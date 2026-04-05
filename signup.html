@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Sign Up | NomadCompass</title>
+  <meta name="description" content="Create your NomadCompass account to save your city preferences, vote on destinations, and get personalized recommendations for your nomad journey.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Join NomadCompass">
+  <meta property="og:description" content="Create an account to find your perfect digital nomad destination.">
+  <meta property="og:type" content="website">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/auth.css">
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase-config.js"></script>
+  <script src="scripts/auth.js"></script>
+
+  <style>
+    /* Page fade-in animation */
+    body {
+      animation: pageIn 0.4s ease-out;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <!-- Back to home -->
+    <a href="index.html" class="back-to-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to home
+    </a>
+
+    <!-- Auth Card -->
+    <div class="auth-card">
+      <!-- Logo -->
+      <a href="index.html" class="auth-logo">
+        <img src="assets/logo.svg" alt="" class="auth-logo-icon">
+        <span class="auth-logo-text">
+          <span class="auth-logo-nomad">Nomad</span><span class="auth-logo-accent">Compass</span>
+        </span>
+      </a>
+
+      <!-- Header -->
+      <div class="auth-header">
+        <h1>Create your account</h1>
+        <p>Start finding your perfect city today</p>
+      </div>
+
+      <!-- Form Error -->
+      <div class="form-error" id="formError">
+        Please fix the errors below to continue.
+      </div>
+
+      <!-- Signup Form -->
+      <form class="auth-form" id="signupForm" novalidate>
+        <div class="form-group">
+          <label for="fullName">Full name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Your name"
+            autocomplete="name"
+            required
+          >
+          <span class="error-message" id="nameError">Please enter your name.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+          <span class="error-message" id="emailError">Please enter a valid email address.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Create a password (8+ characters)"
+            autocomplete="new-password"
+            required
+          >
+          <span class="error-message" id="passwordError">Password must be at least 8 characters.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm your password"
+            autocomplete="new-password"
+            required
+          >
+          <span class="error-message" id="confirmError">Passwords do not match.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="timezone">Your home/work timezone</label>
+          <select id="timezone" name="timezone" required>
+            <option value="">Select your timezone...</option>
+            <option value="-12">UTC-12:00 (Baker Island)</option>
+            <option value="-11">UTC-11:00 (Samoa)</option>
+            <option value="-10">UTC-10:00 (Hawaii)</option>
+            <option value="-9">UTC-09:00 (Alaska)</option>
+            <option value="-8">UTC-08:00 (Los Angeles, Vancouver)</option>
+            <option value="-7">UTC-07:00 (Denver, Phoenix)</option>
+            <option value="-6">UTC-06:00 (Chicago, Mexico City)</option>
+            <option value="-5">UTC-05:00 (New York, Toronto)</option>
+            <option value="-4">UTC-04:00 (Santiago, Halifax)</option>
+            <option value="-3">UTC-03:00 (São Paulo, Buenos Aires)</option>
+            <option value="-2">UTC-02:00 (Mid-Atlantic)</option>
+            <option value="-1">UTC-01:00 (Azores)</option>
+            <option value="0">UTC+00:00 (London, Lisbon)</option>
+            <option value="1">UTC+01:00 (Paris, Berlin, Rome)</option>
+            <option value="2">UTC+02:00 (Cairo, Athens, Helsinki)</option>
+            <option value="3">UTC+03:00 (Moscow, Istanbul, Dubai)</option>
+            <option value="3.5">UTC+03:30 (Tehran)</option>
+            <option value="4">UTC+04:00 (Baku, Tbilisi)</option>
+            <option value="4.5">UTC+04:30 (Kabul)</option>
+            <option value="5">UTC+05:00 (Karachi, Tashkent)</option>
+            <option value="5.5">UTC+05:30 (Mumbai, Delhi)</option>
+            <option value="5.75">UTC+05:45 (Kathmandu)</option>
+            <option value="6">UTC+06:00 (Dhaka, Almaty)</option>
+            <option value="6.5">UTC+06:30 (Yangon)</option>
+            <option value="7">UTC+07:00 (Bangkok, Jakarta, Hanoi)</option>
+            <option value="8">UTC+08:00 (Singapore, Hong Kong, Bali)</option>
+            <option value="9">UTC+09:00 (Tokyo, Seoul)</option>
+            <option value="9.5">UTC+09:30 (Adelaide)</option>
+            <option value="10">UTC+10:00 (Sydney, Melbourne)</option>
+            <option value="11">UTC+11:00 (Solomon Islands)</option>
+            <option value="12">UTC+12:00 (Auckland, Fiji)</option>
+          </select>
+          <span class="error-message" id="timezoneError">Please select your timezone.</span>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms" name="terms" required>
+          <label for="terms">
+            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+          </label>
+        </div>
+        <span class="error-message" id="termsError" style="margin-top: -12px;">You must agree to the terms to continue.</span>
+
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </form>
+
+      <!-- Divider -->
+      <div class="auth-divider">
+        <span>or</span>
+      </div>
+
+      <!-- Social Login -->
+      <button type="button" class="btn-social" id="googleBtn">
+        <svg viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <!-- Footer -->
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Log in &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Signup Page JavaScript
+     * Handles form validation and Supabase account creation
+     */
+    (function() {
+      'use strict';
+
+      const form = document.getElementById('signupForm');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const nameInput = document.getElementById('fullName');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const confirmInput = document.getElementById('confirmPassword');
+      const timezoneSelect = document.getElementById('timezone');
+      const termsCheckbox = document.getElementById('terms');
+
+      const nameError = document.getElementById('nameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const confirmError = document.getElementById('confirmError');
+      const timezoneError = document.getElementById('timezoneError');
+      const termsError = document.getElementById('termsError');
+      const formError = document.getElementById('formError');
+
+      const googleBtn = document.getElementById('googleBtn');
+
+      let isSubmitting = false;
+
+      /**
+       * Validates email format
+       */
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      /**
+       * Shows an error on a form field
+       */
+      function showError(input, errorEl, message) {
+        if (input.type !== 'checkbox') {
+          input.classList.add('error');
+        }
+        if (message) {
+          errorEl.textContent = message;
+        }
+        errorEl.classList.add('visible');
+      }
+
+      /**
+       * Clears an error on a form field
+       */
+      function clearError(input, errorEl) {
+        if (input.type !== 'checkbox') {
+          input.classList.remove('error');
+        }
+        errorEl.classList.remove('visible');
+      }
+
+      /**
+       * Sets loading state on button
+       */
+      function setLoading(loading) {
+        isSubmitting = loading;
+        submitBtn.disabled = loading;
+        submitBtn.textContent = loading ? 'Creating Account...' : 'Create Account';
+      }
+
+      /**
+       * Handles signup with Supabase
+       */
+      async function performSignup(email, password, name, timezone) {
+        setLoading(true);
+        formError.classList.remove('visible');
+
+        try {
+          // Wait for NomadAuth to be available
+          if (typeof NomadAuth === 'undefined') {
+            throw new Error('Authentication not ready. Please refresh the page.');
+          }
+
+          const result = await NomadAuth.signUp(email, password, name, timezone);
+
+          if (result.success) {
+            // Redirect to home page
+            window.location.href = 'index.html';
+          } else {
+            // Show server error
+            formError.textContent = result.error || 'Signup failed. Please try again.';
+            formError.classList.add('visible');
+            setLoading(false);
+          }
+        } catch (err) {
+          formError.textContent = err.message || 'An error occurred. Please try again.';
+          formError.classList.add('visible');
+          setLoading(false);
+        }
+      }
+
+      // Clear errors on input
+      nameInput.addEventListener('input', function() {
+        clearError(nameInput, nameError);
+        formError.classList.remove('visible');
+      });
+
+      emailInput.addEventListener('input', function() {
+        clearError(emailInput, emailError);
+        formError.classList.remove('visible');
+      });
+
+      passwordInput.addEventListener('input', function() {
+        clearError(passwordInput, passwordError);
+        formError.classList.remove('visible');
+        if (confirmInput.value) {
+          if (confirmInput.value === passwordInput.value) {
+            clearError(confirmInput, confirmError);
+          }
+        }
+      });
+
+      confirmInput.addEventListener('input', function() {
+        clearError(confirmInput, confirmError);
+        formError.classList.remove('visible');
+      });
+
+      timezoneSelect.addEventListener('change', function() {
+        clearError(timezoneSelect, timezoneError);
+        formError.classList.remove('visible');
+      });
+
+      termsCheckbox.addEventListener('change', function() {
+        clearError(termsCheckbox, termsError);
+        formError.classList.remove('visible');
+      });
+
+      // Form submission
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        if (isSubmitting) return;
+
+        let hasErrors = false;
+        formError.classList.remove('visible');
+
+        // Validate name
+        if (!nameInput.value.trim()) {
+          showError(nameInput, nameError, 'Please enter your name.');
+          hasErrors = true;
+        } else {
+          clearError(nameInput, nameError);
+        }
+
+        // Validate email
+        if (!emailInput.value.trim()) {
+          showError(emailInput, emailError, 'Please enter your email address.');
+          hasErrors = true;
+        } else if (!isValidEmail(emailInput.value.trim())) {
+          showError(emailInput, emailError, 'Please enter a valid email address.');
+          hasErrors = true;
+        } else {
+          clearError(emailInput, emailError);
+        }
+
+        // Validate password
+        if (!passwordInput.value) {
+          showError(passwordInput, passwordError, 'Please enter a password.');
+          hasErrors = true;
+        } else if (passwordInput.value.length < 8) {
+          showError(passwordInput, passwordError, 'Password must be at least 8 characters.');
+          hasErrors = true;
+        } else {
+          clearError(passwordInput, passwordError);
+        }
+
+        // Validate confirm password
+        if (!confirmInput.value) {
+          showError(confirmInput, confirmError, 'Please confirm your password.');
+          hasErrors = true;
+        } else if (confirmInput.value !== passwordInput.value) {
+          showError(confirmInput, confirmError, 'Passwords do not match.');
+          hasErrors = true;
+        } else {
+          clearError(confirmInput, confirmError);
+        }
+
+        // Validate timezone
+        if (!timezoneSelect.value) {
+          showError(timezoneSelect, timezoneError, 'Please select your timezone.');
+          hasErrors = true;
+        } else {
+          clearError(timezoneSelect, timezoneError);
+        }
+
+        // Validate terms
+        if (!termsCheckbox.checked) {
+          showError(termsCheckbox, termsError, 'You must agree to the terms to continue.');
+          hasErrors = true;
+        } else {
+          clearError(termsCheckbox, termsError);
+        }
+
+        if (hasErrors) {
+          formError.textContent = 'Please fix the errors above to continue.';
+          formError.classList.add('visible');
+          return;
+        }
+
+        // Perform signup with Supabase
+        await performSignup(
+          emailInput.value.trim(),
+          passwordInput.value,
+          nameInput.value.trim(),
+          parseFloat(timezoneSelect.value)
+        );
+      });
+
+      // Google OAuth (requires Supabase Google provider setup)
+      googleBtn.addEventListener('click', async function() {
+        const client = getSupabase();
+        if (client && isSupabaseConfigured()) {
+          try {
+            const { error } = await client.auth.signInWithOAuth({
+              provider: 'google',
+              options: {
+                redirectTo: window.location.origin + '/index.html'
+              }
+            });
+            if (error) {
+              formError.textContent = error.message;
+              formError.classList.add('visible');
+            }
+          } catch (err) {
+            formError.textContent = 'Google sign-in is not configured yet.';
+            formError.classList.add('visible');
+          }
+        } else {
+          // Fallback for non-Supabase mode
+          const browserOffset = -new Date().getTimezoneOffset() / 60;
+          const authData = {
+            loggedIn: true,
+            name: 'Google User',
+            email: 'user@gmail.com',
+            userId: 'local_' + Date.now(),
+            timezone: browserOffset
+          };
+          localStorage.setItem('nomadcompass_auth', JSON.stringify(authData));
+          window.location.href = 'index.html';
+        }
+      });
+
+      // Check if already logged in
+      function checkAuth() {
+        if (typeof NomadAuth !== 'undefined' && NomadAuth.isLoggedIn()) {
+          window.location.href = 'index.html';
+          return;
+        }
+        try {
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+          if (auth && auth.loggedIn) {
+            window.location.href = 'index.html';
+          }
+        } catch (e) {
+          // Not logged in
+        }
+      }
+
+      // Check auth after a short delay to let NomadAuth initialize
+      setTimeout(checkAuth, 100);
+
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!-- ============================================
+     NOMADCOMPASS - NAVIGATION COMPONENT
+     Include this at the top of every page
+     ============================================ -->
+
+<nav class="nav" id="mainNav">
+  <div class="nav-container">
+
+    <!-- Logo (left) -->
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+    </a>
+
+    <!-- Desktop Navigation Links (center) -->
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link active">Home</a></li>
+      <li><a href="wheel.html" class="nav-link">Wheel</a></li>
+      <li><a href="index.html#cities" class="nav-link">Cities</a></li>
+      <li><a href="rentals.html" class="nav-link">Rentals</a></li>
+      <li><a href="blog.html" class="nav-link">Blog</a></li>
+    </ul>
+
+    <!-- Desktop Actions (right) -->
+    <div class="nav-actions">
+      <a href="login.html" class="nav-login">Login</a>
+      <a href="signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+    </div>
+
+    <!-- Mobile Hamburger Toggle -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span class="nav-toggle-line"></span>
+      <span class="nav-toggle-line"></span>
+      <span class="nav-toggle-line"></span>
+    </button>
+
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="nav-mobile" id="navMobile">
+    <ul class="nav-mobile-links">
+      <li><a href="index.html" class="nav-mobile-link active">Home</a></li>
+      <li><a href="wheel.html" class="nav-mobile-link">Wheel</a></li>
+      <li><a href="index.html#cities" class="nav-mobile-link">Cities</a></li>
+      <li><a href="rentals.html" class="nav-mobile-link">Rentals</a></li>
+      <li><a href="blog.html" class="nav-mobile-link">Blog</a></li>
+    </ul>
+    <div class="nav-mobile-actions">
+      <a href="login.html" class="btn btn-secondary">Login</a>
+      <a href="signup.html" class="btn btn-primary">Sign Up</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Navigation JavaScript -->
+<script>
+(function() {
+  // DOM elements
+  const nav = document.getElementById('mainNav');
+  const navToggle = document.getElementById('navToggle');
+  const navMobile = document.getElementById('navMobile');
+  const body = document.body;
+
+  // Toggle mobile menu
+  navToggle.addEventListener('click', function() {
+    const isOpen = navToggle.classList.toggle('active');
+    navMobile.classList.toggle('active');
+    body.classList.toggle('nav-open');
+
+    // Update ARIA attribute for accessibility
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close mobile menu when clicking a link
+  const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+  mobileLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      navToggle.classList.remove('active');
+      navMobile.classList.remove('active');
+      body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Add shadow on scroll
+  function handleScroll() {
+    if (window.scrollY > 10) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }
+
+  // Listen for scroll
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
+  // Run on initial load
+  handleScroll();
+
+  // Close menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && navMobile.classList.contains('active')) {
+      navToggle.classList.remove('active');
+      navMobile.classList.remove('active');
+      body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close menu on resize to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768 && navMobile.classList.contains('active')) {
+      navToggle.classList.remove('active');
+      navMobile.classList.remove('active');
+      body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+</script>

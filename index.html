@@ -1,0 +1,2524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NomadCompass helps digital nomads cut through the noise and find the city that actually fits their life. Stop comparing. Start going.">
+
+  <title>NomadCompass — Find Your Next City</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/logo-128.svg">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/nav.css">
+  <link rel="stylesheet" href="styles/footer.css">
+
+  <!-- Auth state check (runs synchronously before render to prevent flash) -->
+  <script>
+    (function() {
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          document.documentElement.classList.add('auth-logged-in');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Twemoji emoji sizing -->
+  <style>
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 .05em 0 .1em;
+      vertical-align: -0.1em;
+    }
+  </style>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NomadCompass — Find Your Perfect Digital Nomad City">
+  <meta property="og:description" content="Stop comparing cities endlessly. NomadCompass helps digital nomads find the destination that actually fits their lifestyle.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://picsum.photos/seed/nomadcompass-og/1200/630">
+
+  <!-- Page-specific styles -->
+  <style>
+    /* Page fade-in animation */
+    body {
+      animation: pageIn 0.4s ease-out;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ============================================
+       FULL PAGE BACKGROUND
+       ============================================ */
+    .page-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('images/extended_surf_4000.webp') center top / cover no-repeat;
+      z-index: -2;
+    }
+
+    .page-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(253, 248, 243, 0.15) 0%,
+        rgba(253, 248, 243, 0.3) 25%,
+        rgba(253, 248, 243, 0.5) 50%,
+        rgba(253, 248, 243, 0.75) 75%,
+        rgba(253, 248, 243, 0.9) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* ============================================
+       HERO SECTION
+       ============================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: var(--space-24) var(--space-6);
+      padding-top: calc(var(--nav-height) + var(--space-12));
+    }
+
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+    }
+
+    .hero-headline {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      line-height: 1.1;
+      margin-bottom: var(--space-6);
+      color: var(--color-ink);
+      min-height: calc(2 * clamp(2.5rem, 8vw, 4.5rem) * 1.1);
+    }
+
+    .typewriter {
+      display: inline-block;
+      position: relative;
+    }
+
+    .typewriter-text {
+      display: inline;
+    }
+
+    .typewriter::after {
+      content: '|';
+      display: inline-block;
+      color: var(--color-terracotta);
+      font-weight: 300;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .typewriter.done::after {
+      animation: blink 1s step-end 3;
+      animation-fill-mode: forwards;
+    }
+
+    .hero-subheadline {
+      font-size: var(--text-xl);
+      color: var(--color-stone);
+      max-width: 600px;
+      margin: 0 auto var(--space-8);
+      line-height: var(--leading-relaxed);
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      justify-content: center;
+    }
+
+    .hero-ctas .btn {
+      min-width: 180px;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: var(--space-8);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--color-stone);
+      font-size: var(--text-sm);
+      animation: bounce 2s ease infinite;
+    }
+
+    .hero-scroll-icon {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--color-stone);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-scroll-icon::after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background-color: var(--color-stone);
+      border-radius: var(--radius-full);
+      animation: scrollDot 2s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    @keyframes scrollDot {
+      0%, 100% { transform: translateY(-4px); opacity: 0; }
+      50% { transform: translateY(4px); opacity: 1; }
+    }
+
+    /* ============================================
+       CITIES EXPLORER PAGE STYLES
+       (copied 1:1 from cities.html)
+       ============================================ */
+
+    /* --- FILTER BAR --- */
+    .filter-bar {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .filter-label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--color-charcoal);
+      margin-bottom: var(--space-2);
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-base);
+      color: var(--color-charcoal);
+      background-color: var(--color-sand);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233D3833' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--color-terracotta);
+      box-shadow: 0 0 0 3px rgba(196, 112, 75, 0.15);
+    }
+
+    /* --- SEARCH INPUT --- */
+    .filter-input {
+      width: 100%;
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-base);
+      color: var(--color-charcoal);
+      background-color: var(--color-sand);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      padding-left: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 10px center;
+    }
+
+    .filter-input:focus {
+      outline: none;
+      border-color: var(--color-terracotta);
+      box-shadow: 0 0 0 3px rgba(196, 112, 75, 0.15);
+    }
+
+    .filter-input::placeholder {
+      color: var(--color-stone);
+    }
+
+    /* --- ADVANCED FILTERS BUTTON --- */
+    .advanced-filters-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-base);
+      font-weight: var(--font-medium);
+      color: var(--color-charcoal);
+      background-color: var(--color-sand);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .advanced-filters-btn:hover {
+      background-color: var(--color-sand-dark);
+    }
+
+    .advanced-filters-btn.active {
+      background-color: var(--color-terracotta);
+      color: var(--color-white);
+      border-color: var(--color-terracotta);
+    }
+
+    .advanced-filters-btn .filter-icon {
+      flex-shrink: 0;
+    }
+
+    .advanced-filters-btn .chevron-icon {
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .advanced-filters-btn.active .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .filter-badge {
+      display: none;
+      background-color: var(--color-terracotta);
+      color: var(--color-white);
+      font-size: var(--text-xs);
+      font-weight: var(--font-semibold);
+      padding: 2px 6px;
+      border-radius: 999px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .advanced-filters-btn.active .filter-badge {
+      background-color: var(--color-white);
+      color: var(--color-terracotta);
+    }
+
+    .filter-badge.visible {
+      display: inline-block;
+    }
+
+    /* --- SLIDERS PANEL --- */
+    .sliders-panel {
+      display: none;
+      margin-top: var(--space-5);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--color-sand-dark);
+      animation: slideDown 0.3s ease;
+    }
+
+    .sliders-panel.open {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .sliders-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4) var(--space-6);
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slider-label {
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--color-charcoal);
+    }
+
+    .slider-value {
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-terracotta);
+      background-color: rgba(196, 112, 75, 0.1);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      min-width: 28px;
+      text-align: center;
+    }
+
+    /* --- DUAL RANGE SLIDER STYLING --- */
+    .dual-range {
+      position: relative;
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .slider-track {
+      position: absolute;
+      width: 100%;
+      height: 6px;
+      background: var(--color-sand-dark);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    .slider-range {
+      position: absolute;
+      height: 6px;
+      background: var(--color-terracotta);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    .filter-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      position: absolute;
+      width: 100%;
+      height: 6px;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+      pointer-events: none;
+    }
+
+    .filter-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--color-terracotta);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      pointer-events: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .filter-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: var(--color-terracotta);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      pointer-events: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .filter-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-slider-min {
+      z-index: 1;
+    }
+
+    .filter-slider-max {
+      z-index: 2;
+    }
+
+    /* --- TIMEZONE FILTER (signed-in only) --- */
+    .slider-group-timezone {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--color-sand) 0%, rgba(255,255,255,0.5) 100%);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-2);
+      border: 1px dashed var(--color-sand-dark);
+    }
+
+    .slider-group-timezone .slider-label {
+      color: var(--color-terracotta);
+    }
+
+    .timezone-filter-content {
+      display: none;
+    }
+
+    .timezone-filter-content.active {
+      display: block;
+    }
+
+    .timezone-filter-locked {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      color: var(--color-stone);
+      padding: var(--space-2) 0;
+    }
+
+    .timezone-filter-locked.hidden {
+      display: none;
+    }
+
+    .timezone-filter-locked svg {
+      color: var(--color-sand-dark);
+      flex-shrink: 0;
+    }
+
+    .timezone-filter-locked a {
+      color: var(--color-terracotta);
+      font-weight: var(--font-medium);
+      text-decoration: none;
+    }
+
+    .timezone-filter-locked a:hover {
+      text-decoration: underline;
+    }
+
+    /* --- RESET BUTTON --- */
+    .reset-filters-btn {
+      margin-top: var(--space-5);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--color-stone);
+      background-color: transparent;
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .reset-filters-btn:hover {
+      color: var(--color-charcoal);
+      border-color: var(--color-stone);
+      background-color: var(--color-sand);
+    }
+
+    /* --- RESULTS INFO --- */
+    .results-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .results-count {
+      font-size: var(--text-base);
+      color: var(--color-stone);
+    }
+
+    .results-count strong {
+      color: var(--color-ink);
+    }
+
+    /* --- CITIES GRID --- */
+    .cities-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    @media (min-width: 640px) {
+      .cities-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .cities-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* --- COLLAPSED STATE --- */
+    .cities-grid.collapsed .city-card:nth-child(n+10) {
+      display: none;
+    }
+
+    /* --- SHOW MORE BUTTON --- */
+    .show-more-container {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--space-8);
+    }
+
+    .show-more-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--space-8);
+      background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-dark, #1a3a2a) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(45, 71, 57, 0.3);
+    }
+
+    .show-more-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(45, 71, 57, 0.4);
+    }
+
+    .show-more-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .show-more-btn.expanded .show-more-icon {
+      transform: rotate(180deg);
+    }
+
+    .show-more-container.hidden {
+      display: none;
+    }
+
+    /* --- CITY CARD --- */
+    .city-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: transform var(--transition-base), box-shadow var(--transition-base), opacity var(--transition-base);
+    }
+
+    .city-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .city-card.hidden {
+      display: none;
+    }
+
+    .city-card.fade-out {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .city-card.fade-in {
+      animation: cardFadeIn 0.4s ease forwards;
+    }
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered animation delays */
+    .city-card:nth-child(1) { animation-delay: 0ms; }
+    .city-card:nth-child(2) { animation-delay: 50ms; }
+    .city-card:nth-child(3) { animation-delay: 100ms; }
+    .city-card:nth-child(4) { animation-delay: 150ms; }
+    .city-card:nth-child(5) { animation-delay: 200ms; }
+    .city-card:nth-child(6) { animation-delay: 250ms; }
+    .city-card:nth-child(7) { animation-delay: 300ms; }
+    .city-card:nth-child(8) { animation-delay: 350ms; }
+    .city-card:nth-child(9) { animation-delay: 400ms; }
+
+    .city-card-image-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .city-card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .city-card:hover .city-card-image {
+      transform: scale(1.05);
+    }
+
+    /* Stats overlay on hover */
+    .city-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .city-card:hover .city-card-overlay {
+      opacity: 1;
+    }
+
+    .overlay-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px 8px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .overlay-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .overlay-stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .overlay-stat-label {
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-weight: var(--font-medium);
+    }
+
+    .overlay-stat-value {
+      font-size: 9px;
+      font-weight: var(--font-semibold);
+      color: var(--color-white);
+    }
+
+    .overlay-stat-bar {
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .overlay-stat-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .overlay-stat-fill.excellent { background: #4ade80; }
+    .overlay-stat-fill.good { background: #facc15; }
+    .overlay-stat-fill.average { background: #fb923c; }
+    .overlay-stat-fill.below { background: #f87171; }
+
+    .city-card-body {
+      padding: var(--space-5);
+    }
+
+    .city-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-2);
+    }
+
+    .city-card-location {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .city-card-flag {
+      font-size: var(--text-2xl);
+    }
+
+    .city-card-name {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--color-ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .city-card-country {
+      font-size: var(--text-sm);
+      color: var(--color-stone);
+    }
+
+    /* Nomad Score badge */
+    .nomad-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      min-width: 50px;
+    }
+
+    .nomad-score-value {
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      line-height: 1;
+    }
+
+    .nomad-score-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+    }
+
+    /* Score adjustment indicator */
+    .score-adj {
+      font-size: 10px;
+      margin-left: 2px;
+    }
+
+    .score-adj.up {
+      color: #4ade80;
+    }
+
+    .score-adj.down {
+      color: #f87171;
+    }
+
+    /* Score color variants */
+    .nomad-score.excellent {
+      background-color: var(--color-forest);
+      color: var(--color-white);
+    }
+
+    .nomad-score.good {
+      background-color: var(--color-forest-muted);
+      color: var(--color-white);
+    }
+
+    .nomad-score.average {
+      background-color: var(--color-warning);
+      color: var(--color-ink);
+    }
+
+    .nomad-score.below {
+      background-color: var(--color-sand-dark);
+      color: var(--color-charcoal);
+    }
+
+    .city-card-tagline {
+      font-size: var(--text-sm);
+      color: var(--color-charcoal);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-4);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Weather and Cost Info Row */
+    .city-card-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3);
+      margin-bottom: var(--space-3);
+      background-color: var(--color-sand);
+      border-radius: var(--radius-md);
+    }
+
+    .city-card-weather {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .weather-icon {
+      font-size: var(--text-xl);
+    }
+
+    .weather-temp {
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      color: var(--color-charcoal);
+    }
+
+    .city-card-climate-type {
+      font-size: var(--text-xs);
+      font-weight: var(--font-medium);
+      color: var(--color-white);
+      background-color: var(--color-stone);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .city-card-cost {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .cost-label {
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      color: var(--color-terracotta);
+    }
+
+    .cost-period {
+      font-size: var(--text-xs);
+      color: var(--color-stone);
+    }
+
+    .city-card-action {
+      width: 100%;
+    }
+
+    /* --- RATINGS LEGEND --- */
+    .ratings-legend {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--space-6);
+      overflow: hidden;
+    }
+
+    .legend-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: var(--space-4) var(--space-5);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--color-charcoal);
+      transition: background-color 0.2s ease;
+    }
+
+    .legend-toggle:hover {
+      background-color: var(--color-sand);
+    }
+
+    .legend-toggle-text {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .legend-toggle svg {
+      transition: transform 0.2s ease;
+    }
+
+    .legend-toggle.active svg {
+      transform: rotate(180deg);
+    }
+
+    .legend-content {
+      display: none;
+      padding: 0 var(--space-5) var(--space-5);
+      animation: slideDown 0.3s ease;
+    }
+
+    .legend-content.open {
+      display: block;
+    }
+
+    .legend-intro {
+      font-size: var(--text-sm);
+      color: var(--color-stone);
+      margin-bottom: var(--space-4);
+      line-height: var(--leading-relaxed);
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-3);
+    }
+
+    .legend-item {
+      display: flex;
+      gap: var(--space-3);
+      padding: var(--space-3);
+      background-color: var(--color-sand);
+      border-radius: var(--radius-md);
+    }
+
+    .legend-item-icon {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-terracotta);
+      color: white;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+    }
+
+    .legend-item-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .legend-item-title {
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-ink);
+      margin-bottom: 2px;
+    }
+
+    .legend-item-desc {
+      font-size: var(--text-xs);
+      color: var(--color-stone);
+      line-height: 1.4;
+    }
+
+    .legend-score-scale {
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-sand-dark);
+    }
+
+    .legend-scale-title {
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-charcoal);
+      margin-bottom: var(--space-3);
+    }
+
+    .legend-scale-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .legend-scale-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--color-stone);
+    }
+
+    .legend-scale-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .legend-scale-dot.excellent { background: #4ade80; }
+    .legend-scale-dot.good { background: #facc15; }
+    .legend-scale-dot.average { background: #fb923c; }
+    .legend-scale-dot.below { background: #f87171; }
+
+    /* --- NO RESULTS --- */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-16);
+      color: var(--color-stone);
+    }
+
+    .no-results-icon {
+      font-size: 3rem;
+      margin-bottom: var(--space-4);
+    }
+
+    .no-results h3 {
+      margin-bottom: var(--space-2);
+      color: var(--color-ink);
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 767px) {
+      .filter-group {
+        min-width: 100%;
+      }
+
+      .filter-row {
+        flex-direction: column;
+      }
+
+      .advanced-filters-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .sliders-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-headline {
+        font-size: 2.25rem;
+        min-height: calc(2 * 2.25rem * 1.1);
+      }
+
+      .hero-subheadline {
+        font-size: var(--text-lg);
+      }
+
+      .hero-scroll {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Full page background -->
+  <div class="page-bg"></div>
+
+  <!-- ==========================================
+       NAVIGATION
+       ========================================== -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="wheel.html" class="nav-link">Wheel</a></li>
+        <li><a href="#cities" class="nav-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="index.html" class="nav-mobile-link active">Home</a></li>
+        <li><a href="wheel.html" class="nav-mobile-link">Wheel</a></li>
+        <li><a href="#cities" class="nav-mobile-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-mobile-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-mobile-link">Blog</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="login.html" class="btn btn-secondary">Login</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Navigation Script -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('active');
+          navMobile.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
+
+  <!-- ==========================================
+       MAIN CONTENT
+       ========================================== -->
+  <main>
+
+    <!-- ==========================================
+         SECTION 1: HERO
+         ========================================== -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-headline">
+          <span class="typewriter" id="typewriter">
+            <span class="typewriter-text"></span>
+          </span>
+        </h1>
+        <p class="hero-subheadline">
+          NomadCompass helps digital nomads cut through the noise and find the city that actually fits their life.
+        </p>
+        <div class="hero-ctas">
+          <a href="wheel.html" class="btn btn-primary btn-lg">Find My City</a>
+          <a href="#cities" class="btn btn-secondary btn-lg">Explore All Places</a>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="hero-scroll-icon"></div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CITIES EXPLORER (copied from cities.html)
+         ========================================== -->
+    <section class="section" id="cities">
+      <div class="container">
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label class="filter-label" for="filterRegion">Region</label>
+              <select class="filter-select" id="filterRegion">
+                <option value="all">All Regions</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="filterCountry">Country</label>
+              <select class="filter-select" id="filterCountry">
+                <option value="all">All Countries</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="filterCity">City</label>
+              <select class="filter-select" id="filterCity">
+                <option value="all">All Cities</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="filterClimateType">Climate</label>
+              <select class="filter-select" id="filterClimateType">
+                <option value="all">All Climates</option>
+                <option value="Tropical">Tropical</option>
+                <option value="Arid">Arid / Desert</option>
+                <option value="Mediterranean">Mediterranean</option>
+                <option value="Oceanic">Oceanic</option>
+                <option value="Humid Subtropical">Humid Subtropical</option>
+                <option value="Continental">Continental</option>
+                <option value="Highland">Highland</option>
+                <option value="Subarctic">Subarctic</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="filterSort">Sort By</label>
+              <select class="filter-select" id="filterSort">
+                <option value="score">Nomad Score</option>
+                <option value="cost">Cost (Cheapest)</option>
+                <option value="safety">Safety</option>
+                <option value="wifi">WiFi</option>
+                <option value="community">Community</option>
+                <option value="climate">Climate</option>
+                <option value="nightlife">Nightlife</option>
+                <option value="nature">Nature</option>
+                <option value="food">Food</option>
+                <option value="english">English</option>
+                <option value="visa">Visa</option>
+              </select>
+            </div>
+            <button type="button" class="advanced-filters-btn" id="advancedFiltersBtn">
+              <svg class="filter-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+              </svg>
+              Advanced Filters
+              <span class="filter-badge" id="filterBadge"></span>
+              <svg class="chevron-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Collapsible Sliders Panel -->
+          <div class="sliders-panel" id="slidersPanel">
+            <div class="sliders-grid">
+              <div class="slider-group" data-category="climate">
+                <div class="slider-header">
+                  <label class="slider-label">Climate</label>
+                  <span class="slider-value" id="climateValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterClimateMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterClimateMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="climateRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="cost">
+                <div class="slider-header">
+                  <label class="slider-label">Cost</label>
+                  <span class="slider-value" id="costValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterCostMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterCostMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="costRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="wifi">
+                <div class="slider-header">
+                  <label class="slider-label">WiFi</label>
+                  <span class="slider-value" id="wifiValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterWifiMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterWifiMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="wifiRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="nightlife">
+                <div class="slider-header">
+                  <label class="slider-label">Nightlife</label>
+                  <span class="slider-value" id="nightlifeValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterNightlifeMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterNightlifeMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="nightlifeRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="nature">
+                <div class="slider-header">
+                  <label class="slider-label">Nature</label>
+                  <span class="slider-value" id="natureValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterNatureMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterNatureMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="natureRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="safety">
+                <div class="slider-header">
+                  <label class="slider-label">Safety</label>
+                  <span class="slider-value" id="safetyValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterSafetyMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterSafetyMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="safetyRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="food">
+                <div class="slider-header">
+                  <label class="slider-label">Food</label>
+                  <span class="slider-value" id="foodValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterFoodMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterFoodMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="foodRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="community">
+                <div class="slider-header">
+                  <label class="slider-label">Community</label>
+                  <span class="slider-value" id="communityValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterCommunityMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterCommunityMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="communityRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="english">
+                <div class="slider-header">
+                  <label class="slider-label">English</label>
+                  <span class="slider-value" id="englishValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterEnglishMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterEnglishMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="englishRange"></div>
+                </div>
+              </div>
+              <div class="slider-group" data-category="visa">
+                <div class="slider-header">
+                  <label class="slider-label">Visa</label>
+                  <span class="slider-value" id="visaValue">1 - 10</span>
+                </div>
+                <div class="dual-range">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterVisaMin" min="1" max="10" value="1">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterVisaMax" min="1" max="10" value="10">
+                  <div class="slider-track"></div>
+                  <div class="slider-range" id="visaRange"></div>
+                </div>
+              </div>
+              <!-- Time Difference Filter (signed-in users only) -->
+              <div class="slider-group slider-group-timezone" id="timezoneFilterGroup" data-category="timezone">
+                <div class="slider-header">
+                  <label class="slider-label">Time Difference</label>
+                  <span class="slider-value" id="timezoneValue">-12 to +12 hrs</span>
+                </div>
+                <div class="timezone-filter-content" id="timezoneFilterContent">
+                  <div class="dual-range">
+                    <input type="range" class="filter-slider filter-slider-min" id="filterTimezoneMin" min="-12" max="12" value="-12" step="1">
+                    <input type="range" class="filter-slider filter-slider-max" id="filterTimezoneMax" min="-12" max="12" value="12" step="1">
+                    <div class="slider-track"></div>
+                    <div class="slider-range" id="timezoneRange"></div>
+                  </div>
+                </div>
+                <div class="timezone-filter-locked" id="timezoneFilterLocked">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <a href="signup.html">Sign up</a> to filter by time difference
+                </div>
+              </div>
+            </div>
+            <button type="button" class="reset-filters-btn" id="resetFiltersBtn">Reset All Filters</button>
+          </div>
+        </div>
+
+        <!-- Ratings Legend -->
+        <div class="ratings-legend">
+          <button type="button" class="legend-toggle" id="legendToggle">
+            <span class="legend-toggle-text">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4M12 8h.01"/>
+              </svg>
+              How are ratings compiled?
+            </span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="legend-content" id="legendContent">
+            <p class="legend-intro">
+              Each city is rated on 13 categories using a combination of official data sources, global indices, and expert assessments. The <strong>Nomad Score</strong> is the average of all category scores (1-10 scale).
+            </p>
+            <div class="legend-grid">
+              <div class="legend-item">
+                <div class="legend-item-icon">1</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Climate</div>
+                  <div class="legend-item-desc">Temperature, humidity, rain days, and seasonal extremes. Optimized for remote work comfort (15-28°C ideal).</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">2</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Cost</div>
+                  <div class="legend-item-desc">Monthly living expenses including rent, food, transport, and entertainment. Based on Numbeo Cost of Living Index.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">3</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">WiFi</div>
+                  <div class="legend-item-desc">Average internet speed and reliability. Based on Speedtest Global Index and coworking infrastructure.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">4</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Nightlife</div>
+                  <div class="legend-item-desc">Bars, clubs, live music, and social scene vibrancy. Based on venue density and reputation.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">5</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Nature</div>
+                  <div class="legend-item-desc">Access to parks, beaches, mountains, and outdoor activities. Based on proximity and diversity of natural attractions.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">6</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Safety</div>
+                  <div class="legend-item-desc">Personal safety and crime rates. Based on Numbeo Crime Index (inverted) and government travel advisories.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">7</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Food</div>
+                  <div class="legend-item-desc">Culinary scene quality and diversity. Based on Michelin recognition, local cuisine reputation, and street food culture.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">8</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Community</div>
+                  <div class="legend-item-desc">Digital nomad presence and networking opportunities. Based on coworking spaces, meetups, and expat communities.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">9</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">English</div>
+                  <div class="legend-item-desc">English proficiency among locals. Based on EF English Proficiency Index and tourism infrastructure.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">10</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Visa</div>
+                  <div class="legend-item-desc">Ease of obtaining visa or staying long-term. Considers digital nomad visas, visa-free stays, and extension options.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">11</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Culture</div>
+                  <div class="legend-item-desc">Museums, galleries, historical sites, and cultural events. Based on UNESCO sites and cultural vibrancy.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">12</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Cleanliness</div>
+                  <div class="legend-item-desc">Street cleanliness, waste management, and overall city hygiene standards.</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-item-icon">13</div>
+                <div class="legend-item-content">
+                  <div class="legend-item-title">Air Quality</div>
+                  <div class="legend-item-desc">Air pollution levels and AQI. Based on IQAir World Air Quality Report and WHO standards.</div>
+                </div>
+              </div>
+            </div>
+            <div class="legend-score-scale">
+              <div class="legend-scale-title">Score Scale</div>
+              <div class="legend-scale-items">
+                <div class="legend-scale-item">
+                  <span class="legend-scale-dot excellent"></span>
+                  <span>8-10: Excellent</span>
+                </div>
+                <div class="legend-scale-item">
+                  <span class="legend-scale-dot good"></span>
+                  <span>6-7: Good</span>
+                </div>
+                <div class="legend-scale-item">
+                  <span class="legend-scale-dot average"></span>
+                  <span>4-5: Average</span>
+                </div>
+                <div class="legend-scale-item">
+                  <span class="legend-scale-dot below"></span>
+                  <span>1-3: Below Average</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Info -->
+        <div class="results-info">
+          <p class="results-count">Showing <strong id="cityCount">20</strong> cities</p>
+        </div>
+
+        <!-- Cities Grid -->
+        <div class="cities-grid collapsed" id="citiesGrid">
+          <!-- City cards will be generated by JavaScript -->
+        </div>
+
+        <!-- Show More Button -->
+        <div class="show-more-container" id="showMoreContainer">
+          <button class="show-more-btn" id="showMoreBtn">
+            <span class="show-more-text">Show <span id="hiddenCount">0</span> more cities</span>
+            <svg class="show-more-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column footer-about">
+          <a href="index.html" class="footer-logo">
+            <img src="assets/logo.svg" alt="" class="footer-logo-icon">
+            <span class="footer-logo-nomad">Nomad</span><span class="footer-logo-accent">Compass</span>
+          </a>
+          <p class="footer-description">
+            Your trusted guide for finding the perfect city to work and live remotely.
+            Make informed decisions with real data and community insights.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Twitter">
+              <svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">
+              <svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="YouTube">
+              <svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="LinkedIn">
+              <svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Explore</h4>
+          <ul class="footer-links">
+            <li><a href="#cities" class="footer-link">All Cities</a></li>
+            <li><a href="wheel.html" class="footer-link">Decision Wheel</a></li>
+            <li><a href="compare.html" class="footer-link">Compare Cities</a></li>
+            <li><a href="top-picks.html" class="footer-link">Top Picks</a></li>
+            <li><a href="map.html" class="footer-link">Interactive Map</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="blog.html" class="footer-link">Blog</a></li>
+            <li><a href="guides.html" class="footer-link">City Guides</a></li>
+            <li><a href="visa-info.html" class="footer-link">Visa Information</a></li>
+            <li><a href="cost-calculator.html" class="footer-link">Cost Calculator</a></li>
+            <li><a href="faq.html" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-column footer-newsletter">
+          <h4 class="footer-heading">Stay Connected</h4>
+          <p class="footer-newsletter-text">
+            Get weekly insights on the best cities for remote work, visa updates, and nomad community news.
+          </p>
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+            <input
+              type="email"
+              class="footer-newsletter-input"
+              placeholder="Enter your email"
+              aria-label="Email address"
+              required
+            >
+            <button type="submit" class="footer-newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclosure">
+          Some links on this site are affiliate links. We may earn a commission at no extra cost to you.
+        </p>
+        <p class="footer-copyright">
+          &copy; 2025 NomadCompass. All rights reserved.
+          <a href="privacy.html">Privacy Policy</a> &middot;
+          <a href="terms.html">Terms of Service</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Twemoji for cross-platform flag emoji support -->
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+
+  <!-- ==========================================
+       CITY DATA
+       ========================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="cities-data.js"></script>
+  <script src="scripts/supabase-config.js"></script>
+  <script src="scripts/votes.js"></script>
+
+  <!-- ==========================================
+       PAGE SCRIPTS
+       ========================================== -->
+  <script>
+    // ============================================
+    // TYPEWRITER ANIMATION
+    // ============================================
+    (function() {
+      const container = document.getElementById('typewriter');
+      const textElement = container.querySelector('.typewriter-text');
+      const lines = ['Stop comparing.', 'Start going.'];
+      let lineIndex = 0;
+      let charIndex = 0;
+      let currentText = '';
+
+      function typeNextChar() {
+        const currentLine = lines[lineIndex];
+
+        if (charIndex < currentLine.length) {
+          currentText += currentLine.charAt(charIndex);
+          textElement.innerHTML = currentText;
+          charIndex++;
+
+          const delay = currentLine.charAt(charIndex - 1) === '.' ? 400 : 60 + Math.random() * 40;
+          setTimeout(typeNextChar, delay);
+        } else if (lineIndex < lines.length - 1) {
+          lineIndex++;
+          charIndex = 0;
+          currentText += '<br>';
+          textElement.innerHTML = currentText;
+          setTimeout(typeNextChar, 200);
+        } else {
+          setTimeout(() => {
+            container.classList.add('done');
+          }, 2000);
+        }
+      }
+
+      setTimeout(typeNextChar, 500);
+    })();
+  </script>
+
+  <!-- ==========================================
+       CITIES EXPLORER SCRIPTS (copied from cities.html)
+       ========================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // ============================================
+      // VOTE AGGREGATES CACHE
+      // ============================================
+      let allVoteAggregates = {};
+      let votesLoaded = false;
+
+      // ============================================
+      // REGION MAPPING
+      // ============================================
+      const CITY_REGIONS = {
+        // Europe
+        lisbon: 'europe', porto: 'europe', budapest: 'europe', tallinn: 'europe',
+        split: 'europe', belgrade: 'europe', laspalmas: 'europe', barcelona: 'europe',
+        berlin: 'europe', prague: 'europe', amsterdam: 'europe', vienna: 'europe',
+        zurich: 'europe', geneva: 'europe', dublin: 'europe', london: 'europe',
+        manchester: 'europe', edinburgh: 'europe', paris: 'europe', lyon: 'europe',
+        nice: 'europe', milan: 'europe', rome: 'europe', florence: 'europe',
+        palermo: 'europe', madrid: 'europe', valencia: 'europe', seville: 'europe',
+        malaga: 'europe', tenerife: 'europe', athens: 'europe', thessaloniki: 'europe',
+        crete: 'europe', malta: 'europe', cyprus: 'europe', warsaw: 'europe',
+        krakow: 'europe', bucharest: 'europe', clujnapoca: 'europe', sofia: 'europe',
+        riga: 'europe', vilnius: 'europe', podgorica: 'europe', tirana: 'europe',
+        sarajevo: 'europe', skopje: 'europe',
+        // Europe - missing cities
+        annecy: 'europe', brussels: 'europe', cologne: 'europe', frankfurt: 'europe',
+        gijon: 'europe', gothenburg: 'europe', granadaspain: 'europe', hamburg: 'europe',
+        heidelberg: 'europe', marbella: 'europe', munich: 'europe', piran: 'europe',
+        sarande: 'europe', zagreb: 'europe',
+        // Europe - new cities
+        lecce: 'europe', trieste: 'europe', genoa: 'europe', sansebastian: 'europe',
+        alicante: 'europe', zaragoza: 'europe', oxford: 'europe', cambridge: 'europe',
+        york: 'europe', bath: 'europe', trondheim: 'europe', tromso: 'europe',
+        turku: 'europe', oulu: 'europe', groningen: 'europe', thehague: 'europe',
+        leuven: 'europe', luxembourg: 'europe', nuremberg: 'europe', stuttgart: 'europe',
+        dusseldorf: 'europe', freiburg: 'europe', strasbourg: 'europe', grenoble: 'europe',
+        aixenprovence: 'europe', bordeaux: 'europe', nantes: 'europe', montpellier: 'europe',
+        toulouse: 'europe', marseille: 'europe', antwerp: 'europe', bruges: 'europe',
+        ghent: 'europe', rotterdam: 'europe', utrecht: 'europe', eindhoven: 'europe',
+        maastricht: 'europe', bremen: 'europe', hannover: 'europe', dortmund: 'europe',
+        essen: 'europe', bremen: 'europe', leipzig: 'europe', dresden: 'europe',
+        salzburg: 'europe', innsbruck: 'europe', graz: 'europe', linz: 'europe',
+        basel: 'europe', bern: 'europe', lucerne: 'europe', lausanne: 'europe',
+        oslo: 'europe', bergen: 'europe', stavanger: 'europe', goteborg: 'europe',
+        malmo: 'europe', stockholm: 'europe', helsinki: 'europe', tampere: 'europe',
+        copenhagen: 'europe', aarhus: 'europe', reykjavik: 'europe', galway: 'europe',
+        cork: 'europe', limerick: 'europe', belfast: 'europe', glasgow: 'europe',
+        brighton: 'europe', bristol: 'europe', cardiff: 'europe', liverpool: 'europe',
+        leeds: 'europe', birmingham: 'europe', newcastle: 'europe', nottingham: 'europe',
+        sheffield: 'europe', naples: 'europe', bologna: 'europe', turin: 'europe',
+        verona: 'europe', bari: 'europe', catania: 'europe', bilbao: 'europe',
+        granada: 'europe', cordoba: 'europe', cadiz: 'europe', tarifa: 'europe',
+        girona: 'europe', palma: 'europe', ibiza: 'europe', fuerteventura: 'europe',
+        rhodes: 'europe', santorini: 'europe', chania: 'europe', zakynthos: 'europe',
+        kotor: 'europe', dubrovnik: 'europe', zadar: 'europe', pula: 'europe',
+        ljubljana: 'europe', bled: 'europe', bratislava: 'europe', brno: 'europe',
+        kosice: 'europe', plovdiv: 'europe', varna: 'europe', constanta: 'europe',
+        brasov: 'europe', sibiu: 'europe', timisoara: 'europe', iasi: 'europe',
+        kaunas: 'europe', tartu: 'europe', klaipeda: 'europe', gdansk: 'europe',
+        poznan: 'europe', wroclaw: 'europe', lodz: 'europe', porto: 'europe',
+        faro: 'europe', funchal: 'europe', pontadelgada: 'europe', cascais: 'europe',
+        coimbra: 'europe', ericeira: 'europe', valletta: 'europe', paphos: 'europe',
+        ohrid: 'europe', prizren: 'europe', mostar: 'europe', novisad: 'europe',
+
+        // Asia
+        chiangmai: 'asia', bali: 'asia', kualalumpur: 'asia', hochiminhcity: 'asia',
+        penang: 'asia', tbilisi: 'asia', bangkok: 'asia', tokyo: 'asia',
+        seoul: 'asia', singapore: 'asia', hanoi: 'asia', danang: 'asia',
+        taipei: 'asia', manila: 'asia', cebu: 'asia', siemreap: 'asia',
+        phnompenh: 'asia', kathmandu: 'asia', pokhara: 'asia', mumbai: 'asia',
+        bangalore: 'asia', goa: 'asia', colombo: 'asia', phuket: 'asia',
+        kohphangan: 'asia', ubud: 'asia', hongkong: 'asia', yerevan: 'asia',
+        baku: 'asia', batumi: 'asia',
+        // Asia - new cities
+        chiangrai: 'asia', pattaya: 'asia', khaolak: 'asia', kanchanaburi: 'asia',
+        sanur: 'asia', solo: 'asia', medan: 'asia', makassar: 'asia',
+        kuching: 'asia', johorbahru: 'asia', baguio: 'asia', davao: 'asia',
+        iloilo: 'asia', cantho: 'asia', hue: 'asia', ninhbinh: 'asia',
+        vangvieng: 'asia', sihanoukville: 'asia', battambang: 'asia', nagoya: 'asia',
+        hiroshima: 'asia', kanazawa: 'asia', kaohsiung: 'asia', tainan: 'asia',
+        gwangju: 'asia', daegu: 'asia', jaipur: 'asia', kochi: 'asia', udaipur: 'asia',
+        kyoto: 'asia', osaka: 'asia', fukuoka: 'asia', sapporo: 'asia',
+        busan: 'asia', jeju: 'asia', huahin: 'asia', krabi: 'asia',
+        kohsamui: 'asia', pai: 'asia', hoian: 'asia', dalat: 'asia',
+        nhatrang: 'asia', quynnhon: 'asia', sapa: 'asia', luangprabang: 'asia',
+        vientiane: 'asia', kampot: 'asia', canggu: 'asia', lombok: 'asia',
+        nusapenida: 'asia', bandung: 'asia', yogyakarta: 'asia', surabaya: 'asia',
+        semarang: 'asia', malang: 'asia', langkawi: 'asia', ipoh: 'asia',
+        malacca: 'asia', kotakinabalu: 'asia', dumaguete: 'asia', boracay: 'asia',
+        siargao: 'asia', palawan: 'asia', elnido: 'asia', pune: 'asia',
+        shenzhen: 'asia', gyumri: 'asia', kutaisi: 'asia',
+        phuquoc: 'asia', quynhon: 'asia', weligama: 'asia',
+
+        // Latin America
+        medellin: 'latam', mexicocity: 'latam', buenosaires: 'latam', playadelcarmen: 'latam',
+        oaxaca: 'latam', montevideo: 'latam', lima: 'latam', cusco: 'latam',
+        bogota: 'latam', cartagena: 'latam', santiago: 'latam', valparaiso: 'latam',
+        quito: 'latam', sanjuan: 'latam', santacruz: 'latam', lapaz: 'latam',
+        asuncion: 'latam', guadalajara: 'latam', puertovallarta: 'latam', sanjosecr: 'latam',
+        tamarindo: 'latam', panama: 'latam', antigua: 'latam', sanmigueldeallende: 'latam',
+        merida: 'latam',
+        // Latin America - new cities
+        cancun: 'latam', queretaro: 'latam', mazatlan: 'latam', leon: 'latam',
+        manizales: 'latam', pereira: 'latam', barranquilla: 'latam', cali: 'latam',
+        guayaquil: 'latam', trujillo: 'latam', cochabamba: 'latam', sucre: 'latam',
+        rosario: 'latam', mardelplata: 'latam', cordoba: 'latam', mendoza: 'latam',
+        bariloche: 'latam', recife: 'latam', fortaleza: 'latam', salvador: 'latam',
+        florianopolis: 'latam', saopaulo: 'latam', riodejaneiro: 'latam', brasilia: 'latam',
+        boquete: 'latam', lakeatitlan: 'latam', tulum: 'latam', sayulita: 'latam',
+        puertoescondido: 'latam', guanajuato: 'latam', huanchaco: 'latam', mancora: 'latam',
+        montanita: 'latam', vilcabamba: 'latam', cuenca: 'latam', arequipa: 'latam',
+        santodomingo: 'latam', puntacana: 'latam', havana: 'latam', santamarta: 'latam',
+        puertorico: 'latam',
+
+        // North America
+        austin: 'northamerica', miami: 'northamerica', vancouver: 'northamerica',
+        // North America - new cities
+        sanfrancisco: 'northamerica', sandiego: 'northamerica', losangeles: 'northamerica',
+        newyork: 'northamerica', chicago: 'northamerica', boston: 'northamerica',
+        nashville: 'northamerica', denver: 'northamerica', seattle: 'northamerica',
+        portland: 'northamerica', calgary: 'northamerica', victoria: 'northamerica',
+        ottawa: 'northamerica', montreal: 'northamerica', toronto: 'northamerica',
+
+        // Africa
+        capetown: 'africa', cairo: 'africa', marrakech: 'africa', casablanca: 'africa',
+        accra: 'africa', nairobi: 'africa', kigali: 'africa', lagos: 'africa',
+        // Africa - new cities
+        luxor: 'africa', alexandria: 'africa', capeverde: 'africa', windhoek: 'africa',
+        kampala: 'africa', maputo: 'africa', arusha: 'africa', addisababa: 'africa',
+        dakar: 'africa', tunis: 'africa', rabat: 'africa', essaouira: 'africa',
+        chefchaouen: 'africa', taghazout: 'africa', zanzibar: 'africa', mombasa: 'africa',
+        daressalaam: 'africa', johannesburg: 'africa', durban: 'africa',
+
+        // Middle East
+        dubai: 'middleeast', telaviv: 'middleeast', antalya: 'middleeast', istanbul: 'middleeast',
+        // Middle East - new cities
+        salalah: 'middleeast', bahrain: 'middleeast', riyadh: 'middleeast', jeddah: 'middleeast',
+        kuwait: 'middleeast', ramallah: 'middleeast', yazd: 'middleeast', amman: 'middleeast',
+        aqaba: 'middleeast', beirut: 'middleeast', muscat: 'middleeast', doha: 'middleeast',
+        abudhabi: 'middleeast', haifa: 'middleeast', eilat: 'middleeast', bodrum: 'middleeast',
+        fethiye: 'middleeast', izmir: 'middleeast', cappadocia: 'middleeast',
+        manama: 'middleeast',
+
+        // Oceania
+        sydney: 'oceania', melbourne: 'oceania', auckland: 'oceania',
+        // Oceania - new cities
+        darwin: 'oceania', canberra: 'oceania', wellington: 'oceania', suva: 'oceania',
+        noumea: 'oceania', brisbane: 'oceania', perth: 'oceania', adelaide: 'oceania',
+        goldcoast: 'oceania', cairns: 'oceania', hobart: 'oceania', byronbay: 'oceania',
+        christchurch: 'oceania', queenstown: 'oceania', mauritius: 'oceania'
+      };
+
+      // ============================================
+      // DOM REFERENCES
+      // ============================================
+      const citiesGrid = document.getElementById('citiesGrid');
+      const cityCount = document.getElementById('cityCount');
+      const filterRegion = document.getElementById('filterRegion');
+      const filterCountry = document.getElementById('filterCountry');
+      const filterCity = document.getElementById('filterCity');
+      const filterClimateType = document.getElementById('filterClimateType');
+      const filterSort = document.getElementById('filterSort');
+
+      const advancedFiltersBtn = document.getElementById('advancedFiltersBtn');
+      const slidersPanel = document.getElementById('slidersPanel');
+      const filterBadge = document.getElementById('filterBadge');
+      const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+
+      const legendToggle = document.getElementById('legendToggle');
+      const legendContent = document.getElementById('legendContent');
+
+      const sliderFilters = {
+        climate: { min: document.getElementById('filterClimateMin'), max: document.getElementById('filterClimateMax'), value: document.getElementById('climateValue'), range: document.getElementById('climateRange') },
+        cost: { min: document.getElementById('filterCostMin'), max: document.getElementById('filterCostMax'), value: document.getElementById('costValue'), range: document.getElementById('costRange') },
+        wifi: { min: document.getElementById('filterWifiMin'), max: document.getElementById('filterWifiMax'), value: document.getElementById('wifiValue'), range: document.getElementById('wifiRange') },
+        nightlife: { min: document.getElementById('filterNightlifeMin'), max: document.getElementById('filterNightlifeMax'), value: document.getElementById('nightlifeValue'), range: document.getElementById('nightlifeRange') },
+        nature: { min: document.getElementById('filterNatureMin'), max: document.getElementById('filterNatureMax'), value: document.getElementById('natureValue'), range: document.getElementById('natureRange') },
+        safety: { min: document.getElementById('filterSafetyMin'), max: document.getElementById('filterSafetyMax'), value: document.getElementById('safetyValue'), range: document.getElementById('safetyRange') },
+        food: { min: document.getElementById('filterFoodMin'), max: document.getElementById('filterFoodMax'), value: document.getElementById('foodValue'), range: document.getElementById('foodRange') },
+        community: { min: document.getElementById('filterCommunityMin'), max: document.getElementById('filterCommunityMax'), value: document.getElementById('communityValue'), range: document.getElementById('communityRange') },
+        english: { min: document.getElementById('filterEnglishMin'), max: document.getElementById('filterEnglishMax'), value: document.getElementById('englishValue'), range: document.getElementById('englishRange') },
+        visa: { min: document.getElementById('filterVisaMin'), max: document.getElementById('filterVisaMax'), value: document.getElementById('visaValue'), range: document.getElementById('visaRange') }
+      };
+
+      const timezoneFilter = {
+        group: document.getElementById('timezoneFilterGroup'),
+        content: document.getElementById('timezoneFilterContent'),
+        locked: document.getElementById('timezoneFilterLocked'),
+        min: document.getElementById('filterTimezoneMin'),
+        max: document.getElementById('filterTimezoneMax'),
+        value: document.getElementById('timezoneValue'),
+        range: document.getElementById('timezoneRange')
+      };
+
+      let userTimezone = null;
+
+      function initUserTimezone() {
+        try {
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+          if (auth && auth.loggedIn && auth.timezone !== undefined) {
+            userTimezone = auth.timezone;
+            timezoneFilter.content.classList.add('active');
+            timezoneFilter.locked.classList.add('hidden');
+            updateTimezoneSliderRange();
+          } else {
+            timezoneFilter.content.classList.remove('active');
+            timezoneFilter.locked.classList.remove('hidden');
+          }
+        } catch (e) {
+          timezoneFilter.content.classList.remove('active');
+          timezoneFilter.locked.classList.remove('hidden');
+        }
+      }
+
+      function getTimeDifference(cityTimezone) {
+        if (userTimezone === null) return 0;
+        return cityTimezone - userTimezone;
+      }
+
+      function updateTimezoneSliderRange() {
+        const minVal = parseInt(timezoneFilter.min.value, 10);
+        const maxVal = parseInt(timezoneFilter.max.value, 10);
+        const formatHr = (h) => (h >= 0 ? '+' + h : h) + ' hr' + (Math.abs(h) !== 1 ? 's' : '');
+        timezoneFilter.value.textContent = formatHr(minVal) + ' to ' + formatHr(maxVal);
+        const minPercent = ((minVal + 12) / 24) * 100;
+        const maxPercent = ((maxVal + 12) / 24) * 100;
+        timezoneFilter.range.style.left = minPercent + '%';
+        timezoneFilter.range.style.width = (maxPercent - minPercent) + '%';
+      }
+
+      // ============================================
+      // UTILITY FUNCTIONS
+      // ============================================
+      function getCategoryKeys() {
+        return ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
+      }
+
+      function calculateNomadScore(city) {
+        const categories = getCategoryKeys();
+        const cityVotes = allVoteAggregates[city.id] || {};
+
+        if (window.VotingService && Object.keys(cityVotes).length > 0) {
+          let total = 0;
+          categories.forEach(key => {
+            const baseScore = city.scores[key];
+            const votes = cityVotes[key] || { upvotes: 0, downvotes: 0 };
+            const { adjustedScore } = window.VotingService.calculateAdjustedScore(baseScore, votes.upvotes, votes.downvotes);
+            total += adjustedScore;
+          });
+          return (total / categories.length).toFixed(1);
+        }
+
+        const total = categories.reduce((sum, key) => sum + city.scores[key], 0);
+        return (total / categories.length).toFixed(1);
+      }
+
+      function getAdjustedScore(city, category) {
+        const baseScore = city.scores[category];
+        const cityVotes = allVoteAggregates[city.id] || {};
+        const votes = cityVotes[category] || { upvotes: 0, downvotes: 0 };
+
+        if (window.VotingService && (votes.upvotes > 0 || votes.downvotes > 0)) {
+          const { adjustedScore } = window.VotingService.calculateAdjustedScore(baseScore, votes.upvotes, votes.downvotes);
+          return adjustedScore;
+        }
+        return baseScore;
+      }
+
+      function getScoreClass(score) {
+        if (score >= 8) return 'excellent';
+        if (score >= 6.5) return 'good';
+        if (score >= 5) return 'average';
+        return 'below';
+      }
+
+      // ============================================
+      // RENDERING
+      // ============================================
+      function createCityCard(city, index) {
+        const nomadScore = calculateNomadScore(city);
+        const scoreClass = getScoreClass(parseFloat(nomadScore));
+        const costPerMonth = city.costPerMonth ? `$${city.costPerMonth.toLocaleString()}` : 'N/A';
+
+        const cityVotes = allVoteAggregates[city.id] || {};
+        const hasVotes = Object.keys(cityVotes).length > 0;
+        const baseScore = getCategoryKeys().reduce((sum, key) => sum + city.scores[key], 0) / getCategoryKeys().length;
+        const scoreDiff = parseFloat(nomadScore) - baseScore;
+        const showAdjustment = hasVotes && Math.abs(scoreDiff) >= 0.1;
+
+        const overlayStats = [
+          { label: 'Climate', value: getAdjustedScore(city, 'climate') },
+          { label: 'Cost', value: getAdjustedScore(city, 'cost') },
+          { label: 'WiFi', value: getAdjustedScore(city, 'wifi') },
+          { label: 'Nightlife', value: getAdjustedScore(city, 'nightlife') },
+          { label: 'Nature', value: getAdjustedScore(city, 'nature') },
+          { label: 'Safety', value: getAdjustedScore(city, 'safety') },
+          { label: 'Food', value: getAdjustedScore(city, 'food') },
+          { label: 'Community', value: getAdjustedScore(city, 'community') },
+          { label: 'English', value: getAdjustedScore(city, 'english') },
+          { label: 'Visa', value: getAdjustedScore(city, 'visa') },
+          { label: 'Culture', value: getAdjustedScore(city, 'culture') },
+          { label: 'Clean', value: getAdjustedScore(city, 'cleanliness') },
+          { label: 'Air', value: getAdjustedScore(city, 'airquality') }
+        ];
+
+        const getBarClass = (val) => {
+          if (val >= 8) return 'excellent';
+          if (val >= 6) return 'good';
+          if (val >= 4) return 'average';
+          return 'below';
+        };
+
+        const overlayStatsHtml = overlayStats.map(stat => `
+          <div class="overlay-stat">
+            <div class="overlay-stat-header">
+              <span class="overlay-stat-label">${stat.label}</span>
+              <span class="overlay-stat-value">${stat.value}</span>
+            </div>
+            <div class="overlay-stat-bar">
+              <div class="overlay-stat-fill ${getBarClass(stat.value)}" style="width: ${stat.value * 10}%"></div>
+            </div>
+          </div>
+        `).join('');
+
+        return `
+          <article class="city-card fade-in" data-city-id="${city.id}" data-lat="${city.lat || ''}" data-lng="${city.lng || ''}" style="animation-delay: ${index * 50}ms">
+            <div class="city-card-image-container">
+              <img src="${city.image}" alt="${city.name}, ${city.country}" class="city-card-image" loading="lazy">
+              <div class="city-card-overlay">
+                <div class="overlay-stats">${overlayStatsHtml}</div>
+              </div>
+            </div>
+            <div class="city-card-body">
+              <div class="city-card-header">
+                <div class="city-card-location">
+                  <span class="city-card-flag">${city.flag}</span>
+                  <div>
+                    <h2 class="city-card-name">${city.name}</h2>
+                    <span class="city-card-country">${city.country}</span>
+                  </div>
+                </div>
+                <div class="nomad-score ${scoreClass}">
+                  <span class="nomad-score-value">${nomadScore}</span>
+                  <span class="nomad-score-label">Score${showAdjustment ? ` <span class="score-adj ${scoreDiff > 0 ? 'up' : 'down'}">${scoreDiff > 0 ? '↑' : '↓'}</span>` : ''}</span>
+                </div>
+              </div>
+              <div class="city-card-info">
+                <div class="city-card-weather" data-city-id="${city.id}">
+                  <span class="weather-icon">--</span>
+                  <span class="weather-temp">--°C</span>
+                </div>
+                <div class="city-card-climate-type">${city.climateType || 'N/A'}</div>
+                <div class="city-card-cost">
+                  <span class="cost-label">~${costPerMonth}</span>
+                  <span class="cost-period">/month</span>
+                </div>
+              </div>
+              <a href="cities/${city.id}.html" class="btn btn-primary city-card-action">View City →</a>
+            </div>
+          </article>
+        `;
+      }
+
+      // Show More button elements
+      const showMoreContainer = document.getElementById('showMoreContainer');
+      const showMoreBtn = document.getElementById('showMoreBtn');
+      const hiddenCountEl = document.getElementById('hiddenCount');
+
+      function updateShowMoreButton(totalCities) {
+        const hiddenCount = Math.max(0, totalCities - 9);
+        hiddenCountEl.textContent = hiddenCount;
+
+        if (hiddenCount > 0) {
+          showMoreContainer.classList.remove('hidden');
+        } else {
+          showMoreContainer.classList.add('hidden');
+        }
+      }
+
+      // Toggle collapsed state
+      showMoreBtn.addEventListener('click', function() {
+        const isCollapsed = citiesGrid.classList.toggle('collapsed');
+        showMoreBtn.classList.toggle('expanded', !isCollapsed);
+
+        if (isCollapsed) {
+          showMoreBtn.querySelector('.show-more-text').innerHTML =
+            `Show <span id="hiddenCount">${hiddenCountEl.textContent}</span> more cities`;
+        } else {
+          showMoreBtn.querySelector('.show-more-text').textContent = 'Show less';
+        }
+      });
+
+      function renderCities(cities) {
+        if (cities.length === 0) {
+          citiesGrid.innerHTML = `
+            <div class="no-results">
+              <div class="no-results-icon">🔍</div>
+              <h3>No cities found</h3>
+              <p>Try adjusting your filters to see more results.</p>
+            </div>
+          `;
+          cityCount.textContent = '0';
+          showMoreContainer.classList.add('hidden');
+          return;
+        }
+
+        const html = cities.map((city, index) => createCityCard(city, index)).join('');
+        citiesGrid.innerHTML = html;
+        cityCount.textContent = cities.length;
+
+        // Reset to collapsed state and update button
+        citiesGrid.classList.add('collapsed');
+        showMoreBtn.classList.remove('expanded');
+        showMoreBtn.querySelector('.show-more-text').innerHTML =
+          `Show <span id="hiddenCount">${Math.max(0, cities.length - 9)}</span> more cities`;
+        updateShowMoreButton(cities.length);
+
+        if (typeof twemoji !== 'undefined') {
+          twemoji.parse(citiesGrid, { folder: 'svg', ext: '.svg' });
+        }
+      }
+
+      // ============================================
+      // FILTERING & SORTING
+      // ============================================
+      function filterCities(cities) {
+        const region = filterRegion.value;
+        const country = filterCountry.value;
+        const cityId = filterCity.value;
+        const climateType = filterClimateType.value;
+
+        return cities.filter(city => {
+          if (cityId !== 'all' && city.id !== cityId) return false;
+          if (country !== 'all' && city.country !== country) return false;
+          if (region !== 'all' && CITY_REGIONS[city.id] !== region) return false;
+          if (climateType !== 'all' && city.climateType !== climateType) return false;
+
+          for (const [category, elements] of Object.entries(sliderFilters)) {
+            const minValue = parseInt(elements.min.value, 10);
+            const maxValue = parseInt(elements.max.value, 10);
+            const score = city.scores[category];
+            if (score < minValue || score > maxValue) return false;
+          }
+
+          if (userTimezone !== null) {
+            const tzMinValue = parseInt(timezoneFilter.min.value, 10);
+            const tzMaxValue = parseInt(timezoneFilter.max.value, 10);
+            if (tzMinValue > -12 || tzMaxValue < 12) {
+              const cityTimezone = city.timezone !== undefined ? city.timezone : 0;
+              const timeDiff = getTimeDifference(cityTimezone);
+              if (timeDiff < tzMinValue || timeDiff > tzMaxValue) return false;
+            }
+          }
+
+          return true;
+        });
+      }
+
+      function countActiveFilters() {
+        let count = 0;
+        for (const elements of Object.values(sliderFilters)) {
+          const minVal = parseInt(elements.min.value, 10);
+          const maxVal = parseInt(elements.max.value, 10);
+          if (minVal > 1 || maxVal < 10) count++;
+        }
+        if (userTimezone !== null) {
+          const tzMinVal = parseInt(timezoneFilter.min.value, 10);
+          const tzMaxVal = parseInt(timezoneFilter.max.value, 10);
+          if (tzMinVal > -12 || tzMaxVal < 12) count++;
+        }
+        return count;
+      }
+
+      function updateFilterBadge() {
+        const count = countActiveFilters();
+        if (count > 0) {
+          filterBadge.textContent = count;
+          filterBadge.classList.add('visible');
+        } else {
+          filterBadge.classList.remove('visible');
+        }
+      }
+
+      function updateSliderRange(elements) {
+        const minVal = parseInt(elements.min.value, 10);
+        const maxVal = parseInt(elements.max.value, 10);
+        elements.value.textContent = `${minVal} - ${maxVal}`;
+        const minPercent = ((minVal - 1) / 9) * 100;
+        const maxPercent = ((maxVal - 1) / 9) * 100;
+        elements.range.style.left = minPercent + '%';
+        elements.range.style.width = (maxPercent - minPercent) + '%';
+      }
+
+      function handleSliderInput(category, type) {
+        const elements = sliderFilters[category];
+        let minVal = parseInt(elements.min.value, 10);
+        let maxVal = parseInt(elements.max.value, 10);
+        if (type === 'min' && minVal > maxVal) elements.min.value = maxVal;
+        else if (type === 'max' && maxVal < minVal) elements.max.value = minVal;
+        updateSliderRange(elements);
+        updateFilterBadge();
+        updateDisplay();
+      }
+
+      function resetAllFilters() {
+        filterRegion.value = 'all';
+        filterClimateType.value = 'all';
+        populateCountryDropdown();
+        populateCityDropdown();
+        for (const elements of Object.values(sliderFilters)) {
+          elements.min.value = 1;
+          elements.max.value = 10;
+          updateSliderRange(elements);
+        }
+        if (userTimezone !== null) {
+          timezoneFilter.min.value = -12;
+          timezoneFilter.max.value = 12;
+          updateTimezoneSliderRange();
+        }
+        updateFilterBadge();
+        updateDisplay();
+      }
+
+      function initSliderRanges() {
+        for (const elements of Object.values(sliderFilters)) {
+          updateSliderRange(elements);
+        }
+      }
+
+      function toggleSlidersPanel() {
+        slidersPanel.classList.toggle('open');
+        advancedFiltersBtn.classList.toggle('active');
+      }
+
+      function toggleLegend() {
+        legendContent.classList.toggle('open');
+        legendToggle.classList.toggle('active');
+      }
+
+      function sortCities(cities) {
+        const sortBy = filterSort.value;
+        return [...cities].sort((a, b) => {
+          if (sortBy === 'score') return calculateNomadScore(b) - calculateNomadScore(a);
+          if (sortBy === 'cost') return getAdjustedScore(b, 'cost') - getAdjustedScore(a, 'cost');
+          return getAdjustedScore(b, sortBy) - getAdjustedScore(a, sortBy);
+        });
+      }
+
+      function updateDisplay() {
+        const currentCards = citiesGrid.querySelectorAll('.city-card');
+        currentCards.forEach(card => card.classList.add('fade-out'));
+        setTimeout(() => {
+          const filtered = filterCities(CITIES);
+          const sorted = sortCities(filtered);
+          renderCities(sorted);
+          fetchWeatherForCities();
+        }, 200);
+      }
+
+      // ============================================
+      // DROPDOWNS
+      // ============================================
+      function populateRegionDropdown() {
+        filterRegion.innerHTML = '<option value="all">All Regions</option>';
+        const regionNames = {
+          'europe': 'Europe', 'asia': 'Asia', 'latam': 'Latin America',
+          'northamerica': 'North America', 'africa': 'Africa', 'middleeast': 'Middle East', 'oceania': 'Oceania'
+        };
+        const regionsWithCities = [...new Set(Object.values(CITY_REGIONS))].sort();
+        regionsWithCities.forEach(region => {
+          const option = document.createElement('option');
+          option.value = region;
+          option.textContent = regionNames[region] || region;
+          filterRegion.appendChild(option);
+        });
+      }
+
+      function populateCountryDropdown() {
+        const selectedRegion = filterRegion.value;
+        filterCountry.innerHTML = '<option value="all">All Countries</option>';
+        let filteredCities = CITIES;
+        if (selectedRegion !== 'all') {
+          filteredCities = CITIES.filter(city => CITY_REGIONS[city.id] === selectedRegion);
+        }
+        const countries = [...new Set(filteredCities.map(city => city.country))].sort();
+        countries.forEach(country => {
+          const option = document.createElement('option');
+          option.value = country;
+          option.textContent = country;
+          filterCountry.appendChild(option);
+        });
+      }
+
+      function populateCityDropdown() {
+        const selectedRegion = filterRegion.value;
+        const selectedCountry = filterCountry.value;
+        filterCity.innerHTML = '<option value="all">All Cities</option>';
+        let filteredCities = CITIES;
+        if (selectedRegion !== 'all') {
+          filteredCities = filteredCities.filter(city => CITY_REGIONS[city.id] === selectedRegion);
+        }
+        if (selectedCountry !== 'all') {
+          filteredCities = filteredCities.filter(city => city.country === selectedCountry);
+        }
+        const sortedCities = filteredCities.sort((a, b) => a.name.localeCompare(b.name));
+        sortedCities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city.id;
+          option.textContent = city.name;
+          filterCity.appendChild(option);
+        });
+      }
+
+      function onRegionChange() {
+        populateCountryDropdown();
+        populateCityDropdown();
+        updateDisplay();
+      }
+
+      function onCountryChange() {
+        populateCityDropdown();
+        updateDisplay();
+      }
+
+      // ============================================
+      // EVENT LISTENERS
+      // ============================================
+      function initEventListeners() {
+        filterRegion.addEventListener('change', onRegionChange);
+        filterCountry.addEventListener('change', onCountryChange);
+        filterCity.addEventListener('change', updateDisplay);
+        filterClimateType.addEventListener('change', updateDisplay);
+        filterSort.addEventListener('change', updateDisplay);
+        advancedFiltersBtn.addEventListener('click', toggleSlidersPanel);
+        legendToggle.addEventListener('click', toggleLegend);
+        resetFiltersBtn.addEventListener('click', resetAllFilters);
+
+        for (const [category, elements] of Object.entries(sliderFilters)) {
+          elements.min.addEventListener('input', () => handleSliderInput(category, 'min'));
+          elements.max.addEventListener('input', () => handleSliderInput(category, 'max'));
+        }
+
+        timezoneFilter.min.addEventListener('input', handleTimezoneSliderInput);
+        timezoneFilter.max.addEventListener('input', handleTimezoneSliderInput);
+      }
+
+      function handleTimezoneSliderInput() {
+        let minVal = parseInt(timezoneFilter.min.value, 10);
+        let maxVal = parseInt(timezoneFilter.max.value, 10);
+        if (minVal > maxVal) {
+          if (this === timezoneFilter.min) timezoneFilter.min.value = maxVal;
+          else timezoneFilter.max.value = minVal;
+        }
+        updateTimezoneSliderRange();
+        updateFilterBadge();
+        updateDisplay();
+      }
+
+      // ============================================
+      // WEATHER
+      // ============================================
+      const WEATHER_ICONS = {
+        0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️',
+        51: '🌧️', 53: '🌧️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️',
+        71: '🌨️', 73: '🌨️', 75: '🌨️', 80: '🌦️', 81: '🌦️', 82: '🌦️',
+        95: '⛈️', 96: '⛈️', 99: '⛈️'
+      };
+
+      function getWeatherIcon(code) { return WEATHER_ICONS[code] || '🌡️'; }
+
+      async function fetchWeatherForCities() {
+        const cityCards = document.querySelectorAll('.city-card');
+        const citiesWithCoords = [];
+        cityCards.forEach(card => {
+          const lat = card.dataset.lat;
+          const lng = card.dataset.lng;
+          const cityId = card.dataset.cityId;
+          if (lat && lng && lat !== '' && lng !== '') {
+            citiesWithCoords.push({ cityId, lat, lng });
+          }
+        });
+        const batchSize = 20;
+        for (let i = 0; i < citiesWithCoords.length; i += batchSize) {
+          const batch = citiesWithCoords.slice(i, i + batchSize);
+          await fetchWeatherBatch(batch);
+        }
+      }
+
+      async function fetchWeatherBatch(cities) {
+        try {
+          const lats = cities.map(c => c.lat).join(',');
+          const lngs = cities.map(c => c.lng).join(',');
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lngs}&current=temperature_2m,weather_code&timezone=auto`;
+          const response = await fetch(url);
+          if (!response.ok) return;
+          const data = await response.json();
+          const results = Array.isArray(data) ? data : [data];
+          results.forEach((result, index) => {
+            if (result.current) {
+              const city = cities[index];
+              const temp = Math.round(result.current.temperature_2m);
+              const weatherCode = result.current.weather_code;
+              const icon = getWeatherIcon(weatherCode);
+              updateCityWeather(city.cityId, icon, temp);
+            }
+          });
+        } catch (error) {
+          console.warn('Weather fetch failed:', error);
+        }
+      }
+
+      function updateCityWeather(cityId, icon, temp) {
+        const weatherEl = document.querySelector(`.city-card-weather[data-city-id="${cityId}"]`);
+        if (weatherEl) {
+          weatherEl.querySelector('.weather-icon').textContent = icon;
+          weatherEl.querySelector('.weather-temp').textContent = `${temp}°C`;
+        }
+      }
+
+      // ============================================
+      // INITIALIZATION
+      // ============================================
+      async function init() {
+        initUserTimezone();
+        initSliderRanges();
+        populateRegionDropdown();
+        populateCountryDropdown();
+        populateCityDropdown();
+        const sorted = sortCities(CITIES);
+        renderCities(sorted);
+        fetchWeatherForCities();
+        initEventListeners();
+
+        if (window.VotingService) {
+          try {
+            allVoteAggregates = await window.VotingService.fetchAllVoteAggregates();
+            votesLoaded = true;
+            if (Object.keys(allVoteAggregates).length > 0) {
+              updateDisplay();
+            }
+          } catch (error) {
+            console.error('Error loading vote aggregates:', error);
+          }
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Auth State Management -->
+  <script src="scripts/auth.js"></script>
+
+</body>
+</html>

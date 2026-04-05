@@ -1,0 +1,467 @@
+/* ============================================
+   NOMADCOMPASS - NAVIGATION STYLES
+   Sticky top navigation with mobile hamburger
+   ============================================ */
+
+/* --------------------------------------------
+   SCROLLBAR LAYOUT SHIFT PREVENTION
+   Always reserve space for scrollbar
+   -------------------------------------------- */
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* --------------------------------------------
+   AUTH STATE FLASH PREVENTION
+   Hide login buttons only when user is logged in
+   -------------------------------------------- */
+
+/* If user is logged in (detected via localStorage sync check),
+   hide the default login/signup links until auth.js replaces them with user menu */
+html.auth-logged-in .nav-login,
+html.auth-logged-in .nav-signup,
+html.auth-logged-in .nav-mobile-actions > a[href="login.html"],
+html.auth-logged-in .nav-mobile-actions > a[href="signup.html"] {
+  visibility: hidden;
+}
+
+/* For logged-in users, show nav-actions only after auth.js has replaced the content */
+html.auth-logged-in .nav-actions,
+html.auth-logged-in .nav-mobile-actions {
+  visibility: hidden;
+}
+
+html.auth-logged-in.auth-ready .nav-actions,
+html.auth-logged-in.auth-ready .nav-mobile-actions {
+  visibility: visible;
+}
+
+/* --------------------------------------------
+   MAIN NAVIGATION BAR
+   Fixed to top, full width
+   -------------------------------------------- */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  /* Only transition visual properties, not layout */
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+  transition-property: background-color, border-color, box-shadow;
+}
+
+/* Add solid background when page is scrolled */
+.nav.scrolled {
+  background-color: var(--color-cream);
+  border-bottom-color: var(--color-sand-dark);
+  box-shadow: var(--shadow-md);
+}
+
+/* Container for nav content */
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+/* --------------------------------------------
+   LOGO
+   Elegant branding with icon and styled text
+   -------------------------------------------- */
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  text-decoration: none !important;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform var(--transition-fast);
+}
+
+.nav-logo * {
+  text-decoration: none !important;
+}
+
+.nav-logo:hover {
+  transform: scale(1.02);
+}
+
+/* Logo icon */
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 2px 4px rgba(192, 57, 43, 0.2));
+  transition: transform var(--transition-fast);
+}
+
+.nav-logo:hover .nav-logo-icon {
+  transform: rotate(-8deg) scale(1.05);
+}
+
+/* Logo text wrapper */
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+/* "Nomad" part - black and bold */
+.nav-logo-nomad {
+  font-weight: 700;
+  color: var(--color-ink, #1a1a1a);
+  letter-spacing: -0.5px;
+  transition: color var(--transition-fast);
+}
+
+/* "Compass" part - red accent */
+.nav-logo-accent {
+  color: #c0392b;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.nav-logo:hover .nav-logo-nomad {
+  color: #333;
+}
+
+.nav-logo:hover .nav-logo-accent {
+  color: #e74c3c;
+}
+
+/* --------------------------------------------
+   DESKTOP NAVIGATION LINKS
+   Centered links
+   -------------------------------------------- */
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: var(--space-8);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Show on desktop */
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+/* Individual nav link */
+.nav-link {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--color-charcoal);
+  text-decoration: none;
+  padding: var(--space-2) 0;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-terracotta);
+}
+
+/* Active state indicator */
+.nav-link.active {
+  color: var(--color-terracotta);
+}
+
+/* Underline on hover/active */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-terracotta);
+  transition: width var(--transition-base);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* --------------------------------------------
+   NAVIGATION ACTIONS
+   Login and Sign Up buttons (right side)
+   -------------------------------------------- */
+.nav-actions {
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Show on desktop */
+@media (min-width: 768px) {
+  .nav-actions {
+    display: flex;
+  }
+}
+
+/* Login link - ghost style */
+.nav-login {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--color-charcoal);
+  text-decoration: none;
+  padding: var(--space-2) var(--space-4);
+  transition: color var(--transition-fast);
+}
+
+.nav-login:hover {
+  color: var(--color-terracotta);
+}
+
+/* Sign Up button - primary style, slightly smaller */
+.nav-signup {
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--text-sm);
+}
+
+/* --------------------------------------------
+   USER MENU (logged in state)
+   -------------------------------------------- */
+
+/* User button - profile link */
+.nav-user-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-1);
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  background: var(--color-sand);
+  transition: all var(--transition-fast);
+}
+
+.nav-user-btn:hover {
+  background: var(--color-sand-dark);
+}
+
+/* Avatar container */
+.nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nav-avatar-lg {
+  width: 40px;
+  height: 40px;
+}
+
+.nav-avatar-initials {
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  letter-spacing: 0.5px;
+}
+
+.nav-avatar-lg .nav-avatar-initials {
+  font-size: 14px;
+}
+
+.nav-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* User name */
+.nav-user-name {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-charcoal);
+}
+
+/* Logout button - icon only on desktop */
+.nav-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-stone);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.nav-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.nav-logout-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Mobile user button */
+.nav-user-btn-mobile {
+  width: 100%;
+  justify-content: flex-start;
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-2);
+}
+
+.nav-user-btn-mobile .nav-user-name {
+  font-size: var(--text-base);
+}
+
+.nav-logout-btn-mobile {
+  width: 100%;
+}
+
+/* --------------------------------------------
+   MOBILE HAMBURGER MENU
+   Three-line icon that animates to X
+   -------------------------------------------- */
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--space-2);
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .nav-toggle {
+    display: none;
+  }
+}
+
+/* Hamburger lines */
+.nav-toggle-line {
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-charcoal);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+.nav-toggle-line:nth-child(1) {
+  transform: translateY(-6px);
+}
+
+.nav-toggle-line:nth-child(3) {
+  transform: translateY(6px);
+}
+
+/* Animate to X when open */
+.nav-toggle.active .nav-toggle-line:nth-child(1) {
+  transform: translateY(0) rotate(45deg);
+}
+
+.nav-toggle.active .nav-toggle-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.nav-toggle.active .nav-toggle-line:nth-child(3) {
+  transform: translateY(0) rotate(-45deg);
+}
+
+/* --------------------------------------------
+   MOBILE MENU OVERLAY
+   Full-screen menu for mobile
+   -------------------------------------------- */
+.nav-mobile {
+  position: fixed;
+  top: var(--nav-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-cream);
+  padding: var(--space-8) var(--space-6);
+  transform: translateX(100%);
+  transition: transform var(--transition-base);
+  overflow-y: auto;
+  z-index: 999;
+}
+
+/* Show mobile menu when active */
+.nav-mobile.active {
+  transform: translateX(0);
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .nav-mobile {
+    display: none;
+  }
+}
+
+/* Mobile menu links */
+.nav-mobile-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-8) 0;
+}
+
+.nav-mobile-link {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-ink);
+  text-decoration: none;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-sand-dark);
+  transition: color var(--transition-fast);
+}
+
+.nav-mobile-link:hover,
+.nav-mobile-link.active {
+  color: var(--color-terracotta);
+}
+
+/* Mobile menu actions */
+.nav-mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.nav-mobile-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.nav-open {
+  overflow: hidden;
+}

@@ -1,0 +1,3041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find short-term rentals perfect for digital nomads. Monthly apartments, coliving spaces, and furnished stays in top nomad cities.">
+
+  <title>Short-Term Rentals — NomadCompass</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/logo-128.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Short-Term Rentals for Digital Nomads | NomadCompass">
+  <meta property="og:description" content="Find monthly apartments, coliving spaces, and furnished rentals in the best digital nomad destinations.">
+  <meta property="og:type" content="website">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/nav.css">
+  <link rel="stylesheet" href="styles/footer.css">
+
+  <!-- Auth state check (prevents button flash on page load) -->
+  <script>
+    (function() {
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          document.documentElement.classList.add('auth-logged-in');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Page-specific styles -->
+  <style>
+    body {
+      animation: pageIn 0.4s ease-out;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      padding: var(--space-12) 0 var(--space-6);
+    }
+
+    .page-header h1 {
+      margin-bottom: var(--space-3);
+    }
+
+    .page-header .lead {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      align-items: center;
+    }
+
+    .search-input-wrapper {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
+      font-size: var(--text-base);
+      border: 2px solid var(--color-sand-dark);
+      border-radius: var(--radius-lg);
+      background: var(--color-sand);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: var(--space-3);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-stone);
+    }
+
+    .search-btn {
+      padding: var(--space-3) var(--space-6);
+      background: #c0392b;
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .search-btn:hover {
+      background: #a93226;
+      transform: translateY(-1px);
+    }
+
+    /* Main Layout */
+    .rentals-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: var(--space-6);
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .rentals-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Filter Sidebar */
+    .filter-sidebar {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-5);
+      position: sticky;
+      top: calc(var(--nav-height) + var(--space-4));
+      max-height: calc(100vh - var(--nav-height) - var(--space-8));
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    @media (max-width: 1024px) {
+      .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 100vh;
+        border-radius: 0;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform var(--transition-base);
+      }
+
+      .filter-sidebar.open {
+        transform: translateX(0);
+      }
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-sand-dark);
+    }
+
+    .filter-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--color-ink);
+    }
+
+    .filter-clear {
+      font-size: var(--text-sm);
+      color: #c0392b;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      transition: background var(--transition-fast);
+    }
+
+    .filter-clear:hover {
+      background: rgba(192, 57, 43, 0.1);
+    }
+
+    .filter-close {
+      display: none;
+      background: none;
+      border: none;
+      font-size: var(--text-2xl);
+      cursor: pointer;
+      color: var(--color-charcoal);
+    }
+
+    @media (max-width: 1024px) {
+      .filter-close {
+        display: block;
+      }
+    }
+
+    /* Filter Section */
+    .filter-section {
+      border-bottom: 1px solid var(--color-sand-dark);
+      padding: var(--space-4) 0;
+    }
+
+    .filter-section:last-child {
+      border-bottom: none;
+    }
+
+    .filter-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .filter-section-title {
+      font-weight: var(--font-semibold);
+      color: var(--color-ink);
+      font-size: var(--text-base);
+    }
+
+    .filter-section-toggle {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-stone);
+      transition: transform var(--transition-fast);
+    }
+
+    .filter-section.collapsed .filter-section-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .filter-section-content {
+      padding-top: var(--space-3);
+      display: grid;
+      gap: var(--space-2);
+    }
+
+    .filter-section.collapsed .filter-section-content {
+      display: none;
+    }
+
+    /* Filter Controls */
+    .filter-select {
+      width: 100%;
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--color-charcoal);
+      background-color: var(--color-sand);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233D3833' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #c0392b;
+    }
+
+    /* Range Input */
+    .filter-range {
+      display: flex;
+      gap: var(--space-2);
+      align-items: center;
+    }
+
+    .filter-range-input {
+      flex: 1;
+      padding: var(--space-2);
+      font-size: var(--text-sm);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      background: var(--color-sand);
+      text-align: center;
+    }
+
+    .filter-range-input:focus {
+      outline: none;
+      border-color: #c0392b;
+    }
+
+    .filter-range-sep {
+      color: var(--color-stone);
+    }
+
+    /* Checkbox Grid */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+
+    .checkbox-item:hover {
+      background: var(--color-sand);
+    }
+
+    .checkbox-item input {
+      width: 18px;
+      height: 18px;
+      accent-color: #c0392b;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .checkbox-item span {
+      font-size: var(--text-sm);
+      color: var(--color-charcoal);
+      line-height: 1.3;
+    }
+
+    /* Checkbox Full Width */
+    .checkbox-full {
+      grid-column: 1 / -1;
+    }
+
+    /* Counter Control */
+    .counter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-2) 0;
+    }
+
+    .counter-label {
+      font-size: var(--text-sm);
+      color: var(--color-charcoal);
+    }
+
+    .counter-control {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .counter-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-full);
+      background: var(--color-white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+      color: var(--color-charcoal);
+      transition: border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .counter-btn:hover:not(:disabled) {
+      border-color: #c0392b;
+      color: #c0392b;
+    }
+
+    .counter-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .counter-value {
+      font-weight: var(--font-medium);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    /* Rating Stars */
+    .rating-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .rating-option {
+      flex: 1 1 auto;
+      min-width: 50px;
+      padding: var(--space-2);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      cursor: pointer;
+      text-align: center;
+      font-size: var(--text-sm);
+      transition: all var(--transition-fast);
+    }
+
+    .rating-option:hover {
+      border-color: #c0392b;
+    }
+
+    .rating-option.active {
+      border-color: #c0392b;
+      background: rgba(192, 57, 43, 0.1);
+      color: #c0392b;
+    }
+
+    .rating-option .star {
+      color: #f59e0b;
+    }
+
+    /* WiFi Speed Buttons */
+    .wifi-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .wifi-option {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      cursor: pointer;
+      font-size: var(--text-sm);
+      transition: all var(--transition-fast);
+    }
+
+    .wifi-option:hover {
+      border-color: #c0392b;
+    }
+
+    .wifi-option.active {
+      border-color: #c0392b;
+      background: rgba(192, 57, 43, 0.1);
+      color: #c0392b;
+    }
+
+    /* Apply Button (Mobile) */
+    .filter-apply-btn {
+      display: none;
+      width: 100%;
+      padding: var(--space-4);
+      background: #c0392b;
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-semibold);
+      font-size: var(--text-base);
+      cursor: pointer;
+      margin-top: var(--space-4);
+    }
+
+    @media (max-width: 1024px) {
+      .filter-apply-btn {
+        display: block;
+      }
+    }
+
+    /* Mobile Filter Toggle */
+    .mobile-filter-toggle {
+      display: none;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-white);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      font-weight: var(--font-medium);
+      margin-bottom: var(--space-4);
+    }
+
+    @media (max-width: 1024px) {
+      .mobile-filter-toggle {
+        display: flex;
+      }
+    }
+
+    .active-filter-count {
+      background: #c0392b;
+      color: white;
+      font-size: var(--text-xs);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Results Section */
+    .results-section {
+      min-width: 0;
+    }
+
+    /* Results header */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .results-count {
+      font-size: var(--text-lg);
+      color: var(--color-charcoal);
+    }
+
+    .results-count strong {
+      color: var(--color-ink);
+    }
+
+    .results-sort {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .results-sort label {
+      font-size: var(--text-sm);
+      color: var(--color-stone);
+    }
+
+    .sort-select {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-sm);
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      cursor: pointer;
+    }
+
+    /* Active Filters Tags */
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    .active-filter-tag {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-3);
+      background: rgba(192, 57, 43, 0.1);
+      color: #c0392b;
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
+    }
+
+    .active-filter-tag button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      color: inherit;
+    }
+
+    /* Rentals Grid */
+    .rentals-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    @media (min-width: 640px) {
+      .rentals-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .rentals-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Rental Card */
+    .rental-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rental-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Card Image Section */
+    .rental-card-image {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .rental-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-base);
+    }
+
+    .rental-card:hover .rental-card-image img {
+      transform: scale(1.05);
+    }
+
+    /* Single badge on image */
+    .rental-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #c0392b;
+      color: white;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: var(--font-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .rental-badge.studio { background: #c0392b; }
+    .rental-badge.apartment { background: #c0392b; }
+    .rental-badge.coliving { background: #8e44ad; }
+    .rental-badge.hotel { background: #2980b9; }
+    .rental-badge.house { background: #16a085; }
+    .rental-badge.hostel { background: #e67e22; }
+
+    .rental-favorite {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      background: white;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: transform var(--transition-fast);
+      border: none;
+    }
+
+    .rental-favorite:hover {
+      transform: scale(1.1);
+    }
+
+    .rental-favorite svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Card Body */
+    .rental-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Location & Rating Row */
+    .rental-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .rental-location {
+      font-size: 13px;
+      color: var(--color-stone);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+
+    .rental-location svg {
+      flex-shrink: 0;
+      width: 12px;
+      height: 12px;
+    }
+
+    .rental-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: var(--font-medium);
+      color: var(--color-charcoal);
+      flex-shrink: 0;
+    }
+
+    .rental-rating-star {
+      color: #f59e0b;
+    }
+
+    /* Title */
+    .rental-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: var(--font-medium);
+      color: var(--color-ink);
+      line-height: 1.35;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 43px;
+    }
+
+    /* Specs Row - Simple inline */
+    .rental-specs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--color-charcoal);
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .rental-specs span {
+      white-space: nowrap;
+    }
+
+    .rental-specs .sep {
+      color: var(--color-sand-dark);
+    }
+
+    /* Features Row */
+    .rental-features {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .rental-feature {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--color-charcoal);
+      background: var(--color-sand);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .rental-feature.wifi {
+      background: #d5f5e3;
+      color: #1e8449;
+    }
+
+    .rental-feature.verified {
+      background: #e8f8f5;
+      color: #1abc9c;
+    }
+
+    /* Footer */
+    .rental-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-sand);
+      margin-top: auto;
+    }
+
+    .rental-price-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rental-price {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: var(--font-semibold);
+      color: var(--color-ink);
+      line-height: 1;
+    }
+
+    .rental-price-period {
+      font-size: 12px;
+      color: var(--color-stone);
+      margin-top: 2px;
+    }
+
+    .rental-meta {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .rental-min-stay {
+      font-size: 11px;
+      color: var(--color-stone);
+      background: var(--color-sand);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .rental-tags {
+      display: flex;
+      gap: 4px;
+    }
+
+    .rental-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: var(--font-medium);
+    }
+
+    .rental-tag.superhost {
+      background: #fef3e2;
+      color: #d68910;
+    }
+
+    .rental-tag.instant {
+      background: #fdeaea;
+      color: #c0392b;
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: var(--space-16) var(--space-4);
+      color: var(--color-stone);
+      grid-column: 1 / -1;
+    }
+
+    .no-results h3 {
+      color: var(--color-ink);
+      margin-bottom: var(--space-2);
+    }
+
+    .no-results-btn {
+      margin-top: var(--space-4);
+      padding: var(--space-3) var(--space-6);
+      background: #c0392b;
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-medium);
+      cursor: pointer;
+    }
+
+    /* Filter Overlay */
+    .filter-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .filter-overlay.active {
+      display: block;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+    }
+
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: var(--space-1) var(--space-2);
+      background: var(--color-ink);
+      color: white;
+      font-size: var(--text-xs);
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition-fast);
+    }
+
+    .tooltip:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="wheel.html" class="nav-link">Wheel</a></li>
+        <li><a href="index.html#cities" class="nav-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-link active">Rentals</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="index.html" class="nav-mobile-link">Home</a></li>
+        <li><a href="wheel.html" class="nav-mobile-link">Wheel</a></li>
+        <li><a href="index.html#cities" class="nav-mobile-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-mobile-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-mobile-link">Blog</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="login.html" class="btn btn-secondary">Login</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Navigation Script -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
+
+  <!-- Main Content -->
+  <main class="section" style="padding-top: calc(var(--nav-height) + var(--space-8));">
+    <div class="container">
+
+      <!-- Page Header -->
+      <header class="page-header">
+        <h1>Short-Term Rentals</h1>
+        <p class="lead">Find your perfect home base. Monthly apartments, coliving spaces, and furnished stays in top nomad destinations.</p>
+      </header>
+
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="M21 21l-4.35-4.35"></path>
+          </svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by city, neighborhood, or property name...">
+        </div>
+        <button class="search-btn" onclick="filterRentals()">Search</button>
+      </div>
+
+      <!-- Mobile Filter Toggle -->
+      <button class="mobile-filter-toggle" id="mobileFilterToggle">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M1 14h6m2-6h6m2 8h6"></path>
+        </svg>
+        Filters
+        <span class="active-filter-count" id="activeFilterCount" style="display: none;">0</span>
+      </button>
+
+      <!-- Filter Overlay (Mobile) -->
+      <div class="filter-overlay" id="filterOverlay"></div>
+
+      <!-- Main Layout -->
+      <div class="rentals-layout">
+
+        <!-- Filter Sidebar -->
+        <aside class="filter-sidebar" id="filterSidebar">
+          <div class="filter-header">
+            <h2 class="filter-title">Filters</h2>
+            <button class="filter-clear" onclick="clearAllFilters()">Clear all</button>
+            <button class="filter-close" id="filterClose">&times;</button>
+          </div>
+
+          <!-- Location -->
+          <div class="filter-section" data-section="location">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Location</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <select id="cityFilter" class="filter-select">
+                <option value="">All Cities</option>
+                <option value="lisbon">Lisbon, Portugal</option>
+                <option value="bali">Bali, Indonesia</option>
+                <option value="medellin">Medellín, Colombia</option>
+                <option value="chiangmai">Chiang Mai, Thailand</option>
+                <option value="mexicocity">Mexico City, Mexico</option>
+                <option value="barcelona">Barcelona, Spain</option>
+                <option value="bangkok">Bangkok, Thailand</option>
+                <option value="berlin">Berlin, Germany</option>
+                <option value="porto">Porto, Portugal</option>
+                <option value="tbilisi">Tbilisi, Georgia</option>
+                <option value="capetown">Cape Town, South Africa</option>
+                <option value="buenosaires">Buenos Aires, Argentina</option>
+              </select>
+              <select id="neighborhoodFilter" class="filter-select">
+                <option value="">All Neighborhoods</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Property Type -->
+          <div class="filter-section" data-section="property">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Property Type</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="checkbox-grid">
+                <label class="checkbox-item">
+                  <input type="checkbox" value="apartment" data-filter="type">
+                  <span>Apartment</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="studio" data-filter="type">
+                  <span>Studio</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="coliving" data-filter="type">
+                  <span>Coliving</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="hotel" data-filter="type">
+                  <span>Apart-Hotel</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="house" data-filter="type">
+                  <span>House/Villa</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="hostel" data-filter="type">
+                  <span>Hostel</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rooms & Space -->
+          <div class="filter-section" data-section="rooms">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Rooms & Space</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="counter-row">
+                <span class="counter-label">Bedrooms</span>
+                <div class="counter-control">
+                  <button class="counter-btn" onclick="adjustCounter('bedrooms', -1)">−</button>
+                  <span class="counter-value" id="bedroomsValue">Any</span>
+                  <button class="counter-btn" onclick="adjustCounter('bedrooms', 1)">+</button>
+                </div>
+              </div>
+              <div class="counter-row">
+                <span class="counter-label">Bathrooms</span>
+                <div class="counter-control">
+                  <button class="counter-btn" onclick="adjustCounter('bathrooms', -1)">−</button>
+                  <span class="counter-value" id="bathroomsValue">Any</span>
+                  <button class="counter-btn" onclick="adjustCounter('bathrooms', 1)">+</button>
+                </div>
+              </div>
+              <div class="counter-row">
+                <span class="counter-label">Guests</span>
+                <div class="counter-control">
+                  <button class="counter-btn" onclick="adjustCounter('guests', -1)">−</button>
+                  <span class="counter-value" id="guestsValue">Any</span>
+                  <button class="counter-btn" onclick="adjustCounter('guests', 1)">+</button>
+                </div>
+              </div>
+              <div style="margin-top: var(--space-3);">
+                <label class="filter-label" style="margin-bottom: var(--space-1);">Size (m²)</label>
+                <div class="filter-range">
+                  <input type="number" class="filter-range-input" id="sizeMin" placeholder="Min" min="0">
+                  <span class="filter-range-sep">—</span>
+                  <input type="number" class="filter-range-input" id="sizeMax" placeholder="Max" min="0">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="filter-section" data-section="price">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Price</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <label class="filter-label" style="margin-bottom: var(--space-1);">Monthly Price (USD)</label>
+              <div class="filter-range">
+                <input type="number" class="filter-range-input" id="priceMin" placeholder="$0" min="0">
+                <span class="filter-range-sep">—</span>
+                <input type="number" class="filter-range-input" id="priceMax" placeholder="Any" min="0">
+              </div>
+              <div class="checkbox-grid" style="margin-top: var(--space-3);">
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="billsIncluded">
+                  <span>Bills included</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="depositFree">
+                  <span>No deposit required</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Work Setup (Nomad-specific) -->
+          <div class="filter-section" data-section="work">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Work Setup</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <label class="filter-label" style="margin-bottom: var(--space-2);">WiFi Speed</label>
+              <div class="wifi-options" id="wifiOptions">
+                <button type="button" class="wifi-option" data-speed="0">Any</button>
+                <button type="button" class="wifi-option" data-speed="25">25+ Mbps</button>
+                <button type="button" class="wifi-option" data-speed="50">50+ Mbps</button>
+                <button type="button" class="wifi-option" data-speed="100">100+ Mbps</button>
+                <button type="button" class="wifi-option" data-speed="200">200+ Mbps</button>
+              </div>
+              <div class="checkbox-grid" style="margin-top: var(--space-3);">
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="dedicatedWorkspace">
+                  <span>Dedicated workspace</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="standingDesk">
+                  <span>Standing desk</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="monitor">
+                  <span>External monitor</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="ergonomicChair">
+                  <span>Ergonomic chair</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="coworking">
+                  <span>Coworking access</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="quietSpace">
+                  <span>Quiet environment</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Amenities -->
+          <div class="filter-section" data-section="amenities">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Amenities</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="checkbox-grid">
+                <label class="checkbox-item">
+                  <input type="checkbox" value="ac" data-filter="amenity">
+                  <span>Air conditioning</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="heating" data-filter="amenity">
+                  <span>Heating</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="kitchen" data-filter="amenity">
+                  <span>Full kitchen</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="washer" data-filter="amenity">
+                  <span>Washer</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="dryer" data-filter="amenity">
+                  <span>Dryer</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="dishwasher" data-filter="amenity">
+                  <span>Dishwasher</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="tv" data-filter="amenity">
+                  <span>TV</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="streaming" data-filter="amenity">
+                  <span>Netflix/Streaming</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="iron" data-filter="amenity">
+                  <span>Iron</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="hairdryer" data-filter="amenity">
+                  <span>Hair dryer</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="coffeeMaker" data-filter="amenity">
+                  <span>Coffee maker</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="microwave" data-filter="amenity">
+                  <span>Microwave</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Building & Location -->
+          <div class="filter-section" data-section="building">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Building & Location</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="checkbox-grid">
+                <label class="checkbox-item">
+                  <input type="checkbox" value="pool" data-filter="building">
+                  <span>Pool</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="gym" data-filter="building">
+                  <span>Gym</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="rooftop" data-filter="building">
+                  <span>Rooftop/Terrace</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="balcony" data-filter="building">
+                  <span>Balcony</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="garden" data-filter="building">
+                  <span>Garden</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="elevator" data-filter="building">
+                  <span>Elevator</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="doorman" data-filter="building">
+                  <span>Doorman/Security</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="parking" data-filter="building">
+                  <span>Parking</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="bikeStorage" data-filter="building">
+                  <span>Bike storage</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="metro" data-filter="building">
+                  <span>Near metro</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="beach" data-filter="building">
+                  <span>Near beach</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="center" data-filter="building">
+                  <span>City center</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lifestyle -->
+          <div class="filter-section" data-section="lifestyle">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Lifestyle</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="checkbox-grid">
+                <label class="checkbox-item">
+                  <input type="checkbox" value="petFriendly" data-filter="lifestyle">
+                  <span>Pet friendly</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="familyFriendly" data-filter="lifestyle">
+                  <span>Family friendly</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="smokingAllowed" data-filter="lifestyle">
+                  <span>Smoking allowed</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="partiesAllowed" data-filter="lifestyle">
+                  <span>Events allowed</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="lgbtqFriendly" data-filter="lifestyle">
+                  <span>LGBTQ+ friendly</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="community" data-filter="lifestyle">
+                  <span>Community events</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="sustainable" data-filter="lifestyle">
+                  <span>Eco-friendly</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" value="womenOnly" data-filter="lifestyle">
+                  <span>Women only</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Booking Options -->
+          <div class="filter-section" data-section="booking">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Booking Options</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="checkbox-grid">
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="instantBook">
+                  <span>Instant book</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="selfCheckin">
+                  <span>Self check-in</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="flexibleCancel">
+                  <span>Flexible cancellation</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="longTermDiscount">
+                  <span>Long-term discount</span>
+                </label>
+              </div>
+              <div style="margin-top: var(--space-3);">
+                <label class="filter-label" style="margin-bottom: var(--space-1);">Minimum Stay</label>
+                <select id="minStayFilter" class="filter-select">
+                  <option value="">Any length</option>
+                  <option value="3">3+ nights</option>
+                  <option value="7">1+ week</option>
+                  <option value="14">2+ weeks</option>
+                  <option value="28">1+ month</option>
+                  <option value="90">3+ months</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rating & Reviews -->
+          <div class="filter-section" data-section="rating">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Rating & Reviews</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <label class="filter-label" style="margin-bottom: var(--space-2);">Minimum Rating</label>
+              <div class="rating-options" id="ratingOptions">
+                <button type="button" class="rating-option" data-rating="0">Any</button>
+                <button type="button" class="rating-option" data-rating="4"><span class="star">★</span> 4+</button>
+                <button type="button" class="rating-option" data-rating="4.5"><span class="star">★</span> 4.5+</button>
+                <button type="button" class="rating-option" data-rating="4.8"><span class="star">★</span> 4.8+</button>
+              </div>
+              <div class="checkbox-grid" style="margin-top: var(--space-3);">
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="superhost">
+                  <span>Superhost only</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="verified">
+                  <span>Verified properties</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" id="nomadVerified">
+                  <span>Nomad verified</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accessibility -->
+          <div class="filter-section collapsed" data-section="accessibility">
+            <div class="filter-section-header" onclick="toggleSection(this)">
+              <span class="filter-section-title">Accessibility</span>
+              <span class="filter-section-toggle">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="filter-section-content">
+              <div class="checkbox-grid">
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" value="stepFree" data-filter="accessibility">
+                  <span>Step-free entrance</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" value="wideDoorway" data-filter="accessibility">
+                  <span>Wide doorways (32"+)</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" value="accessibleBathroom" data-filter="accessibility">
+                  <span>Accessible bathroom</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" value="grabBars" data-filter="accessibility">
+                  <span>Grab bars</span>
+                </label>
+                <label class="checkbox-item checkbox-full">
+                  <input type="checkbox" value="accessibleParking" data-filter="accessibility">
+                  <span>Accessible parking</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apply Button (Mobile) -->
+          <button class="filter-apply-btn" onclick="applyFiltersAndClose()">
+            Show Results
+          </button>
+        </aside>
+
+        <!-- Results Section -->
+        <section class="results-section">
+          <!-- Active Filters -->
+          <div class="active-filters" id="activeFilters"></div>
+
+          <!-- Results Header -->
+          <div class="results-header">
+            <p class="results-count">Showing <strong id="rentalCount">0</strong> rentals</p>
+            <div class="results-sort">
+              <label for="sortSelect">Sort by:</label>
+              <select id="sortSelect" class="sort-select" onchange="filterRentals()">
+                <option value="recommended">Recommended</option>
+                <option value="priceLow">Price: Low to High</option>
+                <option value="priceHigh">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="reviews">Most Reviews</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Rentals Grid -->
+          <div class="rentals-grid" id="rentalsGrid">
+            <!-- Rentals will be rendered by JavaScript -->
+          </div>
+
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column footer-about">
+          <a href="index.html" class="footer-logo">
+            <img src="assets/logo.svg" alt="" class="footer-logo-icon">
+            <span class="footer-logo-nomad">Nomad</span><span class="footer-logo-accent">Compass</span>
+          </a>
+          <p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Explore</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#cities" class="footer-link">All Cities</a></li>
+            <li><a href="wheel.html" class="footer-link">Decision Wheel</a></li>
+            <li><a href="rentals.html" class="footer-link">Rentals</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="blog.html" class="footer-link">Blog</a></li>
+            <li><a href="guides.html" class="footer-link">City Guides</a></li>
+            <li><a href="faq.html" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-links">
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li><a href="privacy.html" class="footer-link">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2025 NomadCompass. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Rentals Data & Script -->
+  <script>
+    // Extended rental data with all filter properties
+    const RENTALS = [
+      // Lisbon
+      {
+        id: 1,
+        city: "lisbon",
+        cityName: "Lisbon, Portugal",
+        neighborhood: "Alfama",
+        type: "apartment",
+        title: "Sunny Alfama Studio with River View",
+        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop",
+        price: 1200,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 45,
+        wifiSpeed: 150,
+        amenities: ["ac", "kitchen", "washer", "tv", "streaming", "coffeeMaker"],
+        building: ["elevator", "center"],
+        workSetup: ["dedicatedWorkspace", "ergonomicChair"],
+        lifestyle: [],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.9,
+        reviews: 127,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2024-01-15"
+      },
+      {
+        id: 2,
+        city: "lisbon",
+        cityName: "Lisbon, Portugal",
+        neighborhood: "Santos",
+        type: "coliving",
+        title: "Selina Secret Garden Coliving",
+        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&h=400&fit=crop",
+        price: 850,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 25,
+        wifiSpeed: 200,
+        amenities: ["ac", "kitchen", "washer"],
+        building: ["rooftop", "garden", "center"],
+        workSetup: ["coworking", "dedicatedWorkspace", "monitor"],
+        lifestyle: ["community", "lgbtqFriendly"],
+        booking: ["instantBook", "flexibleCancel"],
+        accessibility: ["stepFree"],
+        rating: 4.7,
+        reviews: 89,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 7,
+        longTermDiscount: true,
+        dateAdded: "2024-02-20"
+      },
+      {
+        id: 3,
+        city: "lisbon",
+        cityName: "Lisbon, Portugal",
+        neighborhood: "Alcântara",
+        type: "apartment",
+        title: "Modern Loft in LX Factory Area",
+        image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop",
+        price: 1600,
+        bedrooms: 2,
+        bathrooms: 1,
+        guests: 4,
+        size: 75,
+        wifiSpeed: 300,
+        amenities: ["ac", "heating", "kitchen", "washer", "dryer", "dishwasher", "tv", "streaming"],
+        building: ["gym", "balcony", "elevator", "parking"],
+        workSetup: ["dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair"],
+        lifestyle: ["petFriendly"],
+        booking: ["instantBook", "selfCheckin", "longTermDiscount"],
+        accessibility: ["stepFree", "wideDoorway"],
+        rating: 4.8,
+        reviews: 64,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 30,
+        longTermDiscount: true,
+        dateAdded: "2023-11-10"
+      },
+      // Bali
+      {
+        id: 4,
+        city: "bali",
+        cityName: "Canggu, Bali",
+        neighborhood: "Canggu",
+        type: "house",
+        title: "Rice Field View Villa with Pool",
+        image: "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=600&h=400&fit=crop",
+        price: 900,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 60,
+        wifiSpeed: 100,
+        amenities: ["ac", "kitchen", "tv"],
+        building: ["pool", "garden", "parking"],
+        workSetup: ["dedicatedWorkspace"],
+        lifestyle: ["sustainable"],
+        booking: ["selfCheckin", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.9,
+        reviews: 203,
+        superhost: true,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 14,
+        longTermDiscount: true,
+        dateAdded: "2024-03-05"
+      },
+      {
+        id: 5,
+        city: "bali",
+        cityName: "Ubud, Bali",
+        neighborhood: "Ubud",
+        type: "coliving",
+        title: "Outpost Coliving & Coworking",
+        image: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600&h=400&fit=crop",
+        price: 750,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 30,
+        wifiSpeed: 150,
+        amenities: ["ac", "kitchen"],
+        building: ["pool", "garden"],
+        workSetup: ["coworking", "dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair", "quietSpace"],
+        lifestyle: ["community", "sustainable"],
+        booking: ["instantBook", "flexibleCancel", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.8,
+        reviews: 156,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 7,
+        longTermDiscount: true,
+        dateAdded: "2024-01-28"
+      },
+      {
+        id: 6,
+        city: "bali",
+        cityName: "Canggu, Bali",
+        neighborhood: "Berawa",
+        type: "studio",
+        title: "Beach Walking Distance Studio",
+        image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&h=400&fit=crop",
+        price: 650,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 35,
+        wifiSpeed: 50,
+        amenities: ["ac", "kitchen", "tv"],
+        building: ["parking", "beach"],
+        workSetup: ["dedicatedWorkspace"],
+        lifestyle: [],
+        booking: ["selfCheckin"],
+        accessibility: [],
+        rating: 4.6,
+        reviews: 78,
+        superhost: false,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 7,
+        longTermDiscount: false,
+        dateAdded: "2024-02-14"
+      },
+      // Medellín
+      {
+        id: 7,
+        city: "medellin",
+        cityName: "Medellín, Colombia",
+        neighborhood: "El Poblado",
+        type: "apartment",
+        title: "El Poblado Penthouse with City Views",
+        image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&h=400&fit=crop",
+        price: 1100,
+        bedrooms: 2,
+        bathrooms: 2,
+        guests: 4,
+        size: 85,
+        wifiSpeed: 200,
+        amenities: ["ac", "kitchen", "washer", "dryer", "tv", "streaming", "dishwasher"],
+        building: ["gym", "pool", "rooftop", "doorman", "elevator", "parking"],
+        workSetup: ["dedicatedWorkspace", "standingDesk", "monitor"],
+        lifestyle: ["petFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel", "longTermDiscount"],
+        accessibility: ["stepFree", "elevator"],
+        rating: 4.9,
+        reviews: 94,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2023-12-01"
+      },
+      {
+        id: 8,
+        city: "medellin",
+        cityName: "Medellín, Colombia",
+        neighborhood: "El Poblado",
+        type: "coliving",
+        title: "Selina Medellín Coliving",
+        image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&h=400&fit=crop",
+        price: 600,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 20,
+        wifiSpeed: 100,
+        amenities: ["ac", "kitchen"],
+        building: ["rooftop", "center"],
+        workSetup: ["coworking", "dedicatedWorkspace"],
+        lifestyle: ["community", "lgbtqFriendly", "partiesAllowed"],
+        booking: ["instantBook", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.5,
+        reviews: 112,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 3,
+        longTermDiscount: true,
+        dateAdded: "2024-02-01"
+      },
+      {
+        id: 9,
+        city: "medellin",
+        cityName: "Medellín, Colombia",
+        neighborhood: "Laureles",
+        type: "apartment",
+        title: "Laureles Modern Apartment",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
+        price: 750,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 55,
+        wifiSpeed: 100,
+        amenities: ["ac", "kitchen", "washer", "tv"],
+        building: ["elevator", "metro"],
+        workSetup: ["dedicatedWorkspace", "ergonomicChair"],
+        lifestyle: ["familyFriendly"],
+        booking: ["selfCheckin", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.7,
+        reviews: 58,
+        superhost: true,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 14,
+        longTermDiscount: true,
+        dateAdded: "2024-01-20"
+      },
+      // Chiang Mai
+      {
+        id: 10,
+        city: "chiangmai",
+        cityName: "Chiang Mai, Thailand",
+        neighborhood: "Nimman",
+        type: "apartment",
+        title: "Nimman Luxury Condo with Pool",
+        image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=600&h=400&fit=crop",
+        price: 450,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 40,
+        wifiSpeed: 200,
+        amenities: ["ac", "kitchen", "washer", "tv", "streaming", "microwave"],
+        building: ["pool", "gym", "elevator", "parking"],
+        workSetup: ["dedicatedWorkspace", "monitor", "ergonomicChair"],
+        lifestyle: [],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel", "longTermDiscount"],
+        accessibility: ["stepFree"],
+        rating: 4.8,
+        reviews: 187,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2023-10-15"
+      },
+      {
+        id: 11,
+        city: "chiangmai",
+        cityName: "Chiang Mai, Thailand",
+        neighborhood: "Nimman",
+        type: "coliving",
+        title: "Hub53 Coliving Space",
+        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=400&fit=crop",
+        price: 500,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 25,
+        wifiSpeed: 300,
+        amenities: ["ac", "kitchen"],
+        building: ["rooftop", "center"],
+        workSetup: ["coworking", "dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair", "quietSpace"],
+        lifestyle: ["community"],
+        booking: ["instantBook", "flexibleCancel", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.9,
+        reviews: 73,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 7,
+        longTermDiscount: true,
+        dateAdded: "2024-03-01"
+      },
+      {
+        id: 12,
+        city: "chiangmai",
+        cityName: "Chiang Mai, Thailand",
+        neighborhood: "Old City",
+        type: "house",
+        title: "Old City Traditional House",
+        image: "https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?w=600&h=400&fit=crop",
+        price: 350,
+        bedrooms: 2,
+        bathrooms: 1,
+        guests: 4,
+        size: 70,
+        wifiSpeed: 50,
+        amenities: ["ac", "kitchen", "washer"],
+        building: ["garden", "bikeStorage", "center"],
+        workSetup: ["dedicatedWorkspace"],
+        lifestyle: ["petFriendly", "familyFriendly"],
+        booking: ["selfCheckin"],
+        accessibility: [],
+        rating: 4.6,
+        reviews: 42,
+        superhost: false,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 7,
+        longTermDiscount: false,
+        dateAdded: "2024-01-05"
+      },
+      // Mexico City
+      {
+        id: 13,
+        city: "mexicocity",
+        cityName: "Mexico City, Mexico",
+        neighborhood: "Roma Norte",
+        type: "apartment",
+        title: "Roma Norte Designer Apartment",
+        image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=600&h=400&fit=crop",
+        price: 1000,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 50,
+        wifiSpeed: 150,
+        amenities: ["ac", "heating", "kitchen", "washer", "tv", "streaming", "coffeeMaker"],
+        building: ["rooftop", "elevator", "center", "metro"],
+        workSetup: ["dedicatedWorkspace", "ergonomicChair"],
+        lifestyle: ["lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.8,
+        reviews: 134,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2023-11-20"
+      },
+      {
+        id: 14,
+        city: "mexicocity",
+        cityName: "Mexico City, Mexico",
+        neighborhood: "Condesa",
+        type: "coliving",
+        title: "Casai Condesa Living",
+        image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=600&h=400&fit=crop",
+        price: 900,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 35,
+        wifiSpeed: 200,
+        amenities: ["ac", "kitchen", "washer", "tv"],
+        building: ["gym", "rooftop", "doorman", "center"],
+        workSetup: ["coworking", "dedicatedWorkspace", "monitor"],
+        lifestyle: ["community", "lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel", "longTermDiscount"],
+        accessibility: ["stepFree"],
+        rating: 4.7,
+        reviews: 67,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 7,
+        longTermDiscount: true,
+        dateAdded: "2024-02-10"
+      },
+      {
+        id: 15,
+        city: "mexicocity",
+        cityName: "Mexico City, Mexico",
+        neighborhood: "Coyoacán",
+        type: "studio",
+        title: "Coyoacán Charming Studio",
+        image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600&h=400&fit=crop",
+        price: 600,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 30,
+        wifiSpeed: 75,
+        amenities: ["ac", "kitchen", "tv"],
+        building: ["garden", "parking"],
+        workSetup: ["dedicatedWorkspace"],
+        lifestyle: ["petFriendly", "familyFriendly"],
+        booking: ["selfCheckin"],
+        accessibility: [],
+        rating: 4.9,
+        reviews: 89,
+        superhost: true,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 14,
+        longTermDiscount: true,
+        dateAdded: "2024-01-10"
+      },
+      // Barcelona
+      {
+        id: 16,
+        city: "barcelona",
+        cityName: "Barcelona, Spain",
+        neighborhood: "Gothic Quarter",
+        type: "apartment",
+        title: "Gothic Quarter Stylish Flat",
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop",
+        price: 1800,
+        bedrooms: 2,
+        bathrooms: 1,
+        guests: 4,
+        size: 65,
+        wifiSpeed: 300,
+        amenities: ["ac", "heating", "kitchen", "washer", "dishwasher", "tv", "streaming"],
+        building: ["balcony", "center", "metro"],
+        workSetup: ["dedicatedWorkspace", "monitor", "ergonomicChair"],
+        lifestyle: ["lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.7,
+        reviews: 156,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 30,
+        longTermDiscount: true,
+        dateAdded: "2023-09-15"
+      },
+      {
+        id: 17,
+        city: "barcelona",
+        cityName: "Barcelona, Spain",
+        neighborhood: "Sants",
+        type: "coliving",
+        title: "Sants Coliving Hub",
+        image: "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=600&h=400&fit=crop",
+        price: 950,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 22,
+        wifiSpeed: 500,
+        amenities: ["ac", "heating", "kitchen"],
+        building: ["rooftop", "metro"],
+        workSetup: ["coworking", "dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair"],
+        lifestyle: ["community", "lgbtqFriendly"],
+        booking: ["instantBook", "flexibleCancel", "longTermDiscount"],
+        accessibility: ["stepFree"],
+        rating: 4.6,
+        reviews: 82,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 14,
+        longTermDiscount: true,
+        dateAdded: "2024-02-28"
+      },
+      {
+        id: 18,
+        city: "barcelona",
+        cityName: "Barcelona, Spain",
+        neighborhood: "Eixample",
+        type: "hotel",
+        title: "Eixample Apart-Hotel Suite",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        price: 2200,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 45,
+        wifiSpeed: 200,
+        amenities: ["ac", "heating", "kitchen", "tv", "streaming", "coffeeMaker", "iron", "hairdryer"],
+        building: ["gym", "rooftop", "doorman", "elevator", "center"],
+        workSetup: ["dedicatedWorkspace", "ergonomicChair"],
+        lifestyle: ["lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel"],
+        accessibility: ["stepFree", "wideDoorway", "accessibleBathroom"],
+        rating: 4.9,
+        reviews: 201,
+        superhost: true,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 3,
+        longTermDiscount: false,
+        dateAdded: "2023-08-20"
+      },
+      // Bangkok
+      {
+        id: 19,
+        city: "bangkok",
+        cityName: "Bangkok, Thailand",
+        neighborhood: "Sukhumvit",
+        type: "apartment",
+        title: "Sukhumvit High-Rise Condo",
+        image: "https://images.unsplash.com/photo-1600573472591-ee6c563aaec9?w=600&h=400&fit=crop",
+        price: 700,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 45,
+        wifiSpeed: 200,
+        amenities: ["ac", "kitchen", "washer", "tv", "streaming", "microwave"],
+        building: ["pool", "gym", "elevator", "metro"],
+        workSetup: ["dedicatedWorkspace", "monitor"],
+        lifestyle: [],
+        booking: ["instantBook", "selfCheckin", "longTermDiscount"],
+        accessibility: ["stepFree"],
+        rating: 4.7,
+        reviews: 143,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2023-12-10"
+      },
+      {
+        id: 20,
+        city: "bangkok",
+        cityName: "Bangkok, Thailand",
+        neighborhood: "Silom",
+        type: "coliving",
+        title: "Draper Startup House",
+        image: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&h=400&fit=crop",
+        price: 550,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 20,
+        wifiSpeed: 300,
+        amenities: ["ac", "kitchen"],
+        building: ["rooftop", "center", "metro"],
+        workSetup: ["coworking", "dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair"],
+        lifestyle: ["community"],
+        booking: ["instantBook", "flexibleCancel", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.8,
+        reviews: 94,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 7,
+        longTermDiscount: true,
+        dateAdded: "2024-01-25"
+      },
+      {
+        id: 21,
+        city: "bangkok",
+        cityName: "Bangkok, Thailand",
+        neighborhood: "Silom",
+        type: "studio",
+        title: "Silom Business District Studio",
+        image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=400&fit=crop",
+        price: 500,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 35,
+        wifiSpeed: 100,
+        amenities: ["ac", "kitchen", "tv"],
+        building: ["pool", "gym", "elevator", "metro"],
+        workSetup: ["dedicatedWorkspace"],
+        lifestyle: [],
+        booking: ["selfCheckin"],
+        accessibility: [],
+        rating: 4.5,
+        reviews: 67,
+        superhost: false,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 14,
+        longTermDiscount: false,
+        dateAdded: "2024-02-05"
+      },
+      // Berlin
+      {
+        id: 22,
+        city: "berlin",
+        cityName: "Berlin, Germany",
+        neighborhood: "Kreuzberg",
+        type: "apartment",
+        title: "Kreuzberg Industrial Loft",
+        image: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&h=400&fit=crop",
+        price: 1400,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 65,
+        wifiSpeed: 250,
+        amenities: ["heating", "kitchen", "washer", "dryer", "dishwasher", "tv", "streaming"],
+        building: ["garden", "bikeStorage", "metro"],
+        workSetup: ["dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair"],
+        lifestyle: ["petFriendly", "lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.8,
+        reviews: 112,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 30,
+        longTermDiscount: true,
+        dateAdded: "2023-10-05"
+      },
+      {
+        id: 23,
+        city: "berlin",
+        cityName: "Berlin, Germany",
+        neighborhood: "Friedrichshain",
+        type: "coliving",
+        title: "Factory Berlin Living",
+        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=600&h=400&fit=crop",
+        price: 1100,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 1,
+        size: 25,
+        wifiSpeed: 500,
+        amenities: ["heating", "kitchen"],
+        building: ["rooftop", "center", "metro"],
+        workSetup: ["coworking", "dedicatedWorkspace", "standingDesk", "monitor", "ergonomicChair", "quietSpace"],
+        lifestyle: ["community", "lgbtqFriendly"],
+        booking: ["instantBook", "flexibleCancel", "longTermDiscount"],
+        accessibility: ["stepFree"],
+        rating: 4.6,
+        reviews: 78,
+        superhost: false,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 14,
+        longTermDiscount: true,
+        dateAdded: "2024-03-10"
+      },
+      {
+        id: 24,
+        city: "berlin",
+        cityName: "Berlin, Germany",
+        neighborhood: "Mitte",
+        type: "apartment",
+        title: "Mitte Modern Apartment",
+        image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&h=400&fit=crop",
+        price: 1600,
+        bedrooms: 2,
+        bathrooms: 1,
+        guests: 4,
+        size: 75,
+        wifiSpeed: 200,
+        amenities: ["heating", "kitchen", "washer", "dishwasher", "tv", "streaming", "coffeeMaker"],
+        building: ["balcony", "elevator", "center", "metro"],
+        workSetup: ["dedicatedWorkspace", "monitor", "ergonomicChair"],
+        lifestyle: ["familyFriendly"],
+        booking: ["selfCheckin", "longTermDiscount"],
+        accessibility: ["stepFree", "wideDoorway"],
+        rating: 4.7,
+        reviews: 93,
+        superhost: true,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2023-11-30"
+      },
+      // Additional cities
+      {
+        id: 25,
+        city: "porto",
+        cityName: "Porto, Portugal",
+        neighborhood: "Ribeira",
+        type: "apartment",
+        title: "Ribeira River View Flat",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop",
+        price: 1100,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 50,
+        wifiSpeed: 150,
+        amenities: ["ac", "heating", "kitchen", "washer", "tv", "streaming"],
+        building: ["balcony", "center"],
+        workSetup: ["dedicatedWorkspace", "ergonomicChair"],
+        lifestyle: [],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.9,
+        reviews: 134,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2024-01-08"
+      },
+      {
+        id: 26,
+        city: "tbilisi",
+        cityName: "Tbilisi, Georgia",
+        neighborhood: "Vake",
+        type: "apartment",
+        title: "Vake Park Modern Apartment",
+        image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop",
+        price: 450,
+        bedrooms: 2,
+        bathrooms: 1,
+        guests: 4,
+        size: 70,
+        wifiSpeed: 100,
+        amenities: ["ac", "heating", "kitchen", "washer", "tv"],
+        building: ["balcony", "parking", "metro"],
+        workSetup: ["dedicatedWorkspace", "monitor"],
+        lifestyle: ["petFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.8,
+        reviews: 67,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: true,
+        minStay: 14,
+        longTermDiscount: true,
+        dateAdded: "2024-02-15"
+      },
+      {
+        id: 27,
+        city: "capetown",
+        cityName: "Cape Town, South Africa",
+        neighborhood: "Sea Point",
+        type: "apartment",
+        title: "Sea Point Ocean View Studio",
+        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop",
+        price: 800,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 40,
+        wifiSpeed: 100,
+        amenities: ["ac", "kitchen", "washer", "tv", "streaming"],
+        building: ["pool", "gym", "beach", "parking"],
+        workSetup: ["dedicatedWorkspace"],
+        lifestyle: ["lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel"],
+        accessibility: [],
+        rating: 4.7,
+        reviews: 89,
+        superhost: true,
+        verified: true,
+        nomadVerified: false,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 28,
+        longTermDiscount: true,
+        dateAdded: "2024-01-22"
+      },
+      {
+        id: 28,
+        city: "buenosaires",
+        cityName: "Buenos Aires, Argentina",
+        neighborhood: "Palermo",
+        type: "apartment",
+        title: "Palermo Soho Designer Loft",
+        image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&h=400&fit=crop",
+        price: 650,
+        bedrooms: 1,
+        bathrooms: 1,
+        guests: 2,
+        size: 55,
+        wifiSpeed: 100,
+        amenities: ["ac", "heating", "kitchen", "washer", "tv", "streaming"],
+        building: ["balcony", "center"],
+        workSetup: ["dedicatedWorkspace", "ergonomicChair"],
+        lifestyle: ["lgbtqFriendly"],
+        booking: ["instantBook", "selfCheckin", "flexibleCancel", "longTermDiscount"],
+        accessibility: [],
+        rating: 4.8,
+        reviews: 156,
+        superhost: true,
+        verified: true,
+        nomadVerified: true,
+        billsIncluded: true,
+        depositFree: false,
+        minStay: 30,
+        longTermDiscount: true,
+        dateAdded: "2023-12-20"
+      }
+    ];
+
+    // Neighborhoods by city
+    const NEIGHBORHOODS = {
+      lisbon: ["Alfama", "Santos", "Alcântara", "Baixa", "Bairro Alto", "Príncipe Real"],
+      bali: ["Canggu", "Ubud", "Seminyak", "Berawa", "Sanur"],
+      medellin: ["El Poblado", "Laureles", "Envigado", "Sabaneta"],
+      chiangmai: ["Nimman", "Old City", "Santitham", "Chang Phueak"],
+      mexicocity: ["Roma Norte", "Condesa", "Coyoacán", "Polanco", "Del Valle"],
+      barcelona: ["Gothic Quarter", "Eixample", "Gràcia", "Sants", "Poblenou"],
+      bangkok: ["Sukhumvit", "Silom", "Sathorn", "Thonglor", "Ekkamai"],
+      berlin: ["Kreuzberg", "Friedrichshain", "Mitte", "Prenzlauer Berg", "Neukölln"],
+      porto: ["Ribeira", "Baixa", "Foz", "Cedofeita"],
+      tbilisi: ["Vake", "Saburtalo", "Old Town", "Vera"],
+      capetown: ["Sea Point", "Green Point", "Gardens", "Camps Bay"],
+      buenosaires: ["Palermo", "Recoleta", "San Telmo", "Belgrano"]
+    };
+
+    // Filter state
+    let filterState = {
+      search: "",
+      city: "",
+      neighborhood: "",
+      types: [],
+      bedrooms: 0,
+      bathrooms: 0,
+      guests: 0,
+      sizeMin: 0,
+      sizeMax: 0,
+      priceMin: 0,
+      priceMax: 0,
+      billsIncluded: false,
+      depositFree: false,
+      wifiSpeed: 0,
+      workSetup: [],
+      amenities: [],
+      building: [],
+      lifestyle: [],
+      booking: [],
+      accessibility: [],
+      rating: 0,
+      superhost: false,
+      verified: false,
+      nomadVerified: false,
+      minStay: 0,
+      sort: "recommended"
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile filter toggle
+      const mobileToggle = document.getElementById('mobileFilterToggle');
+      const filterSidebar = document.getElementById('filterSidebar');
+      const filterOverlay = document.getElementById('filterOverlay');
+      const filterClose = document.getElementById('filterClose');
+
+      mobileToggle.addEventListener('click', () => {
+        filterSidebar.classList.add('open');
+        filterOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+
+      filterClose.addEventListener('click', closeFilterSidebar);
+      filterOverlay.addEventListener('click', closeFilterSidebar);
+
+      // City change - update neighborhoods
+      document.getElementById('cityFilter').addEventListener('change', function() {
+        updateNeighborhoods(this.value);
+        filterRentals();
+      });
+
+      // WiFi speed buttons
+      document.querySelectorAll('#wifiOptions .wifi-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#wifiOptions .wifi-option').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          filterState.wifiSpeed = parseInt(this.dataset.speed);
+          filterRentals();
+        });
+      });
+
+      // Rating buttons
+      document.querySelectorAll('#ratingOptions .rating-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#ratingOptions .rating-option').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          filterState.rating = parseFloat(this.dataset.rating);
+          filterRentals();
+        });
+      });
+
+      // Search input
+      document.getElementById('searchInput').addEventListener('input', debounce(filterRentals, 300));
+      document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') filterRentals();
+      });
+
+      // Price inputs
+      document.getElementById('priceMin').addEventListener('input', debounce(filterRentals, 500));
+      document.getElementById('priceMax').addEventListener('input', debounce(filterRentals, 500));
+
+      // Size inputs
+      document.getElementById('sizeMin').addEventListener('input', debounce(filterRentals, 500));
+      document.getElementById('sizeMax').addEventListener('input', debounce(filterRentals, 500));
+
+      // All checkboxes
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', filterRentals);
+      });
+
+      // Select dropdowns
+      document.getElementById('neighborhoodFilter').addEventListener('change', filterRentals);
+      document.getElementById('minStayFilter').addEventListener('change', filterRentals);
+
+      // Initial render
+      renderRentals(RENTALS);
+    });
+
+    function closeFilterSidebar() {
+      document.getElementById('filterSidebar').classList.remove('open');
+      document.getElementById('filterOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function applyFiltersAndClose() {
+      filterRentals();
+      closeFilterSidebar();
+    }
+
+    function updateNeighborhoods(city) {
+      const neighborhoodSelect = document.getElementById('neighborhoodFilter');
+      neighborhoodSelect.innerHTML = '<option value="">All Neighborhoods</option>';
+
+      if (city && NEIGHBORHOODS[city]) {
+        NEIGHBORHOODS[city].forEach(n => {
+          neighborhoodSelect.innerHTML += `<option value="${n}">${n}</option>`;
+        });
+      }
+    }
+
+    function toggleSection(header) {
+      const section = header.closest('.filter-section');
+      section.classList.toggle('collapsed');
+    }
+
+    function adjustCounter(type, delta) {
+      const valueEl = document.getElementById(type + 'Value');
+      let current = valueEl.textContent === 'Any' ? 0 : parseInt(valueEl.textContent);
+      current = Math.max(0, current + delta);
+      valueEl.textContent = current === 0 ? 'Any' : current + '+';
+      filterState[type] = current;
+      filterRentals();
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    function getFilterState() {
+      return {
+        search: document.getElementById('searchInput').value.toLowerCase(),
+        city: document.getElementById('cityFilter').value,
+        neighborhood: document.getElementById('neighborhoodFilter').value,
+        types: Array.from(document.querySelectorAll('[data-filter="type"]:checked')).map(cb => cb.value),
+        bedrooms: filterState.bedrooms,
+        bathrooms: filterState.bathrooms,
+        guests: filterState.guests,
+        sizeMin: parseInt(document.getElementById('sizeMin').value) || 0,
+        sizeMax: parseInt(document.getElementById('sizeMax').value) || 0,
+        priceMin: parseInt(document.getElementById('priceMin').value) || 0,
+        priceMax: parseInt(document.getElementById('priceMax').value) || 0,
+        billsIncluded: document.getElementById('billsIncluded').checked,
+        depositFree: document.getElementById('depositFree').checked,
+        wifiSpeed: filterState.wifiSpeed,
+        workSetup: [
+          document.getElementById('dedicatedWorkspace')?.checked && 'dedicatedWorkspace',
+          document.getElementById('standingDesk')?.checked && 'standingDesk',
+          document.getElementById('monitor')?.checked && 'monitor',
+          document.getElementById('ergonomicChair')?.checked && 'ergonomicChair',
+          document.getElementById('coworking')?.checked && 'coworking',
+          document.getElementById('quietSpace')?.checked && 'quietSpace'
+        ].filter(Boolean),
+        amenities: Array.from(document.querySelectorAll('[data-filter="amenity"]:checked')).map(cb => cb.value),
+        building: Array.from(document.querySelectorAll('[data-filter="building"]:checked')).map(cb => cb.value),
+        lifestyle: Array.from(document.querySelectorAll('[data-filter="lifestyle"]:checked')).map(cb => cb.value),
+        accessibility: Array.from(document.querySelectorAll('[data-filter="accessibility"]:checked')).map(cb => cb.value),
+        instantBook: document.getElementById('instantBook')?.checked,
+        selfCheckin: document.getElementById('selfCheckin')?.checked,
+        flexibleCancel: document.getElementById('flexibleCancel')?.checked,
+        longTermDiscount: document.getElementById('longTermDiscount')?.checked,
+        minStay: parseInt(document.getElementById('minStayFilter').value) || 0,
+        rating: filterState.rating,
+        superhost: document.getElementById('superhost')?.checked,
+        verified: document.getElementById('verified')?.checked,
+        nomadVerified: document.getElementById('nomadVerified')?.checked,
+        sort: document.getElementById('sortSelect').value
+      };
+    }
+
+    function filterRentals() {
+      const filters = getFilterState();
+      let filtered = RENTALS.filter(rental => {
+        // Search
+        if (filters.search && !rental.title.toLowerCase().includes(filters.search) &&
+            !rental.cityName.toLowerCase().includes(filters.search) &&
+            !rental.neighborhood.toLowerCase().includes(filters.search)) {
+          return false;
+        }
+
+        // Location
+        if (filters.city && rental.city !== filters.city) return false;
+        if (filters.neighborhood && rental.neighborhood !== filters.neighborhood) return false;
+
+        // Property type
+        if (filters.types.length > 0 && !filters.types.includes(rental.type)) return false;
+
+        // Rooms
+        if (filters.bedrooms > 0 && rental.bedrooms < filters.bedrooms) return false;
+        if (filters.bathrooms > 0 && rental.bathrooms < filters.bathrooms) return false;
+        if (filters.guests > 0 && rental.guests < filters.guests) return false;
+
+        // Size
+        if (filters.sizeMin > 0 && rental.size < filters.sizeMin) return false;
+        if (filters.sizeMax > 0 && rental.size > filters.sizeMax) return false;
+
+        // Price
+        if (filters.priceMin > 0 && rental.price < filters.priceMin) return false;
+        if (filters.priceMax > 0 && rental.price > filters.priceMax) return false;
+
+        // Bills & Deposit
+        if (filters.billsIncluded && !rental.billsIncluded) return false;
+        if (filters.depositFree && !rental.depositFree) return false;
+
+        // WiFi
+        if (filters.wifiSpeed > 0 && rental.wifiSpeed < filters.wifiSpeed) return false;
+
+        // Work setup
+        if (filters.workSetup.length > 0) {
+          const hasAll = filters.workSetup.every(w => rental.workSetup.includes(w));
+          if (!hasAll) return false;
+        }
+
+        // Amenities
+        if (filters.amenities.length > 0) {
+          const hasAll = filters.amenities.every(a => rental.amenities.includes(a));
+          if (!hasAll) return false;
+        }
+
+        // Building
+        if (filters.building.length > 0) {
+          const hasAll = filters.building.every(b => rental.building.includes(b));
+          if (!hasAll) return false;
+        }
+
+        // Lifestyle
+        if (filters.lifestyle.length > 0) {
+          const hasAll = filters.lifestyle.every(l => rental.lifestyle.includes(l));
+          if (!hasAll) return false;
+        }
+
+        // Accessibility
+        if (filters.accessibility.length > 0) {
+          const hasAll = filters.accessibility.every(a => rental.accessibility.includes(a));
+          if (!hasAll) return false;
+        }
+
+        // Booking options
+        if (filters.instantBook && !rental.booking.includes('instantBook')) return false;
+        if (filters.selfCheckin && !rental.booking.includes('selfCheckin')) return false;
+        if (filters.flexibleCancel && !rental.booking.includes('flexibleCancel')) return false;
+        if (filters.longTermDiscount && !rental.longTermDiscount) return false;
+
+        // Min stay
+        if (filters.minStay > 0 && rental.minStay > filters.minStay) return false;
+
+        // Rating
+        if (filters.rating > 0 && rental.rating < filters.rating) return false;
+
+        // Host status
+        if (filters.superhost && !rental.superhost) return false;
+        if (filters.verified && !rental.verified) return false;
+        if (filters.nomadVerified && !rental.nomadVerified) return false;
+
+        return true;
+      });
+
+      // Sort
+      switch (filters.sort) {
+        case 'priceLow':
+          filtered.sort((a, b) => a.price - b.price);
+          break;
+        case 'priceHigh':
+          filtered.sort((a, b) => b.price - a.price);
+          break;
+        case 'rating':
+          filtered.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'reviews':
+          filtered.sort((a, b) => b.reviews - a.reviews);
+          break;
+        case 'newest':
+          filtered.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+          break;
+        default:
+          // Recommended: prioritize nomad verified, then rating, then reviews
+          filtered.sort((a, b) => {
+            if (a.nomadVerified !== b.nomadVerified) return b.nomadVerified ? 1 : -1;
+            if (a.superhost !== b.superhost) return b.superhost ? 1 : -1;
+            return (b.rating * b.reviews) - (a.rating * a.reviews);
+          });
+      }
+
+      renderRentals(filtered);
+      updateActiveFilters(filters);
+      updateFilterCount(filters);
+    }
+
+    function updateActiveFilters(filters) {
+      const container = document.getElementById('activeFilters');
+      const tags = [];
+
+      if (filters.city) {
+        const cityName = document.querySelector(`#cityFilter option[value="${filters.city}"]`).textContent;
+        tags.push({ label: cityName, clear: () => { document.getElementById('cityFilter').value = ''; filterRentals(); } });
+      }
+
+      if (filters.types.length > 0) {
+        filters.types.forEach(t => {
+          tags.push({
+            label: t.charAt(0).toUpperCase() + t.slice(1),
+            clear: () => { document.querySelector(`[data-filter="type"][value="${t}"]`).checked = false; filterRentals(); }
+          });
+        });
+      }
+
+      if (filters.priceMax > 0) {
+        tags.push({
+          label: `Under $${filters.priceMax}`,
+          clear: () => { document.getElementById('priceMax').value = ''; filterRentals(); }
+        });
+      }
+
+      if (filters.wifiSpeed > 0) {
+        tags.push({
+          label: `${filters.wifiSpeed}+ Mbps`,
+          clear: () => {
+            document.querySelectorAll('#wifiOptions .wifi-option').forEach(b => b.classList.remove('active'));
+            document.querySelector('#wifiOptions .wifi-option[data-speed="0"]').classList.add('active');
+            filterState.wifiSpeed = 0;
+            filterRentals();
+          }
+        });
+      }
+
+      if (filters.rating > 0) {
+        tags.push({
+          label: `★ ${filters.rating}+`,
+          clear: () => {
+            document.querySelectorAll('#ratingOptions .rating-option').forEach(b => b.classList.remove('active'));
+            document.querySelector('#ratingOptions .rating-option[data-rating="0"]').classList.add('active');
+            filterState.rating = 0;
+            filterRentals();
+          }
+        });
+      }
+
+      if (filters.nomadVerified) {
+        tags.push({
+          label: 'Nomad Verified',
+          clear: () => { document.getElementById('nomadVerified').checked = false; filterRentals(); }
+        });
+      }
+
+      container.innerHTML = tags.map(tag => `
+        <span class="active-filter-tag">
+          ${tag.label}
+          <button onclick="(${tag.clear.toString()})()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+        </span>
+      `).join('');
+    }
+
+    function updateFilterCount(filters) {
+      let count = 0;
+      if (filters.city) count++;
+      if (filters.neighborhood) count++;
+      count += filters.types.length;
+      if (filters.bedrooms > 0) count++;
+      if (filters.bathrooms > 0) count++;
+      if (filters.guests > 0) count++;
+      if (filters.priceMin > 0 || filters.priceMax > 0) count++;
+      if (filters.wifiSpeed > 0) count++;
+      count += filters.workSetup.length;
+      count += filters.amenities.length;
+      count += filters.building.length;
+      count += filters.lifestyle.length;
+      count += filters.accessibility.length;
+      if (filters.rating > 0) count++;
+      if (filters.superhost) count++;
+      if (filters.nomadVerified) count++;
+
+      const badge = document.getElementById('activeFilterCount');
+      if (count > 0) {
+        badge.textContent = count;
+        badge.style.display = 'inline';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    function clearAllFilters() {
+      // Reset all inputs
+      document.getElementById('searchInput').value = '';
+      document.getElementById('cityFilter').value = '';
+      document.getElementById('neighborhoodFilter').innerHTML = '<option value="">All Neighborhoods</option>';
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.getElementById('priceMin').value = '';
+      document.getElementById('priceMax').value = '';
+      document.getElementById('sizeMin').value = '';
+      document.getElementById('sizeMax').value = '';
+      document.getElementById('minStayFilter').value = '';
+
+      // Reset counters
+      filterState.bedrooms = 0;
+      filterState.bathrooms = 0;
+      filterState.guests = 0;
+      document.getElementById('bedroomsValue').textContent = 'Any';
+      document.getElementById('bathroomsValue').textContent = 'Any';
+      document.getElementById('guestsValue').textContent = 'Any';
+
+      // Reset WiFi
+      filterState.wifiSpeed = 0;
+      document.querySelectorAll('#wifiOptions .wifi-option').forEach(b => b.classList.remove('active'));
+
+      // Reset rating
+      filterState.rating = 0;
+      document.querySelectorAll('#ratingOptions .rating-option').forEach(b => b.classList.remove('active'));
+
+      filterRentals();
+    }
+
+    function createRentalCard(rental) {
+      const typeLabels = {
+        apartment: 'Apartment',
+        studio: 'Studio',
+        coliving: 'Coliving',
+        hotel: 'Apart-Hotel',
+        house: 'Villa',
+        hostel: 'Hostel'
+      };
+
+      // Build features (max 3)
+      const features = [];
+      if (rental.wifiSpeed >= 100) {
+        features.push(`<span class="rental-feature wifi">${rental.wifiSpeed} Mbps</span>`);
+      }
+      if (rental.nomadVerified) {
+        features.push('<span class="rental-feature verified">✓ Nomad Verified</span>');
+      }
+      if (rental.workSetup.includes('dedicatedWorkspace')) {
+        features.push('<span class="rental-feature">Workspace</span>');
+      }
+
+      // Build tags
+      const tags = [];
+      if (rental.superhost) {
+        tags.push('<span class="rental-tag superhost">Superhost</span>');
+      }
+      if (rental.booking.includes('instantBook')) {
+        tags.push('<span class="rental-tag instant">Instant</span>');
+      }
+
+      // Min stay text
+      const minStayText = rental.minStay >= 28
+        ? `${Math.round(rental.minStay/30)}mo min`
+        : `${rental.minStay}d min`;
+
+      return `
+        <article class="rental-card">
+          <div class="rental-card-image">
+            <img src="${rental.image}" alt="${rental.title}" loading="lazy">
+            <span class="rental-badge ${rental.type}">${typeLabels[rental.type]}</span>
+            <button class="rental-favorite" aria-label="Save to favorites">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="rental-card-body">
+            <div class="rental-header">
+              <p class="rental-location">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                ${rental.neighborhood}, ${rental.cityName.split(',')[0]}
+              </p>
+              <p class="rental-rating">
+                <span class="rental-rating-star">★</span> ${rental.rating}
+              </p>
+            </div>
+            <h3 class="rental-title">${rental.title}</h3>
+            <div class="rental-specs">
+              <span>${rental.bedrooms} bed</span>
+              <span class="sep">·</span>
+              <span>${rental.bathrooms} bath</span>
+              <span class="sep">·</span>
+              <span>${rental.size}m²</span>
+            </div>
+            ${features.length > 0 ? `<div class="rental-features">${features.slice(0, 3).join('')}</div>` : ''}
+            <div class="rental-footer">
+              <div class="rental-price-block">
+                <p class="rental-price">$${rental.price.toLocaleString()}</p>
+                <span class="rental-price-period">per month</span>
+              </div>
+              <div class="rental-meta">
+                ${tags.length > 0 ? `<div class="rental-tags">${tags.join('')}</div>` : ''}
+                <span class="rental-min-stay">${minStayText}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderRentals(rentals) {
+      const grid = document.getElementById('rentalsGrid');
+      const count = document.getElementById('rentalCount');
+
+      if (rentals.length === 0) {
+        grid.innerHTML = `
+          <div class="no-results">
+            <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin: 0 auto var(--space-4); opacity: 0.5;">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <h3>No rentals found</h3>
+            <p>Try adjusting your filters to see more results.</p>
+            <button class="no-results-btn" onclick="clearAllFilters()">Clear all filters</button>
+          </div>
+        `;
+        count.textContent = '0';
+        return;
+      }
+
+      grid.innerHTML = rentals.map(createRentalCard).join('');
+      count.textContent = rentals.length;
+    }
+  </script>
+
+</body>
+</html>

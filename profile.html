@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>My Profile | NomadCompass</title>
+  <meta name="description" content="Manage your NomadCompass profile settings, timezone preferences, and account details.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/auth.css">
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase-config.js"></script>
+  <script src="scripts/auth.js"></script>
+
+  <style>
+    body {
+      animation: pageIn 0.4s ease-out;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <!-- Back to home -->
+    <a href="index.html" class="back-to-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to home
+    </a>
+
+    <!-- Profile Card -->
+    <div class="auth-card profile-card">
+      <!-- Logo -->
+      <a href="index.html" class="auth-logo">
+        <img src="assets/logo.svg" alt="" class="auth-logo-icon">
+        <span class="auth-logo-text">
+          <span class="auth-logo-nomad">Nomad</span><span class="auth-logo-accent">Compass</span>
+        </span>
+      </a>
+
+      <!-- Success Message -->
+      <div class="success-message" id="successMessage">
+        Profile updated successfully!
+      </div>
+
+      <!-- Profile View -->
+      <div class="profile-view" id="profileView">
+        <div class="profile-header">
+          <div class="profile-avatar-wrapper">
+            <div class="profile-avatar" id="profileAvatar">?</div>
+            <button type="button" class="profile-avatar-edit" id="avatarEditBtn" title="Change photo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+            </button>
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+          </div>
+          <h1 class="profile-name" id="profileName">Loading...</h1>
+          <p class="profile-email" id="profileEmail"></p>
+          <p class="profile-avatar-hint">Click the camera icon to upload a photo</p>
+        </div>
+
+        <div class="profile-section">
+          <div class="profile-section-title">Account Settings</div>
+
+          <div class="profile-field">
+            <span class="profile-field-label">Display Name</span>
+            <span class="profile-field-value" id="displayName">-</span>
+          </div>
+
+          <div class="profile-field">
+            <span class="profile-field-label">Home Timezone</span>
+            <span class="profile-field-value" id="displayTimezone">-</span>
+          </div>
+
+          <div class="profile-field">
+            <span class="profile-field-label">Member Since</span>
+            <span class="profile-field-value" id="memberSince">-</span>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button type="button" class="btn-edit" id="editBtn">Edit Profile</button>
+          <button type="button" class="btn-logout" id="logoutBtn">Log Out</button>
+        </div>
+      </div>
+
+      <!-- Edit Form -->
+      <form class="edit-form" id="editForm">
+        <div class="auth-header">
+          <h1>Edit Profile</h1>
+          <p>Update your account settings</p>
+        </div>
+
+        <div class="form-error" id="formError"></div>
+
+        <div class="form-group">
+          <label for="editName">Display Name</label>
+          <input
+            type="text"
+            id="editName"
+            name="name"
+            placeholder="Your name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="editTimezone">Home Timezone</label>
+          <select id="editTimezone" name="timezone" required>
+            <option value="">Select your timezone...</option>
+            <option value="-12">UTC-12:00 (Baker Island)</option>
+            <option value="-11">UTC-11:00 (Samoa)</option>
+            <option value="-10">UTC-10:00 (Hawaii)</option>
+            <option value="-9">UTC-09:00 (Alaska)</option>
+            <option value="-8">UTC-08:00 (Los Angeles, Vancouver)</option>
+            <option value="-7">UTC-07:00 (Denver, Phoenix)</option>
+            <option value="-6">UTC-06:00 (Chicago, Mexico City)</option>
+            <option value="-5">UTC-05:00 (New York, Toronto)</option>
+            <option value="-4">UTC-04:00 (Santiago, Halifax)</option>
+            <option value="-3">UTC-03:00 (Sao Paulo, Buenos Aires)</option>
+            <option value="-2">UTC-02:00 (Mid-Atlantic)</option>
+            <option value="-1">UTC-01:00 (Azores)</option>
+            <option value="0">UTC+00:00 (London, Lisbon)</option>
+            <option value="1">UTC+01:00 (Paris, Berlin, Rome)</option>
+            <option value="2">UTC+02:00 (Cairo, Athens, Helsinki)</option>
+            <option value="3">UTC+03:00 (Moscow, Istanbul, Dubai)</option>
+            <option value="3.5">UTC+03:30 (Tehran)</option>
+            <option value="4">UTC+04:00 (Baku, Tbilisi)</option>
+            <option value="4.5">UTC+04:30 (Kabul)</option>
+            <option value="5">UTC+05:00 (Karachi, Tashkent)</option>
+            <option value="5.5">UTC+05:30 (Mumbai, Delhi)</option>
+            <option value="5.75">UTC+05:45 (Kathmandu)</option>
+            <option value="6">UTC+06:00 (Dhaka, Almaty)</option>
+            <option value="6.5">UTC+06:30 (Yangon)</option>
+            <option value="7">UTC+07:00 (Bangkok, Jakarta, Hanoi)</option>
+            <option value="8">UTC+08:00 (Singapore, Hong Kong, Bali)</option>
+            <option value="9">UTC+09:00 (Tokyo, Seoul)</option>
+            <option value="9.5">UTC+09:30 (Adelaide)</option>
+            <option value="10">UTC+10:00 (Sydney, Melbourne)</option>
+            <option value="11">UTC+11:00 (Solomon Islands)</option>
+            <option value="12">UTC+12:00 (Auckland, Fiji)</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Profile Page JavaScript
+     */
+    (function() {
+      'use strict';
+
+      const profileView = document.getElementById('profileView');
+      const editForm = document.getElementById('editForm');
+      const successMessage = document.getElementById('successMessage');
+      const formError = document.getElementById('formError');
+
+      // Profile display elements
+      const profileAvatar = document.getElementById('profileAvatar');
+      const profileName = document.getElementById('profileName');
+      const profileEmail = document.getElementById('profileEmail');
+      const displayName = document.getElementById('displayName');
+      const displayTimezone = document.getElementById('displayTimezone');
+      const memberSince = document.getElementById('memberSince');
+      const avatarEditBtn = document.getElementById('avatarEditBtn');
+      const avatarInput = document.getElementById('avatarInput');
+
+      // Edit form elements
+      const editNameInput = document.getElementById('editName');
+      const editTimezoneSelect = document.getElementById('editTimezone');
+
+      // Buttons
+      const editBtn = document.getElementById('editBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      let currentAuth = null;
+
+      /**
+       * Format timezone for display
+       */
+      function formatTimezone(offset) {
+        if (offset === null || offset === undefined) return 'Not set';
+        const sign = offset >= 0 ? '+' : '';
+        const hours = Math.floor(Math.abs(offset));
+        const minutes = (Math.abs(offset) % 1) * 60;
+        if (minutes > 0) {
+          return `UTC${sign}${offset >= 0 ? hours : -hours}:${minutes.toString().padStart(2, '0')}`;
+        }
+        return `UTC${sign}${offset}:00`;
+      }
+
+      /**
+       * Get initials from name
+       */
+      function getInitials(name) {
+        if (!name) return '?';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      }
+
+      /**
+       * Load and display profile data
+       */
+      function loadProfile() {
+        // Check if logged in
+        if (typeof NomadAuth !== 'undefined' && NomadAuth.isLoggedIn()) {
+          currentAuth = NomadAuth.getAuthState();
+        } else {
+          // Also check localStorage
+          try {
+            const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+            if (!auth || !auth.loggedIn) {
+              window.location.href = 'login.html';
+              return;
+            }
+            currentAuth = auth;
+          } catch {
+            window.location.href = 'login.html';
+            return;
+          }
+        }
+
+        if (!currentAuth) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Display profile info
+        const name = currentAuth.name || 'User';
+        const avatarUrl = currentAuth.avatarUrl;
+
+        // Set avatar (image or initials)
+        if (avatarUrl) {
+          profileAvatar.innerHTML = `<img src="${avatarUrl}" alt="" class="profile-avatar-img">`;
+          profileAvatar.classList.add('has-image');
+        } else {
+          profileAvatar.textContent = getInitials(name);
+          profileAvatar.classList.remove('has-image');
+        }
+
+        profileName.textContent = name;
+        profileEmail.textContent = currentAuth.email || '';
+        displayName.textContent = name;
+        displayTimezone.textContent = formatTimezone(currentAuth.timezone);
+        memberSince.textContent = 'Recently joined';
+
+        // Pre-fill edit form
+        editNameInput.value = name;
+        if (currentAuth.timezone !== undefined && currentAuth.timezone !== null) {
+          editTimezoneSelect.value = currentAuth.timezone.toString();
+        }
+      }
+
+      /**
+       * Show edit mode
+       */
+      function showEditMode() {
+        profileView.classList.add('hidden');
+        editForm.classList.add('active');
+        successMessage.classList.remove('visible');
+        formError.classList.remove('visible');
+      }
+
+      /**
+       * Show view mode
+       */
+      function showViewMode() {
+        editForm.classList.remove('active');
+        profileView.classList.remove('hidden');
+        formError.classList.remove('visible');
+      }
+
+      /**
+       * Save profile changes
+       */
+      async function saveProfile(e) {
+        e.preventDefault();
+
+        const newName = editNameInput.value.trim();
+        const newTimezone = parseFloat(editTimezoneSelect.value);
+
+        if (!newName) {
+          formError.textContent = 'Please enter your name.';
+          formError.classList.add('visible');
+          return;
+        }
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+        formError.classList.remove('visible');
+
+        try {
+          if (typeof NomadAuth !== 'undefined' && NomadAuth.updateProfile) {
+            const result = await NomadAuth.updateProfile({
+              name: newName,
+              timezone: newTimezone
+            });
+
+            if (!result.success) {
+              throw new Error(result.error || 'Failed to update profile');
+            }
+          }
+
+          // Also update localStorage
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth') || '{}');
+          auth.name = newName;
+          auth.timezone = newTimezone;
+          localStorage.setItem('nomadcompass_auth', JSON.stringify(auth));
+
+          // Reload profile and show success
+          loadProfile();
+          showViewMode();
+          successMessage.classList.add('visible');
+
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+            successMessage.classList.remove('visible');
+          }, 3000);
+
+        } catch (err) {
+          formError.textContent = err.message || 'Failed to save changes.';
+          formError.classList.add('visible');
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save Changes';
+        }
+      }
+
+      /**
+       * Handle logout
+       */
+      async function handleLogout() {
+        if (typeof NomadAuth !== 'undefined') {
+          await NomadAuth.logout();
+        } else {
+          localStorage.removeItem('nomadcompass_auth');
+          window.location.href = 'index.html';
+        }
+      }
+
+      /**
+       * Handle avatar upload
+       */
+      async function handleAvatarUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert('Please select an image file.');
+          return;
+        }
+
+        // Validate file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          alert('Image must be less than 2MB.');
+          return;
+        }
+
+        // Show loading state
+        profileAvatar.innerHTML = '<span class="avatar-loading">...</span>';
+
+        try {
+          const client = getSupabase();
+          if (!client || !isSupabaseConfigured()) {
+            // Fallback: Use base64 for localStorage
+            const reader = new FileReader();
+            reader.onload = function(event) {
+              const base64 = event.target.result;
+              const auth = JSON.parse(localStorage.getItem('nomadcompass_auth') || '{}');
+              auth.avatarUrl = base64;
+              localStorage.setItem('nomadcompass_auth', JSON.stringify(auth));
+              loadProfile();
+            };
+            reader.readAsDataURL(file);
+            return;
+          }
+
+          // Upload to Supabase Storage
+          const userId = currentAuth.userId;
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${userId}/avatar.${fileExt}`;
+
+          // Upload file
+          const { data, error } = await client.storage
+            .from('avatars')
+            .upload(fileName, file, {
+              cacheControl: '3600',
+              upsert: true
+            });
+
+          if (error) throw error;
+
+          // Get public URL
+          const { data: urlData } = client.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+          const avatarUrl = urlData.publicUrl + '?t=' + Date.now();
+
+          // Update profile in database
+          await client
+            .from('profiles')
+            .update({ avatar_url: avatarUrl })
+            .eq('id', userId);
+
+          // Update local state
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth') || '{}');
+          auth.avatarUrl = avatarUrl;
+          localStorage.setItem('nomadcompass_auth', JSON.stringify(auth));
+
+          // Reload profile
+          loadProfile();
+          successMessage.textContent = 'Profile photo updated!';
+          successMessage.classList.add('visible');
+          setTimeout(() => successMessage.classList.remove('visible'), 3000);
+
+        } catch (err) {
+          console.error('Avatar upload error:', err);
+          alert('Failed to upload photo. Please try again.');
+          loadProfile();
+        }
+      }
+
+      // Event listeners
+      editBtn.addEventListener('click', showEditMode);
+      cancelBtn.addEventListener('click', showViewMode);
+      editForm.addEventListener('submit', saveProfile);
+      logoutBtn.addEventListener('click', handleLogout);
+      avatarEditBtn.addEventListener('click', () => avatarInput.click());
+      avatarInput.addEventListener('change', handleAvatarUpload);
+
+      // Load profile on page load (with delay for NomadAuth to initialize)
+      setTimeout(loadProfile, 150);
+
+    })();
+  </script>
+</body>
+</html>

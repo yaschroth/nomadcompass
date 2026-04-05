@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lima digital nomad guide: cost of living, WiFi speeds, coworking spaces, visa info, and where to stay in Peru.">
+
+  <title>Lima, Peru — NomadCompass City Guide</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="apple-touch-icon" href="../assets/logo-128.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Lima Digital Nomad Guide | NomadCompass">
+  <meta property="og:description" content="Everything you need to know about living and working remotely in Lima. Cost of living, coworking spaces, neighborhoods, and visa info.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800&h=500&fit=crop">
+
+  <!-- Preload fonts to prevent layout shift -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap" as="style">
+
+  <!-- Leaflet.js for maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/nav.css">
+  <link rel="stylesheet" href="../styles/footer.css">
+  <link rel="stylesheet" href="../styles/city-page.css">
+
+  <!-- Auth state check (prevents button flash on page load) -->
+  <script>
+    (function() {
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          document.documentElement.classList.add('auth-logged-in');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Twemoji emoji sizing -->
+  <style>
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 .05em 0 .1em;
+      vertical-align: -0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="../wheel.html" class="nav-link">Wheel</a></li>
+        <li><a href="../index.html#cities" class="nav-link active">Cities</a></li>
+        <li><a href="../rentals.html" class="nav-link">Rentals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="../login.html" class="nav-login">Login</a>
+        <a href="../signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="../index.html" class="nav-mobile-link">Home</a></li>
+        <li><a href="../wheel.html" class="nav-mobile-link">Wheel</a></li>
+        <li><a href="../index.html#cities" class="nav-mobile-link active">Cities</a></li>
+        <li><a href="../rentals.html" class="nav-mobile-link">Rentals</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="../login.html" class="btn btn-secondary">Login</a>
+        <a href="../signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    (function() {
+      // Immediately render user menu if logged in (prevents flash)
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          var name = auth.name || 'User';
+          var initials = name.includes('@') ? name.split('@')[0].charAt(0).toUpperCase() : name.split(' ').map(function(n){return n.charAt(0)}).join('').toUpperCase().slice(0,2);
+          var displayName = name.includes('@') ? name.split('@')[0] : name.split(' ')[0];
+          var avatarContent = auth.avatarUrl
+            ? '<img src="' + auth.avatarUrl + '" alt="" class="nav-avatar-img">'
+            : '<span class="nav-avatar-initials">' + initials + '</span>';
+          var userMenuHtml = '<a href="../profile.html" class="nav-user-btn"><span class="nav-avatar">' + avatarContent + '</span><span class="nav-user-name">' + displayName + '</span></a><button class="nav-logout-btn" type="button" title="Log out" onclick="localStorage.removeItem(\'nomadcompass_auth\');window.location.reload();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>';
+          var mobileMenuHtml = '<a href="../profile.html" class="nav-user-btn nav-user-btn-mobile"><span class="nav-avatar nav-avatar-lg">' + avatarContent + '</span><span class="nav-user-name">' + displayName + '</span></a><button class="btn btn-secondary nav-logout-btn-mobile" type="button" onclick="localStorage.removeItem(\'nomadcompass_auth\');window.location.reload();">Log Out</button>';
+          document.querySelector('.nav-actions').innerHTML = userMenuHtml;
+          document.querySelector('.nav-mobile-actions').innerHTML = mobileMenuHtml;
+          document.documentElement.classList.add('auth-ready');
+        }
+      } catch (e) {}
+      // Mark as ready for non-logged-in users too
+      if (!document.documentElement.classList.contains('auth-ready')) {
+        document.documentElement.classList.add('auth-ready');
+      }
+
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+      const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('active');
+          navMobile.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
+
+  <main class="main-content">
+
+    <!-- Hero Section -->
+    <section class="city-hero">
+      <img src="https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800&h=500&fit=crop" alt="Lima cityscape" class="city-hero-image">
+      <div class="city-hero-overlay"></div>
+      <div class="city-hero-content">
+        <div class="city-hero-flag">🇵🇪</div>
+        <h1 class="city-hero-title">Lima</h1>
+        <p class="city-hero-country">Peru</p>
+        <p class="city-hero-tagline">Discover culinary capital of South America with Pacific coast vibes.</p>
+      </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="quick-stats">
+      <div class="container">
+        <div class="quick-stats-grid">
+          <div class="quick-stat">
+            <div class="quick-stat-value">$1.800</div>
+            <div class="quick-stat-label">Monthly Budget</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value" id="currentWeather" data-lat="-12.0464" data-lng="-77.0428">--</div>
+            <div class="quick-stat-label">Current Weather</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">Arid</div>
+            <div class="quick-stat-label">Climate Type</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">60 Mbps</div>
+            <div class="quick-stat-label">Avg. WiFi Speed</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">4/10</div>
+            <div class="quick-stat-label">Safety Score</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">2,000+</div>
+            <div class="quick-stat-label">Active Nomads</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value" id="timeDifference" data-timezone="-5">--</div>
+            <div class="quick-stat-label">Time Difference</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Score Section -->
+    <section class="score-section">
+      <div class="container">
+        <div class="score-container">
+          <div class="score-gauge">
+            <svg viewBox="0 0 100 100" width="200" height="200">
+              <circle class="score-gauge-bg" cx="50" cy="50" r="42" />
+              <circle class="score-gauge-fill" id="scoreGaugeFill" cx="50" cy="50" r="42" stroke-dasharray="0 264" />
+            </svg>
+            <div class="score-gauge-text">
+              <div class="score-gauge-value" id="nomadScoreValue">0</div>
+              <div class="score-gauge-label">Nomad Score</div>
+            </div>
+          </div>
+          <div class="score-description">
+            <h2>Worth Considering</h2>
+            <p>Lima excels in Food &amp; Dining, Visa Friendliness, Culture. Areas for consideration include Safety. Overall, it offers a welcoming environment for remote workers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Category Breakdown</h2>
+          <p>How Lima scores across all 13 factors</p>
+        </div>
+        <div class="radar-chart-container">
+          <div class="radar-chart-wrapper">
+            <svg class="radar-chart" id="radarChart" viewBox="0 0 400 400"></svg>
+          </div>
+        </div>
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </div>
+    </section>
+
+    <!-- Neighborhoods Guide -->
+    
+    <section class="neighborhoods-section" id="neighborhoods">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Neighborhoods in Lima</h2>
+          <p>Where to base yourself for the perfect nomad experience</p>
+        </div>
+        <div class="neighborhoods-layout">
+          <div class="neighborhoods-map-container">
+            <div id="neighborhoodsMap" class="neighborhoods-map"></div>
+          </div>
+          <div class="neighborhoods-list">
+            
+            <article class="neighborhood-card" data-index="0" data-lat="-12.119" data-lng="-77.03">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Miraflores</h3>
+                  <span class="neighborhood-price">$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Tourist &amp; Modern</span>
+              </div>
+              <p class="neighborhood-tagline">Lima&#039;s polished Pacific playground</p>
+              <p class="neighborhood-description">Miraflores is Lima&#039;s most tourist-friendly district - ocean cliffs, Parque Kennedy, and excellent infrastructure. It&#039;s safe, walkable, and has the city&#039;s best amenities.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> First-time visitors, digital nomads, and those seeking comfort
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Very safe</li><li>Ocean views</li><li>Good infrastructure</li><li>Walkable</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Expensive</li><li>Touristy</li><li>Less authentic</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="1" data-lat="-12.147" data-lng="-77.022">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Barranco</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Bohemian &amp; Artistic</span>
+              </div>
+              <p class="neighborhood-tagline">Lima&#039;s bohemian artistic heart</p>
+              <p class="neighborhood-description">Barranco is Lima&#039;s soul - colonial mansions, street art, and bohemian bars. It&#039;s the city&#039;s creative center with the best nightlife and artistic atmosphere.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Artists, night owls, and those seeking Lima&#039;s creative scene
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Best nightlife</li><li>Art galleries</li><li>Colonial charm</li><li>Creative energy</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Can be noisy</li><li>Variable safety</li><li>Hilly streets</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="2" data-lat="-12.097" data-lng="-77.037">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">San Isidro</h3>
+                  <span class="neighborhood-price">$$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Business &amp; Upscale</span>
+              </div>
+              <p class="neighborhood-tagline">Lima&#039;s green business district</p>
+              <p class="neighborhood-description">San Isidro is Lima&#039;s financial heart - corporate towers, El Olivar park, and upscale residential areas. It&#039;s where Lima&#039;s business elite works and lives.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Business travelers, professionals, and those seeking quiet luxury
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Very safe</li><li>Beautiful parks</li><li>Upscale dining</li><li>Professional area</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Expensive</li><li>Quiet evenings</li><li>Less character</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="3" data-lat="-12.046" data-lng="-77.03">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Centro Histórico</h3>
+                  <span class="neighborhood-price">$</span>
+                </div>
+                <span class="neighborhood-vibe">Historic &amp; Gritty</span>
+              </div>
+              <p class="neighborhood-tagline">Lima&#039;s colonial UNESCO treasure</p>
+              <p class="neighborhood-description">Lima&#039;s historic center is UNESCO-listed - Plaza Mayor, colonial churches, and historic architecture. It&#039;s gritty but essential for understanding Lima&#039;s Spanish heritage.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> History lovers, culture seekers, and those seeking authentic Lima
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Historic architecture</li><li>Cultural sites</li><li>Local food</li><li>Affordable</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Safety concerns</li><li>Crowded</li><li>Polluted</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="4" data-lat="-12.113" data-lng="-77.008">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Surquillo</h3>
+                  <span class="neighborhood-price">$</span>
+                </div>
+                <span class="neighborhood-vibe">Emerging &amp; Foodie</span>
+              </div>
+              <p class="neighborhood-tagline">Lima&#039;s emerging foodie frontier</p>
+              <p class="neighborhood-description">Surquillo is Lima&#039;s next Barranco - traditional market, emerging restaurants, and authentic character. Foodies and locals are discovering this gritty gem.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Foodies, adventurous travelers, and those seeking authentic vibes
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Best market</li><li>Authentic food</li><li>Affordable</li><li>Local character</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Gritty areas</li><li>Less polished</li><li>Variable safety</li></ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <!-- Where to Stay -->
+    <section class="affiliate-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Where to Stay in Lima</h2>
+          <p>Top neighborhoods and accommodations for digital nomads</p>
+        </div>
+        <div class="affiliate-grid">
+          
+          <article class="stay-card">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=200&fit=crop" alt="Lima Central Flat" class="stay-card-image">
+            <div class="stay-card-body">
+              <div class="stay-card-type">Apartment</div>
+              <h3 class="stay-card-name">Lima Central Flat</h3>
+              <p class="stay-card-price">From $800/month • Furnished</p>
+              <a href="#" class="btn btn-primary" style="width: 100%;">Find Apartments →</a>
+            </div>
+          </article>
+          <article class="stay-card">
+            <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=200&fit=crop" alt="Lima Coliving" class="stay-card-image">
+            <div class="stay-card-body">
+              <div class="stay-card-type">Coliving</div>
+              <h3 class="stay-card-name">Lima Coliving</h3>
+              <p class="stay-card-price">From $600/month • Community</p>
+              <a href="#" class="btn btn-primary" style="width: 100%;">Find Apartments →</a>
+            </div>
+          </article>
+          <article class="stay-card">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=200&fit=crop" alt="Lima Boutique" class="stay-card-image">
+            <div class="stay-card-body">
+              <div class="stay-card-type">Hotel</div>
+              <h3 class="stay-card-name">Lima Boutique</h3>
+              <p class="stay-card-price">From $50/night • Central</p>
+              <a href="#" class="btn btn-primary" style="width: 100%;">Find Apartments →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coworking Spaces -->
+    <section class="affiliate-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Coworking Spaces</h2>
+          <p>Where nomads get work done in Lima</p>
+        </div>
+        <div class="affiliate-grid">
+          
+          <article class="cowork-card">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=200&fit=crop" alt="Lima Hub" class="cowork-card-image">
+            <h3 class="cowork-card-name">Lima Hub</h3>
+            <div class="cowork-card-prices">
+              <div class="cowork-price">
+                <span class="cowork-price-value">$15</span>
+                <span class="cowork-price-label">/day</span>
+              </div>
+              <div class="cowork-price">
+                <span class="cowork-price-value">$200</span>
+                <span class="cowork-price-label">/month</span>
+              </div>
+            </div>
+            <div class="cowork-wifi">📶 100 Mbps WiFi</div>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">Learn More →</a>
+          </article>
+          <article class="cowork-card">
+            <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=200&fit=crop" alt="Local Cowork" class="cowork-card-image">
+            <h3 class="cowork-card-name">Local Cowork</h3>
+            <div class="cowork-card-prices">
+              <div class="cowork-price">
+                <span class="cowork-price-value">$10</span>
+                <span class="cowork-price-label">/day</span>
+              </div>
+              <div class="cowork-price">
+                <span class="cowork-price-value">$150</span>
+                <span class="cowork-price-label">/month</span>
+              </div>
+            </div>
+            <div class="cowork-wifi">📶 50 Mbps WiFi</div>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">Learn More →</a>
+          </article>
+          <article class="cowork-card">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=200&fit=crop" alt="Digital Nomad Space" class="cowork-card-image">
+            <h3 class="cowork-card-name">Digital Nomad Space</h3>
+            <div class="cowork-card-prices">
+              <div class="cowork-price">
+                <span class="cowork-price-value">$20</span>
+                <span class="cowork-price-label">/day</span>
+              </div>
+              <div class="cowork-price">
+                <span class="cowork-price-value">$250</span>
+                <span class="cowork-price-label">/month</span>
+              </div>
+            </div>
+            <div class="cowork-wifi">📶 200 Mbps WiFi</div>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">Learn More →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Eat & Drink -->
+    <section class="affiliate-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Where to Eat & Drink</h2>
+          <p>Best food and drink spots in Lima</p>
+        </div>
+        <div class="affiliate-grid">
+          
+          <article class="eat-card">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=200&fit=crop" alt="Local Market" class="eat-card-image">
+            <h3 class="eat-card-name">Local Market</h3>
+            <div class="eat-card-type">Food Market</div>
+            <p class="eat-card-description">Explore local flavors and fresh ingredients at Lima&#039;s best market.</p>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">View Location →</a>
+          </article>
+          <article class="eat-card">
+            <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&h=200&fit=crop" alt="Traditional Restaurant" class="eat-card-image">
+            <h3 class="eat-card-name">Traditional Restaurant</h3>
+            <div class="eat-card-type">Local Cuisine</div>
+            <p class="eat-card-description">Authentic local dishes in a welcoming atmosphere.</p>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">View Location →</a>
+          </article>
+          <article class="eat-card">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=200&fit=crop" alt="Nomad Cafe" class="eat-card-image">
+            <h3 class="eat-card-name">Nomad Cafe</h3>
+            <div class="eat-card-type">Cafe &amp; Bar</div>
+            <p class="eat-card-description">Popular with digital nomads. Great coffee and WiFi.</p>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">View Location →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Voting -->
+    <section class="voting-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>What Do Nomads Say?</h2>
+          <p>Vote on how accurate these scores are based on your experience</p>
+        </div>
+        <div class="voting-grid" id="votingGrid"></div>
+        <div class="voting-login-prompt" id="votingLoginPrompt" style="display: none;">
+          <p>Sign up to vote and help other nomads make better decisions.</p>
+          <a href="../signup.html" class="btn btn-primary">Sign Up to Vote</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Cities -->
+    <section class="related-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>You Might Also Like</h2>
+          <p>Cities with similar vibes to Lima</p>
+        </div>
+        <div class="related-carousel-wrapper">
+          <button class="related-carousel-nav prev" id="relatedPrev" aria-label="Previous cities">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="related-grid" id="relatedGrid"></div>
+          <button class="related-carousel-nav next" id="relatedNext" aria-label="Next cities">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column footer-about">
+          <a href="../index.html" class="footer-logo"><img src="../assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">Nomad</span><span class="footer-logo-accent">Compass</span></a>
+          <p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Explore</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html#cities" class="footer-link">All Cities</a></li>
+            <li><a href="../wheel.html" class="footer-link">Decision Wheel</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="../blog.html" class="footer-link">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2025 NomadCompass. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../cities-data.js"></script>
+  <script src="../scripts/supabase-config.js"></script>
+  <script src="../scripts/votes.js"></script>
+  <script>
+    (function() {
+      'use strict';
+      const CITY_ID = 'lima';
+      const CATEGORY_DESCRIPTIONS = {"climate":"Lima has an unusual desert climate moderated by the cold Humboldt Current, creating persistent overcast conditions from May to November (garúa season). Temperatures range from 15-20°C (59-68°F) in winter and 22-28°C (72-82°F) in summer (December-April). Rain is extremely rare despite the gray skies. Humidity is high year-round. Summer brings sunshine and beach weather. The climate takes adjustment but is never extreme.","cost":"Lima offers good value for South America, especially outside upscale districts. Monthly costs range from $1,200-2,200 USD for a comfortable lifestyle. Rent for a central one-bedroom apartment in Miraflores averages $600-1,000, cheaper in other districts. Menú del día lunches cost $3-5. Restaurant dining in trendy areas runs $15-30. Coworking spaces cost $100-250 monthly. Transportation is very affordable.","wifi":"Peru's internet infrastructure has improved significantly, and Lima offers generally reliable connectivity. Most cafes and coworking spaces provide 20-50 Mbps connections. Miraflores and San Isidro have the best infrastructure. Coworking spaces like WeWork and Comunal cater to remote workers. Residential connections can be inconsistent in older buildings. Mobile data through Movistar or Claro provides good backup. Some areas have fiber optic.","nightlife":"Lima's nightlife has something for everyone, centered around Miraflores and Barranco neighborhoods. Barranco is the bohemian heart, with bars, live music venues, and clubs spread along its charming streets. Miraflores offers upscale lounges and international bars. Larcomar mall has ocean-view venues. Peña clubs feature live música criolla (traditional Peruvian music). The party scene runs late, with clubs filling after midnight.","nature":"Lima is a desert city, but nature is accessible. The coastline offers dramatic clifftop views and surfing beaches. Miraflores' Parque del Amor provides Pacific Ocean panoramas. Day trips to Pachacamac ruins combine archaeology with desert landscapes. The nearby Paracas National Reserve features dramatic coastal scenery and wildlife. Mountain escapes into the Andes are 3-4 hours away. Lima's parks provide green respite.","safety":"Lima requires more awareness than some South American capitals but is manageable with precautions. Miraflores and San Isidro are safe neighborhoods where you can walk freely. Petty theft and pickpocketing occur in crowded areas and on public transit. Avoid displaying expensive items. Certain districts like Callao should be avoided unless with knowledgeable guides. Use registered taxis or ride apps. Most tourists experience no problems.","food":"Lima is South America's culinary capital, with world-renowned ceviche and a sophisticated food scene. Celebrity chefs like Gastón Acurio have elevated Peruvian cuisine globally. Don't miss cevicherías for fresh fish in tiger's milk (citrus marinade). Anticuchos (grilled beef heart) are beloved street food. Chinese-Peruvian fusion (chifa) is ubiquitous. The upscale Central restaurant consistently ranks among the world's best. Markets offer authentic eating experiences.","community":"Lima has a growing digital nomad community, though smaller than some other Latin American hubs. Coworking spaces in Miraflores host networking events. The expat scene includes business professionals, NGO workers, and remote employees. Facebook groups and Meetups connect remote workers. The Peruvian startup ecosystem attracts entrepreneurs. Integration with locals takes effort but is rewarding. Spanish proficiency helps significantly.","english":"English proficiency in Lima varies significantly. Miraflores and tourist areas have better English speakers. Business settings and upscale venues handle English well. Local neighborhoods, markets, and everyday services typically require Spanish. Younger Peruvians may speak some English. Spanish is essential for navigating the city fully and connecting with local culture. Many nomads take classes while staying.","visa":"Peru offers visa-free entry for citizens of many countries, allowing stays of up to 90 days (sometimes 183 days at immigration's discretion). Extensions are possible through immigration offices. There's no specific digital nomad visa. Remote workers typically enter as tourists. Work visas require employer sponsorship. The tourist status is generally adequate for nomad stays. Visa runs to nearby countries are possible for longer stays.","culture":"Lima blends pre-Columbian heritage with Spanish colonial history and modern cosmopolitanism. Historic center showcases baroque architecture and churches. Museums display Incan and pre-Incan artifacts. The coastal districts feel distinctly modern and international. Peruvian pride in cuisine and culture runs deep. Catholicism remains influential with religious festivals throughout the year. The city's inequality is visible between wealthy and poorer districts.","cleanliness":"Lima's cleanliness varies dramatically by district. Miraflores and San Isidro are well-maintained with clean streets and parks. The historic center has improved but remains grittier. Industrial areas and poorer neighborhoods have more challenges. The persistent garúa (mist) can leave surfaces damp. Tap water is not safe to drink. Air quality is a concern due to traffic. The city is working on environmental improvements.","airquality":"Lima has poor air quality, ranking among the more polluted cities in the Americas. Vehicle emissions and industrial activity contribute to smog, particularly in dry months. The geographic bowl effect traps pollution. Coastal areas like Miraflores have better air due to sea breezes. Air quality alerts are common. Sensitive individuals should monitor conditions. The greyness of winter can compound the heaviness."};
+
+      const scoreGaugeFill = document.getElementById('scoreGaugeFill');
+      const nomadScoreValue = document.getElementById('nomadScoreValue');
+      const categoriesGrid = document.getElementById('categoriesGrid');
+      const votingGrid = document.getElementById('votingGrid');
+      const votingLoginPrompt = document.getElementById('votingLoginPrompt');
+      const relatedGrid = document.getElementById('relatedGrid');
+
+      // Vote aggregates cache
+      let voteAggregates = {};
+      let userVotes = {};
+
+      function getCityData() { return CITIES.find(c => c.id === CITY_ID); }
+
+      function getCategoryKeys() {
+        return ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
+      }
+
+      function calculateNomadScore(city, aggregates) {
+        if (window.VotingService && aggregates && Object.keys(aggregates).length > 0) {
+          return window.VotingService.calculateAdjustedNomadScore(city, aggregates);
+        }
+        const cats = getCategoryKeys();
+        return (cats.reduce((s, k) => s + city.scores[k], 0) / cats.length).toFixed(1);
+      }
+
+      function animateScoreGauge(score, isAdjusted) {
+        const circ = 2 * Math.PI * 42;
+        setTimeout(() => { scoreGaugeFill.style.strokeDasharray = `${circ * score / 10} ${circ}`; }, 300);
+        nomadScoreValue.textContent = score;
+        const label = document.querySelector('.score-gauge-label');
+        if (label && isAdjusted) {
+          label.innerHTML = 'Nomad Score<br><small style="opacity:0.7;font-size:0.7em">Community Adjusted</small>';
+        }
+      }
+
+      function drawRadarChart(city, aggregates) {
+        const svg = document.getElementById('radarChart');
+        if (!svg) return;
+
+        const categories = getCategoryKeys();
+        const n = categories.length;
+        const cx = 200, cy = 200, maxR = 140;
+        const angleStep = (2 * Math.PI) / n;
+        const startAngle = -Math.PI / 2;
+
+        const scores = categories.map(key => {
+          const baseScore = city.scores[key];
+          const votes = aggregates[key] || { upvotes: 0, downvotes: 0 };
+          if (window.VotingService) {
+            const result = window.VotingService.calculateAdjustedScore(baseScore, votes.upvotes, votes.downvotes);
+            return result.adjustedScore;
+          }
+          return baseScore;
+        });
+
+        let webHTML = '';
+        const levels = [2, 4, 6, 8, 10];
+        levels.forEach((level, li) => {
+          const r = (level / 10) * maxR;
+          const points = [];
+          for (let i = 0; i < n; i++) {
+            const angle = startAngle + i * angleStep;
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            points.push(`${x},${y}`);
+          }
+          const isOuter = li === levels.length - 1;
+          webHTML += `<polygon points="${points.join(' ')}" class="radar-web ${isOuter ? 'radar-web-outer' : ''}" />`;
+        });
+
+        for (let i = 0; i < n; i++) {
+          const angle = startAngle + i * angleStep;
+          const x2 = cx + maxR * Math.cos(angle);
+          const y2 = cy + maxR * Math.sin(angle);
+          webHTML += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" class="radar-web" />`;
+        }
+
+        const dataPoints = scores.map((score, i) => {
+          const r = (score / 10) * maxR;
+          const angle = startAngle + i * angleStep;
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          return `${x},${y}`;
+        });
+
+        webHTML += `<polygon points="${dataPoints.join(' ')}" class="radar-fill" />`;
+
+        scores.forEach((score, i) => {
+          const r = (score / 10) * maxR;
+          const angle = startAngle + i * angleStep;
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          webHTML += `<circle cx="${x}" cy="${y}" r="6" class="radar-point" data-category="${categories[i]}" data-score="${score}" />`;
+        });
+
+        const labelR = maxR + 30;
+        categories.forEach((key, i) => {
+          const cat = CATEGORIES[key];
+          const angle = startAngle + i * angleStep;
+          const x = cx + labelR * Math.cos(angle);
+          const y = cy + labelR * Math.sin(angle);
+          let anchor = 'middle';
+          if (x < cx - 10) anchor = 'end';
+          else if (x > cx + 10) anchor = 'start';
+          webHTML += `<text x="${x}" y="${y}" class="radar-label" text-anchor="${anchor}">${cat.name}</text>`;
+        });
+
+        svg.innerHTML = webHTML;
+      }
+
+      function renderCategories(city, aggregates) {
+        const loggedIn = isLoggedIn();
+        categoriesGrid.innerHTML = getCategoryKeys().map(key => {
+          const cat = CATEGORIES[key];
+          const baseScore = city.scores[key];
+          const votes = aggregates[key] || { upvotes: 0, downvotes: 0, totalVotes: 0 };
+          const myVote = userVotes[key] || null;
+
+          let displayScore = baseScore;
+          let adjustment = 0;
+          let totalVotes = 0;
+
+          if (window.VotingService) {
+            const result = window.VotingService.calculateAdjustedScore(baseScore, votes.upvotes, votes.downvotes);
+            displayScore = result.adjustedScore;
+            adjustment = result.adjustment;
+            totalVotes = result.totalVotes;
+          }
+
+          const adjustmentText = adjustment !== 0 ?
+            `<span class="category-adjustment ${adjustment > 0 ? 'positive' : 'negative'}">${adjustment > 0 ? '+' : ''}${adjustment.toFixed(1)}</span>` : '';
+
+          const netVotes = (votes.upvotes || 0) - (votes.downvotes || 0);
+          const netVotesText = netVotes > 0 ? `+${netVotes}` : `${netVotes}`;
+          const netVotesClass = netVotes > 0 ? 'positive' : netVotes < 0 ? 'negative' : '';
+
+          return `<div class="category-item">
+            <div class="category-header">
+              <div class="category-name"><span class="category-icon">${cat.icon}</span><span>${cat.name}</span></div>
+              <div class="category-score">${displayScore}/10 ${adjustmentText}</div>
+            </div>
+            <div class="category-bar"><div class="category-bar-fill" style="width:${displayScore*10}%"></div></div>
+            <div class="category-meta">
+              <span class="category-base">(base: ${baseScore})</span>
+              ${totalVotes > 0 ? `<span class="category-votes">${totalVotes} votes</span>` : ''}
+            </div>
+            <p class="category-description">${CATEGORY_DESCRIPTIONS[key] || ''}</p>
+            <div class="category-voting">
+              <span class="category-voting-label">Is this accurate?</span>
+              <div class="category-voting-actions">
+                <button class="category-vote-btn upvote ${myVote===1?'active':''}" onclick="handleVote('${key}',1)" ${loggedIn?'':'disabled'} title="Score is accurate or too low">👍</button>
+                <span class="category-vote-count ${netVotesClass}">${netVotesText}</span>
+                <button class="category-vote-btn downvote ${myVote===-1?'active':''}" onclick="handleVote('${key}',-1)" ${loggedIn?'':'disabled'} title="Score is too high">👎</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+
+        drawRadarChart(city, aggregates);
+      }
+
+      function isLoggedIn() {
+        if (window.VotingService) return window.VotingService.isUserLoggedIn();
+        try {
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+          return auth && auth.loggedIn;
+        } catch { return false; }
+      }
+
+      async function handleVote(cat, delta) {
+        if (!isLoggedIn()) {
+          window.location.href = '../signup.html?redirect=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+
+        const currentVote = userVotes[cat];
+
+        if (window.VotingService) {
+          if (currentVote === delta) {
+            await window.VotingService.removeVote(CITY_ID, cat);
+            delete userVotes[cat];
+          } else {
+            await window.VotingService.submitVote(CITY_ID, cat, delta);
+            userVotes[cat] = delta;
+          }
+
+          voteAggregates = await window.VotingService.fetchVoteAggregates(CITY_ID);
+          const city = getCityData();
+          renderCategories(city, voteAggregates);
+
+          const score = calculateNomadScore(city, voteAggregates);
+          animateScoreGauge(score, Object.keys(voteAggregates).length > 0);
+        }
+      }
+      window.handleVote = handleVote;
+
+      function findRelatedCities(curr, n=10) {
+        const cats = getCategoryKeys();
+        return CITIES.filter(c => c.id !== curr.id).map(c => {
+          let d = 0; cats.forEach(k => { const diff = c.scores[k] - curr.scores[k]; d += diff*diff; });
+          return { city: c, dist: Math.sqrt(d) };
+        }).sort((a,b) => a.dist - b.dist).slice(0, n).map(x => x.city);
+      }
+
+      function renderRelatedCities(city) {
+        const getBarClass = (val) => {
+          if (val >= 8) return 'excellent';
+          if (val >= 6) return 'good';
+          if (val >= 4) return 'average';
+          return 'below';
+        };
+
+        const relatedCities = findRelatedCities(city);
+        relatedGrid.innerHTML = relatedCities.map(r => {
+          const nomadScore = calculateNomadScore(r, {});
+          const scoreClass = nomadScore >= 7.5 ? 'excellent' : nomadScore >= 6 ? 'good' : nomadScore >= 5 ? 'average' : 'below';
+          const costPerMonth = r.costPerMonth ? `$${r.costPerMonth.toLocaleString()}` : 'N/A';
+
+          const overlayStats = [
+            { label: 'Climate', value: r.scores.climate },
+            { label: 'Cost', value: r.scores.cost },
+            { label: 'WiFi', value: r.scores.wifi },
+            { label: 'Nightlife', value: r.scores.nightlife },
+            { label: 'Nature', value: r.scores.nature },
+            { label: 'Safety', value: r.scores.safety },
+            { label: 'Food', value: r.scores.food },
+            { label: 'Community', value: r.scores.community },
+            { label: 'English', value: r.scores.english },
+            { label: 'Visa', value: r.scores.visa },
+            { label: 'Culture', value: r.scores.culture },
+            { label: 'Clean', value: r.scores.cleanliness },
+            { label: 'Air', value: r.scores.airquality }
+          ];
+
+          const overlayStatsHtml = overlayStats.map(stat => `
+            <div class="overlay-stat">
+              <div class="overlay-stat-header">
+                <span class="overlay-stat-label">${stat.label}</span>
+                <span class="overlay-stat-value">${stat.value}</span>
+              </div>
+              <div class="overlay-stat-bar">
+                <div class="overlay-stat-fill ${getBarClass(stat.value)}" style="width: ${stat.value * 10}%"></div>
+              </div>
+            </div>
+          `).join('');
+
+          return `
+          <a href="${r.id}.html" class="city-card">
+            <div class="city-card-image-container">
+              <img src="${r.image}" alt="${r.name}, ${r.country}" class="city-card-image" loading="lazy">
+              <div class="city-card-overlay">
+                <div class="overlay-stats">${overlayStatsHtml}</div>
+              </div>
+            </div>
+            <div class="city-card-body">
+              <div class="city-card-header">
+                <div class="city-card-location">
+                  <span class="city-card-flag">${r.flag}</span>
+                  <div>
+                    <h3 class="city-card-name">${r.name}</h3>
+                    <span class="city-card-country">${r.country}</span>
+                  </div>
+                </div>
+                <div class="nomad-score ${scoreClass}">
+                  <span class="nomad-score-value">${nomadScore}</span>
+                  <span class="nomad-score-label">Score</span>
+                </div>
+              </div>
+              <div class="city-card-info">
+                <div class="city-card-weather" data-city-id="${r.id}">
+                  <span class="weather-icon">--</span>
+                  <span class="weather-temp">--°C</span>
+                </div>
+                <div class="city-card-climate-type">${r.climateType || 'N/A'}</div>
+                <div class="city-card-cost">
+                  <span class="cost-label">~${costPerMonth}</span>
+                  <span class="cost-period">/month</span>
+                </div>
+              </div>
+              <span class="btn btn-primary city-card-action">View City →</span>
+            </div>
+          </a>`;
+        }).join('');
+
+        fetchRelatedCitiesWeather(relatedCities);
+        initRelatedCarousel();
+      }
+
+      function initRelatedCarousel() {
+        const grid = document.getElementById('relatedGrid');
+        const prevBtn = document.getElementById('relatedPrev');
+        const nextBtn = document.getElementById('relatedNext');
+
+        if (!grid || !prevBtn || !nextBtn) return;
+
+        const getScrollAmount = () => {
+          const card = grid.querySelector('.city-card');
+          if (!card) return 320;
+          const style = getComputedStyle(grid);
+          const gap = parseFloat(style.gap) || 24;
+          return card.offsetWidth + gap;
+        };
+
+        const updateButtons = () => {
+          prevBtn.disabled = grid.scrollLeft <= 0;
+          nextBtn.disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 10;
+        };
+
+        prevBtn.addEventListener('click', () => {
+          grid.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+          grid.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        grid.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+        updateButtons();
+      }
+
+      async function fetchRelatedCitiesWeather(cities) {
+        const weatherIcons = { 0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️', 51: '🌧️', 53: '🌧️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️', 71: '❄️', 73: '❄️', 75: '❄️', 80: '🌧️', 81: '🌧️', 82: '🌧️', 95: '⛈️' };
+        for (const city of cities) {
+          if (city.lat && city.lng) {
+            try {
+              const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`);
+              const data = await res.json();
+              if (data.current_weather) {
+                const icon = weatherIcons[data.current_weather.weathercode] || '🌡️';
+                const temp = Math.round(data.current_weather.temperature);
+                const weatherEl = document.querySelector(`.city-card-weather[data-city-id="${city.id}"]`);
+                if (weatherEl) {
+                  weatherEl.querySelector('.weather-icon').textContent = icon;
+                  weatherEl.querySelector('.weather-temp').textContent = `${temp}°C`;
+                }
+              }
+            } catch (e) { /* ignore weather errors */ }
+          }
+        }
+      }
+
+      async function init() {
+        const city = getCityData();
+        if (!city) return;
+
+        animateScoreGauge(calculateNomadScore(city, {}), false);
+        renderCategories(city, {});
+        renderRelatedCities(city);
+
+        if (window.VotingService) {
+          try {
+            const [aggregates, myVotes] = await Promise.all([
+              window.VotingService.fetchVoteAggregates(CITY_ID),
+              window.VotingService.getUserVotes(CITY_ID)
+            ]);
+
+            voteAggregates = aggregates;
+            userVotes = myVotes;
+
+            const hasVotes = Object.keys(aggregates).length > 0;
+            const score = calculateNomadScore(city, aggregates);
+            animateScoreGauge(score, hasVotes);
+            renderCategories(city, aggregates);
+          } catch (error) {
+            console.error('Error loading vote data:', error);
+          }
+        }
+      }
+
+      async function fetchWeather() {
+        const el = document.getElementById('currentWeather');
+        if (!el) return;
+        const lat = el.dataset.lat;
+        const lng = el.dataset.lng;
+        if (!lat || !lng) { el.textContent = 'N/A'; return; }
+        try {
+          const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+          const data = await res.json();
+          if (data.current_weather) {
+            const temp = Math.round(data.current_weather.temperature);
+            const code = data.current_weather.weathercode;
+            const icon = code === 0 ? '☀️' : code <= 3 ? '⛅' : code <= 49 ? '☁️' : code <= 69 ? '🌧️' : code <= 79 ? '❄️' : '⛈️';
+            el.textContent = `${temp}°C ${icon}`;
+          }
+        } catch (e) { el.textContent = 'N/A'; }
+      }
+
+      function calculateTimeDiff() {
+        const el = document.getElementById('timeDifference');
+        if (!el) return;
+        const cityTz = parseInt(el.dataset.timezone);
+        if (isNaN(cityTz)) { el.textContent = 'N/A'; return; }
+        try {
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+          if (auth && auth.loggedIn && auth.timezone !== undefined) {
+            const diff = cityTz - auth.timezone;
+            if (diff === 0) el.textContent = 'Same time';
+            else if (diff > 0) el.textContent = `+${diff} hrs`;
+            else el.textContent = `${diff} hrs`;
+          } else {
+            el.textContent = 'Sign in';
+          }
+        } catch (e) { el.textContent = 'Sign in'; }
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+      fetchWeather();
+      calculateTimeDiff();
+    })();
+  </script>
+  <script src="../scripts/auth.js"></script>
+
+  <!-- Leaflet.js for neighborhood map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl) return;
+
+      const neighborhoods = [{"name":"Miraflores","tagline":"Lima's polished Pacific playground","description":"Miraflores is Lima's most tourist-friendly district - ocean cliffs, Parque Kennedy, and excellent infrastructure. It's safe, walkable, and has the city's best amenities.","vibe":"Tourist & Modern","bestFor":"First-time visitors, digital nomads, and those seeking comfort","pros":["Very safe","Ocean views","Good infrastructure","Walkable"],"cons":["Expensive","Touristy","Less authentic"],"lat":-12.119,"lng":-77.03,"priceLevel":"$$$"},{"name":"Barranco","tagline":"Lima's bohemian artistic heart","description":"Barranco is Lima's soul - colonial mansions, street art, and bohemian bars. It's the city's creative center with the best nightlife and artistic atmosphere.","vibe":"Bohemian & Artistic","bestFor":"Artists, night owls, and those seeking Lima's creative scene","pros":["Best nightlife","Art galleries","Colonial charm","Creative energy"],"cons":["Can be noisy","Variable safety","Hilly streets"],"lat":-12.147,"lng":-77.022,"priceLevel":"$$"},{"name":"San Isidro","tagline":"Lima's green business district","description":"San Isidro is Lima's financial heart - corporate towers, El Olivar park, and upscale residential areas. It's where Lima's business elite works and lives.","vibe":"Business & Upscale","bestFor":"Business travelers, professionals, and those seeking quiet luxury","pros":["Very safe","Beautiful parks","Upscale dining","Professional area"],"cons":["Expensive","Quiet evenings","Less character"],"lat":-12.097,"lng":-77.037,"priceLevel":"$$$$"},{"name":"Centro Histórico","tagline":"Lima's colonial UNESCO treasure","description":"Lima's historic center is UNESCO-listed - Plaza Mayor, colonial churches, and historic architecture. It's gritty but essential for understanding Lima's Spanish heritage.","vibe":"Historic & Gritty","bestFor":"History lovers, culture seekers, and those seeking authentic Lima","pros":["Historic architecture","Cultural sites","Local food","Affordable"],"cons":["Safety concerns","Crowded","Polluted"],"lat":-12.046,"lng":-77.03,"priceLevel":"$"},{"name":"Surquillo","tagline":"Lima's emerging foodie frontier","description":"Surquillo is Lima's next Barranco - traditional market, emerging restaurants, and authentic character. Foodies and locals are discovering this gritty gem.","vibe":"Emerging & Foodie","bestFor":"Foodies, adventurous travelers, and those seeking authentic vibes","pros":["Best market","Authentic food","Affordable","Local character"],"cons":["Gritty areas","Less polished","Variable safety"],"lat":-12.113,"lng":-77.008,"priceLevel":"$"}];
+      if (neighborhoods.length === 0) return;
+
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+
+      const map = L.map('neighborhoodsMap', {
+        scrollWheelZoom: false
+      }).setView([avgLat, avgLng], 13);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      });
+
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) })
+          .addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+
+      function highlightNeighborhood(index) {
+        markers.forEach((m, i) => m.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => {
+          card.classList.toggle('active', i === index);
+        });
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => {
+        card.addEventListener('click', () => highlightNeighborhood(i));
+      });
+
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
+  <!-- Twemoji for cross-platform flag emoji support -->
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof twemoji !== 'undefined') {
+        twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+      }
+    });
+  </script>
+</body>
+</html>

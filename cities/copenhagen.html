@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Copenhagen digital nomad guide: cost of living, WiFi speeds, coworking spaces, visa info, and where to stay in Denmark.">
+
+  <title>Copenhagen, Denmark — NomadCompass City Guide</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="apple-touch-icon" href="../assets/logo-128.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Copenhagen Digital Nomad Guide | NomadCompass">
+  <meta property="og:description" content="Everything you need to know about living and working remotely in Copenhagen. Cost of living, coworking spaces, neighborhoods, and visa info.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=800&h=500&fit=crop">
+
+  <!-- Preload fonts to prevent layout shift -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap" as="style">
+
+  <!-- Leaflet.js for maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/nav.css">
+  <link rel="stylesheet" href="../styles/footer.css">
+  <link rel="stylesheet" href="../styles/city-page.css">
+
+  <!-- Auth state check (prevents button flash on page load) -->
+  <script>
+    (function() {
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          document.documentElement.classList.add('auth-logged-in');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Twemoji emoji sizing -->
+  <style>
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 .05em 0 .1em;
+      vertical-align: -0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="../wheel.html" class="nav-link">Wheel</a></li>
+        <li><a href="../index.html#cities" class="nav-link active">Cities</a></li>
+        <li><a href="../rentals.html" class="nav-link">Rentals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="../login.html" class="nav-login">Login</a>
+        <a href="../signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="../index.html" class="nav-mobile-link">Home</a></li>
+        <li><a href="../wheel.html" class="nav-mobile-link">Wheel</a></li>
+        <li><a href="../index.html#cities" class="nav-mobile-link active">Cities</a></li>
+        <li><a href="../rentals.html" class="nav-mobile-link">Rentals</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="../login.html" class="btn btn-secondary">Login</a>
+        <a href="../signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    (function() {
+      // Immediately render user menu if logged in (prevents flash)
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          var name = auth.name || 'User';
+          var initials = name.includes('@') ? name.split('@')[0].charAt(0).toUpperCase() : name.split(' ').map(function(n){return n.charAt(0)}).join('').toUpperCase().slice(0,2);
+          var displayName = name.includes('@') ? name.split('@')[0] : name.split(' ')[0];
+          var avatarContent = auth.avatarUrl
+            ? '<img src="' + auth.avatarUrl + '" alt="" class="nav-avatar-img">'
+            : '<span class="nav-avatar-initials">' + initials + '</span>';
+          var userMenuHtml = '<a href="../profile.html" class="nav-user-btn"><span class="nav-avatar">' + avatarContent + '</span><span class="nav-user-name">' + displayName + '</span></a><button class="nav-logout-btn" type="button" title="Log out" onclick="localStorage.removeItem(\'nomadcompass_auth\');window.location.reload();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>';
+          var mobileMenuHtml = '<a href="../profile.html" class="nav-user-btn nav-user-btn-mobile"><span class="nav-avatar nav-avatar-lg">' + avatarContent + '</span><span class="nav-user-name">' + displayName + '</span></a><button class="btn btn-secondary nav-logout-btn-mobile" type="button" onclick="localStorage.removeItem(\'nomadcompass_auth\');window.location.reload();">Log Out</button>';
+          document.querySelector('.nav-actions').innerHTML = userMenuHtml;
+          document.querySelector('.nav-mobile-actions').innerHTML = mobileMenuHtml;
+          document.documentElement.classList.add('auth-ready');
+        }
+      } catch (e) {}
+      // Mark as ready for non-logged-in users too
+      if (!document.documentElement.classList.contains('auth-ready')) {
+        document.documentElement.classList.add('auth-ready');
+      }
+
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+      const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('active');
+          navMobile.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
+
+  <main class="main-content">
+
+    <!-- Hero Section -->
+    <section class="city-hero">
+      <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=800&h=500&fit=crop" alt="Copenhagen cityscape" class="city-hero-image">
+      <div class="city-hero-overlay"></div>
+      <div class="city-hero-content">
+        <div class="city-hero-flag">🇩🇰</div>
+        <h1 class="city-hero-title">Copenhagen</h1>
+        <p class="city-hero-country">Denmark</p>
+        <p class="city-hero-tagline">Experience scandinavian design, cycling culture, and the world&#039;s best restaurants meet hygge.</p>
+      </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="quick-stats">
+      <div class="container">
+        <div class="quick-stats-grid">
+          <div class="quick-stat">
+            <div class="quick-stat-value">$4.500</div>
+            <div class="quick-stat-label">Monthly Budget</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value" id="currentWeather" data-lat="55.6761" data-lng="12.5683">--</div>
+            <div class="quick-stat-label">Current Weather</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">Oceanic</div>
+            <div class="quick-stat-label">Climate Type</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">90 Mbps</div>
+            <div class="quick-stat-label">Avg. WiFi Speed</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">9/10</div>
+            <div class="quick-stat-label">Safety Score</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value">2,000+</div>
+            <div class="quick-stat-label">Active Nomads</div>
+          </div>
+          <div class="quick-stat">
+            <div class="quick-stat-value" id="timeDifference" data-timezone="1">--</div>
+            <div class="quick-stat-label">Time Difference</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Score Section -->
+    <section class="score-section">
+      <div class="container">
+        <div class="score-container">
+          <div class="score-gauge">
+            <svg viewBox="0 0 100 100" width="200" height="200">
+              <circle class="score-gauge-bg" cx="50" cy="50" r="42" />
+              <circle class="score-gauge-fill" id="scoreGaugeFill" cx="50" cy="50" r="42" stroke-dasharray="0 264" />
+            </svg>
+            <div class="score-gauge-text">
+              <div class="score-gauge-value" id="nomadScoreValue">0</div>
+              <div class="score-gauge-label">Nomad Score</div>
+            </div>
+          </div>
+          <div class="score-description">
+            <h2>A Solid Choice for Digital Nomads</h2>
+            <p>Copenhagen excels in WiFi Quality, Safety, Food &amp; Dining. Areas for consideration include Climate and Cost of Living. Overall, it offers a welcoming environment for remote workers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Category Breakdown</h2>
+          <p>How Copenhagen scores across all 13 factors</p>
+        </div>
+        <div class="radar-chart-container">
+          <div class="radar-chart-wrapper">
+            <svg class="radar-chart" id="radarChart" viewBox="0 0 400 400"></svg>
+          </div>
+        </div>
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </div>
+    </section>
+
+    <!-- Neighborhoods Guide -->
+    
+    <section class="neighborhoods-section" id="neighborhoods">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Neighborhoods in Copenhagen</h2>
+          <p>Where to base yourself for the perfect nomad experience</p>
+        </div>
+        <div class="neighborhoods-layout">
+          <div class="neighborhoods-map-container">
+            <div id="neighborhoodsMap" class="neighborhoods-map"></div>
+          </div>
+          <div class="neighborhoods-list">
+            
+            <article class="neighborhood-card" data-index="0" data-lat="55.697" data-lng="12.546">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Nørrebro</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Multicultural &amp; Creative</span>
+              </div>
+              <p class="neighborhood-tagline">Copenhagen&#039;s multicultural creative heart</p>
+              <p class="neighborhood-description">Nørrebro is Copenhagen&#039;s most diverse and creative neighborhood - multicultural communities, independent shops, and thriving cafe culture. It&#039;s where young Copenhageners live, with amazing food scene and character.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Creatives, foodies, and nomads seeking diverse Copenhagen living
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Great food</li><li>Diverse culture</li><li>Creative scene</li><li>Good cafes</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Busy streets</li><li>Variable areas</li><li>Far from center</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="1" data-lat="55.669" data-lng="12.549">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Vesterbro</h3>
+                  <span class="neighborhood-price">$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Hip &amp; Transformed</span>
+              </div>
+              <p class="neighborhood-tagline">Copenhagen&#039;s hip former red-light district</p>
+              <p class="neighborhood-description">Vesterbro has transformed from red-light district to Copenhagen&#039;s hippest neighborhood - Meatpacking District bars, specialty coffee, and young energy. It&#039;s trendy, central, and very Danish cool.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Young professionals, nightlife lovers, and nomads seeking trendy Copenhagen
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Best nightlife</li><li>Trendy cafes</li><li>Central location</li><li>Meatpacking District</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Expensive</li><li>Crowded bars</li><li>Remaining rough areas</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="2" data-lat="55.673" data-lng="12.594">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Christianshavn</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Canal &amp; Alternative</span>
+              </div>
+              <p class="neighborhood-tagline">Canal district with Freetown Christiania</p>
+              <p class="neighborhood-description">Christianshavn is Copenhagen&#039;s canal neighborhood - Dutch-inspired waterways and the famous Freetown Christiania. It&#039;s unique, charming, and offers Copenhagen&#039;s most distinctive living experience.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Alternative types, canal lovers, and nomads seeking unique Copenhagen
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Beautiful canals</li><li>Christiania</li><li>Unique character</li><li>Central</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Expensive</li><li>Tourist crowds</li><li>Christiania tensions</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="3" data-lat="55.678" data-lng="12.525">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Frederiksberg</h3>
+                  <span class="neighborhood-price">$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Elegant &amp; Green</span>
+              </div>
+              <p class="neighborhood-tagline">Copenhagen&#039;s elegant green municipality</p>
+              <p class="neighborhood-description">Frederiksberg is technically its own municipality - elegant apartments, beautiful parks, and refined atmosphere. It&#039;s where established Danes live, with excellent quality of life.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Families, professionals, and nomads seeking refined Copenhagen living
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Beautiful parks</li><li>Elegant streets</li><li>Safe</li><li>Good cafes</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Most expensive</li><li>Quiet evenings</li><li>Residential</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="4" data-lat="55.705" data-lng="12.578">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Østerbro</h3>
+                  <span class="neighborhood-price">$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Family &amp; Waterfront</span>
+              </div>
+              <p class="neighborhood-tagline">Copenhagen&#039;s family neighborhood with harbor access</p>
+              <p class="neighborhood-description">Østerbro is Copenhagen&#039;s family favorite - wide streets, Fælledparken, and waterfront access. It&#039;s upscale and residential, where professional families settle for quality of life.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Families, professionals, and nomads seeking quality residential living
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Great parks</li><li>Waterfront</li><li>Family-friendly</li><li>Safe</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Expensive</li><li>Limited nightlife</li><li>Residential quiet</li></ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <!-- Where to Stay -->
+    <section class="affiliate-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Where to Stay in Copenhagen</h2>
+          <p>Top neighborhoods and accommodations for digital nomads</p>
+        </div>
+        <div class="affiliate-grid">
+          
+          <article class="stay-card">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=200&fit=crop" alt="Copenhagen Central Flat" class="stay-card-image">
+            <div class="stay-card-body">
+              <div class="stay-card-type">Apartment</div>
+              <h3 class="stay-card-name">Copenhagen Central Flat</h3>
+              <p class="stay-card-price">From $800/month • Furnished</p>
+              <a href="#" class="btn btn-primary" style="width: 100%;">Find Apartments →</a>
+            </div>
+          </article>
+          <article class="stay-card">
+            <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=200&fit=crop" alt="Copenhagen Coliving" class="stay-card-image">
+            <div class="stay-card-body">
+              <div class="stay-card-type">Coliving</div>
+              <h3 class="stay-card-name">Copenhagen Coliving</h3>
+              <p class="stay-card-price">From $600/month • Community</p>
+              <a href="#" class="btn btn-primary" style="width: 100%;">Find Apartments →</a>
+            </div>
+          </article>
+          <article class="stay-card">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=200&fit=crop" alt="Copenhagen Boutique" class="stay-card-image">
+            <div class="stay-card-body">
+              <div class="stay-card-type">Hotel</div>
+              <h3 class="stay-card-name">Copenhagen Boutique</h3>
+              <p class="stay-card-price">From $50/night • Central</p>
+              <a href="#" class="btn btn-primary" style="width: 100%;">Find Apartments →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coworking Spaces -->
+    <section class="affiliate-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Coworking Spaces</h2>
+          <p>Where nomads get work done in Copenhagen</p>
+        </div>
+        <div class="affiliate-grid">
+          
+          <article class="cowork-card">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=200&fit=crop" alt="Copenhagen Hub" class="cowork-card-image">
+            <h3 class="cowork-card-name">Copenhagen Hub</h3>
+            <div class="cowork-card-prices">
+              <div class="cowork-price">
+                <span class="cowork-price-value">$15</span>
+                <span class="cowork-price-label">/day</span>
+              </div>
+              <div class="cowork-price">
+                <span class="cowork-price-value">$200</span>
+                <span class="cowork-price-label">/month</span>
+              </div>
+            </div>
+            <div class="cowork-wifi">📶 100 Mbps WiFi</div>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">Learn More →</a>
+          </article>
+          <article class="cowork-card">
+            <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=200&fit=crop" alt="Local Cowork" class="cowork-card-image">
+            <h3 class="cowork-card-name">Local Cowork</h3>
+            <div class="cowork-card-prices">
+              <div class="cowork-price">
+                <span class="cowork-price-value">$10</span>
+                <span class="cowork-price-label">/day</span>
+              </div>
+              <div class="cowork-price">
+                <span class="cowork-price-value">$150</span>
+                <span class="cowork-price-label">/month</span>
+              </div>
+            </div>
+            <div class="cowork-wifi">📶 50 Mbps WiFi</div>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">Learn More →</a>
+          </article>
+          <article class="cowork-card">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=200&fit=crop" alt="Digital Nomad Space" class="cowork-card-image">
+            <h3 class="cowork-card-name">Digital Nomad Space</h3>
+            <div class="cowork-card-prices">
+              <div class="cowork-price">
+                <span class="cowork-price-value">$20</span>
+                <span class="cowork-price-label">/day</span>
+              </div>
+              <div class="cowork-price">
+                <span class="cowork-price-value">$250</span>
+                <span class="cowork-price-label">/month</span>
+              </div>
+            </div>
+            <div class="cowork-wifi">📶 200 Mbps WiFi</div>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">Learn More →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Eat & Drink -->
+    <section class="affiliate-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Where to Eat & Drink</h2>
+          <p>Best food and drink spots in Copenhagen</p>
+        </div>
+        <div class="affiliate-grid">
+          
+          <article class="eat-card">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=200&fit=crop" alt="Local Market" class="eat-card-image">
+            <h3 class="eat-card-name">Local Market</h3>
+            <div class="eat-card-type">Food Market</div>
+            <p class="eat-card-description">Explore local flavors and fresh ingredients at Copenhagen&#039;s best market.</p>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">View Location →</a>
+          </article>
+          <article class="eat-card">
+            <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&h=200&fit=crop" alt="Traditional Restaurant" class="eat-card-image">
+            <h3 class="eat-card-name">Traditional Restaurant</h3>
+            <div class="eat-card-type">Local Cuisine</div>
+            <p class="eat-card-description">Authentic local dishes in a welcoming atmosphere.</p>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">View Location →</a>
+          </article>
+          <article class="eat-card">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=200&fit=crop" alt="Nomad Cafe" class="eat-card-image">
+            <h3 class="eat-card-name">Nomad Cafe</h3>
+            <div class="eat-card-type">Cafe &amp; Bar</div>
+            <p class="eat-card-description">Popular with digital nomads. Great coffee and WiFi.</p>
+            <a href="#" class="btn btn-secondary" style="width: 100%;">View Location →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Voting -->
+    <section class="voting-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>What Do Nomads Say?</h2>
+          <p>Vote on how accurate these scores are based on your experience</p>
+        </div>
+        <div class="voting-grid" id="votingGrid"></div>
+        <div class="voting-login-prompt" id="votingLoginPrompt" style="display: none;">
+          <p>Sign up to vote and help other nomads make better decisions.</p>
+          <a href="../signup.html" class="btn btn-primary">Sign Up to Vote</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Cities -->
+    <section class="related-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>You Might Also Like</h2>
+          <p>Cities with similar vibes to Copenhagen</p>
+        </div>
+        <div class="related-carousel-wrapper">
+          <button class="related-carousel-nav prev" id="relatedPrev" aria-label="Previous cities">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="related-grid" id="relatedGrid"></div>
+          <button class="related-carousel-nav next" id="relatedNext" aria-label="Next cities">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column footer-about">
+          <a href="../index.html" class="footer-logo"><img src="../assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">Nomad</span><span class="footer-logo-accent">Compass</span></a>
+          <p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Explore</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html#cities" class="footer-link">All Cities</a></li>
+            <li><a href="../wheel.html" class="footer-link">Decision Wheel</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="../blog.html" class="footer-link">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2025 NomadCompass. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../cities-data.js"></script>
+  <script src="../scripts/supabase-config.js"></script>
+  <script src="../scripts/votes.js"></script>
+  <script>
+    (function() {
+      'use strict';
+      const CITY_ID = 'copenhagen';
+      const CATEGORY_DESCRIPTIONS = {"climate":"Copenhagen has a temperate oceanic climate with mild summers (17-23°C) and cold, dark winters (0-5°C). Rain is frequent year-round. Summer brings long daylight hours—sunset after 10pm. Winter is challenging with limited daylight (sunrise 8:30am, sunset 3:30pm) and gray skies. Spring and autumn are variable. The climate requires seasonal adaptation and good rain gear.","cost":"Copenhagen is among the world's most expensive cities. A comfortable lifestyle costs €3,500-5,000/month. Apartments are extremely difficult to find, ranging €1,500-2,500/month. Restaurant meals cost €25-40—even casual dining is pricey. Alcohol is expensive. However, quality is exceptional, and cycling saves transport costs. Budget-conscious nomads find Copenhagen challenging.","wifi":"Danish internet infrastructure is excellent. Copenhagen offers speeds of 100+ Mbps commonly, with gigabit available. Public WiFi is widespread. Cafes welcome laptop workers. Coworking spaces provide premium connectivity. Mobile coverage is excellent. The tech-forward Nordic approach ensures connectivity is never a concern. Copenhagen is fully equipped for remote work.","nightlife":"Copenhagen's nightlife is sophisticated and diverse. Meatpacking District has trendy bars and clubs. Nørrebro is alternative and hip. Vesterbro offers classic Copenhagen vibes. The scene starts relatively early by European standards—Danes socialize over dinner and drinks, with clubs busy by midnight. Quality over quantity defines the approach. Summer brings outdoor drinking culture.","nature":"Copenhagen integrates urban and natural spaces. The harbor is swimmable with popular swimming areas. Parks are everywhere—Fælledparken, Frederiksberg Gardens. The surrounding coast offers beaches. Day trips reach Swedish Malmö, Louisiana Museum, and North Zealand's forests and castles. Denmark's flat landscape is accessible and well-organized. Nature is incorporated into daily urban life.","safety":"Copenhagen is extremely safe—among the world's safest cities. Violent crime is rare. Bikes can be left relatively unattended (though theft exists). You can walk anywhere at any time without concern. Danish society values trust and civic responsibility. Emergency services are excellent. The only 'danger' is cycling accidents—follow the rules.","food":"Copenhagen has become a food destination. Noma put it on the map, and New Nordic cuisine has transformed the scene. Smørrebrød (open sandwiches) remain traditional lunch. Food halls like Torvehallerne showcase local quality. Street food has elevated with Reffen and other markets. The prices are high but quality is exceptional. Pastries at bakeries are outstanding.","community":"Copenhagen has a significant international community, particularly in tech and creative industries. Coworking spaces host events. The startup ecosystem is developing. Danes can seem reserved initially but form genuine friendships over time. Expat networks provide English-speaking community. The community is sophisticated and professional. Integration into Danish society requires effort.","english":"English fluency in Denmark is among the world's highest. Business, socializing, and daily life function in English. Signs and services are often bilingual. Learning Danish is appreciated but not necessary for daily life. University courses are taught in English. The high English proficiency can make learning Danish difficult—Danes switch immediately.","visa":"Denmark is part of the EU and Schengen. EU citizens have freedom of movement. Non-EU visitors stay 90 days within Schengen. Denmark offers various work permits but has strict immigration requirements. The digital nomad visa options are limited. High income requirements and complex bureaucracy make long-term stays challenging for non-EU citizens.","culture":"Danish culture is defined by 'hygge'—cozy contentment—and egalitarian values. Design is central to identity—Danish furniture, architecture, and lifestyle are world-renowned. Cycling isn't just transportation but culture. Work-life balance is sacred. The welfare state shapes expectations. The society is trusting and cooperative. The culture values quality of life over ostentation.","cleanliness":"Copenhagen is immaculately clean. Streets are spotless, public spaces are well-maintained, and civic pride is evident. Cycling culture reduces litter from car windows. Danes expect cleanliness and enforce it socially. Public transport is pristine. Tap water is excellent. The overall impression is of meticulous civic care.","airquality":"Air quality in Copenhagen is excellent, with AQI typically 15-35. Cycling culture and clean energy reduce emissions. Coastal winds keep air fresh. Industrial activity is minimal in central areas. Denmark's environmental commitment shows in air quality. The clean air complements the outdoor, cycling-based lifestyle."};
+
+      const scoreGaugeFill = document.getElementById('scoreGaugeFill');
+      const nomadScoreValue = document.getElementById('nomadScoreValue');
+      const categoriesGrid = document.getElementById('categoriesGrid');
+      const votingGrid = document.getElementById('votingGrid');
+      const votingLoginPrompt = document.getElementById('votingLoginPrompt');
+      const relatedGrid = document.getElementById('relatedGrid');
+
+      // Vote aggregates cache
+      let voteAggregates = {};
+      let userVotes = {};
+
+      function getCityData() { return CITIES.find(c => c.id === CITY_ID); }
+
+      function getCategoryKeys() {
+        return ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
+      }
+
+      function calculateNomadScore(city, aggregates) {
+        if (window.VotingService && aggregates && Object.keys(aggregates).length > 0) {
+          return window.VotingService.calculateAdjustedNomadScore(city, aggregates);
+        }
+        const cats = getCategoryKeys();
+        return (cats.reduce((s, k) => s + city.scores[k], 0) / cats.length).toFixed(1);
+      }
+
+      function animateScoreGauge(score, isAdjusted) {
+        const circ = 2 * Math.PI * 42;
+        setTimeout(() => { scoreGaugeFill.style.strokeDasharray = `${circ * score / 10} ${circ}`; }, 300);
+        nomadScoreValue.textContent = score;
+        const label = document.querySelector('.score-gauge-label');
+        if (label && isAdjusted) {
+          label.innerHTML = 'Nomad Score<br><small style="opacity:0.7;font-size:0.7em">Community Adjusted</small>';
+        }
+      }
+
+      function drawRadarChart(city, aggregates) {
+        const svg = document.getElementById('radarChart');
+        if (!svg) return;
+
+        const categories = getCategoryKeys();
+        const n = categories.length;
+        const cx = 200, cy = 200, maxR = 140;
+        const angleStep = (2 * Math.PI) / n;
+        const startAngle = -Math.PI / 2;
+
+        const scores = categories.map(key => {
+          const baseScore = city.scores[key];
+          const votes = aggregates[key] || { upvotes: 0, downvotes: 0 };
+          if (window.VotingService) {
+            const result = window.VotingService.calculateAdjustedScore(baseScore, votes.upvotes, votes.downvotes);
+            return result.adjustedScore;
+          }
+          return baseScore;
+        });
+
+        let webHTML = '';
+        const levels = [2, 4, 6, 8, 10];
+        levels.forEach((level, li) => {
+          const r = (level / 10) * maxR;
+          const points = [];
+          for (let i = 0; i < n; i++) {
+            const angle = startAngle + i * angleStep;
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            points.push(`${x},${y}`);
+          }
+          const isOuter = li === levels.length - 1;
+          webHTML += `<polygon points="${points.join(' ')}" class="radar-web ${isOuter ? 'radar-web-outer' : ''}" />`;
+        });
+
+        for (let i = 0; i < n; i++) {
+          const angle = startAngle + i * angleStep;
+          const x2 = cx + maxR * Math.cos(angle);
+          const y2 = cy + maxR * Math.sin(angle);
+          webHTML += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" class="radar-web" />`;
+        }
+
+        const dataPoints = scores.map((score, i) => {
+          const r = (score / 10) * maxR;
+          const angle = startAngle + i * angleStep;
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          return `${x},${y}`;
+        });
+
+        webHTML += `<polygon points="${dataPoints.join(' ')}" class="radar-fill" />`;
+
+        scores.forEach((score, i) => {
+          const r = (score / 10) * maxR;
+          const angle = startAngle + i * angleStep;
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          webHTML += `<circle cx="${x}" cy="${y}" r="6" class="radar-point" data-category="${categories[i]}" data-score="${score}" />`;
+        });
+
+        const labelR = maxR + 30;
+        categories.forEach((key, i) => {
+          const cat = CATEGORIES[key];
+          const angle = startAngle + i * angleStep;
+          const x = cx + labelR * Math.cos(angle);
+          const y = cy + labelR * Math.sin(angle);
+          let anchor = 'middle';
+          if (x < cx - 10) anchor = 'end';
+          else if (x > cx + 10) anchor = 'start';
+          webHTML += `<text x="${x}" y="${y}" class="radar-label" text-anchor="${anchor}">${cat.name}</text>`;
+        });
+
+        svg.innerHTML = webHTML;
+      }
+
+      function renderCategories(city, aggregates) {
+        const loggedIn = isLoggedIn();
+        categoriesGrid.innerHTML = getCategoryKeys().map(key => {
+          const cat = CATEGORIES[key];
+          const baseScore = city.scores[key];
+          const votes = aggregates[key] || { upvotes: 0, downvotes: 0, totalVotes: 0 };
+          const myVote = userVotes[key] || null;
+
+          let displayScore = baseScore;
+          let adjustment = 0;
+          let totalVotes = 0;
+
+          if (window.VotingService) {
+            const result = window.VotingService.calculateAdjustedScore(baseScore, votes.upvotes, votes.downvotes);
+            displayScore = result.adjustedScore;
+            adjustment = result.adjustment;
+            totalVotes = result.totalVotes;
+          }
+
+          const adjustmentText = adjustment !== 0 ?
+            `<span class="category-adjustment ${adjustment > 0 ? 'positive' : 'negative'}">${adjustment > 0 ? '+' : ''}${adjustment.toFixed(1)}</span>` : '';
+
+          const netVotes = (votes.upvotes || 0) - (votes.downvotes || 0);
+          const netVotesText = netVotes > 0 ? `+${netVotes}` : `${netVotes}`;
+          const netVotesClass = netVotes > 0 ? 'positive' : netVotes < 0 ? 'negative' : '';
+
+          return `<div class="category-item">
+            <div class="category-header">
+              <div class="category-name"><span class="category-icon">${cat.icon}</span><span>${cat.name}</span></div>
+              <div class="category-score">${displayScore}/10 ${adjustmentText}</div>
+            </div>
+            <div class="category-bar"><div class="category-bar-fill" style="width:${displayScore*10}%"></div></div>
+            <div class="category-meta">
+              <span class="category-base">(base: ${baseScore})</span>
+              ${totalVotes > 0 ? `<span class="category-votes">${totalVotes} votes</span>` : ''}
+            </div>
+            <p class="category-description">${CATEGORY_DESCRIPTIONS[key] || ''}</p>
+            <div class="category-voting">
+              <span class="category-voting-label">Is this accurate?</span>
+              <div class="category-voting-actions">
+                <button class="category-vote-btn upvote ${myVote===1?'active':''}" onclick="handleVote('${key}',1)" ${loggedIn?'':'disabled'} title="Score is accurate or too low">👍</button>
+                <span class="category-vote-count ${netVotesClass}">${netVotesText}</span>
+                <button class="category-vote-btn downvote ${myVote===-1?'active':''}" onclick="handleVote('${key}',-1)" ${loggedIn?'':'disabled'} title="Score is too high">👎</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+
+        drawRadarChart(city, aggregates);
+      }
+
+      function isLoggedIn() {
+        if (window.VotingService) return window.VotingService.isUserLoggedIn();
+        try {
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+          return auth && auth.loggedIn;
+        } catch { return false; }
+      }
+
+      async function handleVote(cat, delta) {
+        if (!isLoggedIn()) {
+          window.location.href = '../signup.html?redirect=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+
+        const currentVote = userVotes[cat];
+
+        if (window.VotingService) {
+          if (currentVote === delta) {
+            await window.VotingService.removeVote(CITY_ID, cat);
+            delete userVotes[cat];
+          } else {
+            await window.VotingService.submitVote(CITY_ID, cat, delta);
+            userVotes[cat] = delta;
+          }
+
+          voteAggregates = await window.VotingService.fetchVoteAggregates(CITY_ID);
+          const city = getCityData();
+          renderCategories(city, voteAggregates);
+
+          const score = calculateNomadScore(city, voteAggregates);
+          animateScoreGauge(score, Object.keys(voteAggregates).length > 0);
+        }
+      }
+      window.handleVote = handleVote;
+
+      function findRelatedCities(curr, n=10) {
+        const cats = getCategoryKeys();
+        return CITIES.filter(c => c.id !== curr.id).map(c => {
+          let d = 0; cats.forEach(k => { const diff = c.scores[k] - curr.scores[k]; d += diff*diff; });
+          return { city: c, dist: Math.sqrt(d) };
+        }).sort((a,b) => a.dist - b.dist).slice(0, n).map(x => x.city);
+      }
+
+      function renderRelatedCities(city) {
+        const getBarClass = (val) => {
+          if (val >= 8) return 'excellent';
+          if (val >= 6) return 'good';
+          if (val >= 4) return 'average';
+          return 'below';
+        };
+
+        const relatedCities = findRelatedCities(city);
+        relatedGrid.innerHTML = relatedCities.map(r => {
+          const nomadScore = calculateNomadScore(r, {});
+          const scoreClass = nomadScore >= 7.5 ? 'excellent' : nomadScore >= 6 ? 'good' : nomadScore >= 5 ? 'average' : 'below';
+          const costPerMonth = r.costPerMonth ? `$${r.costPerMonth.toLocaleString()}` : 'N/A';
+
+          const overlayStats = [
+            { label: 'Climate', value: r.scores.climate },
+            { label: 'Cost', value: r.scores.cost },
+            { label: 'WiFi', value: r.scores.wifi },
+            { label: 'Nightlife', value: r.scores.nightlife },
+            { label: 'Nature', value: r.scores.nature },
+            { label: 'Safety', value: r.scores.safety },
+            { label: 'Food', value: r.scores.food },
+            { label: 'Community', value: r.scores.community },
+            { label: 'English', value: r.scores.english },
+            { label: 'Visa', value: r.scores.visa },
+            { label: 'Culture', value: r.scores.culture },
+            { label: 'Clean', value: r.scores.cleanliness },
+            { label: 'Air', value: r.scores.airquality }
+          ];
+
+          const overlayStatsHtml = overlayStats.map(stat => `
+            <div class="overlay-stat">
+              <div class="overlay-stat-header">
+                <span class="overlay-stat-label">${stat.label}</span>
+                <span class="overlay-stat-value">${stat.value}</span>
+              </div>
+              <div class="overlay-stat-bar">
+                <div class="overlay-stat-fill ${getBarClass(stat.value)}" style="width: ${stat.value * 10}%"></div>
+              </div>
+            </div>
+          `).join('');
+
+          return `
+          <a href="${r.id}.html" class="city-card">
+            <div class="city-card-image-container">
+              <img src="${r.image}" alt="${r.name}, ${r.country}" class="city-card-image" loading="lazy">
+              <div class="city-card-overlay">
+                <div class="overlay-stats">${overlayStatsHtml}</div>
+              </div>
+            </div>
+            <div class="city-card-body">
+              <div class="city-card-header">
+                <div class="city-card-location">
+                  <span class="city-card-flag">${r.flag}</span>
+                  <div>
+                    <h3 class="city-card-name">${r.name}</h3>
+                    <span class="city-card-country">${r.country}</span>
+                  </div>
+                </div>
+                <div class="nomad-score ${scoreClass}">
+                  <span class="nomad-score-value">${nomadScore}</span>
+                  <span class="nomad-score-label">Score</span>
+                </div>
+              </div>
+              <div class="city-card-info">
+                <div class="city-card-weather" data-city-id="${r.id}">
+                  <span class="weather-icon">--</span>
+                  <span class="weather-temp">--°C</span>
+                </div>
+                <div class="city-card-climate-type">${r.climateType || 'N/A'}</div>
+                <div class="city-card-cost">
+                  <span class="cost-label">~${costPerMonth}</span>
+                  <span class="cost-period">/month</span>
+                </div>
+              </div>
+              <span class="btn btn-primary city-card-action">View City →</span>
+            </div>
+          </a>`;
+        }).join('');
+
+        fetchRelatedCitiesWeather(relatedCities);
+        initRelatedCarousel();
+      }
+
+      function initRelatedCarousel() {
+        const grid = document.getElementById('relatedGrid');
+        const prevBtn = document.getElementById('relatedPrev');
+        const nextBtn = document.getElementById('relatedNext');
+
+        if (!grid || !prevBtn || !nextBtn) return;
+
+        const getScrollAmount = () => {
+          const card = grid.querySelector('.city-card');
+          if (!card) return 320;
+          const style = getComputedStyle(grid);
+          const gap = parseFloat(style.gap) || 24;
+          return card.offsetWidth + gap;
+        };
+
+        const updateButtons = () => {
+          prevBtn.disabled = grid.scrollLeft <= 0;
+          nextBtn.disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 10;
+        };
+
+        prevBtn.addEventListener('click', () => {
+          grid.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+          grid.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        grid.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+        updateButtons();
+      }
+
+      async function fetchRelatedCitiesWeather(cities) {
+        const weatherIcons = { 0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️', 51: '🌧️', 53: '🌧️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️', 71: '❄️', 73: '❄️', 75: '❄️', 80: '🌧️', 81: '🌧️', 82: '🌧️', 95: '⛈️' };
+        for (const city of cities) {
+          if (city.lat && city.lng) {
+            try {
+              const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`);
+              const data = await res.json();
+              if (data.current_weather) {
+                const icon = weatherIcons[data.current_weather.weathercode] || '🌡️';
+                const temp = Math.round(data.current_weather.temperature);
+                const weatherEl = document.querySelector(`.city-card-weather[data-city-id="${city.id}"]`);
+                if (weatherEl) {
+                  weatherEl.querySelector('.weather-icon').textContent = icon;
+                  weatherEl.querySelector('.weather-temp').textContent = `${temp}°C`;
+                }
+              }
+            } catch (e) { /* ignore weather errors */ }
+          }
+        }
+      }
+
+      async function init() {
+        const city = getCityData();
+        if (!city) return;
+
+        animateScoreGauge(calculateNomadScore(city, {}), false);
+        renderCategories(city, {});
+        renderRelatedCities(city);
+
+        if (window.VotingService) {
+          try {
+            const [aggregates, myVotes] = await Promise.all([
+              window.VotingService.fetchVoteAggregates(CITY_ID),
+              window.VotingService.getUserVotes(CITY_ID)
+            ]);
+
+            voteAggregates = aggregates;
+            userVotes = myVotes;
+
+            const hasVotes = Object.keys(aggregates).length > 0;
+            const score = calculateNomadScore(city, aggregates);
+            animateScoreGauge(score, hasVotes);
+            renderCategories(city, aggregates);
+          } catch (error) {
+            console.error('Error loading vote data:', error);
+          }
+        }
+      }
+
+      async function fetchWeather() {
+        const el = document.getElementById('currentWeather');
+        if (!el) return;
+        const lat = el.dataset.lat;
+        const lng = el.dataset.lng;
+        if (!lat || !lng) { el.textContent = 'N/A'; return; }
+        try {
+          const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+          const data = await res.json();
+          if (data.current_weather) {
+            const temp = Math.round(data.current_weather.temperature);
+            const code = data.current_weather.weathercode;
+            const icon = code === 0 ? '☀️' : code <= 3 ? '⛅' : code <= 49 ? '☁️' : code <= 69 ? '🌧️' : code <= 79 ? '❄️' : '⛈️';
+            el.textContent = `${temp}°C ${icon}`;
+          }
+        } catch (e) { el.textContent = 'N/A'; }
+      }
+
+      function calculateTimeDiff() {
+        const el = document.getElementById('timeDifference');
+        if (!el) return;
+        const cityTz = parseInt(el.dataset.timezone);
+        if (isNaN(cityTz)) { el.textContent = 'N/A'; return; }
+        try {
+          const auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+          if (auth && auth.loggedIn && auth.timezone !== undefined) {
+            const diff = cityTz - auth.timezone;
+            if (diff === 0) el.textContent = 'Same time';
+            else if (diff > 0) el.textContent = `+${diff} hrs`;
+            else el.textContent = `${diff} hrs`;
+          } else {
+            el.textContent = 'Sign in';
+          }
+        } catch (e) { el.textContent = 'Sign in'; }
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+      fetchWeather();
+      calculateTimeDiff();
+    })();
+  </script>
+  <script src="../scripts/auth.js"></script>
+
+  <!-- Leaflet.js for neighborhood map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl) return;
+
+      const neighborhoods = [{"name":"Nørrebro","tagline":"Copenhagen's multicultural creative heart","description":"Nørrebro is Copenhagen's most diverse and creative neighborhood - multicultural communities, independent shops, and thriving cafe culture. It's where young Copenhageners live, with amazing food scene and character.","vibe":"Multicultural & Creative","bestFor":"Creatives, foodies, and nomads seeking diverse Copenhagen living","pros":["Great food","Diverse culture","Creative scene","Good cafes"],"cons":["Busy streets","Variable areas","Far from center"],"lat":55.697,"lng":12.546,"priceLevel":"$$"},{"name":"Vesterbro","tagline":"Copenhagen's hip former red-light district","description":"Vesterbro has transformed from red-light district to Copenhagen's hippest neighborhood - Meatpacking District bars, specialty coffee, and young energy. It's trendy, central, and very Danish cool.","vibe":"Hip & Transformed","bestFor":"Young professionals, nightlife lovers, and nomads seeking trendy Copenhagen","pros":["Best nightlife","Trendy cafes","Central location","Meatpacking District"],"cons":["Expensive","Crowded bars","Remaining rough areas"],"lat":55.669,"lng":12.549,"priceLevel":"$$$"},{"name":"Christianshavn","tagline":"Canal district with Freetown Christiania","description":"Christianshavn is Copenhagen's canal neighborhood - Dutch-inspired waterways and the famous Freetown Christiania. It's unique, charming, and offers Copenhagen's most distinctive living experience.","vibe":"Canal & Alternative","bestFor":"Alternative types, canal lovers, and nomads seeking unique Copenhagen","pros":["Beautiful canals","Christiania","Unique character","Central"],"cons":["Expensive","Tourist crowds","Christiania tensions"],"lat":55.673,"lng":12.594,"priceLevel":"$$"},{"name":"Frederiksberg","tagline":"Copenhagen's elegant green municipality","description":"Frederiksberg is technically its own municipality - elegant apartments, beautiful parks, and refined atmosphere. It's where established Danes live, with excellent quality of life.","vibe":"Elegant & Green","bestFor":"Families, professionals, and nomads seeking refined Copenhagen living","pros":["Beautiful parks","Elegant streets","Safe","Good cafes"],"cons":["Most expensive","Quiet evenings","Residential"],"lat":55.678,"lng":12.525,"priceLevel":"$$$"},{"name":"Østerbro","tagline":"Copenhagen's family neighborhood with harbor access","description":"Østerbro is Copenhagen's family favorite - wide streets, Fælledparken, and waterfront access. It's upscale and residential, where professional families settle for quality of life.","vibe":"Family & Waterfront","bestFor":"Families, professionals, and nomads seeking quality residential living","pros":["Great parks","Waterfront","Family-friendly","Safe"],"cons":["Expensive","Limited nightlife","Residential quiet"],"lat":55.705,"lng":12.578,"priceLevel":"$$$"}];
+      if (neighborhoods.length === 0) return;
+
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+
+      const map = L.map('neighborhoodsMap', {
+        scrollWheelZoom: false
+      }).setView([avgLat, avgLng], 13);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      });
+
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) })
+          .addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+
+      function highlightNeighborhood(index) {
+        markers.forEach((m, i) => m.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => {
+          card.classList.toggle('active', i === index);
+        });
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => {
+        card.addEventListener('click', () => highlightNeighborhood(i));
+      });
+
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
+  <!-- Twemoji for cross-platform flag emoji support -->
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof twemoji !== 'undefined') {
+        twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+      }
+    });
+  </script>
+</body>
+</html>

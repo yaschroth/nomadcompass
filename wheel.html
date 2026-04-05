@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Use the Nomad Taste Wheel to find your perfect digital nomad destination based on your priorities.">
+
+  <title>Nomad Taste Wheel — NomadCompass</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/logo-128.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Find Your Perfect City with the Nomad Taste Wheel">
+  <meta property="og:description" content="Set your priorities and discover digital nomad destinations that excel in what matters most to you.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://picsum.photos/seed/nomadcompass-wheel/1200/630">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/nav.css">
+  <link rel="stylesheet" href="styles/footer.css">
+
+  <!-- Auth state check (prevents button flash on page load) -->
+  <script>
+    (function() {
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          document.documentElement.classList.add('auth-logged-in');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Twemoji emoji sizing -->
+  <style>
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 .05em 0 .1em;
+      vertical-align: -0.1em;
+    }
+  </style>
+
+  <!-- Page-specific styles -->
+  <style>
+    /* Page fade-in animation */
+    body {
+      animation: pageIn 0.4s ease-out;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ============================================
+       WHEEL PAGE STYLES
+       ============================================ */
+
+    /* Page background */
+    body.wheel-page {
+      background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(240, 247, 255, 0.75) 100%),
+        url('images/pexels-sebastian-189349.webp') center/cover no-repeat fixed;
+    }
+
+    /* --- PAGE HEADER --- */
+    .wheel-header {
+      text-align: center;
+      padding: var(--space-16) 0 var(--space-8);
+      padding-top: calc(var(--space-16) + 60px);
+    }
+
+    .wheel-header h1 {
+      margin-bottom: var(--space-4);
+    }
+
+    .wheel-header .lead {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* --- MAIN WHEEL SECTION --- */
+    .wheel-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      align-items: center;
+      padding-bottom: var(--space-12);
+    }
+
+    /* --- SVG WHEEL CONTAINER --- */
+    .wheel-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, var(--color-white) 0%, var(--color-sand) 60%, var(--color-sand-dark) 100%);
+      border-radius: 50%;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+    }
+
+    .wheel-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Radar chart web lines */
+    .radar-web {
+      fill: none;
+      stroke: var(--color-sand-dark);
+      stroke-width: 1;
+      opacity: 0.8;
+    }
+
+    .radar-web-outer {
+      stroke-width: 1.5;
+      stroke: var(--color-stone);
+      opacity: 0.5;
+    }
+
+    /* Radar chart data fill */
+    .radar-fill {
+      fill: rgba(0, 102, 255, 0.25);
+      stroke: var(--color-terracotta);
+      stroke-width: 2.5;
+      transition: d 0.3s ease;
+    }
+
+    /* Radar chart data points */
+    .radar-point {
+      fill: var(--color-terracotta);
+      stroke: var(--color-white);
+      stroke-width: 2;
+      cursor: grab;
+      transition: r 0.15s ease, fill 0.15s ease;
+    }
+
+    .radar-point:hover {
+      r: 9;
+      fill: var(--color-terracotta-dark, #c4593d);
+    }
+
+    .radar-point:active {
+      cursor: grabbing;
+      r: 10;
+    }
+
+    /* Radar chart labels */
+    .radar-label {
+      font-family: var(--font-display);
+      font-size: 14px;
+      fill: var(--color-charcoal);
+      font-weight: 500;
+    }
+
+    /* --- CONTROLS PANEL --- */
+    .controls-panel {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-6);
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .controls-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-sand);
+    }
+
+    .controls-header h3 {
+      font-size: var(--text-xl);
+      margin: 0;
+    }
+
+    .reset-btn {
+      font-size: var(--text-sm);
+      padding: var(--space-2) var(--space-4);
+    }
+
+    /* Sliders container - two columns on desktop */
+    #slidersContainer {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    @media (min-width: 768px) {
+      #slidersContainer {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-4) var(--space-6);
+      }
+    }
+
+    /* Individual slider row */
+    .slider-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 44px;
+      gap: var(--space-3);
+      align-items: center;
+      padding: var(--space-3);
+      background: var(--color-sand);
+      border-radius: var(--radius-md);
+    }
+
+    .slider-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--color-charcoal);
+    }
+
+    /* Custom range slider styling */
+    .slider-input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: var(--color-sand-dark);
+      outline: none;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      vertical-align: middle;
+    }
+
+    .slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-terracotta);
+      cursor: pointer;
+      border: 3px solid var(--color-white);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .slider-input::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-md);
+    }
+
+    .slider-input::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-terracotta);
+      cursor: pointer;
+      border: 3px solid var(--color-white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Score value display */
+    .slider-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: var(--color-sand);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-ink);
+    }
+
+    /* --- RESULTS SECTION --- */
+    .results-section {
+      padding: var(--space-12) 0;
+    }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: var(--space-8);
+    }
+
+    .results-header h2 {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-2);
+    }
+
+    .results-header p {
+      color: var(--color-stone);
+    }
+
+    /* Results grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    @media (min-width: 640px) {
+      .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .results-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* City card - same as cities overview */
+    .city-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: cardFadeIn 0.4s ease forwards;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .city-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .city-card:nth-child(1) { animation-delay: 0ms; }
+    .city-card:nth-child(2) { animation-delay: 50ms; }
+    .city-card:nth-child(3) { animation-delay: 100ms; }
+    .city-card:nth-child(4) { animation-delay: 150ms; }
+    .city-card:nth-child(5) { animation-delay: 200ms; }
+    .city-card:nth-child(6) { animation-delay: 250ms; }
+    .city-card:nth-child(7) { animation-delay: 300ms; }
+    .city-card:nth-child(8) { animation-delay: 350ms; }
+    .city-card:nth-child(9) { animation-delay: 400ms; }
+
+    @keyframes cardFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .city-card-image-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .city-card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .city-card:hover .city-card-image {
+      transform: scale(1.05);
+    }
+
+    /* Stats overlay on hover */
+    .city-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .city-card:hover .city-card-overlay {
+      opacity: 1;
+    }
+
+    .overlay-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px 8px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .overlay-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .overlay-stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .overlay-stat-label {
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-weight: var(--font-medium);
+    }
+
+    .overlay-stat-value {
+      font-size: 9px;
+      font-weight: var(--font-semibold);
+      color: var(--color-white);
+    }
+
+    .overlay-stat-bar {
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .overlay-stat-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .overlay-stat-fill.excellent { background: #4ade80; }
+    .overlay-stat-fill.good { background: #facc15; }
+    .overlay-stat-fill.average { background: #fb923c; }
+    .overlay-stat-fill.below { background: #f87171; }
+
+    /* Rank badge */
+    .city-card-rank {
+      position: absolute;
+      top: var(--space-3);
+      left: var(--space-3);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-terracotta);
+      color: var(--color-white);
+      font-weight: var(--font-semibold);
+      font-size: var(--text-sm);
+      border-radius: var(--radius-full);
+      z-index: 2;
+    }
+
+    .city-card-body {
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .city-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-2);
+    }
+
+    .city-card-location {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .city-card-flag {
+      font-size: var(--text-2xl);
+    }
+
+    .city-card-name {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--color-ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .city-card-country {
+      font-size: var(--text-sm);
+      color: var(--color-stone);
+    }
+
+    /* Nomad Score badge */
+    .nomad-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      min-width: 50px;
+    }
+
+    .nomad-score-value {
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      line-height: 1;
+    }
+
+    .nomad-score-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+    }
+
+    /* Score color variants */
+    .nomad-score.excellent {
+      background-color: var(--color-forest);
+      color: var(--color-white);
+    }
+
+    .nomad-score.good {
+      background-color: var(--color-forest-muted);
+      color: var(--color-white);
+    }
+
+    .nomad-score.average {
+      background-color: var(--color-warning);
+      color: var(--color-ink);
+    }
+
+    .nomad-score.below {
+      background-color: var(--color-sand-dark);
+      color: var(--color-charcoal);
+    }
+
+    .city-card-tagline {
+      font-size: var(--text-sm);
+      color: var(--color-charcoal);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-4);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex-grow: 1;
+    }
+
+    /* Weather and Cost Info Row */
+    .city-card-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3);
+      margin-bottom: var(--space-3);
+      background-color: var(--color-sand);
+      border-radius: var(--radius-md);
+    }
+
+    .city-card-match {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-forest);
+    }
+
+    .city-card-climate-type {
+      font-size: var(--text-xs);
+      font-weight: var(--font-medium);
+      color: var(--color-white);
+      background-color: var(--color-stone);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .city-card-cost {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .cost-label {
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      color: var(--color-terracotta);
+    }
+
+    .cost-period {
+      font-size: var(--text-xs);
+      color: var(--color-stone);
+    }
+
+    .city-card-action {
+      width: 100%;
+      margin-top: auto;
+    }
+
+    /* No results state */
+    .no-results {
+      text-align: center;
+      padding: var(--space-12);
+      color: var(--color-stone);
+    }
+
+    /* --- MOBILE ADJUSTMENTS --- */
+    @media (max-width: 767px) {
+      .wheel-wrapper {
+        max-width: 300px;
+      }
+
+      .radar-label {
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+<body class="wheel-page">
+
+  <!-- ==========================================
+       NAVIGATION
+       ========================================== -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="wheel.html" class="nav-link active">Wheel</a></li>
+        <li><a href="index.html#cities" class="nav-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-link">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="index.html" class="nav-mobile-link">Home</a></li>
+        <li><a href="wheel.html" class="nav-mobile-link active">Wheel</a></li>
+        <li><a href="index.html#cities" class="nav-mobile-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-mobile-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-mobile-link">Blog</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="login.html" class="btn btn-secondary">Login</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Navigation Script -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('active');
+          navMobile.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
+
+  <!-- ==========================================
+       MAIN CONTENT
+       ========================================== -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <section class="wheel-header container">
+      <h1>Find Your Perfect City</h1>
+      <p class="lead">
+        Set each slider to show how important that category is to you. Higher = more important. We'll find cities that excel in what matters most to you.
+      </p>
+    </section>
+
+    <!-- Wheel + Controls -->
+    <section class="container">
+      <div class="wheel-section">
+
+        <!-- SVG Wheel -->
+        <div class="wheel-container">
+          <div class="wheel-wrapper">
+            <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 400 400">
+              <!-- Radar chart will be drawn by JavaScript -->
+            </svg>
+          </div>
+        </div>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+          <div class="controls-header">
+            <h3>Your Priorities</h3>
+            <button class="btn btn-ghost reset-btn" id="resetBtn">Reset All</button>
+          </div>
+          <div id="slidersContainer">
+            <!-- Sliders will be generated by JavaScript -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+      <div class="container">
+        <div class="results-header">
+          <h2>Your Top Matches</h2>
+          <p>Cities that best match your preferences</p>
+        </div>
+        <div class="results-grid" id="resultsGrid">
+          <!-- Result cards will be generated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column footer-about">
+          <a href="index.html" class="footer-logo">
+            <img src="assets/logo.svg" alt="" class="footer-logo-icon">
+            <span class="footer-logo-nomad">Nomad</span><span class="footer-logo-accent">Compass</span>
+          </a>
+          <p class="footer-description">
+            Your trusted guide for finding the perfect city to work and live remotely.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Twitter">
+              <svg class="footer-social-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">
+              <svg class="footer-social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="YouTube">
+              <svg class="footer-social-icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Explore</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#cities" class="footer-link">All Cities</a></li>
+            <li><a href="wheel.html" class="footer-link">Decision Wheel</a></li>
+            <li><a href="compare.html" class="footer-link">Compare Cities</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="blog.html" class="footer-link">Blog</a></li>
+            <li><a href="guides.html" class="footer-link">City Guides</a></li>
+            <li><a href="faq.html" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-column footer-newsletter">
+          <h4 class="footer-heading">Stay Connected</h4>
+          <p class="footer-newsletter-text">Get weekly nomad insights.</p>
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+            <input type="email" class="footer-newsletter-input" placeholder="Enter your email" required>
+            <button type="submit" class="footer-newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclosure">Some links on this site are affiliate links. We may earn a commission at no extra cost to you.</p>
+        <p class="footer-copyright">&copy; 2025 NomadCompass. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       CITY DATA
+       ========================================== -->
+  <script src="cities-data.js"></script>
+
+  <!-- ==========================================
+       WHEEL APPLICATION
+       ========================================== -->
+  <script>
+    /**
+     * NOMAD TASTE WHEEL APPLICATION
+     *
+     * This script powers the interactive wheel visualization.
+     * It handles:
+     *   - Drawing the SVG wheel with 10 segments
+     *   - Creating slider controls for each category
+     *   - Updating the wheel in real-time as sliders change
+     *   - Calculating match scores for all cities
+     *   - Displaying the top 3 matching cities
+     */
+
+    (function() {
+      'use strict';
+
+      // ============================================
+      // CONFIGURATION
+      // ============================================
+
+      /**
+       * Wheel dimensions and styling
+       */
+      const CONFIG = {
+        // SVG dimensions
+        centerX: 200,
+        centerY: 200,
+        outerRadius: 180,
+        innerRadius: 50,
+
+        // Colors for each segment (using warm palette)
+        segmentColors: [
+          '#C4704B', // terracotta
+          '#D4A03D', // golden
+          '#4A7360', // forest muted
+          '#8B6F47', // warm brown
+          '#A85A38', // terracotta dark
+          '#6B8E7A', // sage
+          '#C9956C', // tan
+          '#3D5F4D', // forest light
+          '#E8A584', // terracotta light
+          '#7A9E8C', // mint
+          '#9B7653', // bronze
+          '#5A8F7B', // teal
+          '#D49B6A'  // copper
+        ]
+      };
+
+      // ============================================
+      // STATE
+      // ============================================
+
+      /**
+       * Current user scores for each category (0-10)
+       * Default all to 5 (middle value)
+       */
+      let userScores = {
+        climate: 5,
+        cost: 5,
+        wifi: 5,
+        nightlife: 5,
+        nature: 5,
+        safety: 5,
+        food: 5,
+        community: 5,
+        english: 5,
+        visa: 5,
+        culture: 5,
+        cleanliness: 5,
+        airquality: 5
+      };
+
+      // ============================================
+      // DOM REFERENCES
+      // ============================================
+
+      const wheelSvg = document.getElementById('wheelSvg');
+      const slidersContainer = document.getElementById('slidersContainer');
+      const resultsGrid = document.getElementById('resultsGrid');
+      const resetBtn = document.getElementById('resetBtn');
+
+      // ============================================
+      // UTILITY FUNCTIONS
+      // ============================================
+
+      /**
+       * Convert degrees to radians
+       * @param {number} degrees - Angle in degrees
+       * @returns {number} Angle in radians
+       */
+      function degreesToRadians(degrees) {
+        return degrees * (Math.PI / 180);
+      }
+
+      /**
+       * Calculate X coordinate on a circle
+       * @param {number} centerX - Center X position
+       * @param {number} radius - Circle radius
+       * @param {number} angle - Angle in radians
+       * @returns {number} X coordinate
+       */
+      function polarToCartesianX(centerX, radius, angle) {
+        return centerX + radius * Math.cos(angle);
+      }
+
+      /**
+       * Calculate Y coordinate on a circle
+       * @param {number} centerY - Center Y position
+       * @param {number} radius - Circle radius
+       * @param {number} angle - Angle in radians
+       * @returns {number} Y coordinate
+       */
+      function polarToCartesianY(centerY, radius, angle) {
+        return centerY + radius * Math.sin(angle);
+      }
+
+      /**
+       * Create an SVG arc path for a wheel segment
+       * @param {number} startAngle - Start angle in degrees
+       * @param {number} endAngle - End angle in degrees
+       * @param {number} innerRadius - Inner radius
+       * @param {number} outerRadius - Outer radius
+       * @returns {string} SVG path data string
+       */
+      function createArcPath(startAngle, endAngle, innerRadius, outerRadius) {
+        const startRad = degreesToRadians(startAngle - 90); // Offset to start at top
+        const endRad = degreesToRadians(endAngle - 90);
+
+        const x1 = polarToCartesianX(CONFIG.centerX, outerRadius, startRad);
+        const y1 = polarToCartesianY(CONFIG.centerY, outerRadius, startRad);
+        const x2 = polarToCartesianX(CONFIG.centerX, outerRadius, endRad);
+        const y2 = polarToCartesianY(CONFIG.centerY, outerRadius, endRad);
+        const x3 = polarToCartesianX(CONFIG.centerX, innerRadius, endRad);
+        const y3 = polarToCartesianY(CONFIG.centerY, innerRadius, endRad);
+        const x4 = polarToCartesianX(CONFIG.centerX, innerRadius, startRad);
+        const y4 = polarToCartesianY(CONFIG.centerY, innerRadius, startRad);
+
+        const largeArcFlag = (endAngle - startAngle) > 180 ? 1 : 0;
+
+        return [
+          `M ${x1} ${y1}`,
+          `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+          `L ${x3} ${y3}`,
+          `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4}`,
+          'Z'
+        ].join(' ');
+      }
+
+      // ============================================
+      // WHEEL RENDERING
+      // ============================================
+
+      /**
+       * Draw the radar chart style wheel
+       * Shows all categories as axes with scores visualized as a filled polygon
+       */
+      function drawWheel() {
+        const categories = getCategoryKeys();
+        const n = categories.length;
+        const cx = 200, cy = 200, maxR = 140;
+        const angleStep = (2 * Math.PI) / n;
+        const startAngle = -Math.PI / 2; // Start from top
+
+        // Clear existing wheel content
+        wheelSvg.innerHTML = '';
+
+        // Get scores
+        const scores = categories.map(key => userScores[key]);
+
+        // Create web layers (background grid)
+        const levels = [2, 4, 6, 8, 10];
+        levels.forEach((level, li) => {
+          const r = (level / 10) * maxR;
+          const points = [];
+          for (let i = 0; i < n; i++) {
+            const angle = startAngle + i * angleStep;
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            points.push(`${x},${y}`);
+          }
+          const isOuter = li === levels.length - 1;
+          const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          polygon.setAttribute('points', points.join(' '));
+          polygon.setAttribute('class', `radar-web ${isOuter ? 'radar-web-outer' : ''}`);
+          wheelSvg.appendChild(polygon);
+        });
+
+        // Add axis lines
+        for (let i = 0; i < n; i++) {
+          const angle = startAngle + i * angleStep;
+          const x2 = cx + maxR * Math.cos(angle);
+          const y2 = cy + maxR * Math.sin(angle);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', cx);
+          line.setAttribute('y1', cy);
+          line.setAttribute('x2', x2);
+          line.setAttribute('y2', y2);
+          line.setAttribute('class', 'radar-web');
+          wheelSvg.appendChild(line);
+        }
+
+        // Create data polygon
+        const dataPoints = scores.map((score, i) => {
+          const r = (score / 10) * maxR;
+          const angle = startAngle + i * angleStep;
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          return `${x},${y}`;
+        });
+
+        // Data fill polygon
+        const fillPolygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        fillPolygon.setAttribute('points', dataPoints.join(' '));
+        fillPolygon.setAttribute('class', 'radar-fill');
+        wheelSvg.appendChild(fillPolygon);
+
+        // Data points (dots)
+        scores.forEach((score, i) => {
+          const r = (score / 10) * maxR;
+          const angle = startAngle + i * angleStep;
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', x);
+          circle.setAttribute('cy', y);
+          circle.setAttribute('r', '6');
+          circle.setAttribute('class', 'radar-point');
+          circle.setAttribute('data-category', categories[i]);
+          circle.setAttribute('data-score', score);
+          wheelSvg.appendChild(circle);
+        });
+
+        // Labels
+        const labelR = maxR + 28;
+        categories.forEach((key, i) => {
+          const cat = CATEGORIES[key];
+          const angle = startAngle + i * angleStep;
+          const x = cx + labelR * Math.cos(angle);
+          const y = cy + labelR * Math.sin(angle);
+
+          // Adjust text anchor based on position
+          let anchor = 'middle';
+          if (x < cx - 10) anchor = 'end';
+          else if (x > cx + 10) anchor = 'start';
+
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', y + 4);
+          text.setAttribute('class', 'radar-label');
+          text.setAttribute('text-anchor', anchor);
+          text.textContent = cat.name;
+          wheelSvg.appendChild(text);
+        });
+      }
+
+      // ============================================
+      // RADAR POINT DRAGGING
+      // ============================================
+
+      let isDragging = false;
+      let dragCategory = null;
+      const WHEEL_CX = 200;
+      const WHEEL_CY = 200;
+      const WHEEL_MAX_R = 140;
+
+      /**
+       * Get mouse/touch position relative to SVG
+       */
+      function getEventPosition(event, svg) {
+        const rect = svg.getBoundingClientRect();
+        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+        // Scale to SVG viewBox coordinates (400x400)
+        const scaleX = 400 / rect.width;
+        const scaleY = 400 / rect.height;
+
+        return {
+          x: (clientX - rect.left) * scaleX,
+          y: (clientY - rect.top) * scaleY
+        };
+      }
+
+      /**
+       * Calculate score from position (distance from center)
+       */
+      function calculateScoreFromPosition(x, y) {
+        const dx = x - WHEEL_CX;
+        const dy = y - WHEEL_CY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Convert distance to score (0-10)
+        let score = Math.round((distance / WHEEL_MAX_R) * 10);
+        score = Math.max(0, Math.min(10, score)); // Clamp to 0-10
+
+        return score;
+      }
+
+      /**
+       * Handle start of drag on radar point
+       */
+      function handleDragStart(event) {
+        const target = event.target;
+        if (target.classList.contains('radar-point')) {
+          event.preventDefault();
+          isDragging = true;
+          dragCategory = target.getAttribute('data-category');
+          target.style.cursor = 'grabbing';
+          wheelSvg.style.cursor = 'grabbing';
+        }
+      }
+
+      /**
+       * Handle drag movement
+       */
+      function handleDragMove(event) {
+        if (!isDragging || !dragCategory) return;
+
+        event.preventDefault();
+        const pos = getEventPosition(event, wheelSvg);
+        const newScore = calculateScoreFromPosition(pos.x, pos.y);
+
+        // Update score
+        userScores[dragCategory] = newScore;
+
+        // Update slider
+        const slider = document.getElementById(`slider-${dragCategory}`);
+        const valueDisplay = document.getElementById(`value-${dragCategory}`);
+        if (slider) slider.value = newScore;
+        if (valueDisplay) valueDisplay.textContent = newScore;
+
+        // Redraw wheel
+        drawWheel();
+      }
+
+      /**
+       * Handle end of drag
+       */
+      function handleDragEnd() {
+        if (isDragging) {
+          isDragging = false;
+          dragCategory = null;
+          wheelSvg.style.cursor = '';
+
+          // Update results after drag ends
+          updateResults();
+        }
+      }
+
+      /**
+       * Initialize radar drag listeners
+       */
+      function initRadarDrag() {
+        // Mouse events
+        wheelSvg.addEventListener('mousedown', handleDragStart);
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+
+        // Touch events
+        wheelSvg.addEventListener('touchstart', handleDragStart, { passive: false });
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
+      }
+
+      // ============================================
+      // SLIDER CONTROLS
+      // ============================================
+
+      /**
+       * Create all slider controls for category scores
+       */
+      function createSliders() {
+        const categories = getCategoryKeys();
+        slidersContainer.innerHTML = '';
+
+        categories.forEach(key => {
+          const category = CATEGORIES[key];
+          const score = userScores[key];
+
+          const row = document.createElement('div');
+          row.className = 'slider-row';
+
+          row.innerHTML = `
+            <div class="slider-label">
+              <span>${category.name}</span>
+            </div>
+            <input
+              type="range"
+              class="slider-input"
+              id="slider-${key}"
+              data-category="${key}"
+              min="0"
+              max="10"
+              step="1"
+              value="${score}"
+              aria-label="${category.name} importance"
+            >
+            <div class="slider-value" id="value-${key}">${score}</div>
+          `;
+
+          slidersContainer.appendChild(row);
+
+          // Add event listener for this slider
+          const slider = row.querySelector('.slider-input');
+          slider.addEventListener('input', handleSliderChange);
+
+          // Support touch events
+          slider.addEventListener('touchstart', handleTouchStart, { passive: true });
+          slider.addEventListener('touchmove', handleTouchMove, { passive: false });
+        });
+      }
+
+      /**
+       * Handle slider value changes
+       * Updates the score, redraws the wheel, and recalculates matches
+       * @param {Event} event - Input event from slider
+       */
+      function handleSliderChange(event) {
+        const category = event.target.dataset.category;
+        const value = parseInt(event.target.value, 10);
+
+        // Update state
+        userScores[category] = value;
+
+        // Update displayed value
+        document.getElementById(`value-${category}`).textContent = value;
+
+        // Redraw wheel with new values
+        drawWheel();
+
+        // Recalculate and display matches
+        updateResults();
+      }
+
+      /**
+       * Handle touch start for mobile slider support
+       */
+      function handleTouchStart(event) {
+        // Allow default touch behavior
+      }
+
+      /**
+       * Handle touch move for mobile slider support
+       */
+      function handleTouchMove(event) {
+        // Prevent page scroll while dragging slider
+        if (event.target.classList.contains('slider-input')) {
+          event.preventDefault();
+        }
+      }
+
+      /**
+       * Reset all scores to default value of 5
+       */
+      function resetScores() {
+        const categories = getCategoryKeys();
+        categories.forEach(key => {
+          userScores[key] = 5;
+          document.getElementById(`slider-${key}`).value = 5;
+          document.getElementById(`value-${key}`).textContent = 5;
+        });
+
+        drawWheel();
+        updateResults();
+      }
+
+      // ============================================
+      // MATCHING ALGORITHM
+      // ============================================
+
+      /**
+       * Calculate how well a city matches the user's priorities
+       * Slider values represent importance (0 = don't care, 10 = very important)
+       * Cities with high scores in important categories rank higher
+       *
+       * @param {Object} city - City object with scores
+       * @returns {number} Match score from 0 to 1 (1 = perfect match)
+       */
+      function calculateMatchScore(city) {
+        const categories = getCategoryKeys();
+        let weightedSum = 0;
+        let totalWeight = 0;
+
+        categories.forEach(key => {
+          const importance = userScores[key]; // 0-10: how much user cares
+          const cityScore = city.scores[key]; // 0-10: how good the city is
+
+          // Apply exponential weighting to amplify user preferences
+          // importance^1.5 makes high-priority sliders ~3x more influential
+          const weight = Math.pow(importance, 1.5);
+          weightedSum += weight * cityScore;
+          totalWeight += weight;
+        });
+
+        // If user set all sliders to 0, return average city score
+        if (totalWeight === 0) {
+          const avgScore = categories.reduce((sum, key) => sum + city.scores[key], 0) / categories.length;
+          return avgScore / 10;
+        }
+
+        // Return weighted average normalized to 0-1
+        // Max possible = totalWeight * 10 (if city scored 10 in all weighted categories)
+        return weightedSum / (totalWeight * 10);
+      }
+
+      /**
+       * Get the top N cities that best match user preferences
+       * @param {number} count - Number of top cities to return
+       * @returns {Array} Array of city objects with match scores
+       */
+      function getTopMatches(count = 3) {
+        // Calculate match score for each city
+        const citiesWithScores = CITIES.map(city => ({
+          ...city,
+          matchScore: calculateMatchScore(city)
+        }));
+
+        // Sort by match score (highest first) and take top N
+        citiesWithScores.sort((a, b) => b.matchScore - a.matchScore);
+
+        return citiesWithScores.slice(0, count);
+      }
+
+      // ============================================
+      // RESULTS RENDERING
+      // ============================================
+
+      /**
+       * Update the results section with top matching cities
+       */
+      function updateResults() {
+        const topMatches = getTopMatches(9);
+
+        // Clear existing results
+        resultsGrid.innerHTML = '';
+
+        if (topMatches.length === 0) {
+          resultsGrid.innerHTML = '<div class="no-results">No cities match your criteria</div>';
+          return;
+        }
+
+        // Create a card for each top city
+        topMatches.forEach((city, index) => {
+          const card = createResultCard(city, index + 1);
+          resultsGrid.appendChild(card);
+        });
+
+        // Parse emoji flags with Twemoji for cross-platform support
+        if (typeof twemoji !== 'undefined') {
+          twemoji.parse(resultsGrid, { folder: 'svg', ext: '.svg' });
+        }
+      }
+
+      /**
+       * Get score class based on value
+       */
+      function getScoreClass(score) {
+        if (score >= 8) return 'excellent';
+        if (score >= 6.5) return 'good';
+        if (score >= 5) return 'average';
+        return 'below';
+      }
+
+      /**
+       * Calculate Nomad Score for a city
+       */
+      function calculateNomadScore(city) {
+        const cats = getCategoryKeys();
+        return (cats.reduce((s, k) => s + city.scores[k], 0) / cats.length).toFixed(1);
+      }
+
+      /**
+       * Format cost per month
+       */
+      function formatCost(costPerMonth) {
+        if (!costPerMonth) return '$1,500';
+        if (costPerMonth >= 1000) {
+          return '$' + (costPerMonth / 1000).toFixed(1).replace('.0', '') + 'k';
+        }
+        return '$' + costPerMonth;
+      }
+
+      /**
+       * Generate overlay stats HTML for hover effect
+       */
+      function generateOverlayStats(city) {
+        const categories = getCategoryKeys();
+        return categories.map(key => {
+          const score = city.scores[key];
+          const cat = CATEGORIES[key];
+          const scoreClass = getScoreClass(score);
+          return `
+            <div class="overlay-stat">
+              <div class="overlay-stat-header">
+                <span class="overlay-stat-label">${cat.name}</span>
+                <span class="overlay-stat-value">${score}/10</span>
+              </div>
+              <div class="overlay-stat-bar">
+                <div class="overlay-stat-fill ${scoreClass}" style="width: ${score * 10}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      /**
+       * Create a result card HTML element for a city
+       * @param {Object} city - City object with match score
+       * @param {number} rank - Ranking position (1, 2, 3)
+       * @returns {HTMLElement} Card element
+       */
+      function createResultCard(city, rank) {
+        const matchPercent = Math.round(city.matchScore * 100);
+        const nomadScore = calculateNomadScore(city);
+        const scoreClass = getScoreClass(parseFloat(nomadScore));
+        const costPerMonth = formatCost(city.costPerMonth);
+
+        const card = document.createElement('article');
+        card.className = 'city-card';
+
+        card.innerHTML = `
+          <div class="city-card-image-container">
+            <span class="city-card-rank">#${rank}</span>
+            <img
+              src="${city.image}"
+              alt="${city.name}, ${city.country}"
+              class="city-card-image"
+              loading="lazy"
+            >
+            <div class="city-card-overlay">
+              <div class="overlay-stats">
+                ${generateOverlayStats(city)}
+              </div>
+            </div>
+          </div>
+          <div class="city-card-body">
+            <div class="city-card-header">
+              <div class="city-card-location">
+                <span class="city-card-flag">${city.flag}</span>
+                <div>
+                  <h3 class="city-card-name">${city.name}</h3>
+                  <span class="city-card-country">${city.country}</span>
+                </div>
+              </div>
+              <div class="nomad-score ${scoreClass}">
+                <span class="nomad-score-value">${nomadScore}</span>
+                <span class="nomad-score-label">Score</span>
+              </div>
+            </div>
+            <p class="city-card-tagline">${city.tagline}</p>
+            <div class="city-card-info">
+              <div class="city-card-match">
+                <span>${matchPercent}%</span>
+                <span>match</span>
+              </div>
+              <div class="city-card-climate-type">${city.climateType || 'N/A'}</div>
+              <div class="city-card-cost">
+                <span class="cost-label">~${costPerMonth}</span>
+                <span class="cost-period">/mo</span>
+              </div>
+            </div>
+            <a href="cities/${city.id}.html" class="btn btn-primary city-card-action">View City →</a>
+          </div>
+        `;
+
+        return card;
+      }
+
+      // ============================================
+      // INITIALIZATION
+      // ============================================
+
+      /**
+       * Initialize the wheel application
+       * Sets up the wheel, sliders, and event listeners
+       */
+      function init() {
+        // Draw the initial wheel
+        drawWheel();
+
+        // Create slider controls
+        createSliders();
+
+        // Initialize radar point dragging
+        initRadarDrag();
+
+        // Calculate initial matches
+        updateResults();
+
+        // Set up reset button
+        resetBtn.addEventListener('click', resetScores);
+      }
+
+      // Start the application when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+
+  <!-- Twemoji for cross-platform flag emoji support -->
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+
+  <!-- Auth State Management (Supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase-config.js"></script>
+  <script src="scripts/auth.js"></script>
+
+</body>
+</html>

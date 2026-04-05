@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Digital Nomad Blog - City Guides, Remote Work Tips & Visa Info | NomadCompass</title>
+  <meta name="description" content="Expert guides for digital nomads: in-depth city reviews, remote work tips, visa requirements, and cost of living breakdowns for the world's best nomad destinations.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="The NomadCompass Blog - Guides for Location-Independent Living">
+  <meta property="og:description" content="Expert city guides, remote work tips, and visa information for digital nomads. Find your next destination with insider knowledge from experienced nomads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nomadcompass.com/blog">
+  <meta property="og:image" content="https://picsum.photos/seed/nomadcompass-blog/1200/630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The NomadCompass Blog">
+  <meta name="twitter:description" content="Expert guides for digital nomads: city reviews, remote work tips, and visa info.">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/nav.css">
+  <link rel="stylesheet" href="styles/footer.css">
+  <link rel="stylesheet" href="styles/blog.css">
+
+  <!-- Twemoji for cross-platform emoji support -->
+  <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <style>
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 .05em 0 .1em;
+      vertical-align: -0.1em;
+    }
+  </style>
+
+  <!-- Auth state check (prevents button flash on page load) -->
+  <script>
+    (function() {
+      try {
+        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
+        if (auth && auth.loggedIn) {
+          document.documentElement.classList.add('auth-logged-in');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    /* Page fade-in animation */
+    body {
+      animation: pageIn 0.4s ease-out;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">Nomad</span><span class="nav-logo-accent">Compass</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="wheel.html" class="nav-link">Wheel</a></li>
+        <li><a href="index.html#cities" class="nav-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-link active">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="index.html" class="nav-mobile-link">Home</a></li>
+        <li><a href="wheel.html" class="nav-mobile-link">Wheel</a></li>
+        <li><a href="index.html#cities" class="nav-mobile-link">Cities</a></li>
+        <li><a href="rentals.html" class="nav-mobile-link">Rentals</a></li>
+        <li><a href="blog.html" class="nav-mobile-link active">Blog</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="login.html" class="btn btn-secondary">Login</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Navigation Script -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('active');
+          navMobile.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
+
+  <main class="main-content">
+    <!-- Blog Header -->
+    <header class="blog-header container">
+      <h1>The NomadCompass Blog</h1>
+      <p class="subtitle">Guides, city reviews, and tips for the location-independent life.</p>
+    </header>
+
+    <!-- Category Filter Tabs -->
+    <div class="container">
+      <div class="category-tabs" role="tablist">
+        <button class="category-tab active" role="tab" data-category="all">All</button>
+        <button class="category-tab" role="tab" data-category="city-guides">City Guides</button>
+        <button class="category-tab" role="tab" data-category="remote-work">Remote Work</button>
+        <button class="category-tab" role="tab" data-category="lifestyle">Lifestyle</button>
+        <button class="category-tab" role="tab" data-category="visa-legal">Visa & Legal</button>
+      </div>
+    </div>
+
+    <!-- Blog Layout -->
+    <div class="container">
+      <div class="blog-layout">
+
+        <!-- Main Content -->
+        <div class="blog-main">
+
+          <!-- Featured Article -->
+          <article class="featured-article" data-category="city-guides">
+            <img
+              src="https://picsum.photos/seed/lisbon-featured/1200/600"
+              alt="Lisbon cityscape with colorful buildings and the Tagus River"
+              class="featured-article-image"
+            >
+            <div class="featured-article-overlay">
+              <span class="category-tag">City Guides</span>
+              <h2>The Ultimate Digital Nomad Guide to Lisbon in 2025</h2>
+              <p class="excerpt">
+                Everything you need to know about living and working remotely in Portugal's sun-soaked capital. From the best neighborhoods and coworking spaces to visa options and hidden gems only locals know.
+              </p>
+              <div class="featured-article-meta">
+                <span class="author">
+                  <img src="https://picsum.photos/seed/sofia/64/64" alt="Sofia Andrade" class="author-avatar">
+                  Sofia Andrade
+                </span>
+                <span>March 2025</span>
+                <span>8 min read</span>
+              </div>
+              <a href="blog/digital-nomad-guide-lisbon.html" class="btn btn-primary">Read Article &rarr;</a>
+            </div>
+          </article>
+
+          <!-- Article Grid -->
+          <div class="article-grid">
+
+            <!-- Article 1 -->
+            <article class="article-card" data-category="city-guides">
+              <img
+                src="https://picsum.photos/seed/medellin-chiangmai/600/400"
+                alt="Split view of Medellín and Chiang Mai"
+                class="article-card-image"
+              >
+              <div class="article-card-body">
+                <span class="category-tag">City Guides</span>
+                <h3><a href="#">Medellín vs Chiang Mai: Which City Wins for Nomads in 2025?</a></h3>
+                <p class="excerpt">
+                  Two of the most popular digital nomad hubs go head-to-head. We compare cost of living, weather, internet speeds, community vibes, and more.
+                </p>
+                <div class="article-card-footer">
+                  <div class="article-card-author">
+                    <img src="https://picsum.photos/seed/marcus/48/48" alt="Marcus Chen">
+                    <span>Marcus Chen</span>
+                  </div>
+                  <span>6 min read</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="article-card" data-category="visa-legal">
+              <img
+                src="https://picsum.photos/seed/portugal-visa/600/400"
+                alt="Portuguese passport and visa documents"
+                class="article-card-image"
+              >
+              <div class="article-card-body">
+                <span class="category-tag">Visa & Legal</span>
+                <h3><a href="#">How to Get a Portugal Digital Nomad Visa (Step by Step)</a></h3>
+                <p class="excerpt">
+                  Portugal's D8 visa is one of Europe's best options for remote workers. Here's exactly how to apply, what documents you need, and common mistakes to avoid.
+                </p>
+                <div class="article-card-footer">
+                  <div class="article-card-author">
+                    <img src="https://picsum.photos/seed/elena/48/48" alt="Elena Vasquez">
+                    <span>Elena Vasquez</span>
+                  </div>
+                  <span>10 min read</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="article-card" data-category="remote-work">
+              <img
+                src="https://picsum.photos/seed/bali-coworking/600/400"
+                alt="Modern coworking space in Bali"
+                class="article-card-image"
+              >
+              <div class="article-card-body">
+                <span class="category-tag">Remote Work</span>
+                <h3><a href="#">The 10 Best Coworking Spaces in Bali for Remote Workers</a></h3>
+                <p class="excerpt">
+                  From beachfront desks in Canggu to jungle retreats in Ubud, these are the coworking spaces that actually deliver on fast WiFi and good vibes.
+                </p>
+                <div class="article-card-footer">
+                  <div class="article-card-author">
+                    <img src="https://picsum.photos/seed/jake/48/48" alt="Jake Morrison">
+                    <span>Jake Morrison</span>
+                  </div>
+                  <span>7 min read</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 4 -->
+            <article class="article-card" data-category="city-guides">
+              <img
+                src="https://picsum.photos/seed/tbilisi-guide/600/400"
+                alt="Tbilisi old town with sulfur baths"
+                class="article-card-image"
+              >
+              <div class="article-card-body">
+                <span class="category-tag">City Guides</span>
+                <h3><a href="#">Why Digital Nomads Are Flocking to Tbilisi, Georgia</a></h3>
+                <p class="excerpt">
+                  A 365-day visa-free stay, incredibly low costs, and a surprisingly vibrant tech scene. Here's why Georgia's capital is the hottest new nomad destination.
+                </p>
+                <div class="article-card-footer">
+                  <div class="article-card-author">
+                    <img src="https://picsum.photos/seed/nina/48/48" alt="Nina Kowalski">
+                    <span>Nina Kowalski</span>
+                  </div>
+                  <span>5 min read</span>
+                </div>
+              </div>
+            </article>
+
+          </div>
+          <!-- End Article Grid -->
+
+        </div>
+        <!-- End Main Content -->
+
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+
+          <!-- Top Cities This Month -->
+          <div class="sidebar-section">
+            <h4>Top Cities This Month</h4>
+            <ol class="top-cities-list">
+              <li>
+                <span class="rank">1</span>
+                <span class="flag">🇵🇹</span>
+                <a href="cities/lisbon.html">Lisbon, Portugal</a>
+              </li>
+              <li>
+                <span class="rank">2</span>
+                <span class="flag">🇹🇭</span>
+                <a href="cities/chiangmai.html">Chiang Mai, Thailand</a>
+              </li>
+              <li>
+                <span class="rank">3</span>
+                <span class="flag">🇨🇴</span>
+                <a href="cities/medellin.html">Medellín, Colombia</a>
+              </li>
+              <li>
+                <span class="rank">4</span>
+                <span class="flag">🇬🇪</span>
+                <a href="cities/tbilisi.html">Tbilisi, Georgia</a>
+              </li>
+              <li>
+                <span class="rank">5</span>
+                <span class="flag">🇲🇽</span>
+                <a href="cities/mexicocity.html">Mexico City, Mexico</a>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Affiliate Banner -->
+          <!-- /* [AFFILIATE] Travel Insurance Banner */ -->
+          <div class="affiliate-banner">
+            <h4>Recommended Tool</h4>
+            <p>Protect your nomad lifestyle with travel insurance designed for remote workers.</p>
+            <a href="#" class="btn btn-primary">Get Travel Insurance &rarr;</a>
+            <!-- /* [AFFILIATE] SafetyWing or World Nomads affiliate link */ -->
+          </div>
+
+          <!-- Newsletter Signup -->
+          <div class="sidebar-section sidebar-newsletter">
+            <h4>Stay in the Loop</h4>
+            <p style="font-size: var(--text-sm); color: var(--color-stone); margin-bottom: var(--space-4);">
+              Get weekly city picks, nomad tips, and exclusive deals straight to your inbox.
+            </p>
+            <form action="#" method="POST">
+              <input type="email" placeholder="your@email.com" required>
+              <button type="submit" class="btn btn-primary">Get Weekly Picks</button>
+            </form>
+          </div>
+
+        </aside>
+        <!-- End Sidebar -->
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <span class="footer-logo-icon">🧭</span>
+            NomadCompass
+          </a>
+          <p class="footer-tagline">Find your perfect city. Live without borders.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Twitter">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="YouTube">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="wheel.html">Find Your City</a></li>
+            <li><a href="index.html#cities">All Cities</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="#">Community</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Visa Guide</a></li>
+            <li><a href="#">Cost Calculator</a></li>
+            <li><a href="#">Packing List</a></li>
+            <li><a href="#">Insurance</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 NomadCompass. Made with ☕ from wherever we are today.</p>
+        <p class="footer-affiliate-disclosure">
+          Some links on this site are affiliate links. We may earn a commission at no extra cost to you.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * Blog Index Page JavaScript
+     * Handles category filtering and mobile navigation
+     */
+    (function() {
+      'use strict';
+
+      // Mobile navigation toggle
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMenu = document.querySelector('.nav-menu');
+      const nav = document.querySelector('.nav');
+
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function() {
+          navToggle.classList.toggle('active');
+          navMenu.classList.toggle('active');
+        });
+      }
+
+      // Add shadow to nav on scroll
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 10) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      });
+
+      // Category filtering
+      const categoryTabs = document.querySelectorAll('.category-tab');
+      const featuredArticle = document.querySelector('.featured-article');
+      const articleCards = document.querySelectorAll('.article-card');
+
+      /**
+       * Filters articles by category
+       * @param {string} category - The category to filter by ('all' shows everything)
+       */
+      function filterByCategory(category) {
+        const allArticles = [featuredArticle, ...articleCards];
+
+        allArticles.forEach(article => {
+          if (!article) return;
+
+          const articleCategory = article.dataset.category;
+
+          if (category === 'all' || articleCategory === category) {
+            article.style.display = '';
+            article.style.opacity = '0';
+            article.style.transform = 'translateY(20px)';
+
+            // Animate in
+            requestAnimationFrame(() => {
+              article.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+              article.style.opacity = '1';
+              article.style.transform = 'translateY(0)';
+            });
+          } else {
+            article.style.display = 'none';
+          }
+        });
+      }
+
+      // Add click handlers to category tabs
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Update active state
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+
+          // Filter articles
+          const category = this.dataset.category;
+          filterByCategory(category);
+        });
+      });
+
+    })();
+  </script>
+
+  <!-- Auth State Management -->
+  <script src="scripts/auth.js"></script>
+
+  <!-- Parse emojis with Twemoji -->
+  <script>
+    if (typeof twemoji !== 'undefined') {
+      twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+    }
+  </script>
+</body>
+</html>
