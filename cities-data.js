@@ -141,7 +141,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Experience surf, sunsets, and smoothie bowls—the Instagram-famous nomad destination.",
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=500&fit=crop",
+    image: "images/batch1/canggu.jpg",
     scores: {
       climate: 7,
       cost: 6,
