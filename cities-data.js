@@ -492,7 +492,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Mexico's culinary capital—mezcal, mole, and indigenous culture.",
-    image: "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&h=500&fit=crop",
+    image: "images/batch2/oaxaca.jpg",
     scores: {
       climate: 7,
       cost: 7,
@@ -1869,7 +1869,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Experience pacific beach town with cobblestone charm and stunning sunsets.",
-    image: "https://images.unsplash.com/photo-1512813195386-6cf811ad3542?w=800&h=500&fit=crop",
+    image: "images/batch2/puertovallarta.jpg",
     scores: {
       climate: 7,
       cost: 6,
@@ -2112,7 +2112,7 @@ const CITIES = [
     country: "UK",
     flag: "🇬🇧",
     tagline: "Historic royalty meets cutting-edge innovation in the world's capital.",
-    image: "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?w=800&h=500&fit=crop",
+    image: "images/batch2/london.jpg",
     scores: {
       climate: 5,
       cost: 1,
@@ -2652,7 +2652,7 @@ const CITIES = [
     country: "Poland",
     flag: "🇵🇱",
     tagline: "Medieval charm, vibrant culture, and incredible value await.",
-    image: "https://images.unsplash.com/photo-1611516491426-03025e6043c8?w=800&h=500&fit=crop",
+    image: "images/batch2/krakow.jpg",
     scores: {
       climate: 4,
       cost: 7,
@@ -3003,7 +3003,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Experience turkish Riviera with ancient ruins, beaches, and nomad visas.",
-    image: "https://images.unsplash.com/photo-1648304179047-2b5aaa8b6870?w=800&h=500&fit=crop",
+    image: "images/batch2/antalya.jpg",
     scores: {
       climate: 7,
       cost: 7,
@@ -3273,7 +3273,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "Where fjords meet cutting-edge architecture in the world's greenest capital.",
-    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&h=500&fit=crop",
+    image: "images/batch2/oslo.jpg",
     scores: {
       climate: 3,
       cost: 2,
@@ -3327,7 +3327,7 @@ const CITIES = [
     country: "Iceland",
     flag: "🇮🇸",
     tagline: "Experience northern lights, geothermal pools, and otherworldly landscapes at the edge of the Arctic.",
-    image: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=800&h=500&fit=crop",
+    image: "images/batch2/reykjavik.jpg",
     scores: {
       climate: 3,
       cost: 2,
@@ -3381,7 +3381,7 @@ const CITIES = [
     country: "Slovenia",
     flag: "🇸🇮",
     tagline: "Europe's greenest capital where Alpine meets Mediterranean in perfect harmony.",
-    image: "https://images.unsplash.com/photo-1569396116180-210c182bedb8?w=800&h=500&fit=crop",
+    image: "images/batch2/ljubljana.jpg",
     scores: {
       climate: 6,
       cost: 5,
@@ -3915,7 +3915,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "A lantern-lit ancient town where history meets beach life.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop",
+    image: "images/batch2/hoian.jpg",
     scores: {
       climate: 6,
       cost: 9,
@@ -4287,7 +4287,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Experience global metropolis with world-class diversity and tech opportunities.",
-    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=800&h=500&fit=crop",
+    image: "images/batch2/toronto.jpg",
     scores: {
       climate: 4,
       cost: 2,
@@ -5692,7 +5692,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Europe's windsurf and kite capital at the strait of Gibraltar.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop",
+    image: "images/batch2/tarifa.jpg",
     scores: {
       climate: 8,
       cost: 8,
@@ -6583,7 +6583,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience party island turned wellness retreat—beaches, beats, and bohemian spirit.",
-    image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=500&fit=crop",
+    image: "images/batch2/ibiza.jpg",
     scores: {
       climate: 8,
       cost: 3,
@@ -6961,7 +6961,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Where Netherlands meets Belgium—Burgundian lifestyle and European crossroads.",
-    image: "https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=800&h=500&fit=crop",
+    image: "images/batch2/maastricht.jpg",
     scores: {
       climate: 5,
       cost: 5,
@@ -7015,7 +7015,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "Gateway to the fjords—colorful Bryggen, rain, and dramatic Norwegian nature.",
-    image: "https://images.unsplash.com/photo-1532965119518-c020cbf2a66a?w=800&h=500&fit=crop",
+    image: "images/batch2/bergen.jpg",
     scores: {
       climate: 4,
       cost: 2,
@@ -7096,7 +7096,7 @@ const CITIES = [
     country: "Denmark",
     flag: "🇩🇰",
     tagline: "Denmark's second city—student energy, modern architecture, and hygge perfected.",
-    image: "https://images.unsplash.com/photo-1583157896273-5b05ce8c6363?w=800&h=500&fit=crop",
+    image: "images/batch2/aarhus.jpg",
     scores: {
       climate: 4,
       cost: 3,
@@ -7150,7 +7150,7 @@ const CITIES = [
     country: "Estonia",
     flag: "🇪🇪",
     tagline: "Estonia's intellectual capital—university town with startup DNA.",
-    image: "https://images.unsplash.com/photo-1549212197-3b55788f1bf2?w=800&h=500&fit=crop",
+    image: "images/batch2/tartu.jpg",
     scores: {
       climate: 4,
       cost: 7,
@@ -7555,7 +7555,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "Discover roman arena by the sea—Istrian wine, truffles, and Adriatic adventures.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop",
+    image: "images/batch2/pula.jpg",
     scores: {
       climate: 7,
       cost: 7,
@@ -7582,7 +7582,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "Experience sea organ sunsets—ancient walls, island-hopping gateway, and Croatian cool.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop",
+    image: "images/batch2/zadar.jpg",
     scores: {
       climate: 8,
       cost: 6,
@@ -7663,7 +7663,7 @@ const CITIES = [
     country: "Cyprus",
     flag: "🇨🇾",
     tagline: "Aphrodite's birthplace—ancient mosaics, year-round sun, and expat-friendly.",
-    image: "https://images.unsplash.com/photo-1505260325041-5e73f5831859?w=800&h=500&fit=crop",
+    image: "images/batch2/paphos.jpg",
     scores: {
       climate: 8,
       cost: 5,
@@ -7717,7 +7717,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Knights and beaches—medieval old town meets 300 days of sunshine.",
-    image: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&h=500&fit=crop",
+    image: "images/batch2/rhodes.jpg",
     scores: {
       climate: 8,
       cost: 7,
@@ -7771,7 +7771,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Experience turkish Riviera star—ancient Halicarnassus, blue voyages, and coastal glamour.",
-    image: "https://images.unsplash.com/photo-1564594736624-def7a10ab047?w=800&h=500&fit=crop",
+    image: "images/batch2/bodrum.jpg",
     scores: {
       climate: 8,
       cost: 6,
@@ -8716,7 +8716,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "The Florence of the South, featuring baroque beauty and charm.",
-    image: "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800&h=500&fit=crop",
+    image: "images/batch2/lecce.jpg",
     scores: {
       climate: 8,
       cost: 6,
@@ -9202,7 +9202,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Medieval charm meets modern innovation.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop",
+    image: "images/batch2/nuremberg.jpg",
     scores: {
       climate: 5,
       cost: 5,
@@ -9499,7 +9499,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Bali's relaxed beachside alternative.",
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=500&fit=crop",
+    image: "images/batch2/sanur.jpg",
     scores: {
       climate: 8,
       cost: 7,
@@ -10201,7 +10201,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "Honky-tonk heaven—bachelorette parties, hot chicken, and country music dreams.",
-    image: "https://images.unsplash.com/photo-1545419913-775e3e3d62ce?w=800&h=500&fit=crop",
+    image: "images/batch2/nashville.jpg",
     scores: {
       climate: 7,
       cost: 3,
@@ -10336,7 +10336,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Mexico's safest metro—baroque plazas, aerospace industry, and wine country weekends.",
-    image: "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&h=500&fit=crop",
+    image: "images/batch2/queretaro.jpg",
     scores: {
       climate: 8,
       cost: 7,
