@@ -1,4 +1,4 @@
-# Supabase Setup Guide for NomadCompass Voting
+# Supabase Setup Guide for The Nomad HQ Voting
 
 ## Step 1: Create Supabase Project
 

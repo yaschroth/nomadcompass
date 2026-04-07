@@ -99,7 +99,7 @@ function createAccommodationPage(acc, cityName, cityId) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="${acc.name} - ${acc.type} accommodation in ${cityName}. ${acc.desc}">
 
-  <title>${acc.name} — ${cityName} | NomadCompass</title>
+  <title>${acc.name} — ${cityName} | The Nomad HQ</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -514,7 +514,7 @@ function createAccommodationPage(acc, cityName, cityId) {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="../index.html" class="footer-logo">NomadCompass</a>
+          <a href="../index.html" class="footer-logo">The Nomad HQ</a>
           <p class="footer-tagline">Find your perfect destination for remote work and adventure.</p>
         </div>
         <div class="footer-links">
@@ -527,7 +527,7 @@ function createAccommodationPage(acc, cityName, cityId) {
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 NomadCompass. All rights reserved.</p>
+        <p>&copy; 2025 The Nomad HQ. All rights reserved.</p>
       </div>
     </div>
   </footer>

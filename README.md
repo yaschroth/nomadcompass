@@ -1,6 +1,6 @@
-# NomadCompass
+# The Nomad HQ
 
-NomadCompass is a decision-making tool for digital nomads that helps you find the perfect city based on your personal priorities. Use the interactive Taste Wheel to set what matters most to you, and get instant recommendations from 120+ curated destinations worldwide.
+The Nomad HQ is a decision-making tool for digital nomads that helps you find the perfect city based on your personal priorities. Use the interactive Taste Wheel to set what matters most to you, and get instant recommendations from 120+ curated destinations worldwide.
 
 ## File Structure
 

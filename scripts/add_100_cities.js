@@ -1,5 +1,5 @@
 /**
- * Add 100 new cities to NomadCompass
+ * Add 100 new cities to The Nomad HQ
  * Run with: node scripts/add_100_cities.js
  */
 

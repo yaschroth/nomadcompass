@@ -1,4 +1,4 @@
-# NomadCompass Verification Checklist
+# The Nomad HQ Verification Checklist
 
 ---
 
@@ -192,7 +192,7 @@ Award these badges on profiles:
 4. "Have you done monthly rentals before? Any references?"
    → Note for follow-up
 
-5. "Any questions about how NomadCompass works?"
+5. "Any questions about how The Nomad HQ works?"
    → Explain payment protection, verification
 ```
 

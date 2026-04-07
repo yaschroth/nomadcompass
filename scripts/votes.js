@@ -1,5 +1,5 @@
 /**
- * NomadCompass Voting Service
+ * The Nomad HQ Voting Service
  *
  * Handles community voting for city category scores.
  * Uses Supabase as backend with localStorage fallback.

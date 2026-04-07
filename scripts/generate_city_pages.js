@@ -26986,14 +26986,14 @@ function generateCityPage(city) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="${escapeHtml(city.name)} digital nomad guide: cost of living, WiFi speeds, coworking spaces, visa info, and where to stay in ${escapeHtml(city.country)}.">
 
-  <title>${escapeHtml(city.name)}, ${escapeHtml(city.country)} — NomadCompass City Guide</title>
+  <title>${escapeHtml(city.name)}, ${escapeHtml(city.country)} — The Nomad HQ City Guide</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
   <link rel="apple-touch-icon" href="../assets/logo-128.svg">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="${escapeHtml(city.name)} Digital Nomad Guide | NomadCompass">
+  <meta property="og:title" content="${escapeHtml(city.name)} Digital Nomad Guide | The Nomad HQ">
   <meta property="og:description" content="Everything you need to know about living and working remotely in ${escapeHtml(city.name)}. Cost of living, coworking spaces, neighborhoods, and visa info.">
   <meta property="og:type" content="article">
   <meta property="og:image" content="${content.hero_image}">
@@ -27384,7 +27384,7 @@ function generateCityPage(city) {
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="footer-copyright">&copy; 2025 NomadCompass. All rights reserved.</p>
+        <p class="footer-copyright">&copy; 2025 The Nomad HQ. All rights reserved.</p>
       </div>
     </div>
   </footer>

@@ -1,5 +1,5 @@
 /**
- * Supabase Configuration for NomadCompass
+ * Supabase Configuration for The Nomad HQ
  *
  * SETUP INSTRUCTIONS:
  * 1. Create a Supabase project at https://supabase.com

@@ -26,11 +26,11 @@
 
 ---
 
-## How NomadCompass Works
+## How The Nomad HQ Works
 
 We connect you directly with **verified digital nomads** — remote workers who need quality housing for extended stays.
 
-| Airbnb | NomadCompass |
+| Airbnb | The Nomad HQ |
 |--------|--------------|
 | 15.5% fee | **5-8% fee** |
 | 2-3 night average stays | **1-6 month stays** |
@@ -44,7 +44,7 @@ We connect you directly with **verified digital nomads** — remote workers who 
 
 On a **€1,500/month** rental:
 
-| | Airbnb | NomadCompass | You Save |
+| | Airbnb | The Nomad HQ | You Save |
 |-|--------|--------------|----------|
 | Monthly fee | €232 | €75-120 | **€112-157/month** |
 | Yearly fee | €2,784 | €900-1,440 | **€1,344-1,884/year** |
@@ -88,8 +88,8 @@ On a **€1,500/month** rental:
 
 Contact us: [your email]
 
-Website: [nomadcompass.com]
+Website: [thenomadhq.com]
 
 ---
 
-*NomadCompass — Quality tenants. Longer stays. Lower fees.*
+*The Nomad HQ — Quality tenants. Longer stays. Lower fees.*

@@ -1,4 +1,4 @@
-# NomadCompass Design System
+# The Nomad HQ Design System
 
 A warm, editorial travel magazine aesthetic for digital nomads.
 

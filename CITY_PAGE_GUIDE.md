@@ -1,6 +1,6 @@
-# NomadCompass City Page Creation Guide
+# The Nomad HQ City Page Creation Guide
 
-This guide documents the process for creating high-quality city detail pages for NomadCompass, following the pattern established with Hanoi.
+This guide documents the process for creating high-quality city detail pages for The Nomad HQ, following the pattern established with Hanoi.
 
 ---
 
@@ -527,9 +527,9 @@ calculateTimeDiff();
 ```html
 <meta name="description" content="[City] digital nomad guide: [key points], and where to stay in [Country]'s [descriptor].">
 
-<title>[City], [Country] — NomadCompass City Guide</title>
+<title>[City], [Country] — The Nomad HQ City Guide</title>
 
-<meta property="og:title" content="[City] Digital Nomad Guide | NomadCompass">
+<meta property="og:title" content="[City] Digital Nomad Guide | The Nomad HQ">
 <meta property="og:description" content="Everything you need to know about living and working remotely in [City]. Cost of living, coworking spaces, neighborhoods, and visa info.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="[Unsplash image URL with w=1200&h=630]">

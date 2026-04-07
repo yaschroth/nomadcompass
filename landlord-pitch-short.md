@@ -37,7 +37,7 @@ Happy to share details if you're interested.
 
 Hi,
 
-I run NomadCompass — we connect property owners with verified digital nomads for 1-6 month stays.
+I run The Nomad HQ — we connect property owners with verified digital nomads for 1-6 month stays.
 
 Why landlords work with us:
 - 15.5% Airbnb fee → 5-8% with us
