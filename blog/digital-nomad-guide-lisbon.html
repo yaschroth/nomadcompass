@@ -76,24 +76,72 @@
 </head>
 <body>
   <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-container container">
+  <nav class="nav" id="mainNav">
+    <div class="nav-container">
       <a href="../index.html" class="nav-logo">
-        <span class="nav-logo-icon">🧭</span>
-        The Nomad HQ
+        <img src="../assets/logo.svg" alt="" class="nav-logo-icon">
+        <span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span>
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <span class="hamburger"></span>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="../wheel.html" class="nav-link">Wheel</a></li>
+        <li><a href="../rentals.html" class="nav-link">Rentals</a></li>
+        <li><a href="../blog.html" class="nav-link active">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="../login.html" class="nav-login">Login</a>
+        <a href="../signup.html" class="btn btn-primary nav-signup">Sign Up</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
       </button>
-      <div class="nav-menu">
-        <a href="../index.html" class="nav-link">Home</a>
-        <a href="../wheel.html" class="nav-link">Wheel</a>
-        <a href="../index.html#cities" class="nav-link">Cities</a>
-        <a href="../rentals.html" class="nav-link">Rentals</a>
-        <a href="../blog.html" class="nav-link active">Blog</a>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <ul class="nav-mobile-links">
+        <li><a href="../index.html" class="nav-mobile-link">Home</a></li>
+        <li><a href="../wheel.html" class="nav-mobile-link">Wheel</a></li>
+        <li><a href="../rentals.html" class="nav-mobile-link">Rentals</a></li>
+        <li><a href="../blog.html" class="nav-mobile-link active">Blog</a></li>
+      </ul>
+      <div class="nav-mobile-actions">
+        <a href="../login.html" class="btn btn-secondary">Login</a>
+        <a href="../signup.html" class="btn btn-primary">Sign Up</a>
       </div>
     </div>
   </nav>
+
+  <!-- Navigation Script -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      const navToggle = document.getElementById('navToggle');
+      const navMobile = document.getElementById('navMobile');
+      const body = document.body;
+
+      navToggle.addEventListener('click', function() {
+        const isOpen = navToggle.classList.toggle('active');
+        navMobile.classList.toggle('active');
+        body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      const mobileLinks = navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('active');
+          navMobile.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    })();
+  </script>
 
   <main class="main-content">
     <!-- Article Header -->
