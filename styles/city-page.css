@@ -9,9 +9,7 @@
    -------------------------------------------- */
 .city-hero {
   position: relative;
-  height: 60vh;
-  min-height: 400px;
-  max-height: 600px;
+  min-height: 100vh;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -25,24 +23,83 @@
   object-fit: cover;
 }
 
+/* Light gradient at top for nav readability */
+.city-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-height) + 40px);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
 .city-hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(15, 23, 42, 0.9) 0%,
-    rgba(15, 23, 42, 0.5) 50%,
-    rgba(15, 23, 42, 0.2) 100%
+    rgba(15, 23, 42, 0.95) 0%,
+    rgba(15, 23, 42, 0.75) 50%,
+    rgba(15, 23, 42, 0.2) 80%,
+    transparent 100%
   );
 }
 
 .city-hero-content {
   position: relative;
   z-index: 1;
-  padding: var(--space-8) var(--space-6);
+  padding: calc(var(--nav-height) + var(--space-8)) var(--space-6) var(--space-10);
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+}
+
+/* Scroll indicator */
+.city-hero .hero-scroll-indicator {
+  position: absolute;
+  bottom: var(--space-8);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: rgba(255,255,255,0.6);
+  font-size: var(--text-sm);
+  z-index: 2;
+  animation: heroScrollBounce 2s ease infinite;
+}
+
+.city-hero .hero-scroll-indicator-icon {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.city-hero .hero-scroll-indicator-icon::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background-color: rgba(255,255,255,0.6);
+  border-radius: var(--radius-full);
+  animation: heroScrollDot 2s ease infinite;
+}
+
+@keyframes heroScrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+@keyframes heroScrollDot {
+  0%, 100% { transform: translateY(-4px); opacity: 0; }
+  50% { transform: translateY(4px); opacity: 1; }
 }
 
 .city-hero-flag {
@@ -1437,11 +1494,6 @@
 }
 
 @media (max-width: 768px) {
-  .city-hero {
-    height: 50vh;
-    min-height: 350px;
-  }
-
   .city-hero-title {
     font-size: var(--text-4xl);
   }
