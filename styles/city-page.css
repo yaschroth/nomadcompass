@@ -219,16 +219,37 @@
    Animated circular gauge with description
    -------------------------------------------- */
 .score-section {
-  padding: var(--space-16) var(--space-6);
-  background: var(--color-sand);
+  padding: var(--space-20) var(--space-6);
+  background: linear-gradient(160deg, var(--color-forest) 0%, #1e293b 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.score-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .score-container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   gap: var(--space-12);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10) var(--space-12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
 }
 
 .score-gauge {
@@ -242,16 +263,17 @@
 
 .score-gauge-bg {
   fill: none;
-  stroke: var(--color-sand-dark);
-  stroke-width: 8;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 10;
 }
 
 .score-gauge-fill {
   fill: none;
   stroke: var(--color-terracotta);
-  stroke-width: 8;
+  stroke-width: 10;
   stroke-linecap: round;
   transition: stroke-dasharray 1.5s ease-out;
+  filter: drop-shadow(0 0 8px rgba(0, 102, 255, 0.4));
 }
 
 .score-gauge-text {
@@ -265,17 +287,17 @@
 
 .score-gauge-value {
   font-family: var(--font-display);
-  font-size: var(--text-5xl);
-  color: var(--color-ink);
+  font-size: 3.5rem;
+  color: var(--color-white);
   line-height: 1;
 }
 
 .score-gauge-label {
-  font-size: var(--text-sm);
-  color: var(--color-stone);
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: var(--space-1);
+  letter-spacing: 0.1em;
+  margin-top: var(--space-2);
 }
 
 .score-description {
@@ -285,13 +307,24 @@
 .score-description h2 {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  color: var(--color-ink);
-  margin: 0 0 var(--space-4);
+  color: var(--color-white);
+  margin: 0 0 var(--space-2);
+  line-height: var(--leading-snug);
+}
+
+.score-description h2::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: var(--color-terracotta);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-4);
 }
 
 .score-description p {
-  font-size: var(--text-lg);
-  color: var(--color-charcoal);
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.7);
   line-height: var(--leading-relaxed);
   margin: 0;
 }
@@ -1640,10 +1673,22 @@
     font-size: var(--text-xl);
   }
 
+  .score-section {
+    padding: var(--space-12) var(--space-4);
+  }
+
+  .score-section::before {
+    left: 50%;
+    top: 30%;
+    width: 300px;
+    height: 300px;
+  }
+
   .score-container {
     flex-direction: column;
     text-align: center;
-    gap: var(--space-8);
+    gap: var(--space-6);
+    padding: var(--space-8) var(--space-6);
   }
 
   .score-gauge svg {
@@ -1653,6 +1698,11 @@
 
   .score-description h2 {
     font-size: var(--text-2xl);
+  }
+
+  .score-description h2::before {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .categories-grid {
