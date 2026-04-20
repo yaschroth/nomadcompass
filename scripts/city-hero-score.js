@@ -21,8 +21,8 @@
       scoreContainer.querySelector('.score-gauge').outerHTML +
     '</div>';
 
-  // Insert badge into hero content — absolute on desktop, inline on mobile
-  heroContent.appendChild(badge);
+  // Insert badge at the top of hero content, above the flag
+  heroContent.insertBefore(badge, heroContent.firstChild);
 
   // Remove the original score section entirely
   scoreSection.remove();
