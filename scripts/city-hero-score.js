@@ -7,8 +7,8 @@
   'use strict';
 
   var scoreSection = document.querySelector('.score-section');
-  var heroContent = document.querySelector('.city-hero-content');
-  if (!scoreSection || !heroContent) return;
+  var hero = document.querySelector('.city-hero');
+  if (!scoreSection || !hero) return;
 
   var gauge = scoreSection.querySelector('.score-gauge');
   if (!gauge) return;
@@ -17,6 +17,6 @@
   badge.className = 'hero-score-badge';
   badge.appendChild(gauge);
 
-  heroContent.insertBefore(badge, heroContent.firstChild);
+  hero.appendChild(badge);
   scoreSection.remove();
 })();
