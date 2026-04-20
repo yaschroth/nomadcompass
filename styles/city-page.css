@@ -57,15 +57,17 @@
   width: 100%;
 }
 
-/* Compact Nomad Score badge at top of hero content, above flag */
+/* Compact Nomad Score badge — sits inline with the title */
 .hero-score-badge {
+  flex-shrink: 0;
   display: inline-flex;
-  margin-bottom: var(--space-4);
+  align-self: flex-end;
+  padding-bottom: var(--space-1);
 }
 
-.hero-score-badge-gauge .score-gauge svg {
-  width: 120px;
-  height: 120px;
+.hero-score-badge .score-gauge svg {
+  width: 100px;
+  height: 100px;
 }
 
 .hero-score-badge .score-gauge-bg {
@@ -79,7 +81,7 @@
 }
 
 .hero-score-badge .score-gauge-value {
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
   color: var(--color-white);
   font-family: var(--font-display);
   line-height: 1;
@@ -103,14 +105,21 @@
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .hero-score-badge-gauge .score-gauge svg {
-    width: 100px;
-    height: 100px;
+@media (max-width: 640px) {
+  .city-hero-headline {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-4);
   }
-
+  .hero-score-badge {
+    align-self: flex-start;
+  }
+  .hero-score-badge .score-gauge svg {
+    width: 84px;
+    height: 84px;
+  }
   .hero-score-badge .score-gauge-value {
-    font-size: var(--text-2xl);
+    font-size: var(--text-xl);
   }
 }
 
@@ -173,66 +182,117 @@
   50% { transform: translateY(4px); opacity: 1; }
 }
 
+/* Magazine split: title + gauge side-by-side */
+.city-hero-headline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.city-hero-headline-text {
+  min-width: 0;
+}
+
+/* Country as overline above the title (with flag inline) */
+.city-hero-country {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin: 0 0 var(--space-3);
+  line-height: 1;
+}
+
 .city-hero-flag {
-  font-size: var(--text-4xl);
-  margin-bottom: var(--space-2);
+  font-size: var(--text-xl);
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .city-hero-title {
   font-family: var(--font-display);
-  font-size: var(--text-5xl);
+  font-size: clamp(3rem, 8vw, 5.25rem);
   color: var(--color-white);
-  margin: 0 0 var(--space-1);
-  line-height: var(--leading-tight);
-}
-
-.city-hero-country {
-  font-size: var(--text-xl);
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 var(--space-4);
-  font-weight: var(--font-medium);
+  margin: 0;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
 }
 
 .city-hero-tagline {
   font-size: var(--text-lg);
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 var(--space-6);
-  max-width: 600px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 var(--space-8);
+  max-width: 640px;
   line-height: var(--leading-relaxed);
 }
 
-/* Quick stats inside hero — inline horizontal strip */
+/* Quick stats inside hero — elegant inline strip with dot separators */
 .city-hero .quick-stats-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-5);
   align-items: baseline;
-}
-
-@media (max-width: 480px) {
-  .city-hero .quick-stats-grid {
-    gap: var(--space-3) var(--space-4);
-  }
+  gap: 0;
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .city-hero .quick-stat {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  position: relative;
+}
+
+.city-hero .quick-stat:first-child {
+  padding-left: 0;
+}
+
+.city-hero .quick-stat::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%);
+}
+
+.city-hero .quick-stat:first-child::before {
+  display: none;
 }
 
 .city-hero .quick-stat-value {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   color: var(--color-white);
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .city-hero .quick-stat-label {
   font-size: 0.6875rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-top: 2px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .city-hero .quick-stats-grid {
+    gap: var(--space-3) 0;
+  }
+  .city-hero .quick-stat {
+    padding: 0 var(--space-4);
+  }
 }
 
 /* --------------------------------------------
