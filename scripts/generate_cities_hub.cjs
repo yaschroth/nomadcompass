@@ -130,6 +130,27 @@ const html = `<!DOCTYPE html>
     .city-dir-name { font-weight: 600; }
     .city-dir-country { color: var(--color-text-muted, #777); font-size: .85rem; }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Digital Nomad City Guides",
+    "description": "Browse all ${cities.length} digital nomad city guides with cost of living, WiFi, coworking, safety and visa info.",
+    "url": "${SITE}/cities",
+    "isPartOf": { "@type": "WebSite", "url": "${SITE}/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "${SITE}/" },
+      { "@type": "ListItem", "position": 2, "name": "Cities", "item": "${SITE}/cities" }
+    ]
+  }
+  </script>
 </head>
 <body>
 

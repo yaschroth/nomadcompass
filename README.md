@@ -2,6 +2,20 @@
 
 The Nomad HQ is a decision-making tool for digital nomads that helps you find the perfect city based on your personal priorities. Use the interactive Taste Wheel to set what matters most to you, and get instant recommendations from 120+ curated destinations worldwide.
 
+## SEO & Style Guides
+
+Read the guide for a page type before creating or editing pages of that type. Each covers the
+SEO, structure, structured data, internal linking, and house style for its surface:
+
+- [`BLOG_STYLE_GUIDE.md`](BLOG_STYLE_GUIDE.md) — blog articles (`blog/`)
+- [`CITY_PAGE_STYLE_GUIDE.md`](CITY_PAGE_STYLE_GUIDE.md) — city pages (`cities/`); pair with
+  [`CITY_PAGE_GUIDE.md`](CITY_PAGE_GUIDE.md) (the build/data template)
+- [`ACCOMMODATION_PAGE_STYLE_GUIDE.md`](ACCOMMODATION_PAGE_STYLE_GUIDE.md) — accommodation listings (`accommodations/`)
+- [`CORE_PAGES_STYLE_GUIDE.md`](CORE_PAGES_STYLE_GUIDE.md) — homepage, hubs, tools, author, and utility/auth pages
+
+Shared, universal rules (clean self-canonical URLs, the em-dash ban, one `<h1>` per page,
+mobile-first parity) live in the blog guide and are referenced by the others.
+
 ## File Structure
 
 ```
