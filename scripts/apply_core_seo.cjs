@@ -28,7 +28,7 @@ const cfg = {
   'index.html': { robots: 'index', ld: [org, website] },
   'blog.html': { robots: 'index', ld: [collection('Digital Nomad Blog', '/blog', 'City guides, remote-work tips, and visa information for digital nomads.'), crumb('Blog', '/blog')] },
   'wheel.html': { robots: 'index', ld: [webapp, crumb('Wheel', '/wheel')] },
-  'rentals.html': { robots: 'index', ld: [collection('Nomad-Friendly Rentals', '/rentals', 'Furnished, remote-work-ready rentals for digital nomads.'), crumb('Rentals', '/rentals')] },
+  'rentals.html': { robots: 'noindex' }, // hidden for now (see hide_rentals.cjs / TODO.md)
   'login.html': { robots: 'noindex' },
   'signup.html': { robots: 'noindex' },
   'profile.html': { robots: 'noindex' },

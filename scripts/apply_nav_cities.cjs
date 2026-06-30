@@ -1,9 +1,9 @@
 /**
- * Adds the "Cities" nav item (after "Rentals", before "Blog") to every page's
- * header so the tab is consistent site-wide. It was only on index/cities/about,
- * so it appeared to "disappear" when navigating to other pages.
+ * Adds the "Cities" nav item (after "Wheel") to every page's header so the tab
+ * is consistent site-wide. It was only on index/cities/about, so it appeared to
+ * "disappear" when navigating to other pages.
  * Inserts into both desktop (.nav-link) and mobile (.nav-mobile-link) menus,
- * reusing the same href prefix as the sibling Rentals link. Idempotent.
+ * reusing the same href prefix as the sibling Wheel link. Idempotent.
  */
 const fs = require('fs');
 const path = require('path');
@@ -24,14 +24,14 @@ for (const abs of targets) {
   if (/class="nav-(?:link|mobile-link)[^"]*">Cities<\/a>/.test(html)) { alreadyHad++; continue; }
   const before = html;
 
-  // desktop
+  // desktop (anchor on Wheel; Rentals was hidden, see hide_rentals.cjs)
   html = html.replace(
-    /<li><a href="([^"]*)rentals" class="nav-link[^"]*">Rentals<\/a><\/li>/,
+    /<li><a href="([^"]*)wheel" class="nav-link[^"]*">Wheel<\/a><\/li>/,
     (m, pre) => `${m}\n        <li><a href="${pre}cities" class="nav-link">Cities</a></li>`
   );
   // mobile
   html = html.replace(
-    /<li><a href="([^"]*)rentals" class="nav-mobile-link[^"]*">Rentals<\/a><\/li>/,
+    /<li><a href="([^"]*)wheel" class="nav-mobile-link[^"]*">Wheel<\/a><\/li>/,
     (m, pre) => `${m}\n        <li><a href="${pre}cities" class="nav-mobile-link">Cities</a></li>`
   );
 
@@ -39,5 +39,5 @@ for (const abs of targets) {
   else noMatch.push(path.relative(ROOT, abs));
 }
 
-console.log(`Nav "Cities" inserted: ${changed} | already had it: ${alreadyHad} | no Rentals nav match: ${noMatch.length}`);
+console.log(`Nav "Cities" inserted: ${changed} | already had it: ${alreadyHad} | no Wheel nav match: ${noMatch.length}`);
 if (noMatch.length) console.log('  no-match files:', noMatch.slice(0, 10).join(', ') + (noMatch.length > 10 ? ` (+${noMatch.length - 10})` : ''));

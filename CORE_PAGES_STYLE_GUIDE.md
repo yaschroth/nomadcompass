@@ -17,7 +17,7 @@ The pages covered here, with their current state (audited 2026-06-30):
 | Blog hub | `blog.html` | `/blog` | yes | no CollectionPage/Breadcrumb JSON-LD, no robots |
 | Cities hub | `cities.html` | `/cities` | yes | no CollectionPage/Breadcrumb JSON-LD (robots ok) |
 | Decision tool | `wheel.html` | `/wheel` | yes | no JSON-LD, no robots, partial OG |
-| Rentals hub | `rentals.html` | `/rentals` | yes | no JSON-LD, no robots, partial OG |
+| Rentals hub | `rentals.html` | `/rentals` | no | **hidden for now**: `noindex`, removed from nav + sitemap (see `TODO.md`) |
 | Author | `about/yannick-schroth.html` | `/about/yannick-schroth` | yes | **done** (ProfilePage shipped) |
 | Auth/utility | `login/signup/profile.html` | `/login` … | no | not `noindex`, no canonical |
 | Stale shell | `index-shell.html` | `/index-shell` | no | duplicate of homepage |
@@ -90,6 +90,9 @@ These are list/index pages whose SEO job is to **funnel crawl + equity to the it
 ---
 
 ## 4. Tool pages (`wheel.html` → `/wheel`, `rentals.html` → `/rentals`)
+
+> **Rentals is hidden for now** (`noindex`, off the nav and sitemap — see `TODO.md`). The guidance
+> below applies to it only when it is brought back; until then it needs nothing. `/wheel` is live.
 
 Interactive/app-like pages. They are indexable and in the sitemap, so they still need the basics:
 
