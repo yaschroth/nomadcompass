@@ -11114,3 +11114,12 @@ const CATEGORIES = {
 function getCategoryKeys() {
   return ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
 }
+
+// Render a country flag emoji as a self-hosted SVG <img> (consistent across platforms).
+function flagSvg(emoji){
+  if(!emoji) return '';
+  const pts=[...emoji];
+  if(pts.length!==2) return emoji;
+  const code=pts.map(p=>String.fromCharCode(p.codePointAt(0)-0x1F1E6+97)).join('');
+  return '<img class="flag-img" src="/assets/flags/'+code+'.svg" alt="" loading="lazy">';
+}

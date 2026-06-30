@@ -29,6 +29,14 @@ const titleCase = (slug) =>
 const escapeHtml = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+// flag emoji -> self-hosted SVG <img> (emoji fall back to letters like "BE" on Windows)
+const flagImg = (emoji) => {
+  const pts = [...(emoji || '')];
+  if (pts.length !== 2) return '';
+  const code = pts.map((p) => String.fromCharCode(p.codePointAt(0) - 0x1f1e6 + 97)).join('');
+  return `<img class="flag-img" src="/assets/flags/${code}.svg" alt="" loading="lazy"> `;
+};
+
 // only link cities that actually have a page (no 404s)
 const fileSlugs = fs
   .readdirSync(path.join(ROOT, 'cities'))
@@ -67,7 +75,7 @@ const sections = letters
       .map(
         (c) =>
           `          <li><a href="/cities/${c.slug}" class="city-dir-link">` +
-          `${c.flag ? escapeHtml(c.flag) + ' ' : ''}` +
+          `${flagImg(c.flag)}` +
           `<span class="city-dir-name">${escapeHtml(c.name)}</span>` +
           `${c.country ? `<span class="city-dir-country">${escapeHtml(c.country)}</span>` : ''}` +
           `</a></li>`
@@ -127,6 +135,7 @@ const html = `<!DOCTYPE html>
     .city-dir-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .35rem .75rem; }
     .city-dir-link { display: flex; align-items: baseline; gap: .4rem; padding: .45rem .5rem; border-radius: 8px; text-decoration: none; color: inherit; }
     .city-dir-link:hover { background: rgba(0,0,0,.05); }
+    .city-dir-link .flag-img { align-self: center; flex: 0 0 auto; }
     .city-dir-name { font-weight: 600; }
     .city-dir-country { color: var(--color-text-muted, #777); font-size: .85rem; }
   </style>
