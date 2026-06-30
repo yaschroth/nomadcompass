@@ -35,7 +35,8 @@ function extractFaq(html, articleInner) {
   // find a "Frequently Asked Questions" / "FAQ" h2 and the block after it
   const h2 = articleInner.match(/<h2[^>]*>\s*(?:Frequently Asked Questions|FAQ|FAQs)[^<]*<\/h2>([\s\S]*?)(?=<h2|<\/article|$)/i);
   if (!h2) return null;
-  const block = h2[1];
+  // stop before the author-bio block so its text never leaks into the last answer
+  const block = h2[1].split(/<div class="author-bio"/i)[0];
   const qa = [];
   const re = /<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3|$)/gi;
   let m;
@@ -162,10 +163,10 @@ for (const file of files) {
         if (faq) {
           const fjson = JSON.stringify(faq, null, 2).replace(/\n/g, '\n  ');
           html = html.replace(
-            /(<script type="application\/ld\+json">[\s\S]*?<\/script>)(\s*<\/head>)/,
-            `$1\n\n  <script type="application/ld+json">\n  ${fjson}\n  </script>$2`
+            /<\/head>/i,
+            `  <script type="application/ld+json">\n  ${fjson}\n  </script>\n</head>`
           );
-          ldNote = 'ok +FAQPage';
+          ldNote = `ok +FAQPage(${faq.mainEntity.length})`;
         }
       }
     } else if (data) {
