@@ -97,6 +97,12 @@ const html = `<!DOCTYPE html>
   <meta property="og:description" content="Browse all ${cities.length} digital nomad city guides with cost of living, WiFi, coworking, safety and visa info.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${SITE}/cities">
+  <meta property="og:image" content="${SITE}/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="All Digital Nomad City Guides | The Nomad HQ">
+  <meta name="twitter:image" content="${SITE}/assets/og-image.png">
 
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
