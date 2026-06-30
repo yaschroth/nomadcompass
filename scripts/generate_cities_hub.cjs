@@ -107,15 +107,15 @@ const html = `<!DOCTYPE html>
   <link rel="stylesheet" href="styles/footer.css">
 
   <style>
-    .city-dir-hero {
-      background: var(--color-sand);
-      border-bottom: 1px solid var(--color-sand-dark);
-      padding: calc(var(--nav-height, 64px) + 3rem) 1.25rem 2.5rem;
-      text-align: center;
-    }
-    .city-dir-hero h1 { font-family: 'DM Serif Display', serif; color: var(--color-ink); font-size: clamp(2rem, 5vw, 2.85rem); margin: 0 0 .65rem; }
-    .city-dir-hero p { max-width: 620px; margin: 0 auto; color: var(--color-charcoal); font-size: 1.05rem; line-height: 1.6; }
-    .city-dir-hero .count { display: inline-block; margin-top: 1.1rem; color: var(--color-terracotta); font-weight: 600; font-size: .95rem; }
+    .cities-hero { position: relative; min-height: 56vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .cities-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .cities-hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(15,23,42,.5) 0%, rgba(15,23,42,.45) 45%, rgba(15,23,42,.82) 100%); }
+    /* light gradient at the very top so the transparent nav stays readable over the photo */
+    .cities-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: calc(var(--nav-height, 64px) + 44px); z-index: 2; pointer-events: none; background: linear-gradient(to bottom, rgba(255,255,255,.82) 0%, rgba(255,255,255,.45) 55%, transparent 100%); }
+    .cities-hero-content { position: relative; z-index: 3; color: #fff; max-width: 720px; padding: calc(var(--nav-height, 64px) + 3rem) 1.25rem 3rem; }
+    .cities-hero-content h1 { font-family: 'DM Serif Display', serif; color: #fff; font-size: clamp(2.2rem, 6vw, 3.4rem); margin: 0 0 1rem; text-shadow: 0 2px 24px rgba(0,0,0,.4); }
+    .cities-hero-content p { color: rgba(255,255,255,.92); font-size: 1.1rem; line-height: 1.65; margin: 0 auto; max-width: 600px; text-shadow: 0 1px 12px rgba(0,0,0,.35); }
+    .cities-hero-content .count { display: inline-block; margin-top: 1.4rem; color: #fff; font-weight: 600; font-size: .9rem; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); padding: .4rem 1rem; border-radius: 999px; backdrop-filter: blur(6px); }
 
     .az-bar {
       position: sticky; top: var(--nav-height, 64px); z-index: 50;
@@ -231,8 +231,10 @@ const html = `<!DOCTYPE html>
   </script>
 
   <main>
-    <header class="city-dir-hero">
-      <div class="container">
+    <header class="cities-hero">
+      <img class="cities-hero-img" src="/assets/cities-hero.webp" alt="A world city skyline at dusk" fetchpriority="high">
+      <div class="cities-hero-overlay"></div>
+      <div class="cities-hero-content">
         <h1>Digital Nomad City Guides</h1>
         <p>Every destination we cover, in one place. Browse by cost of living, WiFi, coworking, safety and visas, then open a full guide to dig in.</p>
         <span class="count">${cities.length} cities and counting</span>
