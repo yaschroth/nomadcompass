@@ -126,19 +126,13 @@ for (const file of files) {
   // body: crawlable Explore + FAQ before </main>
   if (!/city-seo-start/.test(html)) {
     const near = nearest(c, 6);
-    const cityLinks = near.map((n) => `<li><a href="/cities/${n.id}">${esc(n.name)}, ${esc(n.country)}</a></li>`).join('\n            ');
-    const blogLink = BLOG[slug] ? ` Read our in-depth <a href="/blog/${BLOG[slug]}">${esc(c.name)} guide on the blog</a>.` : '';
-    const accom = (accomByCity[slug] || []).slice(0, 3);
-    const accomLink = accom.length ? ` See <a href="/accommodations/${accom[0]}">where to stay in ${esc(c.name)}</a>.` : '';
-    const faqHtml = faq.map((x) => `          <h3>${esc(x.q)}</h3>\n          <p>${esc(x.a)}</p>`).join('\n');
+    const cityLinks = near.map((n) => `<a href="/cities/${n.id}">${esc(n.name)}</a>`).join(', ');
+    const blogLink = BLOG[slug] ? ` Read the <a href="/blog/${BLOG[slug]}">full ${esc(c.name)} guide</a>.` : '';
+    const faqHtml = faq.map((x) => `          <details class="city-faq">\n            <summary>${esc(x.q)}</summary>\n            <p>${esc(x.a)}</p>\n          </details>`).join('\n');
     const block = `
         <!-- city-seo-start -->
         <section class="container city-seo-explore" style="padding:2rem 1.25rem; max-width:1100px; margin:0 auto;">
-          <h2>Explore More Nomad Cities Like ${esc(c.name)}</h2>
-          <ul class="city-seo-related">
-            ${cityLinks}
-          </ul>
-          <p>Compare destinations with the <a href="/wheel">Nomad Taste Wheel</a> or browse <a href="/cities">all city guides</a>.${blogLink}${accomLink}</p>
+          <p class="city-seo-nearby"><strong>Nearby:</strong> ${cityLinks}. <a href="/cities">Browse all city guides</a> or <a href="/wheel">find your match with the Nomad Wheel</a>.${blogLink}</p>
 
           <h2 id="faq">Frequently Asked Questions About ${esc(c.name)}</h2>
 ${faqHtml}

@@ -115,7 +115,7 @@ for (const file of files) {
 
   // 2. FAQ answers (body + JSON-LD, kept in sync)
   const fa = faqs(c, f, h);
-  const faqBody = fa.map((x) => `          <h3>${esc(x.q)}</h3>\n          <p>${esc(x.a)}</p>`).join('\n');
+  const faqBody = fa.map((x) => `          <details class="city-faq">\n            <summary>${esc(x.q)}</summary>\n            <p>${esc(x.a)}</p>\n          </details>`).join('\n');
   if (/<h2 id="faq">/.test(html)) {
     // use REPLACEMENT FUNCTIONS so '$' in cost strings ($2,800) is inserted literally
     html = html.replace(
