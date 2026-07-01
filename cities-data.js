@@ -634,7 +634,7 @@ const CITIES = [
       wifi: 8,
       nightlife: 9,
       nature: 3,
-      safety: 6,
+      safety: 8,
       food: 10,
       community: 9,
       english: 6,
