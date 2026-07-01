@@ -119,10 +119,8 @@ const CAT_LABELS = [['climate', 'Climate'], ['cost', 'Cost'], ['wifi', 'WiFi'], 
 const barCls = (v) => (v >= 8 ? 'excellent' : v >= 6 ? 'good' : v >= 4 ? 'average' : 'below');
 const badgeCls = (v) => (v == null ? 'below' : v >= 8 ? 'excellent' : v >= 6.5 ? 'good' : v >= 5 ? 'average' : 'below');
 const cards = cities.map((c) => {
-  const stats = CAT_LABELS.map(([k, label]) => {
-    const v = typeof c.scores[k] === 'number' ? c.scores[k] : 0;
-    return `<div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">${label}</span><span class="overlay-stat-value">${v}</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill ${barCls(v)}" style="width:${v * 10}%"></div></div></div>`;
-  }).join('');
+  // Hover stats overlay is built lazily client-side from data-scores (keeps the
+  // static DOM ~20k nodes lighter across 410 cards). See buildOverlay() below.
   const cost = c.cost != null ? `$${c.cost.toLocaleString('en-US')}` : 'N/A';
   const scoresCsv = SCORE_KEYS.map((k) => (typeof c.scores[k] === 'number' ? c.scores[k] : '')).join(',');
   return `      <article class="city-card fade-in"` +
@@ -137,7 +135,7 @@ const cards = cities.map((c) => {
     ` data-tz="${c.tz != null ? c.tz : ''}">
         <div class="city-card-image-container">
           <img src="${c.image}" alt="${escapeHtml(c.name)}, ${escapeHtml(c.country)}" class="city-card-image" loading="lazy">
-          <div class="city-card-overlay"><div class="overlay-stats">${stats}</div></div>
+          <div class="city-card-overlay"></div>
         </div>
         <div class="city-card-body">
           <div class="city-card-header">
@@ -466,6 +464,20 @@ ${cards}
         card._cost = d.cost === '' ? null : parseFloat(d.cost);
         card._score = d.score === '' ? null : parseFloat(d.score);
       });
+      // Build the hover stats overlay lazily (first hover) to keep the initial DOM light.
+      var OV_LABELS = ['Climate', 'Cost', 'WiFi', 'Nightlife', 'Nature', 'Safety', 'Food', 'Community', 'English', 'Visa', 'Culture', 'Clean', 'Air'];
+      function ovCls(v) { return v >= 8 ? 'excellent' : v >= 6 ? 'good' : v >= 4 ? 'average' : 'below'; }
+      function buildOverlay(card) {
+        if (card._ov) return; card._ov = true;
+        var box = card.querySelector('.city-card-overlay'); if (!box) return;
+        var h = '<div class="overlay-stats">';
+        for (var i = 0; i < OV_LABELS.length; i++) {
+          var v = card._scores[i] == null ? 0 : card._scores[i];
+          h += '<div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">' + OV_LABELS[i] + '</span><span class="overlay-stat-value">' + v + '</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill ' + ovCls(v) + '" style="width:' + (v * 10) + '%"></div></div></div>';
+        }
+        box.innerHTML = h + '</div>';
+      }
+      cards.forEach(function (card) { card.addEventListener('mouseenter', function () { buildOverlay(card); }); });
       var search = $('citySearch'), region = $('filterRegion'), country = $('filterCountry'), city = $('filterCity'),
           climate = $('filterClimateType'), sortSel = $('filterSort'), count = $('cityCount'), empty = $('cityEmpty'),
           advBtn = $('advancedFiltersBtn'), panel = $('slidersPanel'), badge = $('filterBadge'),
@@ -568,7 +580,7 @@ ${cards}
       city.addEventListener('change', apply);
       climate.addEventListener('change', apply);
       sortSel.addEventListener('change', apply);
-      search.addEventListener('input', apply);
+      var _searchT; search.addEventListener('input', function () { clearTimeout(_searchT); _searchT = setTimeout(apply, 160); });
       SLIDER_CATS.forEach(function (cat) {
         var el = sliders[cat];
         el.min.addEventListener('input', function () { var mn = parseInt(el.min.value, 10), mx = parseInt(el.max.value, 10); if (mn > mx) el.min.value = mx; updateSliderRange(el); updateBadge(); apply(); });
