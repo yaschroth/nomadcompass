@@ -37,42 +37,49 @@ const flagImg = (emoji) => {
 const fileSlugs = fs.readdirSync(path.join(ROOT, 'cities')).filter((f) => f.endsWith('.html')).map((f) => f.replace(/\.html$/, ''));
 const meta = new Map(loadCities().map((c) => [c.id, c]));
 
+const CITY_REGIONS = require('../city-regions.js');
+const SCORE_KEYS = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
+const avgScore = (c) => {
+  const s = c.scores || {}; let t = 0, n = 0;
+  for (const k of SCORE_KEYS) { if (typeof s[k] === 'number') { t += s[k]; n++; } }
+  return n ? t / n : null;
+};
+
 const cities = fileSlugs
   .map((slug) => {
     const c = meta.get(slug) || {};
-    return { slug, name: c.name || titleCase(slug), country: c.country || '', flag: c.flag || '', cost: c.costPerMonth || null };
+    return {
+      slug, name: c.name || titleCase(slug), country: c.country || '', flag: c.flag || '',
+      cost: c.costPerMonth || null, region: CITY_REGIONS[slug] || '', climate: c.climateType || '',
+      score: avgScore(c),
+    };
   })
-  .sort((a, b) => a.name.localeCompare(b.name));
+  // default view: highest-rated first (reinforces the "rated & ranked" positioning)
+  .sort((a, b) => (b.score || 0) - (a.score || 0) || a.name.localeCompare(b.name));
 
-const groups = {};
-for (const c of cities) {
-  const letter = (c.name[0] || '#').toUpperCase();
-  (groups[letter] = groups[letter] || []).push(c);
-}
-const letters = Object.keys(groups).sort();
+const REGION_LABELS = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', northamerica: 'North America', africa: 'Africa', middleeast: 'Middle East', oceania: 'Oceania' };
+const regionOptions = [...new Set(cities.map((c) => c.region).filter(Boolean))].sort()
+  .map((r) => `<option value="${r}">${REGION_LABELS[r] || r}</option>`).join('\n          ');
+const climateOptions = [...new Set(cities.map((c) => c.climate).filter(Boolean))].sort()
+  .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('\n          ');
 
-const azNav = letters.map((l) => `<a href="#letter-${l}" class="az-link">${l}</a>`).join('\n        ');
-
-const sections = letters
-  .map((l) => {
-    const items = groups[l]
-      .map((c) =>
-        `          <li><a href="/cities/${c.slug}" class="city-dir-link">` +
-        `${flagImg(c.flag)}` +
-        `<span class="city-dir-text"><span class="city-dir-name">${escapeHtml(c.name)}</span>` +
-        `${c.country ? `<span class="city-dir-country">${escapeHtml(c.country)}</span>` : ''}</span>` +
-        `${c.cost ? `<span class="city-dir-cost">$${c.cost.toLocaleString('en-US')}/mo</span>` : ''}` +
-        `</a></li>`
-      )
-      .join('\n');
-    return `      <section class="city-dir-group" id="letter-${l}">
-        <h2 class="city-dir-letter">${l}</h2>
-        <ul class="city-dir-list">
-${items}
-        </ul>
-      </section>`;
-  })
-  .join('\n');
+const scoreCls = (v) => (v == null ? '' : v >= 8 ? 's-exc' : v >= 6.5 ? 's-good' : v >= 5 ? 's-ok' : 's-low');
+const cards = cities.map((c) =>
+  `        <li><a href="/cities/${c.slug}" class="city-dir-link"` +
+  ` data-name="${escapeHtml((c.name || '').toLowerCase())}"` +
+  ` data-country="${escapeHtml((c.country || '').toLowerCase())}"` +
+  ` data-region="${c.region}"` +
+  ` data-climate="${escapeHtml(c.climate)}"` +
+  ` data-cost="${c.cost != null ? c.cost : ''}"` +
+  ` data-score="${c.score != null ? c.score.toFixed(2) : ''}">` +
+  `${flagImg(c.flag)}` +
+  `<span class="city-dir-text"><span class="city-dir-name">${escapeHtml(c.name)}</span>` +
+  `${c.country ? `<span class="city-dir-country">${escapeHtml(c.country)}</span>` : ''}</span>` +
+  `<span class="city-dir-meta">` +
+  `${c.score != null ? `<span class="city-dir-score ${scoreCls(c.score)}">${c.score.toFixed(1)}</span>` : ''}` +
+  `${c.cost ? `<span class="city-dir-cost">$${c.cost.toLocaleString('en-US')}/mo</span>` : ''}` +
+  `</span></a></li>`
+).join('\n');
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -127,21 +134,7 @@ const html = `<!DOCTYPE html>
     @keyframes heroScrollBounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
     @keyframes heroScrollDot { 0%,100% { transform: translateY(-4px); opacity: 0; } 50% { transform: translateY(4px); opacity: 1; } }
 
-    .az-bar {
-      position: sticky; top: var(--nav-height, 64px); z-index: 50;
-      scroll-margin-top: var(--nav-height, 64px);
-      display: flex; flex-wrap: wrap; gap: .2rem; justify-content: center;
-      padding: .55rem 1rem;
-      background: rgba(255,255,255,.9); backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--color-sand-dark);
-    }
-    .az-link { display: inline-block; min-width: 1.7rem; text-align: center; padding: .25rem .45rem; border-radius: 6px; font-weight: 600; font-size: .9rem; text-decoration: none; color: var(--color-charcoal); }
-    .az-link:hover { background: var(--color-sand); color: var(--color-terracotta); }
-
     .city-dir-wrap { max-width: 1120px; margin: 0 auto; padding: 2.25rem 1.25rem 4rem; }
-    .city-dir-group { scroll-margin-top: calc(var(--nav-height, 64px) + 56px); margin-top: 2.5rem; }
-    .city-dir-group:first-child { margin-top: .5rem; }
-    .city-dir-letter { font-family: 'DM Serif Display', serif; color: var(--color-ink); font-size: 1.5rem; margin: 0 0 1rem; padding-bottom: .35rem; border-bottom: 2px solid var(--color-sand-dark); }
     .city-dir-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .6rem; }
     .city-dir-link {
       display: flex; align-items: center; gap: .65rem;
@@ -155,7 +148,28 @@ const html = `<!DOCTYPE html>
     .city-dir-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
     .city-dir-name { font-weight: 600; }
     .city-dir-country { color: var(--color-stone); font-size: .82rem; }
-    .city-dir-cost { margin-left: auto; color: var(--color-terracotta); font-weight: 600; font-size: .85rem; white-space: nowrap; }
+    .city-dir-cost { color: var(--color-terracotta); font-weight: 600; font-size: .82rem; white-space: nowrap; }
+    .city-dir-meta { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: .2rem; flex: 0 0 auto; }
+    .city-dir-score { font-weight: 700; font-size: .78rem; padding: .08rem .42rem; border-radius: 6px; color: #fff; background: var(--color-stone); }
+    .city-dir-score.s-exc { background: #16a34a; }
+    .city-dir-score.s-good { background: #0066FF; }
+    .city-dir-score.s-ok { background: #d97706; }
+    .city-dir-score.s-low { background: #9ca3af; }
+
+    /* filter / sort toolbar — makes /cities the "browse & compare" surface */
+    .city-filter-bar {
+      position: sticky; top: var(--nav-height, 64px); z-index: 50;
+      scroll-margin-top: var(--nav-height, 64px);
+      background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-sand-dark);
+    }
+    .city-filter-inner { max-width: 1120px; margin: 0 auto; padding: .7rem 1.25rem; display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+    .city-filter-search { flex: 1 1 220px; min-width: 150px; padding: .55rem .85rem; border: 1px solid var(--color-sand-dark); border-radius: 8px; font: inherit; color: var(--color-ink); background: #fff; }
+    .city-filter-select { padding: .55rem .7rem; border: 1px solid var(--color-sand-dark); border-radius: 8px; font: inherit; color: var(--color-charcoal); background: #fff; cursor: pointer; }
+    .city-filter-search:focus, .city-filter-select:focus { outline: none; border-color: var(--color-terracotta); box-shadow: 0 0 0 3px rgba(0,102,255,.14); }
+    .city-filter-count { margin-left: auto; color: var(--color-stone); font-size: .85rem; font-weight: 600; white-space: nowrap; }
+    .city-dir-empty { text-align: center; color: var(--color-stone); padding: 3.5rem 1rem; }
+    .city-dir-empty .linklike { background: none; border: 0; padding: 0; color: var(--color-terracotta); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; }
   </style>
 
   <script type="application/ld+json">
@@ -262,12 +276,32 @@ const html = `<!DOCTYPE html>
       </a>
     </header>
 
-    <nav class="az-bar" id="directory" aria-label="Jump to letter">
-        ${azNav}
-    </nav>
+    <div class="city-filter-bar" id="directory">
+      <div class="city-filter-inner">
+        <input type="search" id="citySearch" class="city-filter-search" placeholder="Search city or country&hellip;" aria-label="Search cities">
+        <select id="cityRegion" class="city-filter-select" aria-label="Filter by region">
+          <option value="">All regions</option>
+          ${regionOptions}
+        </select>
+        <select id="cityClimate" class="city-filter-select" aria-label="Filter by climate">
+          <option value="">All climates</option>
+          ${climateOptions}
+        </select>
+        <select id="citySort" class="city-filter-select" aria-label="Sort cities">
+          <option value="score">Sort: Top rated</option>
+          <option value="cost-asc">Cost: Low to high</option>
+          <option value="cost-desc">Cost: High to low</option>
+          <option value="name">Name: A to Z</option>
+        </select>
+        <span class="city-filter-count" id="cityCount">${cities.length} cities</span>
+      </div>
+    </div>
 
     <div class="city-dir-wrap">
-${sections}
+      <ul class="city-dir-list" id="cityGrid">
+${cards}
+      </ul>
+      <p class="city-dir-empty" id="cityEmpty" hidden>No cities match those filters. <button type="button" class="linklike" id="cityReset">Reset</button></p>
     </div>
   </main>
 
@@ -298,9 +332,66 @@ ${sections}
     </div>
   </footer>
 
+  <script>
+    // Client-side filter/sort over the static (crawlable) city grid.
+    (function () {
+      var grid = document.getElementById('cityGrid');
+      if (!grid) return;
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('.city-dir-link'));
+      var search = document.getElementById('citySearch'),
+          region = document.getElementById('cityRegion'),
+          climate = document.getElementById('cityClimate'),
+          sortSel = document.getElementById('citySort'),
+          count = document.getElementById('cityCount'),
+          empty = document.getElementById('cityEmpty'),
+          reset = document.getElementById('cityReset');
+      function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
+      function apply() {
+        var q = (search.value || '').trim().toLowerCase(),
+            r = region.value, cl = climate.value, s = sortSel.value, shown = 0;
+        cards.forEach(function (card) {
+          var d = card.dataset, ok = true;
+          if (q && d.name.indexOf(q) < 0 && d.country.indexOf(q) < 0) ok = false;
+          if (r && d.region !== r) ok = false;
+          if (cl && d.climate !== cl) ok = false;
+          card.parentNode.style.display = ok ? '' : 'none';
+          if (ok) shown++;
+        });
+        var vis = cards.filter(function (c) { return c.parentNode.style.display !== 'none'; });
+        vis.sort(function (a, b) {
+          var da = a.dataset, db = b.dataset;
+          if (s === 'name') return da.name.localeCompare(db.name);
+          if (s === 'cost-asc' || s === 'cost-desc') {
+            var ca = num(da.cost), cb = num(db.cost);
+            if (ca === null && cb === null) return da.name.localeCompare(db.name);
+            if (ca === null) return 1;
+            if (cb === null) return -1;
+            return s === 'cost-asc' ? ca - cb : cb - ca;
+          }
+          var sa = num(da.score), sb = num(db.score);
+          if (sa === null && sb === null) return da.name.localeCompare(db.name);
+          if (sa === null) return 1;
+          if (sb === null) return -1;
+          return sb - sa || da.name.localeCompare(db.name);
+        });
+        vis.forEach(function (c) { grid.appendChild(c.parentNode); });
+        count.textContent = shown + (shown === 1 ? ' city' : ' cities');
+        empty.hidden = shown > 0;
+      }
+      [search, region, climate, sortSel].forEach(function (el) {
+        el.addEventListener('input', apply);
+        el.addEventListener('change', apply);
+      });
+      if (reset) reset.addEventListener('click', function () {
+        search.value = ''; region.value = ''; climate.value = ''; sortSel.value = 'score'; apply();
+      });
+      apply();
+    })();
+  </script>
+
 </body>
 </html>
 `;
 
 fs.writeFileSync(path.join(ROOT, 'cities.html'), html);
-console.log(`Wrote cities.html with ${cities.length} city links across ${letters.length} letter groups.`);
+console.log(`Wrote cities.html with ${cities.length} city links (filterable/sortable grid).`);
