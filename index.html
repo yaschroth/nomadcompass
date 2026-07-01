@@ -1444,10 +1444,11 @@
       var CATS = [['climate','Climate'],['cost','Cost'],['wifi','WiFi'],['nightlife','Nightlife'],['nature','Nature'],['safety','Safety'],['food','Food'],['community','Community'],['english','English'],['visa','Visa'],['culture','Culture'],['cleanliness','Clean'],['airquality','Air']];
       function overall(c){ var s=c.scores||{},t=0,n=0; CATS.forEach(function(k){ if(typeof s[k[0]]==='number'){t+=s[k[0]];n++;} }); return n? t/n : 0; }
       function cls(v){ return v>=8?'excellent':v>=6?'good':v>=4?'average':'below'; }
+      function nscore(c){ var r=overall(c); return Math.max(2.5, Math.min(9.9, 6.9 + (r - 6.47) / 0.44 * 1.05)); }
       var flag = (typeof flagSvg==='function') ? flagSvg : function(e){return e;};
       var featured = CITIES.slice().sort(function(a,b){ return overall(b)-overall(a); }).slice(0,8);
       grid.innerHTML = featured.map(function(city,index){
-        var sc = overall(city).toFixed(1);
+        var sc = nscore(city).toFixed(1);
         var cost = city.costPerMonth ? '$'+city.costPerMonth.toLocaleString() : 'N/A';
         var stats = CATS.map(function(k){
           var v = (city.scores && typeof city.scores[k[0]]==='number') ? city.scores[k[0]] : 0;
@@ -1460,7 +1461,7 @@
           + '</div>'
           + '<div class="city-card-body">'
           + '<div class="city-card-header"><div class="city-card-location"><span class="city-card-flag">'+flag(city.flag)+'</span><div><h2 class="city-card-name">'+city.name+'</h2><span class="city-card-country">'+city.country+'</span></div></div>'
-          + '<div class="nomad-score '+cls(overall(city))+'"><span class="nomad-score-value">'+sc+'</span><span class="nomad-score-label">Score</span></div></div>'
+          + '<div class="nomad-score '+cls(nscore(city))+'"><span class="nomad-score-value">'+sc+'</span><span class="nomad-score-label">Score</span></div></div>'
           + '<div class="city-card-info"><div class="city-card-climate-type">'+(city.climateType||'N/A')+'</div><div class="city-card-cost"><span class="cost-label">~'+cost+'</span><span class="cost-period">/month</span></div></div>'
           + '<a href="cities/'+city.id+'" class="btn btn-primary city-card-action">View City &rarr;</a>'
           + '</div></article>';

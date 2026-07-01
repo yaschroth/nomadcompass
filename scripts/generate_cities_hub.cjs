@@ -44,6 +44,9 @@ const avgScore = (c) => {
   for (const k of SCORE_KEYS) { if (typeof s[k] === 'number') { t += s[k]; n++; } }
   return n ? t / n : null;
 };
+// The raw 13-category average compresses to ~5.0-7.6. Rescale (z-score to mean 6.9,
+// sd 1.05, clamped 2.5-9.9) so top/bottom cities stand out. Monotonic -> rankings unchanged.
+const nomadScore = (raw) => (raw == null ? null : Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)));
 
 const cities = fileSlugs
   .map((slug) => {
@@ -51,7 +54,7 @@ const cities = fileSlugs
     return {
       slug, name: c.name || titleCase(slug), country: c.country || '', flag: c.flag || '',
       cost: c.costPerMonth || null, region: CITY_REGIONS[slug] || '', climate: c.climateType || '',
-      score: avgScore(c), image: c.image || '', scores: c.scores || {},
+      score: nomadScore(avgScore(c)), image: c.image || '', scores: c.scores || {},
       tz: (typeof c.timezone === 'number' ? c.timezone : null),
     };
   })
@@ -114,7 +117,7 @@ const legendItems = LEGEND.map(([t, d], i) => `<div class="legend-item"><div cla
 // 410 cities so they stay crawlable; the toolbar below filters/sorts them client-side.
 const CAT_LABELS = [['climate', 'Climate'], ['cost', 'Cost'], ['wifi', 'WiFi'], ['nightlife', 'Nightlife'], ['nature', 'Nature'], ['safety', 'Safety'], ['food', 'Food'], ['community', 'Community'], ['english', 'English'], ['visa', 'Visa'], ['culture', 'Culture'], ['cleanliness', 'Clean'], ['airquality', 'Air']];
 const barCls = (v) => (v >= 8 ? 'excellent' : v >= 6 ? 'good' : v >= 4 ? 'average' : 'below');
-const badgeCls = (v) => (v == null ? 'below' : v >= 7 ? 'excellent' : v >= 6 ? 'good' : v >= 5 ? 'average' : 'below');
+const badgeCls = (v) => (v == null ? 'below' : v >= 8 ? 'excellent' : v >= 6.5 ? 'good' : v >= 5 ? 'average' : 'below');
 const cards = cities.map((c) => {
   const stats = CAT_LABELS.map(([k, label]) => {
     const v = typeof c.scores[k] === 'number' ? c.scores[k] : 0;
@@ -384,7 +387,7 @@ ${slidersMarkup}
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div class="legend-content" id="legendContent">
-          <p class="legend-intro">Each city is rated on 13 categories using official data, global indices, and expert assessments. The <strong>Nomad Score</strong> is the average of all category scores (1-10 scale).</p>
+          <p class="legend-intro">Each city is rated on 13 categories using official data, global indices, and expert assessments. The <strong>Nomad Score</strong> is a calibrated composite of all 13 category scores (1-10 scale).</p>
           <div class="legend-grid">
               ${legendItems}
           </div>

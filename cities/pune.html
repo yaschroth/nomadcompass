@@ -708,11 +708,16 @@
       }
 
       function calculateNomadScore(city, aggregates) {
+        var raw;
         if (window.VotingService && aggregates && Object.keys(aggregates).length > 0) {
-          return window.VotingService.calculateAdjustedNomadScore(city, aggregates);
+          raw = parseFloat(window.VotingService.calculateAdjustedNomadScore(city, aggregates));
+        } else {
+          const cats = getCategoryKeys();
+          raw = cats.reduce((s, k) => s + city.scores[k], 0) / cats.length;
         }
-        const cats = getCategoryKeys();
-        return (cats.reduce((s, k) => s + city.scores[k], 0) / cats.length).toFixed(1);
+        // Calibrated composite: the raw average of 13 categories compresses to ~5-7.6,
+        // so rescale (z-score to mean 6.9, sd 1.05, clamped) for real spread. Monotonic.
+        return Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)).toFixed(1);
       }
 
       function animateScoreGauge(score, isAdjusted) {
