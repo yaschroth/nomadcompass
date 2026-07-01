@@ -310,10 +310,6 @@ const html = `<!DOCTYPE html>
           </div>
         </div>
       </div>
-      <a href="#directory" class="hero-scroll-indicator" aria-label="Scroll to city directory">
-        <span>Browse all cities</span>
-        <div class="hero-scroll-indicator-icon"></div>
-      </a>
     </header>
 
     <div class="city-browse" id="directory">
