@@ -51,7 +51,7 @@ const cities = fileSlugs
     return {
       slug, name: c.name || titleCase(slug), country: c.country || '', flag: c.flag || '',
       cost: c.costPerMonth || null, region: CITY_REGIONS[slug] || '', climate: c.climateType || '',
-      score: avgScore(c),
+      score: avgScore(c), image: c.image || '', scores: c.scores || {},
     };
   })
   // default view: highest-rated first (reinforces the "rated & ranked" positioning)
@@ -63,23 +63,41 @@ const regionOptions = [...new Set(cities.map((c) => c.region).filter(Boolean))].
 const climateOptions = [...new Set(cities.map((c) => c.climate).filter(Boolean))].sort()
   .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('\n          ');
 
-const scoreCls = (v) => (v == null ? '' : v >= 8 ? 's-exc' : v >= 6.5 ? 's-good' : v >= 5 ? 's-ok' : 's-low');
-const cards = cities.map((c) =>
-  `        <li><a href="/cities/${c.slug}" class="city-dir-link"` +
-  ` data-name="${escapeHtml((c.name || '').toLowerCase())}"` +
-  ` data-country="${escapeHtml((c.country || '').toLowerCase())}"` +
-  ` data-region="${c.region}"` +
-  ` data-climate="${escapeHtml(c.climate)}"` +
-  ` data-cost="${c.cost != null ? c.cost : ''}"` +
-  ` data-score="${c.score != null ? c.score.toFixed(2) : ''}">` +
-  `${flagImg(c.flag)}` +
-  `<span class="city-dir-text"><span class="city-dir-name">${escapeHtml(c.name)}</span>` +
-  `${c.country ? `<span class="city-dir-country">${escapeHtml(c.country)}</span>` : ''}</span>` +
-  `<span class="city-dir-meta">` +
-  `${c.score != null ? `<span class="city-dir-score ${scoreCls(c.score)}">${c.score.toFixed(1)}</span>` : ''}` +
-  `${c.cost ? `<span class="city-dir-cost">$${c.cost.toLocaleString('en-US')}/mo</span>` : ''}` +
-  `</span></a></li>`
-).join('\n');
+// beautiful image cards (same component as the homepage), rendered statically for all
+// 410 cities so they stay crawlable; the toolbar below filters/sorts them client-side.
+const CAT_LABELS = [['climate', 'Climate'], ['cost', 'Cost'], ['wifi', 'WiFi'], ['nightlife', 'Nightlife'], ['nature', 'Nature'], ['safety', 'Safety'], ['food', 'Food'], ['community', 'Community'], ['english', 'English'], ['visa', 'Visa'], ['culture', 'Culture'], ['cleanliness', 'Clean'], ['airquality', 'Air']];
+const barCls = (v) => (v >= 8 ? 'excellent' : v >= 6 ? 'good' : v >= 4 ? 'average' : 'below');
+const badgeCls = (v) => (v == null ? 'below' : v >= 7 ? 'excellent' : v >= 6 ? 'good' : v >= 5 ? 'average' : 'below');
+const cards = cities.map((c) => {
+  const stats = CAT_LABELS.map(([k, label]) => {
+    const v = typeof c.scores[k] === 'number' ? c.scores[k] : 0;
+    return `<div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">${label}</span><span class="overlay-stat-value">${v}</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill ${barCls(v)}" style="width:${v * 10}%"></div></div></div>`;
+  }).join('');
+  const cost = c.cost != null ? `$${c.cost.toLocaleString('en-US')}` : 'N/A';
+  return `      <article class="city-card fade-in"` +
+    ` data-name="${escapeHtml((c.name || '').toLowerCase())}"` +
+    ` data-country="${escapeHtml((c.country || '').toLowerCase())}"` +
+    ` data-region="${c.region}"` +
+    ` data-climate="${escapeHtml(c.climate)}"` +
+    ` data-cost="${c.cost != null ? c.cost : ''}"` +
+    ` data-score="${c.score != null ? c.score.toFixed(2) : ''}">
+        <div class="city-card-image-container">
+          <img src="${c.image}" alt="${escapeHtml(c.name)}, ${escapeHtml(c.country)}" class="city-card-image" loading="lazy">
+          <div class="city-card-overlay"><div class="overlay-stats">${stats}</div></div>
+        </div>
+        <div class="city-card-body">
+          <div class="city-card-header">
+            <div class="city-card-location"><span class="city-card-flag">${flagImg(c.flag)}</span><div><h2 class="city-card-name">${escapeHtml(c.name)}</h2><span class="city-card-country">${escapeHtml(c.country)}</span></div></div>
+            <div class="nomad-score ${badgeCls(c.score)}"><span class="nomad-score-value">${c.score != null ? c.score.toFixed(1) : 'N/A'}</span><span class="nomad-score-label">Score</span></div>
+          </div>
+          <div class="city-card-info">
+            <div class="city-card-climate-type">${escapeHtml(c.climate || 'N/A')}</div>
+            <div class="city-card-cost"><span class="cost-label">~${cost}</span><span class="cost-period">/month</span></div>
+          </div>
+          <a href="/cities/${c.slug}" class="btn btn-primary city-card-action">View City &rarr;</a>
+        </div>
+      </article>`;
+}).join('\n');
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -112,6 +130,7 @@ const html = `<!DOCTYPE html>
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/nav.css">
   <link rel="stylesheet" href="styles/footer.css">
+  <link rel="stylesheet" href="styles/city-cards.css">
 
   <style>
     /* Hero — same magazine style as the blog hero: full-bleed photo, bottom-anchored dark gradient, serif H1 */
@@ -134,27 +153,8 @@ const html = `<!DOCTYPE html>
     @keyframes heroScrollBounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
     @keyframes heroScrollDot { 0%,100% { transform: translateY(-4px); opacity: 0; } 50% { transform: translateY(4px); opacity: 1; } }
 
-    .city-dir-wrap { max-width: 1120px; margin: 0 auto; padding: 2.25rem 1.25rem 4rem; }
-    .city-dir-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .6rem; }
-    .city-dir-link {
-      display: flex; align-items: center; gap: .65rem;
-      padding: .65rem .8rem; border: 1px solid var(--color-sand-dark);
-      background: var(--color-white); border-radius: 10px;
-      text-decoration: none; color: var(--color-ink);
-      transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
-    }
-    .city-dir-link:hover { border-color: var(--color-terracotta); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
-    .city-dir-link .flag-img { width: 1.6rem; flex: 0 0 auto; box-shadow: 0 0 0 .5px rgba(0,0,0,.12); }
-    .city-dir-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
-    .city-dir-name { font-weight: 600; }
-    .city-dir-country { color: var(--color-stone); font-size: .82rem; }
-    .city-dir-cost { color: var(--color-terracotta); font-weight: 600; font-size: .82rem; white-space: nowrap; }
-    .city-dir-meta { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: .2rem; flex: 0 0 auto; }
-    .city-dir-score { font-weight: 700; font-size: .78rem; padding: .08rem .42rem; border-radius: 6px; color: #fff; background: var(--color-stone); }
-    .city-dir-score.s-exc { background: #16a34a; }
-    .city-dir-score.s-good { background: #0066FF; }
-    .city-dir-score.s-ok { background: #d97706; }
-    .city-dir-score.s-low { background: #9ca3af; }
+    /* card grid + card component live in styles/city-cards.css (shared with the homepage) */
+    .city-card-flag .flag-img { width: 1.5rem; box-shadow: 0 0 0 .5px rgba(0,0,0,.12); }
 
     /* filter / sort toolbar — makes /cities the "browse & compare" surface */
     .city-filter-bar {
@@ -297,12 +297,10 @@ const html = `<!DOCTYPE html>
       </div>
     </div>
 
-    <div class="city-dir-wrap">
-      <ul class="city-dir-list" id="cityGrid">
+    <div class="city-card-grid" id="cityGrid">
 ${cards}
-      </ul>
-      <p class="city-dir-empty" id="cityEmpty" hidden>No cities match those filters. <button type="button" class="linklike" id="cityReset">Reset</button></p>
     </div>
+    <p class="city-dir-empty" id="cityEmpty" hidden>No cities match those filters. <button type="button" class="linklike" id="cityReset">Reset</button></p>
   </main>
 
   <footer class="footer">
@@ -337,7 +335,7 @@ ${cards}
     (function () {
       var grid = document.getElementById('cityGrid');
       if (!grid) return;
-      var cards = Array.prototype.slice.call(grid.querySelectorAll('.city-dir-link'));
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('.city-card'));
       var search = document.getElementById('citySearch'),
           region = document.getElementById('cityRegion'),
           climate = document.getElementById('cityClimate'),
@@ -354,10 +352,10 @@ ${cards}
           if (q && d.name.indexOf(q) < 0 && d.country.indexOf(q) < 0) ok = false;
           if (r && d.region !== r) ok = false;
           if (cl && d.climate !== cl) ok = false;
-          card.parentNode.style.display = ok ? '' : 'none';
+          card.style.display = ok ? '' : 'none';
           if (ok) shown++;
         });
-        var vis = cards.filter(function (c) { return c.parentNode.style.display !== 'none'; });
+        var vis = cards.filter(function (c) { return c.style.display !== 'none'; });
         vis.sort(function (a, b) {
           var da = a.dataset, db = b.dataset;
           if (s === 'name') return da.name.localeCompare(db.name);
@@ -374,7 +372,7 @@ ${cards}
           if (sb === null) return -1;
           return sb - sa || da.name.localeCompare(db.name);
         });
-        vis.forEach(function (c) { grid.appendChild(c.parentNode); });
+        vis.forEach(function (c) { grid.appendChild(c); });
         count.textContent = shown + (shown === 1 ? ' city' : ' cities');
         empty.hidden = shown > 0;
       }
