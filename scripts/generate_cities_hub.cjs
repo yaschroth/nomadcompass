@@ -134,7 +134,7 @@ const cards = cities.map((c) => {
     ` data-scores="${scoresCsv}"` +
     ` data-tz="${c.tz != null ? c.tz : ''}">
         <div class="city-card-image-container">
-          <img src="${c.image}" alt="${escapeHtml(c.name)}, ${escapeHtml(c.country)}" class="city-card-image" loading="lazy">
+          <img src="${c.image}" alt="${escapeHtml(c.name)}, ${escapeHtml(c.country)}" class="city-card-image" width="800" height="500" loading="lazy" decoding="async">
           <div class="city-card-overlay"></div>
         </div>
         <div class="city-card-body">
