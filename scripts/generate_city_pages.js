@@ -27002,6 +27002,7 @@ function generateCityPage(city) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap" as="style">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
 
   <!-- Leaflet.js for maps -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -27384,7 +27385,15 @@ function generateCityPage(city) {
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="footer-copyright">&copy; 2025 The Nomad HQ. All rights reserved.</p>
+        <nav class="footer-legal" aria-label="Legal and company">
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/disclosure">Affiliate Disclosure</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+        </nav>
+        <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
+        <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p>
       </div>
     </div>
   </footer>

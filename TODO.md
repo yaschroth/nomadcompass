@@ -63,12 +63,25 @@ Make the blog articles genuinely good and unique (the current priority). Then re
 
 ## 4. Smaller cleanups surfaced by the SEO audits
 
-- **Dead footer links** in [index.html](index.html): `compare`, `top-picks`, `map`, `guides`,
-  `visa-info`, `cost-calculator`, `faq` point to pages that don't exist (404 / crawl waste). Build
-  or remove them.
-- **Missing legal pages:** privacy policy + terms (also referenced/expected). Add real pages.
-- **`index-shell.html`** is a homepage duplicate (already `noindex`); delete it when convenient.
-- **Author entity:** enrich Yannick's bio with real specifics; add an X/YouTube profile to
-  `sameAs` in [scripts/lib/author.cjs](scripts/lib/author.cjs) if desired.
-- **Core Web Vitals:** measure a city page in PageSpeed Insights (remote Unsplash heroes + Leaflet
-  maps + Twemoji can hurt LCP).
+- ✅ **Dead footer links** removed from index.html (2026-07-01). Footer now links
+  About/Contact/Privacy/Terms/Affiliate-Disclosure sitewide (`scripts/apply_footer_legal.cjs`).
+- ✅ **Legal/trust pages** added (2026-07-01): `/privacy`, `/terms`, `/disclosure`, `/contact`,
+  `/about` via `scripts/generate_core_pages.cjs`. TWO follow-ups: (a) have a professional review the
+  privacy/terms/disclosure wording; (b) set up the `hello@thenomadhq.com` inbox used on /contact
+  (placeholder) or swap the address.
+- ✅ **Font-loading bug** fixed sitewide (2026-07-01): pages now actually load the DM Serif Display
+  stylesheet (`scripts/fix_font_loading.cjs`) — was silently falling back to Georgia everywhere
+  except /cities.
+- **Newsletter capture — DEFERRED (owner said not yet).** The footer "Subscribe" form is fake:
+  `onsubmit="event.preventDefault(); alert('Thanks!')"` stores nothing. Wire it to a real provider
+  (MailerLite / Buttondown / ConvertKit) so signups build an actual list — best owned-audience asset
+  for an affiliate site. Same fake form on index.html footer.
+- **Analytics still missing.** GSC is set up (owner), but no GA4/Plausible page analytics installed —
+  add one to see traffic, top landing pages, and behavior. Resubmit the (now fresh) sitemap in GSC.
+- **`index-shell.html`** is a homepage duplicate (already `noindex`); delete when convenient.
+- **Author entity:** now linked sitewide (footer); still worth enriching Yannick's bio with concrete
+  first-hand specifics (cities visited, years nomading) for E-E-A-T.
+- **Core Web Vitals:** the 410 external Unsplash `<img>` have no `width`/`height` (CLS) or `srcset`;
+  homepage LCP is an 875 KB CSS background image; no caching headers in `vercel.json`. All fixable.
+- **Thin content:** ~200 city pages are near-duplicate templated prose — consider `noindex` on the
+  weak tail + concentrating unique content on a ~40-60 core (see item 3).
