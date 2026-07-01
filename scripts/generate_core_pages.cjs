@@ -228,6 +228,17 @@ ${updatedLine}`),
     <h2>Changes &amp; contact</h2>
     <p>We may update these terms; continued use means you accept the changes. Questions? <a href="/contact">Contact us</a>.</p>
 ${updatedLine}`),
+
+  '404.html': page('404', 'Page Not Found &mdash; The Nomad HQ', 'Sorry, we could not find that page. Browse our city guides, take the Nomad Wheel, or read the blog.', `    <h1>Page not found</h1>
+    <p class="lead">We couldn&rsquo;t find that page &mdash; it may have moved, or never existed.</p>
+    <p>Try one of these instead:</p>
+    <ul>
+      <li><a href="/cities">Browse all 410 city guides</a></li>
+      <li><a href="/wheel">Find your match on the Nomad Wheel</a></li>
+      <li><a href="/blog">Read the blog</a></li>
+      <li><a href="/">Go to the homepage</a></li>
+    </ul>
+    <a href="/cities" class="btn btn-primary btn-lg legal-cta">Browse cities &rarr;</a>`, 'noindex, follow'),
 };
 
 let n = 0;

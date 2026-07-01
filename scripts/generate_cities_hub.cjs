@@ -81,8 +81,8 @@ const slidersMarkup = SLIDER_CATS.map(([cat, label]) => {
                   <span class="slider-value" id="${cat}Value">1 - 10</span>
                 </div>
                 <div class="dual-range">
-                  <input type="range" class="filter-slider filter-slider-min" id="filter${C}Min" min="1" max="10" value="1">
-                  <input type="range" class="filter-slider filter-slider-max" id="filter${C}Max" min="1" max="10" value="10">
+                  <input type="range" class="filter-slider filter-slider-min" id="filter${C}Min" min="1" max="10" value="1" aria-label="${label} minimum score">
+                  <input type="range" class="filter-slider filter-slider-max" id="filter${C}Max" min="1" max="10" value="10" aria-label="${label} maximum score">
                   <div class="slider-track"></div>
                   <div class="slider-range" id="${cat}Range"></div>
                 </div>
@@ -345,7 +345,7 @@ const html = `<!DOCTYPE html>
             <label class="filter-label" for="filterSort">Sort By</label>
             <select class="filter-select" id="filterSort">${sortOptions}</select>
           </div>
-          <button type="button" class="advanced-filters-btn" id="advancedFiltersBtn">
+          <button type="button" class="advanced-filters-btn" id="advancedFiltersBtn" aria-expanded="false" aria-controls="slidersPanel">
             <svg class="filter-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
             Advanced Filters
             <span class="filter-badge" id="filterBadge"></span>
@@ -362,8 +362,8 @@ ${slidersMarkup}
               </div>
               <div class="timezone-filter-content" id="timezoneFilterContent">
                 <div class="dual-range">
-                  <input type="range" class="filter-slider filter-slider-min" id="filterTimezoneMin" min="-12" max="12" value="-12" step="1">
-                  <input type="range" class="filter-slider filter-slider-max" id="filterTimezoneMax" min="-12" max="12" value="12" step="1">
+                  <input type="range" class="filter-slider filter-slider-min" id="filterTimezoneMin" min="-12" max="12" value="-12" step="1" aria-label="Minimum time difference (hours)">
+                  <input type="range" class="filter-slider filter-slider-max" id="filterTimezoneMax" min="-12" max="12" value="12" step="1" aria-label="Maximum time difference (hours)">
                   <div class="slider-track"></div>
                   <div class="slider-range" id="timezoneRange"></div>
                 </div>
@@ -379,7 +379,7 @@ ${slidersMarkup}
       </div>
 
       <div class="ratings-legend">
-        <button type="button" class="legend-toggle" id="legendToggle">
+        <button type="button" class="legend-toggle" id="legendToggle" aria-expanded="false" aria-controls="legendContent">
           <span class="legend-toggle-text">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
             How are ratings compiled?
@@ -576,8 +576,8 @@ ${cards}
       });
       tz.min.addEventListener('input', function () { var mn = parseInt(tz.min.value, 10), mx = parseInt(tz.max.value, 10); if (mn > mx) tz.min.value = mx; updateTzRange(); updateBadge(); apply(); });
       tz.max.addEventListener('input', function () { var mn = parseInt(tz.min.value, 10), mx = parseInt(tz.max.value, 10); if (mx < mn) tz.max.value = mn; updateTzRange(); updateBadge(); apply(); });
-      advBtn.addEventListener('click', function () { panel.classList.toggle('open'); advBtn.classList.toggle('active'); });
-      if (legendToggle) legendToggle.addEventListener('click', function () { legendContent.classList.toggle('open'); legendToggle.classList.toggle('active'); });
+      advBtn.addEventListener('click', function () { var open = panel.classList.toggle('open'); advBtn.classList.toggle('active'); advBtn.setAttribute('aria-expanded', open); });
+      if (legendToggle) legendToggle.addEventListener('click', function () { var open = legendContent.classList.toggle('open'); legendToggle.classList.toggle('active'); legendToggle.setAttribute('aria-expanded', open); });
       function resetAll() {
         search.value = ''; region.value = 'all'; climate.value = 'all'; sortSel.value = 'score';
         populateCountry(); populateCity();
