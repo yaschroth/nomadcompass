@@ -304,7 +304,7 @@ const html = `<!DOCTYPE html>
           <h1>Find the Best City to Live and Work Remotely</h1>
           <p class="excerpt">We rate and rank every destination on the 13 things that actually matter to digital nomads &mdash; cost of living, WiFi, safety, climate, visas and more &mdash; so you can compare cities side by side and find where you&rsquo;ll thrive.</p>
           <div class="hero-ctas">
-            <a href="/wheel" class="btn btn-primary btn-lg">Take the 2-minute match quiz &rarr;</a>
+            <a href="/wheel" class="btn btn-primary btn-lg">Find your match on the Wheel &rarr;</a>
             <a href="#directory" class="btn btn-lg btn-ghost">Browse all cities</a>
           </div>
         </div>
