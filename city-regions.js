@@ -1,0 +1,145 @@
+// Region mapping (city.id -> region slug). Single source of truth shared by the
+// homepage and the /cities browse filters. Extracted from the old homepage explorer.
+const CITY_REGIONS = {
+        // Europe
+        lisbon: 'europe', porto: 'europe', budapest: 'europe', tallinn: 'europe',
+        split: 'europe', belgrade: 'europe', laspalmas: 'europe', barcelona: 'europe',
+        berlin: 'europe', prague: 'europe', amsterdam: 'europe', vienna: 'europe',
+        zurich: 'europe', geneva: 'europe', dublin: 'europe', london: 'europe',
+        manchester: 'europe', edinburgh: 'europe', paris: 'europe', lyon: 'europe',
+        nice: 'europe', milan: 'europe', rome: 'europe', florence: 'europe',
+        palermo: 'europe', madrid: 'europe', valencia: 'europe', seville: 'europe',
+        malaga: 'europe', tenerife: 'europe', athens: 'europe', thessaloniki: 'europe',
+        crete: 'europe', malta: 'europe', cyprus: 'europe', warsaw: 'europe',
+        krakow: 'europe', bucharest: 'europe', clujnapoca: 'europe', sofia: 'europe',
+        riga: 'europe', vilnius: 'europe', podgorica: 'europe', tirana: 'europe',
+        sarajevo: 'europe', skopje: 'europe',
+        // Europe - missing cities
+        annecy: 'europe', brussels: 'europe', cologne: 'europe', frankfurt: 'europe',
+        gijon: 'europe', gothenburg: 'europe', granadaspain: 'europe', hamburg: 'europe',
+        heidelberg: 'europe', marbella: 'europe', munich: 'europe', piran: 'europe',
+        sarande: 'europe', zagreb: 'europe',
+        // Europe - new cities
+        lecce: 'europe', trieste: 'europe', genoa: 'europe', sansebastian: 'europe',
+        alicante: 'europe', zaragoza: 'europe', oxford: 'europe', cambridge: 'europe',
+        york: 'europe', bath: 'europe', trondheim: 'europe', tromso: 'europe',
+        turku: 'europe', oulu: 'europe', groningen: 'europe', thehague: 'europe',
+        leuven: 'europe', luxembourg: 'europe', nuremberg: 'europe', stuttgart: 'europe',
+        dusseldorf: 'europe', freiburg: 'europe', strasbourg: 'europe', grenoble: 'europe',
+        aixenprovence: 'europe', bordeaux: 'europe', nantes: 'europe', montpellier: 'europe',
+        toulouse: 'europe', marseille: 'europe', antwerp: 'europe', bruges: 'europe',
+        ghent: 'europe', rotterdam: 'europe', utrecht: 'europe', eindhoven: 'europe',
+        maastricht: 'europe', bremen: 'europe', hannover: 'europe', dortmund: 'europe',
+        essen: 'europe', bremen: 'europe', leipzig: 'europe', dresden: 'europe',
+        salzburg: 'europe', innsbruck: 'europe', graz: 'europe', linz: 'europe',
+        basel: 'europe', bern: 'europe', lucerne: 'europe', lausanne: 'europe',
+        oslo: 'europe', bergen: 'europe', stavanger: 'europe', goteborg: 'europe',
+        malmo: 'europe', stockholm: 'europe', helsinki: 'europe', tampere: 'europe',
+        copenhagen: 'europe', aarhus: 'europe', reykjavik: 'europe', galway: 'europe',
+        cork: 'europe', limerick: 'europe', belfast: 'europe', glasgow: 'europe',
+        brighton: 'europe', bristol: 'europe', cardiff: 'europe', liverpool: 'europe',
+        leeds: 'europe', birmingham: 'europe', newcastle: 'europe', nottingham: 'europe',
+        sheffield: 'europe', naples: 'europe', bologna: 'europe', turin: 'europe',
+        verona: 'europe', bari: 'europe', catania: 'europe', bilbao: 'europe',
+        granada: 'europe', cordoba: 'europe', cadiz: 'europe', tarifa: 'europe',
+        girona: 'europe', palma: 'europe', ibiza: 'europe', fuerteventura: 'europe',
+        rhodes: 'europe', santorini: 'europe', chania: 'europe', zakynthos: 'europe',
+        kotor: 'europe', dubrovnik: 'europe', zadar: 'europe', pula: 'europe',
+        ljubljana: 'europe', bled: 'europe', bratislava: 'europe', brno: 'europe',
+        kosice: 'europe', plovdiv: 'europe', varna: 'europe', constanta: 'europe',
+        brasov: 'europe', sibiu: 'europe', timisoara: 'europe', iasi: 'europe',
+        kaunas: 'europe', tartu: 'europe', klaipeda: 'europe', gdansk: 'europe',
+        poznan: 'europe', wroclaw: 'europe', lodz: 'europe', porto: 'europe',
+        faro: 'europe', funchal: 'europe', pontadelgada: 'europe', cascais: 'europe',
+        coimbra: 'europe', ericeira: 'europe', valletta: 'europe', paphos: 'europe',
+        ohrid: 'europe', prizren: 'europe', mostar: 'europe', novisad: 'europe',
+
+        // Asia
+        chiangmai: 'asia', bali: 'asia', kualalumpur: 'asia', hochiminhcity: 'asia',
+        penang: 'asia', tbilisi: 'asia', bangkok: 'asia', tokyo: 'asia',
+        seoul: 'asia', singapore: 'asia', hanoi: 'asia', danang: 'asia',
+        taipei: 'asia', manila: 'asia', cebu: 'asia', siemreap: 'asia',
+        phnompenh: 'asia', kathmandu: 'asia', pokhara: 'asia', mumbai: 'asia',
+        bangalore: 'asia', goa: 'asia', colombo: 'asia', phuket: 'asia',
+        kohphangan: 'asia', ubud: 'asia', hongkong: 'asia', yerevan: 'asia',
+        baku: 'asia', batumi: 'asia',
+        // Asia - new cities
+        chiangrai: 'asia', pattaya: 'asia', khaolak: 'asia', kanchanaburi: 'asia',
+        sanur: 'asia', solo: 'asia', medan: 'asia', makassar: 'asia',
+        kuching: 'asia', johorbahru: 'asia', baguio: 'asia', davao: 'asia',
+        iloilo: 'asia', cantho: 'asia', hue: 'asia', ninhbinh: 'asia',
+        vangvieng: 'asia', sihanoukville: 'asia', battambang: 'asia', nagoya: 'asia',
+        hiroshima: 'asia', kanazawa: 'asia', kaohsiung: 'asia', tainan: 'asia',
+        gwangju: 'asia', daegu: 'asia', jaipur: 'asia', kochi: 'asia', udaipur: 'asia',
+        kyoto: 'asia', osaka: 'asia', fukuoka: 'asia', sapporo: 'asia',
+        busan: 'asia', jeju: 'asia', huahin: 'asia', krabi: 'asia',
+        kohsamui: 'asia', pai: 'asia', hoian: 'asia', dalat: 'asia',
+        nhatrang: 'asia', quynnhon: 'asia', sapa: 'asia', luangprabang: 'asia',
+        vientiane: 'asia', kampot: 'asia', canggu: 'asia', lombok: 'asia',
+        nusapenida: 'asia', bandung: 'asia', yogyakarta: 'asia', surabaya: 'asia',
+        semarang: 'asia', malang: 'asia', langkawi: 'asia', ipoh: 'asia',
+        malacca: 'asia', kotakinabalu: 'asia', dumaguete: 'asia', boracay: 'asia',
+        siargao: 'asia', palawan: 'asia', elnido: 'asia', pune: 'asia',
+        shenzhen: 'asia', gyumri: 'asia', kutaisi: 'asia',
+        phuquoc: 'asia', quynhon: 'asia', weligama: 'asia',
+
+        // Latin America
+        medellin: 'latam', mexicocity: 'latam', buenosaires: 'latam', playadelcarmen: 'latam',
+        oaxaca: 'latam', montevideo: 'latam', lima: 'latam', cusco: 'latam',
+        bogota: 'latam', cartagena: 'latam', santiago: 'latam', valparaiso: 'latam',
+        quito: 'latam', sanjuan: 'latam', santacruz: 'latam', lapaz: 'latam',
+        asuncion: 'latam', guadalajara: 'latam', puertovallarta: 'latam', sanjosecr: 'latam',
+        tamarindo: 'latam', panama: 'latam', antigua: 'latam', sanmigueldeallende: 'latam',
+        merida: 'latam',
+        // Latin America - new cities
+        cancun: 'latam', queretaro: 'latam', mazatlan: 'latam', leon: 'latam',
+        manizales: 'latam', pereira: 'latam', barranquilla: 'latam', cali: 'latam',
+        guayaquil: 'latam', trujillo: 'latam', cochabamba: 'latam', sucre: 'latam',
+        rosario: 'latam', mardelplata: 'latam', cordoba: 'latam', mendoza: 'latam',
+        bariloche: 'latam', recife: 'latam', fortaleza: 'latam', salvador: 'latam',
+        florianopolis: 'latam', saopaulo: 'latam', riodejaneiro: 'latam', brasilia: 'latam',
+        boquete: 'latam', lakeatitlan: 'latam', tulum: 'latam', sayulita: 'latam',
+        puertoescondido: 'latam', guanajuato: 'latam', huanchaco: 'latam', mancora: 'latam',
+        montanita: 'latam', vilcabamba: 'latam', cuenca: 'latam', arequipa: 'latam',
+        santodomingo: 'latam', puntacana: 'latam', havana: 'latam', santamarta: 'latam',
+        puertorico: 'latam',
+
+        // North America
+        austin: 'northamerica', miami: 'northamerica', vancouver: 'northamerica',
+        // North America - new cities
+        sanfrancisco: 'northamerica', sandiego: 'northamerica', losangeles: 'northamerica',
+        newyork: 'northamerica', chicago: 'northamerica', boston: 'northamerica',
+        nashville: 'northamerica', denver: 'northamerica', seattle: 'northamerica',
+        portland: 'northamerica', calgary: 'northamerica', victoria: 'northamerica',
+        ottawa: 'northamerica', montreal: 'northamerica', toronto: 'northamerica',
+
+        // Africa
+        capetown: 'africa', cairo: 'africa', marrakech: 'africa', casablanca: 'africa',
+        accra: 'africa', nairobi: 'africa', kigali: 'africa', lagos: 'africa',
+        // Africa - new cities
+        luxor: 'africa', alexandria: 'africa', capeverde: 'africa', windhoek: 'africa',
+        kampala: 'africa', maputo: 'africa', arusha: 'africa', addisababa: 'africa',
+        dakar: 'africa', tunis: 'africa', rabat: 'africa', essaouira: 'africa',
+        chefchaouen: 'africa', taghazout: 'africa', zanzibar: 'africa', mombasa: 'africa',
+        daressalaam: 'africa', johannesburg: 'africa', durban: 'africa',
+
+        // Middle East
+        dubai: 'middleeast', telaviv: 'middleeast', antalya: 'middleeast', istanbul: 'middleeast',
+        // Middle East - new cities
+        salalah: 'middleeast', bahrain: 'middleeast', riyadh: 'middleeast', jeddah: 'middleeast',
+        kuwait: 'middleeast', ramallah: 'middleeast', yazd: 'middleeast', amman: 'middleeast',
+        aqaba: 'middleeast', beirut: 'middleeast', muscat: 'middleeast', doha: 'middleeast',
+        abudhabi: 'middleeast', haifa: 'middleeast', eilat: 'middleeast', bodrum: 'middleeast',
+        fethiye: 'middleeast', izmir: 'middleeast', cappadocia: 'middleeast',
+        manama: 'middleeast',
+
+        // Oceania
+        sydney: 'oceania', melbourne: 'oceania', auckland: 'oceania',
+        // Oceania - new cities
+        darwin: 'oceania', canberra: 'oceania', wellington: 'oceania', suva: 'oceania',
+        noumea: 'oceania', brisbane: 'oceania', perth: 'oceania', adelaide: 'oceania',
+        goldcoast: 'oceania', cairns: 'oceania', hobart: 'oceania', byronbay: 'oceania',
+        christchurch: 'oceania', queenstown: 'oceania', mauritius: 'oceania'
+      };
+
+if (typeof module !== 'undefined' && module.exports) module.exports = CITY_REGIONS;
