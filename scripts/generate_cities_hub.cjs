@@ -186,7 +186,7 @@ const html = `<!DOCTYPE html>
   <link rel="stylesheet" href="styles/city-filters.css">
 
   <style>
-    /* Hero — same magazine style as the blog hero: full-bleed photo, bottom-anchored dark gradient, serif H1 */
+    /* Hero, same magazine style as the blog hero: full-bleed photo, bottom-anchored dark gradient, serif H1 */
     .cities-hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
     .cities-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-sand-dark) 100%); }
     .cities-hero-overlay { position: relative; z-index: 1; width: 100%; padding: calc(var(--nav-height, 64px) + 2rem) 0 3.5rem; background: linear-gradient(to top, rgba(15,23,42,.95) 0%, rgba(15,23,42,.75) 50%, rgba(15,23,42,.2) 80%, transparent 100%); color: #fff; }
@@ -298,7 +298,7 @@ const html = `<!DOCTYPE html>
           <span class="cities-hero-label">The Digital Nomad City Index</span>
           <span class="category-tag">${cities.length} cities rated</span>
           <h1>Find the Best City to Live and Work Remotely</h1>
-          <p class="excerpt">We rate and rank every destination on the 13 things that actually matter to digital nomads &mdash; cost of living, WiFi, safety, climate, visas and more &mdash; so you can compare cities side by side and find where you&rsquo;ll thrive.</p>
+          <p class="excerpt">We rate and rank every destination on the 13 things that actually matter to digital nomads, like cost of living, WiFi, safety, climate, visas and more, so you can compare cities side by side and find where you&rsquo;ll thrive.</p>
           <div class="hero-ctas">
             <a href="/wheel" class="btn btn-primary btn-lg">Find your match on the Wheel &rarr;</a>
             <a href="#directory" class="btn btn-lg btn-ghost">Browse all cities</a>

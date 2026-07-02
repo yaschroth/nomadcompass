@@ -99,7 +99,7 @@ function createAccommodationPage(acc, cityName, cityId) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="${acc.name} - ${acc.type} accommodation in ${cityName}. ${acc.desc}">
 
-  <title>${acc.name} — ${cityName} | The Nomad HQ</title>
+  <title>${acc.name}, ${cityName} | The Nomad HQ</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">

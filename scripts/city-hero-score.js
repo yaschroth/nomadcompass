@@ -1,6 +1,6 @@
 /**
  * Move the Nomad Score gauge into the top of the hero content.
- * Runs before the score animation JS — element IDs (#scoreGaugeFill,
+ * Runs before the score animation JS, element IDs (#scoreGaugeFill,
  * #nomadScoreValue) still resolve via getElementById after reparenting.
  */
 (function() {

@@ -27,12 +27,12 @@ const CITY_CONTENT = {
     "wifi_speed": "100 Mbps",
     "nomad_count": "5,000+",
     "score_title": "A Top-Tier Nomad Destination",
-    "score_description": "Lisbon scores highly across most categories, excelling in climate, safety, community, and English accessibility. The main trade-off is cost—Lisbon has become more expensive in recent years, though it's still reasonable by Western European standards.",
+    "score_description": "Lisbon scores highly across most categories, excelling in climate, safety, community, and English accessibility. The main trade-off is cost, Lisbon has become more expensive in recent years, though it's still reasonable by Western European standards.",
     "neighborhoods": [
       {
         "name": "Príncipe Real",
         "tagline": "Where Lisbon's creative class comes to play",
-        "description": "The undisputed king of nomad neighborhoods. Príncipe Real blends bohemian charm with modern sophistication—think vintage shops next to specialty coffee, co-working spaces in palatial buildings, and sunset drinks in the botanical garden. This is where you'll find Lisbon's most interesting people.",
+        "description": "The undisputed king of nomad neighborhoods. Príncipe Real blends bohemian charm with modern sophistication, think vintage shops next to specialty coffee, co-working spaces in palatial buildings, and sunset drinks in the botanical garden. This is where you'll find Lisbon's most interesting people.",
         "vibe": "Creative & Upscale",
         "bestFor": "Creatives, entrepreneurs, and those who want to be in the center of Lisbon's nomad scene",
         "pros": ["Best cafe and coworking density", "Beautiful garden and viewpoints", "Walkable to everything", "Strong nomad community"],
@@ -44,7 +44,7 @@ const CITY_CONTENT = {
       {
         "name": "Alfama",
         "tagline": "Get lost in Lisbon's soul",
-        "description": "The oldest district in Lisbon is a labyrinth of narrow alleys, fado music drifting from tiny bars, and laundry hanging between tiled buildings. Living here means trading convenience for authenticity—you'll carry groceries up steep hills but wake up to church bells and river views.",
+        "description": "The oldest district in Lisbon is a labyrinth of narrow alleys, fado music drifting from tiny bars, and laundry hanging between tiled buildings. Living here means trading convenience for authenticity, you'll carry groceries up steep hills but wake up to church bells and river views.",
         "vibe": "Traditional & Authentic",
         "bestFor": "Culture seekers, photographers, and those who prioritize atmosphere over convenience",
         "pros": ["Cheapest central neighborhood", "Incredible atmosphere and views", "Best local restaurants", "Authentic Portuguese life"],
@@ -26986,7 +26986,7 @@ function generateCityPage(city) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="${escapeHtml(city.name)} digital nomad guide: cost of living, WiFi speeds, coworking spaces, visa info, and where to stay in ${escapeHtml(city.country)}.">
 
-  <title>${escapeHtml(city.name)}, ${escapeHtml(city.country)} — The Nomad HQ City Guide</title>
+  <title>${escapeHtml(city.name)}, ${escapeHtml(city.country)}, The Nomad HQ City Guide</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">

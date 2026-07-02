@@ -3,7 +3,7 @@
  * disclosure. Shared nav + footer + head (fonts loaded correctly). Regenerable.
  * Usage: node scripts/generate_core_pages.cjs
  *
- * NOTE: privacy/terms/disclosure are reasonable, plain-English templates — have a
+ * NOTE: privacy/terms/disclosure are reasonable, plain-English templates, have a
  * professional review before relying on them. Contact email is a placeholder.
  */
 const fs = require('fs');
@@ -160,38 +160,38 @@ const updatedLine = `    <p class="legal-updated">Last updated: ${UPDATED}</p>`;
 
 const pages = {
   'about.html': page('about', 'About The Nomad HQ', 'The Nomad HQ rates 410 cities on the 13 things that matter most to digital nomads, so remote workers can find their ideal base with real data instead of guesswork.', `    <h1>About The Nomad HQ</h1>
-    <p class="lead">We help remote workers find the right city to live and work &mdash; using data, not hype.</p>
+    <p class="lead">We help remote workers find the right city to live and work, using data, not hype.</p>
     <p>The Nomad HQ rates <strong>410 cities</strong> on the 13 things that actually matter to digital nomads: cost of living, internet, safety, climate, visas, community, food, culture, and more. Every city gets a calibrated <strong>Nomad Score</strong> and a full breakdown, so you can compare destinations like-for-like instead of trusting scattered blog opinions.</p>
     <h2>How we rate cities</h2>
-    <p>Each of the 13 categories is scored 1&ndash;10 from official data sources, global indices, and hands-on assessment. The Nomad Score is a calibrated composite of those categories, tuned so the strongest and weakest cities genuinely stand out. Ratings are independent &mdash; they are never influenced by advertising or affiliate partnerships. You can <a href="/cities">browse and compare every city</a> or <a href="/wheel">match your priorities on the Nomad Wheel</a>.</p>
+    <p>Each of the 13 categories is scored 1&ndash;10 from official data sources, global indices, and hands-on assessment. The Nomad Score is a calibrated composite of those categories, tuned so the strongest and weakest cities genuinely stand out. Ratings are independent, they are never influenced by advertising or affiliate partnerships. You can <a href="/cities">browse and compare every city</a> or <a href="/wheel">match your priorities on the Nomad Wheel</a>.</p>
     <h2>Who is behind it</h2>
     <p>The Nomad HQ is written and maintained by <a href="/about/yannick-schroth">Yannick Schroth</a>, who covers remote work, travel, and the practicalities of living abroad. Read more on the <a href="/about/yannick-schroth">author page</a>.</p>
     <h2>Get in touch</h2>
-    <p>Spotted an error, or have a city we should add? <a href="/contact">Contact us</a> &mdash; reader corrections keep the ratings honest.</p>
+    <p>Spotted an error, or have a city we should add? <a href="/contact">Contact us</a>, reader corrections keep the ratings honest.</p>
     <a href="/cities" class="btn btn-primary btn-lg legal-cta">Browse all cities &rarr;</a>`),
 
-  'contact.html': page('contact', 'Contact The Nomad HQ', 'Get in touch with The Nomad HQ — corrections, city suggestions, partnerships, or press.', `    <h1>Contact</h1>
-    <p class="lead">Questions, corrections, city suggestions, or partnership ideas &mdash; we read everything.</p>
+  'contact.html': page('contact', 'Contact The Nomad HQ', 'Get in touch with The Nomad HQ, corrections, city suggestions, partnerships, or press.', `    <h1>Contact</h1>
+    <p class="lead">Questions, corrections, city suggestions, or partnership ideas, we read everything.</p>
     <p>The fastest way to reach us is email:</p>
     <ul>
       <li><strong>Email:</strong> <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
       <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/yannick-schroth/" rel="noopener" target="_blank">Yannick Schroth</a></li>
       <li><strong>Instagram:</strong> <a href="https://www.instagram.com/ynncks/" rel="noopener" target="_blank">@ynncks</a></li>
     </ul>
-    <p>Found something out of date &mdash; a cost, a visa rule, a WiFi speed? Tell us the city and what changed and we will update it. Reader corrections are the single best way to keep 410 city guides accurate.</p>
+    <p>Found something out of date, a cost, a visa rule, a WiFi speed? Tell us the city and what changed and we will update it. Reader corrections are the single best way to keep 410 city guides accurate.</p>
     <p>We typically reply within a few business days.</p>`),
 
-  'disclosure.html': page('disclosure', 'Affiliate Disclosure — The Nomad HQ', 'How The Nomad HQ uses affiliate links and how that does (and does not) affect our content.', `    <h1>Affiliate Disclosure</h1>
+  'disclosure.html': page('disclosure', 'Affiliate Disclosure, The Nomad HQ', 'How The Nomad HQ uses affiliate links and how that does (and does not) affect our content.', `    <h1>Affiliate Disclosure</h1>
     <p class="lead">In plain English: some links earn us a commission. That never changes what we recommend.</p>
-    <p>The Nomad HQ is reader-supported. Some links on this site &mdash; for example, to accommodation booking platforms, travel insurance, eSIMs, or banking services &mdash; are <strong>affiliate links</strong>. If you click one and make a purchase, we may earn a commission <strong>at no extra cost to you</strong>.</p>
+    <p>The Nomad HQ is reader-supported. Some links on this site, for example, to accommodation booking platforms, travel insurance, eSIMs, or banking services, are <strong>affiliate links</strong>. If you click one and make a purchase, we may earn a commission <strong>at no extra cost to you</strong>.</p>
     <h2>How this affects our content</h2>
-    <p>It does not. Our city ratings and the Nomad Score are derived from data and independent assessment, and are <strong>never</strong> influenced by whether a destination or provider has an affiliate program. We link to services because we think they are useful to remote workers &mdash; not because of commissions.</p>
+    <p>It does not. Our city ratings and the Nomad Score are derived from data and independent assessment, and are <strong>never</strong> influenced by whether a destination or provider has an affiliate program. We link to services because we think they are useful to remote workers, not because of commissions.</p>
     <h2>How to identify affiliate links</h2>
     <p>Affiliate and sponsored links are marked with <code>rel="sponsored"</code> and, where relevant, a note near the link. Commissions help us keep the site free and continue researching and updating city guides.</p>
     <p>This disclosure is provided in accordance with U.S. Federal Trade Commission (FTC) guidelines. Questions? <a href="/contact">Contact us</a>.</p>
 ${updatedLine}`),
 
-  'privacy.html': page('privacy', 'Privacy Policy — The Nomad HQ', 'How The Nomad HQ collects, uses, and protects your information.', `    <h1>Privacy Policy</h1>
+  'privacy.html': page('privacy', 'Privacy Policy, The Nomad HQ', 'How The Nomad HQ collects, uses, and protects your information.', `    <h1>Privacy Policy</h1>
     <p class="lead">This policy explains what we collect and why. We keep it minimal.</p>
     <h2>Information we collect</h2>
     <ul>
@@ -211,10 +211,10 @@ ${updatedLine}`),
     <p>We may update this policy; material changes will be reflected by the date below. Questions? <a href="/contact">Contact us</a>.</p>
 ${updatedLine}`),
 
-  'terms.html': page('terms', 'Terms of Service — The Nomad HQ', 'The terms governing your use of The Nomad HQ.', `    <h1>Terms of Service</h1>
+  'terms.html': page('terms', 'Terms of Service, The Nomad HQ', 'The terms governing your use of The Nomad HQ.', `    <h1>Terms of Service</h1>
     <p class="lead">By using The Nomad HQ, you agree to these terms.</p>
     <h2>Informational purposes only</h2>
-    <p>The Nomad HQ provides information about cities, cost of living, visas, safety, and related topics for <strong>general informational purposes only</strong>. Data can change quickly and may contain errors. Nothing here is legal, financial, immigration, tax, or travel advice. <strong>Always verify critical details</strong> &mdash; especially visa rules, taxes, and safety &mdash; with official sources before making decisions.</p>
+    <p>The Nomad HQ provides information about cities, cost of living, visas, safety, and related topics for <strong>general informational purposes only</strong>. Data can change quickly and may contain errors. Nothing here is legal, financial, immigration, tax, or travel advice. <strong>Always verify critical details</strong>, especially visa rules, taxes, and safety, with official sources before making decisions.</p>
     <h2>No warranties</h2>
     <p>The site is provided &ldquo;as is,&rdquo; without warranties of any kind, express or implied, including accuracy, completeness, or fitness for a particular purpose.</p>
     <h2>Limitation of liability</h2>
@@ -229,8 +229,8 @@ ${updatedLine}`),
     <p>We may update these terms; continued use means you accept the changes. Questions? <a href="/contact">Contact us</a>.</p>
 ${updatedLine}`),
 
-  '404.html': page('404', 'Page Not Found &mdash; The Nomad HQ', 'Sorry, we could not find that page. Browse our city guides, take the Nomad Wheel, or read the blog.', `    <h1>Page not found</h1>
-    <p class="lead">We couldn&rsquo;t find that page &mdash; it may have moved, or never existed.</p>
+  '404.html': page('404', 'Page Not Found, The Nomad HQ', 'Sorry, we could not find that page. Browse our city guides, take the Nomad Wheel, or read the blog.', `    <h1>Page not found</h1>
+    <p class="lead">We couldn&rsquo;t find that page, it may have moved, or never existed.</p>
     <p>Try one of these instead:</p>
     <ul>
       <li><a href="/cities">Browse all 410 city guides</a></li>
