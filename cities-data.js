@@ -9121,7 +9121,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Experience international city of peace and justice.",
-    image: "images/batch1/thehague.jpg",
+    image: "/images/cities/thehague-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -9364,7 +9364,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Cézanne's city of fountains and light.",
-    image: "images/batch1/aixenprovence.jpg",
+    image: "/images/cities/aixenprovence-card.webp",
     scores: {
       climate: 8,
       cost: 4,
@@ -9985,7 +9985,7 @@ const CITIES = [
     country: "Taiwan",
     flag: "🇹🇼",
     tagline: "Taiwan's oldest city with temple culture.",
-    image: "images/batch1/tainan.jpg",
+    image: "/images/cities/tainan-card.webp",
     scores: {
       climate: 8,
       cost: 7,

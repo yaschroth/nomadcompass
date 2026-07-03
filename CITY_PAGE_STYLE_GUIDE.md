@@ -123,7 +123,13 @@ genuinely distinct:
 - **A unique hero image per city** (a recognisable landmark or street scene — see section 6).
   Never reuse one hero across cities.
 - **Unique title + meta description** per city (not a pure string template).
-- **Real category descriptions** (the 10–13 scores) written for that city, not generic filler.
+- **Real category descriptions** (`CATEGORY_DESCRIPTIONS`, the 13 scores) written for that
+  city, not generic filler. **RULE: each of the 13 descriptions MUST be 50–100 words**,
+  city-specific and accurate (from the same research). Keys: `climate, cost, wifi, nightlife,
+  nature, safety, food, community, english, visa, culture, cleanliness, airquality`. These
+  render as the category tiles near the top of the page, so they are prime content; rewriting
+  them to 50–100 words is a required part of every city deep-dive, not optional. (Audit
+  2026-07-03: 84% were under 50 words, median 11 — treat sub-50 as a defect to fix.)
 - If a city genuinely has little to say, it is better **`noindex`** than a thin near-duplicate
   (a thin page can drag down the whole `/cities/` cluster's quality signal).
 
@@ -162,11 +168,55 @@ This turns the 410 city pages into a real internal link graph instead of sitemap
 
 ## 7. Images
 
-WebP or optimised remote stock, **unique per city**, topical (landmark > city > country), with
-descriptive alt text containing the city name. Hero ~1200px wide, `fetchPriority="high"`,
-explicitly sized; below-the-fold images `loading="lazy"`. Never reuse a hero across cities (a
-reused hero is a templated-page signal). See [`BLOG_STYLE_GUIDE.md`](BLOG_STYLE_GUIDE.md) §10
-and [`IMAGE_VERIFICATION_CHECKLIST.md`](IMAGE_VERIFICATION_CHECKLIST.md).
+The hero renders **full-screen**: `.city-hero { min-height: 100vh }` with
+`.city-hero-image { object-fit: cover }`. That drives four hard rules (all four must hold):
+
+1. **Actually of the city.** The hero MUST depict the city the page is about. No generic
+   stock, no wrong-city photo, and **no image reused across cities** (410 pages currently
+   share only 307 images — dedupe). Every hero is **vision-verified** to show the correct
+   city (a landmark or recognisable street/skyline) before it ships. Landmark > city street >
+   country > region; never a random beach/mountain that could be anywhere.
+2. **High resolution.** At least **1600px wide (target 1920px+)** so it stays crisp at
+   full-screen. The legacy `w=800&h=500` requests are too small and read as blurry, fix them.
+3. **WebP.** Served as `.webp` (no bare JPG/PNG). 70 legacy local JPGs and any non-`fm=webp`
+   remote URL are defects.
+4. **Attributed.** Where the license requires it (Wikimedia Commons CC-BY / CC-BY-SA, etc.),
+   a visible credit ships on the page ("Photo: <author> / <source>", linked) and is recorded
+   in a per-city attribution field. Add Unsplash credit too even though it is optional.
+
+Descriptive alt text containing the city name; `fetchPriority="high"` and explicit dimensions
+on the hero; below-the-fold images `loading="lazy"`. Apply the same real/correct/webp/attributed
+standard to the `/cities` **card** image (`cities-data.js` `image`) so card and hero agree.
+See [`BLOG_STYLE_GUIDE.md`](BLOG_STYLE_GUIDE.md) §10 and
+[`IMAGE_VERIFICATION_CHECKLIST.md`](IMAGE_VERIFICATION_CHECKLIST.md).
+
+### 7a. Sources, verification & hosting (the "definitely of the city" rule)
+
+**Sources (any of the three, best verified image wins):** Unsplash, Wikimedia Commons, Pexels.
+Prefer whichever yields a correct, suitable, high-res shot; there is no fixed ranking.
+
+**Verification is mandatory and vision-based.** For each city, gather several candidates, then
+a vision-capable step **actually views each image** and keeps it only if BOTH hold:
+- **Definitely of the city:** shows a recognisable landmark, skyline, old town, harbour, or
+  characteristic street of THIS specific city. Reject anything that could be "anywhere"
+  (generic beach, generic mountain, close-up food/person), any map/diagram/coat-of-arms/flag,
+  any indoor-only shot, and any image of a different place.
+- **Suitable as a full-screen hero:** landscape orientation, >=1600px wide, sharp, well-composed,
+  daytime-clear enough to read behind the light top gradient.
+
+If no candidate passes, the city is flagged (kept on its old image) rather than shipping a
+wrong one. Never ship an unverified hero.
+
+**Hosting:** download the chosen image and store it self-hosted as
+`images/cities/<slug>.webp` (converted to webp, resized to ~1920px wide). Self-hosting
+guarantees the webp + resolution + longevity regardless of source, and removes any runtime
+dependency on a third-party image host. Record attribution per city (author, source, license,
+source-page URL) and render a small visible credit on the hero.
+
+**Attribution format per source** (visible on page, linked):
+- Unsplash: `Photo: <author> / Unsplash` (optional by license, we add it anyway).
+- Pexels: `Photo: <author> / Pexels`.
+- Wikimedia Commons: `Photo: <author> / Wikimedia Commons (<license>)` — required for CC-BY/BY-SA.
 
 ---
 
