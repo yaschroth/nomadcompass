@@ -7015,7 +7015,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "Gateway to the fjords, colorful Bryggen, rain, and dramatic Norwegian nature.",
-    image: "images/batch2/bergen.jpg",
+    image: "/images/cities/bergen-card.webp",
     scores: {
       climate: 4,
       cost: 2,
@@ -7042,7 +7042,7 @@ const CITIES = [
     country: "Sweden",
     flag: "🇸🇪",
     tagline: "Sweden's friendly west coast, seafood, archipelago, and laid-back vibes.",
-    image: "https://images.unsplash.com/photo-1579003593419-98f949b9398f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/gothenburg-card.webp",
     scores: {
       climate: 4,
       cost: 3,
@@ -7096,7 +7096,7 @@ const CITIES = [
     country: "Denmark",
     flag: "🇩🇰",
     tagline: "Denmark's second city, student energy, modern architecture, and hygge perfected.",
-    image: "images/batch2/aarhus.jpg",
+    image: "/images/cities/aarhus-card.webp",
     scores: {
       climate: 4,
       cost: 3,
