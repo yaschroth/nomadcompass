@@ -8959,7 +8959,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "Experience Georgian elegance and Roman baths.",
-    image: "images/batch1/bath.jpg",
+    image: "/images/cities/bath-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -9499,7 +9499,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Bali's relaxed beachside alternative.",
-    image: "images/batch2/sanur.jpg",
+    image: "/images/cities/sanur-card.webp",
     scores: {
       climate: 8,
       cost: 7,
@@ -10120,7 +10120,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "The city that never sleeps.",
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/newyork-card.webp",
     scores: {
       climate: 5,
       cost: 1,
