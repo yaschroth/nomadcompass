@@ -7582,7 +7582,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "Experience sea organ sunsets, ancient walls, island-hopping gateway, and Croatian cool.",
-    image: "images/batch2/zadar.jpg",
+    image: "/images/cities/zadar-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -7663,7 +7663,7 @@ const CITIES = [
     country: "Cyprus",
     flag: "🇨🇾",
     tagline: "Aphrodite's birthplace, ancient mosaics, year-round sun, and expat-friendly.",
-    image: "images/batch2/paphos.jpg",
+    image: "/images/cities/paphos-card.webp",
     scores: {
       climate: 8,
       cost: 5,
@@ -7717,7 +7717,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Knights and beaches, medieval old town meets 300 days of sunshine.",
-    image: "images/batch2/rhodes.jpg",
+    image: "/images/cities/rhodes-card.webp",
     scores: {
       climate: 8,
       cost: 7,
