@@ -7150,7 +7150,7 @@ const CITIES = [
     country: "Estonia",
     flag: "🇪🇪",
     tagline: "Estonia's intellectual capital, university town with startup DNA.",
-    image: "images/batch2/tartu.jpg",
+    image: "/images/cities/tartu-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -7447,7 +7447,7 @@ const CITIES = [
     country: "Montenegro",
     flag: "🇲🇪",
     tagline: "Fjord-like bay meets medieval walls, Montenegro's dramatic crown jewel.",
-    image: "https://images.unsplash.com/photo-1614122027743-50a9e6e8002f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kotor-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -7555,7 +7555,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "Discover roman arena by the sea, Istrian wine, truffles, and Adriatic adventures.",
-    image: "images/batch2/pula.jpg",
+    image: "/images/cities/pula-card.webp",
     scores: {
       climate: 7,
       cost: 7,
