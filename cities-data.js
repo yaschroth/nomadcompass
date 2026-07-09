@@ -8743,7 +8743,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Where Italian and Central European cultures meet in harmony.",
-    image: "https://images.unsplash.com/photo-1586378842517-2d08e0f3e9d0?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/trieste-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -8905,7 +8905,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "Experience punting, pubs, and world-class education here.",
-    image: "https://images.unsplash.com/photo-1578922992690-9a4d43e6f45d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cambridge-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -8932,7 +8932,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "Medieval walls and Viking history await.",
-    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccbf?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/york-card.webp",
     scores: {
       climate: 5,
       cost: 5,
