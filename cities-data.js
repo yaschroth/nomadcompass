@@ -2571,7 +2571,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Greece's largest island with beaches, gorges, and ancient ruins.",
-    image: "https://images.unsplash.com/photo-1667229269047-dbf14345e39f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/crete-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -2652,7 +2652,7 @@ const CITIES = [
     country: "Poland",
     flag: "🇵🇱",
     tagline: "Medieval charm, vibrant culture, and incredible value await.",
-    image: "images/batch2/krakow.jpg",
+    image: "/images/cities/krakow-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -3300,7 +3300,7 @@ const CITIES = [
     country: "Finland",
     flag: "🇫🇮",
     tagline: "Experience saunas, design, and the happiest people on Earth in a tech-forward capital.",
-    image: "https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/helsinki-card.webp",
     scores: {
       climate: 3,
       cost: 3,
