@@ -2058,7 +2058,7 @@ const CITIES = [
     country: "Switzerland",
     flag: "🇨🇭",
     tagline: "Experience international diplomacy hub with mountain views and French flair.",
-    image: "https://images.unsplash.com/photo-1573108037329-37aa135a142e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/geneva-card.webp",
     scores: {
       climate: 5,
       cost: 1,
@@ -2166,7 +2166,7 @@ const CITIES = [
     country: "UK",
     flag: "🇬🇧",
     tagline: "Explore medieval castles, literary heritage, and Scottish hospitality.",
-    image: "https://images.unsplash.com/photo-1559297434-fae8a1916a79?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/edinburgh-card.webp",
     scores: {
       climate: 4,
       cost: 4,
@@ -2247,7 +2247,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Experience riviera glamour with Mediterranean beaches and Alpine day trips.",
-    image: "https://images.unsplash.com/photo-1491166617655-0723a0999cfc?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/nice-card.webp",
     scores: {
       climate: 8,
       cost: 3,
