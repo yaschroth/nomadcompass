@@ -9013,7 +9013,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "Experience the northern lights and midnight sun.",
-    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tromso-card.webp",
     scores: {
       climate: 2,
       cost: 2,
@@ -9067,7 +9067,7 @@ const CITIES = [
     country: "Finland",
     flag: "🇫🇮",
     tagline: "Northern lights, Nokia engineers, and Arctic air, Finland's innovation outpost.",
-    image: "https://images.unsplash.com/photo-1569067225637-a4c40a9f5c07?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/oulu-card.webp",
     scores: {
       climate: 2,
       cost: 5,
@@ -9148,7 +9148,7 @@ const CITIES = [
     country: "Belgium",
     flag: "🇧🇪",
     tagline: "Experience beer, bikes, and brilliant minds.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/leuven-card.webp",
     scores: {
       climate: 5,
       cost: 6,
