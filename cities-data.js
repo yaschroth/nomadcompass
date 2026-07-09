@@ -492,7 +492,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Mexico's culinary capital, mezcal, mole, and indigenous culture.",
-    image: "images/batch2/oaxaca.jpg",
+    image: "/images/cities/oaxaca-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -735,7 +735,7 @@ const CITIES = [
     country: "South Korea",
     flag: "🇰🇷",
     tagline: "K-pop, kimchi, and lightning-fast internet in Asia's tech capital.",
-    image: "https://images.unsplash.com/photo-1546874177-9e664107314e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/seoul-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -10363,7 +10363,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Old Mexico beach vibes, Malecón promenade, fresh shrimp, and golden-zone sunsets.",
-    image: "images/batch1/mazatlan.jpg",
+    image: "/images/cities/mazatlan-card.webp",
     scores: {
       climate: 9,
       cost: 8,

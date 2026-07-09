@@ -68,7 +68,10 @@ async function nominatim(q) {
         }
         if (hit) { out.push({ ...v, verified: true, lat: hit.lat, lng: hit.lng, source: 'osm' }); kept++; }
         else if (v.url) { out.push({ ...v, verified: false, source: 'url-only' }); kept++; }
-        else { dropped++; }
+        // OSM coverage is uneven (real cafes/restaurants often unmapped and websiteless).
+        // Keep the agent's rating-gated, specifically-named venue and link it via Google Maps
+        // (a Maps search on a specific name resolves to the real place) rather than drop to fake cards.
+        else { out.push({ ...v, verified: false, source: 'maps' }); kept++; }
       }
       data[key] = out;
     }
