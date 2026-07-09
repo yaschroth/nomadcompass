@@ -9175,7 +9175,7 @@ const CITIES = [
     country: "Luxembourg",
     flag: "🇱🇺",
     tagline: "Banking powerhouse in a fairy-tale gorge, fortress walls, EU institutions, and sky-high salaries.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/luxembourg-card.webp",
     scores: {
       climate: 5,
       cost: 1,
@@ -9229,7 +9229,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Porsche, Mercedes, and vineyard-covered hills, engineering precision meets Swabian soul.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/stuttgart-card.webp",
     scores: {
       climate: 6,
       cost: 4,
@@ -9418,7 +9418,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Infamous party town reborn, beachfront condos, cheap eats, and Bangkok weekend escapes.",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/pattaya-card.webp",
     scores: {
       climate: 8,
       cost: 8,
