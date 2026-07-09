@@ -762,7 +762,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Bikes, canals, and a progressive culture with world-class startups.",
-    image: "https://images.unsplash.com/photo-1753810809240-a28f725d3328?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/amsterdam-card.webp",
     scores: {
       climate: 5,
       cost: 2,
@@ -1734,7 +1734,7 @@ const CITIES = [
     country: "Puerto Rico",
     flag: "🇵🇷",
     tagline: "Experience caribbean vibes with US convenience, beaches and tax benefits.",
-    image: "https://images.unsplash.com/photo-1602025324203-b0d03c868993?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sanjuan-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -2463,7 +2463,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Discover costa del Sol sunshine with Picasso's birthplace charm.",
-    image: "https://images.unsplash.com/photo-1730031914372-2e3b0e433ea5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/malaga-card.webp",
     scores: {
       climate: 8,
       cost: 5,
