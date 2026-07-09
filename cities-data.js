@@ -87,7 +87,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "The OG nomad hub, temples, mountains, and the best coworking cafés in Asia.",
-    image: "images/batch1/chiangmai.jpg",
+    image: "/images/cities/chiangmai-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -10201,7 +10201,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "Honky-tonk heaven, bachelorette parties, hot chicken, and country music dreams.",
-    image: "images/batch2/nashville.jpg",
+    image: "/images/cities/nashville-card.webp",
     scores: {
       climate: 7,
       cost: 3,
@@ -11011,7 +11011,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Australia's planned capital city.",
-    image: "images/batch1/canberra.jpg",
+    image: "/images/cities/canberra-card.webp",
     scores: {
       climate: 6,
       cost: 3,
