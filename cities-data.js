@@ -4611,7 +4611,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Experience underground streets, colorful houses, and mariachi serenades.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/guanajuato-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -5152,7 +5152,7 @@ const CITIES = [
     country: "Mauritius",
     flag: "🇲🇺",
     tagline: "Discover island paradise with lagoons, mountains, and multicultural harmony.",
-    image: "https://images.unsplash.com/photo-1585464231875-d9ef1f5ad396?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/mauritius-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -5475,7 +5475,7 @@ const CITIES = [
     country: "New Zealand",
     flag: "🇳🇿",
     tagline: "Experience garden city reborn with innovative spirit and mountain access.",
-    image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/christchurch-card.webp",
     scores: {
       climate: 5,
       cost: 4,
