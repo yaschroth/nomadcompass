@@ -6907,7 +6907,7 @@ const CITIES = [
     country: "Ireland",
     flag: "🇮🇪",
     tagline: "Ireland's cultural heart, trad music, Wild Atlantic Way, and Celtic soul.",
-    image: "images/batch1/galway.jpg",
+    image: "/images/cities/galway-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -6961,7 +6961,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Where Netherlands meets Belgium, Burgundian lifestyle and European crossroads.",
-    image: "images/batch2/maastricht.jpg",
+    image: "/images/cities/maastricht-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -7798,7 +7798,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Experience paragliding paradise, Ölüdeniz lagoon, Lycian tombs, and adventure base.",
-    image: "images/batch1/fethiye.jpg",
+    image: "/images/cities/fethiye-card.webp",
     scores: {
       climate: 8,
       cost: 7,
