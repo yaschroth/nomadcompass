@@ -5611,7 +5611,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Bali's digital nomad capital with surf breaks and rice paddies.",
-    image: "images/batch1/canggu.jpg",
+    image: "/images/cities/canggu-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -5908,7 +5908,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Wine capital meets startup culture in southwestern France's most elegant city.",
-    image: "https://images.unsplash.com/photo-1576703190985-b4a7bfa1f1ae?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bordeaux-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -6205,7 +6205,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Experience romantic castle town with Germany's oldest university and intellectual energy.",
-    image: "https://images.unsplash.com/photo-1573158530011-fa37d58dc432?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/heidelberg-card.webp",
     scores: {
       climate: 6,
       cost: 4,
