@@ -195,7 +195,7 @@ const CITIES = [
     country: "Hungary",
     flag: "🇭🇺",
     tagline: "Experience thermal baths by day, ruin bars by night, Central Europe's hidden gem.",
-    image: "images/batch1/budapest.jpg",
+    image: "/images/cities/budapest-card.webp",
     scores: {
       climate: 5,
       cost: 6,
@@ -249,7 +249,7 @@ const CITIES = [
     country: "Argentina",
     flag: "🇦🇷",
     tagline: "Experience tango, steak, and Malbec, the Paris of South America at incredible value.",
-    image: "images/batch1/buenosaires.jpg",
+    image: "/images/cities/buenosaires-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -1869,7 +1869,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Experience pacific beach town with cobblestone charm and stunning sunsets.",
-    image: "images/batch2/puertovallarta.jpg",
+    image: "/images/cities/puertovallarta-card.webp",
     scores: {
       climate: 7,
       cost: 6,
