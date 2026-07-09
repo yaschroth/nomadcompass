@@ -3786,7 +3786,7 @@ const CITIES = [
     country: "South Korea",
     flag: "🇰🇷",
     tagline: "Beach city vibes with mountains, temples, and fresh seafood.",
-    image: "https://images.unsplash.com/photo-1701172189149-450eecf09863?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/busan-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -4155,7 +4155,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Experience snow country capital with ramen, beer, and outdoor adventures.",
-    image: "https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sapporo-card.webp",
     scores: {
       climate: 4,
       cost: 5,
@@ -4341,7 +4341,7 @@ const CITIES = [
     country: "Brazil",
     flag: "🇧🇷",
     tagline: "An island paradise where surf culture meets startup energy.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/florianopolis-card.webp",
     scores: {
       climate: 7,
       cost: 6,
