@@ -6286,7 +6286,7 @@ const CITIES = [
     country: "Austria",
     flag: "🇦🇹",
     tagline: "Austria's second city, student vibes, design scene, and culinary capital.",
-    image: "https://images.unsplash.com/photo-1577346174251-6d99c9fa25e8?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/graz-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -6367,7 +6367,7 @@ const CITIES = [
     country: "Switzerland",
     flag: "🇨🇭",
     tagline: "Experience postcard-perfect Switzerland, mountains, lakes, and medieval charm.",
-    image: "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lucerne-card.webp",
     scores: {
       climate: 5,
       cost: 1,
@@ -6745,7 +6745,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Portugal's Oxford, ancient university, fado tradition, and student energy.",
-    image: "https://images.unsplash.com/photo-1560091225-f6984db58d95?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/coimbra-card.webp",
     scores: {
       climate: 7,
       cost: 7,
