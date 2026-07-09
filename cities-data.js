@@ -9715,7 +9715,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "City of love with growing nomad scene.",
-    image: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/iloilo-card.webp",
     scores: {
       climate: 8,
       cost: 10,
@@ -10174,7 +10174,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "Historic charm meets innovation.",
-    image: "https://images.unsplash.com/photo-1501979376754-2ff867a4f659?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/boston-card.webp",
     scores: {
       climate: 4,
       cost: 2,
@@ -10282,7 +10282,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Canada's bilingual capital city.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ottawa-card.webp",
     scores: {
       climate: 3,
       cost: 3,
