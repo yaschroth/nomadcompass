@@ -2112,7 +2112,7 @@ const CITIES = [
     country: "UK",
     flag: "🇬🇧",
     tagline: "Historic royalty meets cutting-edge innovation in the world's capital.",
-    image: "images/batch2/london.jpg",
+    image: "/images/cities/london-card.webp",
     scores: {
       climate: 5,
       cost: 1,
@@ -3111,7 +3111,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Bali's spiritual heart, rice terraces, temples, and wellness retreats.",
-    image: "https://images.unsplash.com/photo-1558005530-a7958896ec60?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ubud-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -3273,7 +3273,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "Where fjords meet cutting-edge architecture in the world's greenest capital.",
-    image: "images/batch2/oslo.jpg",
+    image: "/images/cities/oslo-card.webp",
     scores: {
       climate: 3,
       cost: 2,
