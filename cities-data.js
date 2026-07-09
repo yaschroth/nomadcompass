@@ -4287,7 +4287,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Experience global metropolis with world-class diversity and tech opportunities.",
-    image: "images/batch2/toronto.jpg",
+    image: "/images/cities/toronto-card.webp",
     scores: {
       climate: 4,
       cost: 2,
@@ -4449,7 +4449,7 @@ const CITIES = [
     country: "USA",
     flag: "🇺🇸",
     tagline: "Keep Portland weird, coffee, bikes, and boundless creativity.",
-    image: "https://images.unsplash.com/photo-1628783629868-19fb7eb52e2a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/portland-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -4476,7 +4476,7 @@ const CITIES = [
     country: "USA",
     flag: "🇺🇸",
     tagline: "Discover a tech giant capital with coffee culture and mountain views.",
-    image: "https://images.unsplash.com/photo-1741423681140-0a5c983f008c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/seattle-card.webp",
     scores: {
       climate: 5,
       cost: 2,
