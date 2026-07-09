@@ -3327,7 +3327,7 @@ const CITIES = [
     country: "Iceland",
     flag: "🇮🇸",
     tagline: "Experience northern lights, geothermal pools, and otherworldly landscapes at the edge of the Arctic.",
-    image: "images/batch2/reykjavik.jpg",
+    image: "/images/cities/reykjavik-card.webp",
     scores: {
       climate: 3,
       cost: 2,
@@ -3381,7 +3381,7 @@ const CITIES = [
     country: "Slovenia",
     flag: "🇸🇮",
     tagline: "Europe's greenest capital where Alpine meets Mediterranean in perfect harmony.",
-    image: "images/batch2/ljubljana.jpg",
+    image: "/images/cities/ljubljana-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -3759,7 +3759,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Discover ancient temples, zen gardens, and timeless Japanese beauty.",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kyoto-card.webp",
     scores: {
       climate: 6,
       cost: 4,
