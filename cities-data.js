@@ -519,7 +519,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "A food lover's paradise, hawker stalls, temples, and colonial charm.",
-    image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/penang-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -627,7 +627,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Chaotic, cheap, and endlessly fascinating, the gateway to Southeast Asia.",
-    image: "https://images.unsplash.com/photo-1704872656367-aab145fdee7f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bangkok-card.webp",
     scores: {
       climate: 4,
       cost: 6,
@@ -1113,7 +1113,7 @@ const CITIES = [
     country: "Cambodia",
     flag: "🇰🇭",
     tagline: "Explore the ancient temples of Angkor and a surprisingly vibrant nomad scene.",
-    image: "https://images.unsplash.com/photo-1565687363630-7a81809a199c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/siemreap-card.webp",
     scores: {
       climate: 5,
       cost: 9,
