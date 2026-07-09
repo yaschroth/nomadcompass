@@ -4314,7 +4314,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Discover european charm with North American convenience and poutine.",
-    image: "https://images.unsplash.com/photo-1558489580-faa74691fdc5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/montreal-card.webp",
     scores: {
       climate: 3,
       cost: 4,
@@ -5556,7 +5556,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Tasmania's artsy capital with MONA, wilderness, and fresh produce.",
-    image: "images/batch1/hobart.jpg",
+    image: "/images/cities/hobart-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -5692,7 +5692,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Europe's windsurf and kite capital at the strait of Gibraltar.",
-    image: "images/batch2/tarifa.jpg",
+    image: "/images/cities/tarifa-card.webp",
     scores: {
       climate: 8,
       cost: 8,
