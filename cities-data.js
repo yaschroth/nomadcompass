@@ -3597,7 +3597,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Experience algarve gateway with year-round sun, beaches, and airport convenience.",
-    image: "images/batch1/faro.jpg",
+    image: "/images/cities/faro-card.webp",
     scores: {
       climate: 9,
       cost: 6,
@@ -3813,7 +3813,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Japan's startup city with ramen, beaches, and laid-back energy.",
-    image: "images/batch1/fukuoka.jpg",
+    image: "/images/cities/fukuoka-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -3915,7 +3915,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "A lantern-lit ancient town where history meets beach life.",
-    image: "images/batch2/hoian.jpg",
+    image: "/images/cities/hoian-card.webp",
     scores: {
       climate: 6,
       cost: 9,
