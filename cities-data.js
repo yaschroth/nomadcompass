@@ -1572,7 +1572,7 @@ const CITIES = [
     country: "Peru",
     flag: "🇵🇪",
     tagline: "Experience inca heritage at altitude, gateway to Machu Picchu.",
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cusco-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -9688,7 +9688,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Durian capital and eagle sanctuary, Mindanao's orderly hub with volcanic Mt. Apo nearby.",
-    image: "images/batch1/davao.jpg",
+    image: "/images/cities/davao-card.webp",
     scores: {
       climate: 8,
       cost: 9,
@@ -10336,7 +10336,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Mexico's safest metro, baroque plazas, aerospace industry, and wine country weekends.",
-    image: "images/batch2/queretaro.jpg",
+    image: "/images/cities/queretaro-card.webp",
     scores: {
       climate: 8,
       cost: 7,
