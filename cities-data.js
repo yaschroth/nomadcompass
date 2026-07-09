@@ -7123,7 +7123,7 @@ const CITIES = [
     country: "Finland",
     flag: "🇫🇮",
     tagline: "Finland's industrial heart turned sauna capital, lakes, tech, and Nordic calm.",
-    image: "https://images.unsplash.com/photo-1551519779-61d2beb5432d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tampere-card.webp",
     scores: {
       climate: 3,
       cost: 5,
@@ -7744,7 +7744,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Discover volcanic drama, iconic sunsets, whitewashed villages, and caldera views.",
-    image: "https://images.unsplash.com/photo-1560703649-e3055f28bcf8?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/santorini-card.webp",
     scores: {
       climate: 8,
       cost: 4,
@@ -7771,7 +7771,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Experience turkish Riviera star, ancient Halicarnassus, blue voyages, and coastal glamour.",
-    image: "images/batch2/bodrum.jpg",
+    image: "/images/cities/bodrum-card.webp",
     scores: {
       climate: 8,
       cost: 6,
