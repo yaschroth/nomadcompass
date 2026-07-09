@@ -5800,7 +5800,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience basque Country gem with Guggenheim, pintxos, and green hills.",
-    image: "https://images.unsplash.com/photo-1554212264-aae064407bd6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bilbao-card.webp",
     scores: {
       climate: 6,
       cost: 4,
@@ -6583,7 +6583,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience party island turned wellness retreat, beaches, beats, and bohemian spirit.",
-    image: "images/batch2/ibiza.jpg",
+    image: "/images/cities/ibiza-card.webp",
     scores: {
       climate: 8,
       cost: 3,
@@ -6691,7 +6691,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Discover medieval gem near Barcelona, Game of Thrones streets and world-class dining.",
-    image: "images/batch1/girona.jpg",
+    image: "/images/cities/girona-card.webp",
     scores: {
       climate: 7,
       cost: 5,
