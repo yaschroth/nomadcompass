@@ -3003,7 +3003,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Experience turkish Riviera with ancient ruins, beaches, and nomad visas.",
-    image: "images/batch2/antalya.jpg",
+    image: "/images/cities/antalya-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -3030,7 +3030,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Where continents collide, bazaars, mosques, and Bosphorus views.",
-    image: "https://images.unsplash.com/photo-1545069128-193f82499904?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/istanbul-card.webp",
     scores: {
       climate: 6,
       cost: 6,
@@ -3408,7 +3408,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "Austro-Hungarian elegance meets Balkan warmth in Croatia's creative capital.",
-    image: "https://images.unsplash.com/photo-1557180295-76eee20ae8aa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/zagreb-card.webp",
     scores: {
       climate: 5,
       cost: 6,
