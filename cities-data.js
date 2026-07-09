@@ -8716,7 +8716,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "The Florence of the South, featuring baroque beauty and charm.",
-    image: "images/batch2/lecce.jpg",
+    image: "/images/cities/lecce-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -9202,7 +9202,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Medieval charm meets modern innovation.",
-    image: "images/batch2/nuremberg.jpg",
+    image: "/images/cities/nuremberg-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -9256,7 +9256,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Rhine riverfront glamour, Germany's fashion hub with Europe's largest Japantown.",
-    image: "images/batch1/dusseldorf.jpg",
+    image: "/images/cities/dusseldorf-card.webp",
     scores: {
       climate: 5,
       cost: 4,
