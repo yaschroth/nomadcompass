@@ -23,7 +23,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const cd = fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8');
 function cityCenter(slug) {
-  const m = cd.match(new RegExp('id:\\s*[\'"]' + slug + '[\'"][\\s\\S]{0,800}?lat:\\s*(-?[0-9.]+)[\\s\\S]{0,200}?lng:\\s*(-?[0-9.]+)'));
+  const m = cd.match(new RegExp('id:\\s*[\'"]' + slug + '[\'"][\\s\\S]{0,2500}?lat:\\s*(-?[0-9.]+)[\\s\\S]{0,400}?lng:\\s*(-?[0-9.]+)'));
   return m ? { lat: parseFloat(m[1]), lng: parseFloat(m[2]) } : null;
 }
 function haversine(la1, lo1, la2, lo2) {

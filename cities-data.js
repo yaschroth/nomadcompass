@@ -5370,7 +5370,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Experience wine country capital with festival culture and livable charm.",
-    image: "https://images.unsplash.com/photo-1677893111398-0ebb0ed2aa85?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/adelaide-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -6664,7 +6664,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Alhambra's home, tapas tradition, flamenco caves, and Sierra Nevada snow.",
-    image: "https://images.unsplash.com/photo-1564740603199-5f56138c6679?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/granadaspain-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -6772,7 +6772,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Madeira's garden city, eternal spring, levada hikes, and island tranquility.",
-    image: "images/batch1/funchal.jpg",
+    image: "/images/cities/funchal-card.webp",
     scores: {
       climate: 8,
       cost: 5,
