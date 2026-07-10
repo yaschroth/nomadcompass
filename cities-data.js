@@ -546,7 +546,7 @@ const CITIES = [
     country: "Uruguay",
     flag: "🇺🇾",
     tagline: "South America's most stable country, relaxed vibes and mate culture.",
-    image: "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/montevideo-card.webp",
     scores: {
       climate: 6,
       cost: 6,
