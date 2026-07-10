@@ -9607,7 +9607,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "Orangutan encounters and Sarawak laksa, Borneo's charming, cat-obsessed capital.",
-    image: "images/batch1/kuching.jpg",
+    image: "/images/cities/kuching-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -9904,7 +9904,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "City of peace with powerful history.",
-    image: "images/batch1/hiroshima.jpg",
+    image: "/images/cities/hiroshima-card.webp",
     scores: {
       climate: 7,
       cost: 5,
@@ -9958,7 +9958,7 @@ const CITIES = [
     country: "Taiwan",
     flag: "🇹🇼",
     tagline: "Taiwan's sunny southern harbor city.",
-    image: "images/batch1/kaohsiung.jpg",
+    image: "/images/cities/kaohsiung-card.webp",
     scores: {
       climate: 8,
       cost: 6,
