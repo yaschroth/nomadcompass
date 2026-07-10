@@ -4422,7 +4422,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Where jungle meets beach in Mexico's boho-chic paradise.",
-    image: "https://images.unsplash.com/photo-1570737543098-0983d88f796d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tulum-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -4584,7 +4584,7 @@ const CITIES = [
     country: "Argentina",
     flag: "🇦🇷",
     tagline: "A wine country capital beneath the Andes mountains.",
-    image: "https://images.unsplash.com/photo-1578496479531-32e296d5c6e1?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/mendoza-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -5529,7 +5529,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Discover tropical gateway to the Great Barrier Reef and rainforest adventures.",
-    image: "https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cairns-card.webp",
     scores: {
       climate: 6,
       cost: 4,
