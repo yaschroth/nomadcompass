@@ -8338,7 +8338,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Experience white Beach paradise, sunset sailing, vibrant nightlife, and island energy.",
-    image: "https://images.unsplash.com/photo-1543731068-7e0f5beff43a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/boracay-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -9931,7 +9931,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Experience preserved Edo-era culture and gardens.",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kanazawa-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -10012,7 +10012,7 @@ const CITIES = [
     country: "South Korea",
     flag: "🇰🇷",
     tagline: "Korea's art capital with democratic spirit.",
-    image: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/gwangju-card.webp",
     scores: {
       climate: 6,
       cost: 7,
