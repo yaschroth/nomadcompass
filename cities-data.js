@@ -2436,7 +2436,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience flamenco, tapas, and Moorish palaces in Andalusia's heart.",
-    image: "https://images.unsplash.com/photo-1515443961218-a51367888e4b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/seville-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -2517,7 +2517,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Explore ancient history, island hopping, and Mediterranean warmth.",
-    image: "https://images.unsplash.com/photo-1749290756646-79266d27153a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/athens-card.webp",
     scores: {
       climate: 7,
       cost: 5,
@@ -2598,7 +2598,7 @@ const CITIES = [
     country: "Cyprus",
     flag: "🇨🇾",
     tagline: "An island crossroads of Europe and Middle East with tax benefits.",
-    image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cyprus-card.webp",
     scores: {
       climate: 8,
       cost: 5,

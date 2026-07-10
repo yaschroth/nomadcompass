@@ -17,7 +17,7 @@ const DIR = process.argv[2];
 const OUT = path.join(ROOT, 'images', 'cities');
 const ATTR = path.join(OUT, 'attribution.json');
 const UA = { headers: { 'User-Agent': 'TheNomadHQ/1.0 (city guide images; hello@thenomadhq.com)' } };
-const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const esc = (s) => String(s == null ? '' : s).replace(/[ \t]*(?:&mdash;|&#8212;|—)[ \t]*/g, ', ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
