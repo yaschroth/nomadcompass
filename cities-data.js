@@ -6610,7 +6610,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience costa del Sol glamour, luxury marina, golf courses, and endless sunshine.",
-    image: "https://images.unsplash.com/photo-1561556442-6c81f3c76f93?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/marbella-card.webp",
     scores: {
       climate: 8,
       cost: 4,
@@ -7312,7 +7312,7 @@ const CITIES = [
     country: "Romania",
     flag: "🇷🇴",
     tagline: "Experience dracula country, Gothic spires, ski slopes, and Transylvanian mystery.",
-    image: "https://images.unsplash.com/photo-1563219996-8c12ea8f11eb?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/brasov-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -9337,7 +9337,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Ski slopes meet science labs, cable cars to peaks and student energy below.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/grenoble-card.webp",
     scores: {
       climate: 6,
       cost: 6,
