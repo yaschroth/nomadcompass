@@ -6637,7 +6637,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Europe's oldest city, Atlantic breezes, Carnival spirit, and authentic Andalusia.",
-    image: "https://images.unsplash.com/photo-1590142310916-e3f0fb0e1d0a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cadiz-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -6799,7 +6799,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Experience azores adventure base, volcanic lakes, whale watching, and mid-Atlantic magic.",
-    image: "https://images.unsplash.com/photo-1596997000103-e597b3ca50df?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/pontadelgada-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -6853,7 +6853,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "Experience street art capital, Banksy's hometown with independent spirit and music scene.",
-    image: "https://images.unsplash.com/photo-1566848953576-5e0c24e8f09c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bristol-card.webp",
     scores: {
       climate: 5,
       cost: 4,
