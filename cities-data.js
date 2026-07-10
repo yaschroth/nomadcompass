@@ -6988,7 +6988,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Experience design capital, Philips heritage, tech startups, and Dutch innovation hub.",
-    image: "https://images.unsplash.com/photo-1580217593608-61931cefc821?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/eindhoven-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -7285,7 +7285,7 @@ const CITIES = [
     country: "Romania",
     flag: "🇷🇴",
     tagline: "Transylvania's gem, Germanic architecture, Carpathian gateway, and medieval festivals.",
-    image: "https://images.unsplash.com/photo-1560148712-8b0c4e9c1f2a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sibiu-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -7366,7 +7366,7 @@ const CITIES = [
     country: "Bulgaria",
     flag: "🇧🇬",
     tagline: "Bulgaria's Black Sea capital, beach life, ancient gold, and summer vibes.",
-    image: "https://images.unsplash.com/photo-1581875480595-3d3f53e52c6c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/varna-card.webp",
     scores: {
       climate: 7,
       cost: 8,
