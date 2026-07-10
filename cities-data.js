@@ -1599,7 +1599,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "Experience high-altitude culture hub with world-class museums and nightlife.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bogota-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -10606,7 +10606,7 @@ const CITIES = [
     country: "Brazil",
     flag: "🇧🇷",
     tagline: "Brazil's Venice, baroque churches, frevo dancing, and Boa Viagem beach promenade.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/recife-card.webp",
     scores: {
       climate: 9,
       cost: 8,
