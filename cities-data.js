@@ -2625,7 +2625,7 @@ const CITIES = [
     country: "Poland",
     flag: "🇵🇱",
     tagline: "Discover phoenix city reborn with startup energy and rich history.",
-    image: "https://images.unsplash.com/photo-1744183661738-f581e2cb0590?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/warsaw-card.webp",
     scores: {
       climate: 4,
       cost: 6,
@@ -3057,7 +3057,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Thailand's largest island with beaches, diving, and island hopping.",
-    image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/phuket-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -3624,7 +3624,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Maritime metropolis where harbor history meets media innovation.",
-    image: "https://images.unsplash.com/photo-1576168418281-d25d3150fd72?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/hamburg-card.webp",
     scores: {
       climate: 5,
       cost: 4,
