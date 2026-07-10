@@ -33,7 +33,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Europe's sunniest capital with a thriving tech scene and endless pastéis de nata.",
-    image: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lisbon-card.webp",
     scores: {
       climate: 9,
       cost: 3,
@@ -411,7 +411,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Experience port wine, azulejo tiles, and a more laid-back alternative to Lisbon.",
-    image: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/porto-card.webp",
     scores: {
       climate: 8,
       cost: 4,
@@ -573,7 +573,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Soak in Mediterranean vibes, Gaudí architecture, and beach-side coworking.",
-    image: "images/batch1/barcelona.jpg",
+    image: "/images/cities/barcelona-card.webp",
     scores: {
       climate: 8,
       cost: 3,
