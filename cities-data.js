@@ -2760,7 +2760,7 @@ const CITIES = [
     country: "Latvia",
     flag: "🇱🇻",
     tagline: "Experience art Nouveau architecture and Baltic charm at affordable prices.",
-    image: "https://images.unsplash.com/photo-1621631434587-ba1ef41bfe31?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/riga-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -2787,7 +2787,7 @@ const CITIES = [
     country: "Lithuania",
     flag: "🇱🇹",
     tagline: "A baroque old town with a self-declared republic for artists.",
-    image: "https://images.unsplash.com/photo-1681675896751-10fabe479843?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/vilnius-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -2976,7 +2976,7 @@ const CITIES = [
     country: "Georgia",
     flag: "🇬🇪",
     tagline: "Experience black Sea resort town with casinos, beaches, and Georgian charm.",
-    image: "https://images.unsplash.com/photo-1643792412669-f7900db4e0c1?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/batumi-card.webp",
     scores: {
       climate: 7,
       cost: 8,
