@@ -2004,7 +2004,7 @@ const CITIES = [
     country: "Austria",
     flag: "🇦🇹",
     tagline: "Experience imperial grandeur, coffee house culture, and world's most livable city.",
-    image: "images/batch1/vienna.jpg",
+    image: "/images/cities/vienna-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -3435,7 +3435,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "The Pearl of the Adriatic where medieval walls meet crystal-clear waters.",
-    image: "https://images.unsplash.com/photo-1555990793-da11153b2473?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dubrovnik-card.webp",
     scores: {
       climate: 8,
       cost: 4,
@@ -6070,7 +6070,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Bavarian charm meets high-tech innovation, beer gardens and startups.",
-    image: "https://images.unsplash.com/photo-1741120026139-8ae0036ebe6d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/munich-card.webp",
     scores: {
       climate: 5,
       cost: 3,
