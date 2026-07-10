@@ -4530,7 +4530,7 @@ const CITIES = [
     country: "Argentina",
     flag: "🇦🇷",
     tagline: "Experience university town with fernet culture and sierras on the doorstep.",
-    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cordoba-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -4854,7 +4854,7 @@ const CITIES = [
     country: "Guatemala",
     flag: "🇬🇹",
     tagline: "Discover volcanic lake paradise with Mayan villages and yoga retreats.",
-    image: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lakeatitlan-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -6151,7 +6151,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Discover baroque beauty risen from ashes, culture and affordability in eastern Germany.",
-    image: "https://images.unsplash.com/photo-1555581079-88bf9fbc1699?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dresden-card.webp",
     scores: {
       climate: 5,
       cost: 5,
