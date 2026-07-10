@@ -6934,7 +6934,7 @@ const CITIES = [
     country: "Belgium",
     flag: "🇧🇪",
     tagline: "Discover medieval fairytale, canals, chocolate, and perfectly preserved Gothic beauty.",
-    image: "https://images.unsplash.com/photo-1560710529-a93e8c8cc55b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bruges-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -7636,7 +7636,7 @@ const CITIES = [
     country: "Slovenia",
     flag: "🇸🇮",
     tagline: "Experience venetian gem on the Adriatic, Slovenia's tiny slice of Mediterranean magic.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/piran-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -7852,7 +7852,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Discover hot air balloon heaven, fairy chimneys, cave hotels, and lunar landscapes.",
-    image: "https://images.unsplash.com/photo-1584866138589-f8b7b50cd6ec?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cappadocia-card.webp",
     scores: {
       climate: 5,
       cost: 8,
