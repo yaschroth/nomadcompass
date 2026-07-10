@@ -2328,7 +2328,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Experience renaissance masterpieces, Tuscan hills, and artisan gelato.",
-    image: "https://images.unsplash.com/photo-1541370976299-4d24ebbc9077?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/florence-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -2706,7 +2706,7 @@ const CITIES = [
     country: "Romania",
     flag: "🇷🇴",
     tagline: "Transylvania's tech hub with student energy and mountain access.",
-    image: "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/clujnapoca-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -2922,7 +2922,7 @@ const CITIES = [
     country: "Armenia",
     flag: "🇦🇲",
     tagline: "Experience pink city of ancient brandy, stunning landscapes, and warm hospitality.",
-    image: "https://images.unsplash.com/photo-1516415855612-c72c024b0b92?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/yerevan-card.webp",
     scores: {
       climate: 5,
       cost: 8,
