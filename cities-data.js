@@ -9391,7 +9391,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Northern Thailand's artistic and spiritual center.",
-    image: "https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/chiangrai-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -9661,7 +9661,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Pine-scented mountain escape, strawberry farms, ukay-ukay shopping, and cool highland air.",
-    image: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/baguio-card.webp",
     scores: {
       climate: 7,
       cost: 9,
@@ -9769,7 +9769,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Vietnam's last imperial city, Forbidden Purple citadel, royal cuisine, and Perfume River poetry.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/hue-card.webp",
     scores: {
       climate: 7,
       cost: 10,
