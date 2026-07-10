@@ -4881,7 +4881,7 @@ const CITIES = [
     country: "Panama",
     flag: "🇵🇦",
     tagline: "Discover mountain town escape with eternal spring and coffee farms.",
-    image: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/boquete-card.webp",
     scores: {
       climate: 8,
       cost: 7,
@@ -5044,7 +5044,7 @@ const CITIES = [
     country: "Morocco",
     flag: "🇲🇦",
     tagline: "Discover windy coastal fortress with artist souls and fresh seafood.",
-    image: "https://images.unsplash.com/photo-1569383746724-6f1b882b8f46?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/essaouira-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -5665,7 +5665,7 @@ const CITIES = [
     country: "Bulgaria",
     flag: "🇧🇬",
     tagline: "Discover ancient Roman city with thriving arts scene and incredible value.",
-    image: "https://images.unsplash.com/photo-1568625502763-2a5ec6a94c47?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/plovdiv-card.webp",
     scores: {
       climate: 6,
       cost: 8,
