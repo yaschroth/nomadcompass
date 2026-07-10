@@ -438,7 +438,7 @@ const CITIES = [
     country: "Serbia",
     flag: "🇷🇸",
     tagline: "Experience legendary nightlife and Balkan hospitality at unbeatable prices.",
-    image: "https://images.unsplash.com/photo-1727105538592-3074729d8abc?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/belgrade-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -708,7 +708,7 @@ const CITIES = [
     country: "UAE",
     flag: "🇦🇪",
     tagline: "A futuristic skyline and tax-free living in the desert oasis.",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dubai-card.webp",
     scores: {
       climate: 3,
       cost: 2,
@@ -1977,7 +1977,7 @@ const CITIES = [
     country: "Guatemala",
     flag: "🇬🇹",
     tagline: "A colonial gem surrounded by volcanoes with incredible value.",
-    image: "https://images.unsplash.com/photo-1604014238170-4def1e4e6fcf?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/antigua-card.webp",
     scores: {
       climate: 8,
       cost: 7,
