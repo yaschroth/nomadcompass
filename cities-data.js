@@ -3462,7 +3462,7 @@ const CITIES = [
     country: "Poland",
     flag: "🇵🇱",
     tagline: "A Baltic port city of amber, Gothic spires, and maritime heritage.",
-    image: "https://images.unsplash.com/photo-1462524500090-89443873e2b4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/gdansk-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -4665,7 +4665,7 @@ const CITIES = [
     country: "Ecuador",
     flag: "🇪🇨",
     tagline: "Discover colonial highland gem beloved by retirees and creatives.",
-    image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cuenca-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -4827,7 +4827,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Surf village vibes just north of Puerto Vallarta.",
-    image: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sayulita-card.webp",
     scores: {
       climate: 7,
       cost: 6,
