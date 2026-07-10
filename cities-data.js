@@ -60,7 +60,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "The city of eternal spring, where innovation meets Latin warmth.",
-    image: "https://images.unsplash.com/photo-1590598016835-83cf3357ebc5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/medellin-card.webp",
     scores: {
       climate: 9,
       cost: 7,
@@ -114,7 +114,7 @@ const CITIES = [
     country: "Georgia",
     flag: "🇬🇪",
     tagline: "Ancient wine country meets digital nomad paradise with a 365-day visa-free stay.",
-    image: "https://images.unsplash.com/photo-1565008576549-57569a49371d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tbilisi-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -816,7 +816,7 @@ const CITIES = [
     country: "USA",
     flag: "🇺🇸",
     tagline: "Keep it weird, live music, BBQ, and a booming tech scene.",
-    image: "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/austin-card.webp",
     scores: {
       climate: 6,
       cost: 3,
