@@ -1005,7 +1005,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "A beach city with perfect weather and Vietnam's best infrastructure.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/danang-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -10579,7 +10579,7 @@ const CITIES = [
     country: "Argentina",
     flag: "🇦🇷",
     tagline: "Argentina's summer beach capital.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/mardelplata-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -10984,7 +10984,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Australia's tropical frontier town.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/darwin-card.webp",
     scores: {
       climate: 7,
       cost: 3,
