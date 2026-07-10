@@ -6259,7 +6259,7 @@ const CITIES = [
     country: "Austria",
     flag: "🇦🇹",
     tagline: "Discover ski in the morning, work in the afternoon, Alpine adventure capital.",
-    image: "https://images.unsplash.com/photo-1576427920927-77a2ebf6e38d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/innsbruck-card.webp",
     scores: {
       climate: 4,
       cost: 4,
@@ -6313,7 +6313,7 @@ const CITIES = [
     country: "Switzerland",
     flag: "🇨🇭",
     tagline: "Art Basel's home, where three countries meet and culture thrives.",
-    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/basel-card.webp",
     scores: {
       climate: 5,
       cost: 2,
@@ -6394,7 +6394,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Experience la Grassa, La Dotta, La Rossa, fat, learned, and red. Italy's food capital.",
-    image: "https://images.unsplash.com/photo-1598814828588-53e86798baa7?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bologna-card.webp",
     scores: {
       climate: 6,
       cost: 5,
