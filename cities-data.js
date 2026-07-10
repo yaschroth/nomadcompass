@@ -2382,7 +2382,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience tapas, art, and nightlife that never ends in Spain's capital.",
-    image: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/madrid-card.webp",
     scores: {
       climate: 6,
       cost: 4,
@@ -3138,7 +3138,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "A colonial gem with art galleries, expat community, and perfect weather.",
-    image: "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sanmigueldeallende-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -5584,7 +5584,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Europe's only World Surf Reserve just 45 minutes from Lisbon.",
-    image: "images/batch1/ericeira.jpg",
+    image: "/images/cities/ericeira-card.webp",
     scores: {
       climate: 8,
       cost: 6,
