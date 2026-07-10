@@ -897,7 +897,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Experience iconic harbor, world-class beaches, and a laid-back lifestyle.",
-    image: "images/batch1/sydney.jpg",
+    image: "/images/cities/sydney-card.webp",
     scores: {
       climate: 8,
       cost: 2,
@@ -924,7 +924,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Experience coffee culture, street art, and Australia's creative capital.",
-    image: "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/melbourne-card.webp",
     scores: {
       climate: 6,
       cost: 3,
@@ -8797,7 +8797,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "A world-class food scene on the Basque coast.",
-    image: "images/batch1/sansebastian.jpg",
+    image: "/images/cities/sansebastian-card.webp",
     scores: {
       climate: 6,
       cost: 4,
