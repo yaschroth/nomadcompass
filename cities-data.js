@@ -303,7 +303,7 @@ const CITIES = [
     country: "Croatia",
     flag: "🇭🇷",
     tagline: "Explore Roman ruins, Adriatic islands, and Game of Thrones filming locations.",
-    image: "https://images.unsplash.com/photo-1555990538-c48ab0a194b5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/split-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -600,7 +600,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Techno, startups, and creative freedom in Europe's coolest capital.",
-    image: "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/berlin-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -5394,7 +5394,7 @@ const CITIES = [
     country: "New Zealand",
     flag: "🇳🇿",
     tagline: "Discover compact creative capital with craft coffee and wind-swept harbor.",
-    image: "https://images.unsplash.com/photo-1589871973318-9ca1258faa5d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/wellington-card.webp",
     scores: {
       climate: 5,
       cost: 4,
