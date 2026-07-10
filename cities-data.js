@@ -465,7 +465,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Enjoy year-round spring weather on a volcanic island with a massive nomad scene.",
-    image: "images/batch1/laspalmas.jpg",
+    image: "/images/cities/laspalmas-card.webp",
     scores: {
       climate: 9,
       cost: 5,
@@ -789,7 +789,7 @@ const CITIES = [
     country: "Singapore",
     flag: "🇸🇬",
     tagline: "The garden city, efficient, clean, and Asia's business hub.",
-    image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/singapore-card.webp",
     scores: {
       climate: 5,
       cost: 2,
@@ -870,7 +870,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Where mountains meet ocean in Canada's most beautiful city.",
-    image: "https://images.unsplash.com/photo-1757266562608-2bbf67f92e71?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/vancouver-card.webp",
     scores: {
       climate: 5,
       cost: 3,
