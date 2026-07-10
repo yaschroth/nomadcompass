@@ -681,7 +681,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Ultra-modern efficiency meets ancient tradition in the world's largest city.",
-    image: "https://images.unsplash.com/photo-1759970752518-b0ffa38c130b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tokyo-card.webp",
     scores: {
       climate: 6,
       cost: 3,
@@ -10066,7 +10066,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "Experience perfect weather and beach vibes year-round.",
-    image: "images/batch1/sandiego.jpg",
+    image: "/images/cities/sandiego-card.webp",
     scores: {
       climate: 9,
       cost: 2,
@@ -10309,7 +10309,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Caribbean beaches with Mexican culture.",
-    image: "https://images.unsplash.com/photo-1510097467424-192d713fd8b2?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cancun-card.webp",
     scores: {
       climate: 9,
       cost: 6,
