@@ -3219,7 +3219,7 @@ const CITIES = [
     country: "Denmark",
     flag: "🇩🇰",
     tagline: "Experience scandinavian design, cycling culture, and the world's best restaurants meet hygge.",
-    image: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/copenhagen-card.webp",
     scores: {
       climate: 4,
       cost: 2,
@@ -3246,7 +3246,7 @@ const CITIES = [
     country: "Sweden",
     flag: "🇸🇪",
     tagline: "A Nordic innovation hub spread across 14 islands with world-class design.",
-    image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/stockholm-card.webp",
     scores: {
       climate: 4,
       cost: 2,
@@ -3732,7 +3732,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Japan's kitchen, street food paradise meets comedy capital.",
-    image: "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/osaka-card.webp",
     scores: {
       climate: 6,
       cost: 4,
