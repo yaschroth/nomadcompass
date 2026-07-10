@@ -6043,7 +6043,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Discover alpine paradise with crystal-clear lakes and mountain adventures.",
-    image: "https://images.unsplash.com/photo-1578758837674-93ed0ab5e515?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/annecy-card.webp",
     scores: {
       climate: 6,
       cost: 4,
@@ -6097,7 +6097,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Experience cathedral city with carnival spirit and thriving creative scene.",
-    image: "https://images.unsplash.com/photo-1755038995767-bd8827d76ffa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cologne-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -6178,7 +6178,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Berlin's cooler cousin, art, music, and the best value in Germany.",
-    image: "https://images.unsplash.com/photo-1588428584584-5949a3c13248?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/leipzig-card.webp",
     scores: {
       climate: 5,
       cost: 6,
