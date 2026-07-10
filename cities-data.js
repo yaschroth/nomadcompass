@@ -6556,7 +6556,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Discover island sophistication, yacht harbors, Gothic cathedral, and year-round sun.",
-    image: "https://images.unsplash.com/photo-1566993850067-bb8df9c9807e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/palma-card.webp",
     scores: {
       climate: 8,
       cost: 4,
@@ -9094,7 +9094,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Student-powered bicycle kingdom, nightlife, innovation, and northern Dutch grit.",
-    image: "images/batch1/groningen.jpg",
+    image: "/images/cities/groningen-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -9283,7 +9283,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Germany's sunniest and greenest city.",
-    image: "images/batch1/freiburg.jpg",
+    image: "/images/cities/freiburg-card.webp",
     scores: {
       climate: 6,
       cost: 4,
