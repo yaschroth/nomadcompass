@@ -1032,7 +1032,7 @@ const CITIES = [
     country: "Taiwan",
     flag: "🇹🇼",
     tagline: "Experience night markets, bubble tea, and one of Asia's friendliest cities.",
-    image: "images/batch1/taipei.jpg",
+    image: "/images/cities/taipei-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -2031,7 +2031,7 @@ const CITIES = [
     country: "Switzerland",
     flag: "🇨🇭",
     tagline: "Explore alpine lakes, chocolate, and Europe's financial powerhouse.",
-    image: "https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/zurich-card.webp",
     scores: {
       climate: 5,
       cost: 1,
@@ -2409,7 +2409,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Beach city vibes with paella, futuristic architecture, and sun.",
-    image: "https://images.unsplash.com/photo-1577990432593-6bf35f43beed?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/valencia-card.webp",
     scores: {
       climate: 8,
       cost: 5,
