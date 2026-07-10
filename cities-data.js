@@ -5316,7 +5316,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Experience sunshine State capital with river culture and gateway to the tropics.",
-    image: "https://images.unsplash.com/photo-1566734904496-9309bb1798ae?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/brisbane-card.webp",
     scores: {
       climate: 7,
       cost: 3,
@@ -5421,7 +5421,7 @@ const CITIES = [
     country: "New Zealand",
     flag: "🇳🇿",
     tagline: "Experience adventure capital surrounded by mountains, lakes, and extreme sports.",
-    image: "images/batch1/queenstown.jpg",
+    image: "/images/cities/queenstown-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -5448,7 +5448,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Experience surf beaches, high-rises, and endless summer on Australia's coast.",
-    image: "images/batch1/goldcoast.jpg",
+    image: "/images/cities/goldcoast-card.webp",
     scores: {
       climate: 8,
       cost: 3,
