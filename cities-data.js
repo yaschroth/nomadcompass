@@ -3165,7 +3165,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Yucatán's cultural capital with Mayan history and colonial charm.",
-    image: "https://images.unsplash.com/photo-1547995886-6dc09384c6e6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/merida-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -3705,7 +3705,7 @@ const CITIES = [
     country: "Belgium",
     flag: "🇧🇪",
     tagline: "Discover medieval canals, student energy, and progressive culture.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ghent-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -4128,7 +4128,7 @@ const CITIES = [
     country: "South Korea",
     flag: "🇰🇷",
     tagline: "A volcanic island paradise with unique culture and Korean hospitality.",
-    image: "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/jeju-card.webp",
     scores: {
       climate: 7,
       cost: 6,
