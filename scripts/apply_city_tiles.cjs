@@ -19,7 +19,7 @@ for (const file of fs.readdirSync(DIR).filter((f) => /^cats-.+\.json$/.test(f)))
   const page = path.join(ROOT, 'cities', slug + '.html');
   if (!fs.existsSync(page)) { console.error('NO PAGE:', slug); fail++; continue; }
   let obj;
-  try { obj = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8')); }
+  try { obj = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8').replace(/^﻿/, '')); }
   catch (e) { console.error('BAD JSON:', slug, e.message); fail++; continue; }
   const missing = KEYS.filter((k) => !obj[k] || !String(obj[k]).trim());
   if (missing.length) { console.error('MISSING KEYS:', slug, missing.join(',')); fail++; continue; }

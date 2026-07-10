@@ -49,7 +49,7 @@ async function nominatim(q) {
   const files = fs.readdirSync(DIR).filter((f) => /^venues-.+\.json$/.test(f) && !/\.verified\.json$/.test(f));
   for (const file of files) {
     const slug = file.replace(/^venues-/, '').replace(/\.json$/, '');
-    const data = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8'));
+    const data = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8').replace(/^﻿/, ''));
     const center = cityCenter(slug);
     if (!center) { console.error('NO CENTER for', slug, '- skipping'); continue; }
     const cityName = data.city || slug;

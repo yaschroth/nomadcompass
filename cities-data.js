@@ -222,7 +222,7 @@ const CITIES = [
     country: "South Africa",
     flag: "🇿🇦",
     tagline: "Where Table Mountain meets the ocean, stunning nature and a creative scene.",
-    image: "https://images.unsplash.com/photo-1651349957998-8ae820a88556?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/capetown-card.webp",
     scores: {
       climate: 8,
       cost: 6,
@@ -6718,7 +6718,7 @@ const CITIES = [
     country: "Portugal",
     flag: "🇵🇹",
     tagline: "Lisbon's seaside escape, surf, seafood, and sophisticated coastal living.",
-    image: "https://images.unsplash.com/photo-1587973878097-ef3aabd5eeaa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cascais-card.webp",
     scores: {
       climate: 9,
       cost: 4,
@@ -10255,7 +10255,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Canada's warmest city, afternoon tea, whale watching, and flower-lined harbors.",
-    image: "images/batch1/victoria.jpg",
+    image: "/images/cities/victoria-card.webp",
     scores: {
       climate: 6,
       cost: 3,

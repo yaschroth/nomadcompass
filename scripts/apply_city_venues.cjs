@@ -64,7 +64,7 @@ const sectionRe = (anchor) => new RegExp('(<h2>' + anchor + '[^<]*</h2>[\\s\\S]*
 let ok = 0, fail = 0;
 const flags = [];
 for (const file of fs.readdirSync(DIR).filter((f) => /^venues-.+\.verified\.json$/.test(f))) {
-  const data = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8'));
+  const data = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8').replace(/^﻿/, ''));
   const slug = data.slug || file.replace(/^venues-/, '').replace(/\.verified\.json$/, '');
   const page = path.join(ROOT, 'cities', slug + '.html');
   if (!fs.existsSync(page)) { console.error('NO PAGE:', slug); fail++; continue; }

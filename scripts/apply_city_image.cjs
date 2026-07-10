@@ -24,7 +24,7 @@ const esc = (s) => String(s == null ? '' : s).replace(/[ \t]*(?:&mdash;|&#8212;|
   const attrib = fs.existsSync(ATTR) ? JSON.parse(fs.readFileSync(ATTR, 'utf8')) : {};
   let ok = 0, skipped = 0, fail = 0;
   for (const file of fs.readdirSync(DIR).filter((f) => /^img-.+\.json$/.test(f))) {
-    const j = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8'));
+    const j = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8').replace(/^﻿/, ''));
     const slug = j.slug;
     if (!j.ok) { console.error('FLAGGED (kept old image):', slug, j.reason || ''); skipped++; continue; }
     const page = path.join(ROOT, 'cities', slug + '.html');
