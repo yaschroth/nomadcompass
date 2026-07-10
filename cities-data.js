@@ -1653,7 +1653,7 @@ const CITIES = [
     country: "Chile",
     flag: "🇨🇱",
     tagline: "A modern metropolis between the Andes and wine country.",
-    image: "https://images.unsplash.com/photo-1548102245-c79dbcfa9f92?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/santiago-card.webp",
     scores: {
       climate: 7,
       cost: 5,
@@ -1842,7 +1842,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Experience tequila country with mariachi, tech startups, and perfect weather.",
-    image: "https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/guadalajara-card.webp",
     scores: {
       climate: 8,
       cost: 7,
@@ -2301,7 +2301,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Experience eternal city of ancient ruins, pasta, and la dolce vita.",
-    image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/rome-card.webp",
     scores: {
       climate: 7,
       cost: 4,
