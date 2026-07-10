@@ -7609,7 +7609,7 @@ const CITIES = [
     country: "Slovenia",
     flag: "🇸🇮",
     tagline: "Experience fairytale lake, island church, castle cliff, and Julian Alps backdrop.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bled-card.webp",
     scores: {
       climate: 5,
       cost: 6,
@@ -8149,7 +8149,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Vietnam's little Paris, cool highlands, coffee farms, and French villas.",
-    image: "https://images.unsplash.com/photo-1555921015-5532091f6026?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dalat-card.webp",
     scores: {
       climate: 8,
       cost: 9,
@@ -9310,7 +9310,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Half-timbered Petite France, European Parliament, and Alsatian wine routes.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/strasbourg-card.webp",
     scores: {
       climate: 5,
       cost: 4,
