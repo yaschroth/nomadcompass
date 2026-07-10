@@ -1275,7 +1275,7 @@ const CITIES = [
     country: "India",
     flag: "🇮🇳",
     tagline: "Find beach shacks, trance parties, and Portuguese colonial charm.",
-    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/goa-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -2085,7 +2085,7 @@ const CITIES = [
     country: "Ireland",
     flag: "🇮🇪",
     tagline: "Experience pubs, tech giants, and legendary Irish craic here.",
-    image: "https://images.unsplash.com/photo-1549918864-48ac978761a4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dublin-card.webp",
     scores: {
       climate: 5,
       cost: 2,
@@ -2193,7 +2193,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "The City of Light, art, cuisine, and timeless romance.",
-    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/paris-card.webp",
     scores: {
       climate: 6,
       cost: 2,
