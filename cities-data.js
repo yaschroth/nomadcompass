@@ -141,7 +141,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Experience surf, sunsets, and smoothie bowls, the Instagram-famous nomad destination.",
-    image: "images/batch1/canggu.jpg",
+    image: "/images/cities/bali-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -168,7 +168,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Experience world-class food, art, and culture at altitude, the megacity that has it all.",
-    image: "images/batch1/mexicocity.jpg",
+    image: "/images/cities/mexicocity-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -10228,7 +10228,7 @@ const CITIES = [
     country: "Canada",
     flag: "🇨🇦",
     tagline: "Gateway to the Canadian Rockies.",
-    image: "images/batch1/calgary.jpg",
+    image: "/images/cities/calgary-card.webp",
     scores: {
       climate: 3,
       cost: 3,
