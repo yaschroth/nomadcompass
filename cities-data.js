@@ -5638,7 +5638,7 @@ const CITIES = [
     country: "Malta",
     flag: "🇲🇹",
     tagline: "Discover baroque fortress city with gaming industry and Mediterranean sun.",
-    image: "https://images.unsplash.com/photo-1571510168951-bc6189f2dfad?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/valletta-card.webp",
     scores: {
       climate: 8,
       cost: 5,
@@ -9040,7 +9040,7 @@ const CITIES = [
     country: "Finland",
     flag: "🇫🇮",
     tagline: "Finland's oldest city with archipelago access.",
-    image: "https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/turku-card.webp",
     scores: {
       climate: 3,
       cost: 5,
@@ -10093,7 +10093,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "Hollywood dreams and highway sprawl, taco trucks, canyon hikes, and eternal golden hour.",
-    image: "images/batch1/losangeles.jpg",
+    image: "/images/cities/losangeles-card.webp",
     scores: {
       climate: 9,
       cost: 2,
