@@ -6340,7 +6340,7 @@ const CITIES = [
     country: "Switzerland",
     flag: "🇨🇭",
     tagline: "Experience olympic capital on Lake Geneva, French flair with Swiss precision.",
-    image: "https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lausanne-card.webp",
     scores: {
       climate: 5,
       cost: 1,
@@ -6826,7 +6826,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "Experience london-by-the-sea, creative, quirky, and proudly alternative.",
-    image: "https://images.unsplash.com/photo-1556292877-913332494cdf?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/brighton-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -6880,7 +6880,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "Scotland's beating heart, Victorian grandeur, live music, and legendary nightlife.",
-    image: "https://images.unsplash.com/photo-1580746738099-6c17abda3c91?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/glasgow-card.webp",
     scores: {
       climate: 4,
       cost: 5,
