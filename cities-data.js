@@ -330,7 +330,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Discover Caribbean beaches and cenotes alongside a booming expat scene.",
-    image: "https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/playadelcarmen-card.webp",
     scores: {
       climate: 7,
       cost: 5,
@@ -357,7 +357,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "A melting pot of cultures with incredible food and modern infrastructure.",
-    image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kualalumpur-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -10147,7 +10147,7 @@ const CITIES = [
     country: "United States",
     flag: "🇺🇸",
     tagline: "Deep-dish pizza and lakefront skyline, brutal winters, world-class architecture, and blues bars.",
-    image: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/chicago-card.webp",
     scores: {
       climate: 4,
       cost: 2,
