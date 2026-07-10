@@ -5719,7 +5719,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience canary Island paradise with endless beaches and volcanic landscapes.",
-    image: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/fuerteventura-card.webp",
     scores: {
       climate: 9,
       cost: 7,
@@ -5854,7 +5854,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Experience asturian coast with cider, surf, and authentic Spanish life.",
-    image: "https://images.unsplash.com/photo-1576168418281-d25d3150fd72?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/gijon-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -5962,7 +5962,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Experience sun-drenched Mediterranean vibes with beaches, history, and affordable French living.",
-    image: "https://images.unsplash.com/photo-1531752148124-118ba196fc7b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/montpellier-card.webp",
     scores: {
       climate: 8,
       cost: 5,
