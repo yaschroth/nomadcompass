@@ -3840,7 +3840,7 @@ const CITIES = [
     country: "India",
     flag: "🇮🇳",
     tagline: "Kerala's coastal gem with backwaters and cultural heritage.",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kochi-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -3864,7 +3864,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Java's cultural heart with temples, art, and batik traditions.",
-    image: "https://images.unsplash.com/photo-1584810359583-96fc3448beaa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/yogyakarta-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -4182,7 +4182,7 @@ const CITIES = [
     country: "Japan",
     flag: "🇯🇵",
     tagline: "Discover industrial powerhouse between Tokyo and Osaka with samurai heritage.",
-    image: "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/nagoya-card.webp",
     scores: {
       climate: 6,
       cost: 4,
