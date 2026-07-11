@@ -7393,7 +7393,7 @@ const CITIES = [
     country: "Serbia",
     flag: "🇷🇸",
     tagline: "EXIT Festival's home, Danube fortress, café culture, and Serbian hospitality.",
-    image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/novisad-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -8257,7 +8257,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "Borneo's gateway, Mount Kinabalu, island parks, and jungle adventures.",
-    image: "https://images.unsplash.com/photo-1573155993874-d5d48af862ba?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kotakinabalu-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -8770,7 +8770,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Birthplace of pesto and Columbus, labyrinthine alleys, maritime glory, and Ligurian coastline.",
-    image: "https://images.unsplash.com/photo-1553901753-215db344677a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/genoa-card.webp",
     scores: {
       climate: 7,
       cost: 5,
