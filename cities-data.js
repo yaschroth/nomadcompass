@@ -8095,7 +8095,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Experience limestone paradise, island hopping, rock climbing, and Andaman adventures.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/krabi-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -8230,7 +8230,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "Experience straits heritage, UNESCO old town, Peranakan culture, and food paradise.",
-    image: "https://images.unsplash.com/photo-1596500028887-f86e8ef04c6c?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/malacca-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -8284,7 +8284,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Experience surfing capital, Cloud 9 waves, island hopping, and barefoot paradise.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/siargao-card.webp",
     scores: {
       climate: 6,
       cost: 7,
