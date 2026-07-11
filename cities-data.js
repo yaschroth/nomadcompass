@@ -951,7 +951,7 @@ const CITIES = [
     country: "New Zealand",
     flag: "🇳🇿",
     tagline: "City of sails where urban life meets Polynesian culture.",
-    image: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/auckland-card.webp",
     scores: {
       climate: 6,
       cost: 3,
@@ -1329,7 +1329,7 @@ const CITIES = [
     country: "Israel",
     flag: "🇮🇱",
     tagline: "Startup nation meets Mediterranean beach life and 24/7 energy.",
-    image: "https://images.unsplash.com/photo-1561992022-6d47c991fdd3?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/telaviv-card.webp",
     scores: {
       climate: 7,
       cost: 2,
@@ -2490,7 +2490,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "A volcanic island with eternal spring and dramatic landscapes.",
-    image: "https://images.unsplash.com/photo-1492803954392-02f36f132ed6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tenerife-card.webp",
     scores: {
       climate: 9,
       cost: 5,
