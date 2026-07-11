@@ -7474,7 +7474,7 @@ const CITIES = [
     country: "North Macedonia",
     flag: "🇲🇰",
     tagline: "Discover uNESCO lake town, 365 churches, ancient history, and Balkan tranquility.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ohrid-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -7825,7 +7825,7 @@ const CITIES = [
     country: "Turkey",
     flag: "🇹🇷",
     tagline: "Turkey's most liberal city, Aegean breezes, bazaars, and progressive spirit.",
-    image: "https://images.unsplash.com/photo-1651524055017-cef6327c11f4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/izmir-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -7933,7 +7933,7 @@ const CITIES = [
     country: "Israel",
     flag: "🇮🇱",
     tagline: "Experience bahá'í gardens cascade down to the sea, tech hub with Mediterranean soul.",
-    image: "https://images.unsplash.com/photo-1547483238-2cbf881a559f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/haifa-card.webp",
     scores: {
       climate: 7,
       cost: 4,
