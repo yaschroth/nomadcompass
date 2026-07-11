@@ -1896,7 +1896,7 @@ const CITIES = [
     country: "Costa Rica",
     flag: "🇨🇷",
     tagline: "Gateway to eco-adventures in the happiest country on Earth.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sanjosecr-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -1950,7 +1950,7 @@ const CITIES = [
     country: "Panama",
     flag: "🇵🇦",
     tagline: "A modern skyline, canal views, and a territorial tax system.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/panama-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -2544,7 +2544,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Greece's second city with Byzantine heritage and vibrant nightlife.",
-    image: "https://images.unsplash.com/photo-1596627120441-b4e21bf6e79a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/thessaloniki-card.webp",
     scores: {
       climate: 6,
       cost: 6,
