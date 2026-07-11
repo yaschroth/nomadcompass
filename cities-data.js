@@ -3543,7 +3543,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Europe's largest port, striking architecture, and raw urban energy.",
-    image: "https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/rotterdam-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -3570,7 +3570,7 @@ const CITIES = [
     country: "Netherlands",
     flag: "🇳🇱",
     tagline: "Medieval charm, canal cafes, and the Netherlands' most livable city.",
-    image: "https://images.unsplash.com/photo-1750930890065-f82f77193a3a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/utrecht-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -3651,7 +3651,7 @@ const CITIES = [
     country: "Ireland",
     flag: "🇮🇪",
     tagline: "Ireland's foodie capital with thriving tech industry growth.",
-    image: "https://images.unsplash.com/photo-1564959130747-897fb406b9af?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cork-card.webp",
     scores: {
       climate: 5,
       cost: 4,
