@@ -8824,7 +8824,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "A sunny beach city with affordable living.",
-    image: "images/batch1/alicante.jpg",
+    image: "/images/cities/alicante-card.webp",
     scores: {
       climate: 9,
       cost: 6,
@@ -8878,7 +8878,7 @@ const CITIES = [
     country: "United Kingdom",
     flag: "🇬🇧",
     tagline: "A historic university city with intellectual charm.",
-    image: "images/batch1/oxford.jpg",
+    image: "/images/cities/oxford-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -8986,7 +8986,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "A tech hub in Norway's historic heartland.",
-    image: "images/batch1/trondheim.jpg",
+    image: "/images/cities/trondheim-card.webp",
     scores: {
       climate: 3,
       cost: 2,
