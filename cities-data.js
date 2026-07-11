@@ -1491,7 +1491,7 @@ const CITIES = [
     country: "Rwanda",
     flag: "🇷🇼",
     tagline: "Africa's cleanest city with gorilla treks and remarkable innovation.",
-    image: "https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kigali-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -10039,7 +10039,7 @@ const CITIES = [
     country: "South Korea",
     flag: "🇰🇷",
     tagline: "Korea's fashion hub surrounded by mountains.",
-    image: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/daegu-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -10714,7 +10714,7 @@ const CITIES = [
     country: "Namibia",
     flag: "🇳🇦",
     tagline: "Discover clean capital gateway to desert wonders.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/windhoek-card.webp",
     scores: {
       climate: 8,
       cost: 8,
