@@ -1626,7 +1626,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "Experience colonial romance on the Caribbean with colorful streets and salsa.",
-    image: "https://images.unsplash.com/photo-1583997052103-b4a1cb974ce5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cartagena-card.webp",
     scores: {
       climate: 5,
       cost: 6,
@@ -1923,7 +1923,7 @@ const CITIES = [
     country: "Costa Rica",
     flag: "🇨🇷",
     tagline: "Experience surf town paradise with yoga, wildlife, and pura vida lifestyle.",
-    image: "https://images.unsplash.com/photo-1589820296156-2454bb8a6ad1?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tamarindo-card.webp",
     scores: {
       climate: 7,
       cost: 5,
@@ -2139,7 +2139,7 @@ const CITIES = [
     country: "UK",
     flag: "🇬🇧",
     tagline: "Industrial heritage reborn as a creative and tech powerhouse.",
-    image: "https://images.unsplash.com/photo-1515586838455-8f8f940d6853?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/manchester-card.webp",
     scores: {
       climate: 4,
       cost: 4,
