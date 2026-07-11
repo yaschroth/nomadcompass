@@ -4746,7 +4746,7 @@ const CITIES = [
     country: "Argentina",
     flag: "🇦🇷",
     tagline: "Discover patagonian Switzerland with chocolate and ski slopes.",
-    image: "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bariloche-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -4800,7 +4800,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "A surf mecca on Oaxaca's wild Pacific coast.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/puertoescondido-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -5989,7 +5989,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "France's oldest city, raw, real, and right on the Mediterranean.",
-    image: "https://images.unsplash.com/photo-1566838217578-1903568a76d9?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/marseille-card.webp",
     scores: {
       climate: 8,
       cost: 5,
