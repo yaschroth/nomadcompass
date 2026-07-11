@@ -3192,7 +3192,7 @@ const CITIES = [
     country: "China",
     flag: "🇭🇰",
     tagline: "East meets West in this vertical city of dim sum and skyscrapers.",
-    image: "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/hongkong-card.webp",
     scores: {
       climate: 6,
       cost: 2,
@@ -4260,7 +4260,7 @@ const CITIES = [
     country: "USA",
     flag: "🇺🇸",
     tagline: "A mile-high city where mountains meet craft beer culture.",
-    image: "images/batch1/denver.jpg",
+    image: "/images/cities/denver-card.webp",
     scores: {
       climate: 6,
       cost: 2,
@@ -5343,7 +5343,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Experience isolated paradise with perfect beaches and endless sunshine.",
-    image: "https://images.unsplash.com/photo-1599134733852-61560256bb50?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/perth-card.webp",
     scores: {
       climate: 8,
       cost: 3,
