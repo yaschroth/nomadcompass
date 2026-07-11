@@ -4368,7 +4368,7 @@ const CITIES = [
     country: "Brazil",
     flag: "🇧🇷",
     tagline: "South America's business capital that never sleeps.",
-    image: "https://images.unsplash.com/photo-1543059080-f9b1272213d5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/saopaulo-card.webp",
     scores: {
       climate: 6,
       cost: 6,
@@ -4719,7 +4719,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "The salsa capital where every night is a dance party.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cali-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -5827,7 +5827,7 @@ const CITIES = [
     country: "Norway",
     flag: "🇳🇴",
     tagline: "Oil wealth meets fjord beauty in Norway's adventure gateway.",
-    image: "https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/stavanger-card.webp",
     scores: {
       climate: 4,
       cost: 2,
