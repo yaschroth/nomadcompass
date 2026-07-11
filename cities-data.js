@@ -276,7 +276,7 @@ const CITIES = [
     country: "Estonia",
     flag: "🇪🇪",
     tagline: "The world's most digital nation, medieval charm meets startup innovation.",
-    image: "https://images.unsplash.com/photo-1742409657355-4a6138f02d94?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tallinn-card.webp",
     scores: {
       climate: 4,
       cost: 5,
@@ -654,7 +654,7 @@ const CITIES = [
     country: "Czech Republic",
     flag: "🇨🇿",
     tagline: "Fairytale spires, cheap beer, and a growing tech scene.",
-    image: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/prague-card.webp",
     scores: {
       climate: 5,
       cost: 5,
@@ -843,7 +843,7 @@ const CITIES = [
     country: "USA",
     flag: "🇺🇸",
     tagline: "Art Deco, beaches, and Latin energy in America's crypto capital.",
-    image: "https://images.unsplash.com/photo-1607304823233-34673a96fddd?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/miami-card.webp",
     scores: {
       climate: 7,
       cost: 2,
