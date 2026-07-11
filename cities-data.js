@@ -2220,7 +2220,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "France's gastronomic capital with Renaissance charm awaits.",
-    image: "https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lyon-card.webp",
     scores: {
       climate: 6,
       cost: 4,
@@ -3084,7 +3084,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Experience full moon parties, yoga retreats, and island digital nomad life.",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kohphangan-card.webp",
     scores: {
       climate: 6,
       cost: 6,
@@ -3516,7 +3516,7 @@ const CITIES = [
     country: "Czech Republic",
     flag: "🇨🇿",
     tagline: "Experience czech tech hub with university energy and prices half of Prague.",
-    image: "https://images.unsplash.com/photo-1545231597-d6c381c583aa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/brno-card.webp",
     scores: {
       climate: 5,
       cost: 6,
