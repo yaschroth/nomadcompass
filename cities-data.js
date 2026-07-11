@@ -3489,7 +3489,7 @@ const CITIES = [
     country: "Poland",
     flag: "🇵🇱",
     tagline: "Experience 130 bridges, Gothic spires, and Poland's Silicon Valley energy.",
-    image: "https://images.unsplash.com/photo-1519658422992-0c8495f08389?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/wroclaw-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -4074,7 +4074,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Discover tropical island paradise with wellness vibes and coconut palms.",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kohsamui-card.webp",
     scores: {
       climate: 6,
       cost: 6,
@@ -4209,7 +4209,7 @@ const CITIES = [
     country: "Sri Lanka",
     flag: "🇱🇰",
     tagline: "Surf town paradise where stilt fishermen meet digital nomads.",
-    image: "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/weligama-card.webp",
     scores: {
       climate: 7,
       cost: 9,
