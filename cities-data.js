@@ -5502,7 +5502,7 @@ const CITIES = [
     country: "Australia",
     flag: "🇦🇺",
     tagline: "Discover bohemian beach town with wellness vibes and Australia's easternmost point.",
-    image: "https://images.unsplash.com/photo-1581132885085-02e91cf6e0cc?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/byronbay-card.webp",
     scores: {
       climate: 8,
       cost: 3,
@@ -6232,7 +6232,7 @@ const CITIES = [
     country: "Austria",
     flag: "🇦🇹",
     tagline: "Mozart's birthplace, baroque splendor wrapped in Alpine majesty.",
-    image: "https://images.unsplash.com/photo-1538467472788-dc7740301fea?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/salzburg-card.webp",
     scores: {
       climate: 5,
       cost: 4,
@@ -7690,7 +7690,7 @@ const CITIES = [
     country: "Greece",
     flag: "🇬🇷",
     tagline: "Crete's Venetian jewel, harbor sunsets, mountain gorges, and Greek island life.",
-    image: "images/batch1/chania.jpg",
+    image: "/images/cities/chania-card.webp",
     scores: {
       climate: 8,
       cost: 6,
