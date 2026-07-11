@@ -6448,7 +6448,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Romeo and Juliet's city, romance, opera, and wine country gateway.",
-    image: "https://images.unsplash.com/photo-1548168998-0e405e7bfbfc?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/verona-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -7258,7 +7258,7 @@ const CITIES = [
     country: "Slovakia",
     flag: "🇸🇰",
     tagline: "Discover compact capital between Vienna and Budapest, castle views and Danube walks.",
-    image: "https://images.unsplash.com/photo-1555990538-c48ab0a194b5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bratislava-card.webp",
     scores: {
       climate: 5,
       cost: 6,
@@ -7339,7 +7339,7 @@ const CITIES = [
     country: "Romania",
     flag: "🇷🇴",
     tagline: "Experience little Vienna, where the 1989 revolution began and tech talent thrives.",
-    image: "https://images.unsplash.com/photo-1565096130168-3f7c5a5b76e3?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/timisoara-card.webp",
     scores: {
       climate: 5,
       cost: 8,
