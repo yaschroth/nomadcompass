@@ -5935,7 +5935,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "The Pink City, aerospace hub with vibrant student energy and southern charm.",
-    image: "https://images.unsplash.com/photo-1668935445093-82a4af5f6c10?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/toulouse-card.webp",
     scores: {
       climate: 7,
       cost: 5,
@@ -6124,7 +6124,7 @@ const CITIES = [
     country: "Germany",
     flag: "🇩🇪",
     tagline: "Europe's financial hub with surprising soul and global connections.",
-    image: "https://images.unsplash.com/photo-1667466333510-16b6914e827a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/frankfurt-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -7069,7 +7069,7 @@ const CITIES = [
     country: "Sweden",
     flag: "🇸🇪",
     tagline: "Experience bridge to Copenhagen, diverse, progressive, and surprisingly affordable for Scandinavia.",
-    image: "https://images.unsplash.com/photo-1543828810-59a96fec4a9a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/malmo-card.webp",
     scores: {
       climate: 4,
       cost: 3,
