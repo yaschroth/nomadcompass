@@ -34,6 +34,13 @@ const esc = (s) => String(s == null ? '' : s).replace(/[ \t]*(?:&mdash;|&#8212;|
       const res = await fetch(j.viewUrl || j.imageUrl, UA);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       buf = Buffer.from(await res.arrayBuffer());
+      // If the viewed thumbnail is under our 1600px hero minimum but a distinct
+      // full-res imageUrl exists, re-fetch that so the hero is not soft on large displays.
+      const w = (await sharp(buf).metadata()).width || 0;
+      if (w < 1600 && j.imageUrl && j.imageUrl !== (j.viewUrl || j.imageUrl)) {
+        const r2 = await fetch(j.imageUrl, UA);
+        if (r2.ok) { const b2 = Buffer.from(await r2.arrayBuffer()); if (((await sharp(b2).metadata()).width || 0) > w) buf = b2; }
+      }
     } catch (e) { console.error('DOWNLOAD FAIL:', slug, e.message); fail++; continue; }
 
     let hInfo;

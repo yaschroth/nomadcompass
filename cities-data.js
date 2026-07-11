@@ -9742,7 +9742,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Mekong Delta's largest city with floating markets.",
-    image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cantho-card.webp",
     scores: {
       climate: 8,
       cost: 10,
@@ -9823,7 +9823,7 @@ const CITIES = [
     country: "Laos",
     flag: "🇱🇦",
     tagline: "Karst mountain majesty, tubing past limestone cliffs and blue lagoon swimming holes.",
-    image: "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/vangvieng-card.webp",
     scores: {
       climate: 7,
       cost: 10,
@@ -10417,7 +10417,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "Coffee Triangle university town, hillside cable cars, thermal springs, and Andean mountain views.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/manizales-card.webp",
     scores: {
       climate: 7,
       cost: 8,
