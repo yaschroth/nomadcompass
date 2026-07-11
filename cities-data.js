@@ -8851,7 +8851,7 @@ const CITIES = [
     country: "Spain",
     flag: "🇪🇸",
     tagline: "Discover underrated Spanish gem between Madrid and Barcelona.",
-    image: "https://images.unsplash.com/photo-1584355998413-0a25a4c8a7b9?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/zaragoza-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -9445,7 +9445,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Similan Islands gateway, jungle-backed beaches, family vibes, and world-class diving.",
-    image: "https://images.unsplash.com/photo-1537956965359-7573183d8f53?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/khaolak-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -9472,7 +9472,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Bridge on the River Kwai country, jungle waterfalls, elephant sanctuaries, and WWII history.",
-    image: "https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kanchanaburi-card.webp",
     scores: {
       climate: 8,
       cost: 9,
