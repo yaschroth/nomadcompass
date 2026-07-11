@@ -1383,7 +1383,7 @@ const CITIES = [
     country: "Morocco",
     flag: "🇲🇦",
     tagline: "Experience medina magic, rooftop riads, and North African mystique.",
-    image: "https://images.unsplash.com/photo-1560706950-4f3d1c9df882?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/marrakech-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -1545,7 +1545,7 @@ const CITIES = [
     country: "Peru",
     flag: "🇵🇪",
     tagline: "Discover culinary capital of South America with Pacific coast vibes.",
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lima-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -1680,7 +1680,7 @@ const CITIES = [
     country: "Chile",
     flag: "🇨🇱",
     tagline: "A bohemian port city with street art, funiculars, and Pacific sunsets.",
-    image: "https://images.unsplash.com/photo-1583997052103-b4a1cb974ce5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/valparaiso-card.webp",
     scores: {
       climate: 7,
       cost: 7,
