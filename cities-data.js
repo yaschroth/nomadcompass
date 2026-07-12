@@ -1248,7 +1248,7 @@ const CITIES = [
     country: "India",
     flag: "🇮🇳",
     tagline: "India's Silicon Valley with perfect weather and craft beer culture.",
-    image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bangalore-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -2868,7 +2868,7 @@ const CITIES = [
     country: "Bosnia",
     flag: "🇧🇦",
     tagline: "Where East meets West, Ottoman bazaars and Austro-Hungarian cafés.",
-    image: "https://images.unsplash.com/photo-1513034751734-9f02f697ac3a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sarajevo-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -3678,7 +3678,7 @@ const CITIES = [
     country: "Belgium",
     flag: "🇧🇪",
     tagline: "Where diamond trade meets fashion design and Flemish art.",
-    image: "https://images.unsplash.com/photo-1580048915913-4f8f5cb481c4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/antwerp-card.webp",
     scores: {
       climate: 5,
       cost: 4,
