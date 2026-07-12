@@ -7501,7 +7501,7 @@ const CITIES = [
     country: "Albania",
     flag: "🇦🇱",
     tagline: "Experience albanian Riviera, turquoise waters, ancient Butrint, and Europe's last secret.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sarande-card.webp",
     scores: {
       climate: 8,
       cost: 9,
@@ -7879,7 +7879,7 @@ const CITIES = [
     country: "Georgia",
     flag: "🇬🇪",
     tagline: "Georgia's ancient capital, UNESCO monasteries, canyons, and authentic hospitality.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kutaisi-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -8311,7 +8311,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Experience best island in the world, underground rivers, lagoons, and pristine nature.",
-    image: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/palawan-card.webp",
     scores: {
       climate: 6,
       cost: 8,
