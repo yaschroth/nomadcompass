@@ -6529,7 +6529,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Sicily's volcanic heart, Etna views, baroque beauty, and street food heaven.",
-    image: "https://images.unsplash.com/photo-1586104237516-56ab76fa0beb?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/catania-card.webp",
     scores: {
       climate: 8,
       cost: 7,
@@ -7177,7 +7177,7 @@ const CITIES = [
     country: "Lithuania",
     flag: "🇱🇹",
     tagline: "Lithuania's hidden gem, art deco architecture and emerging creative scene.",
-    image: "https://images.unsplash.com/photo-1664095046626-33db1d8eea68?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kaunas-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -7204,7 +7204,7 @@ const CITIES = [
     country: "Lithuania",
     flag: "🇱🇹",
     tagline: "Discover baltic Sea port, Curonian Spit gateway and seaside charm.",
-    image: "https://images.unsplash.com/photo-1572955013943-fe1c6f85d0bf?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/klaipeda-card.webp",
     scores: {
       climate: 4,
       cost: 8,
