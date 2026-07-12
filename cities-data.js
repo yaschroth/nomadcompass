@@ -8365,7 +8365,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "City of gentle people, university town, diving paradise, and slow living.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dumaguete-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -9634,7 +9634,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "Singapore's affordable neighbor.",
-    image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/johorbahru-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -9796,7 +9796,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Ha Long Bay on land, limestone karsts, ancient temples, and sampan boat rides through rice paddies.",
-    image: "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ninhbinh-card.webp",
     scores: {
       climate: 7,
       cost: 10,
