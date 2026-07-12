@@ -5180,7 +5180,7 @@ const CITIES = [
     country: "Jordan",
     flag: "🇯🇴",
     tagline: "Discover ancient hills meeting modern cafes in the heart of the Levant.",
-    image: "https://images.unsplash.com/photo-1547483238-2cbf881a559f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/amman-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -5261,7 +5261,7 @@ const CITIES = [
     country: "UAE",
     flag: "🇦🇪",
     tagline: "Oil wealth meets cultural ambition in this desert metropolis.",
-    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/abudhabi-card.webp",
     scores: {
       climate: 3,
       cost: 2,
@@ -6475,7 +6475,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Experience raw, chaotic, unforgettable, birthplace of pizza and southern Italian soul.",
-    image: "https://images.unsplash.com/photo-1728988120174-1bdf6ef22603?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/naples-card.webp",
     scores: {
       climate: 7,
       cost: 6,
