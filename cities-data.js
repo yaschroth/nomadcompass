@@ -3969,7 +3969,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "Discover duty-free island paradise with eagles and emerald waters.",
-    image: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/langkawi-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -4233,7 +4233,7 @@ const CITIES = [
     country: "Malaysia",
     flag: "🇲🇾",
     tagline: "Discover hidden gem with white coffee, street art, and limestone caves.",
-    image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ipoh-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -4503,7 +4503,7 @@ const CITIES = [
     country: "Peru",
     flag: "🇵🇪",
     tagline: "The White City with volcanic views and colonial charm awaits.",
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/arequipa-card.webp",
     scores: {
       climate: 7,
       cost: 8,
