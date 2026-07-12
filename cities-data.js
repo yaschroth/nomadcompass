@@ -1707,7 +1707,7 @@ const CITIES = [
     country: "Ecuador",
     flag: "🇪🇨",
     tagline: "A colonial gem at the equator with affordable mountain living.",
-    image: "https://images.unsplash.com/photo-1583997052103-b4a1cb974ce5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/quito-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -2274,7 +2274,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Experience fashion, design, and aperitivo culture in Italy's business capital.",
-    image: "https://images.unsplash.com/photo-1520440229-6469a149ac59?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/milan-card.webp",
     scores: {
       climate: 5,
       cost: 3,
@@ -2355,7 +2355,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Experience sicilian chaos, street food paradise, and Mediterranean soul.",
-    image: "https://images.unsplash.com/photo-1523365280197-f1783db9fe62?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/palermo-card.webp",
     scores: {
       climate: 8,
       cost: 6,
