@@ -1194,7 +1194,7 @@ const CITIES = [
     country: "Nepal",
     flag: "🇳🇵",
     tagline: "Experience lakeside paradise with Annapurna views and paragliding adventures.",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/pokhara-card.webp",
     scores: {
       climate: 6,
       cost: 10,
@@ -10822,7 +10822,7 @@ const CITIES = [
     country: "Oman",
     flag: "🇴🇲",
     tagline: "Oman's tropical escape with monsoon magic.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/salalah-card.webp",
     scores: {
       climate: 7,
       cost: 6,
@@ -11038,7 +11038,7 @@ const CITIES = [
     country: "Fiji",
     flag: "🇫🇯",
     tagline: "Fiji's rainy capital, colonial markets, kava ceremonies, and Pacific university hub.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/suva-card.webp",
     scores: {
       climate: 8,
       cost: 6,
