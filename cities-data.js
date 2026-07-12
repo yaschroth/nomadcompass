@@ -5881,7 +5881,7 @@ const CITIES = [
     country: "Poland",
     flag: "🇵🇱",
     tagline: "Poland's underrated tech hub with lively old town and student energy.",
-    image: "https://images.unsplash.com/photo-1567958451986-2de427a4a0be?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/poznan-card.webp",
     scores: {
       climate: 4,
       cost: 7,
@@ -6016,7 +6016,7 @@ const CITIES = [
     country: "France",
     flag: "🇫🇷",
     tagline: "Experience creative, green, and affordable, France's most livable city.",
-    image: "https://images.unsplash.com/photo-1612264721245-c27f6e0ea228?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/nantes-card.webp",
     scores: {
       climate: 6,
       cost: 5,
@@ -6421,7 +6421,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Discover industrial elegance, coffee culture, chocolate, and Alpine views.",
-    image: "https://images.unsplash.com/photo-1587637693851-b24a0b58b7b4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/turin-card.webp",
     scores: {
       climate: 5,
       cost: 5,
