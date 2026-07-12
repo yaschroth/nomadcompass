@@ -4557,7 +4557,7 @@ const CITIES = [
     country: "Brazil",
     flag: "🇧🇷",
     tagline: "Experience afro-Brazilian culture, historic Pelourinho, and endless rhythms.",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/salvador-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -5207,7 +5207,7 @@ const CITIES = [
     country: "Lebanon",
     flag: "🇱🇧",
     tagline: "Experience resilient Mediterranean spirit with legendary nightlife and cuisine.",
-    image: "https://images.unsplash.com/photo-1513034751734-9f02f697ac3a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/beirut-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -5746,7 +5746,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Vietnam's island paradise with 30-day visa-free for everyone.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/phuquoc-card.webp",
     scores: {
       climate: 6,
       cost: 8,
