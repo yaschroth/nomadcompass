@@ -2679,7 +2679,7 @@ const CITIES = [
     country: "Romania",
     flag: "🇷🇴",
     tagline: "Experience eclectic architecture, cheap living, and surprising nightlife.",
-    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bucharest-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -2733,7 +2733,7 @@ const CITIES = [
     country: "Bulgaria",
     flag: "🇧🇬",
     tagline: "Experience mountain-ringed capital with ancient history and great value.",
-    image: "https://images.unsplash.com/photo-1512757257124-b6bec9a213d1?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sofia-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -3354,7 +3354,7 @@ const CITIES = [
     country: "Belgium",
     flag: "🇧🇪",
     tagline: "Experience eU capital with Art Nouveau charm, world-class beer, and multicultural vibes.",
-    image: "https://images.unsplash.com/photo-1559113202-c916b8e44373?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/brussels-card.webp",
     scores: {
       climate: 5,
       cost: 4,
