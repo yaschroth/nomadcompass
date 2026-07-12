@@ -4638,7 +4638,7 @@ const CITIES = [
     country: "Ecuador",
     flag: "🇪🇨",
     tagline: "A surf town party paradise on Ecuador's coast.",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/montanita-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -4909,7 +4909,7 @@ const CITIES = [
     country: "South Africa",
     flag: "🇿🇦",
     tagline: "Africa's economic powerhouse with creative energy and entrepreneurial spirit.",
-    image: "https://images.unsplash.com/photo-1577948000111-9c970dfe3743?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/johannesburg-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -5071,7 +5071,7 @@ const CITIES = [
     country: "Morocco",
     flag: "🇲🇦",
     tagline: "Experience surf village paradise with year-round waves and laid-back vibes.",
-    image: "https://images.unsplash.com/photo-1560759226-14da22a643ef?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/taghazout-card.webp",
     scores: {
       climate: 8,
       cost: 9,
