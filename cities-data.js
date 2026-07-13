@@ -4692,7 +4692,7 @@ const CITIES = [
     country: "Dominican Republic",
     flag: "🇩🇴",
     tagline: "An all-inclusive paradise with white sand beaches.",
-    image: "https://images.unsplash.com/photo-1678816331175-a61a6835e889?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/puntacana-card.webp",
     scores: {
       climate: 7,
       cost: 4,
@@ -4990,7 +4990,7 @@ const CITIES = [
     country: "Tanzania",
     flag: "🇹🇿",
     tagline: "Experience spice island paradise with Stone Town charm and turquoise waters.",
-    image: "https://images.unsplash.com/photo-1586861203927-800a5acdcc4d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/zanzibar-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -8581,7 +8581,7 @@ const CITIES = [
     country: "Bolivia",
     flag: "🇧🇴",
     tagline: "Bolivia's white city, colonial perfection, language schools, and altitude charm.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sucre-card.webp",
     scores: {
       climate: 7,
       cost: 10,
