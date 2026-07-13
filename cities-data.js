@@ -1464,7 +1464,7 @@ const CITIES = [
     country: "Kenya",
     flag: "🇰🇪",
     tagline: "Experience safari gateway with a thriving tech scene and incredible wildlife.",
-    image: "https://images.unsplash.com/photo-1611348524140-53c9a25263d6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/nairobi-card.webp",
     scores: {
       climate: 8,
       cost: 7,
@@ -3891,7 +3891,7 @@ const CITIES = [
     country: "India",
     flag: "🇮🇳",
     tagline: "India's Oxford city with tech startup energy and pleasant weather.",
-    image: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/pune-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -4101,7 +4101,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Beach city vibes with fresh seafood and Russian signs everywhere.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/nhatrang-card.webp",
     scores: {
       climate: 6,
       cost: 8,
