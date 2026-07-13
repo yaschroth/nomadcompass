@@ -6502,7 +6502,7 @@ const CITIES = [
     country: "Italy",
     flag: "🇮🇹",
     tagline: "Puglia's gateway, white-washed old town, fresh seafood, and southern warmth.",
-    image: "https://images.unsplash.com/photo-1589989604120-1df6c5be6e10?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bari-card.webp",
     scores: {
       climate: 8,
       cost: 7,
@@ -7420,7 +7420,7 @@ const CITIES = [
     country: "Bosnia and Herzegovina",
     flag: "🇧🇦",
     tagline: "Experience iconic bridge, Ottoman legacy, and resilient Balkan beauty.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/mostar-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -8041,7 +8041,7 @@ const CITIES = [
     country: "Laos",
     flag: "🇱🇦",
     tagline: "Discover uNESCO riverside, morning alms, French colonial charm, and Mekong magic.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/luangprabang-card.webp",
     scores: {
       climate: 5,
       cost: 8,
