@@ -10633,7 +10633,7 @@ const CITIES = [
     country: "Egypt",
     flag: "🇪🇬",
     tagline: "World's greatest open-air museum.",
-    image: "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/luxor-card.webp",
     scores: {
       climate: 8,
       cost: 9,
@@ -10741,7 +10741,7 @@ const CITIES = [
     country: "Uganda",
     flag: "🇺🇬",
     tagline: "Pearl of Africa's vibrant capital.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kampala-card.webp",
     scores: {
       climate: 7,
       cost: 9,
@@ -11065,7 +11065,7 @@ const CITIES = [
     country: "New Caledonia",
     flag: "🇳🇨",
     tagline: "Turquoise lagoons and croissants, where Melanesia meets the Côte d'Azur.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/noumea-card.webp",
     scores: {
       climate: 8,
       cost: 3,
