@@ -8392,7 +8392,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Experience limestone cathedral, secret lagoons, island hopping, and bucket-list beauty.",
-    image: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/elnido-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -8635,7 +8635,7 @@ const CITIES = [
     country: "Ecuador",
     flag: "🇪🇨",
     tagline: "Experience valley of longevity, expat haven, hiking trails, and eternal spring.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/vilcabamba-card.webp",
     scores: {
       climate: 8,
       cost: 9,
@@ -10660,7 +10660,7 @@ const CITIES = [
     country: "Egypt",
     flag: "🇪🇬",
     tagline: "Egypt's Mediterranean pearl.",
-    image: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/alexandria-card.webp",
     scores: {
       climate: 8,
       cost: 9,
