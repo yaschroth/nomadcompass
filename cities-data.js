@@ -1302,7 +1302,7 @@ const CITIES = [
     country: "Sri Lanka",
     flag: "🇱🇰",
     tagline: "Admire colonial architecture, curry feasts, and gateway to tropical paradise.",
-    image: "https://images.unsplash.com/photo-1561426802-392f5b6290cf?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/colombo-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -4773,7 +4773,7 @@ const CITIES = [
     country: "Dominican Republic",
     flag: "🇩🇴",
     tagline: "Discover the first city of the Americas with Caribbean colonial vibes.",
-    image: "https://images.unsplash.com/photo-1592174887344-02ff9373ca55?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/santodomingo-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -5098,7 +5098,7 @@ const CITIES = [
     country: "Morocco",
     flag: "🇲🇦",
     tagline: "The blue pearl of Morocco tucked into the Rif Mountains awaits.",
-    image: "https://images.unsplash.com/photo-1569383746724-6f1b882b8f46?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/chefchaouen-card.webp",
     scores: {
       climate: 6,
       cost: 9,
