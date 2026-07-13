@@ -1761,7 +1761,7 @@ const CITIES = [
     country: "Bolivia",
     flag: "🇧🇴",
     tagline: "Bolivia's economic engine with tropical lowland vibes awaits.",
-    image: "https://images.unsplash.com/photo-1612294037637-ec328d0e075e?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/santacruz-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -8554,7 +8554,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Bali's wild island, dramatic cliffs, manta rays, and Instagram famous spots.",
-    image: "https://images.unsplash.com/photo-1570789210967-2cac24afeb00?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/nusapenida-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -10768,7 +10768,7 @@ const CITIES = [
     country: "Mozambique",
     flag: "🇲🇿",
     tagline: "Prawns and jazz, crumbling colonial grandeur meets Mozambican beach soul.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/maputo-card.webp",
     scores: {
       climate: 8,
       cost: 8,
