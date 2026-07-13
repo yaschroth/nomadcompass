@@ -4936,7 +4936,7 @@ const CITIES = [
     country: "Senegal",
     flag: "🇸🇳",
     tagline: "Experience west African gem with Atlantic vibes and legendary hospitality.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/dakar-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -8473,7 +8473,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "East Java's hero city, gateway to volcanoes, authentic Indonesia.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/surabaya-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -10903,7 +10903,7 @@ const CITIES = [
     country: "Kuwait",
     flag: "🇰🇼",
     tagline: "Discover oil-rich city-state on the Gulf.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kuwait-card.webp",
     scores: {
       climate: 4,
       cost: 3,
