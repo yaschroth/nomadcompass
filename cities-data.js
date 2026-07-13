@@ -1221,7 +1221,7 @@ const CITIES = [
     country: "India",
     flag: "🇮🇳",
     tagline: "Experience bollywood dreams, street food, and India's financial powerhouse.",
-    image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/mumbai-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -1410,7 +1410,7 @@ const CITIES = [
     country: "Morocco",
     flag: "🇲🇦",
     tagline: "Morocco's economic hub with Art Deco charm and ocean views.",
-    image: "https://images.unsplash.com/photo-1569383746724-6f1b882b8f46?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/casablanca-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -2841,7 +2841,7 @@ const CITIES = [
     country: "Albania",
     flag: "🇦🇱",
     tagline: "Europe's most surprising capital, colorful, cheap, and rapidly evolving.",
-    image: "https://images.unsplash.com/photo-1545231597-d6c381c583aa?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tirana-card.webp",
     scores: {
       climate: 7,
       cost: 8,
