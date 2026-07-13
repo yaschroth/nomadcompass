@@ -5288,7 +5288,7 @@ const CITIES = [
     country: "Qatar",
     flag: "🇶🇦",
     tagline: "Discover futuristic skyline rising from the desert with world-class museums.",
-    image: "https://images.unsplash.com/photo-1559564484-e48b3e040ff4?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/doha-card.webp",
     scores: {
       climate: 3,
       cost: 3,
@@ -7906,7 +7906,7 @@ const CITIES = [
     country: "Armenia",
     flag: "🇦🇲",
     tagline: "Armenia's cultural heart, black stone architecture, crafts, and resilient spirit.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/gyumri-card.webp",
     scores: {
       climate: 4,
       cost: 9,
@@ -8014,7 +8014,7 @@ const CITIES = [
     country: "Bahrain",
     flag: "🇧🇭",
     tagline: "Gulf's liberal island, F1 circuits, souks, and expat-friendly lifestyle.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/manama-card.webp",
     scores: {
       climate: 3,
       cost: 5,
