@@ -4395,7 +4395,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "Caribbean beaches meet Sierra Nevada mountains.",
-    image: "https://images.unsplash.com/photo-1583997052103-b4a1cb974ce5?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/santamarta-card.webp",
     scores: {
       climate: 6,
       cost: 7,
@@ -5234,7 +5234,7 @@ const CITIES = [
     country: "Oman",
     flag: "🇴🇲",
     tagline: "Experience sultanate serenity with dramatic mountains and pristine beaches.",
-    image: "https://images.unsplash.com/photo-1513034751734-9f02f697ac3a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/muscat-card.webp",
     scores: {
       climate: 4,
       cost: 6,
@@ -7987,7 +7987,7 @@ const CITIES = [
     country: "Jordan",
     flag: "🇯🇴",
     tagline: "Jordan's Red Sea gem, Petra gateway, coral reefs, and desert warmth.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/aqaba-card.webp",
     scores: {
       climate: 4,
       cost: 8,
