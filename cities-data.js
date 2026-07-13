@@ -3942,7 +3942,7 @@ const CITIES = [
     country: "Laos",
     flag: "🇱🇦",
     tagline: "Southeast Asia's most relaxed capital stretches along the Mekong.",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/vientiane-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -5125,7 +5125,7 @@ const CITIES = [
     country: "Ethiopia",
     flag: "🇪🇹",
     tagline: "Africa's diplomatic capital with coffee origins and highland cool.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/addisababa-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -10849,7 +10849,7 @@ const CITIES = [
     country: "Saudi Arabia",
     flag: "🇸🇦",
     tagline: "Discover rapidly modernizing desert capital.",
-    image: "https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/riyadh-card.webp",
     scores: {
       climate: 5,
       cost: 4,
