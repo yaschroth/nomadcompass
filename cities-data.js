@@ -1059,7 +1059,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Experience chaotic megacity with warm locals and gateway to paradise islands.",
-    image: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/manila-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -2814,7 +2814,7 @@ const CITIES = [
     country: "Montenegro",
     flag: "🇲🇪",
     tagline: "An emerging destination with Adriatic access and Balkan hospitality.",
-    image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/podgorica-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -10957,7 +10957,7 @@ const CITIES = [
     country: "Iran",
     flag: "🇮🇷",
     tagline: "Discover ancient desert city of wind towers.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/yazd-card.webp",
     scores: {
       climate: 6,
       cost: 10,
