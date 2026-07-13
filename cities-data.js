@@ -9877,7 +9877,7 @@ const CITIES = [
     country: "Cambodia",
     flag: "🇰🇭",
     tagline: "Bamboo trains, colonial shophouses, and Cambodia's emerging circus arts scene.",
-    image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/battambang-card.webp",
     scores: {
       climate: 8,
       cost: 10,
@@ -10444,7 +10444,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "Heart of Colombia's coffee triangle.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/pereira-card.webp",
     scores: {
       climate: 7,
       cost: 9,
@@ -10525,7 +10525,7 @@ const CITIES = [
     country: "Peru",
     flag: "🇵🇪",
     tagline: "City of eternal spring with ancient ruins.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/trujillo-card.webp",
     scores: {
       climate: 8,
       cost: 9,
