@@ -7528,7 +7528,7 @@ const CITIES = [
     country: "Kosovo",
     flag: "🇽🇰",
     tagline: "Discover ottoman jewel, cobblestone streets, fortress views, and Balkan authenticity.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/prizren-card.webp",
     scores: {
       climate: 5,
       cost: 10,
@@ -8203,7 +8203,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Experience rice terrace wonderland, trekking, ethnic villages, and mountain mist.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sapa-card.webp",
     scores: {
       climate: 5,
       cost: 10,
@@ -8662,7 +8662,7 @@ const CITIES = [
     country: "Peru",
     flag: "🇵🇪",
     tagline: "Peru's surf town, eternal summer, beach bars, and laid-back coastal living.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/mancora-card.webp",
     scores: {
       climate: 7,
       cost: 8,
