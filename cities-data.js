@@ -1356,7 +1356,7 @@ const CITIES = [
     country: "Egypt",
     flag: "🇪🇬",
     tagline: "Marvel at ancient pyramids, bustling bazaars, and the heart of the Arab world.",
-    image: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cairo-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -8689,7 +8689,7 @@ const CITIES = [
     country: "Peru",
     flag: "🇵🇪",
     tagline: "Discover ancient surf village, reed boats, ceviche, and pre-Inca history.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/huanchaco-card.webp",
     scores: {
       climate: 7,
       cost: 9,
@@ -10876,7 +10876,7 @@ const CITIES = [
     country: "Saudi Arabia",
     flag: "🇸🇦",
     tagline: "Discover red Sea gateway with historic core.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/jeddah-card.webp",
     scores: {
       climate: 6,
       cost: 4,
