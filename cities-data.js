@@ -384,7 +384,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Experience buzzing streets, amazing phở, and some of the best coffee on Earth.",
-    image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/hochiminhcity-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -1086,7 +1086,7 @@ const CITIES = [
     country: "Philippines",
     flag: "🇵🇭",
     tagline: "Experience island life with modern amenities and incredible diving spots.",
-    image: "https://images.unsplash.com/photo-1505840717430-882ce147ef2d?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cebu-card.webp",
     scores: {
       climate: 6,
       cost: 8,
@@ -10687,7 +10687,7 @@ const CITIES = [
     country: "Cape Verde",
     flag: "🇨🇻",
     tagline: "Creole rhythms and volcanic peaks, African-Portuguese fusion on Atlantic trade winds.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/capeverde-card.webp",
     scores: {
       climate: 8,
       cost: 8,
