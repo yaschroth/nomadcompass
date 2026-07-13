@@ -2895,7 +2895,7 @@ const CITIES = [
     country: "North Macedonia",
     flag: "🇲🇰",
     tagline: "Experience quirky capital with statue-filled center and canyon adventures.",
-    image: "https://images.unsplash.com/photo-1712151465643-e8e295120fde?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/skopje-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -2949,7 +2949,7 @@ const CITIES = [
     country: "Azerbaijan",
     flag: "🇦🇿",
     tagline: "Oil-rich capital where ancient Silk Road meets futuristic flames.",
-    image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/baku-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -4023,7 +4023,7 @@ const CITIES = [
     country: "India",
     flag: "🇮🇳",
     tagline: "Experience pink City palaces meet tech startup energy and royal heritage.",
-    image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/jaipur-card.webp",
     scores: {
       climate: 5,
       cost: 9,
