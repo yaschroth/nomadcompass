@@ -1815,7 +1815,7 @@ const CITIES = [
     country: "Paraguay",
     flag: "🇵🇾",
     tagline: "South America's most underrated capital offers low costs.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/asuncion-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -3996,7 +3996,7 @@ const CITIES = [
     country: "China",
     flag: "🇨🇳",
     tagline: "From fishing village to tech megacity in just 40 years.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/shenzhen-card.webp",
     scores: {
       climate: 6,
       cost: 4,
@@ -5017,7 +5017,7 @@ const CITIES = [
     country: "Tunisia",
     flag: "🇹🇳",
     tagline: "Discover mediterranean crossroads with ancient medina and French colonial elegance.",
-    image: "https://images.unsplash.com/photo-1517503733723-8ea1cf616798?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/tunis-card.webp",
     scores: {
       climate: 6,
       cost: 9,
