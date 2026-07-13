@@ -4047,7 +4047,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Thailand's royal beach retreat where retirees and nomads find peace.",
-    image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/huahin-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -5773,7 +5773,7 @@ const CITIES = [
     country: "Morocco",
     flag: "🇲🇦",
     tagline: "Morocco's cultured capital with Atlantic breezes and royal history.",
-    image: "https://images.unsplash.com/photo-1569383746724-6f1b882b8f46?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/rabat-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -7231,7 +7231,7 @@ const CITIES = [
     country: "Slovakia",
     flag: "🇸🇰",
     tagline: "Slovakia's eastern capital, Gothic cathedral, cheap beer, and undiscovered charm.",
-    image: "https://images.unsplash.com/photo-1570991252575-04fa8c3ec7ba?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kosice-card.webp",
     scores: {
       climate: 4,
       cost: 7,
