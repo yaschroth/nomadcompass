@@ -7960,7 +7960,7 @@ const CITIES = [
     country: "Israel",
     flag: "🇮🇱",
     tagline: "Experience red Sea resort, year-round diving, desert adventures, and duty-free shopping.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/eilat-card.webp",
     scores: {
       climate: 4,
       cost: 5,
@@ -8068,7 +8068,7 @@ const CITIES = [
     country: "Thailand",
     flag: "🇹🇭",
     tagline: "Discover mountain hippie town, hot springs, waterfalls, and chill northern vibes.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/pai-card.webp",
     scores: {
       climate: 6,
       cost: 9,
@@ -9526,7 +9526,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Java's cultural heart with royal heritage.",
-    image: "https://images.unsplash.com/photo-1555899434-94d1368aa7af?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/solo-card.webp",
     scores: {
       climate: 8,
       cost: 10,
