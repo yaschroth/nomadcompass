@@ -8419,7 +8419,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Bali's quieter neighbor, Rinjani volcano, Gili islands, and authentic vibes.",
-    image: "https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lombok-card.webp",
     scores: {
       climate: 7,
       cost: 7,
@@ -9553,7 +9553,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Your gateway to Lake Toba and Sumatra.",
-    image: "https://images.unsplash.com/photo-1555899434-94d1368aa7af?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/medan-card.webp",
     scores: {
       climate: 8,
       cost: 10,
@@ -9580,7 +9580,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Eastern Indonesia's vibrant coastal hub.",
-    image: "https://images.unsplash.com/photo-1555899434-94d1368aa7af?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/makassar-card.webp",
     scores: {
       climate: 8,
       cost: 10,
