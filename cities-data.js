@@ -1437,7 +1437,7 @@ const CITIES = [
     country: "Ghana",
     flag: "🇬🇭",
     tagline: "West Africa's rising star with vibrant culture and entrepreneurial spirit.",
-    image: "https://images.unsplash.com/photo-1568632234180-0e6c08735d01?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/accra-card.webp",
     scores: {
       climate: 5,
       cost: 7,
@@ -8176,7 +8176,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Vietnam's next big thing, pristine beaches, seafood, and zero tourists.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/quynhon-card.webp",
     scores: {
       climate: 6,
       cost: 10,
@@ -8446,7 +8446,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Java's cool highland, volcanic craters, tea plantations, and café culture.",
-    image: "https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/bandung-card.webp",
     scores: {
       climate: 7,
       cost: 8,
