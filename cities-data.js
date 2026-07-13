@@ -978,7 +978,7 @@ const CITIES = [
     country: "Vietnam",
     flag: "🇻🇳",
     tagline: "Explore ancient temples, egg coffee, and Old Quarter chaos at its finest.",
-    image: "https://images.unsplash.com/photo-1509030450996-dd1a26dda07a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/hanoi-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -10552,7 +10552,7 @@ const CITIES = [
     country: "Argentina",
     flag: "🇦🇷",
     tagline: "Birthplace of the Argentine flag and Messi.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/rosario-card.webp",
     scores: {
       climate: 7,
       cost: 8,
@@ -10795,7 +10795,7 @@ const CITIES = [
     country: "Tanzania",
     flag: "🇹🇿",
     tagline: "Discover safari capital at Kilimanjaro's foot.",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/arusha-card.webp",
     scores: {
       climate: 7,
       cost: 8,
