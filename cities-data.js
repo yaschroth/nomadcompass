@@ -1140,7 +1140,7 @@ const CITIES = [
     country: "Cambodia",
     flag: "🇰🇭",
     tagline: "Experience rapidly developing capital with riverside charm and rich history.",
-    image: "https://images.unsplash.com/photo-1510797215324-95aa89f43c33?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/phnompenh-card.webp",
     scores: {
       climate: 5,
       cost: 8,
@@ -8122,7 +8122,7 @@ const CITIES = [
     country: "Cambodia",
     flag: "🇰🇭",
     tagline: "Experience pepper farms and river sunsets, Cambodia's most charming small town.",
-    image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kampot-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -8500,7 +8500,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Discover colonial hill town, Bromo gateway, apple orchards, and Dutch heritage.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/malang-card.webp",
     scores: {
       climate: 7,
       cost: 10,
