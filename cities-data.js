@@ -9850,7 +9850,7 @@ const CITIES = [
     country: "Cambodia",
     flag: "🇰🇭",
     tagline: "Gateway to Koh Rong islands, Chinese casino boom meets tropical beach escapes.",
-    image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/sihanoukville-card.webp",
     scores: {
       climate: 8,
       cost: 9,
@@ -10390,7 +10390,7 @@ const CITIES = [
     country: "Mexico",
     flag: "🇲🇽",
     tagline: "Shoe shopping heaven, Mexico's leather craft legacy meets emerging startup culture.",
-    image: "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/leon-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -10471,7 +10471,7 @@ const CITIES = [
     country: "Colombia",
     flag: "🇨🇴",
     tagline: "A Caribbean port city with carnival spirit.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/barranquilla-card.webp",
     scores: {
       climate: 9,
       cost: 8,
