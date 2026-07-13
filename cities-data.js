@@ -1788,7 +1788,7 @@ const CITIES = [
     country: "Bolivia",
     flag: "🇧🇴",
     tagline: "The world's highest capital with stunning Andean landscapes.",
-    image: "https://images.unsplash.com/photo-1489493585363-d69421e0edd3?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lapaz-card.webp",
     scores: {
       climate: 4,
       cost: 9,
@@ -8527,7 +8527,7 @@ const CITIES = [
     country: "Indonesia",
     flag: "🇮🇩",
     tagline: "Central Java's capital, temples, traditions, and unexplored charm.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/semarang-card.webp",
     scores: {
       climate: 6,
       cost: 10,
@@ -8608,7 +8608,7 @@ const CITIES = [
     country: "Bolivia",
     flag: "🇧🇴",
     tagline: "City of eternal spring, Bolivia's food capital and valley paradise.",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/cochabamba-card.webp",
     scores: {
       climate: 7,
       cost: 10,
