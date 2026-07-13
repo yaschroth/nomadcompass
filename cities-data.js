@@ -1167,7 +1167,7 @@ const CITIES = [
     country: "Nepal",
     flag: "🇳🇵",
     tagline: "Gateway to the Himalayas with spiritual vibes and mountain adventures.",
-    image: "https://images.unsplash.com/photo-1565073624497-7144969d0a07?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/kathmandu-card.webp",
     scores: {
       climate: 5,
       cost: 9,
@@ -10498,7 +10498,7 @@ const CITIES = [
     country: "Ecuador",
     flag: "🇪🇨",
     tagline: "Ecuador's vibrant port city.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/guayaquil-card.webp",
     scores: {
       climate: 8,
       cost: 8,
@@ -10930,7 +10930,7 @@ const CITIES = [
     country: "Palestine",
     flag: "🇵🇸",
     tagline: "Palestinian resilience and creativity, rooftop cafes, art galleries, and hillside sunsets.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/ramallah-card.webp",
     scores: {
       climate: 7,
       cost: 7,
