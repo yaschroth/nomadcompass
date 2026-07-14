@@ -1518,7 +1518,7 @@ const CITIES = [
     country: "Nigeria",
     flag: "🇳🇬",
     tagline: "Africa's biggest city, chaotic, creative, and full of opportunity.",
-    image: "https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/lagos-card.webp",
     scores: {
       climate: 5,
       cost: 6,
@@ -4963,7 +4963,7 @@ const CITIES = [
     country: "Tanzania",
     flag: "🇹🇿",
     tagline: "Gateway to Zanzibar with bustling markets and Indian Ocean sunsets.",
-    image: "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?w=800&h=500&fit=crop&fm=webp&q=80",
+    image: "/images/cities/daressalaam-card.webp",
     scores: {
       climate: 5,
       cost: 8,
