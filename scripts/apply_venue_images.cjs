@@ -74,6 +74,8 @@ const NAMECLASS = { coworking: 'cowork-card-name', eat: 'eat-card-name', stay: '
       attrib[slug + '/' + vs] = { name: v.name, kind: v.kind, author: v.author, source: v.source, license: v.license, sourcePageUrl: v.sourcePageUrl, confirm: v.confirm };
       ok++;
     }
+    // Mark the page as checked (even with 0 hits) so it is not re-attempted every sweep.
+    if (!/venue-images-checked/.test(s)) s = s.replace(/<\/body>/i, '<!-- venue-images-checked -->\n</body>');
     fs.writeFileSync(page, s);
     console.log(`${slug}: images added ${ok} | missed ${miss} | skipped ${skip}`);
   }
