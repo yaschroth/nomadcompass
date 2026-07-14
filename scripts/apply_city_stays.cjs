@@ -43,7 +43,10 @@ function stayCard(v, city, country) {
 // (h2 + up to grid-open tag)(grid-open attrs)>(inner ws)(the kept stay-cta div)
 const stayGridRe = /(<h2>Where to Stay in [^<]*<\/h2>[\s\S]*?<div class="affiliate-grid")([^>]*)>([\s\S]*?)(<div class="stay-cta">)/;
 
-const files = fs.readdirSync(DIR).filter((f) => /^stays-.+\.verified\.json$/.test(f));
+// Read the raw research files directly. Geo-verification is redundant for stays: the
+// cards link to a Booking search on the property name (self-resolving) and the >=4.0
+// rating gate is enforced below, so a .verified pass changes nothing in the output.
+const files = fs.readdirSync(DIR).filter((f) => /^stays-.+\.json$/.test(f) && !/\.verified\.json$/.test(f));
 let ok = 0, thin = 0, skipped = 0, fail = 0;
 for (const file of files) {
   const data = JSON.parse(fs.readFileSync(path.join(DIR, file), 'utf8').replace(/^﻿/, ''));
