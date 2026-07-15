@@ -27,7 +27,7 @@ function iso(c) {
 const N = 15;
 // Each page: key = category to rank by (desc). tie-break by overall Nomad Score.
 const PAGES = {
-  cost:    { slug: 'cheapest-cities-for-digital-nomads', h1: 'The Cheapest Cities for Digital Nomads', dimension: 'low cost of living', metric: 'cost' },
+  cost:    { slug: 'cheapest-cities-for-digital-nomads', h1: 'The Cheapest Cities for Digital Nomads', dimension: 'low cost of living', metric: 'cost', sort: 'priceAsc' },
   wifi:    { slug: 'best-cities-for-fast-wifi',           h1: 'Best Cities for Fast, Reliable WiFi',     dimension: 'fast and reliable internet', metric: 'wifi' },
   safety:  { slug: 'safest-cities-for-digital-nomads',    h1: 'The Safest Cities for Digital Nomads',    dimension: 'personal safety', metric: 'safety' },
   climate: { slug: 'best-cities-for-year-round-weather',  h1: 'Best Cities for Year-Round Good Weather', dimension: 'climate', metric: 'climate' },
@@ -41,8 +41,13 @@ const PAGES = {
 
 function rankFor(cfg) {
   const key = cfg.metric;
+  // 'priceAsc' ranks a "cheapest" page by actual monthly cost (lowest first); everything
+  // else ranks by the category score (highest first). Both tie-break on overall Nomad Score.
+  const cmp = cfg.sort === 'priceAsc'
+    ? (a, b) => ((a.costPerMonth || 1e9) - (b.costPerMonth || 1e9)) || (nomadScore(b) - nomadScore(a))
+    : (a, b) => ((b.scores[key] || 0) - (a.scores[key] || 0)) || (nomadScore(b) - nomadScore(a));
   return CITIES.slice()
-    .sort((a, b) => ((b.scores[key] || 0) - (a.scores[key] || 0)) || (nomadScore(b) - nomadScore(a)))
+    .sort(cmp)
     .slice(0, N)
     .map((c, i) => ({
       rank: i + 1, id: c.id, name: c.name, country: c.country, flag: c.flag || '', iso: iso(c),

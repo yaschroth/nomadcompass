@@ -2,9 +2,10 @@
  * Builds a "Best cities for X" landing page at best/<slug>.html from:
  *   - best-<key>.json     (accurate ranked data, from rank_best.cjs)
  *   - content-<key>.json  (unique prose written by an agent)
- * Matches the site design, self-hosted flags + city thumbnails, links to each city
- * guide + /compare, and emits ItemList + FAQPage JSON-LD. Usage:
- *   DIR=... node scripts/apply_best_page.cjs <key> [<key> ...]
+ * Rich structure: hero, multi-paragraph intro, quick picks, "what to weigh", ranked
+ * cards with sub-score chips + long blurbs, closing, FAQ, related. ItemList + FAQPage
+ * JSON-LD, self-hosted flags + thumbnails, links to each guide + /compare.
+ * Usage: DIR=... node scripts/apply_best_page.cjs <key> [<key> ...]
  */
 const fs = require('fs');
 const path = require('path');
@@ -14,10 +15,15 @@ const OUTDIR = path.join(ROOT, 'best');
 const BASE = 'https://thenomadhq.com';
 
 const CHIP = { cost: 'Affordability', wifi: 'WiFi', safety: 'Safety', climate: 'Climate', visa: 'Visa access', food: 'Food', nature: 'Nature', community: 'Community', nightlife: 'Nightlife', english: 'English' };
+const SHORT = { climate: 'Climate', cost: 'Value', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
+// contextual sub-scores shown on each card (minus the page's own metric)
+const CONTEXT = ['safety', 'wifi', 'cost', 'community', 'climate'];
+
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const txt = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const money = (v) => typeof v === 'number' ? '$' + v.toLocaleString('en-US') + '/mo' : '';
 const flag = (iso) => iso ? '/assets/flags/' + iso + '.svg' : '';
+const paras = (s) => String(s || '').split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
 
 function navHtml() {
   return `<nav class="nav" id="mainNav">
@@ -64,84 +70,124 @@ function navScript() {
 const CSS = `
   .best-hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
   .best-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .best-hero-overlay { position: relative; z-index: 1; width: 100%; padding: calc(var(--nav-height,64px) + 3rem) 0 3rem; background: linear-gradient(to top, rgba(15,23,42,.94) 0%, rgba(15,23,42,.7) 55%, rgba(15,23,42,.2) 85%, transparent 100%); color: #fff; }
-  .best-hero::before { content:''; position:absolute; top:0; left:0; right:0; height: calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background: linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
-  .best-hero .container { max-width: 900px; }
-  .best-eyebrow { display:inline-block; font-size: var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
-  .best-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
-  .best-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0; max-width:44ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
-  .best-body { max-width: 900px; margin: 0 auto; padding: 0 var(--space-4,1rem); }
-  .best-intro { padding: 3rem 0 .5rem; }
-  .best-intro p { font-size:var(--text-lg); line-height:1.75; color:var(--color-charcoal); margin:0 0 1.1rem; }
-  .best-method { font-size:var(--text-sm); color:var(--color-stone); line-height:1.6; border-left:3px solid var(--color-sand-dark); padding:.3rem 0 .3rem 1rem; margin:1.4rem 0 0; }
-  .best-method a { color:var(--color-terracotta); }
-  .best-list { list-style:none; margin:2.5rem 0 0; padding:0; display:flex; flex-direction:column; gap:1.1rem; }
-  .best-item { display:grid; grid-template-columns:auto 132px 1fr; gap:1.1rem; align-items:stretch; background:#fff; border:1px solid var(--color-sand-dark); border-radius:var(--radius-lg,14px); overflow:hidden; }
-  .best-rank { display:flex; align-items:center; justify-content:center; width:54px; font-family:'DM Serif Display',serif; font-size:1.7rem; color:var(--color-terracotta); background:var(--color-sand); }
-  .best-thumb { width:132px; height:100%; min-height:120px; object-fit:cover; background:var(--color-sand); }
-  .best-main { padding:1rem 1.2rem 1.1rem 0; display:flex; flex-direction:column; gap:.5rem; }
-  .best-head { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; }
-  .best-flag { width:26px; height:19px; border-radius:3px; object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.1); }
-  .best-name { font-family:'DM Serif Display',serif; font-size:1.4rem; line-height:1.1; margin:0; }
+  .best-hero-overlay { position: relative; z-index: 1; width: 100%; padding: calc(var(--nav-height,64px) + 2rem) 0 3.5rem; background: linear-gradient(to top, rgba(15,23,42,.95) 0%, rgba(15,23,42,.72) 50%, rgba(15,23,42,.2) 80%, transparent 100%); color: #fff; }
+  .best-hero::before { content:''; position:absolute; top:0; left:0; right:0; height: calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background: linear-gradient(to bottom, rgba(255,255,255,.82), rgba(255,255,255,.45) 55%, transparent); }
+  .best-hero .container { max-width: 940px; }
+  .best-eyebrow { display:inline-block; font-size: var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .85rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
+  .best-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.2rem,6vw,3.75rem); line-height:1.08; margin:0 0 1.05rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; max-width:860px; }
+  .best-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0 0 1.6rem; max-width:52ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
+  .best-hero .btn-ghost { color:#fff; border:1px solid rgba(255,255,255,.45); background:rgba(255,255,255,.08); }
+  .best-hero .btn-ghost:hover { background:rgba(255,255,255,.18); border-color:#fff; }
+  .best-body { max-width: 940px; margin: 0 auto; padding: 0 var(--space-4,1rem); }
+  .best-intro { padding: 3.25rem 0 .5rem; }
+  .best-intro p { font-size:var(--text-lg); line-height:1.78; color:var(--color-charcoal); margin:0 0 1.15rem; }
+  .best-method { font-size:var(--text-sm); color:var(--color-stone); line-height:1.6; border-left:3px solid var(--color-terracotta); padding:.4rem 0 .4rem 1rem; margin:1.6rem 0 0; background:linear-gradient(90deg, rgba(192,57,43,.05), transparent); }
+  .best-method a { color:var(--color-terracotta); font-weight:600; }
+
+  .best-picks { margin: 2.75rem 0 .5rem; }
+  .best-h2 { font-family:'DM Serif Display',serif; font-size:1.85rem; color:var(--color-ink); margin:0 0 1.3rem; }
+  .best-picks-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  .best-pick { display:block; text-decoration:none; padding:1.1rem 1.2rem 1.2rem; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:var(--radius-lg,14px); transition:border-color .15s, transform .15s; }
+  .best-pick:hover { border-color:var(--color-terracotta); transform:translateY(-2px); }
+  .best-pick-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--color-terracotta); }
+  .best-pick-city { display:flex; align-items:center; gap:.5rem; font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--color-ink); margin:.4rem 0 .35rem; }
+  .best-pick-city img { width:24px; height:18px; border-radius:3px; box-shadow:0 0 0 1px rgba(0,0,0,.1); }
+  .best-pick-note { font-size:var(--text-sm); color:var(--color-charcoal); line-height:1.5; margin:0; }
+
+  .best-weigh { padding: 2.75rem 0 .5rem; }
+  .best-weigh p { font-size:var(--text-base); line-height:1.75; color:var(--color-charcoal); margin:0 0 1rem; }
+
+  .best-listwrap { padding: 2.75rem 0 .5rem; }
+  .best-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1.15rem; counter-reset:rank; }
+  .best-item { position:relative; display:grid; grid-template-columns:64px 150px 1fr; gap:1.2rem; align-items:stretch; background:#fff; border:1px solid var(--color-sand-dark); border-radius:var(--radius-lg,14px); overflow:hidden; transition:box-shadow .15s, border-color .15s, transform .15s; }
+  .best-item:hover { box-shadow:0 12px 30px rgba(15,23,42,.09); border-color:#c9d6e8; transform:translateY(-2px); }
+  .best-rank { display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg, #1b2a44, #0f172a); }
+  .best-rank span { font-family:'DM Serif Display',serif; font-size:1.7rem; color:#fff; }
+  .best-item.top1 .best-rank { background:linear-gradient(160deg,#e0674f,#c0392b); }
+  .best-item.top2 .best-rank, .best-item.top3 .best-rank { background:linear-gradient(160deg,#334155,#1b2a44); }
+  .best-thumb { width:150px; height:100%; min-height:150px; object-fit:cover; background:var(--color-sand); }
+  .best-main { padding:1.15rem 1.35rem 1.25rem 0; display:flex; flex-direction:column; gap:.55rem; }
+  .best-head { display:flex; align-items:baseline; gap:.55rem; flex-wrap:wrap; }
+  .best-flag { width:27px; height:20px; border-radius:3px; object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.1); align-self:center; }
+  .best-name { font-family:'DM Serif Display',serif; font-size:1.5rem; line-height:1.05; margin:0; }
   .best-name a { color:var(--color-ink); text-decoration:none; }
   .best-name a:hover { color:var(--color-terracotta); }
   .best-country { color:var(--color-stone); font-size:var(--text-sm); }
-  .best-chips { display:flex; flex-wrap:wrap; gap:.4rem; }
-  .best-chip { font-size:12px; font-weight:600; color:var(--color-charcoal); background:var(--color-sand); border-radius:999px; padding:3px 10px; font-variant-numeric:tabular-nums; }
-  .best-chip.hi { background:rgba(192,57,43,.1); color:var(--color-terracotta); }
-  .best-blurb { font-size:var(--text-base); line-height:1.65; color:var(--color-charcoal); margin:.1rem 0 0; }
-  .best-links { display:flex; gap:1rem; margin-top:.2rem; }
+  .best-stats { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
+  .best-stat { font-size:12px; font-weight:600; color:var(--color-charcoal); background:var(--color-sand); border-radius:999px; padding:3px 10px; font-variant-numeric:tabular-nums; }
+  .best-stat.hi { background:var(--color-terracotta); color:#fff; }
+  .best-stat.nomad { background:rgba(192,57,43,.1); color:var(--color-terracotta); }
+  .best-sub { display:flex; flex-wrap:wrap; gap:.75rem; margin:.1rem 0; }
+  .best-subchip { display:flex; align-items:center; gap:.3rem; font-size:11.5px; color:var(--color-stone); font-variant-numeric:tabular-nums; }
+  .best-subchip b { color:var(--color-charcoal); font-weight:700; }
+  .best-subbar { width:34px; height:5px; border-radius:999px; background:var(--color-sand-dark); overflow:hidden; }
+  .best-subbar span { display:block; height:100%; background:#94a3b8; border-radius:999px; }
+  .best-blurb { font-size:var(--text-base); line-height:1.68; color:var(--color-charcoal); margin:.15rem 0 0; }
+  .best-links { display:flex; gap:1.1rem; margin-top:.35rem; }
   .best-links a { font-size:var(--text-sm); font-weight:600; color:var(--color-terracotta); text-decoration:none; }
   .best-links a:hover { text-decoration:underline; }
-  .best-faq { padding: 3rem 0 1rem; }
-  .best-faq h2, .best-related h2 { font-family:'DM Serif Display',serif; font-size:1.9rem; color:var(--color-ink); margin:0 0 1.4rem; }
-  .best-faq-q { font-size:var(--text-lg); font-weight:600; color:var(--color-ink); margin:1.4rem 0 .4rem; }
-  .best-faq-a { font-size:var(--text-base); line-height:1.7; color:var(--color-charcoal); margin:0; }
+
+  .best-closing { padding: 2.75rem 0 .5rem; }
+  .best-closing p { font-size:var(--text-lg); line-height:1.78; color:var(--color-charcoal); margin:0 0 1.1rem; }
+  .best-faq { padding: 2.75rem 0 1rem; }
+  .best-faq-q { font-size:var(--text-lg); font-weight:600; color:var(--color-ink); margin:1.5rem 0 .4rem; }
+  .best-faq-a { font-size:var(--text-base); line-height:1.72; color:var(--color-charcoal); margin:0; }
   .best-related { padding: 2rem 0 1rem; }
   .best-related-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:.8rem; }
   .best-related-grid a { display:block; padding:.9rem 1.1rem; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:var(--radius-md); color:var(--color-ink); text-decoration:none; font-weight:600; font-size:var(--text-base); }
   .best-related-grid a:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
   .best-cta { text-align:center; padding: 2.5rem 1rem 4rem; display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
-  @media (max-width:600px){ .best-item{ grid-template-columns:auto 1fr; } .best-thumb{ display:none; } .best-main{ padding:1rem 1.1rem; } }
+  @media (max-width:640px){ .best-item{ grid-template-columns:52px 1fr; } .best-thumb{ display:none; } .best-main{ padding:1rem 1.1rem; } .best-picks-grid{ grid-template-columns:1fr; } .best-rank span{ font-size:1.4rem; } }
 `;
 
 function build(key, related) {
   const data = JSON.parse(fs.readFileSync(path.join(DIR, 'best-' + key + '.json'), 'utf8'));
   const content = JSON.parse(fs.readFileSync(path.join(DIR, 'content-' + key + '.json'), 'utf8').replace(/^﻿/, ''));
+  const byId = {}; data.cities.forEach((c) => { byId[c.id] = c; });
   const blurbById = {}; (content.entries || []).forEach((e) => { blurbById[e.id] = e.blurb; });
   const top = data.cities[0];
   const url = BASE + '/best/' + data.slug;
   const chipLabel = CHIP[data.metric] || 'Score';
+  const ctx = CONTEXT.filter((k) => k !== data.metric).slice(0, 3);
 
   const items = data.cities.map((c) => {
     const blurb = blurbById[c.id];
-    const metricChip = data.metric === 'cost'
-      ? `<span class="best-chip hi">${esc(money(c.costPerMonth))}</span>`
-      : `<span class="best-chip hi">${esc(chipLabel)} ${c.metricScore}/10</span>`;
-    return `      <li class="best-item">
-        <div class="best-rank">${c.rank}</div>
-        <img class="best-thumb" src="/images/cities/${c.id}-card.webp" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none'">
-        <div class="best-main">
-          <div class="best-head">
-            <img class="best-flag" src="${flag(c.iso)}" alt="" width="26" height="19">
-            <h2 class="best-name"><a href="/cities/${c.id}">${esc(c.name)}</a></h2>
-            <span class="best-country">${esc(c.country)}</span>
+    const metricStat = data.metric === 'cost'
+      ? `<span class="best-stat hi">${esc(money(c.costPerMonth))}</span>`
+      : `<span class="best-stat hi">${esc(chipLabel)} ${c.metricScore}/10</span>`;
+    const nomadStat = `<span class="best-stat nomad">Nomad Score ${c.nomadScore}</span>`;
+    const budgetStat = data.metric !== 'cost' ? `<span class="best-stat">${esc(money(c.costPerMonth))}</span>` : '';
+    const subs = ctx.map((k) => {
+      const v = c.scores[k]; if (typeof v !== 'number') return '';
+      return `<span class="best-subchip">${esc(SHORT[k] || k)} <b>${v}</b><span class="best-subbar"><span style="width:${v * 10}%"></span></span></span>`;
+    }).join('');
+    const cls = c.rank <= 3 ? ' top' + c.rank : '';
+    return `        <li class="best-item${cls}">
+          <div class="best-rank"><span>${c.rank}</span></div>
+          <img class="best-thumb" src="/images/cities/${c.id}-card.webp" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none'">
+          <div class="best-main">
+            <div class="best-head"><img class="best-flag" src="${flag(c.iso)}" alt="" width="27" height="20"><h2 class="best-name"><a href="/cities/${c.id}">${esc(c.name)}</a></h2><span class="best-country">${esc(c.country)}</span></div>
+            <div class="best-stats">${metricStat}${nomadStat}${budgetStat}</div>
+            <div class="best-sub">${subs}</div>
+            ${blurb ? `<p class="best-blurb">${txt(blurb)}</p>` : ''}
+            <div class="best-links"><a href="/cities/${c.id}">Full guide &rarr;</a><a href="/compare?a=${c.id}">Compare &rarr;</a></div>
           </div>
-          <div class="best-chips">${metricChip}<span class="best-chip">Nomad Score ${c.nomadScore}</span>${data.metric !== 'cost' ? `<span class="best-chip">${esc(money(c.costPerMonth))}</span>` : ''}</div>
-          ${blurb ? `<p class="best-blurb">${txt(blurb)}</p>` : ''}
-          <div class="best-links"><a href="/cities/${c.id}">Full guide &rarr;</a><a href="/compare?a=${c.id}">Compare &rarr;</a></div>
-        </div>
-      </li>`;
+        </li>`;
   }).join('\n');
 
-  const introHtml = String(content.intro || '').split(/\n\n+/).map((p) => `<p>${txt(p.trim())}</p>`).join('\n          ');
+  const introHtml = paras(content.intro).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
+  const weighHtml = paras(content.considerations).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
+  const closeHtml = paras(content.closing).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
+  const picks = (content.quickPicks || []).filter((p) => byId[p.id]).map((p) => {
+    const c = byId[p.id];
+    return `          <a class="best-pick" href="/cities/${c.id}"><span class="best-pick-label">${esc(p.label)}</span><span class="best-pick-city"><img src="${flag(c.iso)}" alt="" width="24" height="18">${esc(c.name)}</span><p class="best-pick-note">${txt(p.note)}</p></a>`;
+  }).join('\n');
   const faqHtml = (content.faq || []).map((f) => `        <div><h3 class="best-faq-q">${txt(f.q)}</h3><p class="best-faq-a">${txt(f.a)}</p></div>`).join('\n');
   const relatedHtml = related.filter((r) => r.key !== key).map((r) => `<a href="/best/${r.slug}">${esc(r.h1)}</a>`).join('\n          ');
 
   const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: esc(data.h1), itemListOrder: 'https://schema.org/ItemListOrderDescending', numberOfItems: data.cities.length,
     itemListElement: data.cities.map((c) => ({ '@type': 'ListItem', position: c.rank, url: BASE + '/cities/' + c.id, name: c.name })) };
-  const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage',
-    mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) } : null;
+  const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) } : null;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -180,21 +226,31 @@ function build(key, related) {
         <span class="best-eyebrow">The Nomad HQ City Index</span>
         <h1>${esc(data.h1)}</h1>
         <p class="sub">${esc(content.heroSubtitle || '')}</p>
+        <a href="#ranking" class="btn btn-lg btn-ghost">See the ranking &darr;</a>
       </div></div>
     </header>
     <div class="best-body">
       <section class="best-intro">
-          ${introHtml}
-        <p class="best-method">${txt(content.methodology || '')} Explore the data yourself on the <a href="/compare">comparison tool</a> or <a href="/cities">browse all 410 city guides</a>.</p>
+        ${introHtml}
+        <p class="best-method">${txt(content.methodology || '')} Explore the numbers yourself on the <a href="/compare">comparison tool</a> or <a href="/cities">browse all 410 city guides</a>.</p>
       </section>
 
-      <ol class="best-list">
+      ${picks ? `<section class="best-picks"><h2 class="best-h2">At a glance</h2><div class="best-picks-grid">\n${picks}\n        </div></section>` : ''}
+
+      ${weighHtml ? `<section class="best-weigh"><h2 class="best-h2">What to weigh before you book</h2>\n        ${weighHtml}\n      </section>` : ''}
+
+      <section class="best-listwrap" id="ranking">
+        <h2 class="best-h2">The ranking</h2>
+        <ol class="best-list">
 ${items}
-      </ol>
+        </ol>
+      </section>
 
-      ${(content.faq && content.faq.length) ? `<section class="best-faq"><h2>Frequently asked questions</h2>\n${faqHtml}\n      </section>` : ''}
+      ${closeHtml ? `<section class="best-closing">\n        ${closeHtml}\n      </section>` : ''}
 
-      <section class="best-related"><h2>More nomad city rankings</h2>
+      ${(content.faq && content.faq.length) ? `<section class="best-faq"><h2 class="best-h2">Frequently asked questions</h2>\n${faqHtml}\n      </section>` : ''}
+
+      <section class="best-related"><h2 class="best-h2">More nomad city rankings</h2>
         <div class="best-related-grid">
           ${relatedHtml}
         </div>
@@ -213,12 +269,10 @@ ${items}
 `;
   fs.mkdirSync(OUTDIR, { recursive: true });
   fs.writeFileSync(path.join(OUTDIR, data.slug + '.html'), html);
-  console.log(`best/${data.slug}.html  (${data.cities.length} cities, ${content.entries ? content.entries.length : 0} blurbs, ${content.faq ? content.faq.length : 0} FAQ)`);
+  console.log(`best/${data.slug}.html  (${data.cities.length} cities, ${content.entries ? content.entries.length : 0} blurbs, ${content.quickPicks ? content.quickPicks.length : 0} picks, ${content.faq ? content.faq.length : 0} FAQ)`);
 }
 
-// related = all pages we know about (for cross-links); read from any best-*.json present
 const allKeys = fs.readdirSync(DIR).filter((f) => /^best-.+\.json$/.test(f)).map((f) => f.replace(/^best-|\.json$/g, ''));
 const related = allKeys.map((k) => { const d = JSON.parse(fs.readFileSync(path.join(DIR, 'best-' + k + '.json'), 'utf8')); return { key: k, slug: d.slug, h1: d.h1 }; });
-
 const keys = process.argv.slice(2);
 for (const k of keys) build(k, related);
