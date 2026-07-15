@@ -52,12 +52,18 @@ const NAMECLASS = { coworking: 'cowork-card-name', eat: 'eat-card-name', stay: '
       if (!target) { console.error('  no card match:', slug, v.kind, v.name); miss++; continue; }
       if (/venue-card-image/.test(target[0])) { skip++; continue; }
 
-      // download + convert
+      // download + convert (retry with backoff on 429/5xx; throttle to be polite to Wikimedia)
       try {
-        const res = await fetch(v.viewUrl || v.imageUrl, UA);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const buf = Buffer.from(await res.arrayBuffer());
+        let buf = null;
+        for (let attempt = 0; attempt < 4; attempt++) {
+          const res = await fetch(v.viewUrl || v.imageUrl, UA);
+          if (res.ok) { buf = Buffer.from(await res.arrayBuffer()); break; }
+          if (res.status === 429 || res.status >= 500) { await new Promise((r) => setTimeout(r, 2000 * (attempt + 1))); continue; }
+          throw new Error('HTTP ' + res.status);
+        }
+        if (!buf) throw new Error('HTTP 429 (gave up)');
         await sharp(buf).resize({ width: 600, withoutEnlargement: true }).webp({ quality: 80 }).toFile(webpAbs);
+        await new Promise((r) => setTimeout(r, 350));
       } catch (e) { console.error('  DL/convert fail:', slug, v.name, e.message); miss++; continue; }
 
       const alt = esc(v.alt || (v.name + ' in ' + (data.city || slug)));
