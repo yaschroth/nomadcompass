@@ -16,6 +16,7 @@ const add = (loc, priority, changefreq) => urls.push({ loc, priority, changefreq
 add('/', '1.0', 'weekly');
 add('/cities', '0.9', 'weekly');
 add('/compare', '0.7', 'monthly');
+add('/best', '0.8', 'weekly');
 add('/wheel', '0.8', 'monthly');
 add('/blog', '0.7', 'weekly');
 add('/about', '0.4', 'yearly');
@@ -29,6 +30,11 @@ for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith
 }
 for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
   add('/cities/' + f.replace(/\.html$/, ''), '0.8', 'monthly');
+}
+if (fs.existsSync(path.join(ROOT, 'best'))) {
+  for (const f of fs.readdirSync(path.join(ROOT, 'best')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
+    add('/best/' + f.replace(/\.html$/, ''), '0.7', 'monthly');
+  }
 }
 
 const body = urls.map((u) =>
