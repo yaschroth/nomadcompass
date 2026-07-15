@@ -37,6 +37,7 @@ const PAGES = {
   community:{ slug: 'best-cities-for-nomad-community',    h1: 'Best Cities for Meeting Other Nomads',    dimension: 'nomad community', metric: 'community' },
   nightlife:{ slug: 'best-cities-for-nightlife',          h1: 'Best Cities for Nightlife',               dimension: 'nightlife', metric: 'nightlife' },
   english: { slug: 'best-cities-for-english-speakers',    h1: 'Best Cities for English Speakers',        dimension: 'getting by in English', metric: 'english' },
+  overall: { slug: 'best-all-round-cities-for-digital-nomads', h1: 'The Best All-Round Cities for Digital Nomads', dimension: 'all-around quality as a base', metric: 'overall' },
 };
 
 function rankFor(cfg) {
@@ -45,13 +46,15 @@ function rankFor(cfg) {
   // else ranks by the category score (highest first). Both tie-break on overall Nomad Score.
   const cmp = cfg.sort === 'priceAsc'
     ? (a, b) => ((a.costPerMonth || 1e9) - (b.costPerMonth || 1e9)) || (nomadScore(b) - nomadScore(a))
+    : cfg.metric === 'overall'
+    ? (a, b) => nomadScore(b) - nomadScore(a)
     : (a, b) => ((b.scores[key] || 0) - (a.scores[key] || 0)) || (nomadScore(b) - nomadScore(a));
   return CITIES.slice()
     .sort(cmp)
     .slice(0, N)
     .map((c, i) => ({
       rank: i + 1, id: c.id, name: c.name, country: c.country, flag: c.flag || '', iso: iso(c),
-      metricScore: c.scores[key], nomadScore: nomadScore(c), costPerMonth: c.costPerMonth, tagline: c.tagline,
+      metricScore: cfg.metric === 'overall' ? nomadScore(c) : c.scores[key], nomadScore: nomadScore(c), costPerMonth: c.costPerMonth, tagline: c.tagline,
       scores: c.scores,
     }));
 }

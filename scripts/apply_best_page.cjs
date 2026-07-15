@@ -33,6 +33,7 @@ function navHtml() {
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/wheel" class="nav-link">Wheel</a></li>
         <li><a href="/cities" class="nav-link">Cities</a></li>
+        <li><a href="/best" class="nav-link active">Rankings</a></li>
         <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
@@ -44,6 +45,7 @@ function navHtml() {
         <li><a href="/" class="nav-mobile-link">Home</a></li>
         <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
         <li><a href="/cities" class="nav-mobile-link">Cities</a></li>
+        <li><a href="/best" class="nav-mobile-link active">Rankings</a></li>
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
@@ -154,8 +156,10 @@ function build(key, related) {
     const blurb = blurbById[c.id];
     const metricStat = data.metric === 'cost'
       ? `<span class="best-stat hi">${esc(money(c.costPerMonth))}</span>`
+      : data.metric === 'overall'
+      ? `<span class="best-stat hi">Nomad Score ${c.nomadScore}</span>`
       : `<span class="best-stat hi">${esc(chipLabel)} ${c.metricScore}/10</span>`;
-    const nomadStat = `<span class="best-stat nomad">Nomad Score ${c.nomadScore}</span>`;
+    const nomadStat = data.metric === 'overall' ? '' : `<span class="best-stat nomad">Nomad Score ${c.nomadScore}</span>`;
     const budgetStat = data.metric !== 'cost' ? `<span class="best-stat">${esc(money(c.costPerMonth))}</span>` : '';
     const subs = ctx.map((k) => {
       const v = c.scores[k]; if (typeof v !== 'number') return '';
