@@ -1,207 +1,204 @@
 /* ============================================
-   NOMADCOMPASS - FOOTER STYLES
-   Light footer that matches the site's airy sections
+   THE NOMAD HQ - FOOTER
+   Deep navy footer with a terracotta accent, matching the site's dark heroes.
+   Layout is flex-based so it adapts to 3-column (city/best) and 4-column
+   (home, with newsletter) footers without markup changes.
    ============================================ */
 
-/* --------------------------------------------
-   FOOTER CONTAINER (light, matches sections)
-   -------------------------------------------- */
 .footer {
-  background-color: var(--color-sand);
-  color: var(--color-charcoal);
-  border-top: 1px solid var(--color-sand-dark);
+  position: relative;
+  background: linear-gradient(180deg, #111a2b 0%, #0a0f1b 100%);
+  color: #94a3b8;
   padding-top: var(--space-16);
   padding-bottom: var(--space-8);
 }
+/* soft terracotta glow along the very top edge */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, rgba(192,57,43,0) 8%, var(--color-terracotta) 50%, rgba(192,57,43,0) 92%, transparent 100%);
+  opacity: 0.9;
+}
 
 /* --------------------------------------------
-   FOOTER GRID
+   GRID -> flexible columns
    -------------------------------------------- */
 .footer-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-10);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-10) var(--space-12);
   margin-bottom: var(--space-12);
 }
-@media (min-width: 640px) {
-  .footer-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (min-width: 1024px) {
-  .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1.5fr; gap: var(--space-8); }
-}
+.footer-column { flex: 1 1 150px; min-width: 0; }
+.footer-about { flex: 2 1 300px; max-width: 400px; }
+.footer-newsletter { flex: 1.6 1 260px; }
 
 /* --------------------------------------------
-   COLUMNS: headings, logo, description
+   BRAND + DESCRIPTION
    -------------------------------------------- */
-.footer-heading {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  color: var(--color-ink);
-  margin-bottom: var(--space-5);
-}
-
 .footer-logo {
   font-family: var(--font-display);
   font-size: 1.6rem;
-  color: var(--color-ink);
+  color: #fff;
   text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
   transition: transform var(--transition-fast);
 }
 .footer-logo * { text-decoration: none !important; }
 .footer-logo:hover { transform: scale(1.02); }
-
 .footer-logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   transition: transform var(--transition-fast);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
 }
 .footer-logo:hover .footer-logo-icon { transform: rotate(-8deg) scale(1.05); }
-
-.footer-logo-nomad {
-  font-weight: 700;
-  color: var(--color-ink);
-  letter-spacing: -0.5px;
-}
-.footer-logo-accent {
-  font-weight: 700;
-  color: var(--color-terracotta);
-  letter-spacing: -0.5px;
-  transition: color var(--transition-fast);
-}
-.footer-logo:hover .footer-logo-accent { color: var(--color-terracotta-dark); }
+.footer-logo-nomad { font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+.footer-logo-accent { font-weight: 700; color: var(--color-forest-muted, #ff6b4a); letter-spacing: -0.5px; transition: color var(--transition-fast); }
+.footer-logo:hover .footer-logo-accent { color: #ff8863; }
 
 .footer-description {
   font-size: var(--text-base);
-  color: var(--color-stone);
+  color: #8b98ad;
   line-height: var(--leading-relaxed);
   margin-bottom: 0;
+  max-width: 42ch;
 }
 
 /* --------------------------------------------
-   LINK LISTS
+   COLUMN HEADINGS + LINKS
    -------------------------------------------- */
+.footer-heading {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #e2e8f0;
+  margin-bottom: var(--space-5);
+}
+
 .footer-links { list-style: none; padding: 0; margin: 0; }
 .footer-links li { margin-bottom: var(--space-3); }
 .footer-links li:last-child { margin-bottom: 0; }
 .footer-link {
+  position: relative;
   font-size: var(--text-base);
-  color: var(--color-charcoal);
+  color: #94a3b8;
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
 }
-.footer-link:hover { color: var(--color-terracotta); }
+.footer-link::before {
+  content: '';
+  position: absolute;
+  left: -12px; top: 50%;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--color-terracotta);
+  transform: translateY(-50%) scale(0);
+  transition: transform var(--transition-fast);
+}
+.footer-link:hover { color: #fff; padding-left: 12px; }
+.footer-link:hover::before { transform: translateY(-50%) scale(1); }
 
 /* --------------------------------------------
-   NEWSLETTER
+   NEWSLETTER (home only)
    -------------------------------------------- */
-.footer-newsletter-text {
-  font-size: var(--text-base);
-  color: var(--color-stone);
-  margin-bottom: var(--space-4);
-  line-height: var(--leading-relaxed);
-}
+.footer-newsletter-text { font-size: var(--text-base); color: #8b98ad; margin-bottom: var(--space-4); line-height: var(--leading-relaxed); }
 .footer-newsletter-form { display: flex; flex-direction: column; gap: var(--space-3); }
 @media (min-width: 480px) { .footer-newsletter-form { flex-direction: row; } }
-
 .footer-newsletter-input {
   flex: 1;
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-base);
-  color: var(--color-charcoal);
-  background-color: var(--color-white);
-  border: 1px solid var(--color-sand-dark);
+  color: #fff;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: var(--radius-md);
   min-width: 0;
 }
-.footer-newsletter-input::placeholder { color: var(--color-stone); }
+.footer-newsletter-input::placeholder { color: #64748b; }
 .footer-newsletter-input:focus {
   outline: none;
   border-color: var(--color-terracotta);
-  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.25);
+  background-color: rgba(255,255,255,0.08);
 }
-
 .footer-newsletter-btn {
   padding: var(--space-3) var(--space-6);
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
-  color: var(--color-white);
+  color: #fff;
   background-color: var(--color-terracotta);
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
-.footer-newsletter-btn:hover { background-color: var(--color-terracotta-dark); }
+.footer-newsletter-btn:hover { background-color: var(--color-terracotta-dark); transform: translateY(-1px); }
 
 /* --------------------------------------------
-   SOCIAL LINKS
+   SOCIAL
    -------------------------------------------- */
-.footer-social { display: flex; gap: var(--space-4); margin-top: var(--space-6); }
+.footer-social { display: flex; gap: var(--space-3); margin-top: var(--space-6); }
 .footer-social-link {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-sand-dark);
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius-full);
-  color: var(--color-charcoal);
+  color: #cbd5e1;
   text-decoration: none;
-  font-size: var(--text-lg);
-  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
 }
 .footer-social-link:hover {
   background-color: var(--color-terracotta);
-  color: var(--color-white);
+  color: #fff;
   border-color: var(--color-terracotta);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
-.footer-social-icon { width: 20px; height: 20px; fill: currentColor; }
+.footer-social-icon { width: 19px; height: 19px; fill: currentColor; }
 
 /* --------------------------------------------
-   FOOTER BOTTOM: legal, disclosure, copyright
+   BOTTOM BAR: legal, disclosure, copyright
    -------------------------------------------- */
 .footer-bottom {
-  border-top: 1px solid var(--color-sand-dark);
+  border-top: 1px solid rgba(255,255,255,0.08);
   padding-top: var(--space-8);
 }
-.footer-disclosure {
-  font-size: var(--text-sm);
-  color: var(--color-stone);
-  text-align: center;
-  margin-bottom: var(--space-4);
-  line-height: var(--leading-relaxed);
-}
-.footer-copyright {
-  font-size: var(--text-sm);
-  color: var(--color-stone);
-  text-align: center;
-  margin: 0;
-}
-.footer-copyright a {
-  color: var(--color-charcoal);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-.footer-copyright a:hover { color: var(--color-terracotta); }
-
 .footer-legal {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-2) var(--space-5);
   margin-bottom: var(--space-4);
 }
 .footer-legal a {
   font-size: var(--text-sm);
-  color: var(--color-stone);
+  color: #94a3b8;
   text-decoration: none;
   transition: color var(--transition-fast);
 }
-.footer-legal a:hover { color: var(--color-terracotta); }
+.footer-legal a:hover { color: #fff; }
+.footer-disclosure {
+  font-size: var(--text-sm);
+  color: #64748b;
+  text-align: center;
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-relaxed);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.footer-copyright { font-size: var(--text-sm); color: #64748b; text-align: center; margin: 0; }
+.footer-copyright a { color: #94a3b8; text-decoration: none; transition: color var(--transition-fast); }
+.footer-copyright a:hover { color: var(--color-terracotta); }
