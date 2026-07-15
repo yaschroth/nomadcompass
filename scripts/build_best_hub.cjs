@@ -58,7 +58,7 @@ const html = `<!DOCTYPE html>
   <link rel="stylesheet" href="styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <style>
-    .hub-hero { position: relative; width: 100%; min-height: 58vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hub-hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
     .hub-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .hub-hero-overlay { position: relative; z-index: 1; width: 100%; padding: calc(var(--nav-height,64px) + 3rem) 0 3rem; background: linear-gradient(to top, rgba(15,23,42,.94), rgba(15,23,42,.66) 55%, rgba(15,23,42,.15) 88%, transparent); color:#fff; }
     .hub-hero::before { content:''; position:absolute; top:0;left:0;right:0; height:calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }

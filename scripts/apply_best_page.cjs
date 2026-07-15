@@ -62,7 +62,7 @@ function navScript() {
 }
 
 const CSS = `
-  .best-hero { position: relative; width: 100%; min-height: 62vh; display: flex; align-items: flex-end; overflow: hidden; }
+  .best-hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
   .best-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .best-hero-overlay { position: relative; z-index: 1; width: 100%; padding: calc(var(--nav-height,64px) + 3rem) 0 3rem; background: linear-gradient(to top, rgba(15,23,42,.94) 0%, rgba(15,23,42,.7) 55%, rgba(15,23,42,.2) 85%, transparent 100%); color: #fff; }
   .best-hero::before { content:''; position:absolute; top:0; left:0; right:0; height: calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background: linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
