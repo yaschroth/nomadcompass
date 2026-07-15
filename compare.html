@@ -91,6 +91,20 @@
     .cmp-combo-empty { padding: .9rem; color: var(--color-stone); font-size: var(--text-sm); text-align: center; }
 
     /* ============ comparison board ============ */
+    /* radar / spider chart */
+    .cmp-radar-wrap { padding: 2.5rem var(--space-4, 1rem) 0; }
+    .cmp-radar-wrap[hidden] { display: none; }
+    .cmp-radar-inner { max-width: 600px; margin: 0 auto; }
+    #cmpRadar { width: 100%; height: auto; display: block; overflow: visible; }
+    .cmp-radar-ring { fill: none; stroke: var(--color-sand-dark); stroke-width: 1; }
+    .cmp-radar-axis { stroke: #e3e9f2; stroke-width: 1; }
+    .cmp-radar-label { font-size: 12px; fill: var(--color-stone); font-weight: 600; }
+    .cmp-radar-poly { fill-opacity: 0.13; stroke-width: 2.5; stroke-linejoin: round; }
+    .cmp-radar-dot { stroke: #fff; stroke-width: 1.5; }
+    .cmp-radar-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; margin-top: .75rem; }
+    .cmp-radar-legend span { display: flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600; color: var(--color-charcoal); }
+    .cmp-radar-legend i { width: 14px; height: 14px; border-radius: 4px; }
+    .cmp-citydot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 2px; vertical-align: middle; }
     .cmp-board-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 2.5rem 0 .5rem; }
     .cmp-board { max-width: 1140px; margin: 0 auto; min-width: 660px; padding: 0 var(--space-4, 1rem); }
     .cmp-grid { display: grid; align-items: stretch; }
@@ -216,6 +230,13 @@
       </div>
     </section>
 
+    <div class="cmp-radar-wrap" id="radarWrap" hidden>
+      <div class="cmp-radar-inner">
+        <svg id="cmpRadar" viewBox="0 0 440 380" role="img" aria-label="Radar chart comparing all 13 category scores"></svg>
+        <div class="cmp-radar-legend" id="radarLegend"></div>
+      </div>
+    </div>
+
     <div class="cmp-board-wrap">
       <div class="cmp-board">
         <div class="cmp-grid" id="board"></div>
@@ -311,6 +332,8 @@
         { k: 'airquality', name: 'Air Quality', ic: '🌬️' }
       ];
       var CATKEYS = CATS.map(function (c) { return c.k; });
+      var SHORT = { climate: 'Climate', cost: 'Value', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
+      var COLORS = ['#c0392b', '#1b6ca8', '#d19a2f']; // slot A / B / C
 
       function nomadScore(city) {
         var t = 0, n = 0;
@@ -482,7 +505,7 @@
             '<button class="cmp-remove" data-slot="' + i + '" aria-label="Remove ' + esc(c.name) + '" title="Remove">×</button>' +
             '<img class="cmp-banner" src="' + esc(c.image || ('/images/cities/' + c.id + '-card.webp')) + '" alt="' + esc(c.name) + '" loading="lazy" onerror="this.style.visibility=\'hidden\'">' +
             '<img class="cmp-flag" src="' + flagUrl(c) + '" alt="" width="34" height="25">' +
-            '<div class="cmp-name">' + esc(c.name) + '</div>' +
+            '<div class="cmp-name"><span class="cmp-citydot" style="background:' + COLORS[i] + '"></span>' + esc(c.name) + '</div>' +
             '<div class="cmp-country">' + esc(c.country) + '</div>' +
             gauge(sc, isBest) +
             '<div class="cmp-score-lbl">Nomad Score</div>' +
@@ -513,6 +536,7 @@
         });
 
         board.innerHTML = html;
+        drawRadar(cities, active.length);
 
         // animate bars in
         requestAnimationFrame(function () {
@@ -530,6 +554,47 @@
         note.textContent = active.length < 2
           ? 'Add a second city to see the head-to-head comparison. Higher is better in every category, including cost (a higher score means more affordable).'
           : 'Higher is better in every row, including cost of living (a higher score means more affordable). "Budget" is the estimated monthly spend for a nomad. Scores use the same Nomad Score formula as the city guides.';
+      }
+
+      // =============== radar / spider chart ===============
+      var radarWrap = document.getElementById('radarWrap');
+      var radarSvg = document.getElementById('cmpRadar');
+      var radarLegend = document.getElementById('radarLegend');
+      function drawRadar(cities, activeCount) {
+        if (activeCount < 2) { radarWrap.hidden = true; return; }
+        radarWrap.hidden = false;
+        var cx = 220, cy = 185, maxR = 132, n = CATKEYS.length;
+        var step = (2 * Math.PI) / n, start = -Math.PI / 2;
+        function pt(i, val) {
+          var a = start + i * step, r = maxR * val / 10;
+          return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+        }
+        var svg = '';
+        // grid rings
+        [2, 4, 6, 8, 10].forEach(function (lvl) {
+          var pts = CATKEYS.map(function (k, i) { return pt(i, lvl).map(function (v) { return v.toFixed(1); }).join(','); }).join(' ');
+          svg += '<polygon class="cmp-radar-ring" points="' + pts + '"/>';
+        });
+        // axes + labels
+        CATKEYS.forEach(function (k, i) {
+          var end = pt(i, 10), lab = pt(i, 11.9);
+          svg += '<line class="cmp-radar-axis" x1="' + cx + '" y1="' + cy + '" x2="' + end[0].toFixed(1) + '" y2="' + end[1].toFixed(1) + '"/>';
+          var ang = start + i * step, anchor = Math.cos(ang) > 0.2 ? 'start' : Math.cos(ang) < -0.2 ? 'end' : 'middle';
+          var dy = Math.sin(ang) > 0.5 ? '0.9em' : Math.sin(ang) < -0.5 ? '-0.3em' : '0.3em';
+          svg += '<text class="cmp-radar-label" x="' + lab[0].toFixed(1) + '" y="' + lab[1].toFixed(1) + '" text-anchor="' + anchor + '" dy="' + dy + '">' + (SHORT[k] || k) + '</text>';
+        });
+        // one polygon per active city (in slot order)
+        cities.forEach(function (c, slot) {
+          if (!c) return;
+          var col = COLORS[slot];
+          var pts = CATKEYS.map(function (k, i) { var v = typeof c.scores[k] === 'number' ? c.scores[k] : 0; return pt(i, v).map(function (x) { return x.toFixed(1); }).join(','); });
+          svg += '<polygon class="cmp-radar-poly" points="' + pts.join(' ') + '" style="fill:' + col + ';stroke:' + col + '"/>';
+          pts.forEach(function (p) { var xy = p.split(','); svg += '<circle class="cmp-radar-dot" cx="' + xy[0] + '" cy="' + xy[1] + '" r="2.5" fill="' + col + '"/>'; });
+        });
+        radarSvg.innerHTML = svg;
+        radarLegend.innerHTML = cities.map(function (c, slot) {
+          return c ? '<span><i style="background:' + COLORS[slot] + '"></i>' + esc(c.name) + '</span>' : '';
+        }).join('');
       }
 
       function rowMoney(cities, activeCount) {
