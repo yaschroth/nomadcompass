@@ -14,6 +14,7 @@ const LEGAL = `<nav class="footer-legal" aria-label="Legal and company">
           <a href="/disclosure">Affiliate Disclosure</a>
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
+          <a href="/legal-notice">Legal Notice</a>
         </nav>
         <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
         `;

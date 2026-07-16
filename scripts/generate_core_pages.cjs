@@ -99,6 +99,7 @@ const FOOTER = `  <footer class="footer">
             <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
             <li><a href="/terms" class="footer-link">Terms of Service</a></li>
             <li><a href="/disclosure" class="footer-link">Affiliate Disclosure</a></li>
+            <li><a href="/legal-notice" class="footer-link">Legal Notice</a></li>
           </ul>
         </div>
       </div>
@@ -162,6 +163,28 @@ const updatedLine = `    <p class="legal-updated">Last updated: ${UPDATED}</p>`;
 // page (custom layout, AboutPage + Organization + Person JSON-LD, stat row, category grid,
 // author card, explore hub) that no longer fits the shared legal template. Edit about.html directly.
 const pages = {
+  'legal-notice.html': page('legal-notice', 'Legal Notice, The Nomad HQ', 'Company and contact details for The Nomad HQ, operated by Topblog LLC. This page also serves as our imprint (Impressum).', `    <h1>Legal Notice</h1>
+    <p class="lead">Company and contact information for The Nomad HQ. This page also serves as our imprint (Impressum).</p>
+    <h2>Site operator</h2>
+    <p>This website, The Nomad HQ (thenomadhq.com), is operated by:</p>
+    <ul>
+      <li><strong>Topblog LLC</strong></li>
+      <li>1309 Coffeen Avenue STE 1200</li>
+      <li>Sheridan, Wyoming 82801</li>
+      <li>United States</li>
+    </ul>
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>. For corrections, city suggestions, or anything else, see our <a href="/contact">contact page</a>.</p>
+    <h2>Responsible for content</h2>
+    <p>Editorial content is written and maintained by Yannick Schroth on behalf of Topblog LLC. Read more on the <a href="/about/yannick-schroth">author page</a>.</p>
+    <h2>Affiliate links</h2>
+    <p>Some links on this site are affiliate links, and we may earn a commission at no extra cost to you. This never influences our ratings. Full details are in our <a href="/disclosure">affiliate disclosure</a>.</p>
+    <h2>Liability for content and links</h2>
+    <p>We produce our content with care, but we cannot guarantee that it is always accurate, complete, or current; city data in particular changes over time. Our pages may link to external websites we do not control, and we are not responsible for their content. See our <a href="/terms">terms of service</a> for the full disclaimer.</p>
+    <h2>Data protection</h2>
+    <p>How we collect and handle your data is explained in our <a href="/privacy">privacy policy</a>.</p>
+${updatedLine}`),
+
   'contact.html': page('contact', 'Contact The Nomad HQ', 'Get in touch with The Nomad HQ, corrections, city suggestions, partnerships, or press.', `    <h1>Contact</h1>
     <p class="lead">Questions, corrections, city suggestions, or partnership ideas, we read everything.</p>
     <p>The fastest way to reach us is email:</p>

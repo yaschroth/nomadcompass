@@ -24,6 +24,7 @@ add('/contact', '0.3', 'yearly');
 add('/disclosure', '0.3', 'yearly');
 add('/privacy', '0.2', 'yearly');
 add('/terms', '0.2', 'yearly');
+add('/legal-notice', '0.2', 'yearly');
 
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
   add('/blog/' + f.replace(/\.html$/, ''), '0.7', 'monthly');
