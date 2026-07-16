@@ -138,7 +138,7 @@ function page(slug, title, desc, bodyHtml, robots = 'index, follow') {
     .legal-page p, .legal-page li { color: var(--color-charcoal); line-height: 1.75; }
     .legal-page ul { padding-left: 1.25rem; margin: .5rem 0 1rem; }
     .legal-page li { margin-bottom: .35rem; }
-    .legal-page a { color: var(--color-terracotta); }
+    .legal-page a:not(.btn) { color: var(--color-terracotta); }
     .legal-updated { color: var(--color-stone); font-size: .9rem; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--color-sand-dark); }
     .legal-cta { display: inline-flex; margin-top: 1rem; }
   </style>
@@ -158,18 +158,10 @@ ${FOOTER}
 
 const updatedLine = `    <p class="legal-updated">Last updated: ${UPDATED}</p>`;
 
+// NOTE: about.html is intentionally NOT generated here. It is a bespoke, hand-maintained
+// page (custom layout, AboutPage + Organization + Person JSON-LD, stat row, category grid,
+// author card, explore hub) that no longer fits the shared legal template. Edit about.html directly.
 const pages = {
-  'about.html': page('about', 'About The Nomad HQ', 'The Nomad HQ rates 410 cities on the 13 things that matter most to digital nomads, so remote workers can find their ideal base with real data instead of guesswork.', `    <h1>About The Nomad HQ</h1>
-    <p class="lead">We help remote workers find the right city to live and work, using data, not hype.</p>
-    <p>The Nomad HQ rates <strong>410 cities</strong> on the 13 things that actually matter to digital nomads: cost of living, internet, safety, climate, visas, community, food, culture, and more. Every city gets a calibrated <strong>Nomad Score</strong> and a full breakdown, so you can compare destinations like-for-like instead of trusting scattered blog opinions.</p>
-    <h2>How we rate cities</h2>
-    <p>Each of the 13 categories is scored 1&ndash;10 from official data sources, global indices, and hands-on assessment. The Nomad Score is a calibrated composite of those categories, tuned so the strongest and weakest cities genuinely stand out. Ratings are independent, they are never influenced by advertising or affiliate partnerships. You can <a href="/cities">browse and compare every city</a> or <a href="/wheel">match your priorities on the Nomad Wheel</a>.</p>
-    <h2>Who is behind it</h2>
-    <p>The Nomad HQ is written and maintained by <a href="/about/yannick-schroth">Yannick Schroth</a>, who covers remote work, travel, and the practicalities of living abroad. Read more on the <a href="/about/yannick-schroth">author page</a>.</p>
-    <h2>Get in touch</h2>
-    <p>Spotted an error, or have a city we should add? <a href="/contact">Contact us</a>, reader corrections keep the ratings honest.</p>
-    <a href="/cities" class="btn btn-primary btn-lg legal-cta">Browse all cities &rarr;</a>`),
-
   'contact.html': page('contact', 'Contact The Nomad HQ', 'Get in touch with The Nomad HQ, corrections, city suggestions, partnerships, or press.', `    <h1>Contact</h1>
     <p class="lead">Questions, corrections, city suggestions, or partnership ideas, we read everything.</p>
     <p>The fastest way to reach us is email:</p>
