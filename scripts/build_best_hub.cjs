@@ -17,6 +17,9 @@ const pages = keys.map((k) => {
   let teaser = '';
   const cf = path.join(DIR, 'content-' + k + '.json');
   if (fs.existsSync(cf)) { try { teaser = JSON.parse(fs.readFileSync(cf, 'utf8').replace(/^﻿/, '')).metaDescription || ''; } catch (e) {} }
+  // Robustness: if no content JSON (e.g. an older page whose source wasn't kept), reuse the
+  // page's own meta description so the hub card keeps its teaser.
+  if (!teaser) { try { const hp = path.join(ROOT, 'best', d.slug + '.html'); if (fs.existsSync(hp)) { const m = fs.readFileSync(hp, 'utf8').match(/name="description" content="([^"]+)"/); if (m) teaser = m[1]; } } catch (e) {} }
   return { key: k, slug: d.slug, h1: d.h1, top: d.cities[0], teaser };
 }).sort((a, b) => a.h1.localeCompare(b.h1));
 

@@ -153,11 +153,16 @@ function build(key, related) {
   const ctx = CONTEXT.filter((k) => k !== data.metric).slice(0, 3);
 
   const items = data.cities.map((c) => {
-    const blurb = blurbById[c.id];
+    // Fall back to the city's tagline so a city added later (before its blurb is written) still renders.
+    const blurb = blurbById[c.id] || c.tagline || '';
     const metricStat = data.metric === 'cost'
       ? `<span class="best-stat hi">${esc(money(c.costPerMonth))}</span>`
       : data.metric === 'overall'
       ? `<span class="best-stat hi">Nomad Score ${c.nomadScore}</span>`
+      : data.metric === 'match'
+      ? `<span class="best-stat hi">Match ${c.metricScore}/10</span>`
+      : data.metric === 'value'
+      ? `<span class="best-stat hi">Value ${c.metricScore}</span>`
       : `<span class="best-stat hi">${esc(chipLabel)} ${c.metricScore}/10</span>`;
     const nomadStat = data.metric === 'overall' ? '' : `<span class="best-stat nomad">Nomad Score ${c.nomadScore}</span>`;
     const budgetStat = data.metric !== 'cost' ? `<span class="best-stat">${esc(money(c.costPerMonth))}</span>` : '';
