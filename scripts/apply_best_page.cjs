@@ -19,6 +19,17 @@ const SHORT = { climate: 'Climate', cost: 'Value', wifi: 'WiFi', nightlife: 'Nig
 // contextual sub-scores shown on each card (minus the page's own metric)
 const CONTEXT = ['safety', 'wifi', 'cost', 'community', 'climate'];
 
+// short labels for the grouped "More rankings" chips (geo pages derive their label from the h1)
+const RLBL = {
+  overall: 'All-round', value: 'Best value', cost: 'Cheapest', wifi: 'Fast WiFi', safety: 'Safest',
+  climate: 'Year-round weather', visa: 'Nomad visas', food: 'Food', nature: 'Nature & outdoors',
+  community: 'Nomad community', nightlife: 'Nightlife', english: 'English-speaking',
+  female: 'Female nomads', broke: 'Tight budget', beginner: 'First-timers', families: 'Families', party: 'Party scene',
+};
+const relShort = (r) => (r.key.startsWith('region_') || r.key.startsWith('country_'))
+  ? r.h1.replace(/^Best Digital Nomad Cities in (the )?/, '') : (RLBL[r.key] || r.h1);
+const relGroup = (r) => r.key.startsWith('region_') ? 'region' : r.key.startsWith('country_') ? 'country' : 'priority';
+
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const txt = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const money = (v) => typeof v === 'number' ? '$' + v.toLocaleString('en-US') + '/mo' : '';
@@ -134,10 +145,12 @@ const CSS = `
   .best-faq { padding: 2.75rem 0 1rem; }
   .best-faq-q { font-size:var(--text-lg); font-weight:600; color:var(--color-ink); margin:1.5rem 0 .4rem; }
   .best-faq-a { font-size:var(--text-base); line-height:1.72; color:var(--color-charcoal); margin:0; }
-  .best-related { padding: 2rem 0 1rem; }
-  .best-related-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:.8rem; }
-  .best-related-grid a { display:block; padding:.9rem 1.1rem; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:var(--radius-md); color:var(--color-ink); text-decoration:none; font-weight:600; font-size:var(--text-base); }
-  .best-related-grid a:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
+  .best-related { padding: 2.25rem 0 1rem; }
+  .best-related-group { margin-bottom: 1.4rem; }
+  .best-related-group h3 { font-size: 12px; text-transform: uppercase; letter-spacing:.09em; color:var(--color-stone); font-weight:700; margin:0 0 .75rem; }
+  .best-related-chips { display:flex; flex-wrap:wrap; gap:.55rem; }
+  .best-related-chips a { display:inline-flex; align-items:center; padding:.5rem .95rem; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:999px; text-decoration:none; font-weight:600; font-size:.92rem; transition:border-color .15s, background .15s, transform .15s, box-shadow .15s; }
+  .best-related-chips a:hover { border-color:var(--color-terracotta); background:#fff; transform:translateY(-1px); box-shadow:0 5px 14px rgba(15,23,42,.08); }
   .best-cta { text-align:center; padding: 2.5rem 1rem 4rem; display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
   @media (max-width:640px){ .best-item{ grid-template-columns:52px 1fr; } .best-thumb{ display:none; } .best-main{ padding:1rem 1.1rem; } .best-picks-grid{ grid-template-columns:1fr; } .best-rank span{ font-size:1.4rem; } }
 `;
@@ -192,7 +205,11 @@ function build(key, related) {
     return `          <a class="best-pick" href="/cities/${c.id}"><span class="best-pick-label">${esc(p.label)}</span><span class="best-pick-city"><img src="${flag(c.iso)}" alt="" width="24" height="18">${esc(c.name)}</span><p class="best-pick-note">${txt(p.note)}</p></a>`;
   }).join('\n');
   const faqHtml = (content.faq || []).map((f) => `        <div><h3 class="best-faq-q">${txt(f.q)}</h3><p class="best-faq-a">${txt(f.a)}</p></div>`).join('\n');
-  const relatedHtml = related.filter((r) => r.key !== key).map((r) => `<a href="/best/${r.slug}">${esc(r.h1)}</a>`).join('\n          ');
+  const relGroups = { priority: [], region: [], country: [] };
+  related.filter((r) => r.key !== key).forEach((r) => relGroups[relGroup(r)].push(r));
+  const relChips = (arr) => arr.map((r) => `<a href="/best/${r.slug}">${esc(relShort(r))}</a>`).join('');
+  const relBlock = (title, arr) => arr.length ? `<div class="best-related-group"><h3>${title}</h3><div class="best-related-chips">${relChips(arr)}</div></div>` : '';
+  const relatedHtml = relBlock('By priority', relGroups.priority) + '\n        ' + relBlock('By region', relGroups.region) + '\n        ' + relBlock('By country', relGroups.country);
 
   const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: esc(data.h1), itemListOrder: 'https://schema.org/ItemListOrderDescending', numberOfItems: data.cities.length,
     itemListElement: data.cities.map((c) => ({ '@type': 'ListItem', position: c.rank, url: BASE + '/cities/' + c.id, name: c.name })) };
@@ -260,9 +277,7 @@ ${items}
       ${(content.faq && content.faq.length) ? `<section class="best-faq"><h2 class="best-h2">Frequently asked questions</h2>\n${faqHtml}\n      </section>` : ''}
 
       <section class="best-related"><h2 class="best-h2">More nomad city rankings</h2>
-        <div class="best-related-grid">
-          ${relatedHtml}
-        </div>
+        ${relatedHtml}
       </section>
 
       <div class="best-cta">
