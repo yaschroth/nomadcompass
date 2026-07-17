@@ -143,7 +143,7 @@ const NAV = `  <nav class="nav" id="mainNav">
 const FOOTER = `<footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
-        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/tier-list" class="footer-link">Tier List</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li></ul></div>
+        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/tier-list" class="footer-link">Tier List</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li><li><a href="/activities" class="footer-link">By Activity</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
       <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
@@ -215,7 +215,12 @@ const CSS = `
   .tl-legend { display:flex; flex-wrap:wrap; gap:.4rem .9rem; }
   .tl-leg { display:inline-flex; align-items:center; gap:.4rem; font-size:.85rem; color:rgba(255,255,255,.9); font-variant-numeric:tabular-nums; }
   .tl-leg-dot { width:11px; height:11px; border-radius:3px; display:inline-block; }
-  .tl-wrap { max-width:1180px; margin:0 auto; padding:2.75rem var(--space-4,1rem) 1rem; }
+  .tl-wrap { max-width:1180px; margin:0 auto; padding:1.5rem var(--space-4,1rem) 1rem; }
+  .crumbs { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; font-size:.82rem; color:var(--color-stone); padding:.6rem 0 1rem; }
+  .crumbs a { color:var(--color-terracotta); text-decoration:none; font-weight:600; }
+  .crumbs a:hover { text-decoration:underline; }
+  .crumbs span { color:var(--color-sand-dark); }
+  .crumbs span[aria-current] { color:var(--color-charcoal); font-weight:600; }
   .tl-intro { font-size:var(--text-lg); line-height:1.75; color:var(--color-charcoal); max-width:70ch; margin:0 0 .8rem; }
   .tl-method { font-size:var(--text-sm); color:var(--color-stone); line-height:1.6; border-left:3px solid var(--color-terracotta); padding:.4rem 0 .4rem 1rem; margin:1.2rem 0 2.25rem; background:linear-gradient(90deg, rgba(192,57,43,.05), transparent); }
   .tl-method a { color:var(--color-terracotta); font-weight:600; }
@@ -382,6 +387,10 @@ function render(v) {
   const itemList = { '@context': 'https://schema.org', '@type': 'ItemList', name: v.metaTitle, numberOfItems: N, itemListOrder: 'https://schema.org/ItemListOrderDescending',
     itemListElement: ranked.map((r, i) => ({ '@type': 'ListItem', position: i + 1, url: BASE + '/cities/' + r.c.id, name: r.c.name })) };
   const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+  const purl = BASE + '/' + v.slug;
+  const crumbs = v.type === 'master' ? [['Home', BASE + '/'], ['Tier List', purl]] : [['Home', BASE + '/'], ['Tier lists', BASE + '/tier-lists'], [v.hubLabel, purl]];
+  const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
+  const crumbHtml = `<nav class="crumbs" aria-label="Breadcrumb">${crumbs.map((c, i) => i < crumbs.length - 1 ? `<a href="${c[1].replace(BASE, '')}">${esc(c[0])}</a><span>/</span>` : `<span aria-current="page">${esc(c[0])}</span>`).join('')}</nav>`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -408,6 +417,7 @@ function render(v) {
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(itemList)}</script>
+  <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   <script type="application/ld+json">${JSON.stringify(faqLd)}</script>
   <style>${CSS}</style>
 </head>
@@ -424,6 +434,7 @@ ${NAV}
       </div></div>
     </header>
     <div class="tl-wrap">
+      ${crumbHtml}
       <p class="tl-intro">${intro}</p>
       <p class="tl-method">${method}</p>
       ${v.type === 'master' ? `<div class="tl-filter">

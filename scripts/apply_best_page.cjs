@@ -70,7 +70,7 @@ function footerHtml() {
   return `<footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
-        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li></ul></div>
+        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li><li><a href="/activities" class="footer-link">By Activity</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
       <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
@@ -94,7 +94,12 @@ const CSS = `
   .best-hero .btn-ghost { color:#fff; border:1px solid rgba(255,255,255,.45); background:rgba(255,255,255,.08); }
   .best-hero .btn-ghost:hover { background:rgba(255,255,255,.18); border-color:#fff; }
   .best-body { max-width: 940px; margin: 0 auto; padding: 0 var(--space-4,1rem); }
-  .best-intro { padding: 3.25rem 0 .5rem; }
+  .crumbs { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; font-size:.82rem; color:var(--color-stone); padding:1.1rem 0 0; }
+  .crumbs a { color:var(--color-terracotta); text-decoration:none; font-weight:600; }
+  .crumbs a:hover { text-decoration:underline; }
+  .crumbs span { color:var(--color-sand-dark); }
+  .crumbs span[aria-current] { color:var(--color-charcoal); font-weight:600; }
+  .best-intro { padding: 1.75rem 0 .5rem; }
   .best-intro p { font-size:var(--text-lg); line-height:1.78; color:var(--color-charcoal); margin:0 0 1.15rem; }
   .best-method { font-size:var(--text-sm); color:var(--color-stone); line-height:1.6; border-left:3px solid var(--color-terracotta); padding:.4rem 0 .4rem 1rem; margin:1.6rem 0 0; background:linear-gradient(90deg, rgba(192,57,43,.05), transparent); }
   .best-method a { color:var(--color-terracotta); font-weight:600; }
@@ -222,6 +227,9 @@ function build(key, related) {
   const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: esc(data.h1), itemListOrder: 'https://schema.org/ItemListOrderDescending', numberOfItems: data.cities.length,
     itemListElement: data.cities.map((c) => ({ '@type': 'ListItem', position: c.rank, url: BASE + '/cities/' + c.id, name: c.name })) };
   const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) } : null;
+  const crumbs = [['Home', BASE + '/'], ['Rankings', BASE + '/best'], [data.h1, url]];
+  const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
+  const crumbHtml = `<nav class="crumbs" aria-label="Breadcrumb">${crumbs.map((c, i) => i < crumbs.length - 1 ? `<a href="${c[1].replace(BASE, '')}">${esc(c[0])}</a><span>/</span>` : `<span aria-current="page">${esc(c[0])}</span>`).join('')}</nav>`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -248,6 +256,7 @@ function build(key, related) {
   <link rel="stylesheet" href="../styles/nav.css">
   <link rel="stylesheet" href="../styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(itemListLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ''}
   <style>${CSS}</style>
 </head>
@@ -264,6 +273,7 @@ function build(key, related) {
       </div></div>
     </header>
     <div class="best-body">
+      ${crumbHtml}
       <section class="best-intro">
         ${introHtml}
         <p class="best-method">${txt(content.methodology || '')} Explore the numbers yourself on the <a href="/compare">comparison tool</a> or <a href="/cities">browse all 410 city guides</a>.</p>

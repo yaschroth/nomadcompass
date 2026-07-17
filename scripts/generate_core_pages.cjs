@@ -88,6 +88,7 @@ const FOOTER = `  <footer class="footer">
           <ul class="footer-links">
             <li><a href="/cities" class="footer-link">All Cities</a></li>
             <li><a href="/wheel" class="footer-link">Nomad Wheel</a></li>
+            <li><a href="/activities" class="footer-link">By Activity</a></li>
             <li><a href="/blog" class="footer-link">Blog</a></li>
           </ul>
         </div>

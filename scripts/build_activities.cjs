@@ -74,7 +74,12 @@ const CSS = `
   .act-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.4rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
   .act-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.92); line-height:1.6; margin:0; max-width:56ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
   .act-body { max-width:860px; margin:0 auto; padding:0 var(--space-4,1rem); }
-  .act-intro { padding:3rem 0 .5rem; }
+  .crumbs { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; font-size:.82rem; color:var(--color-stone); padding:1.1rem 0 0; }
+  .crumbs a { color:var(--color-terracotta); text-decoration:none; font-weight:600; }
+  .crumbs a:hover { text-decoration:underline; }
+  .crumbs span { color:var(--color-sand-dark); }
+  .crumbs span[aria-current] { color:var(--color-charcoal); font-weight:600; }
+  .act-intro { padding:1.5rem 0 .5rem; }
   .act-intro p { font-size:var(--text-lg); line-height:1.78; color:var(--color-charcoal); margin:0 0 1.15rem; }
   .act-note { font-size:var(--text-sm); color:var(--color-stone); line-height:1.6; border-left:3px solid var(--color-terracotta); padding:.5rem 0 .5rem 1rem; margin:1.2rem 0 1rem; background:linear-gradient(90deg, rgba(192,57,43,.05), transparent); }
   .act-h2 { font-family:'DM Serif Display',serif; font-size:1.85rem; color:var(--color-ink); margin:2.5rem 0 1.3rem; }
@@ -132,6 +137,9 @@ function render(a) {
   const itemList = { '@context': 'https://schema.org', '@type': 'ItemList', name: a.metaTitle, numberOfItems: (a.entries || []).length, itemListOrder: 'https://schema.org/ItemListOrderDescending',
     itemListElement: (a.entries || []).map((e, i) => { const it = { '@type': 'ListItem', position: i + 1, name: e.place }; if (e.cityId && CITYBYID[e.cityId]) it.url = BASE + '/cities/' + e.cityId; return it; }) };
   const faqLd = (a.faq && a.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: a.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) } : null;
+  const crumbs = [['Home', BASE + '/'], ['By activity', BASE + '/activities'], [a.metaTitle, url]];
+  const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
+  const crumbHtml = `<nav class="crumbs" aria-label="Breadcrumb">${crumbs.map((c, i) => i < crumbs.length - 1 ? `<a href="${c[1].replace(BASE, '')}">${esc(c[0])}</a><span>/</span>` : `<span aria-current="page">${esc(c[0])}</span>`).join('')}</nav>`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -154,6 +162,7 @@ function render(a) {
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(itemList)}</script>
+  <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ''}
   <style>${CSS}</style>
 </head>
@@ -169,6 +178,7 @@ ${NAV}
       </div></div>
     </header>
     <div class="act-body">
+      ${crumbHtml}
       <section class="act-intro">
         ${introHtml}
         <p class="act-note">This is a curated, editorial list based on each place's reputation for ${esc(a.activity.toLowerCase())} and how workable it is as a nomad base. Unlike our <a href="/best">rankings</a> and <a href="/tier-list">tier lists</a>, it is not generated from our 410-city Nomad Score, because we do not score cities on this activity.</p>

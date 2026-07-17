@@ -20,8 +20,10 @@ const node = process.execPath;
 const run = (script, args = []) => execFileSync(node, [path.join(__dirname, script), ...args], { cwd: ROOT, stdio: 'inherit' });
 
 // Live keys = every content-<key>.json present in the repo root.
+// Exclude content-activity-*.json: the editorial activity pages are a separate system
+// (build_activities.cjs), not Nomad-Score rankings, so rank_best/apply_best_page skip them.
 const keys = fs.readdirSync(ROOT)
-  .filter((f) => /^content-.+\.json$/.test(f))
+  .filter((f) => /^content-.+\.json$/.test(f) && !/^content-activity-/.test(f))
   .map((f) => f.replace(/^content-|\.json$/g, ''))
   .sort();
 

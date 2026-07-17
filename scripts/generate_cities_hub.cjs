@@ -413,6 +413,7 @@ ${cards}
           <ul class="footer-links">
             <li><a href="/cities" class="footer-link">All Cities</a></li>
             <li><a href="/wheel" class="footer-link">Decision Wheel</a></li>
+            <li><a href="/activities" class="footer-link">By Activity</a></li>
           </ul>
         </div>
         <div class="footer-column">
