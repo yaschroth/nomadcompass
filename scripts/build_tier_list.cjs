@@ -72,7 +72,8 @@ const NAV = `  <nav class="nav" id="mainNav">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/wheel" class="nav-link">Wheel</a></li>
         <li><a href="/cities" class="nav-link">Cities</a></li>
-        <li><a href="/best" class="nav-link active">Rankings</a></li>
+        <li><a href="/best" class="nav-link">Rankings</a></li>
+        <li><a href="/tier-list" class="nav-link active">Tier List</a></li>
         <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
@@ -84,7 +85,8 @@ const NAV = `  <nav class="nav" id="mainNav">
         <li><a href="/" class="nav-mobile-link">Home</a></li>
         <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
         <li><a href="/cities" class="nav-mobile-link">Cities</a></li>
-        <li><a href="/best" class="nav-mobile-link active">Rankings</a></li>
+        <li><a href="/best" class="nav-mobile-link">Rankings</a></li>
+        <li><a href="/tier-list" class="nav-mobile-link active">Tier List</a></li>
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
@@ -106,7 +108,7 @@ const NAVJS = `<script>(function(){var nav=document.getElementById('mainNav'),t=
 const title = 'Digital Nomad Cities Tier List: All 410 Cities Ranked S to F';
 const desc = 'The definitive digital nomad cities tier list. All 410 rated cities bucketed from S tier to F by Nomad Score, cost, WiFi, safety, climate and more.';
 const CSS = `
-  .tl-hero { position:relative; width:100%; min-height:62vh; display:flex; align-items:flex-end; overflow:hidden; }
+  .tl-hero { position:relative; width:100%; min-height:100vh; display:flex; align-items:flex-end; overflow:hidden; }
   .tl-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .tl-hero-overlay { position:relative; z-index:1; width:100%; padding: calc(var(--nav-height,64px) + 2.5rem) 0 2.75rem; background:linear-gradient(to top, rgba(15,23,42,.95) 0%, rgba(15,23,42,.7) 55%, rgba(15,23,42,.2) 85%, transparent); color:#fff; }
   .tl-hero::before { content:''; position:absolute; top:0;left:0;right:0; height:calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
@@ -127,19 +129,19 @@ const CSS = `
   .tl-letter { font-family:'DM Serif Display',serif; font-size:2.1rem; line-height:1; }
   .tl-range { font-size:.66rem; font-weight:600; opacity:.92; margin-top:.3rem; letter-spacing:.02em; }
   .tl-count { font-size:.66rem; opacity:.8; margin-top:.15rem; }
-  .tl-tiles { display:flex; flex-wrap:wrap; gap:.4rem; align-content:flex-start; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:12px; padding:.5rem; }
-  .tl-tile { position:relative; display:block; width:84px; height:60px; border-radius:8px; overflow:hidden; text-decoration:none; background:#0f172a; box-shadow:0 1px 3px rgba(15,23,42,.12); transition:transform .14s ease, box-shadow .14s ease; }
-  .tl-tile:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 8px 18px rgba(15,23,42,.25); z-index:2; }
+  .tl-tiles { display:flex; flex-wrap:wrap; gap:.55rem; align-content:flex-start; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:14px; padding:.6rem; }
+  .tl-tile { position:relative; display:block; width:132px; height:92px; border-radius:10px; overflow:hidden; text-decoration:none; background:#0f172a; box-shadow:0 1px 3px rgba(15,23,42,.12); transition:transform .14s ease, box-shadow .14s ease; }
+  .tl-tile:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 10px 22px rgba(15,23,42,.28); z-index:2; }
   .tl-tile:focus-visible { outline:2px solid #fff; outline-offset:1px; }
   .tl-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .tl-scrim { position:absolute; inset:0; background:linear-gradient(to top, rgba(15,23,42,.85) 0%, rgba(15,23,42,.05) 60%); }
-  .tl-name { position:absolute; left:4px; right:4px; bottom:3px; z-index:2; color:#fff; font-size:10.5px; font-weight:700; line-height:1.1; text-shadow:0 1px 3px rgba(0,0,0,.7); }
+  .tl-scrim { position:absolute; inset:0; background:linear-gradient(to top, rgba(15,23,42,.85) 0%, rgba(15,23,42,.05) 62%); }
+  .tl-name { position:absolute; left:7px; right:7px; bottom:6px; z-index:2; color:#fff; font-size:13px; font-weight:700; line-height:1.12; text-shadow:0 1px 4px rgba(0,0,0,.75); }
   .tl-faq { max-width:820px; margin:2.5rem auto 0; }
   .tl-faq h2 { font-family:'DM Serif Display',serif; font-size:1.85rem; color:var(--color-ink); margin:0 0 1.2rem; }
   .tl-faq-q { font-size:var(--text-lg); font-weight:600; color:var(--color-ink); margin:1.4rem 0 .4rem; }
   .tl-faq-a { font-size:var(--text-base); line-height:1.72; color:var(--color-charcoal); margin:0; }
   .tl-cta { text-align:center; padding:2.5rem 1rem 4rem; display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
-  @media (max-width:640px){ .tl-row{ grid-template-columns:64px 1fr; } .tl-letter{ font-size:1.6rem; } .tl-tile{ width:72px; height:52px; } .tl-name{ font-size:9.5px; } }
+  @media (max-width:640px){ .tl-row{ grid-template-columns:64px 1fr; } .tl-letter{ font-size:1.6rem; } .tl-tile{ width:104px; height:74px; } .tl-name{ font-size:11.5px; } }
 `;
 
 const html = `<!DOCTYPE html>
