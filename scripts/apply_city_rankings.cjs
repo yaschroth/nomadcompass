@@ -58,9 +58,6 @@ for (const r of rankings) {
   if (r.pagekey.startsWith('country_')) geoByCountry[r.h1.replace(/^Best Digital Nomad Cities in /, '')] = r;
 }
 
-const chip = (href, label) => `<a class="city-explore-chip" href="${href}">${label}</a>`;
-const rankChip = (href, rank, label) => `<a class="city-explore-chip" href="${href}"><span class="rank-badge">${rank}</span>${esc(label)}</a>`;
-
 const cityFiles = fs.readdirSync(path.join(ROOT, 'cities')).filter((f) => f.endsWith('.html'));
 let injected = 0, nomatch = 0, featCount = 0;
 
@@ -75,11 +72,11 @@ for (const file of cityFiles) {
   if (!m) { nomatch++; continue; }
   const oldInner = m[2];
 
-  // Nearby cities (from data)
+  // Nearby cities (from data) -> quiet crawlable line
   const near = nearest(c, 6);
-  const nearbyChips = near.map((n) => chip(`/cities/${n.id}`, esc(n.name))).join('');
+  const nearbyLine = near.map((n) => `<a href="/cities/${n.id}">${esc(n.name)}</a>`).join(' &middot; ');
 
-  // Featured rankings (top-15) + region/country "part of"
+  // Featured rankings (top-15, ranked) + region/country "part of" (no rank)
   const featured = (featMap[id] || []).slice().sort((a, b) => a.rank - b.rank);
   const featSlugs = new Set(featured.map((f) => f.slug));
   const part = [];
@@ -88,23 +85,26 @@ for (const file of cityFiles) {
   const ctyR = geoByCountry[c.country];
   if (ctyR && !featSlugs.has(ctyR.slug)) part.push({ slug: ctyR.slug, label: labelOf(ctyR) });
   if (featured.length) featCount++;
-  const rankHead = featured.length ? 'Featured in these rankings' : 'Part of these collections';
-  const rankChips = featured.map((f) => rankChip(`/best/${f.slug}`, f.rank, f.label)).join('') + part.map((p) => chip(`/best/${p.slug}`, esc(p.label))).join('');
 
-  // Further reading (carry over blog links already on the page)
+  const head = featured.length ? `Where ${esc(c.name)} ranks` : `${esc(c.name)} in our rankings`;
+  const rowF = (f) => `            <li class="city-rank-row"><span class="city-rank-num">${f.rank}</span><a class="city-rank-name" href="/best/${f.slug}">${esc(f.label)}</a><span class="city-rank-arrow">&rarr;</span></li>`;
+  const rowP = (p) => `            <li class="city-rank-row is-part"><span class="city-rank-num" aria-hidden="true"></span><a class="city-rank-name" href="/best/${p.slug}">${esc(p.label)}</a><span class="city-rank-arrow">&rarr;</span></li>`;
+  const rows = featured.map(rowF).concat(part.map(rowP)).join('\n');
+
+  // Further reading (carry over blog links already on the page) -> quiet line
   const seen = new Set();
   const reading = [...oldInner.matchAll(/<a\b[^>]*href="(\/blog\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/g)]
     .map((x) => ({ href: x[1], label: strip(x[2]) }))
     .filter((l) => l.label && !seen.has(l.href) && seen.add(l.href))
     .slice(0, 4);
-  const readingChips = reading.map((l) => chip(l.href, esc(l.label))).join('');
+  const readingLine = reading.map((l) => `<a href="${l.href}">${esc(l.label)}</a>`).join(' &middot; ');
 
-  const groups = [
-    `<div class="city-explore-group"><h3>Explore nearby</h3><div class="city-explore-chips">${nearbyChips}</div></div>`,
-    rankChips ? `<div class="city-explore-group"><h3>${rankHead}</h3><div class="city-explore-chips">${rankChips}</div></div>` : '',
-    readingChips ? `<div class="city-explore-group"><h3>Further reading</h3><div class="city-explore-chips">${readingChips}</div></div>` : '',
+  const footer = [
+    nearbyLine ? `<p class="city-explore-links"><strong>Nearby:</strong> ${nearbyLine}</p>` : '',
+    readingLine ? `<p class="city-explore-links"><strong>Further reading:</strong> ${readingLine}</p>` : '',
+    `<p class="city-explore-links"><a href="/cities">Browse all city guides</a> &middot; <a href="/wheel">Find your match on the Nomad Wheel</a> &middot; <a href="/best">See all 32 rankings</a></p>`,
   ].filter(Boolean).join('\n          ');
-  const card = `\n          <div class="city-explore-card" data-explore="v2">\n          ${groups}\n          <div class="city-explore-more"><a href="/cities">Browse all city guides</a><a href="/wheel">Find your match on the Nomad Wheel</a><a href="/best">See all 32 rankings</a></div>\n          </div>\n`;
+  const card = `\n          <div class="city-explore" data-explore="v3">\n          <h3 class="city-rank-head">${head}</h3>\n          <ol class="city-rank-list">\n${rows}\n          </ol>\n          ${footer}\n          </div>\n`;
 
   if (DRY) continue;
   html = html.replace(re, `$1${card}$3`);
