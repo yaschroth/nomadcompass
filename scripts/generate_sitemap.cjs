@@ -17,6 +17,7 @@ add('/', '1.0', 'weekly');
 add('/cities', '0.9', 'weekly');
 add('/compare', '0.7', 'monthly');
 add('/best', '0.8', 'weekly');
+add('/tier-list', '0.7', 'monthly');
 add('/wheel', '0.8', 'monthly');
 add('/blog', '0.7', 'weekly');
 add('/about', '0.4', 'yearly');

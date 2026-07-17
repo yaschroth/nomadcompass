@@ -81,6 +81,13 @@ const html = `<!DOCTYPE html>
     .hub-card-top { display:flex; align-items:center; gap:.45rem; font-size:var(--text-sm); font-weight:600; color:var(--color-terracotta); margin:.2rem 0 0; }
     .hub-flag { border-radius:2px; object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.1); }
     .hub-cta { text-align:center; padding:3rem 1rem 4rem; display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
+    .hub-tier { display:flex; align-items:center; gap:1.1rem; flex-wrap:wrap; justify-content:space-between; background:linear-gradient(120deg, #1b2a44, #0f172a); color:#fff; border-radius:16px; padding:1.4rem 1.6rem; margin:0 0 2.5rem; text-decoration:none; transition:transform .15s, box-shadow .15s; }
+    .hub-tier:hover { transform:translateY(-2px); box-shadow:0 14px 30px rgba(15,23,42,.22); }
+    .hub-tier-txt h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; margin:0 0 .25rem; color:#fff; }
+    .hub-tier-txt p { margin:0; color:rgba(255,255,255,.85); font-size:.98rem; }
+    .hub-tier-badges { display:flex; gap:.35rem; flex:0 0 auto; }
+    .hub-tier-badge { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'DM Serif Display',serif; font-size:1.1rem; color:#fff; }
+    .hub-tier-go { flex:0 0 auto; font-weight:700; color:#ff8863; }
   </style>
 </head>
 <body>
@@ -121,6 +128,11 @@ const html = `<!DOCTYPE html>
     </header>
     <div class="hub-wrap">
       <p class="hub-lead">There is no single best city for remote work, only the best city for your priorities. These rankings break the question down one factor at a time, from the cheapest bases to the safest streets and the fastest internet, so you can start from what matters most to you and drill into the full guide from there.</p>
+      <a class="hub-tier" href="/tier-list">
+        <div class="hub-tier-txt"><h2>The Digital Nomad Cities Tier List</h2><p>All 410 cities ranked S to F at a glance. Only 2 make S tier.</p></div>
+        <div class="hub-tier-badges"><span class="hub-tier-badge" style="background:#C0392B">S</span><span class="hub-tier-badge" style="background:#C4622E">A</span><span class="hub-tier-badge" style="background:#9E7B1E">B</span><span class="hub-tier-badge" style="background:#2F7D5A">C</span></div>
+        <span class="hub-tier-go">View the tier list &rarr;</span>
+      </a>
       <div class="hub-grid">
 ${cards}
       </div>
