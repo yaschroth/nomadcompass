@@ -150,6 +150,9 @@ const CSS = `
   .tl-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .tl-scrim { position:absolute; inset:0; background:linear-gradient(to top, rgba(15,23,42,.85) 0%, rgba(15,23,42,.05) 62%); }
   .tl-name { position:absolute; left:7px; right:7px; bottom:6px; z-index:2; color:#fff; font-size:13px; font-weight:700; line-height:1.12; text-shadow:0 1px 4px rgba(0,0,0,.75); }
+  .tl-why { position:absolute; inset:0; z-index:3; background:rgba(15,23,42,.94); color:#fff; padding:7px 8px; display:flex; flex-direction:column; justify-content:center; gap:3px; opacity:0; transition:opacity .14s ease; font-size:10.5px; line-height:1.28; }
+  .tl-tile:hover .tl-why, .tl-tile:focus-visible .tl-why { opacity:1; }
+  .tl-why b { font-size:12px; line-height:1.1; }
   .tl-more { margin:2.75rem 0 0; }
   .tl-more h2 { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--color-ink); margin:0 0 1rem; }
   .tl-more-group { margin-bottom:1.1rem; }
@@ -165,9 +168,22 @@ const CSS = `
   @media (max-width:640px){ .tl-row{ grid-template-columns:64px 1fr; } .tl-letter{ font-size:1.6rem; } .tl-tile{ width:104px; height:74px; } .tl-name{ font-size:11.5px; } }
 `;
 
-const tileHtml = (c, s, unit) => `<a class="tl-tile" href="/cities/${c.id}" title="${esc(c.name)} &middot; ${unit} ${s}">`
+const SHORT = { climate: 'Climate', cost: 'Cost', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
+// Short, data-derived reason a city sits in its tier (shown on hover).
+function whyText(c, s, v, tierKey) {
+  const ns = nomadScore(c);
+  if (v.mode === 'category') {
+    return `${v.cat.label} ${s}/10, so ${tierKey} tier. Overall Nomad Score ${ns}.`;
+  }
+  const ent = CK.map((k) => [k, c.scores[k]]).filter((x) => typeof x[1] === 'number').sort((a, b) => b[1] - a[1]);
+  const top = ent.slice(0, 2).map((x) => `${SHORT[x[0]]} ${x[1]}`).join(', ');
+  const low = ent.length ? `${SHORT[ent[ent.length - 1][0]]} ${ent[ent.length - 1][1]}` : '';
+  return `Nomad Score ${s}, ${tierKey} tier. Strong on ${top}. Weakest ${low}.`;
+}
+const tileHtml = (x, v, tierKey, unit) => { const c = x.c, s = x.s; return `<a class="tl-tile" href="/cities/${c.id}" title="${esc(c.name)} &middot; ${unit} ${s}">`
   + `<img class="tl-img" src="/images/cities/${c.id}-card.webp" alt="" loading="lazy" onerror="this.style.display='none'">`
-  + `<span class="tl-scrim"></span><span class="tl-name">${esc(c.name)}</span></a>`;
+  + `<span class="tl-scrim"></span><span class="tl-name">${esc(c.name)}</span>`
+  + `<span class="tl-why"><b>${esc(c.name)}</b><span>${esc(whyText(c, s, v, tierKey))}</span></span></a>`; };
 
 function bucket(v) {
   const ranked = v.pool.map((c) => ({ c, s: v.score(c) })).sort((a, b) => b.s - a.s);
@@ -198,7 +214,7 @@ function render(v) {
   const legend = TIERS.map((t) => `<span class="tl-leg"><span class="tl-leg-dot" style="background:${t.color}"></span>${t.key} &middot; ${esc(t.range)} &middot; ${groups[t.key].length}</span>`).join('');
   const rows = TIERS.map((t) => {
     const items = groups[t.key];
-    const tiles = items.length ? items.map((x) => tileHtml(x.c, x.s, unit)).join('') : '<span class="tl-empty">No cities in this tier.</span>';
+    const tiles = items.length ? items.map((x) => tileHtml(x, v, t.key, unit)).join('') : '<span class="tl-empty">No cities in this tier.</span>';
     return `      <div class="tl-row">
         <div class="tl-label" style="background:${t.color}"><span class="tl-letter">${t.key}</span><span class="tl-range">${t.range}</span><span class="tl-count">${items.length} ${items.length === 1 ? 'city' : 'cities'}</span></div>
         <div class="tl-tiles">${tiles}</div>
