@@ -146,11 +146,17 @@ const CSS = `
   .best-faq-q { font-size:var(--text-lg); font-weight:600; color:var(--color-ink); margin:1.5rem 0 .4rem; }
   .best-faq-a { font-size:var(--text-base); line-height:1.72; color:var(--color-charcoal); margin:0; }
   .best-related { padding: 2.25rem 0 1rem; }
-  .best-related-group { margin-bottom: 1.4rem; }
-  .best-related-group h3 { font-size: 12px; text-transform: uppercase; letter-spacing:.09em; color:var(--color-stone); font-weight:700; margin:0 0 .75rem; }
-  .best-related-chips { display:flex; flex-wrap:wrap; gap:.55rem; }
-  .best-related-chips a { display:inline-flex; align-items:center; padding:.5rem .95rem; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:999px; text-decoration:none; font-weight:600; font-size:.92rem; transition:border-color .15s, background .15s, transform .15s, box-shadow .15s; }
-  .best-related-chips a:hover { border-color:var(--color-terracotta); background:#fff; transform:translateY(-1px); box-shadow:0 5px 14px rgba(15,23,42,.08); }
+  .best-related-group { margin-bottom: 1.6rem; }
+  .best-related-group h3 { font-size: 12px; text-transform: uppercase; letter-spacing:.09em; color:var(--color-stone); font-weight:700; margin:0 0 .8rem; }
+  .best-related-tiles { display:grid; grid-template-columns:repeat(auto-fill,minmax(184px,1fr)); gap:.75rem; }
+  .best-rel-tile { position:relative; display:block; height:118px; border-radius:12px; overflow:hidden; text-decoration:none; background:#0f172a; box-shadow:0 2px 8px rgba(15,23,42,.1); transition:transform .18s ease, box-shadow .18s ease; }
+  .best-rel-tile:hover { transform:translateY(-2px); box-shadow:0 12px 24px rgba(15,23,42,.2); }
+  .best-rel-tile:focus-visible { outline:3px solid var(--color-terracotta); outline-offset:2px; }
+  .best-rel-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .45s ease; }
+  .best-rel-tile:hover .best-rel-img { transform:scale(1.07); }
+  .best-rel-scrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(15,23,42,.12) 0%, rgba(15,23,42,0) 38%, rgba(15,23,42,.82) 100%); }
+  .best-rel-label { position:absolute; left:.75rem; right:.75rem; bottom:.6rem; z-index:2; color:#fff; font-weight:700; font-size:.98rem; line-height:1.18; text-shadow:0 1px 5px rgba(0,0,0,.6); }
+  @media (prefers-reduced-motion:reduce){ .best-rel-tile, .best-rel-img { transition:none; } }
   .best-cta { text-align:center; padding: 2.5rem 1rem 4rem; display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
   @media (max-width:640px){ .best-item{ grid-template-columns:52px 1fr; } .best-thumb{ display:none; } .best-main{ padding:1rem 1.1rem; } .best-picks-grid{ grid-template-columns:1fr; } .best-rank span{ font-size:1.4rem; } }
 `;
@@ -207,8 +213,8 @@ function build(key, related) {
   const faqHtml = (content.faq || []).map((f) => `        <div><h3 class="best-faq-q">${txt(f.q)}</h3><p class="best-faq-a">${txt(f.a)}</p></div>`).join('\n');
   const relGroups = { priority: [], region: [], country: [] };
   related.filter((r) => r.key !== key).forEach((r) => relGroups[relGroup(r)].push(r));
-  const relChips = (arr) => arr.map((r) => `<a href="/best/${r.slug}">${esc(relShort(r))}</a>`).join('');
-  const relBlock = (title, arr) => arr.length ? `<div class="best-related-group"><h3>${title}</h3><div class="best-related-chips">${relChips(arr)}</div></div>` : '';
+  const relTile = (r) => `<a class="best-rel-tile" href="/best/${r.slug}" aria-label="${esc(r.h1)}"><img class="best-rel-img" src="/images/cities/${r.top}.webp" alt="" loading="lazy" onerror="this.style.display='none'"><span class="best-rel-scrim"></span><span class="best-rel-label">${esc(relShort(r))}</span></a>`;
+  const relBlock = (title, arr) => arr.length ? `<div class="best-related-group"><h3>${title}</h3><div class="best-related-tiles">${arr.map(relTile).join('')}</div></div>` : '';
   const relatedHtml = relBlock('By priority', relGroups.priority) + '\n        ' + relBlock('By region', relGroups.region) + '\n        ' + relBlock('By country', relGroups.country);
 
   const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: esc(data.h1), itemListOrder: 'https://schema.org/ItemListOrderDescending', numberOfItems: data.cities.length,
@@ -297,6 +303,6 @@ ${items}
 }
 
 const allKeys = fs.readdirSync(DIR).filter((f) => /^best-.+\.json$/.test(f)).map((f) => f.replace(/^best-|\.json$/g, ''));
-const related = allKeys.map((k) => { const d = JSON.parse(fs.readFileSync(path.join(DIR, 'best-' + k + '.json'), 'utf8')); return { key: k, slug: d.slug, h1: d.h1 }; });
+const related = allKeys.map((k) => { const d = JSON.parse(fs.readFileSync(path.join(DIR, 'best-' + k + '.json'), 'utf8')); return { key: k, slug: d.slug, h1: d.h1, top: d.cities[0] && d.cities[0].id }; });
 const keys = process.argv.slice(2);
 for (const k of keys) build(k, related);
