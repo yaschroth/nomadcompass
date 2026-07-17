@@ -86,9 +86,11 @@ for (const file of cityFiles) {
   if (ctyR && !featSlugs.has(ctyR.slug)) part.push({ slug: ctyR.slug, label: labelOf(ctyR) });
   if (featured.length) featCount++;
 
-  const head = featured.length ? `Where ${esc(c.name)} ranks` : `${esc(c.name)} in our rankings`;
-  const rowF = (f) => `            <li class="city-rank-row"><span class="city-rank-num">${f.rank}</span><a class="city-rank-name" href="/best/${f.slug}">${esc(f.label)}</a><span class="city-rank-arrow">&rarr;</span></li>`;
-  const rowP = (p) => `            <li class="city-rank-row is-part"><span class="city-rank-num" aria-hidden="true"></span><a class="city-rank-name" href="/best/${p.slug}">${esc(p.label)}</a><span class="city-rank-arrow">&rarr;</span></li>`;
+  const cnt = featured.length;
+  const head = cnt ? `Where ${esc(c.name)} ranks` : `${esc(c.name)} in our rankings`;
+  const sub = cnt ? `<p class="city-rank-sub">${esc(c.name)} features in ${cnt} of our 32 city rankings.</p>` : '';
+  const rowF = (f) => `            <li class="city-rank-row"><span class="city-rank-num${f.rank <= 3 ? ' is-podium' : ''}">${f.rank}</span><a class="city-rank-name" href="/best/${f.slug}">${esc(f.label)}</a><span class="city-rank-arrow">&rarr;</span></li>`;
+  const rowP = (p) => `            <li class="city-rank-row is-part"><span class="city-rank-num is-empty" aria-hidden="true"></span><a class="city-rank-name" href="/best/${p.slug}">${esc(p.label)}</a><span class="city-rank-arrow">&rarr;</span></li>`;
   const rows = featured.map(rowF).concat(part.map(rowP)).join('\n');
 
   // Further reading (carry over blog links already on the page) -> quiet line
@@ -104,7 +106,7 @@ for (const file of cityFiles) {
     readingLine ? `<p class="city-explore-links"><strong>Further reading:</strong> ${readingLine}</p>` : '',
     `<p class="city-explore-links"><a href="/cities">Browse all city guides</a> &middot; <a href="/wheel">Find your match on the Nomad Wheel</a> &middot; <a href="/best">See all 32 rankings</a></p>`,
   ].filter(Boolean).join('\n          ');
-  const card = `\n          <div class="city-explore" data-explore="v3">\n          <h3 class="city-rank-head">${head}</h3>\n          <ol class="city-rank-list">\n${rows}\n          </ol>\n          ${footer}\n          </div>\n`;
+  const card = `\n          <div class="city-explore" data-explore="v3">\n          <p class="city-rank-eyebrow">In the rankings</p>\n          <h3 class="city-rank-head">${head}</h3>\n          ${sub}\n          <ol class="city-rank-list">\n${rows}\n          </ol>\n          ${footer}\n          </div>\n`;
 
   if (DRY) continue;
   html = html.replace(re, `$1${card}$3`);
