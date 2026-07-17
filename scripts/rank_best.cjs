@@ -69,7 +69,7 @@ const PAGES = {
 };
 
 // Region display names + slugs
-const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'the Middle East', northamerica: 'North America', oceania: 'Oceania' };
+const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'the Middle East', northamerica: 'North America & the Caribbean', oceania: 'Oceania' };
 const REGION_SLUG = { europe: 'europe', asia: 'asia', latam: 'latin-america', africa: 'africa', middleeast: 'the-middle-east', northamerica: 'north-america', oceania: 'oceania' };
 for (const rk in REGION_NAMES) {
   PAGES['region_' + rk] = { slug: 'best-digital-nomad-cities-in-' + REGION_SLUG[rk], h1: 'Best Digital Nomad Cities in ' + REGION_NAMES[rk], dimension: 'the best bases across ' + REGION_NAMES[rk], metric: 'overall', region: rk };

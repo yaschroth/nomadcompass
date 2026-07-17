@@ -34,7 +34,7 @@ const TIERS = [
   { key: 'D', min: 5.0, color: '#3D6493', range: '5.0 to 5.9' },
   { key: 'F', min: 0,   color: '#5C6672', range: 'below 5.0' },
 ];
-const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'the Middle East', northamerica: 'North America', oceania: 'Oceania' };
+const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'the Middle East', northamerica: 'North America & the Caribbean', oceania: 'Oceania' };
 const REGION_SLUG = { europe: 'europe', asia: 'asia', latam: 'latin-america', africa: 'africa', middleeast: 'middle-east', northamerica: 'north-america', oceania: 'oceania' };
 const CATS = [
   { key: 'cost', slug: 'affordability', label: 'Affordability', lc: 'affordability' },

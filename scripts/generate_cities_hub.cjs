@@ -61,7 +61,7 @@ const cities = fileSlugs
   // default view: highest-rated first (reinforces the "rated & ranked" positioning)
   .sort((a, b) => (b.score || 0) - (a.score || 0) || a.name.localeCompare(b.name));
 
-const REGION_LABELS = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', northamerica: 'North America', africa: 'Africa', middleeast: 'Middle East', oceania: 'Oceania' };
+const REGION_LABELS = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', northamerica: 'North America & the Caribbean', africa: 'Africa', middleeast: 'Middle East', oceania: 'Oceania' };
 const regionOptions = [...new Set(cities.map((c) => c.region).filter(Boolean))].sort()
   .map((r) => `<option value="${r}">${REGION_LABELS[r] || r}</option>`).join('\n          ');
 const climateOptions = [...new Set(cities.map((c) => c.climate).filter(Boolean))].sort()
