@@ -44,6 +44,8 @@ console.log('\n6/7  city "Featured in rankings" links (apply_city_rankings)…')
 run('apply_city_rankings.cjs');
 console.log('\n7/8  nav search box (apply_nav_search)…');
 run('apply_nav_search.cjs');
-console.log('\n8/8  structured data (apply_entity_schema, must run last)…');
+console.log('\n8/9  structured data (apply_entity_schema, must run last)…');
 run('apply_entity_schema.cjs');
+console.log('\n9/9  analytics (apply_analytics)…');
+run('apply_analytics.cjs');
 console.log('\nDone. Review changes with `git diff` before committing.');
