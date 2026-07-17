@@ -18,6 +18,7 @@ add('/cities', '0.9', 'weekly');
 add('/compare', '0.7', 'monthly');
 add('/best', '0.8', 'weekly');
 add('/tier-list', '0.7', 'monthly');
+add('/tier-lists', '0.6', 'monthly');
 add('/wheel', '0.8', 'monthly');
 add('/blog', '0.7', 'weekly');
 add('/about', '0.4', 'yearly');
@@ -36,6 +37,11 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWi
 if (fs.existsSync(path.join(ROOT, 'best'))) {
   for (const f of fs.readdirSync(path.join(ROOT, 'best')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
     add('/best/' + f.replace(/\.html$/, ''), '0.7', 'monthly');
+  }
+}
+if (fs.existsSync(path.join(ROOT, 'tier-list'))) {
+  for (const f of fs.readdirSync(path.join(ROOT, 'tier-list')).filter((x) => x.endsWith('.html')).sort()) {
+    add('/tier-list/' + f.replace(/\.html$/, ''), '0.6', 'monthly');
   }
 }
 
