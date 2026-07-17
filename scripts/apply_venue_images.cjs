@@ -15,7 +15,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DIR = process.argv[2];
 const OUT = path.join(ROOT, 'images', 'venues');
 const ATTR = path.join(OUT, 'attribution.json');
-const UA = { headers: { 'User-Agent': 'TheNomadHQ/1.0 (venue images; hello@thenomadhq.com)' } };
+const UA = { headers: { 'User-Agent': 'TheNomadHQ/1.0 (venue images; info@topblog.agency)' } };
 
 const stripDash = (s) => String(s == null ? '' : s).replace(/[ \t]*(?:&mdash;|&#8212;|—)[ \t]*/g, ', ');
 const esc = (s) => stripDash(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

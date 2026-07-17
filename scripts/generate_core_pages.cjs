@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const UPDATED = 'July 1, 2026';
-const CONTACT_EMAIL = 'hello@thenomadhq.com';
+const CONTACT_EMAIL = 'info@topblog.agency';
 
 const NAV = `  <nav class="nav" id="mainNav">
     <div class="nav-container">

@@ -13,7 +13,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const DIR = process.argv[2];
 const HEADERS = {
-  'User-Agent': 'TheNomadHQ/1.0 (venue verification; hello@thenomadhq.com)',
+  'User-Agent': 'TheNomadHQ/1.0 (venue verification; info@topblog.agency)',
   'Referer': 'https://thenomadhq.com',
   'Accept-Language': 'en',
 };
