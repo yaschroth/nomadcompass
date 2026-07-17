@@ -51,6 +51,25 @@ const CATS = [
   { key: 'cleanliness', slug: 'cleanliness', label: 'Cleanliness', lc: 'cleanliness' },
   { key: 'airquality', slug: 'air-quality', label: 'Air quality', lc: 'air quality' },
 ];
+// composite + value scoring (mirrors rank_best.cjs) for the persona/value tier lists
+const _costs = CITIES.map((c) => c.costPerMonth).filter((v) => typeof v === 'number');
+const _cMin = Math.min(..._costs), _cMax = Math.max(..._costs);
+const cheapness = (c) => typeof c.costPerMonth === 'number' ? 1 - (c.costPerMonth - _cMin) / (_cMax - _cMin || 1) : 0;
+function composite(c, weights, cheapWeight) {
+  let s = 0; for (const k in weights) { const v = c.scores[k]; if (typeof v === 'number') s += weights[k] * (v / 10); }
+  if (cheapWeight) s += cheapWeight * cheapness(c);
+  return +Math.max(0, Math.min(10, s * 10)).toFixed(1);
+}
+const valueIndex = (c) => typeof c.costPerMonth === 'number' && c.costPerMonth > 0 ? +(nomadScore(c) / (c.costPerMonth / 1000)).toFixed(2) : 0;
+const COUNTRIES = { Spain: 'spain', Mexico: 'mexico', Thailand: 'thailand', Portugal: 'portugal', Indonesia: 'indonesia', Vietnam: 'vietnam', Colombia: 'colombia', Italy: 'italy' };
+const PERSONA = [
+  { slug: 'female-nomads', hub: 'Female nomads', h1: 'Digital Nomad Cities for Women: Tier List', mt: 'Best Cities for Female Digital Nomads: Tier List', md: 'A tier list of the best cities for female digital nomads, bucketed S to F on a safety-led blend of safety, cleanliness, community and affordability.', cheapWeight: .20, weights: { safety: .30, cleanliness: .15, airquality: .10, community: .10, english: .15 } },
+  { slug: 'tight-budget', hub: 'Tight budget', h1: 'Digital Nomad Cities on a Tight Budget: Tier List', mt: 'Tight-Budget Digital Nomad Cities: Tier List', md: 'A tier list of the best cities for nomads on a tight budget, bucketed S to F on a cheap-but-workable blend of cost, WiFi and safety.', cheapWeight: .55, weights: { wifi: .25, safety: .20 } },
+  { slug: 'first-timers', hub: 'First-timers', h1: 'Digital Nomad Cities for First-Timers: Tier List', mt: 'Best Cities for First-Time Nomads: Tier List', md: 'A tier list of the easiest cities for first-time digital nomads, bucketed S to F on English, community, safety and WiFi.', weights: { english: .30, community: .25, safety: .25, wifi: .20 } },
+  { slug: 'families', hub: 'Families', h1: 'Digital Nomad Cities for Families: Tier List', mt: 'Best Cities for Digital Nomad Families: Tier List', md: 'A tier list of the best cities for digital nomads with kids, bucketed S to F on safety, cleanliness, air quality, nature and community.', weights: { safety: .30, cleanliness: .20, airquality: .20, nature: .15, community: .15 } },
+  { slug: 'party', hub: 'Party scene', h1: 'Digital Nomad Cities for Nightlife: Tier List', mt: 'Best Party Cities for Digital Nomads: Tier List', md: 'A tier list of the best cities for party-loving nomads, bucketed S to F on nightlife and nomad community.', weights: { nightlife: .60, community: .40 } },
+  { slug: 'best-value', hub: 'Best value', h1: 'Best Value Digital Nomad Cities: Tier List', mt: 'Best Value Digital Nomad Cities: Tier List', md: 'A tier list of the best value digital nomad cities, bucketed S to F by quality of life per dollar (Nomad Score relative to monthly cost).', value: true },
+];
 
 // ---- build variant descriptors ----
 const master = {
@@ -77,7 +96,20 @@ const catVariants = CATS.map((cat) => ({
   kicker: 'Category tier list',
   pool: CITIES, score: (c) => (typeof c.scores[cat.key] === 'number' ? c.scores[cat.key] : 0), mode: 'category', cat,
 }));
-const ALL = [master, ...regionVariants, ...catVariants];
+const countryVariants = Object.keys(COUNTRIES).map((cn) => ({
+  type: 'country', slug: 'tier-list/' + COUNTRIES[cn], file: path.join('tier-list', COUNTRIES[cn] + '.html'), hubLabel: cn,
+  h1: `Digital Nomad Cities in ${cn}: Tier List`,
+  metaTitle: `Digital Nomad Cities in ${cn} Tier List: S to F`,
+  metaDesc: `A tier list of the digital nomad cities we rate in ${cn}, bucketed from S to F by Nomad Score.`,
+  kicker: 'Country tier list',
+  pool: CITIES.filter((c) => c.country === cn), score: nomadScore, mode: 'nomad', country: cn, countrySlug: COUNTRIES[cn],
+}));
+const personaVariants = PERSONA.map((pz) => ({
+  type: 'persona', slug: 'tier-list/' + pz.slug, file: path.join('tier-list', pz.slug + '.html'), hubLabel: pz.hub,
+  h1: pz.h1, metaTitle: pz.mt, metaDesc: pz.md, kicker: 'Persona tier list',
+  pool: CITIES, score: pz.value ? valueIndex : (c) => composite(c, pz.weights, pz.cheapWeight), mode: pz.value ? 'value' : 'composite', persona: pz,
+}));
+const ALL = [master, ...regionVariants, ...countryVariants, ...catVariants, ...personaVariants];
 
 // ---- shared chrome ----
 const NAV = `  <nav class="nav" id="mainNav">
@@ -121,16 +153,16 @@ const FOOTER = `<footer class="footer"><div class="container">
 const NAVJS = `<script>(function(){var nav=document.getElementById('mainNav'),t=document.getElementById('navToggle'),m=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');m.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});m.querySelectorAll('.nav-mobile-link,.nav-mobile-actions .btn').forEach(function(l){l.addEventListener('click',function(){t.classList.remove('active');m.classList.remove('active');b.classList.remove('nav-open');t.setAttribute('aria-expanded','false');});});window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
 // Hover popover: a small city-page summary, filled from each tile's data-* attributes.
 const TLPOP = `<script>(function(){
-  if(!window.matchMedia||!window.matchMedia('(hover:hover)').matches) return;
   var pop=document.getElementById('tlPop'), board=document.querySelector('.tl-board');
   if(!pop||!board) return;
+  var hoverCap=!window.matchMedia||window.matchMedia('(hover:hover)').matches;
   function show(t){
-    var d=t.dataset;
+    var d=t.dataset, href=t.getAttribute('href');
     pop.innerHTML='<div class="tl-pop-h">'+(d.iso?'<img src="/assets/flags/'+d.iso+'.svg" alt="">':'')+'<span><b>'+d.name+'</b> <i>'+d.country+'</i></span></div>'
       +'<div class="tl-pop-meta"><span class="tl-pop-score">Nomad Score '+d.score+'</span> &middot; '+d.tier+' tier &middot; '+d.cost+'</div>'
       +(d.tag?'<p class="tl-pop-tag">'+d.tag+'</p>':'')
       +'<div class="tl-pop-sw"><span><b>Strong:</b> '+d.strong+'</span>'+(d.weak?'<span><b>Weakest:</b> '+d.weak+'</span>':'')+'</div>'
-      +'<div class="tl-pop-go">View the full guide &rarr;</div>';
+      +'<a class="tl-pop-go" href="'+href+'">View the full guide &rarr;</a>';
     pop.style.display='block';
     var r=t.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight, vw=document.documentElement.clientWidth;
     var left=r.left+window.scrollX+r.width/2-pw/2;
@@ -139,9 +171,36 @@ const TLPOP = `<script>(function(){
     if(r.top-ph-10<8) top=r.bottom+window.scrollY+10;
     pop.style.left=left+'px'; pop.style.top=top+'px';
   }
-  board.addEventListener('mouseover',function(e){var t=e.target.closest('.tl-tile'); if(t&&board.contains(t)) show(t);});
-  board.addEventListener('mouseout',function(e){var t=e.target.closest('.tl-tile'); if(t&&(!e.relatedTarget||!t.contains(e.relatedTarget))) pop.style.display='none';});
-  window.addEventListener('scroll',function(){pop.style.display='none';},{passive:true});
+  function hide(){ pop.style.display='none'; }
+  if(hoverCap){
+    board.addEventListener('mouseover',function(e){var t=e.target.closest('.tl-tile'); if(t&&board.contains(t)) show(t);});
+    board.addEventListener('mouseout',function(e){var t=e.target.closest('.tl-tile'); if(t&&(!e.relatedTarget||!t.contains(e.relatedTarget))) hide();});
+    window.addEventListener('scroll',hide,{passive:true});
+  } else {
+    pop.classList.add('touch');
+    board.addEventListener('click',function(e){var t=e.target.closest('.tl-tile'); if(!t) return; e.preventDefault(); show(t);});
+    document.addEventListener('click',function(e){ if(!e.target.closest('.tl-tile') && !e.target.closest('#tlPop')) hide(); });
+  }
+})();</script>`;
+// Master-list filter (region + budget).
+const TLFILTER = `<script>(function(){
+  var reg=document.getElementById('tlfRegion'), bud=document.getElementById('tlfBudget'), cnt=document.getElementById('tlfCount');
+  if(!reg||!bud) return;
+  var tiles=[].slice.call(document.querySelectorAll('.tl-tile'));
+  function apply(){
+    var r=reg.value, b=bud.value?parseInt(bud.value,10):0, shown=0;
+    tiles.forEach(function(t){
+      var ok=(!r||t.dataset.region===r)&&(!b||(t.dataset.costnum&&parseInt(t.dataset.costnum,10)<=b));
+      t.style.display=ok?'':'none'; if(ok)shown++;
+    });
+    document.querySelectorAll('.tl-row').forEach(function(row){
+      var vt=[].filter.call(row.querySelectorAll('.tl-tile'),function(t){return t.style.display!=='none';});
+      row.style.display=vt.length?'':'none';
+      var c=row.querySelector('.tl-count'); if(c) c.textContent=vt.length+(vt.length===1?' city':' cities');
+    });
+    cnt.textContent=shown+' of '+tiles.length+' cities';
+  }
+  reg.addEventListener('change',apply); bud.addEventListener('change',apply); apply();
 })();</script>`;
 
 const CSS = `
@@ -184,8 +243,12 @@ const CSS = `
   .tl-pop-tag { font-size:.88rem; line-height:1.5; color:var(--color-charcoal); margin:0 0 .55rem; }
   .tl-pop-sw { display:flex; flex-direction:column; gap:.15rem; font-size:.78rem; color:var(--color-charcoal); }
   .tl-pop-sw b { color:var(--color-ink); }
-  .tl-pop-go { margin-top:.55rem; font-size:.8rem; font-weight:700; color:var(--color-terracotta); }
-  @media (max-width:640px){ .tl-pop { display:none !important; } }
+  .tl-pop-go { display:inline-block; margin-top:.55rem; font-size:.8rem; font-weight:700; color:var(--color-terracotta); text-decoration:none; }
+  .tl-pop.touch { pointer-events:auto; }
+  .tl-filter { display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin:0 0 1.5rem; padding:.85rem 1.1rem; background:var(--color-sand); border:1px solid var(--color-sand-dark); border-radius:12px; }
+  .tl-filter label { font-size:.85rem; font-weight:600; color:var(--color-charcoal); display:flex; align-items:center; gap:.5rem; }
+  .tl-filter select { font-family:inherit; font-size:.9rem; padding:.4rem .6rem; border:1px solid var(--color-sand-dark); border-radius:8px; background:#fff; color:var(--color-ink); cursor:pointer; }
+  .tl-filter-count { font-size:.82rem; color:var(--color-stone); margin-left:auto; }
   .tl-more { margin:2.75rem 0 0; }
   .tl-more h2 { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--color-ink); margin:0 0 1rem; }
   .tl-more-group { margin-bottom:1.1rem; }
@@ -221,43 +284,57 @@ const tileHtml = (x, v, tierKey, unit) => {
   return `<a class="tl-tile" href="/cities/${c.id}"`
     + ` data-name="${esc(c.name)}" data-country="${esc(c.country || '')}" data-iso="${p.iso}"`
     + ` data-score="${p.ns}" data-tier="${tierKey}" data-cost="${esc(p.cost)}" data-tag="${esc(p.tag)}"`
+    + ` data-region="${REGION[c.id] || ''}" data-costnum="${typeof c.costPerMonth === 'number' ? c.costPerMonth : ''}"`
     + ` data-strong="${esc(p.strong)}" data-weak="${esc(p.weak)}" title="${esc(c.name)} &middot; ${unit} ${s}">`
     + `<img class="tl-img" src="/images/cities/${c.id}-card.webp" alt="" loading="lazy" onerror="this.style.display='none'">`
     + `<span class="tl-scrim"></span><span class="tl-name">${esc(c.name)}</span></a>`;
 };
 
+// value has no natural 0-10 scale, so it is bucketed by rank into proportional bands
+const VALUE_RANGE = { S: 'Exceptional value', A: 'Great value', B: 'Good value', C: 'Fair value', D: 'Below average', F: 'Poor value' };
+const VALUE_FRAC = { S: .05, A: .12, B: .22, C: .28, D: .23 };
 function bucket(v) {
   const ranked = v.pool.map((c) => ({ c, s: v.score(c) })).sort((a, b) => b.s - a.s);
   const groups = {}; TIERS.forEach((t) => (groups[t.key] = []));
-  ranked.forEach(({ c, s }) => { const t = TIERS.find((x) => s >= x.min); groups[t.key].push({ c, s }); });
+  if (v.mode === 'value') {
+    const N = ranked.length; let i = 0;
+    for (const t of TIERS) {
+      const take = t.key === 'F' ? ranked.length - i : Math.round(N * VALUE_FRAC[t.key]);
+      for (let j = 0; j < take && i < ranked.length; j++, i++) groups[t.key].push(ranked[i]);
+    }
+  } else {
+    ranked.forEach(({ c, s }) => { const t = TIERS.find((x) => s >= x.min); groups[t.key].push({ c, s }); });
+  }
   return { ranked, groups };
 }
+const rangeLabel = (v, t) => v.mode === 'value' ? VALUE_RANGE[t.key] : t.range;
 
 // grouped "more tier lists" links, excluding the current variant
 function moreHtml(current) {
   const chip = (v) => `<a href="/${v.slug}">${esc(v.hubLabel)}</a>`;
-  const regionChips = regionVariants.filter((v) => v.slug !== current.slug).map(chip).join('');
-  const catChips = catVariants.filter((v) => v.slug !== current.slug).map(chip).join('');
+  const grp = (title, arr) => { const c = arr.filter((v) => v.slug !== current.slug).map(chip).join(''); return c ? `<div class="tl-more-group"><h3>${title}</h3><div class="tl-chips">${c}</div></div>` : ''; };
   const masterChip = current.slug === master.slug ? '' : `<div class="tl-more-group"><h3>Overall</h3><div class="tl-chips"><a href="/tier-list">All cities tier list</a></div></div>`;
   return `      <section class="tl-more"><h2>More tier lists</h2>
         ${masterChip}
-        <div class="tl-more-group"><h3>By region</h3><div class="tl-chips">${regionChips}</div></div>
-        <div class="tl-more-group"><h3>By category</h3><div class="tl-chips">${catChips}</div></div>
+        ${grp('By region', regionVariants)}
+        ${grp('By country', countryVariants)}
+        ${grp('By category', catVariants)}
+        ${grp('For a kind of nomad', personaVariants)}
         <p style="margin-top:1rem"><a href="/tier-lists" style="color:var(--color-terracotta);font-weight:600">See all tier lists &rarr;</a></p>
       </section>`;
 }
 
 function render(v) {
   const { ranked, groups } = bucket(v);
-  const unit = v.mode === 'category' ? `${v.cat.label}` : 'Nomad Score';
+  const unit = v.mode === 'category' ? `${v.cat.label}` : v.mode === 'composite' ? 'Match' : v.mode === 'value' ? 'Value' : 'Nomad Score';
   const heroId = ranked[0].c.id, heroName = ranked[0].c.name;
   const N = ranked.length;
-  const legend = TIERS.map((t) => `<span class="tl-leg"><span class="tl-leg-dot" style="background:${t.color}"></span>${t.key} &middot; ${esc(t.range)} &middot; ${groups[t.key].length}</span>`).join('');
+  const legend = TIERS.map((t) => `<span class="tl-leg"><span class="tl-leg-dot" style="background:${t.color}"></span>${t.key} &middot; ${esc(rangeLabel(v, t))} &middot; ${groups[t.key].length}</span>`).join('');
   const rows = TIERS.map((t) => {
     const items = groups[t.key];
     const tiles = items.length ? items.map((x) => tileHtml(x, v, t.key, unit)).join('') : '<span class="tl-empty">No cities in this tier.</span>';
     return `      <div class="tl-row">
-        <div class="tl-label" style="background:${t.color}"><span class="tl-letter">${t.key}</span><span class="tl-range">${t.range}</span><span class="tl-count">${items.length} ${items.length === 1 ? 'city' : 'cities'}</span></div>
+        <div class="tl-label" style="background:${t.color}"><span class="tl-letter">${t.key}</span><span class="tl-range">${rangeLabel(v, t)}</span><span class="tl-count">${items.length} ${items.length === 1 ? 'city' : 'cities'}</span></div>
         <div class="tl-tiles">${tiles}</div>
       </div>`;
   }).join('\n');
@@ -272,6 +349,18 @@ function render(v) {
     sub = `The ${N} cities we rate in ${REGION_NAMES[v.region]}, sorted from S to F by their Nomad Score.`;
     intro = `A tier list of every digital nomad city we rate in ${REGION_NAMES[v.region]}, placed by its <strong>Nomad Score</strong>, our calibrated composite of the 13 things that matter most to remote workers.`;
     method = `Tiers follow the Nomad Score: S is 9.0+, A is 8.0 to 8.9, B is 7.0 to 7.9, C is 6.0 to 6.9, D is 5.0 to 5.9, F is below 5.0. Tap any city for its full breakdown, or see the <a href="/tier-list">worldwide tier list</a> and the <a href="/best/best-digital-nomad-cities-in-${REGION_SLUG[v.region]}">${REGION_NAMES[v.region].replace(/^the /, '')} ranking</a>.`;
+  } else if (v.type === 'country') {
+    sub = `The ${N} cities we rate in ${v.country}, sorted from S to F by their Nomad Score.`;
+    intro = `A tier list of every digital nomad city we rate in ${v.country}, placed by its <strong>Nomad Score</strong>, our calibrated composite of the 13 things that matter most to remote workers.`;
+    method = `Tiers follow the Nomad Score: S is 9.0+, A is 8.0 to 8.9, B is 7.0 to 7.9, C is 6.0 to 6.9, D is 5.0 to 5.9, F is below 5.0. Tap any city for its full breakdown, or see the <a href="/tier-list">worldwide tier list</a> and the <a href="/best/best-digital-nomad-cities-in-${v.countrySlug}">${v.country} ranking</a>.`;
+  } else if (v.mode === 'composite') {
+    sub = `All ${N} cities we rate, sorted S to F on our ${v.hubLabel} blend.`;
+    intro = `This tier list places every city on a transparent blend of the categories that matter most for ${v.persona.hub === 'Best value' ? 'value' : v.hubLabel.toLowerCase()}, scored 0 to 10. It is a lens on the same data behind the Nomad Score, tuned for one kind of nomad. Hover any city for its summary.`;
+    method = `Tiers follow the ${v.hubLabel} match score, a weighted blend of existing category scores: S is 9.0+, A is 8.0 to 8.9, and so on down to F below 5.0. See the <a href="/tier-list">all-round tier list</a> and the matching <a href="/best">ranked lists</a>.`;
+  } else if (v.mode === 'value') {
+    sub = `All ${N} cities we rate, sorted S to F by quality of life per dollar.`;
+    intro = `This tier list ranks cities by <strong>value</strong>, their Nomad Score relative to monthly cost, so a very good city at a low price beats a slightly better one that costs far more. It rewards places that punch above their price rather than the outright best or cheapest.`;
+    method = `Tiers follow the value index (Nomad Score per $1,000 of monthly cost): higher means more quality of life for your money. S is the top band, F the bottom. See the <a href="/tier-list">all-round tier list</a> and the <a href="/best/best-value-cities-for-digital-nomads">best value ranking</a>.`;
   } else {
     sub = `All ${N} cities we rate, sorted into tiers from S to F by their Nomad Score. Only ${groups.S.length} reach S tier.`;
     intro = `A tier list is the fastest way to see the whole landscape at once. Every city below is placed by its <strong>Nomad Score</strong>, our calibrated composite of the 13 things that matter most to remote workers. S tier is the rare best; F tier is for cities that only make sense for one very specific reason.`;
@@ -281,6 +370,10 @@ function render(v) {
   const faq = [
     { q: 'What is this tier list based on?', a: v.mode === 'category'
         ? `Each city is placed purely by its ${v.cat.label} score, our 1 to 10 rating for ${v.cat.lc}. S tier is 9 to 10, down to F for below 5.`
+        : v.mode === 'composite'
+        ? `Each city is placed by our ${v.hubLabel} match score, a weighted blend of the existing categories that matter for this kind of nomad. S tier is 9.0 and up, down to F for below 5.0.`
+        : v.mode === 'value'
+        ? `Each city is placed by its value index, its Nomad Score relative to monthly cost. Cities that deliver more quality of life per dollar rank higher.`
         : `Each city is placed by its Nomad Score, our calibrated composite of 13 categories like cost, WiFi, safety, climate and visas. S tier is 9.0 and up, down to F for below 5.0.` },
     { q: `Which cities are S tier?`, a: groups.S.length ? `${groups.S.map((x) => x.c.name).join(', ')}. S tier is deliberately rare.` : `No city reaches S tier here, the top cities sit in A tier: ${groups.A.slice(0, 3).map((x) => x.c.name).join(', ')} and more.` },
     { q: 'Is a lower-tier city a bad place to live?', a: 'Not necessarily. The tiers rank one dimension, so a lower-tier city can still be a great fit if it is strong in the things you care about most. Open any city to see its full breakdown.' },
@@ -333,6 +426,11 @@ ${NAV}
     <div class="tl-wrap">
       <p class="tl-intro">${intro}</p>
       <p class="tl-method">${method}</p>
+      ${v.type === 'master' ? `<div class="tl-filter">
+        <label>Region <select id="tlfRegion"><option value="">All regions</option>${Object.keys(REGION_NAMES).map((rk) => `<option value="${rk}">${esc(REGION_NAMES[rk].replace(/^the /, ''))}</option>`).join('')}</select></label>
+        <label>Budget <select id="tlfBudget"><option value="">Any budget</option><option value="1000">Under $1,000/mo</option><option value="2000">Under $2,000/mo</option><option value="3000">Under $3,000/mo</option><option value="4000">Under $4,000/mo</option></select></label>
+        <span class="tl-filter-count" id="tlfCount"></span>
+      </div>` : ''}
       <div class="tl-board">
 ${rows}
       </div>
@@ -350,6 +448,7 @@ ${faq.map((f) => `        <div><h3 class="tl-faq-q">${esc(f.q)}</h3><p class="tl
   ${FOOTER}
   ${NAVJS}
   ${TLPOP}
+  ${TLFILTER}
 </body>
 </html>
 `;
@@ -359,7 +458,7 @@ ${faq.map((f) => `        <div><h3 class="tl-faq-q">${esc(f.q)}</h3><p class="tl
 function buildHub() {
   const card = (v) => { const top = bucket(v).ranked[0].c; return `        <a class="hub-card" href="/${v.slug}">
           <img class="hub-card-img" src="/images/cities/${top.id}-card.webp" alt="${esc(top.name)}" loading="lazy" onerror="this.style.display='none'">
-          <div class="hub-card-body"><h2 class="hub-card-title">${esc(v.hubLabel)}</h2><p class="hub-card-teaser">${esc(v.type === 'category' ? 'By ' + v.cat.lc + ' score' : v.type === 'region' ? 'Cities in ' + v.hubLabel + ' by Nomad Score' : 'Every rated city by Nomad Score')}</p></div>
+          <div class="hub-card-body"><h2 class="hub-card-title">${esc(v.hubLabel)}</h2><p class="hub-card-teaser">${esc(v.type === 'category' ? 'By ' + v.cat.lc + ' score' : v.type === 'region' ? 'Cities in ' + v.hubLabel + ' by Nomad Score' : v.type === 'country' ? 'Cities in ' + v.hubLabel + ' by Nomad Score' : v.type === 'persona' ? (v.mode === 'value' ? 'By quality of life per dollar' : 'By the ' + v.hubLabel + ' blend') : 'Every rated city by Nomad Score')}</p></div>
         </a>`; };
   const section = (title, arr) => `      <h2 class="hub-sec">${title}</h2>\n      <div class="hub-grid">\n${arr.map(card).join('\n')}\n      </div>`;
   const ld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Digital Nomad City Tier Lists', url: BASE + '/tier-lists',
@@ -414,6 +513,8 @@ ${NAV}
     <div class="hub-wrap">
 ${section('The master tier list', [master])}
 ${section('By region', regionVariants)}
+${section('By country', countryVariants)}
+${section('For a kind of nomad', personaVariants)}
 ${section('By category', catVariants)}
       <div class="hub-cta"><a href="/tier-list" class="btn btn-primary btn-lg">Open the master tier list &rarr;</a></div>
     </div>
