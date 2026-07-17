@@ -44,6 +44,12 @@ if (fs.existsSync(path.join(ROOT, 'tier-list'))) {
     add('/tier-list/' + f.replace(/\.html$/, ''), '0.6', 'monthly');
   }
 }
+if (fs.existsSync(path.join(ROOT, 'activities.html'))) add('/activities', '0.6', 'monthly');
+if (fs.existsSync(path.join(ROOT, 'activities'))) {
+  for (const f of fs.readdirSync(path.join(ROOT, 'activities')).filter((x) => x.endsWith('.html')).sort()) {
+    add('/activities/' + f.replace(/\.html$/, ''), '0.6', 'monthly');
+  }
+}
 
 const body = urls.map((u) =>
   `  <url>\n    <loc>${BASE}${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`

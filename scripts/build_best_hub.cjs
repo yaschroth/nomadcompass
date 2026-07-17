@@ -135,6 +135,7 @@ const html = `<!DOCTYPE html>
         <div class="hub-tier-badges"><span class="hub-tier-badge" style="background:#C0392B">S</span><span class="hub-tier-badge" style="background:#C4622E">A</span><span class="hub-tier-badge" style="background:#9E7B1E">B</span><span class="hub-tier-badge" style="background:#2F7D5A">C</span></div>
         <span class="hub-tier-go">View the tier list &rarr;</span>
       </a>
+      <p style="margin:-1.5rem 0 2.2rem; font-size:.98rem;">Prefer to pick by what you do off the clock? Browse our editorial picks for the <a href="/activities" style="color:var(--color-terracotta); font-weight:600;">best cities by activity</a> (surfing, diving, watersports, shopping).</p>
       <div class="hub-grid">
 ${cards}
       </div>
