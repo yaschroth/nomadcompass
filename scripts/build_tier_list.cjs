@@ -119,6 +119,30 @@ const FOOTER = `<footer class="footer"><div class="container">
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>`;
 const NAVJS = `<script>(function(){var nav=document.getElementById('mainNav'),t=document.getElementById('navToggle'),m=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');m.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});m.querySelectorAll('.nav-mobile-link,.nav-mobile-actions .btn').forEach(function(l){l.addEventListener('click',function(){t.classList.remove('active');m.classList.remove('active');b.classList.remove('nav-open');t.setAttribute('aria-expanded','false');});});window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
+// Hover popover: a small city-page summary, filled from each tile's data-* attributes.
+const TLPOP = `<script>(function(){
+  if(!window.matchMedia||!window.matchMedia('(hover:hover)').matches) return;
+  var pop=document.getElementById('tlPop'), board=document.querySelector('.tl-board');
+  if(!pop||!board) return;
+  function show(t){
+    var d=t.dataset;
+    pop.innerHTML='<div class="tl-pop-h">'+(d.iso?'<img src="/assets/flags/'+d.iso+'.svg" alt="">':'')+'<span><b>'+d.name+'</b> <i>'+d.country+'</i></span></div>'
+      +'<div class="tl-pop-meta"><span class="tl-pop-score">Nomad Score '+d.score+'</span> &middot; '+d.tier+' tier &middot; '+d.cost+'</div>'
+      +(d.tag?'<p class="tl-pop-tag">'+d.tag+'</p>':'')
+      +'<div class="tl-pop-sw"><span><b>Strong:</b> '+d.strong+'</span>'+(d.weak?'<span><b>Weakest:</b> '+d.weak+'</span>':'')+'</div>'
+      +'<div class="tl-pop-go">View the full guide &rarr;</div>';
+    pop.style.display='block';
+    var r=t.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight, vw=document.documentElement.clientWidth;
+    var left=r.left+window.scrollX+r.width/2-pw/2;
+    left=Math.max(window.scrollX+8, Math.min(left, window.scrollX+vw-pw-8));
+    var top=r.top+window.scrollY-ph-10;
+    if(r.top-ph-10<8) top=r.bottom+window.scrollY+10;
+    pop.style.left=left+'px'; pop.style.top=top+'px';
+  }
+  board.addEventListener('mouseover',function(e){var t=e.target.closest('.tl-tile'); if(t&&board.contains(t)) show(t);});
+  board.addEventListener('mouseout',function(e){var t=e.target.closest('.tl-tile'); if(t&&(!e.relatedTarget||!t.contains(e.relatedTarget))) pop.style.display='none';});
+  window.addEventListener('scroll',function(){pop.style.display='none';},{passive:true});
+})();</script>`;
 
 const CSS = `
   .tl-hero { position:relative; width:100%; min-height:100vh; display:flex; align-items:flex-end; overflow:hidden; }
@@ -150,9 +174,18 @@ const CSS = `
   .tl-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .tl-scrim { position:absolute; inset:0; background:linear-gradient(to top, rgba(15,23,42,.85) 0%, rgba(15,23,42,.05) 62%); }
   .tl-name { position:absolute; left:7px; right:7px; bottom:6px; z-index:2; color:#fff; font-size:13px; font-weight:700; line-height:1.12; text-shadow:0 1px 4px rgba(0,0,0,.75); }
-  .tl-why { position:absolute; inset:0; z-index:3; background:rgba(15,23,42,.94); color:#fff; padding:7px 8px; display:flex; flex-direction:column; justify-content:center; gap:3px; opacity:0; transition:opacity .14s ease; font-size:10.5px; line-height:1.28; }
-  .tl-tile:hover .tl-why, .tl-tile:focus-visible .tl-why { opacity:1; }
-  .tl-why b { font-size:12px; line-height:1.1; }
+  .tl-pop { position:absolute; z-index:60; display:none; width:262px; background:#fff; border:1px solid var(--color-sand-dark); border-radius:12px; box-shadow:0 14px 34px rgba(15,23,42,.24); padding:.85rem .95rem 1rem; pointer-events:none; }
+  .tl-pop-h { display:flex; align-items:center; gap:.55rem; margin-bottom:.4rem; }
+  .tl-pop-h img { width:24px; height:18px; border-radius:2px; object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.1); flex:0 0 auto; }
+  .tl-pop-h b { font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--color-ink); line-height:1.05; display:block; }
+  .tl-pop-h i { font-style:normal; font-size:.8rem; color:var(--color-stone); }
+  .tl-pop-meta { font-size:.78rem; color:var(--color-stone); margin-bottom:.5rem; }
+  .tl-pop-score { font-weight:700; color:var(--color-terracotta); }
+  .tl-pop-tag { font-size:.88rem; line-height:1.5; color:var(--color-charcoal); margin:0 0 .55rem; }
+  .tl-pop-sw { display:flex; flex-direction:column; gap:.15rem; font-size:.78rem; color:var(--color-charcoal); }
+  .tl-pop-sw b { color:var(--color-ink); }
+  .tl-pop-go { margin-top:.55rem; font-size:.8rem; font-weight:700; color:var(--color-terracotta); }
+  @media (max-width:640px){ .tl-pop { display:none !important; } }
   .tl-more { margin:2.75rem 0 0; }
   .tl-more h2 { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--color-ink); margin:0 0 1rem; }
   .tl-more-group { margin-bottom:1.1rem; }
@@ -169,21 +202,29 @@ const CSS = `
 `;
 
 const SHORT = { climate: 'Climate', cost: 'Cost', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
-// Short, data-derived reason a city sits in its tier (shown on hover).
-function whyText(c, s, v, tierKey) {
-  const ns = nomadScore(c);
-  if (v.mode === 'category') {
-    return `${v.cat.label} ${s}/10, so ${tierKey} tier. Overall Nomad Score ${ns}.`;
-  }
-  const ent = CK.map((k) => [k, c.scores[k]]).filter((x) => typeof x[1] === 'number').sort((a, b) => b[1] - a[1]);
-  const top = ent.slice(0, 2).map((x) => `${SHORT[x[0]]} ${x[1]}`).join(', ');
-  const low = ent.length ? `${SHORT[ent[ent.length - 1][0]]} ${ent[ent.length - 1][1]}` : '';
-  return `Nomad Score ${s}, ${tierKey} tier. Strong on ${top}. Weakest ${low}.`;
+function iso(c) {
+  if (!c.flag) return '';
+  const cps = [...c.flag].map((ch) => ch.codePointAt(0)).filter((cp) => cp >= 0x1F1E6 && cp <= 0x1F1FF);
+  return cps.length === 2 ? cps.map((cp) => String.fromCharCode(cp - 0x1F1E6 + 97)).join('') : '';
 }
-const tileHtml = (x, v, tierKey, unit) => { const c = x.c, s = x.s; return `<a class="tl-tile" href="/cities/${c.id}" title="${esc(c.name)} &middot; ${unit} ${s}">`
-  + `<img class="tl-img" src="/images/cities/${c.id}-card.webp" alt="" loading="lazy" onerror="this.style.display='none'">`
-  + `<span class="tl-scrim"></span><span class="tl-name">${esc(c.name)}</span>`
-  + `<span class="tl-why"><b>${esc(c.name)}</b><span>${esc(whyText(c, s, v, tierKey))}</span></span></a>`; };
+// A small city-page summary shown in the hover popover.
+function popData(c) {
+  const ns = nomadScore(c);
+  const cost = typeof c.costPerMonth === 'number' ? '$' + c.costPerMonth.toLocaleString('en-US') + '/mo' : 'cost n/a';
+  const ent = CK.map((k) => [k, c.scores[k]]).filter((x) => typeof x[1] === 'number').sort((a, b) => b[1] - a[1]);
+  const strong = ent.slice(0, 2).map((x) => `${SHORT[x[0]]} ${x[1]}`).join(', ');
+  const weak = ent.length ? `${SHORT[ent[ent.length - 1][0]]} ${ent[ent.length - 1][1]}` : '';
+  return { ns, cost, tag: c.tagline || '', strong, weak, iso: iso(c) };
+}
+const tileHtml = (x, v, tierKey, unit) => {
+  const c = x.c, s = x.s, p = popData(c);
+  return `<a class="tl-tile" href="/cities/${c.id}"`
+    + ` data-name="${esc(c.name)}" data-country="${esc(c.country || '')}" data-iso="${p.iso}"`
+    + ` data-score="${p.ns}" data-tier="${tierKey}" data-cost="${esc(p.cost)}" data-tag="${esc(p.tag)}"`
+    + ` data-strong="${esc(p.strong)}" data-weak="${esc(p.weak)}" title="${esc(c.name)} &middot; ${unit} ${s}">`
+    + `<img class="tl-img" src="/images/cities/${c.id}-card.webp" alt="" loading="lazy" onerror="this.style.display='none'">`
+    + `<span class="tl-scrim"></span><span class="tl-name">${esc(c.name)}</span></a>`;
+};
 
 function bucket(v) {
   const ranked = v.pool.map((c) => ({ c, s: v.score(c) })).sort((a, b) => b.s - a.s);
@@ -305,8 +346,10 @@ ${faq.map((f) => `        <div><h3 class="tl-faq-q">${esc(f.q)}</h3><p class="tl
       </div>
     </div>
   </main>
+  <div class="tl-pop" id="tlPop" role="tooltip"></div>
   ${FOOTER}
   ${NAVJS}
+  ${TLPOP}
 </body>
 </html>
 `;
