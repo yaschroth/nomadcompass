@@ -240,6 +240,9 @@ const html = `<!DOCTYPE html>
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/wheel" class="nav-link">Wheel</a></li>
         <li><a href="/cities" class="nav-link active">Cities</a></li>
+        <li><a href="/best" class="nav-link">Rankings</a></li>
+        <li><a href="/tier-list" class="nav-link">Tier List</a></li>
+        <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
       <div class="nav-actions">
@@ -257,6 +260,9 @@ const html = `<!DOCTYPE html>
         <li><a href="/" class="nav-mobile-link">Home</a></li>
         <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
         <li><a href="/cities" class="nav-mobile-link active">Cities</a></li>
+        <li><a href="/best" class="nav-mobile-link">Rankings</a></li>
+        <li><a href="/tier-list" class="nav-mobile-link">Tier List</a></li>
+        <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
       <div class="nav-mobile-actions">
@@ -596,6 +602,13 @@ ${cards}
       initUserTimezone();
       SLIDER_CATS.forEach(function (cat) { updateSliderRange(sliders[cat]); });
       populateCountry(); populateCity();
+      // Deep-link support: /cities?q=lisbon prefills the search box and filters on load.
+      // This makes the URL a real search endpoint (used by the site nav search + the
+      // WebSite SearchAction / sitelinks searchbox in structured data).
+      try {
+        var _q = new URLSearchParams(window.location.search).get('q');
+        if (_q) { search.value = _q; }
+      } catch (e) {}
       apply();
     })();
   </script>

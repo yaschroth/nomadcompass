@@ -41,19 +41,22 @@ const all = [
 ];
 const articleDirs = ['cities' + path.sep, 'activities' + path.sep];
 
-let brand = 0, brandSkip = 0, article = 0, articleSkip = 0;
+let brand = 0, article = 0;
 for (const rel of all) {
   const abs = path.join(ROOT, rel);
   let html = fs.readFileSync(abs, 'utf8');
   const before = html;
 
-  if (!/<!-- brand-graph -->/.test(html)) {
-    html = html.replace(/<\/head>/i, brandGraphScript() + '\n</head>');
-    brand++;
-  } else brandSkip++;
+  // Update-in-place: replace the marked block if present (so schema edits propagate on
+  // re-run), otherwise insert before </head>.
+  const brandRe = /  <!-- brand-graph --><script type="application\/ld\+json">.*?<\/script>/s;
+  const brandBlock = brandGraphScript();
+  if (brandRe.test(html)) { html = html.replace(brandRe, brandBlock); }
+  else { html = html.replace(/<\/head>/i, brandBlock + '\n</head>'); }
+  brand++;
 
   const isArticle = articleDirs.some((d) => rel.includes(d));
-  if (isArticle && !/<!-- article-schema -->/.test(html)) {
+  if (isArticle) {
     const url = canonicalOf(html);
     if (url) {
       const node = articleScript({
@@ -64,11 +67,13 @@ for (const rel of all) {
         datePublished: dateOf(html),
         dateModified: dateOf(html),
       });
-      html = html.replace(/<\/head>/i, node + '\n</head>');
+      const artRe = /  <!-- article-schema --><script type="application\/ld\+json">.*?<\/script>/s;
+      if (artRe.test(html)) { html = html.replace(artRe, node); }
+      else { html = html.replace(/<\/head>/i, node + '\n</head>'); }
       article++;
     }
-  } else if (isArticle) articleSkip++;
+  }
 
   if (html !== before) fs.writeFileSync(abs, html);
 }
-console.log(`Brand graph: added ${brand}, already ${brandSkip} | Article: added ${article}, already ${articleSkip} (of ${all.length} pages)`);
+console.log(`Brand graph: ${brand} pages | Article: ${article} pages (of ${all.length} total)`);

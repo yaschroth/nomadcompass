@@ -30,6 +30,14 @@ const WEBSITE = {
   url: SITE + '/',
   publisher: { '@id': ORG_ID },
   inLanguage: 'en',
+  // Sitelinks searchbox. Backed by a real endpoint: /cities?q= prefills the search
+  // box and filters on load (see generate_cities_hub.cjs). Do not declare this unless
+  // that deep-link keeps working.
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: SITE + '/cities?q={search_term_string}' },
+    'query-input': 'required name=search_term_string',
+  },
 };
 
 // Author reference used by content pages (self-contained, so pages don't depend on
