@@ -230,7 +230,7 @@
         <li><a href="../compare" class="nav-link">Compare</a></li>
         <li><a href="../blog" class="nav-link active">Blog</a></li>
       </ul>
-      <form class="nav-search" action="/cities" method="get" role="search"><input type="search" name="q" placeholder="Search cities&hellip;" aria-label="Search cities" autocomplete="off"></form>
+      <form class="nav-search" action="/cities" method="get" role="search"><input type="search" name="q" placeholder="Jump to a city&hellip;" aria-label="Search a city" autocomplete="off" list="navCityList"><datalist id="navCityList"></datalist></form>
       <div class="nav-actions">
         <a href="../login" class="nav-login">Login</a>
         <a href="../signup" class="btn btn-primary nav-signup">Sign Up</a>
@@ -854,5 +854,9 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
+  <!-- nav-search-js -->
+  <script src="/assets/city-search-index.js" defer></script>
+  <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
+  <!-- /nav-search-js -->
 </body>
 </html>
