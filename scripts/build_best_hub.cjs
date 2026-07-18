@@ -121,7 +121,7 @@ const html = `<!DOCTYPE html>
   </nav>
   <main>
     <header class="hub-hero">
-      <img class="hub-hero-img" src="/images/cities/newyork.webp" alt="The Manhattan skyline seen from New York Harbor" fetchpriority="high">
+      <img class="hub-hero-img" src="/assets/best-hero.webp" alt="A city skyline lit up at dusk" fetchpriority="high">
       <div class="hub-hero-overlay"><div class="container">
         <span class="hub-eyebrow">The Nomad HQ City Index</span>
         <h1>The Best Cities for Digital Nomads</h1>

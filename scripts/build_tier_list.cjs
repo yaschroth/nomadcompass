@@ -425,7 +425,7 @@ function render(v) {
 ${NAV}
   <main>
     <header class="tl-hero">
-      <img class="tl-hero-img" src="/images/cities/${heroId}.webp" alt="${esc(heroName)}" fetchpriority="high">
+      <img class="tl-hero-img" src="${v.type === 'master' ? '/assets/tier-list-hero.webp' : '/images/cities/' + heroId + '.webp'}" alt="${v.type === 'master' ? 'A coastal town on the water at golden hour' : esc(heroName)}" fetchpriority="high">
       <div class="tl-hero-overlay"><div class="container">
         <span class="tl-eyebrow">${esc(v.kicker)}</span>
         <h1>${esc(v.h1)}</h1>

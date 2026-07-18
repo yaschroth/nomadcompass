@@ -71,14 +71,16 @@ new hero style per page; match this one.
   (`.sub`, rgba white .9, max ~56ch). Optional CTA button row.
 - The hero `<img>` gets `fetchpriority="high"` (it is the LCP element). Alt text describes the photo.
 
-**Every hero uses a UNIQUE image; no two page heroes share the same photo.** Current assignments:
-homepage → `images/extended_surf_4000.webp`; `/cities` → `assets/cities-hero.webp`;
-`/best` → `images/cities/newyork.webp`; `/map` → `images/cities/capetown.webp`;
-`/tier-list` → `images/cities/lisbon.webp`; `/compare` → `assets/compare-hero.webp`;
+**Every hero uses a UNIQUE image; no two page heroes share the same photo, and a hub hero never
+reuses a city-page photo.** Each top-level page has its OWN dedicated `assets/<page>-hero.webp`.
+Current assignments: homepage → `images/extended_surf_4000.webp`; `/cities` → `assets/cities-hero.webp`;
+`/best` → `assets/best-hero.webp`; `/map` → `assets/map-hero.webp`;
+`/tier-list` → `assets/tier-list-hero.webp`; `/compare` → `assets/compare-hero.webp`;
 `/wheel` → `assets/wheel-hero.webp`. Per-item pages (each `/best/*`, `/tier-list/*`, `/cities/*`)
-use their own subject's photo, so they are already distinct. When adding a new hub/tool, pick a
-photo not already used by another hero (a dedicated `assets/<page>-hero.webp` or an unused, iconic
-`images/cities/<city>.webp`), sized wide/landscape and optimized to WebP.
+use their own subject's photo, so they are already distinct. When adding a new hub/tool, create a
+NEW dedicated `assets/<page>-hero.webp` from a photo used by no other hero (prefer CC0 / public
+domain so no attribution is needed; if CC BY is used, add a visible credit like the city pages do
+and record it in `IMAGE_CREDITS.md`), sized wide/landscape (~1600px) and optimized to WebP.
 
 ---
 
