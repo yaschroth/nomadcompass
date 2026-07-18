@@ -143,6 +143,13 @@ AI text has near-uniform sentence length. Vary it.
 - **No two consecutive sentences with the same opening pattern.** If three
   sentences start "Bangkok has… / Bangkok offers… / Bangkok is…", rewrite.
 
+### 4.2.1 Paragraph length (max 90 words)
+
+- **Max 90 words per paragraph.** If a thought needs more, split it into two.
+- Shorter paragraphs read better and scan better (especially on mobile) and raise
+  the odds of winning a featured snippet.
+- Applies to body prose; lists, tables, and blockquotes do not count as paragraphs.
+
 ### 4.3 Pull quotes, callouts, emphasis
 
 - Blockquotes (`<blockquote>`) sparingly: a real quote, a warning the reader
@@ -193,6 +200,34 @@ Every article answers one intent. Match the structure to it:
   numbered steps, document checklists, costs, timelines, edge cases. Strong CTA.
 
 If an article tries to serve multiple intents, split it.
+
+### 4.5 No repetition patterns (boilerplate & stuffing)
+
+Formulaic repetition is the strongest "this page is templated / AI-generated" tell
+and a direct Helpful-Content risk. Two kinds are banned. Check tool:
+`node scripts/check_repetition.cjs` (run before publishing; a new article must not
+introduce either problem).
+
+**A) Cross-article boilerplate.** No sentence (from ~40 chars) may appear verbatim in
+**3 or more articles**. The usual offenders:
+
+- **CTAs:** not the same "Compare cities with our Nomad Wheel" line in 12 articles.
+  Write each CTA fresh, tied to that article's topic.
+- **Internal-link sentences:** not a template like "We cover X in a separate guide."
+  Build the link into a topic-specific sentence, not a recurring block.
+- **Disclaimers / date stamps:** keep the YMYL disclaimer as the single standard block
+  (7.6.1), not restated as varied prose in every article.
+- **Fact blocks:** the same "furnished adds 20 to 30 percent" line should not appear
+  word-for-word in eight city guides. Rephrase per article or drop it.
+
+**B) In-article stuffing.** No exact multi-word phrase (3+ words) over **1.5% density**
+in one article (e.g. "digital nomad Bangkok" 40 times in a 2,500-word piece). This is
+the upper bound to 5.5 (keyword density 0.5 to 1.5%). Keep the keyword-in-every-heading
+rule (5.0.5), but in body prose use **pronouns, synonyms, and reworded sentences**
+("the city", "here", "the neighborhood") so the exact phrase does not dominate.
+
+**C) Vary intros and conclusions.** No shared opener or closing block across 3+ articles.
+Every article needs its own hook (4.1).
 
 ---
 
@@ -580,11 +615,15 @@ Per article, confirm:
       external links.
 - [ ] **0 em-dashes / spaced en-dashes**; ≤ 2 triadic lists; no forbidden phrases.
 - [ ] Word count matches the type (section 3); main-keyword density 0.5–1.5 %.
+- [ ] **No paragraph over 90 words** (4.2.1).
+- [ ] **`node scripts/check_repetition.cjs` passes** — no cross-article boilerplate,
+      no in-article stuffing (4.5).
 - [ ] Hero image unique + topical + has alt text; `ceil(words/1500)` images total.
 - [ ] YMYL disclaimer present if the article gives visa/tax/financial guidance.
 - [ ] Article is **linked from [`blog.html`](blog.html)** and present in
       [`sitemap.xml`](sitemap.xml).
 - [ ] One author box only; byline + box use Yannick, linked to the bio page.
+- [ ] **`ARTICLE_LOG.md` updated** with the create/edit and why (section 13).
 
 ## 12. Deploy
 
@@ -592,3 +631,43 @@ Static site, no build. Commit and push to `master`; Vercel auto-deploys (see
 [`nomadhq-stack-deploy`] notes). After deploy, spot-check the live clean URL
 returns 200 and the JSON-LD validates in Google's Rich Results Test. Re-submit
 `sitemap.xml` in Search Console and request indexing for new cornerstone articles.
+
+---
+
+## 13. Maintenance & performance review
+
+### 13.1 Article log
+
+[`ARTICLE_LOG.md`](ARTICLE_LOG.md) is the source of truth for what has been done to
+which article. **Update it after every blog change** (create, edit, delete):
+
+- Before starting article work, **read `ARTICLE_LOG.md`** to see the current status
+  and what has already been done, so sessions don't redo work or start blind.
+- After committing, add a change-history entry: date, slug, what changed, why.
+- A change that touches many articles at once (e.g. a schema sweep via
+  `apply_blog_seo.cjs`) is logged once at the sweep level with the slugs it affected.
+
+### 13.2 Monthly performance review (Google Search Console)
+
+We have GSC access (`sc-domain:thenomadhq.com`). Once a month, review the Performance
+report and act on the highest-impact items, then log them in `ARTICLE_LOG.md`:
+
+1. **Low-CTR pages in the top 20** (impressions but few clicks): rewrite the `<title>`
+   and meta description to match the intent of the queries the page actually ranks for
+   (read them from the query report). This is the fastest CTR lever.
+2. **Pages in positions 8 to 20** for real-volume queries: closest to page 1. Expand the
+   section that matches the query, add internal links pointing to the page, tighten the
+   on-page match. Confirm the query genuinely fits the page first.
+3. **Zero-impression pages**: candidates for a rewrite, a stronger internal-link path, or
+   merging into a better article. First check they are actually indexed (URL inspection):
+   an unindexed page is a discovery problem, not a content one.
+
+Note: queries Google reports as anonymized won't show in the query breakdown; use the
+page-level data for those.
+
+### 13.3 Freshness
+
+Bump JSON-LD `dateModified` (never `datePublished`) only on a **substantive** edit:
+rewrote a section, updated prices/visa rules, added FAQ entries. Not for typos, a single
+new link, or "bumping for SEO", Google devalues zero-delta updates. Re-verify every
+numerical/visa/tax claim when you touch a YMYL article; those age fast.

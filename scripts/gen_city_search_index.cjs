@@ -1,5 +1,5 @@
 /**
- * Emits assets/city-search-index.js — a compact [name, slug] list of all cities,
+ * Emits assets/city-search-index.js: a compact [name, slug] list of all cities,
  * loaded by the header search box so a query resolves straight to /cities/<slug>.
  * slug === the city id === the city page filename (verified 1:1).
  * Usage: node scripts/gen_city_search_index.cjs
