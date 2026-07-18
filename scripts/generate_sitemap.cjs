@@ -15,6 +15,7 @@ const add = (loc, priority, changefreq) => urls.push({ loc, priority, changefreq
 
 add('/', '1.0', 'weekly');
 add('/cities', '0.9', 'weekly');
+add('/map', '0.7', 'monthly');
 add('/compare', '0.7', 'monthly');
 add('/best', '0.8', 'weekly');
 add('/tier-list', '0.7', 'monthly');

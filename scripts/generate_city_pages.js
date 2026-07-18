@@ -27373,7 +27373,7 @@ function generateCityPage(city) {
         <div class="footer-column">
           <h4 class="footer-heading">Explore</h4>
           <ul class="footer-links">
-            <li><a href="../index.html#cities" class="footer-link">All Cities</a></li>
+            <li><a href="../index.html#cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li>
             <li><a href="../wheel.html" class="footer-link">Decision Wheel</a></li>
           </ul>
         </div>
