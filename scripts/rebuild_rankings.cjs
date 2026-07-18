@@ -42,6 +42,8 @@ console.log('\n5/6  sitemap (generate_sitemap)…');
 run('generate_sitemap.cjs');
 console.log('\n6/7  city "Featured in rankings" links (apply_city_rankings)…');
 run('apply_city_rankings.cjs');
+console.log('\n6b   similar cities (apply_similar_cities)…');
+run('apply_similar_cities.cjs');
 console.log('\n7/8  nav search box (apply_nav_search)…');
 run('apply_nav_search.cjs');
 console.log('\n8/9  structured data (apply_entity_schema, must run last)…');
