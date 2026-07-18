@@ -133,7 +133,7 @@ const html = `<!DOCTYPE html>
   ${navHtml()}
   <main>
     <header class="hub-hero">
-      <img class="hub-hero-img" src="/assets/cities-hero.webp" alt="A world city skyline at dusk" fetchpriority="high">
+      <img class="hub-hero-img" src="/images/cities/capetown.webp" alt="Cape Town beneath Table Mountain" fetchpriority="high">
       <div class="hub-hero-overlay"><div class="container">
         <span class="hub-eyebrow">The Nomad HQ World Map</span>
         <h1>The Digital Nomad World Map</h1>

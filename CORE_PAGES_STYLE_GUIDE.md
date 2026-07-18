@@ -51,6 +51,37 @@ If/when on-site search exists, add a `potentialAction` `SearchAction` to the `We
 
 ---
 
+## 1b. Page hero — shared standard (every hub, tool, and landing page)
+
+Every top-level page (homepage, hubs like `/cities` `/best` `/map` `/tier-lists`, tool pages,
+and each generated ranking/tier-list) opens with the **same hero pattern**. Do not invent a
+new hero style per page; match this one.
+
+**Structure** (canonical CSS: `.hub-hero` in [`scripts/build_best_hub.cjs`](scripts/build_best_hub.cjs);
+`.cities-hero` / `.best-hero` / `.tl-hero` are the same shape):
+
+- A full-bleed background **photo**: `position:absolute; inset:0; width/height:100%; object-fit:cover`,
+  section `min-height:100vh`, content bottom-anchored (`align-items:flex-end`).
+- A **bottom dark gradient** overlay (`linear-gradient(to top, rgba(15,23,42,.94) ... transparent)`)
+  that the content sits on, in white.
+- A **top light gradient** (`::before`, white → transparent, height ≈ nav + 44px) so the transparent
+  nav stays readable over the photo.
+- Content: a **terracotta uppercase eyebrow** (`#ff8863`, letter-spacing .16em), a **serif `<h1>`**
+  (`DM Serif Display`, `clamp(2.1rem,5.5vw,3.5rem)`, white, text-shadow), and a **subtitle**
+  (`.sub`, rgba white .9, max ~56ch). Optional CTA button row.
+- The hero `<img>` gets `fetchpriority="high"` (it is the LCP element). Alt text describes the photo.
+
+**Every hero uses a UNIQUE image — no two page heroes share the same photo.** Current assignments:
+homepage → `images/extended_surf_4000.webp`; `/cities` → `assets/cities-hero.webp`;
+`/best` → `images/cities/newyork.webp`; `/map` → `images/cities/capetown.webp`;
+`/tier-list` → `images/cities/lisbon.webp`; `/compare` → `assets/compare-hero.webp`;
+`/wheel` → `assets/wheel-hero.webp`. Per-item pages (each `/best/*`, `/tier-list/*`, `/cities/*`)
+use their own subject's photo, so they are already distinct. When adding a new hub/tool, pick a
+photo not already used by another hero (a dedicated `assets/<page>-hero.webp` or an unused, iconic
+`images/cities/<city>.webp`), sized wide/landscape and optimized to WebP.
+
+---
+
 ## 2. Homepage (`index.html`)
 
 - **`<title>`** ≤ 60, no em-dash. Current title `The Nomad HQ — Find Your Next City` uses an
