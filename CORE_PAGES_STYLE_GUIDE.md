@@ -51,7 +51,7 @@ If/when on-site search exists, add a `potentialAction` `SearchAction` to the `We
 
 ---
 
-## 1b. Page hero — shared standard (every hub, tool, and landing page)
+## 1b. Page hero: shared standard (every hub, tool, and landing page)
 
 Every top-level page (homepage, hubs like `/cities` `/best` `/map` `/tier-lists`, tool pages,
 and each generated ranking/tier-list) opens with the **same hero pattern**. Do not invent a
@@ -71,7 +71,7 @@ new hero style per page; match this one.
   (`.sub`, rgba white .9, max ~56ch). Optional CTA button row.
 - The hero `<img>` gets `fetchpriority="high"` (it is the LCP element). Alt text describes the photo.
 
-**Every hero uses a UNIQUE image — no two page heroes share the same photo.** Current assignments:
+**Every hero uses a UNIQUE image; no two page heroes share the same photo.** Current assignments:
 homepage → `images/extended_surf_4000.webp`; `/cities` → `assets/cities-hero.webp`;
 `/best` → `images/cities/newyork.webp`; `/map` → `images/cities/capetown.webp`;
 `/tier-list` → `images/cities/lisbon.webp`; `/compare` → `assets/compare-hero.webp`;
