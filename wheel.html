@@ -1395,9 +1395,11 @@
           const importance = userScores[key]; // 0-10: how much user cares
           const cityScore = city.scores[key]; // 0-10: how good the city is
 
-          // Apply exponential weighting to amplify user preferences
-          // importance^1.5 makes high-priority sliders ~3x more influential
-          const weight = Math.pow(importance, 1.5);
+          // Apply exponential weighting to amplify user preferences. importance^2 makes a
+          // maxed factor dominate: a single "Essential" (10) outweighs a "Moderate" (5) by
+          // 4x, so cranking one factor visibly reorders the matches (e.g. Cost=Essential
+          // surfaces the cheapest cities even with everything else left at Moderate).
+          const weight = Math.pow(importance, 2);
           weightedSum += weight * cityScore;
           totalWeight += weight;
         });
