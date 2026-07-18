@@ -47,8 +47,8 @@ const slidersMarkup = SLIDER_CATS.map(([cat, label]) => `              <div clas
               </div>`).join('\n');
 
 function navHtml() {
-  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
-  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}">${t}</a></li>`).join('');
+  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
+  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}${h === '/map' ? ' active' : ''}">${t}</a></li>`).join('');
   return `<nav class="nav" id="mainNav"><div class="nav-container">
       <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
       <ul class="nav-links">${li('nav-link')}</ul>

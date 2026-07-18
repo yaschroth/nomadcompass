@@ -239,7 +239,7 @@ const html = `<!DOCTYPE html>
       <ul class="nav-links">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/wheel" class="nav-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-link active">Cities</a></li>
+        <li><a href="/cities" class="nav-link active">Cities</a></li><li><a href="/map" class="nav-link">Map</a></li>
         <li><a href="/best" class="nav-link">Rankings</a></li>
         <li><a href="/tier-list" class="nav-link">Tier List</a></li>
         <li><a href="/compare" class="nav-link">Compare</a></li>
@@ -259,7 +259,7 @@ const html = `<!DOCTYPE html>
       <ul class="nav-mobile-links">
         <li><a href="/" class="nav-mobile-link">Home</a></li>
         <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-mobile-link active">Cities</a></li>
+        <li><a href="/cities" class="nav-mobile-link active">Cities</a></li><li><a href="/map" class="nav-mobile-link">Map</a></li>
         <li><a href="/best" class="nav-mobile-link">Rankings</a></li>
         <li><a href="/tier-list" class="nav-mobile-link">Tier List</a></li>
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>

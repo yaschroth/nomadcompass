@@ -3879,8 +3879,8 @@ const CITIES = [
       culture: 9,
       cleanliness: 5,
       airquality: 5},    costPerMonth: 1300,
-    lat: 9.9312,
-    lng: 76.2673,
+    lat: -7.8014,
+    lng: 110.3647,
 
     timezone: 7
   },
@@ -3930,8 +3930,8 @@ const CITIES = [
       culture: 9,
       cleanliness: 5,
       airquality: 6},    costPerMonth: 1400,
-    lat: 18.5204,
-    lng: 73.8567,
+    lat: 15.8794,
+    lng: 108.335,
 
     timezone: 7
   },
@@ -4062,8 +4062,8 @@ const CITIES = [
       culture: 4,
       cleanliness: 5,
       airquality: 6},    costPerMonth: 1200,
-    lat: 26.9124,
-    lng: 75.7873,
+    lat: 12.5707,
+    lng: 99.9588,
 
     timezone: 7
   },
@@ -4248,8 +4248,8 @@ const CITIES = [
       culture: 6,
       cleanliness: 6,
       airquality: 6},    costPerMonth: 1200,
-    lat: 5.975,
-    lng: 80.4297,
+    lat: 4.5841,
+    lng: 101.0829,
 
     timezone: 8
   },
@@ -5409,8 +5409,8 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 9},    costPerMonth: 3200,
-    lat: -34.9285,
-    lng: 138.6007,
+    lat: -41.2866,
+    lng: 174.7756,
 
     timezone: 12
   },
