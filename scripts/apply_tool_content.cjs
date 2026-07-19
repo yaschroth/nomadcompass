@@ -87,6 +87,17 @@ const POP = {
     });
     return block('Which cities line up with your team', groups);
   },
+  compare() {
+    const byId = {}; CITIES.forEach((c) => { byId[c.id] = c; });
+    const hh = [['lisbon', 'barcelona'], ['chiangmai', 'bali'], ['medellin', 'mexicocity'], ['bangkok', 'hochiminh'], ['tbilisi', 'budapest'], ['porto', 'valencia'], ['canggu', 'ubud'], ['berlin', 'lisbon']];
+    const items = hh.filter((h) => byId[h[0]] && byId[h[1]]).map((h) => `<a href="/compare?a=${h[0]}&amp;b=${h[1]}">${byId[h[0]].name} vs ${byId[h[1]].name}</a>`).join(' &middot; ');
+    return block('Popular head-to-heads', [['Jump into a side-by-side comparison', items + '.']]);
+  },
+  wheel() {
+    const pri = [['low cost', 'cheapest-cities-for-digital-nomads'], ['fast wifi', 'best-cities-for-fast-wifi'], ['safety', 'safest-cities-for-digital-nomads'], ['nightlife', 'best-cities-for-nightlife'], ['nature and the outdoors', 'best-cities-for-nature-and-outdoors'], ['community', 'best-cities-for-nomad-community'], ['food', 'best-cities-for-food'], ['year-round weather', 'best-cities-for-year-round-weather']];
+    const items = pri.map((p) => `<a href="/best/${p[1]}">best for ${p[0]}</a>`).join(' &middot; ');
+    return block('Or start from a single priority', [['If you already know what matters most, jump straight to a ranking', 'See the ' + items + '.']]);
+  },
 };
 
 const TOOLS = {
@@ -162,6 +173,29 @@ const TOOLS = {
     ],
     related: [{ href: '/tier-list', label: 'Our official tier list' }, R.best, R.wheel, R.cities, R.route, CITY('lisbon', 'Lisbon'), CITY('bali', 'Bali')],
   },
+  'compare.html': {
+    h: 'About comparing nomad cities',
+    intro: 'Choosing between two places is far easier when you can see them side by side. This comparison tool puts up to three cities against each other across cost of living, our overall Nomad Score, and all 13 of the factors we rate, from wifi and safety to nightlife and nature, so the trade-offs are obvious at a glance instead of buried in separate tabs.',
+    how: 'Pick two or three cities and the tool lays out their monthly budget, Nomad Score and a category-by-category breakdown, with a radar chart to show the overall shape of each place. The ratings are The Nomad HQ’s editorial scores on a 0–10 scale, applied consistently across every city so the comparison is fair.',
+    faq: [
+      ['How many cities can I compare at once?', 'Two or three. Two is best for a clean head-to-head; a third is useful when you are torn between a shortlist. Add or swap cities at the top of the page.'],
+      ['What exactly is compared?', 'Monthly cost of living, the overall Nomad Score, and all 13 category ratings: climate, cost, wifi, nightlife, nature, safety, food, community, English, visa, culture, cleanliness and air quality.'],
+      ['Where do the scores come from?', 'They are our own editorial ratings, applied the same way to every city so comparisons stay consistent. Costs are estimated monthly budgets for one person, not official statistics.'],
+      ['Can I share a comparison?', 'Yes, the cities you pick are stored in the page URL, so you can copy the link and send someone the exact head-to-head.'],
+    ],
+    related: [R.wheel, R.route, R.visa, R.weather, R.best, R.cities, CITY('lisbon', 'Lisbon'), CITY('medellin', 'Medellín')],
+  },
+  'wheel.html': {
+    h: 'About the Decision Wheel',
+    intro: 'Every "best city for nomads" list is really a list of someone else’s priorities. The Decision Wheel flips that around: you tell it how much each factor matters to you, and it matches you to the cities that fit your priorities rather than the internet’s. Care most about cost and community? Or wifi and nightlife? Dial it in and get a personalised ranking.',
+    how: 'Set an importance level for each of the 13 factors and the wheel weights the cities accordingly, giving the things you care about far more pull than the things you do not. You can also filter by region, climate, time-zone band and budget, so the results are cities you would actually consider, not just high scorers on paper.',
+    faq: [
+      ['How does the matching work?', 'Each city has a 0–10 rating in 13 categories. The wheel multiplies each rating by how important you said that factor is (with a strong curve, so top priorities dominate) and ranks cities by the total. Your must-haves move the needle much more than your nice-to-haves.'],
+      ['Can I narrow it to a region or climate?', 'Yes. As well as the importance sliders there are filters for region, climate type, time-zone band and monthly budget, so you can say "warm, in Europe, under $2,000" and see only cities that qualify.'],
+      ['Is this the same as the rankings?', 'No. Our rankings reflect a fixed idea of "best"; the wheel is personal to you. If you would rather browse ready-made lists, the best-cities rankings are a good starting point.'],
+    ],
+    related: [R.compare, R.best, R.route, R.weather, R.cities, CITY('lisbon', 'Lisbon'), CITY('chiangmai', 'Chiang Mai')],
+  },
 };
 
 const CSS = `<style>
@@ -184,7 +218,7 @@ const CSS = `<style>
   .tool-content .tc-pg p { font-size: .95rem; line-height: 1.65; margin: 0; }
 </style>`;
 
-const POPKEY = { 'route.html': 'route', 'timezones.html': 'tz', 'best-weather.html': 'weather', 'visa.html': 'visa', 'geoarbitrage.html': 'geo' };
+const POPKEY = { 'route.html': 'route', 'timezones.html': 'tz', 'best-weather.html': 'weather', 'visa.html': 'visa', 'geoarbitrage.html': 'geo', 'compare.html': 'compare', 'wheel.html': 'wheel' };
 
 function build(cfg, popHtml) {
   const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: cfg.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };

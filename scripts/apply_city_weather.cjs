@@ -70,7 +70,7 @@ function buildSection(id) {
   const bestTxt = best.map((i) => MON[i]).join(', ');
   const summary = `<p class="cw-summary">The best time to visit ${name} for comfortable weather is <b>${bestTxt}</b>. ` +
     `The warmest month is <b>${MON[warm]}</b> (around ${H[warm]}&deg;C by day), and the wettest is <b>${MON[wet]}</b> (about ${R[wet] || 0}mm of rain).</p>` +
-    `<p class="cw-cta">Chasing good weather? See <a href="/best-weather?month=${SLUG[best[0]]}">other cities that are warm in ${MON[best[0]]}</a>, or <a href="/route">plan a multi-city route</a> around the seasons.</p>`;
+    `<p class="cw-cta">Chasing good weather? See <a href="/best-weather?month=${SLUG[best[0]]}">other cities that are warm in ${MON[best[0]]}</a>, or <a href="/route">plan a multi-city route</a> around the seasons. Staying a while in ${name}? Check <a href="/visa">visa options</a>, your <a href="/timezones">time-zone overlap</a> and <a href="/geoarbitrage">how far your budget stretches</a>, or find it on <a href="/map">the world map</a>.</p>`;
   const legend = `<div class="cw-legend"><span><span class="sw" style="background:#4fae7e"></span>Daily high &amp; low (&deg;C)</span><span><span class="sw" style="background:#7bb0e0"></span>Rainfall (mm/month)</span><span><span class="sw" style="background:rgba(47,125,90,.4)"></span>Best months to visit</span></div>`;
 
   return '<!-- cw-start -->\n' +
