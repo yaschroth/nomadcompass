@@ -1,9 +1,10 @@
 /**
- * Builds /timezones: a Time Zone Overlap Finder. Pick your home/team UTC offset and the tool
- * ranks cities by how many working hours overlap (assuming a 9-17 day on both sides, overlap =
- * max(0, 8 - |cityTz - homeTz|)). Region + min-overlap filters, shareable via ?tz=. Data (id,
- * name, country, iso, tz, region, score, cost) is baked in. Run the head/body sweeps + sitemap
- * afterwards. Usage: node scripts/build_timezones.cjs
+ * Builds /timezones: a DST-aware Time Zone Overlap Finder. Each city carries its IANA zone
+ * (assets/city-tz.js); the browser computes the real UTC offset for a chosen date via Intl, so
+ * daylight-saving shifts are included. Pick your home zone (auto-detected) and a date (now / July /
+ * January) and it ranks cities by overlapping 9-to-5 working hours: overlap = max(0, 8 - |cityOff -
+ * homeOff|). Region + min-overlap filters, shareable via ?tz=Zone&when=now. Run the head/body sweeps
+ * (finish with apply_tools_nav.cjs) + sitemap after. Usage: node scripts/build_timezones.cjs
  */
 const fs = require('fs');
 const path = require('path');
@@ -14,29 +15,30 @@ const iso = (flag) => { const p = [...(flag || '')]; if (p.length !== 2) return 
 
 const m = {};
 new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';module.exports=CITIES')(m);
+const CITY_TZ = require(path.join(ROOT, 'assets', 'city-tz.js'));
 const CK = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
 const nomadScore = (c) => { let t = 0, n = 0; CK.forEach((k) => { const v = c.scores[k]; if (typeof v === 'number') { t += v; n++; } }); const raw = n ? t / n : 0; return +Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)).toFixed(1); };
 const regCode = fs.readFileSync(path.join(ROOT, 'city-regions.js'), 'utf8');
 const rm = {}; new Function('module', 'window', regCode + ';try{module.exports=CITY_REGIONS}catch(e){module.exports={}}')(rm, {});
 const REGION = rm.exports || {};
 
-const DATA = m.exports.filter((c) => c && c.id && typeof c.timezone === 'number').map((c) => [
-  c.id, c.name, c.country, iso(c.flag), c.timezone, REGION[c.id] || '', nomadScore(c), typeof c.costPerMonth === 'number' ? c.costPerMonth : 0,
+// [id, name, country, iso, ianaZone, region, score, cost]
+const DATA = m.exports.filter((c) => c && c.id && CITY_TZ[c.id]).map((c) => [
+  c.id, c.name, c.country, iso(c.flag), CITY_TZ[c.id], REGION[c.id] || '', nomadScore(c), typeof c.costPerMonth === 'number' ? c.costPerMonth : 0,
 ]);
 
-const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'the Middle East', northamerica: 'North America & the Caribbean', oceania: 'Oceania' };
-const REGION_SLUG = { europe: 'europe', asia: 'asia', latam: 'latin-america', africa: 'africa', middleeast: 'middle-east', northamerica: 'north-america', oceania: 'oceania' };
-const regionOptions = Object.keys(REGION_NAMES).map((r) => `<option value="${r}">${REGION_NAMES[r].replace(/^the /, '')}</option>`).join('');
-// home-offset options: label each with example cities
-const OFFSETS = [
-  [-8, 'UTC-8 (Los Angeles, Vancouver)'], [-7, 'UTC-7 (Denver, Phoenix)'], [-6, 'UTC-6 (Chicago, Mexico City)'],
-  [-5, 'UTC-5 (New York, Toronto, Bogota)'], [-4, 'UTC-4 (Santiago, Halifax)'], [-3, 'UTC-3 (Sao Paulo, Buenos Aires)'],
-  [0, 'UTC+0 (London, Lisbon)'], [1, 'UTC+1 (Berlin, Paris, Madrid)'], [2, 'UTC+2 (Athens, Cairo, Cape Town)'],
-  [3, 'UTC+3 (Istanbul, Moscow, Nairobi)'], [4, 'UTC+4 (Dubai, Tbilisi)'], [5, 'UTC+5 (Karachi, Tashkent)'],
-  [5.5, 'UTC+5:30 (India)'], [7, 'UTC+7 (Bangkok, Jakarta, Hanoi)'], [8, 'UTC+8 (Singapore, Bali, Beijing)'],
-  [9, 'UTC+9 (Tokyo, Seoul)'], [10, 'UTC+10 (Sydney, Melbourne)'], [12, 'UTC+12 (Auckland)'],
+const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'Middle East', northamerica: 'North America', oceania: 'Oceania' };
+const regionOptions = Object.keys(REGION_NAMES).map((r) => `<option value="${r}">${REGION_NAMES[r]}</option>`).join('');
+// representative home zones (IANA) with example cities; offsets are shown live per selected date
+const HOME = [
+  ['America/Los_Angeles', 'Los Angeles / Vancouver'], ['America/Denver', 'Denver / Phoenix'], ['America/Chicago', 'Chicago / Mexico City'],
+  ['America/New_York', 'New York / Toronto / Bogota'], ['America/Halifax', 'Halifax / Santiago'], ['America/Sao_Paulo', 'Sao Paulo / Buenos Aires'],
+  ['Atlantic/Reykjavik', 'Reykjavik (no DST)'], ['Europe/London', 'London / Lisbon / Dublin'], ['Europe/Berlin', 'Berlin / Paris / Madrid'],
+  ['Europe/Athens', 'Athens / Helsinki / Cairo'], ['Europe/Istanbul', 'Istanbul (no DST)'], ['Africa/Nairobi', 'Nairobi'],
+  ['Africa/Johannesburg', 'Cape Town / Johannesburg'], ['Asia/Dubai', 'Dubai'], ['Asia/Karachi', 'Karachi'], ['Asia/Kolkata', 'India'],
+  ['Asia/Bangkok', 'Bangkok / Jakarta / Hanoi'], ['Asia/Singapore', 'Singapore / Beijing / Bali'], ['Asia/Tokyo', 'Tokyo / Seoul'],
+  ['Australia/Perth', 'Perth'], ['Australia/Sydney', 'Sydney / Melbourne'], ['Pacific/Auckland', 'Auckland'],
 ];
-const offsetOptions = OFFSETS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
 
 function navHtml() {
   const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
@@ -61,7 +63,7 @@ const FOOTER = `<footer class="footer"><div class="container">
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>`;
 
-const ld = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Digital Nomad Time Zone Overlap Finder', url: BASE + '/timezones', applicationCategory: 'TravelApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description: 'Find digital nomad cities whose working hours overlap with your home or team time zone.' };
+const ld = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Digital Nomad Time Zone Overlap Finder', url: BASE + '/timezones', applicationCategory: 'TravelApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description: 'Find digital nomad cities whose working hours overlap with your home or team time zone, with daylight-saving included.' };
 const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [['Home', BASE + '/'], ['Time Zone Finder', BASE + '/timezones']].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
 
 const html = `<!DOCTYPE html>
@@ -70,11 +72,11 @@ const html = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Time Zone Overlap Finder for Digital Nomads | The Nomad HQ</title>
-  <meta name="description" content="Pick your home or team time zone and find digital nomad cities with the most overlapping working hours, so you can collaborate without living at 3am.">
+  <meta name="description" content="Pick your home time zone and find nomad cities with the most overlapping working hours, daylight-saving included. Collaborate without living at 3am.">
   <link rel="canonical" href="${BASE}/timezones">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="Time Zone Overlap Finder | The Nomad HQ">
-  <meta property="og:description" content="Find nomad cities whose working hours overlap with yours.">
+  <meta property="og:description" content="Find nomad cities whose working hours overlap with yours, DST included.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${BASE}/timezones">
   <meta property="og:image" content="${BASE}/assets/og-image.png">
@@ -102,9 +104,9 @@ const html = `<!DOCTYPE html>
     .tz-field { display:flex; flex-direction:column; gap:.35rem; }
     .tz-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--color-stone); }
     .tz-field select { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:240px; }
-    .tz-field.small select { min-width:150px; }
+    .tz-field.small select { min-width:140px; }
     .tz-detect { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
-    .tz-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; }
+    .tz-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; } .tz-count b { color:var(--color-ink); }
     .tz-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; }
     .tz-card { display:block; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:1rem 1.1rem; text-decoration:none; transition:border-color .15s, transform .15s, box-shadow .15s; }
     .tz-card:hover { border-color:var(--color-terracotta); transform:translateY(-2px); box-shadow:0 10px 24px rgba(15,23,42,.1); }
@@ -112,6 +114,7 @@ const html = `<!DOCTYPE html>
     .tz-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(0,0,0,.08); flex:0 0 auto; }
     .tz-name { font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--color-ink); line-height:1.1; }
     .tz-country { font-size:.78rem; color:var(--color-stone); }
+    .tz-dst { display:inline-block; font-size:.6rem; font-weight:700; color:#8a5a00; background:#fbeecb; border-radius:4px; padding:0 .3rem; margin-left:.3rem; vertical-align:middle; }
     .tz-badge { margin-left:auto; text-align:center; flex:0 0 auto; }
     .tz-badge b { display:block; font-size:1.15rem; font-weight:800; line-height:1; }
     .tz-badge span { font-size:.62rem; text-transform:uppercase; letter-spacing:.05em; color:var(--color-stone); }
@@ -131,59 +134,71 @@ const html = `<!DOCTYPE html>
       <div class="hub-hero-overlay"><div class="container">
         <span class="hub-eyebrow">Remote-work tool</span>
         <h1>Time Zone Overlap Finder</h1>
-        <p class="sub">Working with a team back home? Pick your base time zone and see which nomad cities give you the most overlapping working hours, so calls happen at noon, not 3am.</p>
+        <p class="sub">Working with a team back home? Pick your base time zone and see which nomad cities give you the most overlapping working hours, so calls happen at noon, not 3am. Daylight-saving included.</p>
       </div></div>
     </header>
     <div class="tz-wrap">
       <div class="tz-controls">
-        <div class="tz-field"><label for="tzHome">Your home / team time zone</label><select id="tzHome">${offsetOptions}</select></div>
+        <div class="tz-field"><label for="tzHome">Your home / team time zone</label><select id="tzHome"></select></div>
+        <div class="tz-field small"><label for="tzWhen">When</label><select id="tzWhen"><option value="now">Right now</option><option value="jul">In July (N. summer)</option><option value="jan">In January (N. winter)</option></select></div>
         <div class="tz-field small"><label for="tzRegion">Region</label><select id="tzRegion"><option value="all">Anywhere</option>${regionOptions}</select></div>
         <div class="tz-field small"><label for="tzMin">Min overlap</label><select id="tzMin"><option value="0">Any</option><option value="2">2h+</option><option value="4">4h+</option><option value="6">6h+</option></select></div>
         <button type="button" class="tz-detect" id="tzDetect">Detect my time zone</button>
       </div>
       <p class="tz-count" id="tzCount"></p>
       <div class="tz-grid" id="tzGrid"></div>
-      <p class="tz-note">Overlap assumes a standard 9-to-5 working day on both sides. A city that shares your exact offset gives the full 8 hours; every hour of time difference trims one hour of overlap. Great for staying in sync with a home team or clients; if you have gone fully async, ignore it and optimise for something else. Time zones here are standard offsets and do not track daylight-saving shifts.</p>
+      <p class="tz-note">Overlap assumes a standard 9-to-5 working day on both sides. A city sharing your current offset gives the full 8 hours; every hour of difference trims one hour of overlap. Offsets are computed live for the date you choose, so daylight-saving shifts are included (a "DST" tag means that city is on summer time then). If you have gone fully async, ignore the overlap and optimise for something else.</p>
     </div>
   </main>
   ${FOOTER}
   <script>
     (function(){
       var CITIES=${JSON.stringify(DATA)};
-      var REGN=${JSON.stringify(REGION_SLUG)};
+      var HOME=${JSON.stringify(HOME)};
+      var REGION_NAMES=${JSON.stringify(REGION_NAMES)};
       var grid=document.getElementById('tzGrid'),count=document.getElementById('tzCount');
-      var homeSel=document.getElementById('tzHome'),regSel=document.getElementById('tzRegion'),minSel=document.getElementById('tzMin');
+      var homeSel=document.getElementById('tzHome'),whenSel=document.getElementById('tzWhen'),regSel=document.getElementById('tzRegion'),minSel=document.getElementById('tzMin');
       function lvl(o){return o>=6?6:o>=3?3:o>=1?1:0;}
       function money(v){return v?'$'+v.toLocaleString('en-US')+'/mo':'n/a';}
-      function offLabel(tz){var s=tz<0?'-':'+';var a=Math.abs(tz);var h=Math.floor(a);var mm=Math.round((a-h)*60);return 'UTC'+s+h+(mm?(':'+(mm<10?'0':'')+mm):'');}
+      function offOf(zone,date){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:zone,timeZoneName:'longOffset',hour:'numeric'}).formatToParts(date);var o=(p.find(function(x){return x.type==='timeZoneName';})||{}).value||'GMT+0';var mm=o.match(/GMT([+-])(\\d{1,2})(?::(\\d{2}))?/);if(!mm)return 0;var h=(+mm[2])+(mm[3]?(+mm[3])/60:0);return mm[1]==='-'?-h:h;}catch(e){return 0;}}
+      var _std={};
+      function stdOff(zone){if(_std[zone]!=null)return _std[zone];var y=(new Date()).getUTCFullYear();return _std[zone]=Math.min(offOf(zone,new Date(Date.UTC(y,0,15,12))),offOf(zone,new Date(Date.UTC(y,6,15,12))));}
+      function offLabel(o){var s=o<0?'-':'+';var a=Math.abs(o);var h=Math.floor(a+1e-6);var mm=Math.round((a-h)*60);return 'UTC'+s+h+(mm?(':'+(mm<10?'0':'')+mm):'');}
+      function refDate(){var w=whenSel.value;var y=(new Date()).getUTCFullYear();if(w==='jul')return new Date(Date.UTC(y,6,15,12));if(w==='jan')return new Date(Date.UTC(y,0,15,12));return new Date();}
+      // build home options (auto-detected zone first if not already listed)
+      var detected=''; try{detected=Intl.DateTimeFormat().resolvedOptions().timeZone||'';}catch(e){}
+      var homeList=HOME.slice();
+      if(detected && !homeList.some(function(h){return h[0]===detected;})) homeList.unshift([detected,'Your device zone']);
+      homeList.forEach(function(h){var o=document.createElement('option');o.value=h[0];o.setAttribute('data-l',h[1]);o.textContent=h[1];homeSel.appendChild(o);});
+      homeSel.value = (detected && homeList.some(function(h){return h[0]===detected;})) ? detected : 'Europe/London';
+      function relabel(date){[].forEach.call(homeSel.options,function(op){op.textContent=op.getAttribute('data-l')+' ('+offLabel(offOf(op.value,date))+')';});}
       function render(){
-        var home=parseFloat(homeSel.value),reg=regSel.value,min=parseFloat(minSel.value)||0;
-        var rows=CITIES.map(function(c){var o=Math.max(0,8-Math.abs(c[4]-home));return {c:c,ov:o};})
+        var date=refDate();relabel(date);
+        var homeZone=homeSel.value,homeOff=offOf(homeZone,date),reg=regSel.value,min=parseFloat(minSel.value)||0;
+        var rows=CITIES.map(function(c){var co=offOf(c[4],date);return {c:c,off:co,ov:Math.max(0,8-Math.abs(co-homeOff))};})
           .filter(function(r){return r.ov>=min && (reg==='all'||r.c[5]===reg);})
           .sort(function(a,b){return b.ov-a.ov || b.c[6]-a.c[6];}).slice(0,60);
-        count.textContent=rows.length+' cities with '+(min?('at least '+min+'h'):'any')+' overlap'+(reg!=='all'?' in this region':'');
+        var homeLbl=(homeSel.options[homeSel.selectedIndex]||{}).getAttribute?homeSel.options[homeSel.selectedIndex].getAttribute('data-l'):homeZone;
+        count.innerHTML='Your home <b>'+homeLbl+'</b> is <b>'+offLabel(homeOff)+'</b> then. Showing <b>'+rows.length+'</b> cities with '+(min?('at least '+min+'h'):'any')+' overlap'+(reg!=='all'?' in '+REGION_NAMES[reg]:'')+'.';
         grid.innerHTML=rows.map(function(r){
-          var c=r.c,ov=r.ov,pct=Math.round(ov/8*100);
+          var c=r.c,ov=r.ov,pct=Math.round(ov/8*100);var isDst=r.off>stdOff(c[4])+0.01;
           var flag=c[3]?'<img class="tz-flag" src="/assets/flags/'+c[3]+'.svg" alt="" width="24" height="18" loading="lazy">':'';
           return '<a class="tz-card tz-lvl-'+lvl(ov)+'" href="/cities/'+c[0]+'">'
-            +'<div class="tz-card-top">'+flag+'<div><div class="tz-name">'+c[1]+'</div><div class="tz-country">'+c[2]+' &middot; '+offLabel(c[4])+'</div></div>'
+            +'<div class="tz-card-top">'+flag+'<div><div class="tz-name">'+c[1]+'</div><div class="tz-country">'+c[2]+' &middot; '+offLabel(r.off)+(isDst?'<span class="tz-dst">DST</span>':'')+'</div></div>'
             +'<div class="tz-badge"><b>'+ov.toFixed(ov%1?1:0)+'h</b><span>overlap</span></div></div>'
             +'<div class="tz-bar"><div class="tz-bar-fill" style="width:'+pct+'%"></div><div class="tz-bar-hours">'+ov.toFixed(ov%1?1:0)+' of 8 working hours shared</div></div>'
             +'<div class="tz-meta"><span>Nomad Score '+c[6]+'</span><span>'+money(c[7])+'</span></div></a>';
         }).join('');
+        try{var u=new URL(window.location);u.searchParams.set('tz',homeZone);if(whenSel.value!=='now')u.searchParams.set('when',whenSel.value);else u.searchParams.delete('when');history.replaceState(null,'',u);}catch(e){}
       }
-      [homeSel,regSel,minSel].forEach(function(s){s.addEventListener('change',function(){sync();render();});});
-      document.getElementById('tzDetect').addEventListener('click',function(){
-        try{var o=-new Date().getTimezoneOffset()/60;var best=homeSel.options[0].value,bd=99;for(var i=0;i<homeSel.options.length;i++){var v=parseFloat(homeSel.options[i].value);if(Math.abs(v-o)<bd){bd=Math.abs(v-o);best=homeSel.options[i].value;}}homeSel.value=best;sync();render();}catch(e){}
-      });
-      function sync(){try{var u=new URL(window.location);u.searchParams.set('tz',homeSel.value);history.replaceState(null,'',u);}catch(e){}}
-      // init from ?tz= or detect
-      try{var p=new URLSearchParams(window.location.search).get('tz');if(p!==null){for(var i=0;i<homeSel.options.length;i++){if(homeSel.options[i].value===p){homeSel.value=p;break;}}}else{document.getElementById('tzDetect').click();}}catch(e){}
-      render();
+      [homeSel,whenSel,regSel,minSel].forEach(function(s){s.addEventListener('change',render);});
+      document.getElementById('tzDetect').addEventListener('click',function(){try{var d=Intl.DateTimeFormat().resolvedOptions().timeZone;if(d){var found=false;for(var i=0;i<homeSel.options.length;i++){if(homeSel.options[i].value===d){homeSel.selectedIndex=i;found=true;break;}}if(!found){var o=document.createElement('option');o.value=d;o.setAttribute('data-l','Your device zone');homeSel.insertBefore(o,homeSel.firstChild);homeSel.value=d;}render();}}catch(e){}});
+      // init from ?tz=&when=
+      (function(){var sp=new URLSearchParams(window.location.search);var tzp=sp.get('tz');if(tzp){var ok=false;for(var i=0;i<homeSel.options.length;i++){if(homeSel.options[i].value===tzp){homeSel.value=tzp;ok=true;break;}}if(!ok){var o=document.createElement('option');o.value=tzp;o.setAttribute('data-l','Shared zone');homeSel.insertBefore(o,homeSel.firstChild);homeSel.value=tzp;}}var wp=sp.get('when');if(wp&&(wp==='jul'||wp==='jan'))whenSel.value=wp;render();})();
     })();
   </script>
 </body>
 </html>`;
 
 fs.writeFileSync(path.join(ROOT, 'timezones.html'), html);
-console.log(`Wrote timezones.html with ${DATA.length} cities.`);
+console.log(`Wrote timezones.html with ${DATA.length} cities (DST-aware via IANA zones).`);

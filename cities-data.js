@@ -1671,7 +1671,7 @@ const CITIES = [
     costPerMonth: 2400,
     lat: -33.4489,
     lng: -70.6693,
-    timezone: -3
+    timezone: -4
   },
   {
     id: "valparaiso",
@@ -1698,7 +1698,7 @@ const CITIES = [
     costPerMonth: 1800,
     lat: -33.0472,
     lng: -71.6127,
-    timezone: -3
+    timezone: -4
   },
   {
     id: "quito",
@@ -1833,7 +1833,7 @@ const CITIES = [
     costPerMonth: 1200,
     lat: -25.2637,
     lng: -57.5759,
-    timezone: -4
+    timezone: -3
   },
   {
     id: "guadalajara",
@@ -1914,7 +1914,7 @@ const CITIES = [
     costPerMonth: 2200,
     lat: 9.9281,
     lng: -84.0907,
-    timezone: 0
+    timezone: -6
   },
   {
     id: "tamarindo",
@@ -1941,7 +1941,7 @@ const CITIES = [
     costPerMonth: 2400,
     lat: 10.2997,
     lng: -85.8375,
-    timezone: 1
+    timezone: -6
   },
   {
     id: "panama",
@@ -1995,7 +1995,7 @@ const CITIES = [
     costPerMonth: 1800,
     lat: 14.5586,
     lng: -90.7295,
-    timezone: 1
+    timezone: -6
   },
   {
     id: "vienna",
@@ -2562,7 +2562,7 @@ const CITIES = [
     costPerMonth: 2000,
     lat: 40.6401,
     lng: 22.9444,
-    timezone: 1
+    timezone: 2
   },
   {
     id: "crete",
@@ -2589,7 +2589,7 @@ const CITIES = [
     costPerMonth: 2200,
     lat: 35.2401,
     lng: 24.8093,
-    timezone: 1
+    timezone: 2
   },
   {
     id: "cyprus",
@@ -2616,7 +2616,7 @@ const CITIES = [
     costPerMonth: 2700,
     lat: 35.1264,
     lng: 33.4299,
-    timezone: 1
+    timezone: 2
   },
   {
     id: "warsaw",
@@ -2724,7 +2724,7 @@ const CITIES = [
     costPerMonth: 1700,
     lat: 46.7712,
     lng: 23.6236,
-    timezone: 1
+    timezone: 2
   },
   {
     id: "sofia",
@@ -2886,7 +2886,7 @@ const CITIES = [
     costPerMonth: 1400,
     lat: 43.8563,
     lng: 18.4131,
-    timezone: 2
+    timezone: 1
   },
   {
     id: "skopje",
@@ -2913,7 +2913,7 @@ const CITIES = [
     costPerMonth: 1300,
     lat: 41.9981,
     lng: 21.4254,
-    timezone: 2
+    timezone: 1
   },
   {
     id: "yerevan",
@@ -2994,7 +2994,7 @@ const CITIES = [
     costPerMonth: 1400,
     lat: 41.6168,
     lng: 41.6367,
-    timezone: 2
+    timezone: 4
   },
   {
     id: "antalya",
@@ -3021,7 +3021,7 @@ const CITIES = [
     costPerMonth: 1800,
     lat: 36.8969,
     lng: 30.7133,
-    timezone: 1
+    timezone: 3
   },
   {
     id: "istanbul",
@@ -3129,7 +3129,7 @@ const CITIES = [
     costPerMonth: 1800,
     lat: -8.5069,
     lng: 115.2625,
-    timezone: 1
+    timezone: 8
   },
   {
     id: "sanmigueldeallende",
@@ -4845,7 +4845,7 @@ const CITIES = [
     lat: 20.8686,
     lng: -105.4413,
 
-    timezone: -6
+    timezone: -7
   },
   {
     id: "lakeatitlan",
@@ -5198,7 +5198,7 @@ const CITIES = [
     lat: 31.9454,
     lng: 35.9284,
 
-    timezone: 2
+    timezone: 3
   },
   {
     id: "beirut",

@@ -19,11 +19,12 @@ const CK = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 
 const nomadScore = (c) => { let t = 0, n = 0; CK.forEach((k) => { const v = c.scores[k]; if (typeof v === 'number') { t += v; n++; } }); const raw = n ? t / n : 0; return +Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)).toFixed(1); };
 const CLIMATE = require(path.join(ROOT, 'assets', 'city-climate.js'));
 const META = require(path.join(ROOT, 'scripts', 'lib', 'country-meta.cjs'));
+const CITY_TZ = require(path.join(ROOT, 'assets', 'city-tz.js'));
 
-// [id, name, country, iso, lat, lng, cost, score, tz]
+// [id, name, country, iso, lat, lng, cost, score, ianaZone]
 const DATA = m.exports.filter((c) => c && c.id && typeof c.lat === 'number' && typeof c.lng === 'number').map((c) => [
   c.id, c.name, c.country, iso(c.flag), c.lat, c.lng, typeof c.costPerMonth === 'number' ? c.costPerMonth : 0, nomadScore(c),
-  typeof c.timezone === 'number' ? c.timezone : 0,
+  CITY_TZ[c.id] || 'UTC',
 ]);
 const DEFAULT_ROUTE = ['lisbon', 'barcelona', 'medellin', 'bali'].filter((id) => DATA.some((d) => d[0] === id));
 // country -> [plugTypes, schengen]; only ship entries for countries we actually use
@@ -276,6 +277,7 @@ const html = `<!DOCTYPE html>
       });
 
       function haversine(a,b){var R=6371,dLat=(b[4]-a[4])*Math.PI/180,dLng=(b[5]-a[5])*Math.PI/180;var s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a[4]*Math.PI/180)*Math.cos(b[4]*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return 2*R*Math.asin(Math.sqrt(s));}
+      function offOf(zone,t){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:zone,timeZoneName:'longOffset',hour:'numeric'}).formatToParts(new Date(t));var o=(p.find(function(x){return x.type==='timeZoneName';})||{}).value||'GMT+0';var mm=o.match(/GMT([+-])(\\d{1,2})(?::(\\d{2}))?/);if(!mm)return 0;var h=(+mm[2])+(mm[3]?(+mm[3])/60:0);return mm[1]==='-'?-h:h;}catch(e){return 0;}}
       function daysInMonth(y,mo){return new Date(Date.UTC(y,mo+1,0)).getUTCDate();}
       function addDaysUTC(t,n){return t+n*DAY;}
       function ymd(t){var d=new Date(t);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');}
@@ -395,7 +397,7 @@ const html = `<!DOCTYPE html>
             facts.push('<div class="rt-fact"><span class="fk">Season</span><span class="rt-chip '+sc+'"><span class="dot"></span>'+seas+(mult?' '+(mult>0?'+':'')+Math.round(mult*100)+'%':'')+'</span></div>');}
           facts.push('<div class="rt-fact"><span class="fk">Daylight</span><span class="rt-fv">'+dl.toFixed(1)+' h</span></div>');
           facts.push('<div class="rt-fact"><span class="fk">Est. cost</span><span class="rt-fv">'+money(adjCost(s.id,s.mo))+'<span class="rt-fmuted">/mo</span></span></div>');
-          if(i>0){var p=t.stops[i-1];var dd=haversine(p.c,c);var ft=dd/750+1;var tzd=c[8]-p.c[8];
+          if(i>0){var p=t.stops[i-1];var dd=haversine(p.c,c);var ft=dd/750+1;var tzd=Math.round((offOf(c[8],s.arr)-offOf(p.c[8],s.arr))*10)/10;
             facts.push('<div class="rt-fact"><span class="fk">Flight in</span><span class="rt-fv">'+Math.round(dd).toLocaleString('en-US')+' km</span>, ~'+ft.toFixed(1)+'h from '+p.c[1]+'</div>');
             var jl=tzd===0?'Same time zone':(Math.abs(tzd)+'h '+(tzd>0?'ahead':'behind')+', ~'+Math.max(1,Math.ceil(Math.abs(tzd)/1.5))+'d jet-lag');
             facts.push('<div class="rt-fact"><span class="fk">Time shift</span><span class="rt-fv">'+jl+'</span></div>');}
