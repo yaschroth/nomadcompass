@@ -100,12 +100,15 @@ const html = `<!DOCTYPE html>
     .rt-dot { position:absolute; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; border-radius:50%; background:#8a8175; opacity:.45; cursor:pointer; z-index:2; transition:transform .1s; }
     .rt-dot:hover { transform:scale(1.8); opacity:1; background:var(--color-terracotta); z-index:6; }
     .rt-stop { position:absolute; width:24px; height:24px; margin:-12px 0 0 -12px; border-radius:50%; background:var(--color-terracotta); color:#fff; font-size:.75rem; font-weight:800; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(15,23,42,.35); z-index:5; }
-    /* summary stat grid */
-    .rt-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.9rem 1.1rem; }
-    .rt-stat .k { font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--color-stone); margin:0 0 .15rem; }
-    .rt-stat .v { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); line-height:1.1; }
-    .rt-stat .v small { font-family:'Source Sans 3',sans-serif; font-size:.8rem; font-weight:600; color:var(--color-stone); }
-    .rt-stat .v.big { color:var(--color-terracotta); }
+    /* summary stat tiles */
+    .rt-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.8rem; }
+    .rt-stat { position:relative; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:.85rem .95rem; overflow:hidden; }
+    .rt-stat::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:var(--color-sand-dark,#e3d9c6); }
+    .rt-stat.is-hl::before { background:var(--color-terracotta); }
+    .rt-stat .k { font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--color-stone); margin:0 0 .3rem; }
+    .rt-stat .v { font-size:1.6rem; font-weight:700; color:var(--color-ink); line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+    .rt-stat .v small { font-size:.78rem; font-weight:600; color:var(--color-stone); }
+    .rt-stat.is-hl .v, .rt-stat .v.big { color:var(--color-terracotta); }
     /* timeline */
     .rt-timeline { display:flex; width:100%; height:15px; border-radius:6px; overflow:hidden; margin:.2rem 0 .35rem; }
     .rt-timeline span { display:block; height:100%; border-right:1px solid #fff; }
@@ -125,18 +128,27 @@ const html = `<!DOCTYPE html>
     .rt-budget-total { display:flex; justify-content:space-between; align-items:baseline; border-top:2px solid var(--color-sand-dark,#e3d9c6); margin-top:.7rem; padding-top:.7rem; }
     .rt-budget-total .rt-total-big { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--color-terracotta); }
     /* stop detail */
-    .rt-stopcard { border-top:1px solid var(--color-sand,#f0e9dc); padding:1rem 0; }
-    .rt-stopcard:first-of-type { border-top:none; padding-top:.2rem; }
-    .rt-stopcard-h { display:flex; align-items:center; gap:.55rem; }
-    .rt-sc-num { flex:0 0 auto; width:26px; height:26px; border-radius:50%; background:var(--color-terracotta); color:#fff; font-size:.78rem; font-weight:800; display:flex; align-items:center; justify-content:center; }
-    .rt-sc-name { font-weight:700; color:var(--color-ink); font-size:1.02rem; }
+    .rt-stopcard { display:flex; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; box-shadow:0 6px 18px rgba(15,23,42,.05); overflow:hidden; margin:0 0 .9rem; }
+    .rt-sc-accent { flex:0 0 5px; background:var(--acc,var(--color-terracotta)); }
+    .rt-sc-body { flex:1; min-width:0; padding:1rem 1.15rem; }
+    .rt-stopcard-h { display:flex; align-items:center; gap:.6rem; }
+    .rt-sc-num { flex:0 0 auto; width:28px; height:28px; border-radius:9px; background:var(--acc,var(--color-terracotta)); color:#fff; font-size:.8rem; font-weight:700; display:flex; align-items:center; justify-content:center; }
+    .rt-sc-name { font-weight:700; color:var(--color-ink); font-size:1.05rem; }
     .rt-sc-name small { font-weight:400; color:var(--color-stone); }
-    .rt-sc-dates { margin-left:auto; font-size:.82rem; color:var(--color-charcoal); text-align:right; white-space:nowrap; }
-    .rt-sc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:.5rem .9rem; margin:.7rem 0 0 calc(26px + .55rem); }
-    .rt-fact { font-size:.82rem; color:var(--color-charcoal); line-height:1.35; }
-    .rt-fact .fk { display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--color-stone); }
-    .rt-fact b { color:var(--color-ink); }
-    .rt-warn { margin:.6rem 0 0 calc(26px + .55rem); font-size:.8rem; color:#a4442f; background:#fbe9e6; border-radius:8px; padding:.4rem .6rem; }
+    .rt-sc-dates { margin-left:auto; font-size:.8rem; color:var(--color-charcoal); text-align:right; white-space:nowrap; } .rt-sc-dates b { color:var(--color-ink); }
+    .rt-wx { display:flex; align-items:center; gap:.7rem; margin:.85rem 0 0; padding:.7rem .8rem; background:var(--color-sand,#f6f1e7); border-radius:11px; }
+    .rt-wx-ico { flex:0 0 auto; width:40px; height:40px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:1.35rem; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    .rt-wx-main { flex:1; min-width:0; } .rt-wx-main .t { font-weight:600; color:var(--color-ink); font-size:.9rem; } .rt-wx-main .s { font-size:.76rem; color:var(--color-stone); margin:.05rem 0 .4rem; }
+    .rt-tbar { position:relative; height:8px; border-radius:4px; background:linear-gradient(90deg,#5b8fc9,#56b6a6 30%,#e9c94a 62%,#e8804d 82%,#d1503a); }
+    .rt-tbar-win { position:absolute; top:-2px; height:12px; border:2px solid #fff; border-radius:5px; background:rgba(255,255,255,.12); box-shadow:0 0 0 1px rgba(15,23,42,.18); box-sizing:border-box; }
+    .rt-wx-nodata { margin:.85rem 0 0; font-size:.82rem; color:var(--color-stone); }
+    .rt-sc-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.6rem .9rem; margin:.85rem 0 0; }
+    .rt-fact { font-size:.82rem; color:var(--color-charcoal); line-height:1.3; }
+    .rt-fact .fk { display:block; font-size:.66rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--color-stone); margin:0 0 .18rem; }
+    .rt-fact .rt-fv { color:var(--color-ink); font-weight:600; } .rt-fact .rt-fmuted { color:var(--color-stone); font-weight:400; }
+    .rt-chip { display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-weight:700; padding:2px 9px; border-radius:999px; }
+    .rt-chip .dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+    .rt-warn { margin:.7rem 0 0; font-size:.8rem; color:#a4442f; background:#fbe9e6; border-radius:8px; padding:.45rem .65rem; }
     /* schengen */
     .rt-sch-bar { height:12px; border-radius:6px; background:var(--color-sand,#f0e9dc); overflow:hidden; margin:.5rem 0; }
     .rt-sch-bar span { display:block; height:100%; background:#2f7d5a; }
@@ -324,6 +336,7 @@ const html = `<!DOCTYPE html>
       }
 
       var PAL=['#c0392b','#c4622e','#9e7b1e','#2f7d5a','#3d6493','#7d5ba6','#b23c6e','#2f7d7d'];
+      function tbar(lo,hi){var min=-5,max=40,sp=max-min;var l=Math.max(0,Math.min(100,(lo-min)/sp*100));var r=Math.max(0,Math.min(100,(hi-min)/sp*100));var w=Math.max(8,r-l);if(l+w>100)l=100-w;return '<div class="rt-tbar"><span class="rt-tbar-win" style="left:'+l.toFixed(0)+'%;width:'+w.toFixed(0)+'%"></span></div>';}
       function renderResults(){
         var showEls=['rtSummaryCard','rtBudgetCard','rtStopsCard','rtPackCard'];
         var t=build();
@@ -359,34 +372,40 @@ const html = `<!DOCTYPE html>
         var dist=0,co2=0;for(var i=1;i<t.stops.length;i++){var dd=haversine(t.stops[i-1].c,t.stops[i].c);dist+=dd;co2+=dd*0.15;}
         var cw=0,cwN=0;t.stops.forEach(function(s){var c=comfort(s.id,s.mo);if(c!=null){cw+=c*s.nights;cwN+=s.nights;}});
         var comfortPct=cwN?Math.round(cw/cwN):null;
-        var stats=[['Total budget',money(grand),'big'],['Avg / day',money(grand/totalNights),''],['Total nights',totalNights,''],
+        var stats=[['Total budget',money(grand),'is-hl'],['Avg / day',money(grand/totalNights),''],['Total nights',totalNights,''],
           ['Flights',(t.stops.length-1)+'',''],['Flight distance',Math.round(dist).toLocaleString('en-US')+' <small>km</small>',''],
           ['Flight CO2','~'+Math.round(co2).toLocaleString('en-US')+' <small>kg</small>',''],
           ['Weather comfort',comfortPct==null?'n/a':comfortPct+'<small>/100</small>','']];
-        document.getElementById('rtStats').innerHTML=stats.map(function(s){return '<div class="rt-stat"><p class="k">'+s[0]+'</p><div class="v '+s[2]+'">'+s[1]+'</div></div>';}).join('');
+        document.getElementById('rtStats').innerHTML=stats.map(function(s){return '<div class="rt-stat '+s[2]+'"><p class="k">'+s[0]+'</p><div class="v">'+s[1]+'</div></div>';}).join('');
 
         // ---- Schengen tracker ----
         renderSchengen(t);
 
         // ---- per-stop detail ----
         var sd='';t.stops.forEach(function(s,i){var c=s.c;var w=weatherVerdict(s.id,s.mo);var si=seasonInfo(s.id);var seas=si.lab[s.mo];var mult=si.mult[s.mo];
-          var dl=daylight(c[4],s.arr+(s.dep-s.arr)/2);
+          var dl=daylight(c[4],s.arr+(s.dep-s.arr)/2);var acc=PAL[i%PAL.length];
           var flag=c[3]?'<img src="/assets/flags/'+c[3]+'.svg" alt="" width="20" height="15" style="border-radius:2px;vertical-align:-2px;margin-right:.3rem;">':'';
+          var wx;
+          if(w.hi!=null){wx='<div class="rt-wx"><div class="rt-wx-ico">'+w.emo+'</div><div class="rt-wx-main">'
+            +'<div class="t">'+w.txt+' &middot; '+w.hi+'&deg; / '+w.lo+'&deg;C</div>'
+            +'<div class="s">'+MON[s.mo]+' average'+(w.r!=null?' &middot; '+w.r+'mm rain':'')+'</div>'+tbar(w.lo,w.hi)+'</div></div>';}
+          else{wx='<div class="rt-wx-nodata">Weather data for '+c[1]+' is still loading in.</div>';}
           var facts=[];
-          facts.push('<div class="rt-fact"><span class="fk">Weather ('+MON[s.mo]+')</span>'+w.emo+' <b>'+w.txt+'</b>'+(w.hi!=null?' &middot; '+w.hi+'&deg;/'+w.lo+'&deg;C':'')+(w.r!=null?', '+w.r+'mm rain':'')+'</div>');
-          if(seas)facts.push('<div class="rt-fact"><span class="fk">Season</span><b>'+seas+'</b>'+(mult?' ('+(mult>0?'+':'')+Math.round(mult*100)+'% cost)':' (typical price)')+'</div>');
-          facts.push('<div class="rt-fact"><span class="fk">Daylight</span><b>'+dl.toFixed(1)+'h</b> of daylight</div>');
-          facts.push('<div class="rt-fact"><span class="fk">Est. monthly cost</span><b>'+money(adjCost(s.id,s.mo))+'</b>/mo</div>');
+          if(seas){var sc=seas==='Peak'?'rt-seas-peak':seas==='Low'?'rt-seas-low':'rt-seas-shoulder';
+            facts.push('<div class="rt-fact"><span class="fk">Season</span><span class="rt-chip '+sc+'"><span class="dot"></span>'+seas+(mult?' '+(mult>0?'+':'')+Math.round(mult*100)+'%':'')+'</span></div>');}
+          facts.push('<div class="rt-fact"><span class="fk">Daylight</span><span class="rt-fv">'+dl.toFixed(1)+' h</span></div>');
+          facts.push('<div class="rt-fact"><span class="fk">Est. cost</span><span class="rt-fv">'+money(adjCost(s.id,s.mo))+'<span class="rt-fmuted">/mo</span></span></div>');
           if(i>0){var p=t.stops[i-1];var dd=haversine(p.c,c);var ft=dd/750+1;var tzd=c[8]-p.c[8];
-            facts.push('<div class="rt-fact"><span class="fk">Flight in</span><b>'+Math.round(dd).toLocaleString('en-US')+'km</b> from '+p.c[1]+', ~'+ft.toFixed(1)+'h</div>');
+            facts.push('<div class="rt-fact"><span class="fk">Flight in</span><span class="rt-fv">'+Math.round(dd).toLocaleString('en-US')+' km</span>, ~'+ft.toFixed(1)+'h from '+p.c[1]+'</div>');
             var jl=tzd===0?'Same time zone':(Math.abs(tzd)+'h '+(tzd>0?'ahead':'behind')+', ~'+Math.max(1,Math.ceil(Math.abs(tzd)/1.5))+'d jet-lag');
-            facts.push('<div class="rt-fact"><span class="fk">Time shift</span><b>'+jl+'</b></div>');}
+            facts.push('<div class="rt-fact"><span class="fk">Time shift</span><span class="rt-fv">'+jl+'</span></div>');}
           var warn='';var badMo=bestMonths(s.id);
-          if(badMo && badMo.worst.indexOf(s.mo)>=0 && badMo.best.length)warn='<div class="rt-warn">'+MON[s.mo]+' is one of '+c[1]+"'s tougher months (weather-wise). Better: "+badMo.best.map(function(x){return MON[x];}).join(', ')+'.</div>';
-          sd+='<div class="rt-stopcard"><div class="rt-stopcard-h"><span class="rt-sc-num">'+(i+1)+'</span>'
-            +'<span class="rt-sc-name">'+flag+'<a href="/cities/'+s.id+'" style="color:inherit;">'+c[1]+'</a> <small>&middot; '+c[2]+'</small></span>'
-            +'<span class="rt-sc-dates">'+fmt(s.arr)+' &ndash; '+fmt(s.dep)+'<br>'+s.nights+' nights</span></div>'
-            +'<div class="rt-sc-grid">'+facts.join('')+'</div>'+warn+'</div>';});
+          if(badMo && badMo.worst.indexOf(s.mo)>=0 && badMo.best.length)warn='<div class="rt-warn">'+MON[s.mo]+' is one of '+c[1]+"'s tougher months for weather. Better: "+badMo.best.map(function(x){return MON[x];}).join(', ')+'.</div>';
+          sd+='<div class="rt-stopcard" style="--acc:'+acc+'"><div class="rt-sc-accent"></div><div class="rt-sc-body">'
+            +'<div class="rt-stopcard-h"><span class="rt-sc-num">'+(i+1)+'</span>'
+            +'<span class="rt-sc-name">'+flag+'<a href="/cities/'+s.id+'" style="color:inherit;text-decoration:none;">'+c[1]+'</a> <small>&middot; '+c[2]+'</small></span>'
+            +'<span class="rt-sc-dates"><b>'+fmt(s.arr)+' &ndash; '+fmt(s.dep)+'</b><br>'+s.nights+' nights</span></div>'
+            +wx+'<div class="rt-sc-facts">'+facts.join('')+'</div>'+warn+'</div></div>';});
         document.getElementById('rtStopDetails').innerHTML=sd;
 
         // ---- packing ----
