@@ -70,15 +70,14 @@ const html = `<!DOCTYPE html>
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   <style>
-    .rt-hero { position:relative; min-height:clamp(360px,58vh,540px); display:flex; align-items:flex-end; overflow:hidden; }
-    .rt-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-    .rt-hero-overlay { position:relative; z-index:2; width:100%; padding:calc(var(--nav-height,64px) + 2.75rem) 0 2.4rem; background:linear-gradient(to top, rgba(15,23,42,.92), rgba(15,23,42,.6) 55%, rgba(15,23,42,.12) 88%, transparent); color:#fff; }
-    .rt-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:calc(var(--nav-height,64px) + 46px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.82), rgba(255,255,255,.34) 55%, transparent); }
-    .rt-hero .container { max-width:1040px; }
-    .rt-crumbs { font-size:.82rem; color:rgba(255,255,255,.82); margin:0 0 1rem; } .rt-crumbs a { color:#fff; text-decoration:none; } .rt-crumbs a:hover { text-decoration:underline; } .rt-crumbs span { margin:0 .4rem; color:rgba(255,255,255,.5); }
-    .rt-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .7rem; text-shadow:0 1px 10px rgba(0,0,0,.4); }
-    .rt-hero h1 { font-family:'DM Serif Display',serif; color:#fff; font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.08; margin:0 0 .9rem; text-shadow:0 2px 24px rgba(0,0,0,.45); text-wrap:balance; }
-    .rt-hero p.rt-sub { color:rgba(255,255,255,.92); font-size:1.12rem; line-height:1.6; margin:0; max-width:58ch; text-shadow:0 1px 12px rgba(0,0,0,.4); }
+    .hub-hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hub-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hub-hero-overlay { position: relative; z-index: 1; width: 100%; padding: calc(var(--nav-height,64px) + 3rem) 0 3rem; background: linear-gradient(to top, rgba(15,23,42,.94), rgba(15,23,42,.66) 55%, rgba(15,23,42,.15) 88%, transparent); color:#fff; }
+    .hub-hero::before { content:''; position:absolute; top:0;left:0;right:0; height:calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
+    .hub-hero .container { max-width: 1040px; }
+    .hub-eyebrow { display:inline-block; font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
+    .hub-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
+    .hub-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0; max-width:56ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
     .rt-wrap { max-width:1280px; margin:0 auto; padding:1rem var(--space-4,1rem) 3.5rem; display:grid; grid-template-columns:1fr 340px; gap:1.5rem; align-items:start; }
     @media (max-width:900px){ .rt-wrap{ grid-template-columns:1fr; } }
     .rt-map { position:relative; width:100%; aspect-ratio:2/1; background:#eef1f4 url('/assets/world-map.webp') center/100% 100% no-repeat; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; overflow:hidden; }
@@ -112,13 +111,12 @@ const html = `<!DOCTYPE html>
 <body>
   ${navHtml()}
   <main>
-    <header class="rt-hero">
-      <img class="rt-hero-img" src="/assets/route-hero.webp" alt="The winding hairpin bends of the Transfagarasan mountain road through green Romanian peaks" fetchpriority="high" width="1920" height="1275">
-      <div class="rt-hero-overlay"><div class="container">
-      <nav class="rt-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span>Route Planner</nav>
-      <span class="rt-eyebrow">Trip tool</span>
-      <h1>Nomad Route Planner</h1>
-      <p class="rt-sub">Sketch a multi-city run across a few months. Add cities in the order you would visit them, see the path on the map, and get the total distance and monthly budget at a glance.</p>
+    <header class="hub-hero">
+      <img class="hub-hero-img" src="/assets/route-hero.webp" alt="The winding hairpin bends of the Transfagarasan mountain road through green Romanian peaks" fetchpriority="high" width="1920" height="1275">
+      <div class="hub-hero-overlay"><div class="container">
+        <span class="hub-eyebrow">Trip tool</span>
+        <h1>Nomad Route Planner</h1>
+        <p class="sub">Sketch a multi-city run across a few months. Add cities in the order you would visit them, see the path on the map, and get the total distance and monthly budget at a glance.</p>
       </div></div>
     </header>
     <div class="rt-wrap">
