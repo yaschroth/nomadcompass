@@ -117,7 +117,7 @@ const FOOTER = `  <footer class="footer">
     </div>
   </footer>`;
 
-function page(slug, title, desc, bodyHtml, robots = 'index, follow') {
+function page(slug, title, desc, bodyHtml, robots = 'index, follow', extraCss = '', mainClass = 'legal-page') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,12 +149,13 @@ function page(slug, title, desc, bodyHtml, robots = 'index, follow') {
     .legal-page a:not(.btn) { color: var(--color-terracotta); }
     .legal-updated { color: var(--color-stone); font-size: .9rem; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--color-sand-dark); }
     .legal-cta { display: inline-flex; margin-top: 1rem; }
+${extraCss}
   </style>
 </head>
 <body>
 ${NAV}
 
-  <main class="legal-page">
+  <main${mainClass ? ` class="${mainClass}"` : ''}>
 ${bodyHtml}
   </main>
 
@@ -162,6 +163,66 @@ ${FOOTER}
 </body>
 </html>
 `;
+}
+
+// Bespoke, styled contact page (the generic legal template looked bland here).
+function contactPage() {
+  const title = 'Contact The Nomad HQ';
+  const desc = 'Get in touch with The Nomad HQ: corrections, city suggestions, partnerships, or press.';
+  const ICON = {
+    email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 17v-7"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7v.01"/></svg>',
+  };
+  const card = (href, ext, icon, label, value, note) =>
+    `<a class="contact-card" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}>
+          <span class="contact-icon">${icon}</span>
+          <span class="contact-card-label">${label}</span>
+          <span class="contact-card-value">${value}</span>
+          <span class="contact-card-note">${note}</span>
+        </a>`;
+  const body = `
+    <header class="contact-hero">
+      <div class="container">
+        <span class="contact-eyebrow">Get in touch</span>
+        <h1>Contact</h1>
+        <p class="contact-lead">Questions, corrections, city suggestions, or partnership ideas. We read everything, and reader corrections are what keep 410 city guides accurate.</p>
+      </div>
+    </header>
+    <div class="contact-wrap">
+      <div class="contact-methods">
+        ${card('mailto:' + CONTACT_EMAIL, false, ICON.email, 'Email', CONTACT_EMAIL, 'The fastest way to reach us')}
+        ${card('https://www.linkedin.com/in/yannick-schroth/', true, ICON.linkedin, 'LinkedIn', 'Yannick Schroth', 'Connect with the founder')}
+        ${card('https://www.instagram.com/ynncks/', true, ICON.instagram, 'Instagram', '@ynncks', 'Behind the scenes')}
+      </div>
+      <div class="contact-note-card">
+        <h2>Spotted something out of date?</h2>
+        <p>Found a cost, a visa rule, or a WiFi speed that has changed? Tell us the city and what changed, and we will fix it. Reader corrections are the single best way to keep the ratings honest.</p>
+        <p class="contact-reply">We typically reply within a few business days.</p>
+        <a href="/cities" class="btn btn-secondary">Browse the city guides &rarr;</a>
+      </div>
+    </div>`;
+  const styles = `
+    .contact-hero { background: linear-gradient(180deg, var(--color-sand, #f6f1e7) 0%, rgba(246,241,231,0) 100%); padding: calc(var(--nav-height,64px) + 3.5rem) 1.25rem 2.5rem; text-align: center; }
+    .contact-hero .container { max-width: 720px; }
+    .contact-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--color-terracotta); margin:0 0 .7rem; }
+    .contact-hero h1 { font-family:'DM Serif Display',serif; color:var(--color-ink); font-size:clamp(2.2rem,5.5vw,3.2rem); line-height:1.1; margin:0 0 .8rem; }
+    .contact-lead { color:var(--color-charcoal); font-size:1.12rem; line-height:1.7; margin:0 auto; max-width:60ch; }
+    .contact-wrap { max-width:900px; margin:0 auto; padding:1.5rem 1.25rem 4.5rem; }
+    .contact-methods { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.1rem; }
+    .contact-card { display:flex; flex-direction:column; align-items:flex-start; gap:.25rem; padding:1.5rem 1.4rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; text-decoration:none; transition:border-color .15s, transform .15s, box-shadow .15s; }
+    .contact-card:hover { border-color:var(--color-terracotta); transform:translateY(-3px); box-shadow:0 12px 28px rgba(15,23,42,.1); }
+    .contact-icon { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:12px; background:rgba(192,57,43,.1); color:var(--color-terracotta); margin-bottom:.6rem; }
+    .contact-icon svg { width:22px; height:22px; }
+    .contact-card-label { font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--color-stone,#8a8175); font-weight:700; }
+    .contact-card-value { font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--color-ink,#0f172a); word-break:break-word; }
+    .contact-card-note { font-size:.85rem; color:var(--color-stone,#8a8175); }
+    .contact-note-card { margin-top:1.6rem; padding:1.75rem 1.9rem; background:#F0F7FF; border:1px solid #DBEAFE; border-radius:16px; }
+    .contact-note-card h2 { font-family:'DM Serif Display',serif; color:var(--color-ink,#0f172a); font-size:1.4rem; margin:0 0 .6rem; }
+    .contact-note-card p { color:var(--color-charcoal,#3a3a3a); line-height:1.7; margin:0 0 .8rem; }
+    .contact-reply { color:var(--color-stone,#8a8175) !important; font-size:.92rem; }
+    .contact-note-card .btn { margin-top:.4rem; }`;
+  return page('contact', title, desc, body, 'index, follow', styles, '');
 }
 
 const updatedLine = `    <p class="legal-updated">Last updated: ${UPDATED}</p>`;
@@ -192,16 +253,7 @@ const pages = {
     <p>How we collect and handle your data is explained in our <a href="/privacy">privacy policy</a>.</p>
 ${updatedLine}`),
 
-  'contact.html': page('contact', 'Contact The Nomad HQ', 'Get in touch with The Nomad HQ, corrections, city suggestions, partnerships, or press.', `    <h1>Contact</h1>
-    <p class="lead">Questions, corrections, city suggestions, or partnership ideas, we read everything.</p>
-    <p>The fastest way to reach us is email:</p>
-    <ul>
-      <li><strong>Email:</strong> <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
-      <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/yannick-schroth/" rel="noopener" target="_blank">Yannick Schroth</a></li>
-      <li><strong>Instagram:</strong> <a href="https://www.instagram.com/ynncks/" rel="noopener" target="_blank">@ynncks</a></li>
-    </ul>
-    <p>Found something out of date, a cost, a visa rule, a WiFi speed? Tell us the city and what changed and we will update it. Reader corrections are the single best way to keep 410 city guides accurate.</p>
-    <p>We typically reply within a few business days.</p>`),
+  'contact.html': contactPage(),
 
   'disclosure.html': page('disclosure', 'Affiliate Disclosure, The Nomad HQ', 'How The Nomad HQ uses affiliate links and how that does (and does not) affect our content.', `    <h1>Affiliate Disclosure</h1>
     <p class="lead">In plain English: some links earn us a commission. That never changes what we recommend.</p>

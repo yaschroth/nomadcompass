@@ -226,11 +226,15 @@ function buildHub() {
   <link rel="stylesheet" href="/styles/base.css"><link rel="stylesheet" href="/styles/nav.css"><link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <style>
-    .hub-head { max-width:1040px; margin:0 auto; padding: calc(var(--nav-height,64px) + 3rem) var(--space-4,1rem) 0; }
-    .hub-eyebrow { font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:var(--color-terracotta); margin:0 0 .6rem; }
-    .hub-head h1 { font-family:'DM Serif Display',serif; font-size:clamp(2rem,5vw,3rem); color:var(--color-ink); line-height:1.1; margin:0 0 .8rem; }
-    .hub-head p { font-size:var(--text-lg); line-height:1.7; color:var(--color-charcoal); max-width:70ch; margin:0; }
-    .hub-wrap { max-width:1040px; margin:0 auto; padding:2rem var(--space-4,1rem) 1rem; }
+    .hub-hero { position:relative; width:100%; min-height:100vh; display:flex; align-items:flex-end; overflow:hidden; }
+    .hub-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .hub-hero-overlay { position:relative; z-index:1; width:100%; padding: calc(var(--nav-height,64px) + 3rem) 0 3rem; background:linear-gradient(to top, rgba(15,23,42,.94), rgba(15,23,42,.66) 55%, rgba(15,23,42,.15) 88%, transparent); color:#fff; }
+    .hub-hero::before { content:''; position:absolute; top:0;left:0;right:0; height:calc(var(--nav-height,64px)+44px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
+    .hub-hero .container { max-width:1040px; }
+    .hub-eyebrow { display:inline-block; font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
+    .hub-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
+    .hub-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0; max-width:60ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
+    .hub-wrap { max-width:1040px; margin:0 auto; padding:3rem var(--space-4,1rem) 1rem; }
     .hub-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; }
     .hub-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark); border-radius:14px; overflow:hidden; text-decoration:none; transition:border-color .15s, transform .15s, box-shadow .15s; }
     .hub-card:hover { border-color:var(--color-terracotta); transform:translateY(-2px); box-shadow:0 10px 26px rgba(15,23,42,.1); }
@@ -244,11 +248,14 @@ function buildHub() {
 <body>
 ${NAV}
   <main>
-    <div class="hub-head">
-      <p class="hub-eyebrow">Editorial picks</p>
-      <h1>Best Cities by Activity</h1>
-      <p>Curated picks for the things you want to do off the clock. These lists are editorial, chosen for each place's reputation for the activity and how workable it is as a nomad base, rather than generated from our Nomad Score. Every matched place links to its full city guide.</p>
-    </div>
+    <header class="hub-hero">
+      <img class="hub-hero-img" src="/assets/activities-hero.webp" alt="Turquoise ocean waves rolling onto a sandy beach, seen from above" fetchpriority="high">
+      <div class="hub-hero-overlay"><div class="container">
+        <span class="hub-eyebrow">Editorial picks</span>
+        <h1>Best Cities by Activity</h1>
+        <p class="sub">Curated picks for the things you want to do off the clock, chosen for each place's reputation for the activity and how workable it is as a nomad base rather than generated from our Nomad Score. Every matched place links to its full city guide.</p>
+      </div></div>
+    </header>
     <div class="hub-wrap">
       <div class="hub-grid">
 ${cards}

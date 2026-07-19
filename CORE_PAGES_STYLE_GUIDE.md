@@ -76,7 +76,7 @@ reuses a city-page photo.** Each top-level page has its OWN dedicated `assets/<p
 Current assignments: homepage → `images/extended_surf_4000.webp`; `/cities` → `assets/cities-hero.webp`;
 `/best` → `assets/best-hero.webp`; `/map` → `assets/map-hero.webp`;
 `/tier-list` → `assets/tier-list-hero.webp`; `/compare` → `assets/compare-hero.webp`;
-`/wheel` → `assets/wheel-hero.webp`. Per-item pages (each `/best/*`, `/tier-list/*`, `/cities/*`)
+`/wheel` → `assets/wheel-hero.webp`; `/activities` → `assets/activities-hero.webp`. Per-item pages (each `/best/*`, `/tier-list/*`, `/cities/*`)
 use their own subject's photo, so they are already distinct. When adding a new hub/tool, create a
 NEW dedicated `assets/<page>-hero.webp` from a photo used by no other hero (prefer CC0 / public
 domain so no attribution is needed; if CC BY is used, add a visible credit like the city pages do
