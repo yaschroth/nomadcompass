@@ -127,7 +127,7 @@ const html = `<!DOCTYPE html>
   ${navHtml()}
   <main>
     <header class="hub-hero">
-      <img class="hub-hero-img" src="/assets/timezones-hero.webp" alt="Earth at night from the ISS, city lights glowing across Europe below the blue dawn line" fetchpriority="high" width="1920" height="1280">
+      <img class="hub-hero-img" src="/assets/timezones-hero.webp" alt="A calm purple and gold sunset over a rocky sea at Flo, Norway" fetchpriority="high" width="1920" height="1090">
       <div class="hub-hero-overlay"><div class="container">
         <span class="hub-eyebrow">Remote-work tool</span>
         <h1>Time Zone Overlap Finder</h1>
