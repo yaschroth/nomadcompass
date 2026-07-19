@@ -32,6 +32,10 @@ add('/legal-notice', '0.2', 'yearly');
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
   add('/blog/' + f.replace(/\.html$/, ''), '0.7', 'monthly');
 }
+const blogCatDir = path.join(ROOT, 'blog', 'category');
+if (fs.existsSync(blogCatDir)) for (const f of fs.readdirSync(blogCatDir).filter((x) => x.endsWith('.html')).sort()) {
+  add('/blog/category/' + f.replace(/\.html$/, ''), '0.6', 'monthly');
+}
 for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
   add('/cities/' + f.replace(/\.html$/, ''), '0.8', 'monthly');
 }

@@ -37,7 +37,7 @@ const rootHtml = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html'));
 const all = [
   ...rootHtml,
   ...htmlIn('cities'), ...htmlIn('best'), ...htmlIn('tier-list'),
-  ...htmlIn('activities'), ...htmlIn('blog'), ...htmlIn('about'),
+  ...htmlIn('activities'), ...htmlIn('blog'), ...htmlIn('blog/category'), ...htmlIn('about'),
 ];
 const articleDirs = ['cities' + path.sep, 'activities' + path.sep];
 

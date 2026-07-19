@@ -29,7 +29,7 @@ function htmlIn(dir) {
   if (!fs.existsSync(abs)) return [];
   return fs.readdirSync(abs).filter((f) => f.endsWith('.html')).map((f) => (dir === '.' ? f : path.join(dir, f)));
 }
-const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog'].flatMap(htmlIn);
+const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog', 'blog/category' ].flatMap(htmlIn);
 
 const formRe = /<form class="nav-search"[\s\S]*?<\/form>/;
 const jsRe = /  <!-- nav-search-js -->[\s\S]*?<!-- \/nav-search-js -->/;

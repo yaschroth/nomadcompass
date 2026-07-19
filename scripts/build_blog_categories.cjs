@@ -1,0 +1,165 @@
+/**
+ * Builds blog topic-cluster pillar pages at /blog/category/<slug> (one per article:section):
+ * a crawlable landing page listing every post in that category, so the blog gains real
+ * topical hubs instead of only JS filter chips. Also injects a static "Browse by topic" row
+ * of links into blog.html. Run the head/body sweeps + sitemap afterwards.
+ * Usage: node scripts/build_blog_categories.cjs
+ */
+const fs = require('fs');
+const path = require('path');
+const ROOT = path.resolve(__dirname, '..');
+const BASE = 'https://thenomadhq.com';
+const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const get = (h, re) => { const m = h.match(re); return m ? m[1] : ''; };
+
+// --- collect post metadata ---
+const posts = fs.readdirSync(path.join(ROOT, 'blog')).filter((f) => f.endsWith('.html')).map((f) => {
+  const h = fs.readFileSync(path.join(ROOT, 'blog', f), 'utf8');
+  return {
+    slug: f.replace(/\.html$/, ''),
+    title: get(h, /<title>([^<]*)<\/title>/).split(/\s*[|]\s*/)[0].trim(),
+    excerpt: get(h, /name="description" content="([^"]*)"/),
+    image: get(h, /property="og:image" content="([^"]*)"/),
+    section: get(h, /property="article:section" content="([^"]*)"/).replace(/&amp;/g, '&'),
+    date: get(h, /property="article:published_time" content="([^"]*)"/).slice(0, 10),
+  };
+});
+
+const CATS = [
+  { name: 'City Guides', slug: 'city-guides', h1: 'City Guides', blurb: 'In-depth, field-tested guides to living and working remotely in specific cities, cost of living, neighborhoods, coworking, and the day-to-day reality of each base.' },
+  { name: 'Remote Work', slug: 'remote-work', h1: 'Remote Work', blurb: 'Coworking, productivity, and the practical craft of working well from anywhere, from building a routine that survives time zones to picking the right desk abroad.' },
+  { name: 'Visa & Legal', slug: 'visa-legal', h1: 'Visas & Legal', blurb: 'Digital nomad visas, taxes, and the paperwork side of living abroad, explained in plain language so you can plan the move without nasty surprises.' },
+  { name: 'Lifestyle', slug: 'lifestyle', h1: 'Lifestyle', blurb: 'The bigger picture of nomad life: where the scenes are, how communities form, and comparisons to help you choose a region rather than a single city.' },
+];
+const dateFmt = (d) => { if (!d) return ''; const [y, mo] = d.split('-'); const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; return M[+mo - 1] + ' ' + y; };
+
+function nav(active) {
+  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
+  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}${t === active ? ' active' : ''}">${t}</a></li>`).join('');
+  return `<nav class="nav" id="mainNav"><div class="nav-container">
+      <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
+      <ul class="nav-links">${li('nav-link')}</ul>
+      <div class="nav-actions"><a href="/login" class="nav-login">Login</a><a href="/signup" class="btn btn-primary nav-signup">Sign Up</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
+    </div><div class="nav-mobile" id="navMobile"><ul class="nav-mobile-links">${li('nav-mobile-link')}</ul>
+      <div class="nav-mobile-actions"><a href="/login" class="btn btn-secondary">Login</a><a href="/signup" class="btn btn-primary">Sign Up</a></div></div></nav>
+  <script>(function(){var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),mm=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');mm.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
+}
+const FOOTER = `<footer class="footer"><div class="container">
+      <div class="footer-grid">
+        <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
+        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li><li><a href="/activities" class="footer-link">By Activity</a></li></ul></div>
+        <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
+      <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
+    </div></footer>`;
+
+fs.mkdirSync(path.join(ROOT, 'blog', 'category'), { recursive: true });
+let built = 0;
+for (const cat of CATS) {
+  const items = posts.filter((p) => p.section === cat.name).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  if (!items.length) continue;
+  const url = `${BASE}/blog/category/${cat.slug}`;
+  const cards = items.map((p) => `        <a class="bc-card" href="/blog/${p.slug}">
+          <span class="bc-card-img"><img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" onerror="this.closest('.bc-card-img').style.background='var(--color-sand)';this.remove();"></span>
+          <span class="bc-card-body"><span class="bc-tag">${esc(cat.name)}</span><span class="bc-card-title">${esc(p.title)}</span><span class="bc-card-excerpt">${esc(p.excerpt)}</span><span class="bc-card-meta">Yannick Schroth &middot; ${dateFmt(p.date)}</span></span>
+        </a>`).join('\n');
+  const otherCats = CATS.filter((c) => c.slug !== cat.slug && posts.some((p) => p.section === c.name))
+    .map((c) => `<a href="/blog/category/${c.slug}">${esc(c.name)}</a>`).join('');
+  const collLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: cat.h1 + ' | The Nomad HQ Blog', url, description: cat.blurb, isPartOf: { '@type': 'Blog', '@id': BASE + '/blog' }, hasPart: items.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: BASE + '/blog/' + p.slug })) };
+  const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [['Home', BASE + '/'], ['Blog', BASE + '/blog'], [cat.h1, url]].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${esc(cat.h1)} for Digital Nomads: Guides & Articles | The Nomad HQ</title>
+  <meta name="description" content="${esc(cat.blurb)}">
+  <link rel="canonical" href="${url}">
+  <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta property="og:title" content="${esc(cat.h1)} | The Nomad HQ Blog">
+  <meta property="og:description" content="${esc(cat.blurb)}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="${url}">
+  <meta property="og:image" content="${BASE}/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/nav.css">
+  <link rel="stylesheet" href="/styles/footer.css">
+  <script type="application/ld+json">${JSON.stringify(collLd)}</script>
+  <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
+  <style>
+    .bc-header { background:linear-gradient(180deg,var(--color-sand,#f6f1e7) 0%, rgba(246,241,231,0) 100%); padding: calc(var(--nav-height,64px) + 3.25rem) 1.25rem 2.25rem; text-align:center; }
+    .bc-header .container { max-width:760px; }
+    .bc-crumbs { font-size:.82rem; color:var(--color-stone); margin:0 0 1rem; }
+    .bc-crumbs a { color:var(--color-terracotta); text-decoration:none; }
+    .bc-crumbs span { margin:0 .4rem; color:var(--color-sand-dark); }
+    .bc-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--color-terracotta); margin:0 0 .6rem; }
+    .bc-header h1 { font-family:'DM Serif Display',serif; color:var(--color-ink); font-size:clamp(2.2rem,5.5vw,3.2rem); line-height:1.1; margin:0 0 .8rem; }
+    .bc-header p { color:var(--color-charcoal); font-size:1.1rem; line-height:1.7; margin:0 auto; max-width:60ch; }
+    .bc-wrap { max-width:1080px; margin:0 auto; padding:1.5rem var(--space-4,1rem) 3rem; }
+    .bc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.3rem; }
+    .bc-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; overflow:hidden; text-decoration:none; transition:border-color .15s,transform .15s,box-shadow .15s; }
+    .bc-card:hover { border-color:var(--color-terracotta); transform:translateY(-3px); box-shadow:0 12px 28px rgba(15,23,42,.1); }
+    .bc-card-img { display:block; height:170px; background:var(--color-sand); }
+    .bc-card-img img { width:100%; height:100%; object-fit:cover; display:block; }
+    .bc-card-body { display:flex; flex-direction:column; gap:.4rem; padding:1.1rem 1.2rem 1.3rem; }
+    .bc-tag { align-self:flex-start; font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--color-terracotta); background:rgba(192,57,43,.08); padding:.2rem .55rem; border-radius:999px; }
+    .bc-card-title { font-family:'DM Serif Display',serif; font-size:1.3rem; line-height:1.2; color:var(--color-ink); }
+    .bc-card-excerpt { font-size:.92rem; line-height:1.55; color:var(--color-stone); }
+    .bc-card-meta { font-size:.8rem; color:var(--color-stone); margin-top:.2rem; }
+    .bc-other { margin:2.5rem 0 0; padding-top:1.5rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); text-align:center; }
+    .bc-other-label { font-size:.85rem; font-weight:600; color:var(--color-stone); margin-right:.4rem; }
+    .bc-other a { display:inline-block; margin:.3rem; padding:.45rem .95rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:999px; color:var(--color-charcoal); text-decoration:none; font-weight:600; font-size:.9rem; transition:border-color .15s,color .15s; }
+    .bc-other a:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
+  </style>
+</head>
+<body>
+  ${nav('Blog')}
+  <main>
+    <header class="bc-header"><div class="container">
+      <nav class="bc-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog">Blog</a><span>/</span>${esc(cat.h1)}</nav>
+      <span class="bc-eyebrow">Blog topic</span>
+      <h1>${esc(cat.h1)}</h1>
+      <p>${esc(cat.blurb)}</p>
+    </div></header>
+    <div class="bc-wrap">
+      <div class="bc-grid">
+${cards}
+      </div>
+      <div class="bc-other"><span class="bc-other-label">More topics:</span>${otherCats}<a href="/blog">All articles</a></div>
+    </div>
+  </main>
+  ${FOOTER}
+</body>
+</html>`;
+  fs.writeFileSync(path.join(ROOT, 'blog', 'category', cat.slug + '.html'), html);
+  built++;
+}
+
+// Inject a static "Browse by topic" row into blog.html (idempotent).
+const blogPath = path.join(ROOT, 'blog.html');
+let blog = fs.readFileSync(blogPath, 'utf8');
+const topicRow = `      <!-- blog-topics -->
+      <nav class="blog-topics" aria-label="Blog topics" style="max-width:1080px;margin:0 auto 1.5rem;padding:0 1rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;">
+        <span style="font-size:.85rem;font-weight:600;color:var(--color-stone,#8a8175);">Browse by topic:</span>
+        ${CATS.filter((c) => posts.some((p) => p.section === c.name)).map((c) => `<a href="/blog/category/${c.slug}" style="padding:.4rem .9rem;border:1px solid var(--color-sand-dark,#e3d9c6);border-radius:999px;color:var(--color-charcoal,#3a3a3a);text-decoration:none;font-weight:600;font-size:.9rem;">${esc(c.name)}</a>`).join('')}
+      </nav>
+`;
+const topicRe = /      <!-- blog-topics -->[\s\S]*?<\/nav>\n/;
+if (topicRe.test(blog)) { blog = blog.replace(topicRe, topicRow); }
+else {
+  // insert the static topic links right before the JS filter tabs (or the article grid)
+  const anchor = blog.search(/<div[^>]*class="[^"]*(category-tabs|article-grid|blog-main)[^"]*"/);
+  if (anchor >= 0) { const ls = blog.lastIndexOf('\n', anchor) + 1; blog = blog.slice(0, ls) + topicRow + blog.slice(ls); }
+  else { console.log('WARN: blog.html topic-row anchor not found'); }
+}
+fs.writeFileSync(blogPath, blog);
+
+console.log(`Built ${built} blog category pages + injected the topic row into blog.html.`);

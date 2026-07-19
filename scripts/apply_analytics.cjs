@@ -48,7 +48,7 @@ function htmlIn(dir) {
   if (!fs.existsSync(abs)) return [];
   return fs.readdirSync(abs).filter((f) => f.endsWith('.html')).map((f) => (dir === '.' ? f : path.join(dir, f)));
 }
-const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'about'].flatMap(htmlIn);
+const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'blog/category', 'about' ].flatMap(htmlIn);
 
 const gaRe = /  <!-- ga4 -->[\s\S]*?<!-- \/ga4 -->/;
 const ccRe = /  <!-- cc -->[\s\S]*?<!-- \/cc -->/;
