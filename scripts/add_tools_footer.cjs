@@ -12,6 +12,9 @@ const ROOT = path.resolve(__dirname, '..');
 const LINKS = [
   ['/timezones', 'Time Zone Finder'],
   ['/route', 'Route Planner'],
+  ['/best-weather', 'Best Weather by Month'],
+  ['/visa', 'Visa Finder'],
+  ['/geoarbitrage', 'Geoarbitrage Calculator'],
   ['/tier-list/maker', 'Tier List Maker'],
 ];
 
