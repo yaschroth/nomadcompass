@@ -12,6 +12,83 @@ const ROOT = path.resolve(__dirname, '..');
 const CITY = (id, name) => ({ href: '/cities/' + id, label: name });
 const R = { cities: { href: '/cities', label: 'Browse all 410 cities' }, best: { href: '/best', label: 'Best cities rankings' }, map: { href: '/map', label: 'The world map' }, route: { href: '/route', label: 'Route Planner' }, tz: { href: '/timezones', label: 'Time Zone Finder' }, visa: { href: '/visa', label: 'Visa Finder' }, weather: { href: '/best-weather', label: 'Best Weather by Month' }, geo: { href: '/geoarbitrage', label: 'Geoarbitrage Calculator' }, wheel: { href: '/wheel', label: 'Decision Wheel' }, compare: { href: '/compare', label: 'Compare cities' }, blog: { href: '/blog', label: 'The blog' } };
 
+// ---- data for the static "popular results" blocks (real, crawlable city links, no JS) ----
+const m = {};
+new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';module.exports=CITIES')(m);
+const CLIMATE = require(path.join(ROOT, 'assets', 'city-climate.js'));
+const VISA = require(path.join(ROOT, 'assets', 'visa-data.js'));
+const CK = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
+const score = (c) => { let t = 0, n = 0; CK.forEach((k) => { const v = c.scores[k]; if (typeof v === 'number') { t += v; n++; } }); const raw = n ? t / n : 0; return +Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)).toFixed(1); };
+const CITIES = m.exports.filter((c) => c && c.id).map((c) => ({ id: c.id, name: c.name, country: c.country, tz: c.timezone, cost: c.costPerMonth, score: score(c) }));
+const NAMEFIX = { UAE: 'United Arab Emirates', 'Puerto Rico': 'United States', UK: 'United Kingdom', Bosnia: 'Bosnia and Herzegovina', 'New Caledonia': 'France' };
+const MONF = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MSLUG = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+function comfort(cl, mo) { if (!cl || cl.h[mo] == null || cl.l[mo] == null) return null; const avg = (cl.h[mo] + cl.l[mo]) / 2; const r = cl.r[mo] == null ? 40 : cl.r[mo]; return 0.65 * Math.max(0, 100 - Math.abs(avg - 24) * 5) + 0.35 * Math.max(0, 100 - r * 0.5); }
+const link = (c, hash) => `<a href="/cities/${c.id}${hash || ''}">${c.name}</a>`;
+const listLinks = (arr, hash) => arr.map((c) => link(c, hash)).join(', ');
+
+function block(title, groups) {
+  // groups: [ [subhead, htmlBody], ... ]
+  return `<div class="tc-block tc-popular"><h2>${title}</h2>` + groups.map((g) => `<div class="tc-pg"><h3>${g[0]}</h3><p>${g[1]}</p></div>`).join('') + '</div>';
+}
+
+const POP = {
+  weather() {
+    const months = [0, 3, 6, 9];
+    const groups = months.map((mo) => {
+      const ranked = CITIES.filter((c) => CLIMATE[c.id] && comfort(CLIMATE[c.id], mo) != null)
+        .map((c) => ({ c, cf: comfort(CLIMATE[c.id], mo) })).sort((a, b) => b.cf - a.cf).slice(0, 8).map((x) => x.c);
+      return [`Best weather in ${MONF[mo]}`, listLinks(ranked, '#weather') + `. <a href="/best-weather?month=${MSLUG[mo]}">See the full ${MONF[mo]} ranking &rarr;</a>`];
+    });
+    return block('Where it is warm, month by month', groups);
+  },
+  visa() {
+    const destIdx = {}; VISA.D.forEach((d, i) => { destIdx[d] = i; });
+    const byCanon = {}; CITIES.forEach((c) => { const canon = NAMEFIX[c.country] || c.country; (byCanon[canon] = byCanon[canon] || []).push(c); });
+    const PLABEL = { 'United States': 'US', 'United Kingdom': 'UK', Germany: 'German', Australia: 'Australian' };
+    const passports = ['United States', 'United Kingdom', 'Germany', 'Australia'];
+    const groups = passports.map((p) => {
+      const map = {}; (VISA.V[p] || '').split(',').forEach((tok) => { const i = tok.indexOf(':'); if (i > 0) map[+tok.slice(0, i)] = tok.slice(i + 1); });
+      const free = CITIES.filter((c) => { const idx = destIdx[NAMEFIX[c.country] || c.country]; if (idx === undefined) return false; const v = map[idx]; return v !== undefined && v !== 'X' && v !== 'O' && v !== 'E' && v !== 'A'; })
+        .sort((a, b) => b.score - a.score).slice(0, 10);
+      return [`Visa-free for ${PLABEL[p]} passports`, listLinks(free) + `. <a href="/visa?passport=${encodeURIComponent(p)}">Full ${PLABEL[p]} passport list &rarr;</a>`];
+    });
+    return block('Where popular passports go visa-free', groups);
+  },
+  geo() {
+    const withCost = CITIES.filter((c) => typeof c.cost === 'number' && c.cost > 0);
+    const cheapest = withCost.slice().sort((a, b) => a.cost - b.cost).slice(0, 15);
+    const value = withCost.slice().sort((a, b) => (b.score / b.cost) - (a.score / a.cost)).slice(0, 10);
+    return block('The maths of geoarbitrage', [
+      ['The cheapest nomad cities', cheapest.map((c) => `${link(c)} (~$${c.cost.toLocaleString('en-US')}/mo)`).join(', ') + '.'],
+      ['Best value for money (score per dollar)', listLinks(value) + '. Enter your income above for a personalised savings ranking.'],
+    ]);
+  },
+  route() {
+    const routes = [
+      ['A European summer', ['lisbon', 'porto', 'barcelona', 'split', 'athens']],
+      ['A South-East Asia loop', ['bangkok', 'chiangmai', 'canggu', 'ubud']],
+      ['Latin America on a budget', ['mexicocity', 'oaxaca', 'medellin', 'buenosaires']],
+      ['The nomad classics', ['lisbon', 'barcelona', 'medellin', 'bali']],
+    ];
+    const byId = {}; CITIES.forEach((c) => { byId[c.id] = c; });
+    const groups = routes.filter((r) => r[1].every((id) => byId[id])).map((r) => {
+      const cs = r[1].map((id) => byId[id]);
+      return [r[0], cs.map((c) => link(c)).join(' &rarr; ') + `. <a href="/route?route=${r[1].map((id) => id + ':14').join(',')}">Open this route &rarr;</a>`];
+    });
+    return block('Popular nomad routes', groups);
+  },
+  tz() {
+    const homes = [['a US East-coast team (UTC-5)', -5], ['a UK team (UTC+0)', 0], ['a Central-European team (UTC+1)', 1], ['an East-Asian team (UTC+9)', 9]];
+    const groups = homes.map((h) => {
+      const ranked = CITIES.filter((c) => typeof c.tz === 'number').map((c) => ({ c, ov: Math.max(0, 8 - Math.abs(c.tz - h[1])) }))
+        .filter((x) => x.ov >= 6).sort((a, b) => b.ov - a.ov || b.c.score - a.c.score).slice(0, 8).map((x) => x.c);
+      return [`Best overlap with ${h[0]}`, listLinks(ranked) + '.'];
+    });
+    return block('Which cities line up with your team', groups);
+  },
+};
+
 const TOOLS = {
   'route.html': {
     h: 'About the Nomad Route Planner',
@@ -102,15 +179,21 @@ const CSS = `<style>
   .tool-content .tc-related ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .5rem .7rem; }
   .tool-content .tc-related a { display: inline-block; background: #fff; border: 1px solid var(--color-sand-dark,#e3d9c6); border-radius: 999px; padding: .4rem .9rem; font-size: .9rem; font-weight: 600; color: var(--color-charcoal,#334155); text-decoration: none; }
   .tool-content .tc-related a:hover { border-color: var(--color-terracotta,#c0392b); color: var(--color-terracotta,#c0392b); }
+  .tool-content .tc-pg { margin-bottom: 1rem; }
+  .tool-content .tc-pg h3 { font-size: 1.02rem; color: var(--color-ink,#0f172a); margin: 0 0 .25rem; }
+  .tool-content .tc-pg p { font-size: .95rem; line-height: 1.65; margin: 0; }
 </style>`;
 
-function build(cfg) {
+const POPKEY = { 'route.html': 'route', 'timezones.html': 'tz', 'best-weather.html': 'weather', 'visa.html': 'visa', 'geoarbitrage.html': 'geo' };
+
+function build(cfg, popHtml) {
   const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: cfg.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
   const faqHtml = cfg.faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('\n          ');
   const rel = cfg.related.map((r) => `<li><a href="${r.href}">${r.label}</a></li>`).join('');
   const section = '<!-- tc-start -->\n    ' + CSS + `
     <section class="tool-content"><div class="container">
       <div class="tc-block"><h2>${cfg.h}</h2><p>${cfg.intro}</p></div>
+      ${popHtml || ''}
       <div class="tc-block"><h2>How it works</h2><p>${cfg.how}</p></div>
       <div class="tc-block"><h2>Frequently asked questions</h2>
           ${faqHtml}
@@ -130,7 +213,8 @@ for (const [file, cfg] of Object.entries(TOOLS)) {
   // strip previous injection (idempotent)
   html = html.replace(/\s*<!-- tc-start -->[\s\S]*?<!-- tc-end -->/, '');
   html = html.replace(/\s*<script type="application\/ld\+json" data-tc-faq>[\s\S]*?<\/script>/, '');
-  const { section, ld } = build(cfg);
+  const popHtml = POPKEY[file] ? POP[POPKEY[file]]() : '';
+  const { section, ld } = build(cfg, popHtml);
   // inject section at the end of <main>
   const mainIdx = html.lastIndexOf('</main>');
   if (mainIdx < 0) { console.log('NO MAIN', file); continue; }
