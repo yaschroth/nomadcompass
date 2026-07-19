@@ -20,6 +20,9 @@ const byId = {}; m.exports.forEach((c) => { if (c && c.id) byId[c.id] = c; });
 const CK = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
 function nomadScore(c) { let t = 0, n = 0; CK.forEach((k) => { const v = c.scores[k]; if (typeof v === 'number') { t += v; n++; } }); const raw = n ? t / n : 0; return +Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)).toFixed(1); }
 const money = (v) => typeof v === 'number' ? '$' + v.toLocaleString('en-US') + '/mo' : 'n/a';
+const iso = (flag) => { const p = [...(flag || '')]; if (p.length !== 2) return ''; return p.map((x) => String.fromCharCode(x.codePointAt(0) - 0x1F1E6 + 97)).join(''); };
+const badgeColor = (s) => s >= 8 ? '#C0392B' : s >= 7 ? '#C4622E' : s >= 6 ? '#9E7B1E' : '#5C6672';
+const lvl = (v) => v >= 8 ? 'hi' : v >= 6 ? 'good' : v >= 4 ? 'mid' : 'low';
 
 // Multi-city posts -> the cities they cover (curated for accuracy).
 const MAP = {
@@ -32,31 +35,52 @@ const COLS = [['cost', 'Cost'], ['wifi', 'WiFi'], ['safety', 'Safety'], ['commun
 
 function tableBlock(ids) {
   const cities = ids.map((id) => byId[id]).filter(Boolean);
-  const head = `<th>City</th><th>Nomad Score</th><th>Budget</th>` + COLS.map((c) => `<th>${c[1]}</th>`).join('');
+  const head = `<th class="csb-th-city">City</th><th>Nomad Score</th><th>Budget</th>` + COLS.map((c) => `<th>${c[1]}</th>`).join('');
   const rows = cities.map((c) => {
     const sc = nomadScore(c);
-    const cats = COLS.map(([k]) => `<td>${typeof c.scores[k] === 'number' ? c.scores[k] : '-'}</td>`).join('');
-    return `<tr><td class="csb-city"><a href="/cities/${c.id}">${esc(c.name)}</a><span>${esc(c.country)}</span></td><td class="csb-score">${sc}</td><td>${esc(money(c.costPerMonth))}</td>${cats}</tr>`;
+    const code = iso(c.flag);
+    const flag = code ? `<img class="csb-flag" src="/assets/flags/${code}.svg" alt="" width="22" height="16" loading="lazy">` : '';
+    const cats = COLS.map(([k]) => {
+      const v = c.scores[k];
+      return typeof v === 'number' ? `<td><span class="csb-chip" data-lvl="${lvl(v)}">${v}</span></td>` : '<td><span class="csb-chip" data-lvl="mid">-</span></td>';
+    }).join('');
+    return `<tr>
+            <td class="csb-city">${flag}<a href="/cities/${c.id}">${esc(c.name)}</a><span>${esc(c.country)}</span></td>
+            <td><span class="csb-badge" style="background:${badgeColor(sc)}">${sc}</span></td>
+            <td class="csb-budget">${esc(money(c.costPerMonth))}</td>${cats}
+          </tr>`;
   }).join('');
   return `    <!-- city-scores-start -->
     <div class="city-scores-block">
       <style>
-        .city-scores-block{max-width:820px;margin:2rem auto;padding:1.4rem 1.5rem;background:#fff;border:1px solid var(--color-sand-dark,#e3d9c6);border-radius:14px}
-        .city-scores-block h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--color-ink,#0f172a);margin:0 0 1rem}
-        .csb-scroll{overflow-x:auto}
-        .csb-table{width:100%;border-collapse:collapse;font-size:.92rem}
-        .csb-table th,.csb-table td{padding:.55rem .6rem;text-align:center;border-bottom:1px solid var(--color-sand,#f0e9dc);white-space:nowrap}
-        .csb-table th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--color-stone,#8a8175);font-weight:700}
-        .csb-table td:first-child,.csb-table th:first-child{text-align:left}
-        .csb-city a{font-weight:700;color:var(--color-ink,#0f172a);text-decoration:none}
+        .city-scores-block{max-width:860px;margin:2.25rem auto;padding:1.6rem 1.75rem 1.4rem;background:#fff;border:1px solid var(--color-sand-dark,#e3d9c6);border-radius:18px;box-shadow:0 10px 34px rgba(15,23,42,.07)}
+        .city-scores-block h3{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--color-ink,#0f172a);margin:0 0 1.1rem;letter-spacing:-.01em}
+        .csb-scroll{overflow-x:auto;margin:0 -.4rem}
+        .csb-table{width:100%;border-collapse:separate;border-spacing:0 .25rem;font-size:.92rem;min-width:560px}
+        .csb-table th{padding:.2rem .55rem .7rem;text-align:center;font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--color-stone,#8a8175);font-weight:700;border-bottom:1px solid var(--color-sand,#f0e9dc)}
+        .csb-th-city,.csb-table td:first-child{text-align:left}
+        .csb-table td{padding:.5rem .55rem;text-align:center;vertical-align:middle}
+        .csb-table tbody tr{transition:background .12s}
+        .csb-table tbody tr:hover td{background:var(--color-sand,#faf6ee)}
+        .csb-table tbody tr:hover td:first-child{border-radius:10px 0 0 10px}
+        .csb-table tbody tr:hover td:last-child{border-radius:0 10px 10px 0}
+        .csb-city{display:flex;align-items:center;flex-wrap:wrap;gap:.15rem .55rem;line-height:1.2}
+        .csb-flag{border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.08);flex:0 0 auto}
+        .csb-city a{font-family:'DM Serif Display',serif;font-size:1.08rem;color:var(--color-ink,#0f172a);text-decoration:none}
         .csb-city a:hover{color:var(--color-terracotta,#c0392b)}
-        .csb-city span{display:block;font-size:.75rem;color:var(--color-stone,#8a8175);font-weight:400}
-        .csb-score{font-weight:800;color:var(--color-terracotta,#c0392b);font-size:1.05rem}
-        .csb-note{font-size:.8rem;color:var(--color-stone,#8a8175);margin:.9rem 0 0}
+        .csb-city span{flex-basis:100%;padding-left:calc(22px + .55rem);font-size:.74rem;color:var(--color-stone,#8a8175)}
+        .csb-badge{display:inline-flex;align-items:center;justify-content:center;min-width:2.5rem;height:2.5rem;padding:0 .5rem;border-radius:50%;color:#fff;font-weight:800;font-size:1.02rem;box-shadow:0 3px 10px rgba(15,23,42,.18)}
+        .csb-budget{font-weight:600;color:var(--color-charcoal,#3a3a3a);white-space:nowrap}
+        .csb-chip{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:9px;font-weight:700;font-size:.9rem}
+        .csb-chip[data-lvl=hi]{background:rgba(47,125,90,.16);color:#2f7d5a}
+        .csb-chip[data-lvl=good]{background:rgba(158,123,30,.16);color:#8a6d15}
+        .csb-chip[data-lvl=mid]{background:rgba(15,23,42,.06);color:var(--color-stone,#8a8175)}
+        .csb-chip[data-lvl=low]{background:rgba(192,57,43,.12);color:#c0392b}
+        .csb-note{font-size:.78rem;color:var(--color-stone,#8a8175);margin:1.1rem 0 0;padding-top:.9rem;border-top:1px solid var(--color-sand,#f0e9dc)}
       </style>
       <h3>City scores at a glance</h3>
       <div class="csb-scroll"><table class="csb-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="csb-note">The Nomad HQ ratings (0-10) across our 13 categories. Open a city guide for the full breakdown.</p>
+      <p class="csb-note">The Nomad HQ ratings, scored 0 to 10 across our 13 categories. Open a city guide for the full breakdown.</p>
     </div>
     <!-- city-scores-end -->
 `;
