@@ -15,6 +15,7 @@ image MUST additionally carry a visible on-page credit (see the city-page hero p
 | `assets/timezones-hero.webp` | `/timezones` | "Sunset over a sea in Flø (Unsplash)" (Wikimedia Commons) | CC0 |
 | `assets/route-hero.webp` | `/route` | "Romania Transfagarasan" winding mountain road (Wikimedia Commons) | CC0 |
 | `assets/tier-maker-hero.webp` | `/tier-list/maker` | "Tegallalang Rice Terraces Bali 1" by Philip Nalangan (Wikimedia Commons) | CC BY 4.0 (visible on-page credit) |
+| `assets/best-weather-hero.webp` | `/best-weather` | "Typically view of Seychelles beach (islands of Mahe)" (Wikimedia Commons) | CC0 |
 
 Other hub heroes (`cities-hero.webp`, `compare-hero.webp`, `wheel-hero.webp`) and the
 homepage `extended_surf_4000.webp` predate this file; they are royalty-free stock
