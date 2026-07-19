@@ -63,18 +63,22 @@ const html = `<!DOCTYPE html>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="preload" as="image" href="/assets/route-hero.webp" fetchpriority="high">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   <style>
-    .rt-hero { background:linear-gradient(180deg,var(--color-sand,#f6f1e7) 0%, rgba(246,241,231,0) 100%); padding: calc(var(--nav-height,64px) + 3.25rem) 1.25rem 1.75rem; text-align:center; }
-    .rt-hero .container { max-width:760px; }
-    .rt-crumbs { font-size:.82rem; color:var(--color-stone); margin:0 0 1rem; } .rt-crumbs a { color:var(--color-terracotta); text-decoration:none; } .rt-crumbs span { margin:0 .4rem; color:var(--color-sand-dark); }
-    .rt-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--color-terracotta); margin:0 0 .6rem; }
-    .rt-hero h1 { font-family:'DM Serif Display',serif; color:var(--color-ink); font-size:clamp(2.2rem,5.5vw,3.2rem); line-height:1.1; margin:0 0 .8rem; }
-    .rt-hero p { color:var(--color-charcoal); font-size:1.1rem; line-height:1.7; margin:0 auto; max-width:60ch; }
+    .rt-hero { position:relative; min-height:clamp(360px,58vh,540px); display:flex; align-items:flex-end; overflow:hidden; }
+    .rt-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .rt-hero-overlay { position:relative; z-index:2; width:100%; padding:calc(var(--nav-height,64px) + 2.75rem) 0 2.4rem; background:linear-gradient(to top, rgba(15,23,42,.92), rgba(15,23,42,.6) 55%, rgba(15,23,42,.12) 88%, transparent); color:#fff; }
+    .rt-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:calc(var(--nav-height,64px) + 46px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.82), rgba(255,255,255,.34) 55%, transparent); }
+    .rt-hero .container { max-width:1040px; }
+    .rt-crumbs { font-size:.82rem; color:rgba(255,255,255,.82); margin:0 0 1rem; } .rt-crumbs a { color:#fff; text-decoration:none; } .rt-crumbs a:hover { text-decoration:underline; } .rt-crumbs span { margin:0 .4rem; color:rgba(255,255,255,.5); }
+    .rt-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .7rem; text-shadow:0 1px 10px rgba(0,0,0,.4); }
+    .rt-hero h1 { font-family:'DM Serif Display',serif; color:#fff; font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.08; margin:0 0 .9rem; text-shadow:0 2px 24px rgba(0,0,0,.45); text-wrap:balance; }
+    .rt-hero p.rt-sub { color:rgba(255,255,255,.92); font-size:1.12rem; line-height:1.6; margin:0; max-width:58ch; text-shadow:0 1px 12px rgba(0,0,0,.4); }
     .rt-wrap { max-width:1280px; margin:0 auto; padding:1rem var(--space-4,1rem) 3.5rem; display:grid; grid-template-columns:1fr 340px; gap:1.5rem; align-items:start; }
     @media (max-width:900px){ .rt-wrap{ grid-template-columns:1fr; } }
     .rt-map { position:relative; width:100%; aspect-ratio:2/1; background:#eef1f4 url('/assets/world-map.webp') center/100% 100% no-repeat; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; overflow:hidden; }
@@ -108,12 +112,15 @@ const html = `<!DOCTYPE html>
 <body>
   ${navHtml()}
   <main>
-    <header class="rt-hero"><div class="container">
+    <header class="rt-hero">
+      <img class="rt-hero-img" src="/assets/route-hero.webp" alt="The winding hairpin bends of the Transfagarasan mountain road through green Romanian peaks" fetchpriority="high" width="1920" height="1275">
+      <div class="rt-hero-overlay"><div class="container">
       <nav class="rt-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span>Route Planner</nav>
       <span class="rt-eyebrow">Trip tool</span>
       <h1>Nomad Route Planner</h1>
-      <p>Sketch a multi-city run across a few months. Add cities in the order you would visit them, see the path on the map, and get the total distance and monthly budget at a glance.</p>
-    </div></header>
+      <p class="rt-sub">Sketch a multi-city run across a few months. Add cities in the order you would visit them, see the path on the map, and get the total distance and monthly budget at a glance.</p>
+      </div></div>
+    </header>
     <div class="rt-wrap">
       <div class="rt-map" id="rtMap">
         <svg class="rt-svg" viewBox="0 0 360 180" preserveAspectRatio="none"><polyline id="rtLine" fill="none" stroke="#c0392b" stroke-width="1.1" stroke-dasharray="2.4 1.8" stroke-linejoin="round" stroke-linecap="round" points=""></polyline></svg>

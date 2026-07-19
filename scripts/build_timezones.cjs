@@ -82,19 +82,22 @@ const html = `<!DOCTYPE html>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="preload" as="image" href="/assets/timezones-hero.webp" fetchpriority="high">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   <style>
-    .tz-hero { background:linear-gradient(180deg,var(--color-sand,#f6f1e7) 0%, rgba(246,241,231,0) 100%); padding: calc(var(--nav-height,64px) + 3.25rem) 1.25rem 2rem; text-align:center; }
-    .tz-hero .container { max-width:760px; }
-    .tz-crumbs { font-size:.82rem; color:var(--color-stone); margin:0 0 1rem; }
-    .tz-crumbs a { color:var(--color-terracotta); text-decoration:none; } .tz-crumbs span { margin:0 .4rem; color:var(--color-sand-dark); }
-    .tz-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--color-terracotta); margin:0 0 .6rem; }
-    .tz-hero h1 { font-family:'DM Serif Display',serif; color:var(--color-ink); font-size:clamp(2.2rem,5.5vw,3.2rem); line-height:1.1; margin:0 0 .8rem; }
-    .tz-hero p { color:var(--color-charcoal); font-size:1.1rem; line-height:1.7; margin:0 auto; max-width:60ch; }
+    .tz-hero { position:relative; min-height:clamp(360px,58vh,540px); display:flex; align-items:flex-end; overflow:hidden; }
+    .tz-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .tz-hero-overlay { position:relative; z-index:2; width:100%; padding:calc(var(--nav-height,64px) + 2.75rem) 0 2.4rem; background:linear-gradient(to top, rgba(15,23,42,.92), rgba(15,23,42,.6) 55%, rgba(15,23,42,.12) 88%, transparent); color:#fff; }
+    .tz-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:calc(var(--nav-height,64px) + 46px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.82), rgba(255,255,255,.34) 55%, transparent); }
+    .tz-hero .container { max-width:1040px; }
+    .tz-crumbs { font-size:.82rem; color:rgba(255,255,255,.82); margin:0 0 1rem; } .tz-crumbs a { color:#fff; text-decoration:none; } .tz-crumbs a:hover { text-decoration:underline; } .tz-crumbs span { margin:0 .4rem; color:rgba(255,255,255,.5); }
+    .tz-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .7rem; text-shadow:0 1px 10px rgba(0,0,0,.4); }
+    .tz-hero h1 { font-family:'DM Serif Display',serif; color:#fff; font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.08; margin:0 0 .9rem; text-shadow:0 2px 24px rgba(0,0,0,.45); text-wrap:balance; }
+    .tz-hero p.tz-sub { color:rgba(255,255,255,.92); font-size:1.12rem; line-height:1.6; margin:0; max-width:58ch; text-shadow:0 1px 12px rgba(0,0,0,.4); }
     .tz-wrap { max-width:1080px; margin:0 auto; padding:1rem var(--space-4,1rem) 3.5rem; }
     .tz-controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 8px 24px rgba(15,23,42,.05); }
     .tz-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -124,12 +127,15 @@ const html = `<!DOCTYPE html>
 <body>
   ${navHtml()}
   <main>
-    <header class="tz-hero"><div class="container">
+    <header class="tz-hero">
+      <img class="tz-hero-img" src="/assets/timezones-hero.webp" alt="Earth at night from the ISS, city lights glowing across Europe below the blue dawn line" fetchpriority="high" width="1920" height="1280">
+      <div class="tz-hero-overlay"><div class="container">
       <nav class="tz-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span>Time Zone Finder</nav>
       <span class="tz-eyebrow">Remote-work tool</span>
       <h1>Time Zone Overlap Finder</h1>
-      <p>Working with a team back home? Pick your base time zone and see which nomad cities give you the most overlapping working hours, so calls happen at noon, not 3am.</p>
-    </div></header>
+      <p class="tz-sub">Working with a team back home? Pick your base time zone and see which nomad cities give you the most overlapping working hours, so calls happen at noon, not 3am.</p>
+      </div></div>
+    </header>
     <div class="tz-wrap">
       <div class="tz-controls">
         <div class="tz-field"><label for="tzHome">Your home / team time zone</label><select id="tzHome">${offsetOptions}</select></div>
