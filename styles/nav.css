@@ -212,6 +212,88 @@ html.auth-logged-in.auth-ready .nav-mobile-actions {
 }
 
 /* --------------------------------------------
+   TOOLS DROPDOWN (desktop: hover / focus-within)
+   -------------------------------------------- */
+.nav-item-drop {
+  position: relative;
+}
+.nav-drop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: inherit;
+}
+.nav-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  opacity: .65;
+  transition: transform var(--transition-base);
+}
+.nav-item-drop:hover .nav-caret,
+.nav-item-drop:focus-within .nav-caret {
+  transform: rotate(180deg);
+}
+.nav-drop-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 216px;
+  margin: 0;
+  padding: .4rem;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--color-sand-dark);
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, .13);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 1002;
+}
+/* invisible bridge so the menu does not close in the gap under the button */
+.nav-drop-menu::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+.nav-item-drop:hover .nav-drop-menu,
+.nav-item-drop:focus-within .nav-drop-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.nav-item-drop .nav-drop-menu a.nav-drop-link {
+  display: block;
+  padding: .5rem .8rem;
+  border-radius: 8px;
+  font-size: .92rem;
+  font-weight: var(--font-medium);
+  color: var(--color-charcoal);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.nav-item-drop .nav-drop-menu a.nav-drop-link:hover,
+.nav-item-drop .nav-drop-menu a.nav-drop-link:focus {
+  background: var(--color-sand);
+  color: var(--color-terracotta);
+}
+.nav-item-drop .nav-drop-menu a.nav-drop-link.active {
+  color: var(--color-terracotta);
+}
+
+/* --------------------------------------------
    NAVIGATION ACTIONS
    Login and Sign Up buttons (right side)
    -------------------------------------------- */
@@ -458,6 +540,31 @@ html.auth-logged-in.auth-ready .nav-mobile-actions {
 
 .nav-mobile-link:hover,
 .nav-mobile-link.active {
+  color: var(--color-terracotta);
+}
+
+/* Mobile Tools group (statically expanded, no JS) */
+.nav-mobile-group {
+  border-bottom: 1px solid var(--color-sand-dark);
+  padding-bottom: var(--space-3);
+}
+.nav-mobile-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-ink);
+  padding: var(--space-4) 0 var(--space-2);
+}
+.nav-mobile .nav-mobile-group a.nav-mobile-sub {
+  display: block;
+  font-size: var(--text-lg);
+  color: var(--color-charcoal);
+  text-decoration: none;
+  padding: var(--space-3) 0 var(--space-3) var(--space-4);
+  transition: color var(--transition-fast);
+}
+.nav-mobile .nav-mobile-group a.nav-mobile-sub:hover,
+.nav-mobile .nav-mobile-group a.nav-mobile-sub.active {
   color: var(--color-terracotta);
 }
 
