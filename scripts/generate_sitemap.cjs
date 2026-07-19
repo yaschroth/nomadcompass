@@ -20,6 +20,7 @@ add('/timezones', '0.6', 'monthly');
 add('/route', '0.6', 'monthly');
 add('/best-weather', '0.7', 'monthly');
 add('/visa', '0.7', 'monthly');
+add('/geoarbitrage', '0.7', 'monthly');
 add('/compare', '0.7', 'monthly');
 add('/best', '0.8', 'weekly');
 add('/tier-list', '0.7', 'monthly');

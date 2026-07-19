@@ -17,6 +17,7 @@ image MUST additionally carry a visible on-page credit (see the city-page hero p
 | `assets/tier-maker-hero.webp` | `/tier-list/maker` | "Tegallalang Rice Terraces Bali 1" by Philip Nalangan (Wikimedia Commons) | CC BY 4.0 (visible on-page credit) |
 | `assets/best-weather-hero.webp` | `/best-weather` | "Typically view of Seychelles beach (islands of Mahe)" (Wikimedia Commons) | CC0 |
 | `assets/visa-hero.webp` | `/visa` | "Passport-flag-travel-visa-2642170" (Wikimedia Commons) | CC0 |
+| `assets/geo-hero.webp` | `/geoarbitrage` | "White villa with pool and palm trees (GX-215)" (Wikimedia Commons) | Public domain |
 
 Other hub heroes (`cities-hero.webp`, `compare-hero.webp`, `wheel-hero.webp`) and the
 homepage `extended_surf_4000.webp` predate this file; they are royalty-free stock
