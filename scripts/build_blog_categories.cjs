@@ -26,10 +26,18 @@ const posts = fs.readdirSync(path.join(ROOT, 'blog')).filter((f) => f.endsWith('
 });
 
 const CATS = [
-  { name: 'City Guides', slug: 'city-guides', h1: 'City Guides', blurb: 'In-depth, field-tested guides to living and working remotely in specific cities, cost of living, neighborhoods, coworking, and the day-to-day reality of each base.' },
-  { name: 'Remote Work', slug: 'remote-work', h1: 'Remote Work', blurb: 'Coworking, productivity, and the practical craft of working well from anywhere, from building a routine that survives time zones to picking the right desk abroad.' },
-  { name: 'Visa & Legal', slug: 'visa-legal', h1: 'Visas & Legal', blurb: 'Digital nomad visas, taxes, and the paperwork side of living abroad, explained in plain language so you can plan the move without nasty surprises.' },
-  { name: 'Lifestyle', slug: 'lifestyle', h1: 'Lifestyle', blurb: 'The bigger picture of nomad life: where the scenes are, how communities form, and comparisons to help you choose a region rather than a single city.' },
+  { name: 'City Guides', slug: 'city-guides', h1: 'City Guides', blurb: 'In-depth, field-tested guides to living and working remotely in specific cities, cost of living, neighborhoods, coworking, and the day-to-day reality of each base.',
+    body: 'Every guide here is written from lived experience rather than scraped from a spreadsheet. Each one digs into what a place is actually like to base yourself in for a month or more: a realistic monthly budget, which neighbourhoods suit remote workers, where the wifi holds up, the coworking scene, and the small day-to-day frictions nobody warns you about. Read them alongside the hard numbers in our <a href="/cities">410 city profiles</a> and the <a href="/best">best-cities rankings</a>, put two places <a href="/compare">side by side</a>, or thread several into one trip with the <a href="/route">route planner</a>.',
+    related: [['/cities', 'All 410 city guides'], ['/best', 'Best cities rankings'], ['/compare', 'Compare cities'], ['/route', 'Route Planner'], ['/best-weather', 'Best weather by month']] },
+  { name: 'Remote Work', slug: 'remote-work', h1: 'Remote Work', blurb: 'Coworking, productivity, and the practical craft of working well from anywhere, from building a routine that survives time zones to picking the right desk abroad.',
+    body: 'Working well from anywhere is a skill, not a given. These pieces cover the practical craft of it: building a routine that survives jet lag and time-zone gaps, finding reliable wifi and a desk you actually want to sit at, and staying focused when the beach is right outside. When you are ready to choose a base around your work, the <a href="/best/best-cities-for-fast-wifi">fastest-wifi ranking</a>, the <a href="/best/best-cities-for-nomad-community">best cities for community</a>, the <a href="/timezones">time-zone overlap finder</a> and the <a href="/wheel">Decision Wheel</a> turn the advice into a shortlist.',
+    related: [['/best/best-cities-for-fast-wifi', 'Best for fast wifi'], ['/best/best-cities-for-nomad-community', 'Best for community'], ['/timezones', 'Time Zone Finder'], ['/wheel', 'Decision Wheel'], ['/best', 'All rankings']] },
+  { name: 'Visa & Legal', slug: 'visa-legal', h1: 'Visas & Legal', blurb: 'Digital nomad visas, taxes, and the paperwork side of living abroad, explained in plain language so you can plan the move without nasty surprises.',
+    body: 'The paperwork side of nomad life is where good trips go wrong, so we keep it plain. These guides walk through digital nomad visas, tourist-entry rules, taxes and residency without the jargon, so you can plan a move without a nasty surprise at the border or in April. Check what your own passport can do in the <a href="/visa">visa finder</a>, see which places have launched a <a href="/best/best-cities-for-digital-nomad-visas">dedicated nomad visa</a>, and weigh the cost of each base with the <a href="/geoarbitrage">geoarbitrage calculator</a>.',
+    related: [['/visa', 'Visa Finder by passport'], ['/best/best-cities-for-digital-nomad-visas', 'Best for nomad visas'], ['/geoarbitrage', 'Geoarbitrage Calculator'], ['/best', 'All rankings'], ['/cities', 'All city guides']] },
+  { name: 'Lifestyle', slug: 'lifestyle', h1: 'Lifestyle', blurb: 'The bigger picture of nomad life: where the scenes are, how communities form, and comparisons to help you choose a region rather than a single city.',
+    body: 'Beyond the spreadsheets, this is the texture of nomad life: where the scenes are, how communities and coliving spaces form, and how whole regions compare rather than single cities. Use it to work out the vibe you are after, then get specific with the <a href="/tier-list">cities tier list</a>, the <a href="/best">best-cities rankings</a>, or the <a href="/best-weather">best-weather-by-month finder</a> if you would rather follow the sun around the calendar.',
+    related: [['/tier-list', 'Cities tier list'], ['/best', 'Best cities rankings'], ['/best-weather', 'Best weather by month'], ['/route', 'Route Planner'], ['/cities', 'All city guides']] },
 ];
 const dateFmt = (d) => { if (!d) return ''; const [y, mo] = d.split('-'); const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; return M[+mo - 1] + ' ' + y; };
 
@@ -118,6 +126,13 @@ for (const cat of CATS) {
     .bc-other-label { font-size:.85rem; font-weight:600; color:var(--color-stone); margin-right:.4rem; }
     .bc-other a { display:inline-block; margin:.3rem; padding:.45rem .95rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:999px; color:var(--color-charcoal); text-decoration:none; font-weight:600; font-size:.9rem; transition:border-color .15s,color .15s; }
     .bc-other a:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
+    .bc-intro { max-width:760px; margin:0 auto 2.2rem; }
+    .bc-intro p { font-size:1.05rem; line-height:1.7; color:var(--color-charcoal,#334155); margin:0; }
+    .bc-related { max-width:1080px; margin:2.6rem auto 0; padding-top:1.6rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .bc-related h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink,#0f172a); margin:0 0 .85rem; }
+    .bc-related-links { display:flex; flex-wrap:wrap; gap:.5rem .6rem; }
+    .bc-related-links a { display:inline-block; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:999px; padding:.4rem .9rem; font-weight:600; font-size:.9rem; color:var(--color-charcoal,#334155); text-decoration:none; }
+    .bc-related-links a:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
   </style>
 </head>
 <body>
@@ -130,9 +145,11 @@ for (const cat of CATS) {
       <p>${esc(cat.blurb)}</p>
     </div></header>
     <div class="bc-wrap">
+      <div class="bc-intro"><p>${cat.body}</p></div>
       <div class="bc-grid">
 ${cards}
       </div>
+      <div class="bc-related"><h2>Keep exploring</h2><div class="bc-related-links">${cat.related.map(([h, l]) => `<a href="${h}">${esc(l)}</a>`).join('')}</div></div>
       <div class="bc-other"><span class="bc-other-label">More topics:</span>${otherCats}<a href="/blog">All articles</a></div>
     </div>
   </main>

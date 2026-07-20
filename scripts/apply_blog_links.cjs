@@ -40,7 +40,9 @@ for (const file of files) {
   let html = fs.readFileSync(abs, 'utf8');
   html = html.replace(/\n?\s*<!-- blog-explore-start -->[\s\S]*?<!-- blog-explore-end -->/g, ''); // idempotent strip
   const chips = links.map(([href, label]) => `<a href="${href}">${esc(label)}</a>`).join('');
-  const block = `\n    <!-- blog-explore-start -->${CSS}\n    <section class="blog-explore container">\n      <h3>Explore the data behind this guide</h3>\n      <div class="blog-explore-chips">${chips}</div>\n    </section>\n    <!-- blog-explore-end -->`;
+  const TOOLCHIPS = [['/route', 'Plan a multi-city route'], ['/best-weather', 'Best weather by month'], ['/visa', 'Visa finder by passport'], ['/geoarbitrage', 'Geoarbitrage calculator'], ['/timezones', 'Time-zone overlap']];
+  const toolChips = TOOLCHIPS.map(([href, label]) => `<a href="${href}">${esc(label)}</a>`).join('');
+  const block = `\n    <!-- blog-explore-start -->${CSS}\n    <section class="blog-explore container">\n      <h3>Explore the data behind this guide</h3>\n      <div class="blog-explore-chips">${chips}</div>\n      <h3 style="margin-top:1.3rem">Plan your trip with our tools</h3>\n      <div class="blog-explore-chips">${toolChips}</div>\n    </section>\n    <!-- blog-explore-end -->`;
   // insert before the Related Articles section, else before </main>
   if (/<section class="related-articles/.test(html)) {
     html = html.replace(/(\n\s*<!-- Related Articles -->\s*)?(\n\s*<section class="related-articles)/, `${block}$1$2`);
