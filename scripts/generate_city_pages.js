@@ -27911,11 +27911,18 @@ if (!fs.existsSync(citiesDir)) {
 
 console.log(`Found ${CITIES.length} cities`);
 
+// SAFETY: only create base pages for cities that do NOT already have a page. The existing
+// pages are enhanced in place (guides/tiles/venues/verified images) and must never be
+// clobbered by this base template. Pass --force to override (do not, unless you mean it).
+const FORCE = process.argv.includes('--force');
+let made = 0, skipped = 0;
 CITIES.forEach(city => {
-  const html = generateCityPage(city);
   const filename = path.join(citiesDir, `${city.id}.html`);
+  if (!FORCE && fs.existsSync(filename)) { skipped++; return; }
+  const html = generateCityPage(city);
   fs.writeFileSync(filename, html);
+  made++;
   console.log(`Generated: ${city.id}.html`);
 });
 
-console.log(`\nGenerated ${CITIES.length} city pages!`);
+console.log(`\nGenerated ${made} new city pages (${skipped} existing skipped).`);
