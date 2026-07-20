@@ -353,7 +353,7 @@ function render(v) {
   } else if (v.mode === 'nomad' && v.type === 'region') {
     sub = `The ${N} cities we rate in ${REGION_NAMES[v.region]}, sorted from S to F by their Nomad Score.`;
     intro = `A tier list of every digital nomad city we rate in ${REGION_NAMES[v.region]}, placed by its <strong>Nomad Score</strong>, our calibrated composite of the 13 things that matter most to remote workers.`;
-    method = `Tiers follow the Nomad Score: S is 9.0+, A is 8.0 to 8.9, B is 7.0 to 7.9, C is 6.0 to 6.9, D is 5.0 to 5.9, F is below 5.0. Tap any city for its full breakdown, or see the <a href="/tier-list">worldwide tier list</a> and the <a href="/best/best-digital-nomad-cities-in-${REGION_SLUG[v.region]}">${REGION_NAMES[v.region].replace(/^the /, '')} ranking</a>.`;
+    method = `Tiers follow the Nomad Score: S is 9.0+, A is 8.0 to 8.9, B is 7.0 to 7.9, C is 6.0 to 6.9, D is 5.0 to 5.9, F is below 5.0. Tap any city for its full breakdown, or see the <a href="/tier-list">worldwide tier list</a> and the <a href="/best/best-digital-nomad-cities-in-${v.region === 'middleeast' ? 'the-middle-east' : REGION_SLUG[v.region]}">${REGION_NAMES[v.region].replace(/^the /, '')} ranking</a>.`;
   } else if (v.type === 'country') {
     sub = `The ${N} cities we rate in ${v.country}, sorted from S to F by their Nomad Score.`;
     intro = `A tier list of every digital nomad city we rate in ${v.country}, placed by its <strong>Nomad Score</strong>, our calibrated composite of the 13 things that matter most to remote workers.`;

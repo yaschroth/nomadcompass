@@ -11,6 +11,10 @@
 (function() {
   'use strict';
 
+  // Fail-safe: some pages load auth.js without supabase-config.js. Guarantee getSupabase exists
+  // so those pages fall back to local auth instead of throwing "getSupabase is not defined".
+  if (typeof window.getSupabase !== 'function') { window.getSupabase = function () { return null; }; }
+
   // ============================================
   // AUTH STATE
   // ============================================

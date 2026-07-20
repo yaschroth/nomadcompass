@@ -3855,6 +3855,8 @@ const CITIES = [
       culture: 7,
       cleanliness: 5,
       airquality: 6},
+    lat: 9.9312,
+    lng: 76.2673,
     timezone: 5.5
   },
   {
@@ -3906,6 +3908,8 @@ const CITIES = [
       culture: 7,
       cleanliness: 4,
       airquality: 4},
+    lat: 18.5204,
+    lng: 73.8567,
     timezone: 5.5
   },
   {
@@ -4038,6 +4042,8 @@ const CITIES = [
       culture: 9,
       cleanliness: 4,
       airquality: 3},
+    lat: 26.9124,
+    lng: 75.7873,
     timezone: 5.5
   },
   {
@@ -4224,6 +4230,8 @@ const CITIES = [
       culture: 5,
       cleanliness: 4,
       airquality: 7},
+    lat: 5.9749,
+    lng: 80.4294,
     timezone: 5.5
   },
   {
@@ -5385,6 +5393,8 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 7},
+    lat: -34.9285,
+    lng: 138.6007,
     timezone: 9.5
   },
   {
