@@ -11095,6 +11095,9 @@ const CITIES = [
     lng: 166.458,
     timezone: 11
   },
+  {id:"galle",climateType:"Tropical",name:"Galle",country:"Sri Lanka",flag:"🇱🇰",tagline:"A Dutch-colonial fort town on Sri Lanka's south coast, where ramparts meet surf and slow living.",image:"/images/cities/galle-card.webp",scores:{climate:8,cost:7,wifi:6,nightlife:4,nature:8,safety:7,food:7,community:5,english:7,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:1200,lat:6.0535,lng:80.221,timezone:5.5},
+  {id:"almaty",climateType:"Continental",name:"Almaty",country:"Kazakhstan",flag:"🇰🇿",tagline:"Kazakhstan's leafy former capital, where snow-capped mountains rise straight out of a fast-modernising city.",image:"/images/cities/almaty-card.webp",scores:{climate:5,cost:6,wifi:8,nightlife:6,nature:9,safety:7,food:7,community:5,english:4,visa:6,culture:7,cleanliness:6,airquality:4},costPerMonth:1400,lat:43.222,lng:76.8512,timezone:5},
+  {id:"rishikesh",climateType:"Subtropical",name:"Rishikesh",country:"India",flag:"🇮🇳",tagline:"The Himalayan foothills' yoga capital on the Ganges, all ashrams, rapids, and mountain calm.",image:"/images/cities/rishikesh-card.webp",scores:{climate:7,cost:8,wifi:5,nightlife:2,nature:9,safety:7,food:6,community:6,english:6,visa:5,culture:9,cleanliness:5,airquality:6},costPerMonth:900,lat:30.0869,lng:78.2676,timezone:5.5},
 ];
 
 /**

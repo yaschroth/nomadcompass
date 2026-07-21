@@ -87,6 +87,12 @@ for (const c of CITIES) {
   else if (/<section class="container city-seo-explore"/.test(html)) {
     html = html.replace(/(\s*)<section class="container city-seo-explore"/, `\n${block}$1<section class="container city-seo-explore"`);
     added++;
+  }
+  // New-city base pages have no city-seo-explore block; fall back to inserting before the
+  // "related cities" carousel so brand-new cities still get the static Similar Vibe block.
+  else if (/<section class="related-section"/.test(html)) {
+    html = html.replace(/(\s*)<section class="related-section"/, `\n${block}$1<section class="related-section"`);
+    added++;
   } else skipped++;
 
   // 2) disambiguate the geographic carousel's subtitle

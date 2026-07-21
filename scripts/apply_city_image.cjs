@@ -54,7 +54,7 @@ const esc = (s) => String(s == null ? '' : s).replace(/[ \t]*(?:&mdash;|&#8212;|
     const absHero = 'https://thenomadhq.com/images/cities/' + slug + '.webp';
     const alt = esc(j.alt || (j.city + ' cityscape'));
 
-    const heroRe = /<img decoding="async"[^>]*class="city-hero-image">/;
+    const heroRe = /<img[^>]*class="city-hero-image">/;
     if (!heroRe.test(s)) { console.error('NO HERO IMG:', slug); fail++; continue; }
     s = s.replace(heroRe, () => `<img decoding="async" fetchpriority="high" width="${hInfo.width}" height="${hInfo.height}" src="${heroSrc}" alt="${alt}" class="city-hero-image">`);
     s = s.replace(/(<meta property="og:image" content=")[^"]*(">)/, (_, a, b) => a + absHero + b);
