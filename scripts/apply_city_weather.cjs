@@ -13,6 +13,7 @@ const CLIMATE = require(path.join(ROOT, 'assets', 'city-climate.js'));
 const m = {};
 new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';module.exports=CITIES')(m);
 const NAME = {}; m.exports.forEach((c) => { if (c && c.id) NAME[c.id] = c.name; });
+const COORD = {}; m.exports.forEach((c) => { if (c && c.id && c.lat != null && c.lng != null) COORD[c.id] = { lat: c.lat, lng: c.lng }; });
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const SLUG = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
@@ -73,6 +74,16 @@ function buildSection(id) {
     `<p class="cw-cta">Chasing good weather? See <a href="/best-weather?month=${SLUG[best[0]]}">other cities that are warm in ${MON[best[0]]}</a>, or <a href="/route">plan a multi-city route</a> around the seasons. Staying a while in ${name}? Check <a href="/visa">visa options</a>, your <a href="/timezones">time-zone overlap</a> and <a href="/geoarbitrage">how far your budget stretches</a>, or find it on <a href="/map">the world map</a>.</p>`;
   const legend = `<div class="cw-legend"><span><span class="sw" style="background:#4fae7e"></span>Daily high &amp; low (&deg;C)</span><span><span class="sw" style="background:#7bb0e0"></span>Rainfall (mm/month)</span><span><span class="sw" style="background:rgba(47,125,90,.4)"></span>Best months to visit</span></div>`;
 
+  const co = COORD[id];
+  const live = co
+    ? `<div class="cw-live" data-lat="${co.lat}" data-lng="${co.lng}" hidden>
+          <span class="cw-live-eyebrow">Right now</span>
+          <span class="cw-live-row"></span>
+        </div>
+        `
+    : '';
+  const liveScript = co ? '\n        <script src="/scripts/city-live-conditions.js" defer></script>' : '';
+
   return '<!-- cw-start -->\n' +
     `    <section class="weather-section" id="weather">
       <div class="container">
@@ -80,11 +91,11 @@ function buildSection(id) {
           <h2>Weather in ${name}</h2>
           <p>Monthly averages from 2019-2023 (Open-Meteo), and the best time to visit</p>
         </div>
-        <div class="cw-chart"><div class="cw-cols">
+        ${live}<div class="cw-chart"><div class="cw-cols">
           ${cols.join('\n          ')}
         </div>${legend}</div>
         ${summary}
-        <p class="cw-note">Historical monthly averages, not a forecast. Source: Open-Meteo.</p>
+        <p class="cw-note">Historical monthly averages, not a forecast. Source: Open-Meteo.</p>${liveScript}
       </div>
     </section>\n` +
     '    <!-- cw-end -->';
