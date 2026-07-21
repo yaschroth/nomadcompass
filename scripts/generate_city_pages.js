@@ -27188,8 +27188,8 @@ function generateCityPage(city) {
             </div>
           </div>
           <div class="score-description">
-            <h2>${escapeHtml(content.score_title)}</h2>
-            <p>${escapeHtml(content.score_description)}</p>
+            <h2>Setting Up as a Nomad in ${escapeHtml(city.name)}</h2>
+            <p>${escapeHtml(city.tagline || content.score_description)}</p>
           </div>
         </div>
       </div>
