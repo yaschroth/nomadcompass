@@ -53,9 +53,9 @@ function introParagraph(c, f, h) {
   const variants = [
     () => `For remote workers, ${c.name} leans on ${t1} and ${t2}${cost ? `, with a typical budget near ${cost} a month` : ''}.${weak ? ` The main trade-off is ${weak}.` : ''}`,
     () => `${cost ? `Plan on roughly ${cost} a month. ` : ''}Its strengths are ${t1} and ${t2}${weak ? `, while ${weak} is where it scores lower` : ` and ${t3}`}.`,
-    () => `A ${clim || 'distinctive'} climate and strong ${t1} make ${c.name} an easy base${cost ? `, and at about ${cost} a month it fits a range of budgets` : ''}.${weak ? ` Keep ${weak} in mind.` : ''}`,
+    () => `A ${clim || 'distinctive'} climate and strong ${t1 === 'climate' ? t2 : t1} make ${c.name} an easy base${cost ? `, and at about ${cost} a month it fits a range of budgets` : ''}.${weak ? ` Keep ${weak} in mind.` : ''}`,
     () => `What pulls nomads here is ${t1}, backed by ${t2} and ${t3}.${cost ? ` Budget around ${cost} a month.` : ''}${weak ? ` ${cap(weak)} is the weak spot.` : ''}`,
-    () => `${c.name} pairs ${t1} with ${t2}${clim ? ` and a ${clim} climate` : ''}${cost ? `, all for about ${cost} a month` : ''}.${weak ? ` If anything, ${weak} lags.` : ''}`,
+    () => `${c.name} pairs ${t1} with ${t2}${clim && t1 !== 'climate' && t2 !== 'climate' ? ` and a ${clim} climate` : ''}${cost ? `, all for about ${cost} a month` : ''}.${weak ? ` If anything, ${weak} lags.` : ''}`,
     () => `${cost ? `Expect ${cost} a month here. ` : ''}${cap(t1)} and ${t2} are the standout strengths${weak ? `, with ${weak} the main caveat` : ''}.`,
   ];
   const tagline = c.tagline ? esc(c.tagline).replace(/\s*$/, '') : '';
