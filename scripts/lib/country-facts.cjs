@@ -64,6 +64,7 @@ const FACTS = {
   Jordan: { cur: 'Dinar (JD, JOD)', lang: 'Arabic', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: '10%', ride: 'Uber, Careem', emg: '911' },
   Kazakhstan: { cur: 'Tenge (₸, KZT)', lang: 'Kazakh, Russian', volt: '220V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'Yandex Go, inDrive', emg: '112' },
   Kenya: { cur: 'Shilling (KSh, KES)', lang: 'Swahili, English', volt: '240V / 50Hz', water: 'Bottled or filtered', tip: '10% appreciated', ride: 'Uber, Bolt, Little', emg: '999 / 112' },
+  Zambia: { cur: 'Kwacha (K, ZMW)', lang: 'English', volt: '230V / 50Hz', water: 'Bottled recommended', tip: '10% often added', ride: 'Ulendo, local taxis', emg: '999 / 112' },
   Kosovo: { cur: 'Euro (€, EUR)', lang: 'Albanian, Serbian', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'Local taxis', emg: '112' },
   Kuwait: { cur: 'Dinar (KD, KWD)', lang: 'Arabic', volt: '240V / 50Hz', water: 'Safe (desalinated); many prefer bottled', tip: '10-15%, often added', ride: 'Careem, Uber', emg: '112' },
   Kyrgyzstan: { cur: 'Som (KGS)', lang: 'Kyrgyz, Russian', volt: '220V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'Yandex Go, inDrive', emg: '112' },
