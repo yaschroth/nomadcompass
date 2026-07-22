@@ -34,6 +34,7 @@ const FACTS = {
   China: { cur: 'Yuan (¥, CNY)', lang: 'Mandarin', volt: '220V / 50Hz', water: 'Bottled or boiled', tip: 'Not customary', ride: 'DiDi', emg: '110' },
   Colombia: { cur: 'Peso ($, COP)', lang: 'Spanish', volt: '110V / 60Hz', water: 'Safe in major cities; bottled elsewhere', tip: '10%, often added', ride: 'Uber, DiDi, Cabify', emg: '123' },
   'Costa Rica': { cur: 'Colon (₡, CRC)', lang: 'Spanish', volt: '120V / 60Hz', water: 'Safe in most areas', tip: '10% often added', ride: 'Uber, DiDi', emg: '911' },
+  Nicaragua: { cur: 'Cordoba (C$, NIO)', lang: 'Spanish', volt: '120V / 60Hz', water: 'Bottled recommended', tip: '10%, often added', ride: 'InDrive, local taxis', emg: '118' },
   Croatia: { cur: 'Euro (€, EUR)', lang: 'Croatian', ...EU, tip: 'Round up or 10%', ride: 'Uber, Bolt' },
   Cyprus: { cur: 'Euro (€, EUR)', lang: 'Greek, English', ...EU, tip: 'Round up or 10%', ride: 'Bolt, nEXT' },
   'Czech Republic': { cur: 'Koruna (Kč, CZK)', lang: 'Czech', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Round up or 10%', ride: 'Uber, Bolt', emg: '112' },
