@@ -27123,7 +27123,7 @@ function generateCityPage(city) {
     })();
   </script>
 
-  <main class="main-content">
+  <main>
 
     <!-- Hero Section -->
     <section class="city-hero">

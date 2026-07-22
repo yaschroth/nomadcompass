@@ -31,7 +31,11 @@ const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.html') && f !== 'in
 function fixBrand(s) {
   return s
     .replace(/(nav-logo-nomad">)Nomad(<\/span><span class="nav-logo-accent">)Compass/g, '$1The Nomad$2HQ')
-    .replace(/(footer-logo-nomad">)Nomad(<\/span><span class="footer-logo-accent">)Compass/g, '$1The Nomad$2HQ');
+    .replace(/(footer-logo-nomad">)Nomad(<\/span><span class="footer-logo-accent">)Compass/g, '$1The Nomad$2HQ')
+    // The base template wraps the page in <main class="main-content"> whose
+    // padding-top (nav height) pushes the full-bleed hero down below the fold.
+    // Enhanced pages use a plain <main> so the hero sits under the transparent nav.
+    .replace(/<main class="main-content">/, '<main>');
 }
 
 let fixed = 0, skipAlready = 0, skipEnhanced = 0, noMatch = 0, brandOnly = 0;
