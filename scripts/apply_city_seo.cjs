@@ -110,7 +110,7 @@ for (const file of files) {
 
   // JSON-LD (before </head>)
   const faq = faqFor(c);
-  if (!/application\/ld\+json/.test(html)) {
+  if (!/"@type": "BreadcrumbList"/.test(html)) {
     const breadcrumb = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
       { '@type': 'ListItem', position: 2, name: 'Cities', item: `${SITE}/cities` },
