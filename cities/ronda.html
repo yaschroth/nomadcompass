@@ -376,6 +376,95 @@
       </div>
     </section>
     <!-- cw-end -->
+    <section class="neighborhoods-section" id="neighborhoods">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Neighborhoods in Ronda</h2>
+          <p>Where to base yourself for the perfect nomad experience</p>
+        </div>
+        <div class="neighborhoods-layout">
+          <div class="neighborhoods-map-container">
+            <div id="neighborhoodsMap" class="neighborhoods-map"></div>
+          </div>
+          <div class="neighborhoods-list">
+            <article class="neighborhood-card" data-index="0" data-lat="36.7415" data-lng="-5.1655">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">La Ciudad (Old Town)</h3>
+                  <span class="neighborhood-price">$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Historic, atmospheric</span>
+              </div>
+              <p class="neighborhood-tagline">Historic Moorish quarter atop the gorge</p>
+              <p class="neighborhood-description">The walled Moorish old town south of the Puente Nuevo, with cobbled lanes, whitewashed houses, palaces and the Arab baths. Quiet and atmospheric, packed with monuments but limited nightlife, and busy with day-trippers around the main sights.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> History lovers and photographers wanting monuments and gorge views at their doorstep
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Stunning gorge and bridge views</li><li>Rich Moorish heritage sites</li><li>Quiet and picturesque streets</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Crowded with day-trippers</li><li>Steep cobbled hills</li><li>Few everyday amenities</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="1" data-lat="36.7461" data-lng="-5.165">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Mercadillo (Centro)</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Bustling, central</span>
+              </div>
+              <p class="neighborhood-tagline">Lively commercial heart north of bridge</p>
+              <p class="neighborhood-description">The main modern centre north of the Puente Nuevo, home to Plaza de Espana, the bullring, shops, banks and most restaurants. This is where daily life happens, with the widest choice of cafes, supermarkets and services in a walkable grid.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Nomads wanting cafes, services and restaurants all within walking distance
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Best amenities and dining</li><li>Central and walkable</li><li>Close to bus and train links</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Tourist crowds near bullring</li><li>Can be noisy</li><li>Pricier eateries</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="2" data-lat="36.7375" data-lng="-5.164">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Barrio San Francisco</h3>
+                  <span class="neighborhood-price">$</span>
+                </div>
+                <span class="neighborhood-vibe">Local, relaxed</span>
+              </div>
+              <p class="neighborhood-tagline">Traditional neighbourhood below the old town</p>
+              <p class="neighborhood-description">A traditional residential quarter just south of La Ciudad, outside the old city gate. More local and relaxed, with tapas bars, small squares and the old Arab entrance. Prices are lower and it feels lived-in rather than touristy.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Longer stays wanting an authentic residential feel and cheaper tapas
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Authentic local atmosphere</li><li>Affordable tapas bars</li><li>Quieter than the centre</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Fewer tourist services</li><li>Uphill walk to centre</li><li>Limited nightlife</li></ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
 
     <section class="city-guide" id="guide">
       <div class="container">
@@ -1165,6 +1254,41 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
-  <script src="../scripts/city-blog-articles.js"></script>
+  <script src="../scripts/city-blog-articles.js"></script>  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl || typeof L === 'undefined') return;
+      const neighborhoods = [{"name":"La Ciudad (Old Town)","tagline":"Historic Moorish quarter atop the gorge","lat":36.7415,"lng":-5.1655},{"name":"Mercadillo (Centro)","tagline":"Lively commercial heart north of bridge","lat":36.7461,"lng":-5.165},{"name":"Barrio San Francisco","tagline":"Traditional neighbourhood below the old town","lat":36.7375,"lng":-5.164}];
+      if (neighborhoods.length === 0) return;
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+      const map = L.map('neighborhoodsMap', { scrollWheelZoom: false }).setView([avgLat, avgLng], 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }).addTo(map);
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32]
+      });
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) }).addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+      function highlightNeighborhood(index) {
+        markers.forEach((mk, i) => mk.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.classList.toggle('active', i === index));
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.addEventListener('click', () => highlightNeighborhood(i)));
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
 </body>
 </html>

@@ -376,6 +376,95 @@
       </div>
     </section>
     <!-- cw-end -->
+    <section class="neighborhoods-section" id="neighborhoods">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Neighborhoods in Lalibela</h2>
+          <p>Where to base yourself for the perfect nomad experience</p>
+        </div>
+        <div class="neighborhoods-layout">
+          <div class="neighborhoods-map-container">
+            <div id="neighborhoodsMap" class="neighborhoods-map"></div>
+          </div>
+          <div class="neighborhoods-list">
+            <article class="neighborhood-card" data-index="0" data-lat="12.0319" data-lng="39.0453">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Town Centre near the Churches</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Central, historic, compact</span>
+              </div>
+              <p class="neighborhood-tagline">Steps from the rock-hewn churches</p>
+              <p class="neighborhood-description">The compact core of Lalibela sits right beside the UNESCO rock-hewn churches, with the main road, small shops, tour guides and eateries clustered nearby. Staying here puts the famous monolithic churches within a short walk of most guesthouses.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Pilgrims and travellers wanting the rock churches within walking distance
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Walk to rock-hewn churches</li><li>Guides and shops nearby</li><li>Central to town life</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Basic infrastructure</li><li>Limited nightlife or amenities</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="1" data-lat="12.04" data-lng="39.04">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Ridge-top Lodges above Town</h3>
+                  <span class="neighborhood-price">$$$</span>
+                </div>
+                <span class="neighborhood-vibe">Scenic, tranquil, elevated</span>
+              </div>
+              <p class="neighborhood-tagline">Panoramic mountain-view lodges and hotels</p>
+              <p class="neighborhood-description">Along the higher ground surrounding Lalibela sit several lodges and hotels perched to capture sweeping views of the Lasta mountains and highland scenery. These elevated stays offer quiet, cooler air and dramatic sunrises a short drive from the church complex.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Visitors seeking mountain views, quiet lodges and highland scenery
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Dramatic mountain views</li><li>Quiet and cool</li><li>Comfortable lodges</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Short drive to churches</li><li>Fewer dining choices</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="2" data-lat="12.029" data-lng="39.047">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Local Market Quarter</h3>
+                  <span class="neighborhood-price">$</span>
+                </div>
+                <span class="neighborhood-vibe">Authentic, lively, local</span>
+              </div>
+              <p class="neighborhood-tagline">Traditional Saturday market and daily trade</p>
+              <p class="neighborhood-description">The area around Lalibela's open-air market, busiest on the Saturday market day when highland farmers gather to trade grain, livestock and crafts. This everyday-life quarter offers a grounded look at local commerce and inexpensive food a short walk from the centre.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Budget travellers wanting local markets, street food and everyday culture
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Vibrant Saturday market</li><li>Cheap local food</li><li>Authentic daily life</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Crowded on market day</li><li>Very basic facilities</li></ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
 
     <section class="city-guide" id="guide">
       <div class="container">
@@ -1161,6 +1250,41 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
-  <script src="../scripts/city-blog-articles.js"></script>
+  <script src="../scripts/city-blog-articles.js"></script>  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl || typeof L === 'undefined') return;
+      const neighborhoods = [{"name":"Town Centre near the Churches","tagline":"Steps from the rock-hewn churches","lat":12.0319,"lng":39.0453},{"name":"Ridge-top Lodges above Town","tagline":"Panoramic mountain-view lodges and hotels","lat":12.04,"lng":39.04},{"name":"Local Market Quarter","tagline":"Traditional Saturday market and daily trade","lat":12.029,"lng":39.047}];
+      if (neighborhoods.length === 0) return;
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+      const map = L.map('neighborhoodsMap', { scrollWheelZoom: false }).setView([avgLat, avgLng], 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }).addTo(map);
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32]
+      });
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) }).addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+      function highlightNeighborhood(index) {
+        markers.forEach((mk, i) => mk.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.classList.toggle('active', i === index));
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.addEventListener('click', () => highlightNeighborhood(i)));
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
 </body>
 </html>

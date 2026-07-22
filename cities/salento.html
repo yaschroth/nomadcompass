@@ -376,6 +376,95 @@
       </div>
     </section>
     <!-- cw-end -->
+    <section class="neighborhoods-section" id="neighborhoods">
+      <div class="container">
+        <div class="section-header">
+          <h2>Best Neighborhoods in Salento</h2>
+          <p>Where to base yourself for the perfect nomad experience</p>
+        </div>
+        <div class="neighborhoods-layout">
+          <div class="neighborhoods-map-container">
+            <div id="neighborhoodsMap" class="neighborhoods-map"></div>
+          </div>
+          <div class="neighborhoods-list">
+            <article class="neighborhood-card" data-index="0" data-lat="4.6378" data-lng="-75.5706">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Town Centre (Plaza Bolivar)</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Colourful, lively</span>
+              </div>
+              <p class="neighborhood-tagline">Colourful main square and heart of town</p>
+              <p class="neighborhood-description">The central plaza around Bolivar square, ringed by colourful balconied houses, restaurants and the church. This is the social hub with the most cafes, trout eateries and craft shops, busy with weekend visitors but compact and easy to explore on foot.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> First-time visitors wanting cafes, restaurants and the classic plaza vibe
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Central to everything</li><li>Most dining and cafes</li><li>Vibrant and photogenic</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Busy on weekends</li><li>Can be noisy at night</li><li>Pricier for tourists</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="1" data-lat="4.6392" data-lng="-75.5709">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Calle Real</h3>
+                  <span class="neighborhood-price">$$</span>
+                </div>
+                <span class="neighborhood-vibe">Touristic, artisan</span>
+              </div>
+              <p class="neighborhood-tagline">Iconic craft street up to viewpoint</p>
+              <p class="neighborhood-description">The famous pedestrian street of brightly painted houses climbing north from the plaza to the Mirador viewpoint stairs. Lined with artisan stalls, coffee shops and souvenir stores, it is the most touristic strip but central and full of local colour and character.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Travellers wanting cafes, crafts and easy walks to viewpoints
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Steps to the Mirador</li><li>Many coffee and craft shops</li><li>Walkable and central</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Very touristy</li><li>Crowded daytime</li><li>Uphill climb</li></ul>
+                </div>
+              </div>
+            </article>
+            <article class="neighborhood-card" data-index="2" data-lat="4.642" data-lng="-75.564">
+              <div class="neighborhood-card-header">
+                <div class="neighborhood-card-title">
+                  <h3 class="neighborhood-name">Outskirts toward Cocora</h3>
+                  <span class="neighborhood-price">$</span>
+                </div>
+                <span class="neighborhood-vibe">Rural, tranquil</span>
+              </div>
+              <p class="neighborhood-tagline">Rural lanes near the palm valley</p>
+              <p class="neighborhood-description">The quieter rural fringes on the northeastern road toward Cocora Valley, with fincas, guesthouses and coffee farms among green hills. Calm and scenic with cooler air and nature at hand, though you need jeeps or a walk to reach town services.</p>
+              <div class="neighborhood-best-for">
+                <strong>Best for:</strong> Nature lovers and remote workers wanting quiet fincas and green views
+              </div>
+              <div class="neighborhood-pros-cons">
+                <div class="neighborhood-pros">
+                  <span class="pros-label">✓ Pros</span>
+                  <ul><li>Peaceful natural setting</li><li>Close to Cocora hikes</li><li>Coffee farm stays</li></ul>
+                </div>
+                <div class="neighborhood-cons">
+                  <span class="cons-label">✗ Cons</span>
+                  <ul><li>Away from town services</li><li>Need transport for errands</li><li>Limited nightlife</li></ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
 
     <section class="city-guide" id="guide">
       <div class="container">
@@ -1161,6 +1250,41 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
-  <script src="../scripts/city-blog-articles.js"></script>
+  <script src="../scripts/city-blog-articles.js"></script>  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl || typeof L === 'undefined') return;
+      const neighborhoods = [{"name":"Town Centre (Plaza Bolivar)","tagline":"Colourful main square and heart of town","lat":4.6378,"lng":-75.5706},{"name":"Calle Real","tagline":"Iconic craft street up to viewpoint","lat":4.6392,"lng":-75.5709},{"name":"Outskirts toward Cocora","tagline":"Rural lanes near the palm valley","lat":4.642,"lng":-75.564}];
+      if (neighborhoods.length === 0) return;
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+      const map = L.map('neighborhoodsMap', { scrollWheelZoom: false }).setView([avgLat, avgLng], 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }).addTo(map);
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32]
+      });
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) }).addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+      function highlightNeighborhood(index) {
+        markers.forEach((mk, i) => mk.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.classList.toggle('active', i === index));
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.addEventListener('click', () => highlightNeighborhood(i)));
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
 </body>
 </html>
