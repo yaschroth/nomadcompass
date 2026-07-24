@@ -455,9 +455,9 @@
   background: var(--color-cream);
 }
 
-/* Radar Chart Container */
+/* Radar Chart ("wheel") */
 .radar-chart-container {
-  max-width: 320px;
+  max-width: 380px;
   margin: 0 auto var(--space-8);
   position: relative;
 }
@@ -466,9 +466,6 @@
   position: relative;
   width: 100%;
   padding-bottom: 100%;
-  background: radial-gradient(circle, var(--color-white) 0%, var(--color-sand) 60%, var(--color-sand-dark) 100%);
-  border-radius: 50%;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .radar-chart {
@@ -476,63 +473,100 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 85%;
-  height: 85%;
+  width: 88%;
+  height: 88%;
+  overflow: visible;
+  animation: radarIn 0.6s ease-out both;
 }
 
-/* Radar chart web lines */
+@keyframes radarIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.94); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Grid web + spokes */
 .radar-web {
   fill: none;
   stroke: var(--color-sand-dark);
   stroke-width: 1;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 .radar-web-outer {
   stroke-width: 1.5;
-  stroke: var(--color-stone);
-  opacity: 0.5;
+  stroke: #cbd5e1;
+  opacity: 0.9;
 }
 
-/* Radar chart data fill */
+/* Data shape (soft, on-brand terracotta) */
 .radar-fill {
-  fill: rgba(192, 57, 43, 0.25);
+  fill: rgba(192, 57, 43, 0.1);
   stroke: var(--color-terracotta);
-  stroke-width: 2.5;
+  stroke-width: 2;
+  stroke-linejoin: round;
 }
 
-/* Radar chart data points */
+/* Vertex points, colored by score tier to match the category tiles */
 .radar-point {
   fill: var(--color-terracotta);
   stroke: var(--color-white);
   stroke-width: 2;
   cursor: pointer;
-  transition: r 0.2s ease;
+  transition: r 0.15s ease;
 }
+
+.radar-point.radar-tier-high { fill: #10b981; }
+.radar-point.radar-tier-mid  { fill: #f59e0b; }
+.radar-point.radar-tier-low  { fill: #ef4444; }
 
 .radar-point:hover {
   r: 8;
 }
 
-/* Radar chart labels */
+/* Labels + score value */
 .radar-label {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 11px;
-  fill: var(--color-charcoal);
+  fill: var(--color-ink);
   dominant-baseline: middle;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .radar-label-value {
+  font-family: var(--font-body);
   font-size: 10px;
   fill: var(--color-stone);
-  font-weight: var(--font-medium);
+  dominant-baseline: middle;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hover tooltip */
+.radar-tooltip {
+  position: absolute;
+  z-index: 5;
+  padding: 0.28rem 0.55rem;
+  background: var(--color-ink);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transform: translate(-50%, -135%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.radar-tooltip.visible {
+  opacity: 1;
 }
 
 /* Responsive radar */
 @media (max-width: 640px) {
   .radar-chart-container {
-    max-width: 320px;
+    max-width: 300px;
   }
 
   .radar-label {

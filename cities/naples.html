@@ -1080,7 +1080,7 @@
           const angle = startAngle + i * angleStep;
           const x = cx + r * Math.cos(angle);
           const y = cy + r * Math.sin(angle);
-          webHTML += `<circle cx="${x}" cy="${y}" r="6" class="radar-point" data-category="${categories[i]}" data-score="${score}" />`;
+          webHTML += `<circle cx="${x}" cy="${y}" r="6" class="radar-point radar-tier-${score>=8?'high':score>=5?'mid':'low'}" data-category="${categories[i]}" data-score="${Math.round(score)}" />`;
         });
 
         const labelR = maxR + 30;
@@ -1093,9 +1093,28 @@
           if (x < cx - 10) anchor = 'end';
           else if (x > cx + 10) anchor = 'start';
           webHTML += `<text x="${x}" y="${y}" class="radar-label" text-anchor="${anchor}">${cat.name}</text>`;
+          webHTML += `<text x="${x}" y="${y + 13}" class="radar-label-value" text-anchor="${anchor}">${Math.round(scores[i])}/10</text>`;
         });
 
         svg.innerHTML = webHTML;
+
+        const wrap = svg.closest('.radar-chart-wrapper') || svg.parentElement;
+        if (wrap) {
+          let tip = wrap.querySelector('.radar-tooltip');
+          if (!tip) { tip = document.createElement('div'); tip.className = 'radar-tooltip'; wrap.appendChild(tip); }
+          svg.querySelectorAll('.radar-point').forEach(pt => {
+            pt.addEventListener('mouseenter', () => {
+              const key = pt.getAttribute('data-category');
+              const meta = (typeof CATEGORIES !== 'undefined' && CATEGORIES[key]) ? CATEGORIES[key] : null;
+              tip.textContent = (meta ? meta.name : key) + ' ' + pt.getAttribute('data-score') + '/10';
+              const pr = pt.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+              tip.style.left = (pr.left + pr.width / 2 - wr.left) + 'px';
+              tip.style.top = (pr.top - wr.top) + 'px';
+              tip.classList.add('visible');
+            });
+            pt.addEventListener('mouseleave', () => tip.classList.remove('visible'));
+          });
+        }
       }
 
       function renderCategories(city, aggregates) {
