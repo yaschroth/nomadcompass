@@ -27550,7 +27550,7 @@ function generateCityPage(city) {
           const netVotesText = netVotes > 0 ? \`+\${netVotes}\` : \`\${netVotes}\`;
           const netVotesClass = netVotes > 0 ? 'positive' : netVotes < 0 ? 'negative' : '';
 
-          return \`<div class="category-item">
+          return \`<div class="category-item" data-tier="\${displayScore>=8?'high':displayScore>=5?'mid':'low'}">
             <div class="category-header">
               <div class="category-name"><span class="category-icon">\${cat.icon}</span><span>\${cat.name}</span></div>
               <div class="category-score">\${displayScore}/10 \${adjustmentText}</div>
