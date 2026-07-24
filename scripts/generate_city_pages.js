@@ -26865,7 +26865,7 @@ function generateDefaultContent(city) {
   return {
     hero_image: city.image || `https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1600&h=900&fit=crop`,
     hero_alt: `${city.name} cityscape`,
-    monthly_budget: `${currency}${costPerMonth.toLocaleString()}`,
+    monthly_budget: `$${costPerMonth.toLocaleString('en-US')}`,
     wifi_speed: `${Math.round(city.scores.wifi * 10)} Mbps`,
     nomad_count: city.scores.community >= 7 ? "5,000+" : city.scores.community >= 5 ? "2,000+" : "500+",
     score_title: getScoreTitle(city),
