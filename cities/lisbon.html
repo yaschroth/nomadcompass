@@ -285,6 +285,22 @@
       </div>
     </section>
 
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
 
     <!-- Score Section -->
     <section class="score-section">
@@ -338,7 +354,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -526,7 +542,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Lisbon</h2>
+<h2 id="cost-of-living">Cost of Living in Lisbon</h2>
 <!-- cost-start -->
       <div class="cost-box" data-cost="v1">
         <div class="cost-head">
@@ -568,7 +584,7 @@
 <h2>Getting Around</h2>
 <p>Central Lisbon is walkable, though the hills are steep and the cobbled sidewalks (cal&ccedil;ada) are hard on the knees and slippery when wet. Four metro lines, an extensive Carris bus network, historic trams, and suburban trains cover the rest, all payable with a rechargeable Navegante card. From Lisbon Airport (LIS), the red metro line runs directly from the Aeroporto station into the city in about 20-30 minutes with one transfer, which is by far the cheapest way in. Ride-hailing (Uber, Bolt) is cheap and widely used for late nights or luggage runs.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Citizens of the US, UK, Canada, Australia, and around 60 other visa-exempt countries can stay in the Schengen Area, including Portugal, for up to 90 days within any rolling 180-day period without a visa. Those days are shared across all Schengen countries, not counted per country.</p>
 <p>To stay longer, the main route for remote workers is the <strong>D8 digital nomad visa</strong>. As of 2026 it requires proof of remote income of at least &euro;3,680 per month (four times the Portuguese minimum wage), plus savings of around &euro;11,040. The D8 leads to a residence permit and can put you on a path toward longer-term residency over several years. You must actually live in Portugal (around 183 days a year) to keep the status. There is also the older D7 for those with passive or stable income. <strong>Rules and thresholds change often, so confirm current requirements with official Portuguese government sources (AIMA) or a qualified immigration lawyer before applying.</strong></p>
 
@@ -599,7 +615,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Lisbon</h2>
+          <h2 id="where-to-stay">Where to Stay in Lisbon</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -667,7 +683,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Lisbon</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -723,7 +739,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Lisbon</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -780,7 +796,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1532,5 +1548,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

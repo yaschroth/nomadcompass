@@ -56,6 +56,69 @@
   pointer-events: none;
 }
 
+/* Sticky in-page section nav (jump links) - sits directly under the fixed main nav */
+.city-toc {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 900;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--color-sand-dark);
+}
+
+.city-toc-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: var(--space-1);
+  padding: 0 var(--space-6);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.city-toc-inner::-webkit-scrollbar {
+  display: none;
+}
+
+/* ID selector so these beat the global a:not(.btn):not(.nav-link) link color */
+#cityToc a {
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-stone);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: var(--space-4) var(--space-3);
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+#cityToc a:hover {
+  color: var(--color-ink);
+}
+
+#cityToc a.active {
+  color: var(--color-terracotta);
+  border-bottom-color: var(--color-terracotta);
+}
+
+/* Offset jump targets so headings clear the fixed nav + sticky TOC bar */
+#scores, #facts, #weather, #neighborhoods, #cost-of-living,
+#coworking, #visas, #where-to-stay, #where-to-eat, #reviews, #faq {
+  scroll-margin-top: calc(var(--nav-height) + 60px);
+}
+
+@media (max-width: 640px) {
+  .city-toc-inner {
+    padding: 0 var(--space-3);
+  }
+  #cityToc a {
+    padding: var(--space-3) var(--space-3);
+  }
+}
+
 .city-hero-overlay {
   position: absolute;
   inset: 0;
