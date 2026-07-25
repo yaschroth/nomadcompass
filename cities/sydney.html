@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -526,7 +543,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Sydney</h2>
+<h2 id="cost-of-living">Cost of Living in Sydney</h2>
 <p>Sydney is one of the most expensive cities in the region, and rent is where most of your budget goes. All prices below are in Australian dollars (AUD) with rough US dollar equivalents at about 0.69 USD per AUD (mid 2026). Rates move, so treat the USD figures as a guide.</p>
 <p>Here is a realistic monthly breakdown for a single remote worker:</p>
 <ul>
@@ -548,7 +565,7 @@
 <p>Sydney runs on the <strong>Opal</strong> system, covering trains, metro, buses, light rail, and ferries. You can tap on with a contactless card or phone, no separate Opal card needed. Fares are distance-based with a daily cap (about AUD 19.30 on weekdays, lower on weekends) and a weekly cap of AUD 50, which makes heavy use predictable.</p>
 <p>The central suburbs are walkable and hilly, and the ferry network is a genuine pleasure for commuting. Getting to and from the airport is easy: the Airport Link train connects both terminals directly to the CBD in about 15 minutes, though a station access fee of roughly AUD 17.92 is added on top of the normal fare. Taxis and rideshare are available but cost far more.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Australia has <strong>no dedicated digital nomad visa</strong>. Most remote workers arrive on a tourist-style entry. US, Canadian, Japanese, Singaporean, and several other passport holders use the <strong>ETA (subclass 601)</strong>, while EU and UK citizens use the <strong>eVisitor (subclass 651)</strong>. Both are typically valid for up to 12 months but limit each individual stay to a maximum of three months. The <strong>Visitor visa (subclass 600)</strong> can grant three, six, or twelve months per stay at the officer's discretion.</p>
 <p>Limited remote work for an overseas employer is generally tolerated on tourist streams as long as tourism stays your main purpose and you do not work for an Australian business. If you are under 35 and eligible, a <strong>Working Holiday visa (417/462)</strong> allows longer stays and local work. Visa rules change often, so confirm your specific case with the official Department of Home Affairs website before you book.</p>
 
@@ -577,7 +594,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Sydney</h2>
+          <h2 id="where-to-stay">Where to Stay in Sydney</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -641,7 +658,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Sydney</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -695,7 +712,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Sydney</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -746,7 +763,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1495,5 +1512,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

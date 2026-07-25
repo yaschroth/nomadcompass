@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -526,7 +543,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Querétaro</h2>
+<h2 id="cost-of-living">Cost of Living in Querétaro</h2>
 <p>Querétaro sits at a comfortable middle ground: more affordable than Mexico City or San Miguel de Allende, but not as cheap as smaller provincial towns. Expect to spend between <strong>$1,100 and $1,800 USD per month</strong> as a solo nomad, depending on your housing choice.</p>
 <ul>
 <li><strong>Rent, central neighborhoods (Centro, Cimatario):</strong> 9,000-13,000 MXN/month ($450-650 USD) for a furnished 1BR</li>
@@ -554,7 +571,7 @@
 <p>The main intercity bus terminal (Central de Autobuses) sits about 2 km south of Centro, easily reached by Uber. First-class buses connect Querétaro to Mexico City (about 2.5 hours, 250-350 MXN) and San Miguel de Allende (1 hour, 80-120 MXN) frequently throughout the day.</p>
 <p>Querétaro Intercontinental Airport (QRO) is roughly 32 km northeast of downtown. Uber and taxi kiosks serve the route; budget around 250-400 MXN ($12-20 USD) each way.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Most nationalities, including US, Canadian, UK, EU, and Australian passport holders, enter Mexico visa-free for tourism. On arrival you are typically granted up to 180 days on a tourist permit (FMM), though border agents can issue fewer days, so ask clearly if you need the full 180. There is no official dedicated digital nomad visa in Mexico as of 2025.</p>
 <p>For stays beyond 180 days or if you want a more stable legal status, the <strong>Temporary Resident Visa</strong> is the main route. It requires proof of consistent monthly income of approximately $3,700 USD or savings of around $73,000 USD over the prior 12 months. Apply at a Mexican consulate in your home country before arriving. The visa is initially issued for one year and can be renewed up to four times.</p>
 <p>Extending a tourist permit inside Mexico is not officially possible; most long-term visitors do a border run or apply for residency. Always confirm current requirements with the Instituto Nacional de Migración or a qualified immigration attorney, as thresholds and processes change.</p>
@@ -595,7 +612,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Querétaro</h2>
+          <h2 id="where-to-stay">Where to Stay in Querétaro</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -657,7 +674,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Querétaro</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -711,7 +728,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Querétaro</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -762,7 +779,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1510,5 +1527,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

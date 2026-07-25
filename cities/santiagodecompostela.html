@@ -279,6 +279,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -330,7 +347,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -492,7 +509,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Santiago de Compostela</h2>
+<h2 id="cost-of-living">Cost of Living in Santiago de Compostela</h2>
 <p>Santiago de Compostela is one of the more affordable cities in western Europe, and a nomad can live comfortably on roughly $1,000 to $1,400 a month. As a compact university city, it keeps rents modest, and the walkable centre means you rarely need a car. Groceries at the covered Mercado de Abastos are excellent value, and set lunches with local wine cost little. Galician seafood and Albarino are treats rather than daily splurges. The figures below are editorial estimates and shift with season, flat size and how much you eat out, but they give a realistic starting picture for planning your stay.</p>
 <ul>
 <li>Rent for a one-bedroom flat near the centre: roughly $650 to $900 a month.</li>
@@ -507,7 +524,7 @@
 <h2>Getting Around Santiago de Compostela</h2>
 <p>Santiago is wonderfully walkable, and most nomads never need more than their own two feet. The UNESCO old town is pedestrianised, its granite streets closed to most traffic, so wandering between the cathedral, cafes and markets takes minutes. City buses cover the wider Ensanche, residential outskirts and the university campuses cheaply and reliably. The railway station links you to A Coruna, Vigo, Ourense and onward to Madrid, while Santiago-Rosalia de Castro Airport, a short bus ride out of town, connects across Spain and to several European cities. Cycling is possible but the frequent rain and hilly, cobbled centre make walking the more practical daily choice.</p>
 
-<h2>Visas for Santiago de Compostela</h2>
+<h2 id="visas">Visas for Santiago de Compostela</h2>
 <p>Santiago de Compostela sits within Spain and the Schengen Area, so entry rules follow national policy rather than anything local. Many visitors from visa-exempt countries can stay up to 90 days in any 180-day period without a visa. For a longer base, Spain offers a digital nomad visa aimed at remote workers employed by or contracting with companies outside the country, letting you live and work legally for an extended period with a route to renewal. Requirements typically cover proof of income, health cover and a clean record. Rules change, so always confirm the current criteria with an official Spanish consulate or immigration source before committing to a move.</p>
 
 <h2>Best Time to Visit Santiago de Compostela</h2>
@@ -532,7 +549,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Santiago de Compostela</h2>
+          <h2 id="where-to-stay">Where to Stay in Santiago de Compostela</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -549,7 +566,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Santiago de Compostela</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -582,7 +599,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Santiago de Compostela</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -619,7 +636,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1369,5 +1386,8 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

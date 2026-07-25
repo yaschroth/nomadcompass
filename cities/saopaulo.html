@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -526,7 +543,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in São Paulo</h2>
+<h2 id="cost-of-living">Cost of Living in São Paulo</h2>
 <p>São Paulo is genuinely affordable if you earn in a hard currency, but the numbers shift fast with Brazil's volatile real. As of mid-2026, one US dollar buys roughly $1. Expect these monthly figures for a single person living comfortably:</p>
 <ul>
   <li><strong>Rent, central (Pinheiros, Vila Madalena, Itaim):</strong> $690-$1,200 (~$615-1,050 USD) for a furnished one-bedroom</li>
@@ -548,7 +565,7 @@
 <p>Walkability varies sharply by neighborhood. Pinheiros, Vila Madalena, and Jardins are pedestrian-friendly; sprawling outer districts are not. Do not walk while staring at your phone, especially at night.</p>
 <p>From <strong>Guarulhos International Airport (GRU)</strong>, the most direct option is the <strong>CPTM Line 13-Jade train</strong> to Luz station, from where you connect to the metro. The trip takes about 60-75 minutes and costs under $2. Uber from the airport to central São Paulo runs $16-$30 depending on traffic and is the most common choice for arrivals with luggage. São Paulo's traffic can be brutal during peak hours, so factor in 90+ minutes by road at bad times.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Citizens of most EU countries, the UK, and many other nationalities enter Brazil visa-free for up to 90 days, with the possibility of one extension of up to 90 more days through the Federal Police inside Brazil, capping at 180 days per 12-month period. <strong>US, Canadian, and Australian citizens</strong> now require an e-Visa (VIVIS) since April 10, 2025, costing around USD $80.90 and processed online before arrival.</p>
 <p>Brazil has a formal <strong>Digital Nomad Visa (VITEM XIV)</strong>: it grants one year of residence, renewable for another year, and requires proof of at least USD $1,500 per month in foreign income or USD $18,000 in savings. Processing takes roughly 15-30 days. As of early 2026, there were reports that the Federal Police was frequently denying simple tourist extension requests, so if you plan to stay beyond 90 days, the nomad visa route is safer.</p>
 <p><strong>Always verify current requirements with the Brazilian consulate or official government immigration portal before traveling.</strong></p>
@@ -587,7 +604,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in São Paulo</h2>
+          <h2 id="where-to-stay">Where to Stay in São Paulo</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -649,7 +666,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in São Paulo</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -703,7 +720,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in São Paulo</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -754,7 +771,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1500,5 +1517,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -532,7 +549,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Dubai</h2>
+<h2 id="cost-of-living">Cost of Living in Dubai</h2>
 <p>Dubai is one of the most expensive cities in the Middle East, though the range is wider than you might expect. Your biggest cost is rent. A one-bedroom apartment in central areas like Downtown, DIFC, or Dubai Marina runs AED 8,000-10,000 (roughly $2,200-2,700) per month. Move to outer neighborhoods like Al Quoz, Deira, or Jumeirah Village Circle and you can find similar apartments for AED 4,500-6,500 ($1,225-1,770).</p>
 <ul>
 <li><strong>Rent (central 1BR):</strong> AED 8,000-10,000/month ($2,200-2,700)</li>
@@ -556,7 +573,7 @@
 <p>Walkability is poor in most areas outside of designated waterfront promenades like JBR and the Dubai Creek area. The heat from May through September makes walking outside for more than a few minutes genuinely miserable. Taxis and Careem (the regional Uber equivalent) are reliable, clean, and affordable by Western standards, typically AED 12-35 for most in-city trips.</p>
 <p>Getting to and from the airport is straightforward. Dubai International (DXB) sits on the Red Line metro and is 20-40 minutes from most central areas by train or taxi. Al Maktoum International (DWP) is further out near Expo City and requires a taxi or bus transfer.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Citizens of around 50 countries receive a visa-free entry stamp on arrival. EU, US, UK, Canadian, and Australian passport holders typically receive 30 or 90 days without a visa, depending on passport. Extensions can be requested twice from inside the UAE, each granting an additional 30 days.</p>
 <p>The UAE Virtual Working Programme (the official digital nomad visa) grants a one-year renewable residence visa for remote workers employed by or running a company outside the UAE. You must show monthly income of at least $3,500. The application fee is approximately $287, with processing taking 2-4 weeks. The visa grants access to banking, housing contracts, and family sponsorship.</p>
 <p>There is no straightforward freelancer visa for people whose clients are inside the UAE without an additional business licence setup. Always confirm current entry and extension rules at the official UAE government portal before booking.</p>
@@ -600,7 +617,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Dubai</h2>
+          <h2 id="where-to-stay">Where to Stay in Dubai</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -662,7 +679,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Dubai</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -716,7 +733,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Dubai</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -767,7 +784,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1514,5 +1531,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

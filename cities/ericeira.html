@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -532,7 +549,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Ericeira</h2>
+<h2 id="cost-of-living">Cost of Living in Ericeira</h2>
 <p>Ericeira is not a budget destination in the way parts of inland Portugal are. It is a small, popular surf town, and rents have climbed to rival or exceed Lisbon in peak season. Expect prices in euros, with approximate US dollar figures shown at roughly 1 EUR to 1.08 USD.</p>
 <p>Here is a realistic monthly breakdown for one person:</p>
 <ul>
@@ -555,7 +572,7 @@
 <p>To reach Ericeira from Lisbon Airport (LIS), there is no single direct bus. The usual route is metro from the airport to Campo Grande (changing lines en route), then the Ericeira bus from the terminal there. Door to door this takes around two hours with luggage. If you would rather skip the transfers, a Bolt or Uber from the airport runs roughly 45 EUR and about 40-50 minutes.</p>
 <p>A <strong>car is genuinely useful</strong> here, though not essential. If you want to explore the wider coast, reach quieter surf breaks, do a big supermarket run, or take day trips to Sintra and Mafra, a car saves a lot of time. Without one, you rely on the Lisbon bus and your own two feet, which is fine for a stripped-back surf-and-work routine but limiting if you like to roam.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>If you hold a passport from the US, UK, Canada, Australia, or a similar visa-exempt country, you can enter Portugal and the wider Schengen Area for up to <strong>90 days within any 180-day period</strong> without a visa. That covers a short stay but not a full season, and the clock is shared across all Schengen countries.</p>
 <p>To stay longer, the main route for remote workers is Portugal's <strong>D8 digital nomad visa</strong>. It is aimed at people earning income from outside Portugal, with a monthly income threshold set at roughly four times the Portuguese minimum wage (in the region of 3,600-3,700 EUR per month), plus proof of savings. The residence permit is typically granted for two years and can be extended, and long-term D8 residents can eventually pursue permanent residency or citizenship. Requirements and figures change, so <strong>confirm the current rules with official Portuguese government sources or a qualified immigration adviser before you rely on them.</strong></p>
 
@@ -590,7 +607,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Ericeira</h2>
+          <h2 id="where-to-stay">Where to Stay in Ericeira</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -654,7 +671,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Ericeira</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -708,7 +725,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Ericeira</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -759,7 +776,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1509,5 +1526,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

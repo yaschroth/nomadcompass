@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -532,7 +549,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Bled</h2>
+<h2 id="cost-of-living">Cost of Living in Bled</h2>
 <p>Bled is beautiful but it carries a resort premium. Long-term rentals in central Bled run roughly <strong>EUR 1,000-1,500/month</strong> (USD 1,080-1,620) for a modest one-bedroom apartment. If you base yourself in nearby villages like Bohinjska Bela, Lesce, or Radovljica, 10-20 minutes away by bus or bike, you can find similar flats for EUR 700-900/month (USD 760-980).</p>
 <ul>
 <li><strong>Rent (central Bled, 1BR):</strong> EUR 1,000-1,500/month (USD 1,080-1,620)</li>
@@ -556,7 +573,7 @@
 <p>For getting further afield, <strong>Arriva buses</strong> connect Bled to Ljubljana roughly every 30-60 minutes. The journey to Ljubljana's main bus and train station takes about 1 hour 15 minutes and costs around EUR 6-7 one way. A Bled-Jezero rail station sits about 100 meters from Hotel Triglav, with limited regional train service.</p>
 <p>Getting to and from <strong>Ljubljana Airport (LJU)</strong> is straightforward. A direct Arriva bus runs from the airport to Bled bus station in about 1 hour and costs around EUR 4-5 on weekdays. Shared GoOpti shuttles take 30-45 minutes and cost about EUR 20-30. A private taxi or transfer runs EUR 40-50. There is no need to rent a car for day-to-day life in Bled, but a car is useful if you want to explore the wider Julian Alps or Triglav National Park regularly.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Slovenia is an EU and Schengen member. Most Western passport holders, including US, Canadian, Australian, UK, and EU citizens, can enter visa-free. <strong>US, Canadian, and Australian citizens</strong> get 90 days in any 180-day period within the entire Schengen Area, not just Slovenia.</p>
 <p>Slovenia launched a <strong>dedicated Digital Nomad Visa</strong> (temporary residence permit for digital nomads) on 21 November 2025. Key details:</p>
 <ul>
@@ -612,7 +629,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Bled</h2>
+          <h2 id="where-to-stay">Where to Stay in Bled</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -674,7 +691,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Bled</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -728,7 +745,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Bled</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -779,7 +796,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1525,5 +1542,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

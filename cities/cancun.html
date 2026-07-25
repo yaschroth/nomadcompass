@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -526,7 +543,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Cancún</h2>
+<h2 id="cost-of-living">Cost of Living in Cancún</h2>
 <p>Cancún is more expensive than most of inland Mexico because it is a tourist economy, but it is still affordable by North American or European standards if you live like a local rather than a vacationer. Prices below are approximate and paid in Mexican pesos (MXN); USD figures use a rate near 18 to 19 pesos to the dollar, so treat them as a guide, not a quote.</p>
 <p>Here is a realistic monthly breakdown for one remote worker:</p>
 <ul>
@@ -548,7 +565,7 @@
 <p>Walkability is limited. El Centro is walkable in patches, but the city is spread out, sidewalks are inconsistent, and the Hotel Zone is a single long strip built for cars and buses, not pedestrians. Ride-hailing apps and taxis fill the gaps, though agree on taxi fares in advance since meters are rare.</p>
 <p>From the airport (CUN), the ADO bus is the easy budget choice: expect around 140 to 170 MXN (about $7 to $9) to the downtown terminal, with a direct Hotel Zone route added in 2025. Private transfers and taxis cost far more, so the bus is worth it if your luggage is manageable.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Most visitors from the US, Canada, the UK, the EU and many other countries enter Mexico visa-free as tourists and receive a visitor permit (the FMM). The permit can be granted for up to 180 days, but this is no longer automatic: since roughly 2021, officers have tightened enforcement and increasingly issue shorter stays (30, 60 or 90 days) at their discretion, and frequent back-to-back visa runs are being flagged and sometimes refused.</p>
 <p>Importantly, working remotely on a tourist permit sits in a gray zone, and Mexican officials have signaled that people clearly living and working long-term should hold a <strong>temporary resident visa (residente temporal)</strong>. That visa is applied for at a Mexican consulate abroad, usually requires proof of income or savings, and can be issued for one to four years with the option to renew. If you plan to base yourself in Cancún for many months, this is the cleaner path than repeatedly resetting a tourist stamp. Rules and thresholds change, so confirm current requirements with an official Mexican consulate or the Instituto Nacional de Migración before you rely on any of this.</p>
 
@@ -577,7 +594,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Cancún</h2>
+          <h2 id="where-to-stay">Where to Stay in Cancún</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -639,7 +656,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Cancún</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -693,7 +710,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Cancún</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -750,7 +767,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1501,5 +1518,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>

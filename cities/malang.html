@@ -287,6 +287,23 @@
 
 
     <!-- Score Section -->
+    <!-- Sticky in-page section nav (jump links) -->
+    <nav class="city-toc" id="cityToc" aria-label="Jump to a section">
+      <div class="city-toc-inner">
+        <a href="#facts">Facts</a>
+        <a href="#scores">Scores</a>
+        <a href="#weather">Weather</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#cost-of-living">Cost</a>
+        <a href="#coworking">Coworking</a>
+        <a href="#visas">Visas</a>
+        <a href="#where-to-stay">Stay</a>
+        <a href="#where-to-eat">Eat</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
     <section class="score-section">
       <div class="container">
         <div class="score-container">
@@ -338,7 +355,7 @@
     <!-- facts-end -->
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section" id="scores">
       <div class="container">
         <div class="section-header">
           <h2>Category Breakdown</h2>
@@ -526,7 +543,7 @@
 
     <section class="city-guide" id="guide">
       <div class="container">
-<h2>Cost of Living in Malang</h2>
+<h2 id="cost-of-living">Cost of Living in Malang</h2>
 <p>Malang is one of the most affordable mid-sized cities in Indonesia, running roughly 50-70% cheaper than Bali for a comparable lifestyle. A comfortable month looks something like this:</p>
 <ul>
   <li><strong>Rent, central Klojen or Lowokwaru:</strong> $250-$360 ($280-400 USD) for a furnished one-bedroom apartment</li>
@@ -556,7 +573,7 @@
 <p>Renting a scooter (around $22-$33 per month) is a popular move for longer stays and opens up the surrounding volcanic highlands and waterfalls near Batu. An International Driving Permit is technically required for foreigners.</p>
 <p><strong>Airport:</strong> Abdul Rachman Saleh Airport (IATA: MLG) sits about 9-10 km east of the city center. A Grab or Gojek car costs $4.50-$8.50 and takes 30-60 minutes depending on traffic. White angkot minibuses run from the airport to the city for $0.28. The airport serves domestic routes; you typically fly via Jakarta or Surabaya for international connections. Surabaya's Juanda Airport is about 90 minutes away by car or intercity bus and offers far more international options.</p>
 
-<h2>Visas and Staying Long-Term</h2>
+<h2 id="visas">Visas and Staying Long-Term</h2>
 <p>Most nationalities from Europe, North America, Australia, and much of Asia enter Indonesia visa-free for 30 days. This cannot be extended.</p>
 <p>The most practical option for longer stays is the <strong>Visa on Arrival (e-VOA)</strong>, available to citizens of around 90 countries. It grants 30 days and can be extended once for another 30 days (total 60 days), for a combined fee of around $70-75 USD. You can apply online before arrival at evisa.imigrasi.go.id.</p>
 <p>For stays up to 60 days with extensions possible, the <strong>B211A / C1 Social-Cultural Visa</strong> (now sometimes listed as C1 under Indonesia's 2024 visa reclassification) allows an initial 60 days and up to two 60-day extensions, giving a maximum of 180 days. As of June 2025, extensions require an in-person visit to the local immigration office in Malang.</p>
@@ -602,7 +619,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Stay in Malang</h2>
+          <h2 id="where-to-stay">Where to Stay in Malang</h2>
           <p>Top neighborhoods and accommodations for digital nomads</p>
         </div>
         <div class="affiliate-grid" data-venues="v1" data-stays="s1">
@@ -664,7 +681,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Best Coworking Spaces</h2>
+          <h2 id="coworking">Best Coworking Spaces</h2>
           <p>Where nomads get work done in Malang</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -718,7 +735,7 @@
     <section class="affiliate-section">
       <div class="container">
         <div class="section-header">
-          <h2>Where to Eat & Drink</h2>
+          <h2 id="where-to-eat">Where to Eat & Drink</h2>
           <p>Best food and drink spots in Malang</p>
         </div>
         <div class="affiliate-grid" data-venues="v1">
@@ -769,7 +786,7 @@
     </section>
 
     <!-- Community Voting -->
-    <section class="voting-section">
+    <section class="voting-section" id="reviews">
       <div class="container">
         <div class="section-header">
           <h2>What Do Nomads Say?</h2>
@@ -1516,5 +1533,8 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
 </body>
 </html>
