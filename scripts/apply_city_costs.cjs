@@ -103,7 +103,7 @@ for (const slug of Object.keys(COSTS)) {
   let s = fs.readFileSync(page, 'utf8');
   s = s.replace(/\s*<!-- cost-start -->[\s\S]*?<!-- cost-end -->/, ''); // idempotent
   const city = NAME[slug] || slug;
-  const h2re = new RegExp('(<h2>\\s*Cost of Living[^<]*</h2>)');
+  const h2re = new RegExp('(<h2[^>]*>\\s*Cost of Living[^<]*</h2>)');
   if (!h2re.test(s)) { console.error('NO COST HEADING:', slug); noAnchor++; continue; }
   s = s.replace(h2re, (mt, h2) => h2 + '\n' + box);
   fs.writeFileSync(page, s);
