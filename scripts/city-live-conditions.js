@@ -13,7 +13,8 @@
   var row = el.querySelector('.cw-live-row');
   if (!row) return;
 
-  var ICONS = { 0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️', 51: '🌦️', 53: '🌦️', 55: '🌧️', 61: '🌦️', 63: '🌧️', 65: '🌧️', 71: '🌨️', 73: '🌨️', 75: '❄️', 80: '🌦️', 81: '🌧️', 82: '⛈️', 95: '⛈️', 96: '⛈️', 99: '⛈️' };
+  var ICONS = { 0: 'sun', 1: 'cloud-sun', 2: 'cloud-sun', 3: 'cloud', 45: 'cloud-fog', 48: 'cloud-fog', 51: 'cloud-drizzle', 53: 'cloud-drizzle', 55: 'cloud-drizzle', 61: 'cloud-drizzle', 63: 'cloud-rain', 65: 'cloud-rain', 71: 'cloud-snow', 73: 'cloud-snow', 75: 'cloud-snow', 80: 'cloud-drizzle', 81: 'cloud-rain', 82: 'cloud-lightning', 95: 'cloud-lightning', 96: 'cloud-lightning', 99: 'cloud-lightning' };
+  function nhIcon(name) { return '<svg class="nh-icon nh-icon-' + name + '" aria-hidden="true"><use href="/assets/icons.svg#' + name + '"></use></svg>'; }
   function aqiBand(v) {
     if (v <= 50) return ['Good', 'aqi-good'];
     if (v <= 100) return ['Moderate', 'aqi-mod'];
@@ -35,8 +36,8 @@
     var w = res[0].status === 'fulfilled' ? res[0].value : null;
     if (w && w.current && w.current.temperature_2m != null) {
       var t = Math.round(w.current.temperature_2m);
-      var icon = ICONS[w.current.weather_code] || '🌡️';
-      parts.push('<span class="cw-live-temp">' + icon + ' ' + t + '°C</span>');
+      var wIcon = nhIcon(ICONS[w.current.weather_code] || 'thermometer');
+      parts.push('<span class="cw-live-temp">' + wIcon + ' ' + t + '°C</span>');
       if (w.current.relative_humidity_2m != null) {
         parts.push('<span class="cw-live-hum">' + Math.round(w.current.relative_humidity_2m) + '% humidity</span>');
       }

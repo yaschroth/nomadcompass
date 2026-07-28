@@ -297,7 +297,8 @@ function createAccommodationPage(acc, cityName, cityId) {
       margin-bottom: var(--space-4);
     }
 
-    .acc-rating-stars { color: #f59e0b; }
+    .acc-rating-stars { color: #f59e0b; display: inline-flex; gap: 1px; vertical-align: middle; }
+    .acc-rating-stars .nh-icon { width: 15px; height: 15px; }
     .acc-rating-score { font-weight: var(--font-bold); }
     .acc-rating-count { color: var(--color-stone); font-size: var(--text-sm); }
 
@@ -490,7 +491,7 @@ function createAccommodationPage(acc, cityName, cityId) {
           </div>
 
           <div class="acc-rating-display">
-            <span class="acc-rating-stars">★★★★★</span>
+            <span class="acc-rating-stars"><svg class="nh-icon nh-icon-star" aria-hidden="true"><use href="/assets/icons.svg#star"></use></svg><svg class="nh-icon nh-icon-star" aria-hidden="true"><use href="/assets/icons.svg#star"></use></svg><svg class="nh-icon nh-icon-star" aria-hidden="true"><use href="/assets/icons.svg#star"></use></svg><svg class="nh-icon nh-icon-star" aria-hidden="true"><use href="/assets/icons.svg#star"></use></svg><svg class="nh-icon nh-icon-star" aria-hidden="true"><use href="/assets/icons.svg#star"></use></svg></span>
             <span class="acc-rating-score">${rating}</span>
             <span class="acc-rating-count">(${reviews} reviews)</span>
           </div>
@@ -499,7 +500,7 @@ function createAccommodationPage(acc, cityName, cityId) {
           <button class="acc-contact-btn">Contact Host</button>
 
           <div class="acc-host-info">
-            <span class="acc-host-badge">✓ Verified Host</span>
+            <span class="acc-host-badge"><svg class="nh-icon nh-icon-badge-check" aria-hidden="true"><use href="/assets/icons.svg#badge-check"></use></svg> Verified Host</span>
             <p style="margin-top: var(--space-2); font-size: var(--text-sm); color: var(--color-stone);">
               Usually responds within 2 hours
             </p>

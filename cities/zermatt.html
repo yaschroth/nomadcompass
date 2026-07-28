@@ -52,15 +52,6 @@
     })();
   </script>
 
-  <!-- Twemoji emoji sizing -->
-  <style>
-    img.emoji {
-      height: 1em;
-      width: 1em;
-      margin: 0 .05em 0 .1em;
-      vertical-align: -0.1em;
-    }
-  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -236,7 +227,7 @@
       <div class="city-hero-overlay"></div>
       <a class="hero-credit" href="https://commons.wikimedia.org/wiki/File:Matterhorn_in_winter_with_Zermatt_village.jpg" target="_blank" rel="nofollow noopener">Photo: Deralpinbergsteiger / Wikimedia Commons (CC BY-SA 4.0)</a>
       <div class="city-hero-content">
-        <div class="city-hero-flag">🇨🇭</div>
+        <div class="city-hero-flag"><img class="flag-img" src="/assets/flags/ch.svg" alt="Switzerland flag" loading="lazy"></div>
         <h1 class="city-hero-title">Zermatt</h1>
         <p class="city-hero-country">Switzerland</p>
         <p class="city-hero-tagline">A car-free alpine resort at the foot of the pyramid-shaped Matterhorn, a mecca for skiers, hikers, and mountaineers.</p>
@@ -420,11 +411,11 @@
               </div>
               <div class="neighborhood-pros-cons">
                 <div class="neighborhood-pros">
-                  <span class="pros-label">✓ Pros</span>
+                  <span class="pros-label"><svg class="nh-icon nh-icon-check" aria-hidden="true"><use href="/assets/icons.svg#check"></use></svg> Pros</span>
                   <ul><li>Everything within a short walk</li><li>Best choice of dining and shops</li><li>Direct access to the train and lifts</li></ul>
                 </div>
                 <div class="neighborhood-cons">
-                  <span class="cons-label">✗ Cons</span>
+                  <span class="cons-label"><svg class="nh-icon nh-icon-x" aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg> Cons</span>
                   <ul><li>Busiest and most expensive area</li><li>Can feel crowded in peak season</li></ul>
                 </div>
               </div>
@@ -444,11 +435,11 @@
               </div>
               <div class="neighborhood-pros-cons">
                 <div class="neighborhood-pros">
-                  <span class="pros-label">✓ Pros</span>
+                  <span class="pros-label"><svg class="nh-icon nh-icon-check" aria-hidden="true"><use href="/assets/icons.svg#check"></use></svg> Pros</span>
                   <ul><li>Peaceful and less touristy</li><li>Fine Matterhorn views</li><li>Short walk or e-bus to the center</li></ul>
                 </div>
                 <div class="neighborhood-cons">
-                  <span class="cons-label">✗ Cons</span>
+                  <span class="cons-label"><svg class="nh-icon nh-icon-x" aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg> Cons</span>
                   <ul><li>Fewer shops and restaurants nearby</li><li>Slightly uphill from the core</li></ul>
                 </div>
               </div>
@@ -468,11 +459,11 @@
               </div>
               <div class="neighborhood-pros-cons">
                 <div class="neighborhood-pros">
-                  <span class="pros-label">✓ Pros</span>
+                  <span class="pros-label"><svg class="nh-icon nh-icon-check" aria-hidden="true"><use href="/assets/icons.svg#check"></use></svg> Pros</span>
                   <ul><li>Beautifully preserved old hamlet</li><li>Excellent rustic restaurants</li><li>Superb walking and scenery</li></ul>
                 </div>
                 <div class="neighborhood-cons">
-                  <span class="cons-label">✗ Cons</span>
+                  <span class="cons-label"><svg class="nh-icon nh-icon-x" aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg> Cons</span>
                   <ul><li>No real accommodation base</li><li>Reached only on foot</li></ul>
                 </div>
               </div>
@@ -492,11 +483,11 @@
               </div>
               <div class="neighborhood-pros-cons">
                 <div class="neighborhood-pros">
-                  <span class="pros-label">✓ Pros</span>
+                  <span class="pros-label"><svg class="nh-icon nh-icon-check" aria-hidden="true"><use href="/assets/icons.svg#check"></use></svg> Pros</span>
                   <ul><li>Cheaper than Zermatt</li><li>Large parking garages</li><li>Quick train shuttle into the resort</li></ul>
                 </div>
                 <div class="neighborhood-cons">
-                  <span class="cons-label">✗ Cons</span>
+                  <span class="cons-label"><svg class="nh-icon nh-icon-x" aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg> Cons</span>
                   <ul><li>Lacks Zermatt's charm and buzz</li><li>You must train in for the mountains</li></ul>
                 </div>
               </div>
@@ -1001,7 +992,7 @@
 
           return `<div class="category-item" data-tier="${displayScore>=8?'high':displayScore>=5?'mid':'low'}">
             <div class="category-header">
-              <div class="category-name"><span class="category-icon">${cat.icon}</span><span>${cat.name}</span></div>
+              <div class="category-name"><span class="category-icon">${icon(cat.icon)}</span><span>${cat.name}</span></div>
               <div class="category-score">${displayScore}/10 ${adjustmentText}</div>
             </div>
             <div class="category-bar"><div class="category-bar-fill" style="width:${displayScore*10}%"></div></div>
@@ -1013,9 +1004,9 @@
             <div class="category-voting">
               <span class="category-voting-label">Is this accurate?</span>
               <div class="category-voting-actions">
-                <button class="category-vote-btn upvote ${myVote===1?'active':''}" onclick="handleVote('${key}',1)" ${loggedIn?'':'disabled'} title="Score is accurate or too low">👍</button>
+                <button class="category-vote-btn upvote ${myVote===1?'active':''}" onclick="handleVote('${key}',1)" ${loggedIn?'':'disabled'} title="Score is accurate or too low">${icon('thumbs-up')}</button>
                 <span class="category-vote-count ${netVotesClass}">${netVotesText}</span>
-                <button class="category-vote-btn downvote ${myVote===-1?'active':''}" onclick="handleVote('${key}',-1)" ${loggedIn?'':'disabled'} title="Score is too high">👎</button>
+                <button class="category-vote-btn downvote ${myVote===-1?'active':''}" onclick="handleVote('${key}',-1)" ${loggedIn?'':'disabled'} title="Score is too high">${icon('thumbs-down')}</button>
               </div>
             </div>
           </div>`;
@@ -1120,7 +1111,7 @@
             <div class="city-card-body">
               <div class="city-card-header">
                 <div class="city-card-location">
-                  <span class="city-card-flag">${r.flag}</span>
+                  <span class="city-card-flag">${flagSvg(r.flag)}</span>
                   <div>
                     <h3 class="city-card-name">${r.name}</h3>
                     <span class="city-card-country">${r.country}</span>
@@ -1185,18 +1176,18 @@
       }
 
       async function fetchRelatedCitiesWeather(cities) {
-        const weatherIcons = { 0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️', 51: '🌧️', 53: '🌧️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️', 71: '❄️', 73: '❄️', 75: '❄️', 80: '🌧️', 81: '🌧️', 82: '🌧️', 95: '⛈️' };
+        const weatherIcons = { 0: 'sun', 1: 'cloud-sun', 2: 'cloud-sun', 3: 'cloud', 45: 'cloud-fog', 48: 'cloud-fog', 51: 'cloud-drizzle', 53: 'cloud-drizzle', 55: 'cloud-drizzle', 61: 'cloud-drizzle', 63: 'cloud-rain', 65: 'cloud-rain', 71: 'cloud-snow', 73: 'cloud-snow', 75: 'cloud-snow', 80: 'cloud-drizzle', 81: 'cloud-rain', 82: 'cloud-lightning', 95: 'cloud-lightning' };
         for (const city of cities) {
           if (city.lat && city.lng) {
             try {
               const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`);
               const data = await res.json();
               if (data.current_weather) {
-                const icon = weatherIcons[data.current_weather.weathercode] || '🌡️';
+                const wName = weatherIcons[data.current_weather.weathercode] || 'thermometer';
                 const temp = Math.round(data.current_weather.temperature);
                 const weatherEl = document.querySelector(`.city-card-weather[data-city-id="${city.id}"]`);
                 if (weatherEl) {
-                  weatherEl.querySelector('.weather-icon').textContent = icon;
+                  weatherEl.querySelector('.weather-icon').innerHTML = icon(wName);
                   weatherEl.querySelector('.weather-temp').textContent = `${temp}°C`;
                 }
               }
@@ -1245,8 +1236,8 @@
           if (data.current_weather) {
             const temp = Math.round(data.current_weather.temperature);
             const code = data.current_weather.weathercode;
-            const icon = code === 0 ? '☀️' : code <= 3 ? '⛅' : code <= 49 ? '☁️' : code <= 69 ? '🌧️' : code <= 79 ? '❄️' : '⛈️';
-            el.textContent = `${temp}°C ${icon}`;
+            const wName = code === 0 ? 'sun' : code <= 3 ? 'cloud-sun' : code <= 49 ? 'cloud' : code <= 69 ? 'cloud-rain' : code <= 79 ? 'cloud-snow' : 'cloud-lightning';
+            el.innerHTML = `${temp}°C ` + icon(wName);
           }
         } catch (e) { el.textContent = 'N/A'; }
       }
@@ -1344,15 +1335,7 @@
     })();
   </script>
 
-  <!-- Twemoji for cross-platform flag emoji support -->
-  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof twemoji !== 'undefined') {
-        twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
-      }
-    });
-  </script>  <script>
+<script>
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl || typeof L === 'undefined') return;

@@ -36,11 +36,11 @@ function cardHtml(n, i) {
               </div>
               <div class="neighborhood-pros-cons">
                 <div class="neighborhood-pros">
-                  <span class="pros-label">✓ Pros</span>
+                  <span class="pros-label"><svg class="nh-icon nh-icon-check" aria-hidden="true"><use href="/assets/icons.svg#check"></use></svg> Pros</span>
                   <ul>${pros}</ul>
                 </div>
                 <div class="neighborhood-cons">
-                  <span class="cons-label">✗ Cons</span>
+                  <span class="cons-label"><svg class="nh-icon nh-icon-x" aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg> Cons</span>
                   <ul>${cons}</ul>
                 </div>
               </div>

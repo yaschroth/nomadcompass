@@ -84,3 +84,27 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWi
   }
 }
 console.log(`city pages updated: ${updated} (hero img set: ${heroDone})`);
+
+// 5. wheel.html result cards: dynamic flag emoji -> flagSvg() (cities-data.js is loaded there)
+{
+  const p = path.join(ROOT, 'wheel.html');
+  let s = fs.readFileSync(p, 'utf8');
+  const b = s;
+  s = s.split('<span class="city-card-flag">${city.flag}</span>')
+       .join('<span class="city-card-flag">${flagSvg(city.flag)}</span>');
+  if (s !== b) { fs.writeFileSync(p, s); console.log('wheel.html: result-card flag -> flagSvg'); }
+  else console.log('wheel.html: already done');
+}
+
+// 6. blog.html featured-city cards: static flag emoji -> self-hosted <img>
+{
+  const p = path.join(ROOT, 'blog.html');
+  let s = fs.readFileSync(p, 'utf8');
+  const b = s;
+  for (const [emoji, alt] of [['🇵🇹', 'Portugal'], ['🇹🇭', 'Thailand'], ['🇨🇴', 'Colombia'], ['🇬🇪', 'Georgia'], ['🇲🇽', 'Mexico']]) {
+    const code = toCode(emoji);
+    if (code) s = s.split(`<span class="flag">${emoji}</span>`).join(`<span class="flag">${imgTag(code, alt + ' flag')}</span>`);
+  }
+  if (s !== b) { fs.writeFileSync(p, s); console.log('blog.html: featured flags -> <img>'); }
+  else console.log('blog.html: already done');
+}

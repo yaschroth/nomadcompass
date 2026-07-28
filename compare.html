@@ -132,7 +132,9 @@
 
     /* value rows */
     .cmp-rowlabel { display: flex; align-items: center; gap: .55rem; font-size: var(--text-sm); font-weight: 600; color: var(--color-charcoal); padding: .7rem .6rem .7rem .2rem; }
-    .cmp-rowlabel .ic { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: var(--color-sand); font-size: .95rem; flex: 0 0 auto; }
+    .cmp-rowlabel .ic { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: var(--color-sand); font-size: .95rem; flex: 0 0 auto; color: var(--color-terracotta); }
+    .cmp-rowlabel .ic .nh-icon { width: 17px; height: 17px; }
+    .cmp-best .nh-icon { width: 14px; height: 14px; }
     .cmp-cell { padding: .55rem .8rem; margin: 0 .4rem; display: flex; flex-direction: column; gap: .25rem; justify-content: center; background: #fff; border-left: 1px solid var(--color-sand-dark); border-right: 1px solid var(--color-sand-dark); }
     .cmp-row:last-of-type .cmp-cell { border-bottom: 1px solid var(--color-sand-dark); border-radius: 0 0 var(--radius-lg, 14px) var(--radius-lg, 14px); }
     .cmp-row.zebra .cmp-cell { background: #fbfcfe; }
@@ -349,19 +351,19 @@
       if (typeof CITIES === 'undefined') return;
 
       var CATS = [
-        { k: 'climate', name: 'Climate', ic: '☀️' },
-        { k: 'cost', name: 'Cost of Living', ic: '💰' },
-        { k: 'wifi', name: 'WiFi Quality', ic: '📶' },
-        { k: 'nightlife', name: 'Nightlife', ic: '🎉' },
-        { k: 'nature', name: 'Nature & Outdoors', ic: '🏔️' },
-        { k: 'safety', name: 'Safety', ic: '🛡️' },
-        { k: 'food', name: 'Food & Dining', ic: '🍜' },
-        { k: 'community', name: 'Nomad Community', ic: '👥' },
-        { k: 'english', name: 'English Spoken', ic: '💬' },
-        { k: 'visa', name: 'Visa Friendliness', ic: '🛂' },
-        { k: 'culture', name: 'Culture', ic: '🎭' },
-        { k: 'cleanliness', name: 'Cleanliness', ic: '✨' },
-        { k: 'airquality', name: 'Air Quality', ic: '🌬️' }
+        { k: 'climate', name: 'Climate', ic: 'sun' },
+        { k: 'cost', name: 'Cost of Living', ic: 'wallet' },
+        { k: 'wifi', name: 'WiFi Quality', ic: 'wifi' },
+        { k: 'nightlife', name: 'Nightlife', ic: 'moon' },
+        { k: 'nature', name: 'Nature & Outdoors', ic: 'trees' },
+        { k: 'safety', name: 'Safety', ic: 'shield' },
+        { k: 'food', name: 'Food & Dining', ic: 'utensils' },
+        { k: 'community', name: 'Nomad Community', ic: 'users' },
+        { k: 'english', name: 'English Spoken', ic: 'messages-square' },
+        { k: 'visa', name: 'Visa Friendliness', ic: 'stamp' },
+        { k: 'culture', name: 'Culture', ic: 'drama' },
+        { k: 'cleanliness', name: 'Cleanliness', ic: 'sparkles' },
+        { k: 'airquality', name: 'Air Quality', ic: 'wind' }
       ];
       var CATKEYS = CATS.map(function (c) { return c.k; });
       var SHORT = { climate: 'Climate', cost: 'Value', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
@@ -554,7 +556,7 @@
           var pres = vals.filter(function (v) { return typeof v === 'number'; });
           var best = pres.length ? Math.max.apply(null, pres) : null;
           html += '<div class="cmp-row' + (ri % 2 ? ' zebra' : '') + '" style="display:contents">';
-          html += '<div class="cmp-rowlabel"><span class="ic">' + cat.ic + '</span>' + cat.name + '</div>';
+          html += '<div class="cmp-rowlabel"><span class="ic">' + icon(cat.ic) + '</span>' + cat.name + '</div>';
           for (var j = 0; j < 3; j++) {
             var v = vals[j];
             if (v == null) { html += '<div class="cmp-cell"></div>'; continue; }
@@ -562,7 +564,7 @@
             html += '<div class="cmp-cell' + (win ? ' win' : '') + '">' +
               '<div class="cmp-barrow"><div class="cmp-bar"><span data-w="' + (v * 10) + '"></span></div>' +
               '<span class="cmp-val">' + v + '</span></div>' +
-              (win ? '<span class="cmp-best">✓ Best</span>' : '') + '</div>';
+              (win ? '<span class="cmp-best">' + icon('check') + ' Best</span>' : '') + '</div>';
           }
           html += '</div>';
         });
@@ -634,13 +636,13 @@
         var pres = costs.filter(function (v) { return typeof v === 'number'; });
         var min = pres.length ? Math.min.apply(null, pres) : null;
         var h = '<div class="cmp-row" style="display:contents">';
-        h += '<div class="cmp-rowlabel"><span class="ic">💵</span>Budget / month</div>';
+        h += '<div class="cmp-rowlabel"><span class="ic">' + icon('coins') + '</span>Budget / month</div>';
         for (var j = 0; j < 3; j++) {
           var v = costs[j];
           if (v == null) { h += '<div class="cmp-cell"></div>'; continue; }
           var win = activeCount > 1 && min != null && v === min;
           h += '<div class="cmp-cell' + (win ? ' win' : '') + '"><span class="cmp-cost-val">' + fmtCost(v) + '</span>' +
-            (win ? '<span class="cmp-best">✓ Cheapest</span>' : '') + '</div>';
+            (win ? '<span class="cmp-best">' + icon('check') + ' Cheapest</span>' : '') + '</div>';
         }
         h += '</div>';
         return h;

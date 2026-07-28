@@ -7,33 +7,37 @@
 (function() {
   'use strict';
 
-  // Weather code to emoji mapping
+  // Weather code to line-icon name (self-hosted sprite /assets/icons.svg).
   const WEATHER_ICONS = {
-    0: '☀️',   // Clear sky
-    1: '🌤️',  // Mainly clear
-    2: '⛅',   // Partly cloudy
-    3: '☁️',   // Overcast
-    45: '🌫️', // Fog
-    48: '🌫️', // Depositing rime fog
-    51: '🌧️', // Light drizzle
-    53: '🌧️', // Moderate drizzle
-    55: '🌧️', // Dense drizzle
-    61: '🌧️', // Slight rain
-    63: '🌧️', // Moderate rain
-    65: '🌧️', // Heavy rain
-    71: '🌨️', // Slight snow
-    73: '🌨️', // Moderate snow
-    75: '🌨️', // Heavy snow
-    80: '🌦️', // Slight rain showers
-    81: '🌦️', // Moderate rain showers
-    82: '🌦️', // Violent rain showers
-    95: '⛈️', // Thunderstorm
-    96: '⛈️', // Thunderstorm with hail
-    99: '⛈️', // Thunderstorm with heavy hail
+    0: 'sun',            // Clear sky
+    1: 'cloud-sun',      // Mainly clear
+    2: 'cloud-sun',      // Partly cloudy
+    3: 'cloud',          // Overcast
+    45: 'cloud-fog',     // Fog
+    48: 'cloud-fog',     // Depositing rime fog
+    51: 'cloud-drizzle', // Light drizzle
+    53: 'cloud-drizzle', // Moderate drizzle
+    55: 'cloud-drizzle', // Dense drizzle
+    61: 'cloud-drizzle', // Slight rain
+    63: 'cloud-rain',    // Moderate rain
+    65: 'cloud-rain',    // Heavy rain
+    71: 'cloud-snow',    // Slight snow
+    73: 'cloud-snow',    // Moderate snow
+    75: 'cloud-snow',    // Heavy snow
+    80: 'cloud-drizzle', // Slight rain showers
+    81: 'cloud-rain',    // Moderate rain showers
+    82: 'cloud-lightning', // Violent rain showers
+    95: 'cloud-lightning', // Thunderstorm
+    96: 'cloud-lightning', // Thunderstorm with hail
+    99: 'cloud-lightning', // Thunderstorm with heavy hail
   };
 
+  function nhIcon(name) {
+    return '<svg class="nh-icon nh-icon-' + name + '" aria-hidden="true"><use href="/assets/icons.svg#' + name + '"></use></svg>';
+  }
+
   function getWeatherIcon(code) {
-    return WEATHER_ICONS[code] || '🌡️';
+    return nhIcon(WEATHER_ICONS[code] || 'thermometer');
   }
 
   async function fetchWeather(lat, lng) {
