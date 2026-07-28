@@ -224,6 +224,8 @@ function contactPage() {
 }
 
 const updatedLine = `    <p class="legal-updated">Last updated: ${UPDATED}</p>`;
+// Privacy was revised (third-party/map-tile + self-hosted-fonts clarification) after the others.
+const privacyUpdatedLine = `    <p class="legal-updated">Last updated: July 28, 2026</p>`;
 
 // NOTE: about.html is intentionally NOT generated here. It is a bespoke, hand-maintained
 // page (custom layout, AboutPage + Organization + Person JSON-LD, stat row, category grid,
@@ -274,14 +276,14 @@ ${updatedLine}`),
     <h2>Cookies</h2>
     <p>We use essential cookies for basic functionality and may use analytics and affiliate cookies (e.g., to attribute a referral to a booking partner). You can block cookies in your browser; core content will still work.</p>
     <h2>Third parties</h2>
-    <p>We rely on trusted providers to run the site, including our hosting/CDN (Vercel), authentication/database (Supabase), analytics (Google), and affiliate networks. These providers process data under their own privacy policies. We do not sell your personal information.</p>
+    <p>We rely on trusted providers to run the site: hosting and CDN (Vercel), authentication and database (Supabase), and analytics (Google). When you open an interactive map, the map tiles and mapping library load from OpenStreetMap, Carto, and a public code CDN, which receive your IP address in order to serve them. Affiliate links are handled by their respective networks (for example, Booking.com). Each provider processes data under its own privacy policy. We host our own fonts, so no data is sent to any font CDN. We do not sell your personal information.</p>
     <h2>Your rights</h2>
     <p>Depending on where you live (e.g., the EU/UK under GDPR, or California under CCPA), you may have the right to access, correct, or delete your data, or opt out of certain processing. To exercise these rights, <a href="/contact">contact us</a>.</p>
     <h2>Data retention &amp; children</h2>
     <p>We keep personal data only as long as needed for the purposes above. The site is not directed to children under 13, and we do not knowingly collect their data.</p>
     <h2>Changes</h2>
     <p>We may update this policy; material changes will be reflected by the date below. Questions? <a href="/contact">Contact us</a>.</p>
-${updatedLine}`),
+${privacyUpdatedLine}`),
 
   'terms.html': page('terms', 'Terms of Service, The Nomad HQ', 'The terms governing your use of The Nomad HQ.', `    <h1>Terms of Service</h1>
     <p class="lead">By using The Nomad HQ, you agree to these terms.</p>
