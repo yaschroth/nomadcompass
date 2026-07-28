@@ -22,8 +22,8 @@ function fix(s) {
   const firstCss = /^([ \t]*)<link rel="stylesheet"/m;
   if (firstCss.test(s)) {
     return s.replace(firstCss, (m, ind) =>
-      `${ind}<link rel="preconnect" href="https://fonts.googleapis.com">\n` +
-      `${ind}<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n` +
+      `${ind}\n` +
+      `${ind}\n` +
       `${ind}${STYLESHEET}\n${m}`);
   }
   return s;

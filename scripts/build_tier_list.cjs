@@ -411,8 +411,7 @@ function render(v) {
   <meta name="twitter:title" content="${esc(v.metaTitle)}">
   <meta name="twitter:image" content="${BASE}/images/og/${heroId}.jpg">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles/fonts.css">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
@@ -490,8 +489,7 @@ function buildHub() {
   <meta property="og:image" content="${BASE}/images/og/${bucket(master).ranked[0].c.id}.jpg">
   <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles/fonts.css">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">

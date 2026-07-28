@@ -156,8 +156,7 @@ function render(a) {
   <meta property="og:url" content="${url}">
   ${hero.id ? `<meta property="og:image" content="${BASE}/images/og/${hero.id}.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${BASE}/images/og/${hero.id}.jpg">` : ''}
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles/fonts.css">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
@@ -221,8 +220,7 @@ function buildHub() {
   <meta property="og:description" content="Curated picks for surfing, diving, kayaking and shopping as a digital nomad.">
   <meta property="og:type" content="website"><meta property="og:url" content="${BASE}/activities">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles/fonts.css">
   <link rel="stylesheet" href="/styles/base.css"><link rel="stylesheet" href="/styles/nav.css"><link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <style>
