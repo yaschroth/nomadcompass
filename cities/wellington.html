@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Cuba Street","tagline":"Wellington's bohemian creative heart","description":"Cuba Street is Wellington's soul - independent boutiques, diverse cafes, and creative energy. The bucket fountain is just the start of this pedestrian paradise.","vibe":"Bohemian & Creative","bestFor":"Creatives, coffee lovers, and those seeking Wellington's soul","pros":["Best cafes","Independent shops","Street performers","Creative energy"],"cons":["Busy weekends","Limited parking","Hipster overload"],"lat":-41.291,"lng":174.775,"priceLevel":"$$"},{"name":"Te Aro","tagline":"Wellington's central entertainment zone","description":"Te Aro surrounds Cuba Street and Courtenay Place - bars, restaurants, and Wellington's nightlife. It's flat, central, and where Wellington plays after dark.","vibe":"Entertainment & Central","bestFor":"Night owls, foodies, and those seeking central Wellington","pros":["Best nightlife","Restaurant variety","Central location","Flat terrain"],"cons":["Noisy nights","Expensive rent","Parking nightmare"],"lat":-41.295,"lng":174.778,"priceLevel":"$$"},{"name":"Mount Victoria","tagline":"Wellington's charming hillside village","description":"Mount Victoria is Wellington's prettiest neighborhood - wooden villas, harbor views, and village atmosphere. The lookout offers the best city views.","vibe":"Charming & Village","bestFor":"Long-term residents, view seekers, and those wanting village life","pros":["Best views","Beautiful houses","Village feel","Near city"],"cons":["Steep hills","Limited parking","Expensive"],"lat":-41.297,"lng":174.79,"priceLevel":"$$$"},{"name":"Thorndon","tagline":"Wellington's historic political quarter","description":"Thorndon is Wellington's oldest suburb - historic buildings, Parliament, and Katherine Mansfield's birthplace. It's where Wellington's history and politics meet.","vibe":"Historic & Political","bestFor":"History lovers, political watchers, and those seeking heritage","pros":["Historic architecture","Near Parliament","Botanic Gardens access","Quiet"],"cons":["Limited restaurants","Quiet evenings","Expensive"],"lat":-41.275,"lng":174.775,"priceLevel":"$$$"},{"name":"Newtown","tagline":"Wellington's diverse multicultural hub","description":"Newtown is Wellington's most diverse suburb - ethnic restaurants, the zoo, and genuine multiculturalism. It's less polished but more authentic than the city center.","vibe":"Diverse & Authentic","bestFor":"Foodies, budget travelers, and those seeking diversity","pros":["Diverse food","Affordable","Zoo access","Authentic character"],"cons":["Less pretty","Some rough areas","Far from waterfront"],"lat":-41.31,"lng":174.78,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

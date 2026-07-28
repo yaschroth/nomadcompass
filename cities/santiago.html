@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Providencia","tagline":"Santiago's livable middle-ground","description":"Providencia is Santiago's sweet spot - tree-lined streets, excellent restaurants, and perfect balance of residential calm and urban convenience. It's where most expats settle.","vibe":"Residential & Convenient","bestFor":"Long-term stayers, professionals, and those seeking quality living","pros":["Great restaurants","Safe streets","Parks","Good metro access"],"cons":["Can be quiet","Expensive","Less nightlife"],"lat":-33.428,"lng":-70.61,"priceLevel":"$$$"},{"name":"Bellavista","tagline":"Santiago's bohemian party zone","description":"Bellavista is Santiago's nightlife hub - bars, clubs, street art, and La Chascona (Neruda's house). It's colorful, noisy, and the heart of Santiago's entertainment.","vibe":"Bohemian & Nightlife","bestFor":"Night owls, young travelers, and those seeking Santiago's party scene","pros":["Best nightlife","Patio Bellavista","Street art","La Chascona"],"cons":["Noisy","Safety concerns","Can be dirty"],"lat":-33.432,"lng":-70.632,"priceLevel":"$$"},{"name":"Lastarria/Bellas Artes","tagline":"Santiago's cultural Parisian quarter","description":"Lastarria is Santiago's most charming neighborhood - European flair, cultural venues, and excellent cafes. It's intellectual, artistic, and beautifully preserved.","vibe":"Cultural & Charming","bestFor":"Culture lovers, intellectuals, and those seeking European atmosphere","pros":["Beautiful architecture","Museums","Great cafes","Cultural events"],"cons":["Touristy","Expensive","Crowded weekends"],"lat":-33.438,"lng":-70.64,"priceLevel":"$$$"},{"name":"Las Condes","tagline":"Santiago's upscale business district","description":"Las Condes is Santiago's financial heart - modern towers, upscale malls, and corporate headquarters. It's where Chile's money lives with excellent infrastructure.","vibe":"Business & Upscale","bestFor":"Business travelers, families, and those seeking modern comfort","pros":["Very safe","Modern amenities","Good shopping","Clean"],"cons":["No character","Expensive","Boring"],"lat":-33.417,"lng":-70.587,"priceLevel":"$$$$"},{"name":"Brasil/Yungay","tagline":"Santiago's emerging hipster frontier","description":"Barrio Brasil and Yungay are Santiago's emerging cool - historic buildings, alternative bars, and artistic energy. It's gritty but authentic with strong local character.","vibe":"Emerging & Alternative","bestFor":"Adventurous travelers, artists, and those seeking authentic Santiago","pros":["Authentic atmosphere","Affordable","Historic buildings","Alternative scene"],"cons":["Safety concerns","Gritty areas","Less polished"],"lat":-33.443,"lng":-70.665,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Capital commerce with Pacific character","description":"Fiji's capital center features colonial buildings, bustling markets, and government offices. The municipal market overflows with tropical produce while handicraft centers offer Fijian souvenirs.","vibe":"Urban Pacific","bestFor":"Culture seekers and market lovers","pros":["Municipal market","Cultural institutions","Historic buildings","Central services"],"cons":["Safety concerns","Hot and humid","Limited tourism focus"],"lat":-18.1416,"lng":178.4419,"priceLevel":"$"},{"name":"Domain and Thurston Gardens","tagline":"Green space and colonial heritage","description":"The botanical gardens and surrounding area offer tropical respite with the Fiji Museum, Government House, and peaceful paths. Colonial architecture and national institutions cluster here.","vibe":"Green colonial","bestFor":"History buffs and nature lovers","pros":["Botanical gardens","Museum access","Colonial architecture","Peaceful walks"],"cons":["Limited dining","Government area","Quiet evenings"],"lat":-18.1489,"lng":178.4312,"priceLevel":"$"},{"name":"Laucala Bay","tagline":"University energy and bay views","description":"Home to the University of the South Pacific, this area offers student energy, Pacific regional diversity, and bay views. Research facilities and international students create cosmopolitan atmosphere.","vibe":"Academic diverse","bestFor":"Students and researchers","pros":["University facilities","Diverse community","Bay views","Regional hub"],"cons":["Far from center","Limited nightlife","Basic amenities"],"lat":-18.1534,"lng":178.4589,"priceLevel":"$"},{"name":"Suva Point","tagline":"Ocean views and diplomatic row","description":"This peninsula area hosts embassies, upscale residences, and some of Suva's best dining. Ocean breezes and views across the harbor provide relief from downtown heat.","vibe":"Upscale coastal","bestFor":"Business travelers and diplomats","pros":["Ocean views","Quality dining","Cooler breezes","Safe area"],"cons":["Expensive","Isolated feel","Limited entertainment"],"lat":-18.1378,"lng":178.4234,"priceLevel":"$$"},{"name":"Nausori","tagline":"River town and airport gateway","description":"This satellite town near the airport offers authentic Fijian small-town life. River markets, local restaurants, and everyday commerce provide glimpses of non-tourist Fiji.","vibe":"Local authentic","bestFor":"Authenticity seekers and transit stays","pros":["Near airport","Authentic atmosphere","River markets","Affordable"],"cons":["Not scenic","Basic infrastructure","Safety concerns"],"lat":-18.0334,"lng":178.5312,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

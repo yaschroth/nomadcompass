@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central City","tagline":"Phoenix city rising from earthquakes","description":"Christchurch's center is New Zealand's great urban renewal - post-earthquake rebuilding bringing innovative architecture, street art, and community spaces. A city reborn.","vibe":"Innovative & Recovering","bestFor":"Urban renewal enthusiasts, architecture lovers, and curious travelers","pros":["Innovative rebuilding","Great street art","New restaurants","Flat cycling"],"cons":["Still rebuilding","Some empty lots","Can feel incomplete"],"lat":-43.5321,"lng":172.6362,"priceLevel":"$$"},{"name":"Riccarton","tagline":"University area with student energy","description":"Riccarton serves University of Canterbury - student rentals, multicultural dining, Riccarton Bush reserve. Where affordable living meets academic atmosphere.","vibe":"Student & Diverse","bestFor":"Students, budget travelers, and those wanting diversity","pros":["Affordable","Diverse food","Near university","Good transport"],"cons":["Student housing quality","Less scenic","Basic area"],"lat":-43.5289,"lng":172.5934,"priceLevel":"$"},{"name":"Sumner","tagline":"Beach village with coastal charm","description":"Sumner is Christchurch's beach escape - village atmosphere, surf beach, coastal walks. Where the city meets the sea with relaxed character.","vibe":"Beach & Village","bestFor":"Beach lovers, surfers, and those wanting coastal living","pros":["Beach access","Village feel","Coastal walks","Good cafes"],"cons":["Far from center","Limited public transport","Cool climate"],"lat":-43.5734,"lng":172.7567,"priceLevel":"$$"},{"name":"Lyttelton","tagline":"Port town with creative community","description":"Lyttelton nestles in the volcanic harbor - historic port town with creative community, farmers market, excellent restaurants. Christchurch's bohemian soul.","vibe":"Creative & Historic","bestFor":"Creatives, foodies, and those wanting character","pros":["Great restaurants","Creative community","Farmers market","Character"],"cons":["Tunnel access only","Small town","Limited accommodation"],"lat":-43.6034,"lng":172.7189,"priceLevel":"$$"},{"name":"Merivale","tagline":"Upscale suburb with boutique shopping","description":"Merivale is Christchurch's refined suburb - tree-lined streets, boutique shops, upscale dining. Where the city's establishment lives and dines.","vibe":"Upscale & Elegant","bestFor":"Upscale travelers, shoppers, and those wanting refinement","pros":["Boutique shopping","Good restaurants","Safe area","Pleasant streets"],"cons":["Expensive","Quiet evenings","Residential feel"],"lat":-43.5156,"lng":172.6234,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

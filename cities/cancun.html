@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Zona Hotelera","tagline":"Cancun's iconic beach strip","description":"The Hotel Zone is what most people picture as Cancun - massive resorts, white sand beaches, and turquoise Caribbean waters. It's touristy but the beaches are genuinely spectacular.","vibe":"Resort & Beach","bestFor":"Beach lovers, resort seekers, and those wanting Caribbean luxury","pros":["Amazing beaches","Resort amenities","Water sports","Nightclubs"],"cons":["Very expensive","No local culture","Tourist bubble"],"lat":21.13,"lng":-86.76,"priceLevel":"$$$$"},{"name":"Centro (Downtown)","tagline":"Cancun's authentic Mexican heart","description":"Downtown Cancun is where locals live - Parque de las Palapas, taco stands, and authentic prices. It's the real Mexico that most tourists never see.","vibe":"Local & Authentic","bestFor":"Budget travelers, culture seekers, and those wanting real Mexico","pros":["Authentic food","Affordable","Local culture","Real Mexico"],"cons":["No beach access","Less English","Basic accommodations"],"lat":21.1619,"lng":-86.8515,"priceLevel":"$"},{"name":"Puerto Cancún","tagline":"Cancun's upscale marina development","description":"Puerto Cancún is Cancun's newest development - marina, golf course, and luxury residences. It's quieter than the Hotel Zone with more sophisticated dining options.","vibe":"Upscale & Marina","bestFor":"Luxury seekers, golfers, and those wanting quiet upscale","pros":["Marina views","Golf course","Upscale dining","Quieter beaches"],"cons":["Very expensive","Sterile feel","Far from nightlife"],"lat":21.165,"lng":-86.81,"priceLevel":"$$$$"},{"name":"El Table/Colosio","tagline":"Cancun's digital nomad base","description":"Between downtown and the Hotel Zone, this area offers affordable long-term rentals and easy beach access. It's where savvy digital nomads base themselves.","vibe":"Practical & Affordable","bestFor":"Digital nomads, long-term visitors, and budget-conscious travelers","pros":["Affordable rent","Beach access","Between zones","Supermarkets"],"cons":["Less charming","Busy roads","Limited restaurants"],"lat":21.145,"lng":-86.82,"priceLevel":"$"},{"name":"Punta Sam/Costa Mujeres","tagline":"Cancun's quiet northern escape","description":"North of Cancun, this developing area offers quieter beaches and the ferry to Isla Mujeres. It's for those who want Cancun access without Cancun crowds.","vibe":"Quiet & Developing","bestFor":"Peace seekers, Isla Mujeres visitors, and those avoiding crowds","pros":["Quieter beaches","Near Isla Mujeres","Less developed","New resorts"],"cons":["Far from everything","Limited dining","Car needed"],"lat":21.25,"lng":-86.795,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

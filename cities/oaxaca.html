@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial beauty in Mexico's cultural heart","description":"Oaxaca's Centro is a UNESCO treasure - baroque churches, shaded plazas, and some of Mexico's best food. The zócalo buzzes with life, mezcal bars dot the streets, and nomads gather in colonial courtyards turned cafes. Essential Oaxaca.","vibe":"Colonial & Cultural","bestFor":"Culture lovers, foodies, and nomads seeking Oaxaca's most immersive experience","pros":["Incredible culture","Best restaurants","Colonial beauty","Walkable"],"cons":["Touristy","Noisy festivals","Higher prices"],"lat":17.0608,"lng":-96.725,"priceLevel":"$$"},{"name":"Jalatlaco","tagline":"Oaxaca's colorful neighborhood with local soul","description":"Jalatlaco is Oaxaca's most charming residential neighborhood - colorful streets, local markets, and the famous bread of the same name. Just east of Centro, it offers authentic barrio life with growing cafe scene. Instagrammable and real.","vibe":"Colorful & Local","bestFor":"Photographers, long-term nomads, and those seeking authentic neighborhood life","pros":["Beautiful streets","Local character","Famous bread","Near Centro"],"cons":["Limited cafes","Basic infrastructure","Noisy mornings"],"lat":17.064,"lng":-96.717,"priceLevel":"$"},{"name":"Reforma","tagline":"Oaxaca's upscale residential calm","description":"Reforma is Oaxaca's upscale residential neighborhood north of Centro. Tree-lined streets, good restaurants, and proximity to the Santo Domingo cultural area attract professionals and families seeking quality without tourist crowds.","vibe":"Upscale & Quiet","bestFor":"Families, professionals, and nomads seeking quality residential living","pros":["Quiet streets","Good restaurants","Near Santo Domingo","Safe"],"cons":["Less character","Fewer tourists","Need transport"],"lat":17.068,"lng":-96.722,"priceLevel":"$$"},{"name":"Xochimilco","tagline":"Artisan neighborhood with workshop energy","description":"Xochimilco is Oaxaca's artisan quarter - textile workshops, traditional crafts, and authentic neighborhood atmosphere. It's where Oaxaca's famous textiles are made, offering cultural immersion beyond the tourist center.","vibe":"Artisan & Traditional","bestFor":"Craft lovers, culture seekers, and nomads interested in traditional Mexican artisanry","pros":["Artisan workshops","Authentic culture","Affordable","Local markets"],"cons":["Basic infrastructure","Less English","Far from cafes"],"lat":17.055,"lng":-96.728,"priceLevel":"$"},{"name":"San Felipe del Agua","tagline":"Mountain views in Oaxaca's exclusive heights","description":"San Felipe del Agua climbs the hills north of Oaxaca - mountain views, cooler temperatures, and exclusive residences. It's where wealthy Oaxaqueños live, with growing expat presence seeking space and scenery.","vibe":"Exclusive & Scenic","bestFor":"Nature lovers, families, and nomads seeking views with exclusivity","pros":["Mountain views","Cooler climate","Exclusive area","Space"],"cons":["Need transport","Far from center","Limited walkability"],"lat":17.085,"lng":-96.712,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

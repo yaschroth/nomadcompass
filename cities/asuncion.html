@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial charm with faded grandeur","description":"Asunción's center holds Paraguay's history - colonial buildings, Palacio de los López, market streets. Where South America's 'mother of cities' shows her age.","vibe":"Historic & Faded","bestFor":"History lovers, urban explorers, and authentic seekers","pros":["Historic buildings","Authentic atmosphere","Markets","Affordable"],"cons":["Faded infrastructure","Safety concerns","Hot and humid"],"lat":-25.2867,"lng":-57.6372,"priceLevel":"$"},{"name":"Villa Morra","tagline":"Upscale shopping and modern dining","description":"Villa Morra is Asunción's upscale district - shopping malls, restaurants, modern apartments. Where Paraguay's growing middle class lives and shops.","vibe":"Modern & Upscale","bestFor":"Shoppers, modern seekers, and comfort-focused travelers","pros":["Good shopping","Modern restaurants","Safe area","Good infrastructure"],"cons":["Expensive","Generic feel","Little character"],"lat":-25.2889,"lng":-57.5789,"priceLevel":"$$$"},{"name":"Carmelitas","tagline":"Trendy nightlife and young energy","description":"Carmelitas is Asunción's party district - bars, clubs, restaurants. Where young Asuncenos gather for weekend nights out.","vibe":"Nightlife & Young","bestFor":"Nightlife seekers, young travelers, and social visitors","pros":["Good nightlife","Young atmosphere","Restaurants","Weekend energy"],"cons":["Noisy weekends","Late-night focus","Limited daytime appeal"],"lat":-25.2812,"lng":-57.5834,"priceLevel":"$$"},{"name":"Costanera","tagline":"Riverfront redevelopment and weekend leisure","description":"The Costanera follows the Paraguay River - parks, cycling, waterfront development. Where Asunción is trying to reclaim its river connection.","vibe":"Recreational & Developing","bestFor":"Joggers, cyclists, and those wanting waterfront","pros":["River views","Cycling paths","Parks","New development"],"cons":["Still developing","Hot exposure","Limited shade"],"lat":-25.2734,"lng":-57.6234,"priceLevel":"$"},{"name":"San Lorenzo","tagline":"University city on the outskirts","description":"San Lorenzo is effectively Asunción's university suburb - National University campus, student life, more affordable living. Where academic Paraguay concentrates.","vibe":"Academic & Suburban","bestFor":"Students, budget travelers, and those wanting local life","pros":["Affordable","Student atmosphere","University facilities","Local life"],"cons":["Outside center","Basic infrastructure","Limited attractions"],"lat":-25.3389,"lng":-57.5089,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

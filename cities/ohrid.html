@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Byzantine churches above ancient waters","description":"Ohrid's UNESCO-listed Old Town features Byzantine churches, Ottoman architecture, and stunning lake views. The narrow cobblestone streets and spiritual atmosphere create the Balkans' most atmospheric historic center.","vibe":"Historic & Spiritual","bestFor":"History lovers, church enthusiasts, and atmosphere seekers","pros":["UNESCO heritage","Byzantine churches","Lake views","Atmospheric streets"],"cons":["Steep hills","Crowded in summer","Tourist prices"],"lat":41.1133,"lng":20.7978,"priceLevel":"$$"},{"name":"Kaneo","tagline":"Iconic church on the cliff","description":"The neighborhood around the famous St. John at Kaneo church offers swimming access and the lake's most photographed views. The cliff-side setting and clear waters define Ohrid beauty.","vibe":"Scenic & Swimming","bestFor":"Photographers, swimmers, and iconic view seekers","pros":["Famous church","Swimming spots","Stunning views","Peaceful walks"],"cons":["Crowded at sunset","Limited accommodation","Steep paths"],"lat":41.1089,"lng":20.7878,"priceLevel":"$$"},{"name":"New Town (Centar)","tagline":"Modern waterfront with local life","description":"The newer part of Ohrid offers waterfront promenade, restaurants, and everyday Macedonian life. The less touristy atmosphere and more affordable options attract longer-term visitors.","vibe":"Local & Waterfront","bestFor":"Budget travelers, local experience seekers, and long-term visitors","pros":["Waterfront walks","More affordable","Local atmosphere","Good restaurants"],"cons":["Less historic charm","Further from Old Town","Less scenic"],"lat":41.1178,"lng":20.8023,"priceLevel":"$"},{"name":"Bay of Bones Area","tagline":"Prehistoric settlement and beach access","description":"The lakeside area near the reconstructed Bronze Age settlement offers beach access, the unique museum, and quieter atmosphere. The archaeological interest adds depth to beach time.","vibe":"Archaeological & Beach","bestFor":"History buffs, beach seekers, and unique experience lovers","pros":["Unique museum","Beach access","Quieter area","Archaeological interest"],"cons":["Far from town","Need transport","Limited dining"],"lat":41.0789,"lng":20.7912,"priceLevel":"$"},{"name":"Struga Area","tagline":"Poetry town at the lake's outlet","description":"The neighboring town where the Black Drin River exits the lake offers a more local Macedonian atmosphere. The annual poetry festival and river walks provide different experiences.","vibe":"Literary & Local","bestFor":"Literature lovers, local experience seekers, and those avoiding Ohrid crowds","pros":["Poetry tradition","River walks","Less touristy","More affordable"],"cons":["Less historic","Fewer attractions","Need transport to Ohrid"],"lat":41.1778,"lng":20.6778,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

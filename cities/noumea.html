@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Anse Vata","tagline":"Beach strip with resort vibes","description":"The main tourist beach features hotels, restaurants, and the stunning Anse Vata bay. The French-Pacific atmosphere and water sports make it Nouméa's most popular destination.","vibe":"Beach & Resort","bestFor":"Beach lovers, water sports enthusiasts, and resort seekers","pros":["Beautiful bay","Beach access","Water sports","Good restaurants"],"cons":["Tourist prices","Crowded weekends","Expensive"],"lat":-22.2978,"lng":166.4412,"priceLevel":"$$$"},{"name":"Baie des Citrons","tagline":"Nightlife and sunset cocktails","description":"The neighboring bay offers livelier atmosphere with bars, restaurants, and nightlife. The sunset views and social scene attract younger crowds and night owls.","vibe":"Social & Nightlife","bestFor":"Night owls, social travelers, and sunset cocktail lovers","pros":["Best nightlife","Sunset views","Social atmosphere","Restaurant variety"],"cons":["Noisy at night","Tourist-focused","Expensive drinks"],"lat":-22.2889,"lng":166.4334,"priceLevel":"$$$"},{"name":"Centre-Ville","tagline":"French colonial capital with markets","description":"Downtown Nouméa features French colonial architecture, the famous morning market, and government buildings. The café culture and market atmosphere offer authentic French-Pacific experience.","vibe":"Colonial & Local","bestFor":"Culture seekers, market lovers, and French atmosphere enthusiasts","pros":["Morning market","Colonial architecture","Café culture","Local shops"],"cons":["Hot for walking","Quiet on weekends","Less beach access"],"lat":-22.2756,"lng":166.4456,"priceLevel":"$$"},{"name":"Motor Pool","tagline":"Pacific culture at the Tjibaou Centre","description":"The area near the spectacular Tjibaou Cultural Centre showcases Kanak heritage and Renzo Piano's stunning architecture. The cultural depth and natural setting offer unique experiences.","vibe":"Cultural & Natural","bestFor":"Culture enthusiasts, architecture lovers, and Kanak heritage seekers","pros":["Tjibaou Centre","Stunning architecture","Cultural depth","Natural setting"],"cons":["Far from beaches","Limited accommodation","Need transport"],"lat":-22.2534,"lng":166.4823,"priceLevel":"$$"},{"name":"Îlot Maître","tagline":"Island escape just offshore","description":"The small island off Anse Vata offers beach escapes, snorkeling, and day trip adventures. The clear waters and coral reefs provide accessible marine paradise.","vibe":"Island & Marine","bestFor":"Snorkelers, day trippers, and island escape seekers","pros":["Clear waters","Coral reefs","Easy access","Island atmosphere"],"cons":["Day trip only","Can be crowded","Weather dependent"],"lat":-22.3134,"lng":166.4189,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

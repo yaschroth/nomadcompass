@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Heraklion (Iraklio)","tagline":"Minoan heritage and Venetian harbor","description":"Heraklion is Crete's capital - Minoan palace at Knossos, Venetian fortress, archaeological museum. The gateway to ancient civilizations and modern Cretan life.","vibe":"Historic & Urban","bestFor":"History enthusiasts, museum lovers, and cultural explorers","pros":["Knossos access","Great museum","Ferry connections","Urban amenities"],"cons":["Traffic chaos","Less scenic","Can feel rushed"],"lat":35.3387,"lng":25.1442,"priceLevel":"$$"},{"name":"Chania Old Town","tagline":"Venetian harbor perfection","description":"Chania's Old Town is Mediterranean magic - Venetian harbor, lighthouse, narrow alleys with workshops and tavernas. Possibly the most beautiful town in Greece.","vibe":"Romantic & Historic","bestFor":"Romantics, photographers, and those wanting beauty","pros":["Stunning harbor","Great restaurants","Venetian beauty","Walkable"],"cons":["Very touristy","Expensive","Crowded summer"],"lat":35.518,"lng":24.0179,"priceLevel":"$$$"},{"name":"Rethymno Old Town","tagline":"Ottoman charm and beach access","description":"Rethymno combines Ottoman heritage with beach accessibility - wooden balconies, minarets, Renaissance fortress, and sandy beach steps away.","vibe":"Historic & Beach","bestFor":"Beach lovers, history buffs, and balanced travelers","pros":["Beach nearby","Beautiful old town","Good restaurants","Less crowded"],"cons":["Package tourists","Beach can be busy","Smaller scale"],"lat":35.3693,"lng":24.4732,"priceLevel":"$$"},{"name":"Elounda","tagline":"Luxury resorts with Spinalonga views","description":"Elounda is Crete's luxury destination - five-star resorts, views of Spinalonga island, exclusive beach clubs. Where celebrities and luxury seekers retreat.","vibe":"Luxury & Exclusive","bestFor":"Luxury travelers, honeymooners, and those wanting pampering","pros":["Stunning resorts","Beautiful bay","Exclusive beaches","Spinalonga access"],"cons":["Very expensive","Isolated","Resort-focused"],"lat":35.2567,"lng":25.7312,"priceLevel":"$$$$"},{"name":"Matala","tagline":"Hippie caves and bohemian beaches","description":"Matala preserves 1960s hippie spirit - famous caves where Joni Mitchell once slept, bohemian atmosphere, and sunset beach vibes. Crete's countercultural soul.","vibe":"Bohemian & Beach","bestFor":"Free spirits, beach lovers, and alternative travelers","pros":["Unique atmosphere","Famous caves","Great sunsets","Relaxed vibe"],"cons":["Basic facilities","Very seasonal","Limited nightlife"],"lat":34.9934,"lng":24.7512,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

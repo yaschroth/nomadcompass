@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"East Bank Corniche","tagline":"Nile promenade with temple views","description":"The riverside corniche offers stunning views of the Nile and easy access to Luxor Temple. The concentration of hotels, restaurants, and tour operators makes it the natural tourist base.","vibe":"Tourist & Scenic","bestFor":"First-time visitors, those wanting convenience, and Nile view seekers","pros":["Nile views","Luxor Temple access","Hotel variety","Tour operators nearby"],"cons":["Constant hassle from vendors","Tourist prices","Can feel commercial"],"lat":25.6991,"lng":32.6389,"priceLevel":"$$"},{"name":"Karnak Temple Area","tagline":"Ancient Thebes at your doorstep","description":"The neighborhood near the massive Karnak Temple complex offers proximity to Egypt's most impressive ancient site. Less developed but perfect for those prioritizing the temples.","vibe":"Ancient & Convenient","bestFor":"Egyptology enthusiasts, early risers wanting temple access, and history buffs","pros":["Walk to Karnak","Less touristy feel","Cheaper options","Ancient atmosphere"],"cons":["Far from town center","Limited dining","Basic infrastructure"],"lat":25.7178,"lng":32.6534,"priceLevel":"$"},{"name":"West Bank Villages","tagline":"Living among the ancient tombs","description":"Villages like Gurna and Al-Bairat on the West Bank offer authentic Egyptian village life near the Valley of the Kings. The sunrise balloon launches and proximity to tombs create unique experiences.","vibe":"Village & Archaeological","bestFor":"Adventure travelers, those wanting authentic Egypt, and archaeology lovers","pros":["Valley of Kings access","Authentic village life","Balloon launch views","Budget options"],"cons":["Isolated from east bank","Basic infrastructure","Need ferry or bridge"],"lat":25.7289,"lng":32.6089,"priceLevel":"$"},{"name":"Television Street","tagline":"Local shopping and everyday Luxor","description":"The main commercial street serves local Luxoris with shops, cafes, and everyday businesses. The authentic market atmosphere offers relief from tourist-focused areas.","vibe":"Local & Commercial","bestFor":"Budget travelers, local experience seekers, and market lovers","pros":["Local prices","Authentic atmosphere","Real markets","Less hassle"],"cons":["Not scenic","Less English spoken","Basic accommodation"],"lat":25.6912,"lng":32.6445,"priceLevel":"$"},{"name":"Banana Island","tagline":"Nile island escape from the chaos","description":"This Nile island accessible by boat offers a peaceful retreat from Luxor's intensity. The banana plantations, riverside restaurants, and calm atmosphere provide needed respite.","vibe":"Peaceful & Rural","bestFor":"Peace seekers, couples, and those needing escape from tourist hustle","pros":["Peaceful island","Nile breezes","Relaxed dining","Escape from vendors"],"cons":["Boat access only","Limited accommodation","Far from sights"],"lat":25.6834,"lng":32.6256,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

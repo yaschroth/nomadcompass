@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Grande Île","tagline":"UNESCO island in the heart of Alsace","description":"The historic island center features the iconic cathedral, half-timbered houses, and winding medieval streets. UNESCO-listed since 1988, this is one of Europe's most beautifully preserved city centers.","vibe":"Historic magical","bestFor":"History lovers and first-time visitors","pros":["Stunning cathedral","Beautiful architecture","Walkable charm","UNESCO heritage"],"cons":["Very touristy","Expensive dining","Crowded summer"],"lat":48.5815,"lng":7.7506,"priceLevel":"$$"},{"name":"Petite France","tagline":"Postcard-perfect canals and half-timber","description":"This enchanting quarter features flower-bedecked half-timbered houses along tranquil canals. Former tanners' district now hosts restaurants, boutiques, and quintessential Alsatian scenery.","vibe":"Romantic picturesque","bestFor":"Romantic travelers and photographers","pros":["Stunning canals","Half-timbered houses","Romantic atmosphere","Boat tours"],"cons":["Extremely touristy","High prices","Crowded peak times"],"lat":48.5789,"lng":7.7412,"priceLevel":"$$"},{"name":"European Quarter","tagline":"EU institutions and modern architecture","description":"Home to the European Parliament and other EU institutions, this modern district showcases contemporary architecture and international atmosphere. Diplomats and officials fill the area's upscale restaurants.","vibe":"International modern","bestFor":"Politics enthusiasts and business travelers","pros":["Parliament visits","Modern architecture","International dining","Parkland"],"cons":["Soulless at night","Far from old town","Corporate feel"],"lat":48.5967,"lng":7.7689,"priceLevel":"$$"},{"name":"Krutenau","tagline":"Student quarter with bohemian soul","description":"Near the university, this lively neighborhood offers affordable dining, student bars, and cultural venues. More local than the center with genuine Strasbourg life amid historic buildings.","vibe":"Student bohemian","bestFor":"Budget travelers and nightlife seekers","pros":["Affordable dining","Local atmosphere","Student nightlife","Authentic feel"],"cons":["Can be noisy","Less polished","Some rough edges"],"lat":48.5756,"lng":7.7578,"priceLevel":"$"},{"name":"Neustadt","tagline":"Imperial German grandeur","description":"Built during German rule, this district features grand Wilhelminian architecture around impressive squares. Museums, universities, and tree-lined boulevards create a distinguished atmosphere.","vibe":"Imperial elegant","bestFor":"Architecture lovers and residents","pros":["Grand architecture","Spacious streets","Museums nearby","Less crowded"],"cons":["Less quaint","Spread out","German-era controversy"],"lat":48.5867,"lng":7.7534,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

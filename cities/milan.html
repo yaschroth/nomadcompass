@@ -1462,6 +1462,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Navigli","tagline":"Milan's canal district with aperitivo culture","description":"Navigli is Milan's most atmospheric neighborhood - historic canals, aperitivo culture, and vibrant nightlife. It's where Milanese come for evening drinks and where nomads find character in fashion-focused Milan.","vibe":"Nightlife & Canal","bestFor":"Nightlife lovers, foodies, and nomads seeking Milan's most atmospheric area","pros":["Canal atmosphere","Best aperitivo","Great restaurants","Nightlife"],"cons":["Tourist crowds","Expensive drinks","Noisy evenings"],"lat":45.449,"lng":9.179,"priceLevel":"$$"},{"name":"Brera","tagline":"Milan's artistic quarter with boutique charm","description":"Brera is Milan's artistic neighborhood - the famous art gallery, cobblestone streets, and boutique shops. It's refined and beautiful, where art and design meet. Milan's most charming area.","vibe":"Artistic & Boutique","bestFor":"Art lovers, designers, and nomads seeking Milan's most elegant neighborhood","pros":["Art gallery","Beautiful streets","Boutique shops","Refined"],"cons":["Very expensive","Small area","Limited nightlife"],"lat":45.4722,"lng":9.1867,"priceLevel":"$$$"},{"name":"Isola","tagline":"Milan's creative island with emerging energy","description":"Isola is Milan's emerging creative district - former working-class neighborhood now filled with design studios, trendy restaurants, and young energy. Near the Bosco Verticale, it represents Milan's future.","vibe":"Creative & Emerging","bestFor":"Creatives, young professionals, and nomads seeking Milan's emerging scene","pros":["Creative energy","Good restaurants","Modern architecture","Trendy"],"cons":["Still developing","Mixed areas","Less central"],"lat":45.488,"lng":9.187,"priceLevel":"$$"},{"name":"Porta Romana","tagline":"Milan's balanced residential with local life","description":"Porta Romana offers balanced Milan living - good restaurants, local character, and proximity to both center and university. It's where young Milanese professionals settle, with growing food scene.","vibe":"Balanced & Local","bestFor":"Young professionals, students, and nomads seeking balanced Milan living","pros":["Good balance","Local character","Restaurant scene","Near university"],"cons":["Less exciting","Mixed architecture","Residential quiet"],"lat":45.451,"lng":9.202,"priceLevel":"$$"},{"name":"Centro Storico","tagline":"Milan's heart with Duomo and fashion temples","description":"Milan's center surrounds the Duomo and Galleria Vittorio Emanuele - fashion flagships, historic landmarks, and tourist everything. It's expensive and commercial but undeniably central and impressive.","vibe":"Central & Fashion","bestFor":"Fashion lovers, business travelers, and nomads wanting maximum central access","pros":["Duomo access","Fashion shopping","Central location","Impressive"],"cons":["Very expensive","Extremely touristy","Commercial"],"lat":45.4642,"lng":9.19,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1513,6 +1514,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1457,6 +1457,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt","tagline":"World's longest bar at the Rhine","description":"Düsseldorf's Old Town earns its 'longest bar' nickname - 260 pubs and bars in narrow streets. Altbier flows freely alongside Rhine riverfront energy.","vibe":"Party & Historic","bestFor":"Nightlife seekers, beer lovers, and social travelers","pros":["Incredible nightlife","Altbier culture","Rhine views","Walkable"],"cons":["Very crowded","Loud nights","Tourist-heavy"],"lat":51.2262,"lng":6.7726,"priceLevel":"$$"},{"name":"Carlstadt","tagline":"Antiques and galleries by the river","description":"Carlstadt is Düsseldorf's refined neighbor to Altstadt - antique dealers, art galleries, upscale boutiques. Cultural sophistication without the bar crowds.","vibe":"Cultural & Elegant","bestFor":"Art lovers, antique hunters, and culture seekers","pros":["Excellent galleries","Beautiful streets","Less crowded","Near museums"],"cons":["Expensive","Limited nightlife","Quieter"],"lat":51.2212,"lng":6.7678,"priceLevel":"$$$"},{"name":"Medienhafen","tagline":"Gehry architecture meets harbor style","description":"Medienhafen transformed old port into design destination - Gehry's dancing buildings, modern offices, trendy restaurants. Düsseldorf's contemporary showpiece.","vibe":"Modern & Trendy","bestFor":"Architecture enthusiasts, design lovers, and creatives","pros":["Stunning architecture","Trendy dining","Modern vibe","Waterfront"],"cons":["Expensive","Corporate feel","Limited nightlife"],"lat":51.2134,"lng":6.7567,"priceLevel":"$$$"},{"name":"Flingern","tagline":"Hipster heartland of the Rhineland","description":"Flingern is Düsseldorf's creative quarter - street art, vintage shops, third-wave coffee, independent galleries. Where the city's creative class gathers and creates.","vibe":"Hipster & Creative","bestFor":"Creatives, young professionals, and alternative travelers","pros":["Creative scene","Great cafes","Affordable","Local vibes"],"cons":["Gentrifying fast","Basic area","Limited transport"],"lat":51.2234,"lng":6.8012,"priceLevel":"$$"},{"name":"Oberkassel","tagline":"Affluent left bank elegance","description":"Oberkassel sits across the Rhine - upscale residential area with elegant streets, boutique shopping, and Altstadt views without Altstadt noise.","vibe":"Residential & Upscale","bestFor":"Families, affluent visitors, and those wanting quiet luxury","pros":["Beautiful streets","Safe area","Great views","Elegant dining"],"cons":["Expensive","Limited nightlife","Residential feel"],"lat":51.2312,"lng":6.7534,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1508,6 +1509,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Polana","tagline":"Embassy row with ocean breezes","description":"Maputo's most prestigious neighborhood features embassies, the famous Polana Serena Hotel, and stunning clifftop ocean views. The colonial mansions and upscale restaurants create a refined atmosphere.","vibe":"Upscale & Colonial","bestFor":"Business travelers, luxury seekers, and history enthusiasts","pros":["Beautiful ocean views","Best restaurants","Historic architecture","Safe and secure"],"cons":["Very expensive","Can feel isolated","Limited local atmosphere"],"lat":-25.9678,"lng":32.5912,"priceLevel":"$$$"},{"name":"Baixa","tagline":"Colonial downtown awakening","description":"The historic downtown features Portuguese colonial architecture, the famous fish market, and Art Deco railway station. The mix of faded grandeur and urban renewal creates fascinating exploration.","vibe":"Historic & Urban","bestFor":"Architecture lovers, photographers, and urban explorers","pros":["Colonial architecture","Central location","Fish market","Railway station"],"cons":["Can feel rough","Petty crime concerns","Busy traffic"],"lat":-25.9689,"lng":32.5723,"priceLevel":"$$"},{"name":"Sommerschield","tagline":"Diplomatic quarter with garden villas","description":"The leafy diplomatic area offers tree-lined streets, embassy compounds, and expatriate amenities. The international restaurants and secure environment attract diplomats and business residents.","vibe":"Diplomatic & Leafy","bestFor":"Expats, diplomats, and those wanting secure residential living","pros":["Tree-lined streets","Good restaurants","Secure area","Expat amenities"],"cons":["Expensive","Less authentic","Need transport"],"lat":-25.9545,"lng":32.5934,"priceLevel":"$$$"},{"name":"Costa do Sol","tagline":"Beach promenade and seafood grills","description":"The beachfront stretch offers famous seafood restaurants, weekend atmosphere, and the city's best swimming. The casual beach vibe attracts locals and visitors seeking coastal relaxation.","vibe":"Beach & Casual","bestFor":"Beach lovers, seafood enthusiasts, and weekend relaxation seekers","pros":["Beach access","Amazing seafood","Local atmosphere","Weekend energy"],"cons":["Far from center","Crowded weekends","Traffic to reach"],"lat":-25.9234,"lng":32.6289,"priceLevel":"$$"},{"name":"Malhangalene","tagline":"Local neighborhood with market energy","description":"The residential area offers authentic Maputo life with local markets, everyday commerce, and neighborhood atmosphere. The affordability and genuine experience attract long-term budget travelers.","vibe":"Local & Authentic","bestFor":"Budget travelers, local experience seekers, and long-term visitors","pros":["Authentic atmosphere","Local markets","Affordable","Genuine Maputo life"],"cons":["Less infrastructure","Safety awareness needed","Basic amenities"],"lat":-25.9512,"lng":32.5667,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

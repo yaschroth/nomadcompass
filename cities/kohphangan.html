@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Haad Rin","tagline":"Koh Phangan's legendary Full Moon party beach","description":"Haad Rin is ground zero for the Full Moon Party - bucket bars, beach clubs, and legendary chaos. It's quieter between parties but the party infrastructure remains.","vibe":"Party & Beach","bestFor":"Party seekers, backpackers, and those seeking Full Moon madness","pros":["Full Moon Party","Beach access","Backpacker infrastructure","Nightlife"],"cons":["Trashy party nights","Noise","Not authentic Thailand"],"lat":9.675,"lng":100.065,"priceLevel":"$"},{"name":"Thong Sala","tagline":"Koh Phangan's practical main town","description":"Thong Sala is Phangan's main town - ferry port, night market, and practical services. It's not beautiful but essential for supplies and transport.","vibe":"Practical & Local","bestFor":"Long-term visitors, budget travelers, and those needing services","pros":["Night market","Ferries","Supermarkets","Affordable"],"cons":["Not scenic","No beach","Transit town feel"],"lat":9.72,"lng":99.995,"priceLevel":"$"},{"name":"Sri Thanu/Zen Beach","tagline":"Koh Phangan's yoga and wellness hub","description":"Sri Thanu is Phangan's spiritual center - yoga retreats, vegetarian cafes, and wellness community. It's where the island's conscious travelers gather.","vibe":"Wellness & Yoga","bestFor":"Yogis, wellness seekers, and those seeking spiritual Phangan","pros":["Yoga scene","Healthy food","Community feel","Beautiful sunset"],"cons":["Can feel cliquey","Limited nightlife","Preachy vibes"],"lat":9.735,"lng":99.968,"priceLevel":"$$"},{"name":"Baan Tai","tagline":"Koh Phangan's digital nomad base","description":"Baan Tai is Phangan's most practical beach area - long beach, good restaurants, and digital nomad friendly. It's the sweet spot between party and peace.","vibe":"Beach & Practical","bestFor":"Digital nomads, long-term visitors, and those seeking balance","pros":["Long beach","Good restaurants","Nomad community","Reasonable prices"],"cons":["Shallow swimming","Less scenic","Between areas"],"lat":9.705,"lng":100.028,"priceLevel":"$"},{"name":"Haad Salad/Haad Yao","tagline":"Koh Phangan's beautiful quiet beaches","description":"The northern beaches offer Phangan's most beautiful swimming - clear water, coral reefs, and peaceful atmosphere. It's quieter but requires transport.","vibe":"Beautiful & Quiet","bestFor":"Beach lovers, snorkelers, and those seeking peaceful Phangan","pros":["Beautiful beaches","Good snorkeling","Peaceful","Scenic"],"cons":["Remote","Limited restaurants","Transport needed"],"lat":9.765,"lng":99.972,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

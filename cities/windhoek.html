@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"German colonial meets African modern","description":"Namibia's capital center features German colonial architecture alongside modern African development. The famous Christuskirche, Independence Avenue, and local markets create unique atmosphere.","vibe":"Colonial modern","bestFor":"First-time visitors and culture seekers","pros":["Historic architecture","Central location","Good restaurants","Cultural mix"],"cons":["Hot climate","Limited nightlife","Safety after dark"],"lat":-22.5609,"lng":17.0658,"priceLevel":"$"},{"name":"Klein Windhoek","tagline":"Upscale suburb with restaurant scene","description":"This affluent suburb east of center offers Windhoek's best restaurants, boutique hotels, and comfortable living. Expats and wealthy Namibians enjoy the leafy streets.","vibe":"Upscale suburban","bestFor":"Comfort seekers and foodies","pros":["Best restaurants","Safe area","Quality hotels","Leafy streets"],"cons":["Expensive","Quiet evenings","Car required"],"lat":-22.5689,"lng":17.0823,"priceLevel":"$$"},{"name":"Eros","tagline":"Middle-class residential calm","description":"This residential area near the airport offers middle-class Namibian life with basic amenities and security. Long-term visitors find affordable housing and local character.","vibe":"Residential practical","bestFor":"Long-term stays and budget seekers","pros":["Affordable housing","Near airport","Local atmosphere","Safe area"],"cons":["Limited dining","Needs car","Residential quiet"],"lat":-22.5423,"lng":17.0834,"priceLevel":"$"},{"name":"Katutura","tagline":"Township culture and authentic Namibia","description":"This former township offers authentic Namibian experience with vibrant markets, local shebeens, and community life. Guided tours reveal history while local eateries serve traditional food.","vibe":"Township authentic","bestFor":"Cultural immersion seekers","pros":["Authentic culture","Local food","Township tours","Real Namibia"],"cons":["Safety concerns","Basic facilities","Guide recommended"],"lat":-22.5223,"lng":17.0412,"priceLevel":"$"},{"name":"Olympia","tagline":"Growing suburb with safari connection","description":"This developing area offers newer accommodations and easy access to safari routes north and south. Tour operators and safari companies base here for traveler convenience.","vibe":"Practical gateway","bestFor":"Safari travelers and transit visitors","pros":["Safari access","Tour operators","Modern facilities","Practical location"],"cons":["Limited character","Pass-through feel","Generic development"],"lat":-22.5712,"lng":17.0523,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

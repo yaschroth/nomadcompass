@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Rainbow hillsides and underground streets","description":"Guanajuato's center is Mexico's most colorful - rainbow houses climbing hillsides, underground streets, colonial grandeur. UNESCO-listed theatrical perfection.","vibe":"Colorful & Historic","bestFor":"Photographers, romantics, and culture seekers","pros":["Incredibly beautiful","Unique underground streets","Cultural events","Walkable center"],"cons":["Very hilly","Tourist crowds","Altitude fatigue"],"lat":21.019,"lng":-101.2574,"priceLevel":"$$"},{"name":"Jardín de la Unión","tagline":"Heart of student and tourist life","description":"Jardín de la Unión is Guanajuato's social center - triangular plaza surrounded by restaurants, Teatro Juárez watching over. Where estudiantinas serenade and crowds gather.","vibe":"Social & Central","bestFor":"People watchers, nightlife seekers, and music lovers","pros":["Central atmosphere","Great restaurants","Evening entertainment","Historic theater"],"cons":["Very crowded","Tourist prices","Noisy"],"lat":21.0181,"lng":-101.2544,"priceLevel":"$$"},{"name":"San Fernando","tagline":"Residential hills with local life","description":"San Fernando climbs above the tourist zone - residential streets, local shops, neighborhood life. Where students and locals live above the colonial core.","vibe":"Residential & Local","bestFor":"Long-term visitors, local seekers, and budget travelers","pros":["Affordable","Local atmosphere","Great views","Quiet"],"cons":["Very steep","Far from center","Basic amenities"],"lat":21.0234,"lng":-101.2612,"priceLevel":"$"},{"name":"La Presa","tagline":"Dam area with peaceful escapes","description":"La Presa surrounds the old dam - restaurants, hotels, peaceful setting. Where to escape Guanajuato's intensity while staying accessible.","vibe":"Peaceful & Scenic","bestFor":"Peace seekers, hotel guests, and those wanting calm","pros":["Peaceful","Nice hotels","Scenic setting","Less crowded"],"cons":["Walk to center","Limited nightlife","Isolated feeling"],"lat":21.0089,"lng":-101.2689,"priceLevel":"$$"},{"name":"Valenciana","tagline":"Mining heritage in the hills","description":"Valenciana perches above Guanajuato - former mining village with stunning church, mine tours, panoramic views. Where silver wealth built baroque splendor.","vibe":"Historic & Panoramic","bestFor":"History buffs, view seekers, and church enthusiasts","pros":["Incredible church","Mine tours","Panoramic views","Historic depth"],"cons":["Need transport","Limited services","Day-trip focused"],"lat":21.0412,"lng":-101.2712,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

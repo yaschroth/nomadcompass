@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Al-Balad (Historic Jeddah)","tagline":"UNESCO coral stone heritage","description":"Al-Balad is Jeddah's historic soul - UNESCO World Heritage coral stone buildings, traditional souks, merchant heritage. Where Arabia's gateway to Mecca preserved its past.","vibe":"Historic & Traditional","bestFor":"History lovers, architecture enthusiasts, and culture seekers","pros":["UNESCO site","Traditional architecture","Historic souks","Cultural depth"],"cons":["Hot summers","Basic infrastructure","Limited tourism"],"lat":21.4858,"lng":39.1865,"priceLevel":"$$"},{"name":"Corniche","tagline":"Red Sea waterfront and modern leisure","description":"Jeddah's Corniche stretches along the Red Sea - sculptures, beaches, restaurants. Where Saudi Arabia's opening to tourism shows its progress.","vibe":"Modern & Waterfront","bestFor":"Walkers, families, and those seeking modern Saudi","pros":["Sea views","Sculptures","Beaches","Modern Saudi"],"cons":["Very hot","Spread out","Limited shade"],"lat":21.5412,"lng":39.1234,"priceLevel":"$$"},{"name":"Tahlia Street","tagline":"Upscale shopping and dining","description":"Tahlia Street is Jeddah's luxury strip - international brands, fine dining, modern Jeddah. Where Saudi wealth meets international commerce.","vibe":"Luxury & Commercial","bestFor":"Shoppers, luxury seekers, and modern travelers","pros":["International brands","Good restaurants","Modern","Safe"],"cons":["Very expensive","Commercial","Traffic"],"lat":21.5612,"lng":39.1567,"priceLevel":"$$$$"},{"name":"Obhur Creek","tagline":"Resort area north of the city","description":"Obhur offers Jeddah's beach escape - resorts, water sports, weekend getaways. Where Jeddah's families escape the urban intensity.","vibe":"Resort & Beach","bestFor":"Beach lovers, families, and weekend escapers","pros":["Beach resorts","Water activities","Family-friendly","Escape city"],"cons":["Far from center","Resort prices","Isolated"],"lat":21.7312,"lng":39.1189,"priceLevel":"$$$"},{"name":"King Abdullah Economic City","tagline":"Future city in development","description":"KAEC is Saudi Arabia's future - planned city north of Jeddah, megaprojects, economic zone. Where Vision 2030 takes physical form.","vibe":"Futuristic & Developing","bestFor":"Futurists, business visitors, and the curious","pros":["Future city","Modern facilities","Golf courses","Development showcase"],"cons":["Empty feeling","Far from everything","Still building"],"lat":22.4156,"lng":39.0689,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

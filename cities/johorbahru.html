@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Johor Bahru City Centre","tagline":"Gateway to Singapore with Malaysian prices","description":"The heart of JB offers easy access to the Singapore causeway, heritage buildings, and the bustling City Square mall. The mix of old shophouses and modern development creates an energetic urban atmosphere.","vibe":"Urban & Transit","bestFor":"Cross-border commuters, business travelers, and those wanting city convenience","pros":["Walking distance to Singapore","Good public transport","Shopping malls","Heritage architecture"],"cons":["Heavy traffic","Crowded during peak hours","Can feel chaotic"],"lat":1.4655,"lng":103.7578,"priceLevel":"$$"},{"name":"Mount Austin","tagline":"Suburban comfort with cafe culture","description":"This popular residential area features modern condominiums, trendy cafes, and family-friendly amenities. The cafe scene rivals KL's, making it a favorite for young professionals and digital nomads.","vibe":"Suburban & Trendy","bestFor":"Young professionals, families, and cafe lovers seeking residential comfort","pros":["Excellent cafe scene","Modern condos available","Good schools","Clean and organized"],"cons":["Far from Singapore","Need car to explore","Less nightlife"],"lat":1.5367,"lng":103.7623,"priceLevel":"$$"},{"name":"Iskandar Puteri","tagline":"Future city with theme park attractions","description":"This planned development area features Legoland, EduCity, and Medini's business district. Modern infrastructure and international schools attract families and professionals seeking new development living.","vibe":"Modern & Family","bestFor":"Families, theme park enthusiasts, and those wanting modern infrastructure","pros":["Modern planning","International schools","Theme parks nearby","Less crowded"],"cons":["Still developing","Limited nightlife","Far from city center"],"lat":1.4234,"lng":103.6445,"priceLevel":"$$$"},{"name":"Danga Bay","tagline":"Waterfront leisure and local vibes","description":"The waterfront area offers seaside recreation, night markets, and local entertainment. Less polished than newer areas but with authentic Malaysian charm and affordable eats.","vibe":"Waterfront & Local","bestFor":"Budget travelers, families, and those seeking waterfront living","pros":["Waterfront access","Night markets","Local atmosphere","Affordable"],"cons":["Basic infrastructure","Less modern","Limited expat amenities"],"lat":1.4589,"lng":103.7234,"priceLevel":"$"},{"name":"Taman Molek","tagline":"Established neighborhood with good eats","description":"A mature residential area known for excellent local food and convenient location. The mix of landed houses and apartments offers various accommodation options for long-term stays.","vibe":"Residential & Culinary","bestFor":"Food lovers, families, and those wanting established neighborhood feel","pros":["Great food scene","Established infrastructure","Good schools nearby","Residential calm"],"cons":["Older development","Traffic during peak hours","Less trendy"],"lat":1.5123,"lng":103.7856,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

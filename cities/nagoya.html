@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Sakae","tagline":"Neon-lit entertainment district","description":"Nagoya's main entertainment and shopping district features department stores, TV Tower, and lively nightlife. The concentration of restaurants, bars, and entertainment makes it the city's most dynamic area.","vibe":"Urban & Entertainment","bestFor":"Shoppers, nightlife seekers, and urban experience lovers","pros":["Great shopping","TV Tower views","Nightlife options","Restaurant variety"],"cons":["Crowded","Expensive","Can feel commercial"],"lat":35.1667,"lng":136.9089,"priceLevel":"$$$"},{"name":"Nagoya Station Area","tagline":"Transport hub with towering modernity","description":"The area around the massive station features JR Central Towers, shopping complexes, and excellent transport connections. The modern architecture and convenience attract business travelers.","vibe":"Modern & Transit","bestFor":"Business travelers, transport hub seekers, and modern Japan enthusiasts","pros":["Excellent transport","Modern facilities","Shopping centers","Business hotels"],"cons":["Impersonal feel","Crowded","Less character"],"lat":35.1709,"lng":136.8815,"priceLevel":"$$$"},{"name":"Nagoya Castle Area","tagline":"Shogun heritage and samurai history","description":"The area around the reconstructed castle offers historical atmosphere, the Meiji-mura museum, and traditional gardens. The cultural depth attracts history enthusiasts and castle lovers.","vibe":"Historic & Cultural","bestFor":"History buffs, castle enthusiasts, and cultural travelers","pros":["Famous castle","Cultural museums","Historical atmosphere","Gardens"],"cons":["Tourist-focused","Limited nightlife","Spread out"],"lat":35.1856,"lng":136.8989,"priceLevel":"$$"},{"name":"Osu","tagline":"Retro shopping and otaku culture","description":"The eclectic neighborhood offers vintage shopping, electronic stores, and otaku culture. The Osu Kannon temple adds spiritual depth to the quirky shopping streets.","vibe":"Quirky & Alternative","bestFor":"Vintage shoppers, otaku, and alternative culture seekers","pros":["Retro shopping","Otaku culture","Temple visits","Unique finds"],"cons":["Crowded weekends","Can feel overwhelming","Less upscale"],"lat":35.1567,"lng":136.8989,"priceLevel":"$$"},{"name":"Atsuta","tagline":"Grand shrine and sacred grounds","description":"The area around Atsuta Shrine, one of Japan's most sacred sites, offers spiritual atmosphere and historical significance. The ancient grounds provide escape from urban Nagoya.","vibe":"Sacred & Historical","bestFor":"Spiritual seekers, shrine enthusiasts, and peace lovers","pros":["Grand shrine","Sacred atmosphere","Historical significance","Green spaces"],"cons":["Far from center","Limited nightlife","Quiet area"],"lat":35.1278,"lng":136.9089,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

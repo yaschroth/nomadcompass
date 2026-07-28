@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Casco Antiguo (Old Town)","tagline":"Gothic grandeur and café culture","description":"Palma's Old Town enchants - the magnificent cathedral dominates narrow streets filled with boutiques and tapas bars. Mediterranean sophistication meets Mallorcan heritage.","vibe":"Historic & Sophisticated","bestFor":"Culture lovers, architecture fans, and those wanting Palma's best","pros":["Stunning cathedral","Great restaurants","Historic charm","Walkable"],"cons":["Tourist crowds","Expensive","Cruise ship days"],"lat":39.5676,"lng":2.6502,"priceLevel":"$$$"},{"name":"Santa Catalina","tagline":"Former fishing quarter turned foodie heaven","description":"Santa Catalina is Palma's trendiest neighborhood - the old fishing district now houses Mercat de Santa Catalina, craft cocktail bars, and the city's best restaurants.","vibe":"Trendy & Culinary","bestFor":"Foodies, nightlife seekers, and those wanting trendy vibes","pros":["Best food scene","Great nightlife","Central location","Character"],"cons":["Noisy at night","Gentrified prices","Crowded weekends"],"lat":39.5736,"lng":2.6389,"priceLevel":"$$$"},{"name":"El Terreno","tagline":"Hillside charm with sea views","description":"El Terreno climbs above Palma - once the nightlife center, now a residential area with stunning views, artistic community, and historic Bellver Castle nearby.","vibe":"Residential & Artistic","bestFor":"Artists, long-term residents, and those wanting views","pros":["Great views","Artistic community","Quieter atmosphere","Near castle"],"cons":["Hilly terrain","Limited shops","Past its prime"],"lat":39.5612,"lng":2.6298,"priceLevel":"$$"},{"name":"El Molinar","tagline":"Local beach life outside the center","description":"El Molinar offers authentic Palma beach culture - local swimmers, casual chiringuitos, windmill-dotted shore. Where Palmesanos escape the Old Town crowds.","vibe":"Beach & Local","bestFor":"Beach lovers, locals seekers, and those wanting authenticity","pros":["Local beach scene","Affordable","Authentic vibes","Good seafood"],"cons":["Far from center","Simple facilities","Public transport limited"],"lat":39.5598,"lng":2.6702,"priceLevel":"$$"},{"name":"Son Espanyolet","tagline":"Residential charm with local markets","description":"Son Espanyolet is where young Palma families live - tree-lined streets, local markets, neighborhood bars. Just enough removed from tourism for authentic daily life.","vibe":"Residential & Family","bestFor":"Families, long-term visitors, and those wanting local life","pros":["Local atmosphere","Good prices","Safe area","Markets"],"cons":["Less scenic","Far from beach","Limited nightlife"],"lat":39.5765,"lng":2.6298,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

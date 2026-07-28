@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Victoria Island","tagline":"Corporate towers and beach clubs","description":"Lagos's business hub features skyscrapers, luxury hotels, and the city's best beach clubs. The concentration of corporate offices and upscale venues makes it the natural base for business travelers.","vibe":"Business & Upscale","bestFor":"Business travelers, expats, and those wanting corporate Lagos","pros":["Best infrastructure","Beach clubs","International restaurants","Business hotels"],"cons":["Very expensive","Traffic nightmares","Power issues"],"lat":6.4281,"lng":3.4219,"priceLevel":"$$$"},{"name":"Lekki","tagline":"New money and gated estates","description":"The rapidly developing peninsula showcases Lagos's new wealth with gated communities, modern malls, and trendy restaurants. The emerging tech scene attracts young professionals and entrepreneurs.","vibe":"Modern & Emerging","bestFor":"Young professionals, tech workers, and those wanting modern Lagos","pros":["Modern development","Tech hub emerging","Good restaurants","Less congested than VI"],"cons":["Flooding issues","Traffic to island","Still developing"],"lat":6.4378,"lng":3.4756,"priceLevel":"$$$"},{"name":"Ikoyi","tagline":"Old money elegance on the lagoon","description":"The traditionally wealthy neighborhood offers leafy streets, diplomatic residences, and refined dining. The quieter atmosphere and established infrastructure appeal to families and long-term residents.","vibe":"Affluent & Established","bestFor":"Families, diplomats, and those wanting established luxury","pros":["Leafy and quiet","Good schools","Established infrastructure","Refined restaurants"],"cons":["Very expensive","Less nightlife","Can feel isolated"],"lat":6.4534,"lng":3.4312,"priceLevel":"$$$"},{"name":"Yaba","tagline":"Nigeria's Silicon Valley hub","description":"The tech cluster known as Yabacon Valley hosts startups, co-working spaces, and young innovators. The creative energy and affordable options attract digital nomads and tech entrepreneurs.","vibe":"Tech & Creative","bestFor":"Tech workers, entrepreneurs, and budget-conscious creatives","pros":["Tech ecosystem","Affordable options","Young energy","Co-working spaces"],"cons":["Chaotic infrastructure","Traffic issues","Less polished"],"lat":6.5089,"lng":3.3756,"priceLevel":"$$"},{"name":"Surulere","tagline":"Middle-class Lagos with cultural soul","description":"This residential mainland area offers authentic Lagos middle-class life with the National Stadium, music venues, and vibrant nightlife. The cultural energy attracts creatives and those seeking real Lagos.","vibe":"Cultural & Middle-class","bestFor":"Culture seekers, music lovers, and those wanting authentic Lagos","pros":["Cultural venues","Nightlife scene","Affordable","Authentic Lagos life"],"cons":["Infrastructure challenges","Traffic issues","Less security"],"lat":6.4923,"lng":3.3534,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

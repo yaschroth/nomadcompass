@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kiyovu","tagline":"Embassy row with the best views","description":"Kigali's most upscale residential area features embassies, expatriate homes, and stunning hillside views. The concentration of international restaurants and quiet streets make it the natural expat hub.","vibe":"Upscale & Diplomatic","bestFor":"Business travelers, diplomats, and those wanting comfort and safety","pros":["Best restaurants","Safe and secure","Beautiful views","Quiet residential"],"cons":["Most expensive area","Far from local life","Need transport"],"lat":-1.9534,"lng":30.0612,"priceLevel":"$$$"},{"name":"Kimihurura","tagline":"The new expat favorite","description":"This rapidly developing neighborhood has emerged as a popular alternative to Kiyovu with new apartments, good cafes, and a mix of local and international residents.","vibe":"Growing & Mixed","bestFor":"Young professionals, long-term expats, and those wanting community feel","pros":["Growing cafe scene","Modern apartments","Good value","Mixed community"],"cons":["Still developing","Construction noise","Spread out"],"lat":-1.9623,"lng":30.0823,"priceLevel":"$$"},{"name":"Nyamirambo","tagline":"The Muslim quarter with soul","description":"Kigali's most vibrant neighborhood pulses with markets, mosques, and African urban energy. The authentic atmosphere, street food, and nightlife offer a stark contrast to the quiet hillside suburbs.","vibe":"Local & Vibrant","bestFor":"Culture seekers, budget travelers, and those wanting authentic Rwandan experience","pros":["Authentic local culture","Great markets","Best nightlife","Very affordable"],"cons":["Can feel overwhelming","Less English spoken","Basic infrastructure"],"lat":-1.9756,"lng":30.0456,"priceLevel":"$"},{"name":"Kacyiru","tagline":"Government district with modern amenities","description":"The administrative district houses government offices, international organizations, and modern business hotels. The professional atmosphere and good infrastructure appeal to business visitors.","vibe":"Business & Modern","bestFor":"Business travelers, NGO workers, and those wanting modern amenities","pros":["Modern hotels","Good infrastructure","Professional atmosphere","Conference facilities"],"cons":["Less character","Quiet at night","Limited nightlife"],"lat":-1.9445,"lng":30.0789,"priceLevel":"$$$"},{"name":"Remera","tagline":"Commercial buzz and local energy","description":"A busy commercial area with markets, local restaurants, and the bus station. The young Rwandan energy and affordable prices attract budget travelers and those seeking local immersion.","vibe":"Commercial & Young","bestFor":"Budget travelers, young nomads, and local experience seekers","pros":["Transport hub","Affordable prices","Young energy","Local restaurants"],"cons":["Noisy and busy","Traffic congestion","Less scenic"],"lat":-1.9567,"lng":30.0934,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

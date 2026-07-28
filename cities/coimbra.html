@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Alta (Upper Town)","tagline":"University heritage on the hilltop","description":"Coimbra's upper town centers on Portugal's oldest university - Baroque library, academic traditions, student life. Where scholars have studied for 800 years.","vibe":"Academic & Historic","bestFor":"History lovers, book enthusiasts, and academic visitors","pros":["Stunning library","Historic university","Cultural depth","Great views"],"cons":["Very steep","Limited restaurants","Tourist crowds at library"],"lat":40.209,"lng":-8.4261,"priceLevel":"$$"},{"name":"Baixa (Downtown)","tagline":"Riverside commerce and fado tradition","description":"Coimbra's lower town stretches along the Mondego - shops, restaurants, Coimbra fado venues. Where daily life meets medieval tradition.","vibe":"Commercial & Traditional","bestFor":"Shoppers, fado lovers, and practical visitors","pros":["Fado venues","Good shopping","Riverside walks","Central"],"cons":["Steep climbs to upper town","Tourist restaurants","Limited nightlife"],"lat":40.2089,"lng":-8.4289,"priceLevel":"$$"},{"name":"Santa Clara","tagline":"Across the river with monastery views","description":"Santa Clara sits across the Mondego - views of the university, historic monastery, quieter pace. Where to appreciate Coimbra from a different perspective.","vibe":"Quiet & Scenic","bestFor":"Peace seekers, photographers, and those wanting views","pros":["Great views","Quiet area","Historic monastery","Riverside"],"cons":["Far from action","Limited dining","Basic area"],"lat":40.2034,"lng":-8.4412,"priceLevel":"$"},{"name":"Solum","tagline":"Student housing with local flavor","description":"Solum serves Coimbra's student population - affordable housing, local restaurants, university proximity. Where students live beyond the historic center.","vibe":"Student & Local","bestFor":"Students, budget travelers, and local seekers","pros":["Affordable","Student atmosphere","Local restaurants","Near university"],"cons":["Not scenic","Basic area","Limited attractions"],"lat":40.2012,"lng":-8.4134,"priceLevel":"$"},{"name":"Celas","tagline":"Residential calm near botanical gardens","description":"Celas offers residential Coimbra - near botanical gardens, university facilities, and everyday Portuguese life. Practical base for longer stays.","vibe":"Residential & Green","bestFor":"Long-term visitors, nature lovers, and practical travelers","pros":["Near botanical gardens","Quiet","Affordable","University access"],"cons":["Limited nightlife","Basic shops","Residential focus"],"lat":40.2134,"lng":-8.4189,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Walking Street","tagline":"Neon-lit nightlife epicenter","description":"Thailand's most famous nightlife strip features clubs, bars, and round-the-clock entertainment. The notorious energy and adult-oriented entertainment create polarizing but undeniably vibrant atmosphere.","vibe":"Nightlife & Adult","bestFor":"Night owls, party seekers, and those seeking infamous nightlife","pros":["24-hour entertainment","Nightclub variety","Lively atmosphere","Easy socializing"],"cons":["Not family appropriate","Seedy atmosphere","Can feel overwhelming"],"lat":12.9278,"lng":100.8712,"priceLevel":"$$"},{"name":"Naklua","tagline":"Quiet north with Thai authenticity","description":"The northern area offers calmer beaches, local seafood markets, and more Thai atmosphere. The Sanctuary of Truth and quieter development attract those escaping central Pattaya chaos.","vibe":"Quiet & Local","bestFor":"Families, long-term visitors, and those seeking authentic Thailand","pros":["Quieter beaches","Local markets","Thai atmosphere","Sanctuary of Truth"],"cons":["Less nightlife","Need transport to central","Basic infrastructure"],"lat":12.9689,"lng":100.8934,"priceLevel":"$$"},{"name":"Jomtien","tagline":"Beach relaxation south of the chaos","description":"The southern beach area offers calmer atmosphere, LGBTQ+ friendly venues, and waterfront living. The longer beach and residential feel attract those wanting beach life without Walking Street proximity.","vibe":"Beach & Relaxed","bestFor":"Beach lovers, LGBTQ+ travelers, and relaxation seekers","pros":["Better beach","More relaxed","LGBTQ+ friendly","Beachfront dining"],"cons":["Less central","Fewer attractions","Need transport"],"lat":12.8889,"lng":100.8734,"priceLevel":"$$"},{"name":"Pratumnak Hill","tagline":"Upscale escape between beaches","description":"The hillside area between Pattaya and Jomtien offers upscale condos, quieter atmosphere, and Big Buddha views. The elevated position and development attract professionals and families.","vibe":"Upscale & Quiet","bestFor":"Professionals, families, and upscale living seekers","pros":["Quieter atmosphere","Big Buddha nearby","Upscale condos","Ocean views"],"cons":["Hilly terrain","Less beach access","Need transport"],"lat":12.9089,"lng":100.8612,"priceLevel":"$$$"},{"name":"Central Pattaya","tagline":"Shopping malls and urban convenience","description":"The heart of Pattaya features major shopping malls, hotels, and urban amenities. The concentration of services and entertainment options provides convenient base for exploring.","vibe":"Urban & Commercial","bestFor":"Shoppers, convenience seekers, and first-time visitors","pros":["Major malls","Hotel variety","Central location","Good transport"],"cons":["Busy traffic","Less character","Tourist-oriented"],"lat":12.9356,"lng":100.8789,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

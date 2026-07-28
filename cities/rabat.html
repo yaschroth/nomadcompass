@@ -1446,6 +1446,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kasbah des Oudaias","tagline":"Blue and white clifftop charm","description":"This stunning 12th-century fortress overlooks the Atlantic with whitewashed walls and blue-trimmed doorways. Narrow streets lead to artisan workshops, peaceful gardens, and clifftop cafes serving mint tea.","vibe":"Historic picturesque","bestFor":"Photographers and history lovers","pros":["Stunning views","Historic atmosphere","Andalusian gardens","Artisan crafts"],"cons":["Very touristy","Steep streets","Limited parking"],"lat":34.0342,"lng":-6.8389,"priceLevel":"$$"},{"name":"Agdal","tagline":"Modern Morocco's diplomatic quarter","description":"This upscale neighborhood houses embassies, modern apartments, and trendy cafes. Wide boulevards, international restaurants, and shopping centers create a cosmopolitan atmosphere for expatriates and professionals.","vibe":"Modern upscale","bestFor":"Expats and business travelers","pros":["Modern amenities","International dining","Safe area","Good infrastructure"],"cons":["Expensive","Less character","Car-dependent"],"lat":33.9856,"lng":-6.8523,"priceLevel":"$$"},{"name":"Medina","tagline":"Authentic souks without Marrakech madness","description":"Rabat's medina offers traditional Moroccan market experience without overwhelming tourist pressure. Carpet sellers, spice merchants, and leather craftsmen work alongside locals doing daily shopping.","vibe":"Traditional authentic","bestFor":"Culture seekers and bargain hunters","pros":["Authentic markets","Fair prices","Less hassle","Real Morocco"],"cons":["Navigation confusing","Basic amenities","Crowded mornings"],"lat":34.0234,"lng":-6.8312,"priceLevel":"$"},{"name":"Hassan","tagline":"Royal tower and modern promenade","description":"Home to the iconic Hassan Tower and Mohammed V Mausoleum, this area blends historic monuments with modern waterfront development. Riverbank promenades and cafes attract evening strollers.","vibe":"Monumental modern","bestFor":"Sightseers and evening walks","pros":["Iconic monuments","Waterfront promenade","Evening atmosphere","Central location"],"cons":["Tourist buses","Limited dining","Spread out"],"lat":34.0245,"lng":-6.8198,"priceLevel":"$$"},{"name":"Hay Riad","tagline":"New city convenience and comfort","description":"This modern district west of center offers contemporary living with shopping malls, supermarkets, and medical facilities. Middle-class Moroccans and long-term visitors appreciate the practical amenities.","vibe":"Modern suburban","bestFor":"Long-term stays and families","pros":["Modern amenities","Good shopping","Family-friendly","Less traffic"],"cons":["Far from center","Generic feel","Needs transport"],"lat":33.9734,"lng":-6.8734,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1497,6 +1498,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1468,6 +1468,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Jonker Street","tagline":"Heritage heart with weekend night market","description":"UNESCO-listed Jonker Street forms the cultural core of historic Malacca with antique shops, Peranakan mansions, and the famous weekend night market. The concentration of heritage and tourism makes it ground zero for visitors.","vibe":"Heritage & Tourist","bestFor":"First-time visitors, culture seekers, and antique hunters","pros":["UNESCO heritage","Famous night market","Peranakan culture","Antique shopping"],"cons":["Very crowded on weekends","Tourist prices","Can feel overwhelming"],"lat":2.1934,"lng":102.2478,"priceLevel":"$$"},{"name":"Dutch Square","tagline":"Red buildings and colonial grandeur","description":"The iconic red Stadthuys and Christ Church define Malacca's most photographed area. The Dutch colonial architecture and surrounding museums make it the historic showcase zone.","vibe":"Colonial & Iconic","bestFor":"History buffs, photographers, and colonial heritage enthusiasts","pros":["Iconic red buildings","Museums","Photo opportunities","Historic significance"],"cons":["Tourist trap feel","Trishaw hassle","Crowded"],"lat":2.1945,"lng":102.2489,"priceLevel":"$$"},{"name":"Bukit China","tagline":"Ancient cemetery with hilltop views","description":"The largest Chinese cemetery outside China offers peaceful walks, historic temples, and hilltop views over the city. The spiritual atmosphere contrasts with the busy heritage zone below.","vibe":"Spiritual & Quiet","bestFor":"History seekers, peace lovers, and those escaping crowds","pros":["Historic significance","Quiet atmosphere","Temple visits","City views"],"cons":["Far from center","Hot for walking","Limited amenities"],"lat":2.1978,"lng":102.2534,"priceLevel":"$"},{"name":"Kampung Morten","tagline":"Living Malay village preserved","description":"This traditional Malay village along the river maintains authentic kampung life within the city. The wooden stilt houses and riverside setting offer a glimpse of pre-modern Malacca.","vibe":"Traditional & Village","bestFor":"Culture seekers, photographers, and those wanting authentic Malaysia","pros":["Authentic Malay village","Riverside setting","Traditional houses","Peaceful walks"],"cons":["Limited services","Residential respect needed","Small area"],"lat":2.1889,"lng":102.2456,"priceLevel":"$"},{"name":"Klebang Beach","tagline":"Coconut shakes and coastal escape","description":"The coastal area north of the center offers beach access and the famous coconut shake stalls. The local weekend destination provides relief from heritage zone intensity.","vibe":"Beach & Local","bestFor":"Beach seekers, families, and those wanting local atmosphere","pros":["Beach access","Famous coconut shakes","Local atmosphere","Seafood restaurants"],"cons":["Far from heritage zone","Basic beach","Need transport"],"lat":2.2234,"lng":102.1889,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1519,6 +1520,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

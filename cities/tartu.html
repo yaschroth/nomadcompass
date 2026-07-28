@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Town Hall Square","tagline":"University town heart with cafe culture","description":"The neoclassical square features the famous Kissing Students fountain and surrounding cafes. Estonia's intellectual capital pulses with student energy while historic buildings house cultural venues.","vibe":"Academic charming","bestFor":"Culture lovers and cafe hoppers","pros":["Beautiful square","Cafe culture","Central location","Student energy"],"cons":["Small scale","Quiet summers","Limited nightlife"],"lat":58.3806,"lng":26.7223,"priceLevel":"$"},{"name":"Toomemägi (Cathedral Hill)","tagline":"Park-covered ruins and university heritage","description":"The hill above downtown features the cathedral ruins, university observatory, and peaceful parkland. Generations of students have strolled these paths between historic buildings.","vibe":"Academic peaceful","bestFor":"History lovers and peace seekers","pros":["Cathedral ruins","Beautiful park","University heritage","Peaceful walks"],"cons":["Limited services","Hilly terrain","Weather dependent"],"lat":58.3823,"lng":26.7156,"priceLevel":"$"},{"name":"Karlova","tagline":"Wooden houses and bohemian spirit","description":"This charming neighborhood of wooden houses has maintained its bohemian character. Students, artists, and young families share the narrow streets while small galleries and cafes open.","vibe":"Bohemian residential","bestFor":"Artists and long-term stays","pros":["Wooden architecture","Bohemian character","Affordable","Local atmosphere"],"cons":["Old infrastructure","Quiet nights","Far from center"],"lat":58.3756,"lng":26.7312,"priceLevel":"$"},{"name":"Supilinn","tagline":"Historic Soup Town with river views","description":"Named for its soup-themed streets, this riverside neighborhood features renovated wooden houses and emerging creative businesses. The Emajõgi River provides peaceful walking paths.","vibe":"Creative riverside","bestFor":"Creatives and nature lovers","pros":["River walks","Creative scene","Historic houses","Peaceful atmosphere"],"cons":["Flood risk","Limited services","Gentrifying"],"lat":58.3867,"lng":26.7134,"priceLevel":"$"},{"name":"Annelinn","tagline":"Soviet blocks with practical living","description":"The large Soviet-era housing estate offers affordable living and everyday Estonian life. Supermarkets, schools, and basic services serve a residential population away from tourists.","vibe":"Residential practical","bestFor":"Budget long-term stays","pros":["Very affordable","Local life","Good transport","Practical services"],"cons":["Soviet aesthetics","Far from center","No attractions"],"lat":58.3712,"lng":26.7534,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

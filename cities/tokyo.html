@@ -1456,6 +1456,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Shibuya","tagline":"Tokyo's trendy heart where fashion meets tech","description":"Shibuya is the pulsing center of Tokyo's youth culture and tech scene. Beyond the famous crossing, you'll find cutting-edge coworking spaces, trendy cafes, and an endless stream of energy. It's expensive but puts you at the center of Tokyo's creative and startup ecosystem.","vibe":"Trendy & Dynamic","bestFor":"Tech workers, creatives, and nomads who want to be in Tokyo's most energetic neighborhood","pros":["Excellent transport hub","Countless cafes","Tech scene","24/7 energy"],"cons":["Very expensive","Extremely crowded","Can be overwhelming"],"lat":35.6595,"lng":139.7004,"priceLevel":"$$$"},{"name":"Shimokitazawa","tagline":"Tokyo's bohemian village with vintage soul","description":"Shimokitazawa is Tokyo's indie darling - a maze of narrow streets filled with vintage shops, live music venues, and independent cafes. This is where Tokyo's creative types come to escape the corporate grind. Perfect for nomads who value character over convenience.","vibe":"Bohemian & Creative","bestFor":"Creatives, musicians, and nomads seeking Tokyo's most characterful neighborhood","pros":["Unique character","Great live music","Vintage shopping","Quieter vibe"],"cons":["Small train stations","Limited coworking","Far from CBD"],"lat":35.6615,"lng":139.6676,"priceLevel":"$$"},{"name":"Nakameguro","tagline":"Cherry blossoms and coffee culture by the canal","description":"Nakameguro is Tokyo at its most stylish. The canal-side neighborhood is lined with designer boutiques, specialty coffee shops, and some of the city's best restaurants. It's the neighborhood of choice for Tokyo's fashion and creative industries.","vibe":"Stylish & Upscale","bestFor":"Design professionals, foodies, and nomads with refined taste","pros":["Beautiful canal walks","Best coffee scene","Stylish atmosphere","Great restaurants"],"cons":["Expensive","Can feel exclusive","Limited nightlife"],"lat":35.6439,"lng":139.6986,"priceLevel":"$$$"},{"name":"Shinjuku","tagline":"Neon-lit chaos and the busiest station on earth","description":"Shinjuku is organized chaos at its finest. The world's busiest train station connects you everywhere, while the surrounding blocks offer everything from corporate towers to the legendary Golden Gai bar district. Perfect for nomads who need transport and variety.","vibe":"Urban & Connected","bestFor":"Business travelers, nightlife seekers, and nomads who need maximum connectivity","pros":["Best transport","24-hour services","Endless options","Business facilities"],"cons":["Overwhelming","Tourist-heavy","Noisy and crowded"],"lat":35.6938,"lng":139.7034,"priceLevel":"$$"},{"name":"Koenji","tagline":"Tokyo's punk rock neighborhood with community soul","description":"Koenji is where Tokyo's counterculture lives. Known for its vintage clothing stores, live houses, and activist community, it's the affordable alternative to Shimokitazawa. Strong neighborhood spirit and regular festivals make it perfect for long-term stays.","vibe":"Alternative & Community","bestFor":"Budget nomads, music lovers, and those seeking authentic Tokyo community","pros":["Affordable","Strong community","Great music scene","Local festivals"],"cons":["Further from center","Less English","Limited coworking"],"lat":35.7059,"lng":139.6505,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1507,6 +1508,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

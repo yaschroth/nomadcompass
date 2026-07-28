@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Santa Cruz de Tenerife","tagline":"Capital culture and urban energy","description":"The island capital offers cultural institutions, modern architecture, and authentic Canarian life beyond tourism. The famous Carnival, shopping districts, and harbor create urban Spanish atmosphere.","vibe":"Urban cultural","bestFor":"Culture seekers and urban travelers","pros":["Cultural venues","Carnival celebrations","Authentic Canarian","Good shopping"],"cons":["No beaches","Less touristy","Hot summers"],"lat":28.4636,"lng":-16.2518,"priceLevel":"$"},{"name":"La Laguna","tagline":"UNESCO university town charm","description":"The historic capital features UNESCO-listed colonial architecture and university energy. Tapas bars, bookshops, and cultural venues fill the pedestrian streets while students bring life.","vibe":"Historic academic","bestFor":"History lovers and culture seekers","pros":["UNESCO heritage","Student atmosphere","Great tapas","Cooler climate"],"cons":["Cloudy weather","No beach","Limited nightlife"],"lat":28.4853,"lng":-16.3156,"priceLevel":"$"},{"name":"Puerto de la Cruz","tagline":"Traditional resort with local character","description":"The original tourist area maintains local character with historic plazas, botanical gardens, and the famous Lago Martianez seawater pools. European retirees and nomads mix with Canarians.","vibe":"Traditional resort","bestFor":"Those seeking resort comfort with culture","pros":["Seawater pools","Local character","Botanical gardens","Established tourism"],"cons":["Older tourist base","Rocky beaches","Limited nightlife"],"lat":28.4167,"lng":-16.5489,"priceLevel":"$$"},{"name":"Los Cristianos/Las Américas","tagline":"Southern sun and package tourism","description":"The southern resort strip offers guaranteed sunshine, sandy beaches, and extensive tourist infrastructure. British and German visitors fill all-inclusive hotels while nightlife pumps.","vibe":"Package resort","bestFor":"Sun seekers and party goers","pros":["Best weather","Sandy beaches","Full infrastructure","Active nightlife"],"cons":["Very touristy","Generic feel","No local culture"],"lat":28.0523,"lng":-16.7156,"priceLevel":"$$"},{"name":"El Médano","tagline":"Windsurf village with nomad community","description":"This wind sports capital attracts kitesurfers, windsurfers, and increasingly digital nomads. Affordable living, year-round wind, and relaxed atmosphere create a distinct community.","vibe":"Wind sports nomad","bestFor":"Wind sports enthusiasts and nomads","pros":["Wind sports paradise","Nomad community","Affordable","Relaxed vibe"],"cons":["Very windy","Limited nightlife","Small town"],"lat":28.0445,"lng":-16.5367,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

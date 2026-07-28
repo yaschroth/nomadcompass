@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town (Stariya grad)","tagline":"Roman layers beneath Bulgarian revival","description":"Plovdiv's stunning old town features Bulgarian National Revival houses, Roman ruins, and cobblestone streets. The concentration of history from multiple eras creates one of Europe's most layered historic centers.","vibe":"Historic & Artistic","bestFor":"History lovers, architecture enthusiasts, and culture seekers","pros":["Stunning architecture","Roman theatre","Art galleries","Historic atmosphere"],"cons":["Steep cobblestones","Tourist prices","Crowded in summer"],"lat":42.1489,"lng":24.7534,"priceLevel":"$$"},{"name":"Kapana","tagline":"Creative quarter with artisan buzz","description":"The revitalized craftsmen's quarter has transformed into Plovdiv's hippest area with street art, independent cafes, and creative shops. The pedestrian streets and bohemian energy attract young creatives.","vibe":"Hip & Creative","bestFor":"Creatives, foodies, and alternative culture seekers","pros":["Street art","Hip cafes","Creative shops","Walkable streets"],"cons":["Can feel gentrified","Crowded evenings","Higher prices"],"lat":42.1478,"lng":24.7489,"priceLevel":"$$"},{"name":"Dzhumaya Square","tagline":"Roman stadium beneath the modern","description":"The main pedestrian area features the remarkable Roman Stadium ruins visible beneath the plaza. The shopping streets and central location make it Plovdiv's commercial heart.","vibe":"Central & Archaeological","bestFor":"Shoppers, casual visitors, and Roman history enthusiasts","pros":["Roman Stadium","Shopping streets","Central location","Good restaurants"],"cons":["Busy and commercial","Tourist oriented","Less intimate"],"lat":42.1489,"lng":24.7512,"priceLevel":"$$"},{"name":"Trakiya","tagline":"Soviet blocks with local life","description":"The large residential district offers authentic Bulgarian everyday life with markets, local restaurants, and affordable living. The contrast with the touristy old town reveals real Plovdiv.","vibe":"Residential & Local","bestFor":"Budget travelers, local experience seekers, and long-term visitors","pros":["Authentic life","Local markets","Very affordable","Less touristy"],"cons":["Soviet architecture","Far from center","Less scenic"],"lat":42.1289,"lng":24.7789,"priceLevel":"$"},{"name":"Rowing Channel Area","tagline":"Green escape and water activities","description":"The area around the rowing channel offers parks, sports facilities, and green space. The family-friendly atmosphere and outdoor activities provide escape from urban intensity.","vibe":"Green & Active","bestFor":"Families, sports lovers, and nature seekers","pros":["Green spaces","Sports facilities","Family friendly","Peaceful atmosphere"],"cons":["Far from attractions","Limited dining","Need transport"],"lat":42.1389,"lng":24.7312,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

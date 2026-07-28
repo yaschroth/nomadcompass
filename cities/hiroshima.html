@@ -1421,6 +1421,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Peace Memorial Park Area","tagline":"Where history demands reflection","description":"The Peace Park is Hiroshima's soul - A-Bomb Dome, Memorial Museum, eternal flame. Where humanity confronts its capacity for destruction and hope for peace.","vibe":"Historic & Reflective","bestFor":"History seekers, peace advocates, and thoughtful travelers","pros":["Powerful history","Beautiful park","Museums","Central location"],"cons":["Emotionally heavy","Tourist crowds","Limited nightlife"],"lat":34.3955,"lng":132.4536,"priceLevel":"$$"},{"name":"Hondori","tagline":"Covered arcade shopping and okonomiyaki","description":"Hondori is Hiroshima's main shopping arcade - covered streets, okonomiyaki restaurants, urban energy. Where daily life continues in Japan's resilient city.","vibe":"Shopping & Culinary","bestFor":"Shoppers, food lovers, and urban explorers","pros":["Great shopping","Okonomiyaki paradise","Covered from weather","Central"],"cons":["Crowded","Tourist-oriented","Chain stores"],"lat":34.3934,"lng":132.4589,"priceLevel":"$$"},{"name":"Nagarekawa","tagline":"Entertainment district after dark","description":"Nagarekawa is Hiroshima's nightlife center - bars, clubs, izakayas, and late-night energy. Where Hiroshima unwinds after the day's solemnity.","vibe":"Nightlife & Social","bestFor":"Nightlife seekers, bar hoppers, and social travelers","pros":["Great nightlife","Many bars","Izakayas","Late hours"],"cons":["Noisy","Can be seedy","Tourist traps"],"lat":34.3912,"lng":132.4612,"priceLevel":"$$"},{"name":"Miyajima (Day Trip)","tagline":"Floating torii and sacred island","description":"Miyajima is Hiroshima's sacred island - famous floating torii gate, deer, temples. Essential day trip combining natural beauty with spiritual significance.","vibe":"Sacred & Natural","bestFor":"Temple seekers, photographers, and nature lovers","pros":["Iconic torii","Beautiful island","Temples","Deer"],"cons":["Day trip crowds","Limited accommodation","Tide-dependent views"],"lat":34.2959,"lng":132.3198,"priceLevel":"$$"},{"name":"Hiroshima Station Area","tagline":"Transport hub with modern amenities","description":"Hiroshima Station offers practical base - shinkansen access, hotels, shopping malls. Where transit convenience meets modern Hiroshima.","vibe":"Transit & Modern","bestFor":"Transit travelers, practical visitors, and business trips","pros":["Shinkansen access","Good hotels","Shopping","Convenient"],"cons":["Less character","Generic feel","Far from sights"],"lat":34.3983,"lng":132.4756,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1472,6 +1473,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

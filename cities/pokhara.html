@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Lakeside (Baidam)","tagline":"Pokhara's tourist heartland","description":"Lakeside stretches along Phewa Lake - restaurants, shops, and mountain views. It's touristy but convenient with everything a traveler needs within walking distance.","vibe":"Tourist & Scenic","bestFor":"First-time visitors, trekkers preparing, and those wanting convenience","pros":["Lake views","All services","Mountain views","Walkable"],"cons":["Very touristy","Persistent touts","Not authentic Nepal"],"lat":28.2096,"lng":83.9567,"priceLevel":"$"},{"name":"Damside","tagline":"Pokhara's quieter lake alternative","description":"Damside sits at the lake's southern end - quieter than Lakeside, closer to the dam, and more authentic. Good budget options and local eateries.","vibe":"Quiet & Budget","bestFor":"Budget travelers, peace seekers, and those avoiding tourist crowds","pros":["Quieter","More affordable","Local restaurants","Lake access"],"cons":["Fewer services","Walk to Lakeside","Less scenic"],"lat":28.198,"lng":83.96,"priceLevel":"$"},{"name":"Old Town (Purano Bazaar)","tagline":"Pokhara's authentic Newari heart","description":"Old Pokhara is the real Nepal - traditional Newari architecture, local markets, and zero tourists. It's a world away from Lakeside's traveler bubble.","vibe":"Authentic & Traditional","bestFor":"Culture seekers, photographers, and those wanting real Nepal","pros":["Authentic Nepal","No tourists","Local markets","Traditional architecture"],"cons":["Far from lake","Basic facilities","Less English"],"lat":28.22,"lng":83.985,"priceLevel":"$"},{"name":"Sarangkot Area","tagline":"Pokhara's sunrise viewpoint village","description":"Sarangkot offers Pokhara's most famous sunrise - Annapurna and Machhapuchhre views. Stay up here for peace and paragliding launches.","vibe":"Viewpoint & Adventure","bestFor":"Sunrise seekers, paragliders, and those wanting mountain proximity","pros":["Best views","Paragliding launch","Peaceful","Stunning sunrise"],"cons":["Far from town","Steep access","Cold nights"],"lat":28.244,"lng":83.948,"priceLevel":"$"},{"name":"Pame/North Lakeside","tagline":"Pokhara's peaceful northern stretch","description":"North Lakeside is quieter than the main strip - yoga retreats, organic cafes, and more relaxed atmosphere. The tourist infrastructure thins out here.","vibe":"Peaceful & Wellness","bestFor":"Yoga practitioners, long-term stayers, and those seeking quiet","pros":["Quieter","Yoga retreats","Less touristy","Lake views"],"cons":["Walk to services","Fewer restaurants","Isolated feeling"],"lat":28.225,"lng":83.952,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

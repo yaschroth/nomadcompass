@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Chaweng","tagline":"Koh Samui's main beach strip","description":"Chaweng is Samui's tourist heart - longest beach, shopping, and nightlife. It's the island's most developed and liveliest area.","vibe":"Tourist & Nightlife","bestFor":"Party seekers, shopping lovers, and those wanting action","pros":["Best beach","Nightlife","Shopping","Restaurants"],"cons":["Very touristy","Crowded","Traffic"],"lat":9.528,"lng":100.06,"priceLevel":"$$$"},{"name":"Lamai","tagline":"Koh Samui's second beach scene","description":"Lamai is Samui's second beach - good nightlife, more local feel, and interesting rock formations. Less hectic than Chaweng.","vibe":"Beach & Relaxed","bestFor":"Those wanting beach with less chaos than Chaweng","pros":["Good beach","Less crowded","Nightlife","Local feel"],"cons":["Still touristy","Fewer options","Rocky areas"],"lat":9.471,"lng":100.048,"priceLevel":"$$"},{"name":"Bophut/Fisherman's Village","tagline":"Koh Samui's charming boutique quarter","description":"Bophut is Samui's charm - converted fisherman's village with boutiques, restaurants, and Friday walking street. More sophisticated.","vibe":"Charming & Boutique","bestFor":"Couples, those seeking charm over party","pros":["Friday walking street","Boutique shops","Good restaurants","Charm"],"cons":["Small beach","Quiet some nights","Limited nightlife"],"lat":9.556,"lng":100,"priceLevel":"$$$"},{"name":"Maenam","tagline":"Koh Samui's quiet northern beach","description":"Maenam is Samui's peaceful north - quiet beach, budget bungalows, and local atmosphere. It's Samui for those seeking calm.","vibe":"Peaceful & Budget","bestFor":"Peace seekers, budget travelers, and those wanting quiet beach","pros":["Quiet beach","Affordable","Local feel","Peaceful"],"cons":["Limited nightlife","Basic options","Far from action"],"lat":9.567,"lng":99.985,"priceLevel":"$"},{"name":"Choeng Mon","tagline":"Koh Samui's luxury northeast","description":"Choeng Mon is Samui's upscale corner - luxury resorts, beautiful bay, and exclusive atmosphere. It's where Samui goes premium.","vibe":"Luxury & Exclusive","bestFor":"Luxury travelers, honeymooners, and those seeking exclusivity","pros":["Beautiful bay","Luxury resorts","Exclusive","Quiet"],"cons":["Expensive","Limited budget options","Far from nightlife"],"lat":9.557,"lng":100.06,"priceLevel":"$$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

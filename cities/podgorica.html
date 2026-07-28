@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre (Stara Varoš)","tagline":"Ottoman clock tower meets modern capital","description":"The central area around the old town offers the famous clock tower, Skaline market, and urban energy. The mix of Ottoman remnants and post-war reconstruction creates Montenegro's administrative heart.","vibe":"Urban & Mixed","bestFor":"First-time visitors, market lovers, and urban explorers","pros":["Clock tower","Central market","Restaurant variety","Transport hub"],"cons":["Not scenic","Post-war architecture","Hot in summer"],"lat":42.4412,"lng":19.2634,"priceLevel":"$$"},{"name":"Preko Morače","tagline":"Riverside cafes and canyon gateway","description":"The area beyond the Morača River offers riverside restaurants, the famous Millennium Bridge, and access to canyon day trips. The more relaxed atmosphere contrasts with busy downtown.","vibe":"Riverside & Relaxed","bestFor":"River lovers, canyon trippers, and relaxation seekers","pros":["Riverside dining","Millennium Bridge views","Canyon access","More relaxed"],"cons":["Less central","Spread out","Limited nightlife"],"lat":42.4356,"lng":19.2534,"priceLevel":"$$"},{"name":"City Kvart","tagline":"Shopping mall modernity","description":"The modern commercial area features shopping malls, chain restaurants, and contemporary development. The air-conditioned comfort attracts those escaping the summer heat.","vibe":"Modern & Commercial","bestFor":"Shoppers, comfort seekers, and modern amenity lovers","pros":["Modern malls","Air conditioning","Familiar chains","Easy parking"],"cons":["No character","Could be anywhere","Far from old town"],"lat":42.4267,"lng":19.2789,"priceLevel":"$$"},{"name":"Ribnica","tagline":"River confluence with ancient bridges","description":"The area where the Ribnica meets the Morača features old bridges, the Ribnica fortress ruins, and traditional atmosphere. The historical depth adds interest to Podgorica's limited attractions.","vibe":"Historic & Natural","bestFor":"History seekers, photographers, and nature lovers","pros":["Historic bridges","River walks","Fortress ruins","Natural setting"],"cons":["Limited services","Small area","Hot in summer"],"lat":42.4478,"lng":19.2656,"priceLevel":"$"},{"name":"Doclea Area","tagline":"Roman ruins on the city edge","description":"The archaeological site of ancient Doclea offers Roman ruins and historical significance. The imperial-era remains provide rare ancient interest in a city dominated by modern construction.","vibe":"Archaeological & Quiet","bestFor":"Roman history enthusiasts, archaeology lovers, and quiet seekers","pros":["Roman ruins","Historical significance","Quiet atmosphere","Easy city access"],"cons":["Limited other attractions","Need transport","Basic facilities"],"lat":42.4689,"lng":19.2212,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

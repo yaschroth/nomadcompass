@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Modern commerce meets colonial charm","description":"Bolivia's commercial capital features the pleasant Plaza 24 de Septiembre surrounded by cafes, the cathedral, and colonial-era buildings. Modern shopping and traditional markets coexist in this bustling center.","vibe":"Urban commercial","bestFor":"Business travelers and first-time visitors","pros":["Central location","Shopping options","Historic plaza","Good restaurants"],"cons":["Hot climate","Traffic congestion","Noisy streets"],"lat":-17.7833,"lng":-63.1823,"priceLevel":"$"},{"name":"Equipetrol","tagline":"Upscale dining and nightlife district","description":"Santa Cruz's most modern neighborhood offers international restaurants, trendy bars, and contemporary shopping. Business hotels and upscale apartments serve the city's growing middle and upper class.","vibe":"Upscale modern","bestFor":"Nightlife seekers and business travelers","pros":["Best restaurants","Active nightlife","Modern amenities","Safe area"],"cons":["Expensive","Less authentic","Car-dependent"],"lat":-17.7689,"lng":-63.1978,"priceLevel":"$$"},{"name":"Urbarí","tagline":"Green residential escape","description":"This leafy residential area offers a more peaceful alternative to central neighborhoods. Tree-lined streets, parks, and family homes create suburban comfort while remaining accessible to the center.","vibe":"Suburban peaceful","bestFor":"Families and long-term stays","pros":["Green spaces","Quieter streets","Family-friendly","Good value"],"cons":["Far from center","Limited nightlife","Needs transport"],"lat":-17.7534,"lng":-63.1723,"priceLevel":"$"},{"name":"Plan 3000","tagline":"Authentic barrio with local energy","description":"This working-class neighborhood offers genuine Santa Cruz life with local markets, street food, and neighborhood tiendas. Adventurous travelers find affordability and authenticity away from tourist areas.","vibe":"Local authentic","bestFor":"Budget travelers seeking authenticity","pros":["Very affordable","Local markets","Authentic experience","Street food"],"cons":["Safety concerns","Basic infrastructure","Spanish essential"],"lat":-17.8123,"lng":-63.1534,"priceLevel":"$"},{"name":"Biocentro Güembé","tagline":"Nature resort and butterfly gardens","description":"This ecological resort area outside the city offers a unique escape with butterfly gardens, natural pools, and cabanas. Day visitors and overnight guests enjoy nature without leaving the city.","vibe":"Nature resort","bestFor":"Nature lovers and families","pros":["Beautiful nature","Swimming areas","Butterfly gardens","Peaceful escape"],"cons":["Far from city","Resort prices","Limited to complex"],"lat":-17.8456,"lng":-63.2012,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

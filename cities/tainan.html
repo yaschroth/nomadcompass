@@ -1409,6 +1409,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Anping","tagline":"Dutch fort and historic port charm","description":"Taiwan's oldest neighborhood features Fort Zeelandia, tree houses, and historic streets. Former trading port now offers seafood restaurants, traditional snacks, and preserved heritage buildings.","vibe":"Historic coastal","bestFor":"History buffs and food lovers","pros":["Historic fort","Seafood dining","Traditional snacks","Cultural sites"],"cons":["Crowded weekends","Tourist focus","Spread out"],"lat":23.0012,"lng":120.1623,"priceLevel":"$"},{"name":"West Central District","tagline":"Temple trails and street food heaven","description":"Tainan's historic heart features ancient temples, traditional shops, and legendary street food. Night markets and day markets alike serve dishes that make Tainan Taiwan's food capital.","vibe":"Traditional foodie","bestFor":"Food lovers and culture seekers","pros":["Amazing food","Historic temples","Night markets","Cultural depth"],"cons":["Hot and humid","Crowded markets","Navigation challenging"],"lat":22.9912,"lng":120.2034,"priceLevel":"$"},{"name":"Shennong Street","tagline":"Renovated charm in old Tainan","description":"This beautifully restored historic street showcases traditional architecture with creative cafes and boutique shops. Old merchants' houses now host artisanal businesses preserving Tainan's heritage.","vibe":"Artisan heritage","bestFor":"Photographers and creative types","pros":["Beautiful restoration","Unique shops","Great cafes","Photo opportunities"],"cons":["Can be crowded","Small area","Tourist prices"],"lat":22.9956,"lng":120.1978,"priceLevel":"$$"},{"name":"Blueprint Cultural District","tagline":"Japanese-era creative renewal","description":"Renovated Japanese colonial buildings now house cultural spaces, design shops, and cafes. This creative district showcases Tainan's innovative spirit while preserving architectural heritage.","vibe":"Creative heritage","bestFor":"Design lovers and creatives","pros":["Design shops","Creative atmosphere","Historic buildings","Cultural events"],"cons":["Limited evenings","Specific interest","Small scale"],"lat":22.9878,"lng":120.2089,"priceLevel":"$$"},{"name":"East District","tagline":"Modern Tainan with local life","description":"The newer eastern area offers modern apartments, shopping, and everyday Taiwanese life. University nearby brings student energy while parks and cafes serve residential needs.","vibe":"Modern residential","bestFor":"Long-term stays and local life","pros":["Modern amenities","Student energy","Local prices","Good living"],"cons":["Less character","Tourist-unfriendly","Needs scooter"],"lat":22.9789,"lng":120.2234,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1460,6 +1461,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Silver Lake","tagline":"LA's hipster eastside heart","description":"Silver Lake is LA's Brooklyn - hillside homes, indie coffee shops, and creative energy. It's where LA's alternative culture thrives away from Hollywood.","vibe":"Hipster & Creative","bestFor":"Creatives, musicians, and those seeking alternative LA","pros":["Creative scene","Great coffee","Walkable areas","Sunset views"],"cons":["Hilly","Limited parking","Expensive"],"lat":34.087,"lng":-118.27,"priceLevel":"$$$"},{"name":"Venice","tagline":"LA's beach bohemian playground","description":"Venice is LA's most eclectic beach community - boardwalk performers, Abbot Kinney boutiques, and canals. It's touristy but retains bohemian character.","vibe":"Beach & Bohemian","bestFor":"Beach lovers, free spirits, and those seeking eclectic LA","pros":["Beach access","Abbot Kinney","Canals","People watching"],"cons":["Homeless issues","Touristy boardwalk","Parking nightmare"],"lat":33.985,"lng":-118.4695,"priceLevel":"$$$"},{"name":"Downtown LA (DTLA)","tagline":"LA's urban renaissance hub","description":"DTLA is LA's boldest transformation - Arts District warehouses, rooftop bars, and actual walkability. It's the new center of LA's urban culture.","vibe":"Urban & Emerging","bestFor":"Urban lovers, foodies, and those seeking walkable LA","pros":["Arts District","Walkable","Great food scene","Rooftop bars"],"cons":["Homeless crisis","Gritty areas","Hot summers"],"lat":34.0407,"lng":-118.2468,"priceLevel":"$$$"},{"name":"Los Feliz","tagline":"LA's laid-back creative village","description":"Los Feliz is LA's most livable neighborhood - Griffith Park access, great restaurants, and relaxed vibe. It's where creative professionals settle down.","vibe":"Village & Creative","bestFor":"Long-term stayers, hikers, and those seeking neighborhood feel","pros":["Griffith Park","Great restaurants","Village feel","Walkable"],"cons":["Expensive","Limited nightlife","Parking"],"lat":34.106,"lng":-118.287,"priceLevel":"$$$"},{"name":"Santa Monica","tagline":"LA's upscale beach perfection","description":"Santa Monica is LA's polished beach city - famous pier, Third Street Promenade, and ocean air. It's touristy but offers the quintessential LA beach experience.","vibe":"Beach & Upscale","bestFor":"Beach lovers, families, and those seeking classic LA","pros":["Beautiful beach","Great weather","Bike paths","Shopping"],"cons":["Expensive","Touristy","Traffic to get there"],"lat":34.0195,"lng":-118.4912,"priceLevel":"$$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

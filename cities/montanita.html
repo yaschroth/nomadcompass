@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Main Strip","tagline":"Party central on the Pacific","description":"Montañita's famous main street pumps with backpacker energy, cocktail bars, and surf shops. The party atmosphere and beach access define Ecuador's premier beach party destination.","vibe":"Party & Beach","bestFor":"Backpackers, party seekers, and young travelers","pros":["Epic nightlife","Beach access","Surf culture","Social atmosphere"],"cons":["Very loud","Party crowd","Can feel overwhelming"],"lat":-1.8278,"lng":-80.7556,"priceLevel":"$$"},{"name":"North End","tagline":"Quieter beach beyond the chaos","description":"The northern section of beach offers calmer atmosphere with boutique hotels and yoga retreats. Those seeking Montañita's beach without constant party energy base here.","vibe":"Quiet & Yoga","bestFor":"Yoga practitioners, couples, and those wanting peace","pros":["Quieter atmosphere","Yoga options","Boutique hotels","Beach access"],"cons":["Still close to party","Higher prices","Limited dining"],"lat":-1.8234,"lng":-80.7578,"priceLevel":"$$"},{"name":"The Point","tagline":"Surf break with hostel hub","description":"The headland area offers the main surf break and concentration of surf-focused hostels. The wave watchers, surf lessons, and beach bars create dedicated surf culture.","vibe":"Surf & Social","bestFor":"Surfers, wave watchers, and hostel social seekers","pros":["Main surf break","Surf hostels","Ocean views","Social scene"],"cons":["Crowded waves","Party noise","Rocky shore"],"lat":-1.8312,"lng":-80.7523,"priceLevel":"$"},{"name":"Manglaralto","tagline":"Fishing village escape nearby","description":"The neighboring fishing village offers authentic Ecuadorian coastal life just minutes from Montañita's chaos. The local markets and quieter atmosphere provide escape valve.","vibe":"Local & Authentic","bestFor":"Budget travelers, local experience seekers, and those escaping noise","pros":["Authentic village","Local prices","Fishing boats","Peaceful escape"],"cons":["Less infrastructure","No nightlife","Basic accommodation"],"lat":-1.8423,"lng":-80.7389,"priceLevel":"$"},{"name":"Olon","tagline":"Family beach with sanctuary views","description":"The beach town north of Montañita offers family-friendly atmosphere and views of the hillside sanctuary. The calmer energy attracts those wanting beach without party scene.","vibe":"Family & Calm","bestFor":"Families, couples, and those wanting quiet beach","pros":["Family friendly","Calmer beach","Sanctuary views","More affordable"],"cons":["Less nightlife","Limited restaurants","Need transport to Montañita"],"lat":-1.7934,"lng":-80.7612,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Plaza de Armas/Centro","tagline":"Cusco's historic Incan-Spanish heart","description":"Plaza de Armas is Cusco's magnificent center - colonial churches on Incan foundations, bustling arcades, and tourist services. It's the essential starting point.","vibe":"Historic & Central","bestFor":"First-time visitors, history lovers, and those seeking central Cusco","pros":["Historic beauty","All amenities","Great restaurants","Central"],"cons":["Very touristy","Expensive","Aggressive touts"],"lat":-13.517,"lng":-71.9785,"priceLevel":"$$$"},{"name":"San Blas","tagline":"Cusco's artsy bohemian hillside","description":"San Blas is Cusco's artistic quarter - steep cobblestone streets, artisan workshops, and bohemian cafes. The views over the city are stunning.","vibe":"Bohemian & Artsy","bestFor":"Artists, photographers, and those seeking creative Cusco","pros":["Amazing views","Artisan shops","Bohemian cafes","Authentic feel"],"cons":["Very steep","Altitude challenge","Tourist crowds"],"lat":-13.513,"lng":-71.975,"priceLevel":"$$"},{"name":"San Cristóbal","tagline":"Cusco's local hilltop neighborhood","description":"San Cristóbal sits above the tourist zone - local families, panoramic views, and authentic Cusqueño life. The hilltop church offers the best sunset views.","vibe":"Local & Panoramic","bestFor":"Photographers, budget travelers, and those seeking local atmosphere","pros":["Best views","Local neighborhood","Affordable","Authentic"],"cons":["Steep climb","Limited restaurants","Far from amenities"],"lat":-13.51,"lng":-71.978,"priceLevel":"$"},{"name":"Santa Ana","tagline":"Cusco's authentic market neighborhood","description":"Santa Ana surrounds Cusco's main market - local food stalls, traditional life, and genuine Cusqueño character. It's where locals shop and eat.","vibe":"Market & Local","bestFor":"Foodies, budget travelers, and those seeking authentic Cusco","pros":["Best market","Authentic food","Local prices","Real Cusco"],"cons":["Less polished","Some safety concerns","Limited tourism services"],"lat":-13.52,"lng":-71.985,"priceLevel":"$"},{"name":"Lucrepata/Magisterio","tagline":"Cusco's quiet residential retreat","description":"Lucrepata and Magisterio are Cusco's residential neighborhoods - quiet streets, local restaurants, and long-term expat community. Good for acclimatizing to altitude.","vibe":"Residential & Quiet","bestFor":"Long-term stayers, those acclimatizing, and seeking peace","pros":["Quiet atmosphere","Lower altitude","Local restaurants","Affordable"],"cons":["Far from sights","Limited nightlife","Needs transport"],"lat":-13.525,"lng":-71.965,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

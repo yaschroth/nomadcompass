@@ -1473,6 +1473,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Corralejo","tagline":"Surf town with Saharan dunes","description":"Corralejo is Fuerteventura's hub - surf schools, international restaurants, and the spectacular dune park. The island's most developed yet still relaxed town.","vibe":"Surf & International","bestFor":"Surfers, water sports enthusiasts, and social travelers","pros":["Great waves","Dune beaches","Good restaurants","Social scene"],"cons":["Windy","Touristy","Can be busy"],"lat":28.7308,"lng":-13.866,"priceLevel":"$$"},{"name":"El Cotillo","tagline":"Lagoon beaches and fishing village charm","description":"El Cotillo preserves fishing village authenticity - famous lagoon beaches, excellent seafood, laid-back surfer community. Fuerteventura's chilled-out soul.","vibe":"Relaxed & Authentic","bestFor":"Beach lovers, surfers, and those wanting authenticity","pros":["Amazing lagoons","Fresh fish","Relaxed vibe","Kitesurfing"],"cons":["Limited amenities","Very windy","Basic nightlife"],"lat":28.6834,"lng":-14.0156,"priceLevel":"$$"},{"name":"Costa Calma","tagline":"Resort relaxation on endless beach","description":"Costa Calma offers resort-style beach tourism - long sandy beach, windsurfing conditions, all-inclusive hotels. Where package tourists find Canarian sun.","vibe":"Resort & Beach","bestFor":"Resort seekers, windsurfers, and relaxation focused travelers","pros":["Long beach","Windsurfing","Resort facilities","Safe swimming"],"cons":["Resort-heavy","Limited authenticity","Package tourist feel"],"lat":28.1567,"lng":-14.2234,"priceLevel":"$$"},{"name":"Betancuria","tagline":"Historic capital in volcanic mountains","description":"Betancuria was Fuerteventura's capital - now a peaceful village in volcanic mountains, with historic church, traditional restaurants, and escape from coastal tourism.","vibe":"Historic & Peaceful","bestFor":"History lovers, nature seekers, and those wanting tranquility","pros":["Historic atmosphere","Mountain scenery","Traditional food","Peaceful"],"cons":["Isolated","Limited activities","Car essential"],"lat":28.4234,"lng":-14.0567,"priceLevel":"$$"},{"name":"Puerto del Rosario","tagline":"Island capital with local character","description":"Puerto del Rosario is the working capital - ferry port, local shops, genuine Canarian life. Not beautiful but authentic and practical for island exploration.","vibe":"Local & Practical","bestFor":"Authentic seekers, ferry travelers, and budget visitors","pros":["Authentic vibes","Ferry access","Affordable","Local shops"],"cons":["Not scenic","Limited beach","Basic tourism"],"lat":28.5004,"lng":-13.8628,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1524,6 +1525,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

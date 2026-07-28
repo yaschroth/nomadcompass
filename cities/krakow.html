@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kazimierz","tagline":"Jewish heritage meets bohemian nightlife","description":"Kazimierz is Krakow's most vibrant neighborhood - former Jewish quarter now filled with bars, galleries, and restaurants. Plac Nowy's nightlife and Szeroka Street's heritage create unique atmosphere. Krakow's default nomad choice.","vibe":"Bohemian & Historic","bestFor":"Nightlife lovers, history buffs, and nomads seeking Krakow's most dynamic area","pros":["Best nightlife","Jewish heritage","Great restaurants","Central"],"cons":["Noisy weekends","Tourist crowds","Rising prices"],"lat":50.051,"lng":19.946,"priceLevel":"$$"},{"name":"Stare Miasto (Old Town)","tagline":"Medieval grandeur around Europe's largest square","description":"Krakow's Old Town is one of Europe's best preserved - Rynek Główny, St. Mary's Basilica, and medieval streets. It's tourist central but undeniably beautiful. Stay here for atmosphere, not affordability.","vibe":"Historic & Tourist","bestFor":"First-time visitors, history lovers, and those wanting iconic Krakow","pros":["Incredible history","Beautiful architecture","Central location","Walkable"],"cons":["Very touristy","Expensive","Crowded"],"lat":50.0617,"lng":19.9373,"priceLevel":"$$$"},{"name":"Podgórze","tagline":"Former ghetto transformed into creative quarter","description":"Podgórze was Krakow's wartime ghetto - now transformed into creative district with Schindler's Factory museum. Street art, cafes, and authentic Polish life attract those seeking meaningful neighborhood character.","vibe":"Creative & Meaningful","bestFor":"History seekers, creatives, and nomads wanting authentic with purpose","pros":["Historic significance","Creative scene","Good value","Authentic"],"cons":["Heavy history","Limited amenities","Across river"],"lat":50.0436,"lng":19.9544,"priceLevel":"$"},{"name":"Kleparz / Nowy Kleparz","tagline":"Local markets and student energy north of center","description":"Kleparz sits just north of Old Town - famous market hall, student population, and local atmosphere. It's practical, affordable, and walkable to center without tourist crowds.","vibe":"Local & Student","bestFor":"Students, budget nomads, and those seeking local Krakow","pros":["Great market","Affordable","Near center","Student energy"],"cons":["Basic infrastructure","Less charming","Busy streets"],"lat":50.07,"lng":19.94,"priceLevel":"$"},{"name":"Zabłocie","tagline":"Krakow's post-industrial creative frontier","description":"Zabłocie is Krakow's emerging creative district - former industrial area now housing MOCAK contemporary art museum and creative spaces. It's rough around edges but represents Krakow's creative future.","vibe":"Industrial & Emerging","bestFor":"Creatives, early adopters, and nomads seeking Krakow's next neighborhood","pros":["Art museum","Creative spaces","Affordable","Growing scene"],"cons":["Still developing","Industrial areas","Limited services"],"lat":50.047,"lng":19.963,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

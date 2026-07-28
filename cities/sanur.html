@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central Sanur Beach","tagline":"Sanur's relaxed beachfront heart","description":"Central Sanur's beachfront is Bali's most relaxed - paved promenade, gentle waves, and mature trees. It's where Bali began tourism but kept its dignity.","vibe":"Relaxed & Classic","bestFor":"Relaxation seekers, older travelers, and those wanting calm Bali","pros":["Relaxed atmosphere","Beach promenade","Calm water","Classic Bali"],"cons":["Quiet nightlife","Older crowd","Not trendy"],"lat":8.693,"lng":115.262,"priceLevel":"$$"},{"name":"North Sanur","tagline":"Sanur's local village end","description":"North Sanur is more local - Balinese villages, traditional markets, and fewer tourists. It's where Sanur's authentic character survives.","vibe":"Local & Traditional","bestFor":"Culture seekers, long-term stayers, and those wanting local Bali","pros":["Local character","Traditional markets","Affordable","Authentic"],"cons":["Further from beach","Fewer restaurants","Basic"],"lat":8.675,"lng":115.265,"priceLevel":"$"},{"name":"South Sanur/Mertasari","tagline":"Sanur's quiet southern stretch","description":"South Sanur offers quieter beaches and the boat harbor for Nusa islands. It's more residential with local restaurants and mellow vibes.","vibe":"Quiet & Residential","bestFor":"Peace seekers, Nusa island visitors, and those wanting quiet beach","pros":["Quiet beaches","Nusa boats","Local restaurants","Residential"],"cons":["Limited services","Far from center","Very quiet"],"lat":8.71,"lng":115.26,"priceLevel":"$"},{"name":"Jalan Danau Tamblingan","tagline":"Sanur's main street scene","description":"Sanur's main street runs parallel to the beach - restaurants, shops, and cafes in a walkable strip. It's Sanur's commercial heart.","vibe":"Main Street & Dining","bestFor":"Diners, shoppers, and those wanting Sanur's social scene","pros":["Restaurant variety","Walkable","Shops","Social scene"],"cons":["Traffic","Touristy","Can be hot"],"lat":8.688,"lng":115.258,"priceLevel":"$$"},{"name":"Sindhu/Beach Market Area","tagline":"Sanur's night market hub","description":"Around Sindhu Beach, the night market offers local food and evening atmosphere. It's where Sanur comes alive after sunset.","vibe":"Night Market & Local","bestFor":"Night market lovers, local food seekers, and evening entertainment","pros":["Night market","Local food","Evening atmosphere","Affordable"],"cons":["Only evenings","Crowded market","Variable quality"],"lat":8.685,"lng":115.263,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

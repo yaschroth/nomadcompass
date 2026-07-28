@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Diocletian's Palace","tagline":"Living inside a Roman emperor's palace","description":"Diocletian's Palace isn't just a monument - people actually live here. This UNESCO site is the beating heart of Split, with restaurants, bars, and apartments within ancient Roman walls. Unique and unforgettable, if you can handle the summer crowds.","vibe":"Historic & Unique","bestFor":"History lovers and nomads seeking the most unique living experience in Croatia","pros":["Incredible history","Central location","Unique atmosphere","Nightlife access"],"cons":["Very touristy","Noisy summers","Expensive","Old buildings"],"lat":43.5081,"lng":16.4402,"priceLevel":"$$$"},{"name":"Bačvice","tagline":"Split's beach neighborhood with local energy","description":"Bačvice is Split's most popular beach neighborhood - sandy shores, beach bars, and the famous picigin ball game. Just east of the old town, it offers a perfect balance of beach lifestyle and city access. Very local, very Croatian.","vibe":"Beach & Local","bestFor":"Beach lovers, sports enthusiasts, and nomads seeking authentic Split beach culture","pros":["Sandy beach","Local vibe","Near center","Beach bars"],"cons":["Crowded summer","Noisy weekends","Limited parking"],"lat":43.5022,"lng":16.4489,"priceLevel":"$$"},{"name":"Žnjan","tagline":"Family beaches and modern apartments","description":"Žnjan is Split's eastern beach extension - modern apartments, family-friendly beaches, and a more relaxed atmosphere than central Split. Popular with families and long-term visitors seeking space and sea access without old town chaos.","vibe":"Modern & Family","bestFor":"Families, long-term stayers, and nomads wanting beach access with modern comforts","pros":["Good beaches","Modern apartments","Family-friendly","Bike paths"],"cons":["Far from center","Less character","Need transport"],"lat":43.4997,"lng":16.4778,"priceLevel":"$$"},{"name":"Varoš","tagline":"Narrow streets climbing Split's western hill","description":"Varoš is Split's old fishermen's quarter - narrow stone streets climbing the hill west of the palace. Less touristy than the palace itself, it offers authentic stone houses, local restaurants, and panoramic views. Character over convenience.","vibe":"Traditional & Residential","bestFor":"Culture seekers, photographers, and nomads preferring authenticity over amenities","pros":["Authentic atmosphere","Great views","Local restaurants","Near center"],"cons":["Steep hills","Old buildings","Limited amenities","Narrow streets"],"lat":43.5089,"lng":16.4336,"priceLevel":"$$"},{"name":"Spinut / Trstenik","tagline":"Local Split living with marina views","description":"Spinut and Trstenik are residential neighborhoods north of center, popular with locals and long-term expats. Modern apartments, local markets, and marina access offer practical Split living. Less glamorous but great value.","vibe":"Residential & Practical","bestFor":"Long-term nomads, families, and budget-conscious travelers seeking local life","pros":["Great value","Local markets","Marina access","Quiet streets"],"cons":["Less exciting","Far from beaches","Need transport"],"lat":43.5183,"lng":16.435,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

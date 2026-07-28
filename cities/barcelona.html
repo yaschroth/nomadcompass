@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"El Born / Sant Pere","tagline":"Medieval streets meet trendy boutiques and bars","description":"El Born is Barcelona's most romantic neighborhood - medieval streets opening to hidden plazas, the stunning Santa Maria del Mar church, and some of the city's best cocktail bars. It's central, beautiful, and increasingly popular with nomads seeking atmosphere.","vibe":"Historic & Trendy","bestFor":"Creatives, romantics, and nomads seeking Barcelona's most atmospheric neighborhood","pros":["Beautiful architecture","Great bars","Central location","Charming plazas"],"cons":["Expensive","Touristy","Noisy at night"],"lat":41.3847,"lng":2.1829,"priceLevel":"$$$"},{"name":"Gràcia","tagline":"Village vibes and local Barcelona life","description":"Gràcia was once a separate village and maintains its distinct character. Plaza-centered social life, independent shops, and strong local identity make it Barcelona's most authentic central neighborhood. Regular festivals and a creative community add to its charm.","vibe":"Bohemian & Local","bestFor":"Long-term nomads, families, and those seeking Barcelona without the tourist hordes","pros":["Local character","Beautiful plazas","Creative community","Less touristy"],"cons":["Further from beach","Limited nightlife","Hilly streets"],"lat":41.4025,"lng":2.1567,"priceLevel":"$$"},{"name":"Eixample","tagline":"Gaudí architecture and Barcelona's elegant grid","description":"Eixample is Barcelona's grid-planned extension, famous for Gaudí's masterpieces and elegant Modernist architecture. The wide avenues, cafe terraces, and central location make it perfect for professionals. Eixample Dreta is upscale; Eixample Esquerra more affordable.","vibe":"Elegant & Central","bestFor":"Architecture lovers, professionals, and nomads seeking central, spacious apartments","pros":["Gaudí architecture","Spacious apartments","Central location","Metro access"],"cons":["Expensive","Traffic noise","Less charming"],"lat":41.3925,"lng":2.165,"priceLevel":"$$"},{"name":"Poblenou","tagline":"Barcelona's tech hub with beach access","description":"Poblenou is Barcelona's answer to Brooklyn - former industrial neighborhood turned tech hub. The @22 innovation district houses startups and coworking spaces, while the beachfront location adds lifestyle appeal. Modern, connected, and increasingly popular.","vibe":"Tech & Beach","bestFor":"Tech workers, startup founders, and nomads wanting beach plus business","pros":["Beach access","Tech scene","Modern spaces","Growing community"],"cons":["Less traditional","Still developing","Further from center"],"lat":41.401,"lng":2.205,"priceLevel":"$$"},{"name":"Barceloneta","tagline":"Beach life in Barcelona's fishing quarter","description":"Barceloneta is Barcelona's beach neighborhood - narrow streets of the old fishing quarter opening to the Mediterranean. It's the only place in central Barcelona where you can step from your apartment to the sand. Perfect for beach lovers, though it's touristy.","vibe":"Beach & Traditional","bestFor":"Beach lovers, surfers, and nomads who need daily sea access","pros":["Beach at your door","Seafood restaurants","Historic character","Walkable"],"cons":["Very touristy","Crowded summer","Noisy"],"lat":41.3808,"lng":2.1894,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Trastevere","tagline":"Rome's most romantic neighborhood with nightlife","description":"Trastevere is Rome's most beloved neighborhood - cobblestone streets, ivy-covered buildings, and the best nightlife. It's touristy but retains Roman character. The default choice for nomads seeking atmosphere with entertainment.","vibe":"Romantic & Nightlife","bestFor":"Nightlife lovers, romantics, and nomads seeking atmospheric Roman living","pros":["Best nightlife","Romantic streets","Great restaurants","Character"],"cons":["Touristy","Expensive","Noisy nights"],"lat":41.8867,"lng":12.4692,"priceLevel":"$$$"},{"name":"Testaccio","tagline":"Rome's authentic foodie neighborhood","description":"Testaccio is Rome's most authentic neighborhood - the historic market, working-class heritage, and the city's best traditional restaurants. It's where Romans eat, increasingly discovered by in-the-know nomads.","vibe":"Foodie & Authentic","bestFor":"Foodies, long-term nomads, and those seeking authentic Roman experience","pros":["Best food","Authentic","Local market","Less touristy"],"cons":["Limited sights","Basic infrastructure","Far from center"],"lat":41.8756,"lng":12.4753,"priceLevel":"$$"},{"name":"Monti","tagline":"Rome's trendy vintage neighborhood near Colosseum","description":"Monti is Rome's trendiest neighborhood - vintage shops, wine bars, and cobblestone streets near the Colosseum. It's where young Romans and creative expats gather. Hip without losing Roman character.","vibe":"Trendy & Vintage","bestFor":"Creatives, vintage lovers, and nomads seeking trendy Roman living","pros":["Trendy bars","Vintage shopping","Near Colosseum","Hip vibe"],"cons":["Expensive","Crowded evenings","Tourist spillover"],"lat":41.8948,"lng":12.4929,"priceLevel":"$$"},{"name":"Prati","tagline":"Elegant neighborhood near Vatican City","description":"Prati is Rome's elegant residential area near the Vatican - wide boulevards, good shopping, and refined atmosphere. It's where upper-middle-class Romans live, offering quality without tourist chaos.","vibe":"Elegant & Residential","bestFor":"Professionals, Vatican visitors, and nomads seeking elegant residential","pros":["Near Vatican","Elegant streets","Good shopping","Less chaotic"],"cons":["Less character","Expensive","Quiet evenings"],"lat":41.9097,"lng":12.4603,"priceLevel":"$$$"},{"name":"San Giovanni","tagline":"Local Rome near the ancient walls","description":"San Giovanni sits near the ancient walls - local atmosphere, good value, and excellent metro connections. It's where Romans live affordably, with authentic markets and trattorias.","vibe":"Local & Affordable","bestFor":"Budget nomads, long-term stayers, and those seeking local Roman life","pros":["Good value","Local life","Metro access","Authentic"],"cons":["Far from sights","Basic neighborhood","Less charming"],"lat":41.8858,"lng":12.5086,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

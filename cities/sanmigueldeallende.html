@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial perfection on cobblestone streets","description":"Mexico's most beautifully preserved colonial center features the iconic Parroquia church, art galleries, and centuries-old mansions. Colorful facades, rooftop terraces, and artistic energy define this UNESCO treasure.","vibe":"Colonial artistic","bestFor":"Art lovers and romantic travelers","pros":["Stunning architecture","World-class art scene","Rooftop bars","Cultural events"],"cons":["Very touristy","Expensive","Crowded weekends"],"lat":20.9142,"lng":-100.7453,"priceLevel":"$$"},{"name":"Guadiana","tagline":"Residential charm with local flavor","description":"This neighborhood west of center offers authentic Mexican life with local markets, traditional bakeries, and friendly neighbors. Artists and long-term expats appreciate the quieter streets and community feel.","vibe":"Residential authentic","bestFor":"Long-term stays and budget seekers","pros":["Local atmosphere","Lower prices","Authentic markets","Community feel"],"cons":["Basic amenities","Uphill walks","Less polished"],"lat":20.9089,"lng":-100.7534,"priceLevel":"$"},{"name":"Atascadero","tagline":"Modern expat haven with mountain views","description":"This developing area north of town hosts newer homes, organic markets, and health-conscious cafes. American and Canadian retirees alongside digital nomads create an international community with modern comforts.","vibe":"Expat modern","bestFor":"Expats and comfort seekers","pros":["Mountain views","Modern amenities","Organic options","International community"],"cons":["Far from center","Less authentic","Needs car"],"lat":20.9234,"lng":-100.7612,"priceLevel":"$$"},{"name":"San Antonio","tagline":"Artist colony with bohemian soul","description":"This hillside neighborhood above town has attracted artists for decades. Studios, galleries, and creative workshops fill converted homes while gardens and terraces offer inspiring views.","vibe":"Bohemian creative","bestFor":"Artists and creatives","pros":["Artist community","Great views","Creative energy","Gallery spaces"],"cons":["Steep streets","Far from services","Limited dining"],"lat":20.9178,"lng":-100.7367,"priceLevel":"$$"},{"name":"Balcones","tagline":"Luxury living on the hillside","description":"High above town, this exclusive area offers panoramic views, luxury homes, and gated communities. Infinity pools, professional staff, and sunset terraces provide resort-level living with colonial town access.","vibe":"Luxury hillside","bestFor":"Luxury seekers and privacy lovers","pros":["Stunning views","Luxury amenities","Privacy","Beautiful homes"],"cons":["Very expensive","Car required","Isolated"],"lat":20.9056,"lng":-100.7289,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

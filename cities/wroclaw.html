@@ -1456,6 +1456,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Rynek (Market Square)","tagline":"Wrocław's grand central showpiece","description":"The Rynek is one of Europe's largest market squares - colorful townhouses, gothic town hall, and vibrant atmosphere. Wrocław's magnificent heart.","vibe":"Grand & Historic","bestFor":"First-time visitors, architecture lovers, and those seeking Wrocław's grandeur","pros":["Stunning square","Architecture","Restaurants","Vibrant atmosphere"],"cons":["Touristy","Expensive dining","Crowded"],"lat":51.11,"lng":17.032,"priceLevel":"$$"},{"name":"Ostrów Tumski (Cathedral Island)","tagline":"Wrocław's ancient spiritual heart","description":"Ostrów Tumski is Wrocław's oldest part - cathedral, churches, and atmospheric gas-lit streets. It's peaceful and spiritual.","vibe":"Spiritual & Historic","bestFor":"History lovers, cathedral visitors, and peace seekers","pros":["Ancient history","Cathedral","Gas-lit streets","Peaceful"],"cons":["Limited dining","Quiet evenings","Far from nightlife"],"lat":51.114,"lng":17.047,"priceLevel":"$"},{"name":"Nadodrze","tagline":"Wrocław's emerging creative quarter","description":"Nadodrze is Wrocław's hipster frontier - street art, creative spaces, and emerging bars. It's where Wrocław's alternative scene grows.","vibe":"Creative & Emerging","bestFor":"Creatives, alternative seekers, and those wanting emerging Wrocław","pros":["Street art","Creative scene","Affordable","Alternative vibe"],"cons":["Still rough edges","Variable quality","Some safety concerns"],"lat":51.118,"lng":17.022,"priceLevel":"$"},{"name":"Cztery Kopce (Four Domes Pavilion Area)","tagline":"Wrocław's Centennial Hall district","description":"The Centennial Hall area is UNESCO-listed - modernist architecture, Japanese garden, and green spaces. Wrocław's architectural pride.","vibe":"UNESCO & Green","bestFor":"Architecture lovers, park enthusiasts, and UNESCO seekers","pros":["UNESCO site","Japanese garden","Green spaces","Modernist architecture"],"cons":["Far from center","Limited dining","Specific interest"],"lat":51.107,"lng":17.077,"priceLevel":"$"},{"name":"Uniwersytecki","tagline":"Wrocław's baroque university quarter","description":"The university area features Wrocław's baroque masterpiece - the university building with stunning Aula Leopoldina. Academic and beautiful.","vibe":"Academic & Baroque","bestFor":"Architecture lovers, students, and those seeking baroque beauty","pros":["Aula Leopoldina","University atmosphere","Baroque beauty","River views"],"cons":["Limited dining","Academic focus","Quiet evenings"],"lat":51.114,"lng":17.034,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1507,6 +1508,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

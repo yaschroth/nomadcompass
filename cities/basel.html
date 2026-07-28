@@ -1418,6 +1418,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Grossbasel (Altstadt)","tagline":"Basel's historic heart on the hill","description":"Greater Basel's old town climbs the hill from the Rhine - the red sandstone Münster cathedral, winding medieval lanes, and the elegant Marktplatz create Switzerland's most charming urban center.","vibe":"Historic & Cultural","bestFor":"Culture lovers, history enthusiasts, and those seeking classic Swiss city living","pros":["Beautiful old town","World-class museums","Central location","Rhine views"],"cons":["Very expensive","Touristy","Limited modern amenities"],"lat":47.5585,"lng":7.588,"priceLevel":"$$$$"},{"name":"Kleinbasel","tagline":"Basel's edgier right bank","description":"Little Basel across the Rhine is the city's more diverse, edgier side - ethnic restaurants, alternative bars, and a mix of immigrants and artists create a grittier contrast to polished Grossbasel.","vibe":"Alternative & Diverse","bestFor":"Budget seekers, alternative scene lovers, and those wanting diversity","pros":["More affordable","Diverse dining","Alternative scene","Rhine bathing"],"cons":["Rougher edges","Less polished","Further from museums"],"lat":47.562,"lng":7.595,"priceLevel":"$$"},{"name":"St. Johann","tagline":"Basel's French border quarter","description":"St. Johann sits near the French border - the Novartis Campus brings pharmaceutical money, while the neighborhood offers good value and easy access to French supermarkets and restaurants.","vibe":"International & Practical","bestFor":"Pharma workers, border hoppers, and those wanting Swiss living with French prices","pros":["Near France","Novartis area","Good transport","More affordable"],"cons":["Industrial areas","Less character","Traffic"],"lat":47.567,"lng":7.571,"priceLevel":"$$"},{"name":"Gundeldingen","tagline":"Basel's multicultural neighborhood","description":"Gundeli is Basel's most diverse district - the Güterstrasse offers Turkish, Portuguese, and Asian eateries, while the area attracts students and young professionals with more affordable rents.","vibe":"Multicultural & Young","bestFor":"Students, budget nomads, and those seeking authentic multicultural Basel","pros":["Affordable for Basel","Great ethnic food","Young vibe","Good transport"],"cons":["Less scenic","Noisier","Some rough areas"],"lat":47.545,"lng":7.592,"priceLevel":"$$"},{"name":"Riehen","tagline":"Art paradise at Basel's edge","description":"Riehen is a leafy suburb famous for the Fondation Beyeler - one of Switzerland's best museums. The village feel with easy Basel access makes it perfect for art lovers seeking quiet.","vibe":"Suburban & Cultural","bestFor":"Art lovers, families, and those seeking quiet with world-class culture","pros":["Fondation Beyeler","Quiet village","Green spaces","Easy tram to center"],"cons":["Suburban feel","Limited nightlife","Expensive"],"lat":47.583,"lng":7.649,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1469,6 +1470,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

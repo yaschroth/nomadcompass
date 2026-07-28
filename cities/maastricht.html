@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vrijthof","tagline":"Grand square with twin churches","description":"Maastricht's most impressive square features the twin towers of St. Servatius and St. John's churches, grand cafes, and the famous Andre Rieu concerts. The historic grandeur and terrace culture define the city.","vibe":"Grand & Cultural","bestFor":"Culture lovers, first-time visitors, and outdoor terrace enthusiasts","pros":["Stunning churches","Best terraces","Cultural events","Central location"],"cons":["Tourist prices","Crowded during events","Can feel formal"],"lat":50.8489,"lng":5.6889,"priceLevel":"$$$"},{"name":"Wyck","tagline":"Hip quarter across the Maas","description":"The trendy neighborhood east of the river has transformed into Maastricht's most happening area with boutiques, cafes, and creative businesses. The village atmosphere and design focus attract young professionals.","vibe":"Trendy & Creative","bestFor":"Shoppers, design enthusiasts, and young professionals","pros":["Best boutiques","Hip cafes","Station access","Village feel"],"cons":["Smaller area","Higher prices","Less historic"],"lat":50.8478,"lng":5.7012,"priceLevel":"$$$"},{"name":"Jekerkwartier","tagline":"Medieval walls and art galleries","description":"The charming quarter along the old city walls features the Jeker stream, art galleries, and intimate streets. The artistic atmosphere and historic fortifications create Maastricht's most romantic area.","vibe":"Artistic & Historic","bestFor":"Artists, romantics, and those seeking charm","pros":["Art galleries","Medieval walls","Romantic atmosphere","Stream-side walks"],"cons":["Limited parking","Expensive housing","Small area"],"lat":50.8434,"lng":5.6823,"priceLevel":"$$"},{"name":"Binnenstad","tagline":"Shopping streets and book church","description":"The inner city center offers pedestrian shopping streets and the famous Dominicanen bookshop in a converted church. The commercial heart provides everyday convenience with historic touches.","vibe":"Shopping & Central","bestFor":"Shoppers, book lovers, and those wanting central convenience","pros":["Great shopping","Famous bookshop","Pedestrian streets","Central location"],"cons":["Commercial focus","Crowded weekends","Chain stores present"],"lat":50.8512,"lng":5.6889,"priceLevel":"$$"},{"name":"Sint Pietersberg","tagline":"Hill walks and cave adventures","description":"The southern hill area offers the famous marl caves, Fort Sint Pieter, and nature walks. The panoramic views and outdoor activities attract those seeking escape from the city center.","vibe":"Nature & Historical","bestFor":"Nature lovers, history buffs, and cave explorers","pros":["Cave tours","Nature walks","Fort visits","Great views"],"cons":["Far from center","Need transport","Limited accommodation"],"lat":50.8289,"lng":5.6734,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

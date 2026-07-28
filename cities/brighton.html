@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"The Lanes","tagline":"Brighton's historic shopping maze","description":"The Lanes are Brighton's original heart - narrow twisting streets of antique shops, jewelry stores, and cozy pubs. It's tourist central but undeniably charming and central.","vibe":"Historic & Charming","bestFor":"Shoppers, tourists, and those wanting classic Brighton charm","pros":["Beautiful architecture","Unique shops","Central","Great pubs"],"cons":["Very touristy","Expensive","Crowded"],"lat":50.821,"lng":-0.141,"priceLevel":"$$$"},{"name":"North Laine","tagline":"Brighton's bohemian creative quarter","description":"North Laine is Brighton's soul - independent shops, vintage stores, vegan cafes, and street art create the city's most creative neighborhood. If Brighton is alternative, North Laine is why.","vibe":"Bohemian & Creative","bestFor":"Creatives, alternative types, and indie culture lovers","pros":["Independent shops","Great cafes","Creative vibe","Street art"],"cons":["Can be pretentious","Busy weekends","Expensive vintage"],"lat":50.826,"lng":-0.139,"priceLevel":"$$"},{"name":"Kemptown","tagline":"Brighton's vibrant LGBTQ+ heart","description":"Kemptown is Brighton's proudly LGBTQ+ neighborhood - rainbow flags, inclusive bars, and a welcoming community create one of the UK's most vibrant and accepting areas.","vibe":"LGBTQ+ & Vibrant","bestFor":"LGBTQ+ travelers, those seeking inclusive community, party lovers","pros":["Welcoming community","Great nightlife","Beach access","Inclusive"],"cons":["Noisy weekends","Can be rowdy","Party focused"],"lat":50.819,"lng":-0.124,"priceLevel":"$$"},{"name":"Hove","tagline":"Brighton's sophisticated neighbor","description":"Technically a separate town, Hove is Brighton's quieter, more residential sibling - elegant Regency squares, family-friendly beaches, and a more refined atmosphere.","vibe":"Residential & Elegant","bestFor":"Families, those seeking quiet, long-term residents","pros":["Quieter","Beautiful architecture","Family-friendly","Good restaurants"],"cons":["Less exciting","Further from action","More expensive"],"lat":50.828,"lng":-0.166,"priceLevel":"$$$"},{"name":"Seven Dials","tagline":"Brighton's trendy cafe quarter","description":"Where seven roads meet, Seven Dials has become Brighton's trendy cafe and brunch destination - specialty coffee, independent restaurants, and a local feel away from the seafront.","vibe":"Trendy & Local","bestFor":"Foodies, coffee lovers, and those seeking local Brighton life","pros":["Great cafes","Local feel","Trendy restaurants","Less touristy"],"cons":["Not central","Limited nightlife","Hilly location"],"lat":50.831,"lng":-0.143,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

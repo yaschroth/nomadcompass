@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Toyapakeh","tagline":"Harbor village and diving hub","description":"The main port village offers dive shops, basic accommodation, and the primary access point to the island. The diving and snorkeling focus makes it the natural base for marine enthusiasts.","vibe":"Dive & Basic","bestFor":"Divers, snorkelers, and budget travelers","pros":["Dive shops","Manta ray access","Ferry convenient","Local atmosphere"],"cons":["Very basic","Limited dining","Rough roads beyond"],"lat":-8.6789,"lng":115.5234,"priceLevel":"$"},{"name":"Crystal Bay","tagline":"Snorkeling paradise with sunset views","description":"The famous bay offers calm snorkeling, beach access, and stunning sunsets. The handful of beachfront accommodations and restaurants provide the island's most scenic base.","vibe":"Beach & Scenic","bestFor":"Snorkelers, sunset lovers, and beach seekers","pros":["Beautiful beach","Calm snorkeling","Sunset views","Manta ray encounters"],"cons":["Limited accommodation","Crowded daytime","Basic facilities"],"lat":-8.7134,"lng":115.4678,"priceLevel":"$$"},{"name":"Kelingking Area","tagline":"Instagram famous T-Rex cliff","description":"The western coast features the famous Kelingking Beach viewpoint and the island's most dramatic scenery. The development bringing accommodations to this photogenic zone.","vibe":"Scenic & Instagram","bestFor":"Photographers, Instagram seekers, and dramatic landscape lovers","pros":["Famous viewpoint","Dramatic cliffs","Developing accommodation","Stunning scenery"],"cons":["Crowded peak hours","Dangerous beach descent","Basic infrastructure"],"lat":-8.7534,"lng":115.4312,"priceLevel":"$$"},{"name":"Atuh Beach Area","tagline":"Remote beauty on the east coast","description":"The eastern coast offers stunning beach scenery, dramatic rock formations, and fewer tourists. The developing area provides escapes from the busier west coast viewpoints.","vibe":"Remote & Beautiful","bestFor":"Beach purists, solitude seekers, and photographers","pros":["Stunning beaches","Fewer tourists","Rock formations","Remote beauty"],"cons":["Very rough roads","Limited facilities","Far from port"],"lat":-8.7589,"lng":115.5889,"priceLevel":"$"},{"name":"Ped Village","tagline":"Local village life and temple culture","description":"The traditional village offers authentic Balinese life, important temples, and the starting point for manta diving. The cultural depth complements the island's natural attractions.","vibe":"Traditional & Spiritual","bestFor":"Culture seekers, temple enthusiasts, and authentic Bali lovers","pros":["Traditional temples","Authentic village","Manta diving access","Cultural depth"],"cons":["Limited tourist services","Basic accommodation","Far from beaches"],"lat":-8.6867,"lng":115.5456,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

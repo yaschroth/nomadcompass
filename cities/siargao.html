@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"General Luna","tagline":"Siargao's surf and social hub","description":"GL is Siargao's heart - Cloud 9 surf break, restaurants, and nightlife. It's the island's tourist center with everything a surfer-traveler needs.","vibe":"Surf & Social","bestFor":"Surfers, socializers, and those wanting Siargao's scene","pros":["Cloud 9 access","Restaurants","Nightlife","Surf shops"],"cons":["Crowded","Expensive for Philippines","Tourist bubble"],"lat":9.847,"lng":126.115,"priceLevel":"$$"},{"name":"Cloud 9/Catangnan","tagline":"Siargao's famous wave area","description":"Cloud 9 is the legendary surf spot - world-class waves, boardwalk viewing, and serious surf atmosphere. Stay here for dawn patrol access.","vibe":"Surf & Serious","bestFor":"Serious surfers, surf photographers, and those wanting wave proximity","pros":["Legendary break","Boardwalk","Surf focus","Dawn access"],"cons":["Crowded lineup","Surf-focused only","Competitive"],"lat":9.852,"lng":126.125,"priceLevel":"$$"},{"name":"Pacifico","tagline":"Siargao's chill northern alternative","description":"Pacifico offers Siargao's chillest vibe - consistent surf, fewer crowds, and relaxed atmosphere. It's for those who find GL too busy.","vibe":"Chill & Surf","bestFor":"Chill seekers, intermediate surfers, and those avoiding crowds","pros":["Consistent waves","Relaxed vibe","Less crowded","Cheaper"],"cons":["Far from GL","Limited restaurants","Quiet nights"],"lat":9.945,"lng":126.07,"priceLevel":"$"},{"name":"Dapa/Union","tagline":"Siargao's local town hub","description":"Dapa is Siargao's port and real town - ferries, markets, and local life. It's not tourist-oriented but useful for services and authenticity.","vibe":"Local & Port","bestFor":"Ferry connections, local food, and those wanting real Siargao","pros":["Ferry port","Local markets","Affordable","Authentic"],"cons":["Not scenic","No beaches","Basic"],"lat":9.755,"lng":126.053,"priceLevel":"$"},{"name":"Island Hopping (Naked, Daku, Guyam)","tagline":"Siargao's postcard islands","description":"The island hopping trio offers picture-perfect sandbar islands - palm trees, crystal water, and Instagram dreams. It's Siargao's most popular tour.","vibe":"Paradise & Day Trip","bestFor":"Instagram seekers, beach lovers, and those wanting postcard islands","pros":["Perfect beaches","Palm trees","Crystal water","Boat trip fun"],"cons":["Day trip only","Crowded tours","No accommodation"],"lat":9.87,"lng":126.07,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"El Prado","tagline":"Colonial grandeur meets Caribbean cool","description":"Barranquilla's most prestigious neighborhood showcases stunning Republican-era mansions and tree-lined boulevards. The architectural heritage mixed with modern cafes and cultural venues creates a sophisticated atmosphere that feels distinctly Colombian coastal.","vibe":"Historic & Elegant","bestFor":"Culture lovers, architecture enthusiasts, and those seeking upscale coastal living","pros":["Beautiful historic architecture","Walkable tree-lined streets","Great restaurants and cafes","Cultural landmarks"],"cons":["Higher rents than average","Can feel quiet at night","Limited nightlife options"],"lat":10.9878,"lng":-74.7889,"priceLevel":"$$$"},{"name":"Alto Prado","tagline":"Where modern professionals call home","description":"The residential extension of historic El Prado offers a more contemporary feel with modern apartments, excellent shopping centers, and easy access to the city's best amenities. Popular with young professionals and expats seeking comfort.","vibe":"Modern & Residential","bestFor":"Remote workers, young professionals, and families wanting convenience","pros":["Modern apartments available","Great shopping options","Safe and clean","Good restaurant variety"],"cons":["Less character than historic areas","Need transportation to beach","Can feel suburban"],"lat":10.9956,"lng":-74.8012,"priceLevel":"$$"},{"name":"Buenavista","tagline":"Beach proximity with neighborhood charm","description":"Located closer to the coast, Buenavista offers a more relaxed Caribbean atmosphere with access to beach clubs and seafood restaurants. The neighborhood balances residential calm with entertainment options.","vibe":"Coastal & Relaxed","bestFor":"Beach lovers, seafood enthusiasts, and those wanting coastal lifestyle","pros":["Close to beaches","Excellent seafood restaurants","More relaxed pace","Growing cafe scene"],"cons":["Further from city center","Less public transport","Fewer coworking options"],"lat":11.0078,"lng":-74.8234,"priceLevel":"$$"},{"name":"Centro Histórico","tagline":"The beating heart of Carnival city","description":"The historic downtown captures Barranquilla's authentic spirit with bustling markets, colonial churches, and the energy of Colombia's Carnival capital. It's chaotic but full of life and culture.","vibe":"Authentic & Vibrant","bestFor":"Culture seekers, photographers, and those wanting genuine local experience","pros":["Authentic Colombian culture","Cheap food and shopping","Historic landmarks","Carnival atmosphere"],"cons":["Can feel overwhelming","Safety concerns at night","Noisy and crowded"],"lat":10.9639,"lng":-74.7964,"priceLevel":"$"},{"name":"Puerto Colombia","tagline":"Beach town escape just minutes away","description":"This coastal suburb offers the beach lifestyle without the city chaos. The historic pier, fresh seafood, and laid-back atmosphere make it perfect for those who want ocean access while still being close to Barranquilla.","vibe":"Beachy & Relaxed","bestFor":"Beach lovers, surfers, and those escaping city life","pros":["Direct beach access","Relaxed atmosphere","Fresh seafood daily","Historic charm"],"cons":["Commute to city","Limited nightlife","Fewer amenities"],"lat":11.0011,"lng":-74.9528,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central Riverside","tagline":"Karst views and traveler hub","description":"The main town center along the Nam Song River offers stunning limestone karst views, guesthouses, and traveler services. Morning balloons and evening riverside dining define the experience.","vibe":"Backpacker scenic","bestFor":"Backpackers and nature lovers","pros":["Stunning scenery","River access","Hot air balloons","Traveler services"],"cons":["Party reputation","Tourist-oriented","Can be loud"],"lat":18.9223,"lng":102.4489,"priceLevel":"$"},{"name":"East Bank","tagline":"Quieter views across the river","description":"Across the river, this developing area offers quieter accommodations with equal karst views. Boutique hotels and retreats attract those seeking peace with scenery.","vibe":"Quiet scenic","bestFor":"Peace seekers with view demands","pros":["Same views","Quieter atmosphere","Boutique options","River setting"],"cons":["Fewer services","River crossing needed","Limited dining"],"lat":18.9234,"lng":102.4534,"priceLevel":"$$"},{"name":"Blue Lagoon Area","tagline":"Natural pools and cave adventures","description":"The areas around the famous blue lagoons offer swimming, cave exploration, and countryside experiences. Day trips and overnight stays connect to Vang Vieng's natural attractions.","vibe":"Natural adventure","bestFor":"Adventure seekers and swimmers","pros":["Natural pools","Cave access","Countryside beauty","Adventure activities"],"cons":["Crowded peak times","Entrance fees add up","Tourist-heavy"],"lat":18.9112,"lng":102.4267,"priceLevel":"$"},{"name":"Tubing Route","tagline":"Reformed party scene turned chill","description":"The famous tubing area has reformed from its wild past into a more relaxed float through stunning scenery. Riverside bars remain but with tamer atmosphere.","vibe":"Tubing chill","bestFor":"River floaters and socializers","pros":["Unique activity","River scenery","Social atmosphere","Reformed scene"],"cons":["Still party-focused","Can be rowdy","Safety concerns"],"lat":18.9312,"lng":102.4534,"priceLevel":"$"},{"name":"Village Outskirts","tagline":"Authentic Lao countryside life","description":"Beyond the tourist center, traditional Lao villages offer glimpses of rural life. Cycling and motorbike trips reveal rice paddies, water buffalo, and genuine hospitality.","vibe":"Rural authentic","bestFor":"Cultural immersion seekers","pros":["Authentic culture","Beautiful countryside","Friendly villages","Off the path"],"cons":["No tourist services","Basic facilities","Language barrier"],"lat":18.9023,"lng":102.4623,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

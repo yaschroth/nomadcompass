@@ -1457,6 +1457,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Waterfront Promenade","tagline":"Albanian Riviera's evening stroll","description":"The seaside promenade comes alive at sunset as locals and visitors stroll past cafes, restaurants, and beach bars. Views across to Corfu and Mediterranean atmosphere define Albania's tourism capital.","vibe":"Coastal lively","bestFor":"Beach lovers and evening strollers","pros":["Sea views","Evening atmosphere","Restaurant variety","Beach access"],"cons":["Crowded summer","Tourist prices","Loud at night"],"lat":39.8667,"lng":20.0045,"priceLevel":"$"},{"name":"City Center","tagline":"Local life beyond the beach","description":"Inland from the waterfront, the center offers local markets, everyday shops, and authentic Albanian restaurants. Residents go about daily life while visitors find affordable options.","vibe":"Local practical","bestFor":"Budget travelers and authenticity seekers","pros":["Affordable prices","Local markets","Authentic restaurants","Real Albania"],"cons":["No beach views","Basic infrastructure","Limited English"],"lat":39.8634,"lng":20.0089,"priceLevel":"$"},{"name":"Lëkurësi Castle Area","tagline":"Hilltop views and sunset dining","description":"Above the city, the restored castle and surrounding restaurants offer panoramic views of the bay, Corfu, and coastline. Sunset dinners with Adriatic and Ionian views create memorable experiences.","vibe":"Scenic elevated","bestFor":"View seekers and romantic dinners","pros":["Stunning panoramas","Sunset dining","Historic castle","Photo opportunities"],"cons":["Needs transport","Limited options","Restaurant prices"],"lat":39.8512,"lng":20.0134,"priceLevel":"$$"},{"name":"Mirror Beach Area","tagline":"Crystal waters south of town","description":"South toward the Greek border, crystal-clear beaches attract swimmers and snorkelers. Small hotels and beach bars serve visitors seeking Albania's clearest waters.","vibe":"Beach pristine","bestFor":"Swimmers and beach lovers","pros":["Crystal waters","Less crowded","Natural beauty","Snorkeling"],"cons":["Far from center","Limited services","Needs transport"],"lat":39.8234,"lng":20.0234,"priceLevel":"$"},{"name":"Ksamil Road","tagline":"Coastal drive to island paradise","description":"The road south to Ksamil passes beaches, restaurants, and olive groves. Accommodations along this stretch offer beach access and island views while remaining near Saranda's services.","vibe":"Coastal accessible","bestFor":"Those wanting beaches and convenience","pros":["Multiple beaches","Island views","Variety of stays","Near attractions"],"cons":["Traffic in summer","Spread out","Car helpful"],"lat":39.8456,"lng":20.0067,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1508,6 +1509,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

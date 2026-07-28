@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Masaki","tagline":"Where diplomats and expats call home","description":"Dar's most upscale peninsula neighborhood features embassy compounds, international restaurants, and the Slipway waterfront complex. The infrastructure and security make it the natural choice for expats and business travelers.","vibe":"Upscale & International","bestFor":"Business travelers, expats, and those wanting comfort and safety","pros":["Best infrastructure","International restaurants","Safe and secure","Waterfront access"],"cons":["Expensive for Dar","Feels detached from local life","Traffic bottlenecks"],"lat":-6.7567,"lng":39.2689,"priceLevel":"$$$"},{"name":"Oyster Bay","tagline":"Beach vibes with expat amenities","description":"Adjacent to Masaki, Oyster Bay offers beach access, the famous Coco Beach, and a mix of local and international venues. More relaxed than Masaki but with similar convenience and safety.","vibe":"Beach & Mixed","bestFor":"Beach lovers, young professionals, and those balancing local and expat life","pros":["Beach access","Good restaurant mix","More local feel than Masaki","Active social scene"],"cons":["Beach can be crowded","Still pricey","Traffic issues"],"lat":-6.7456,"lng":39.2778,"priceLevel":"$$"},{"name":"Kariakoo","tagline":"The chaotic heart of Swahili commerce","description":"Dar's main market district is a sensory overload of commerce, culture, and chaos. The largest market in East Africa offers everything imaginable, and the surrounding streets pulse with authentic Tanzanian life.","vibe":"Market & Authentic","bestFor":"Culture seekers, photographers, and those wanting raw African experience","pros":["Authentic Tanzanian culture","Incredible market","Cheapest prices","Amazing street food"],"cons":["Overwhelming for newcomers","Safety concerns","Very crowded and noisy"],"lat":-6.8189,"lng":39.2756,"priceLevel":"$"},{"name":"Mikocheni","tagline":"Middle-class comfort with local flavor","description":"A popular residential area for Tanzanian professionals and long-term expats, Mikocheni offers a balance of affordability and convenience. Good supermarkets, restaurants, and a more authentic feel than the peninsula.","vibe":"Residential & Balanced","bestFor":"Long-term residents, budget-conscious expats, and those seeking local integration","pros":["Good value accommodation","Mix of local and expat venues","Less traffic than peninsula","Growing cafe scene"],"cons":["Less upscale amenities","Further from beach","Can feel spread out"],"lat":-6.7678,"lng":39.2345,"priceLevel":"$$"},{"name":"Kivukoni","tagline":"Colonial history meets working waterfront","description":"The historic waterfront area houses government buildings, the famous fish market, and ferries to Zanzibar. The Kivukoni fish market at dawn is one of Dar's most iconic experiences.","vibe":"Historic & Working","bestFor":"History buffs, photographers, and those catching ferries to islands","pros":["Historic architecture","Famous fish market","Ferry access","Central location"],"cons":["Limited accommodation","Very busy during work hours","Less residential"],"lat":-6.8234,"lng":39.2912,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

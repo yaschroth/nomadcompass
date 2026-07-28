@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"White Beach Station 1","tagline":"Boracay's upscale north","description":"Station 1 is where White Beach is widest and most pristine - luxury resorts, fine dining, and a more refined atmosphere. The powder-soft sand here is world-famous for good reason.","vibe":"Upscale & Serene","bestFor":"Luxury travelers, honeymooners, and those seeking the best beach","pros":["Widest beach","Luxury resorts","Less crowded","Best sand"],"cons":["Most expensive","Far from nightlife","Limited budget options"],"lat":11.974,"lng":121.923,"priceLevel":"$$$$"},{"name":"White Beach Station 2","tagline":"Boracay's bustling heart","description":"Station 2 is the center of the action - D'Mall shopping, beachfront bars, restaurants, and the famous Boracay nightlife all cluster here. It's busy, vibrant, and never boring.","vibe":"Central & Lively","bestFor":"Social travelers, shoppers, and those wanting to be in the middle of everything","pros":["D'Mall access","Great restaurants","Nightlife","Convenient"],"cons":["Crowded","Noisy","Beach narrower here"],"lat":11.967,"lng":121.925,"priceLevel":"$$$"},{"name":"White Beach Station 3","tagline":"Boracay's budget-friendly zone","description":"Station 3 is where backpackers and budget travelers settle - more affordable accommodation, local eateries, and a chiller vibe than the busy center. Still beautiful beach, better prices.","vibe":"Budget & Relaxed","bestFor":"Budget travelers, backpackers, and those seeking value","pros":["Most affordable","Local restaurants","Relaxed vibe","Still great beach"],"cons":["Narrowest beach","Basic accommodation","Walk to nightlife"],"lat":11.96,"lng":121.926,"priceLevel":"$"},{"name":"Bulabog Beach","tagline":"Boracay's kitesurfing paradise","description":"On the island's east side, Bulabog is kitesurfing heaven - steady winds and shallow waters create perfect conditions. It's less scenic than White Beach but perfect for water sports.","vibe":"Sporty & Active","bestFor":"Kitesurfers, windsurfers, and water sports enthusiasts","pros":["World-class kitesurfing","Kite schools","Less crowded","Affordable"],"cons":["Not great for swimming","Seaweed","Windy"],"lat":11.968,"lng":121.934,"priceLevel":"$$"},{"name":"Diniwid Beach","tagline":"Boracay's hidden cove","description":"Just north of Station 1, Diniwid is a small hidden cove - rocky access keeps crowds away, creating a more exclusive, peaceful alternative to busy White Beach.","vibe":"Hidden & Peaceful","bestFor":"Couples, peace seekers, and those wanting an escape","pros":["Secluded","Beautiful cove","Less crowded","Romantic"],"cons":["Rocky access","Limited services","Small beach"],"lat":11.979,"lng":121.92,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

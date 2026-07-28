@@ -1457,6 +1457,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Citadel Area","tagline":"Hue's imperial walled heart","description":"The Citadel is Hue's reason for being - the vast Imperial City, royal tombs, and UNESCO heritage. Stay here to wake up inside history.","vibe":"Imperial & Historic","bestFor":"History lovers, photographers, and those seeking imperial Hue","pros":["Imperial City access","Historic atmosphere","Quiet evenings","Authentic"],"cons":["Tourist crowds daytime","Limited nightlife","Hot walks"],"lat":16.47,"lng":107.577,"priceLevel":"$"},{"name":"South Bank (Tourist Quarter)","tagline":"Hue's backpacker and hotel zone","description":"South of the Perfume River, the tourist quarter offers budget hotels, travel agencies, and traveler restaurants. It's convenient but less atmospheric.","vibe":"Tourist & Convenient","bestFor":"Budget travelers, backpackers, and those wanting tourist services","pros":["Budget accommodation","Tour booking","Restaurants","Central"],"cons":["Touristy","Generic","Less authentic"],"lat":16.462,"lng":107.595,"priceLevel":"$"},{"name":"Kim Long","tagline":"Hue's garden house district","description":"Kim Long is Hue's traditional garden house neighborhood - historic family compounds with beautiful gardens. It's peaceful, authentic, and uniquely Hue.","vibe":"Traditional & Garden","bestFor":"Garden lovers, culture seekers, and those wanting traditional Hue","pros":["Garden houses","Traditional architecture","Peaceful","Authentic"],"cons":["Limited accommodation","Far from center","Transport needed"],"lat":16.48,"lng":107.56,"priceLevel":"$"},{"name":"Vy Da","tagline":"Hue's local riverside life","description":"Vy Da is Hue's authentic riverside neighborhood - local markets, traditional food, and everyday Vietnamese life away from tourist areas.","vibe":"Local & Authentic","bestFor":"Local food seekers, authentic experience lovers, and those avoiding tourists","pros":["Local food","River views","Authentic","Affordable"],"cons":["No tourist facilities","Language barrier","Basic"],"lat":16.455,"lng":107.58,"priceLevel":"$"},{"name":"An Cuu","tagline":"Hue's modern commercial district","description":"An Cuu is Hue's commercial center - shopping, local services, and everyday city life. It's practical rather than scenic.","vibe":"Commercial & Modern","bestFor":"Long-term stayers, shopping, and those needing city services","pros":["Shopping","Services","Supermarkets","Local life"],"cons":["No attractions","Traffic","Not scenic"],"lat":16.458,"lng":107.605,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1508,6 +1509,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

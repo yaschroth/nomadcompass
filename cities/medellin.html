@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"El Poblado","tagline":"Medellín's upscale neighborhood where nomads congregate","description":"El Poblado is the default choice for digital nomads and expats in Medellín. Tree-lined streets, excellent restaurants, and numerous coworking spaces make it incredibly convenient. The Lleras Park area offers nightlife, while Provenza has the best cafes.","vibe":"Upscale & Convenient","bestFor":"Digital nomads seeking safety, convenience, and the established expat community","pros":["Safest area","Best coworking","Great restaurants","Expat community"],"cons":["Expensive for Medellín","Gringo bubble","Less authentic"],"lat":6.2087,"lng":-75.5659,"priceLevel":"$$$"},{"name":"Laureles","tagline":"The local choice with charm and character","description":"Laureles is where paisas (locals) live and increasingly where savvy nomads are moving. Tree-lined circular streets, local restaurants, and a more authentic vibe make it the antidote to Poblado's tourist scene. Better value with growing coworking options.","vibe":"Local & Charming","bestFor":"Long-term nomads, Spanish learners, and those seeking authentic Medellín life","pros":["Better value","Local character","Great food","Less touristy"],"cons":["Less English","Fewer coworking","Quieter nightlife"],"lat":6.2458,"lng":-75.5917,"priceLevel":"$$"},{"name":"Envigado","tagline":"Medellín's peaceful suburb with local soul","description":"Envigado is technically a separate city but feels like Medellín's southern extension. This peaceful, family-friendly area offers incredible value, local authenticity, and easy metro access to the city center. Popular with long-term expats who've discovered its charm.","vibe":"Peaceful & Authentic","bestFor":"Families, long-term stayers, and budget-conscious nomads seeking peace","pros":["Great value","Safe and clean","Local life","Metro access"],"cons":["Far from action","Limited nightlife","Need Spanish"],"lat":6.1716,"lng":-75.5843,"priceLevel":"$"},{"name":"Manila (near Ciudad del Río)","tagline":"Medellín's emerging creative district","description":"Manila and Ciudad del Río represent Medellín's urban renewal. The modern art museum, converted industrial spaces, and emerging restaurant scene attract a creative crowd. It's up-and-coming, with growing coworking options and excellent metro connectivity.","vibe":"Creative & Emerging","bestFor":"Creatives, early adopters, and nomads seeking Medellín's next neighborhood","pros":["Art and culture","Modern vibe","Metro access","Growing scene"],"cons":["Still developing","Mixed areas","Fewer amenities"],"lat":6.2339,"lng":-75.5674,"priceLevel":"$$"},{"name":"Belén","tagline":"Working-class authenticity with stadium energy","description":"Belén offers glimpses of real Medellín life at prices that won't break the bank. This working-class neighborhood near the stadium has strong community spirit, local markets, and easy metro access. Not for everyone, but rewards the adventurous.","vibe":"Authentic & Budget","bestFor":"Budget nomads, Spanish speakers, and those seeking non-touristy experience","pros":["Most affordable","Authentic paisa life","Metro access","Local markets"],"cons":["Less safe at night","Very little English","Basic amenities"],"lat":6.23,"lng":-75.61,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

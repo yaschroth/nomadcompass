@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Beach Road (An Dương Vương)","tagline":"Oceanfront living on the rise","description":"Quy Nhon's developing beachfront features new hotels, seafood restaurants, and the famous Queen's Beach. Morning swimmers join locals for exercises while cafes serve Vietnamese coffee with sea views.","vibe":"Coastal emerging","bestFor":"Beach lovers and early adopters","pros":["Ocean views","Fresh seafood","Morning swims","Developing scene"],"cons":["Limited nightlife","Sparse services","Still developing"],"lat":13.7734,"lng":109.2287,"priceLevel":"$"},{"name":"City Center","tagline":"Local Vietnamese life untouched by tourism","description":"The commercial center offers authentic Vietnamese urban life largely undiscovered by tourists. Markets, street food, and local businesses serve residents while curious travelers find genuine experiences.","vibe":"Authentic local","bestFor":"Cultural immersion seekers","pros":["Authentic Vietnam","Great street food","Very affordable","Local markets"],"cons":["No English","Basic facilities","Hot and busy"],"lat":13.7612,"lng":109.2198,"priceLevel":"$"},{"name":"Ghềnh Ráng","tagline":"Clifftop serenity and nature","description":"South of the city, this rocky cape offers dramatic coastal scenery with quiet beaches and the famous Egg Coffee inventor's grave. Resorts and guesthouses perch above pristine coves.","vibe":"Scenic peaceful","bestFor":"Nature lovers seeking serenity","pros":["Stunning scenery","Quiet beaches","Nature access","Peaceful retreat"],"cons":["Isolated location","Limited transport","Few restaurants"],"lat":13.7456,"lng":109.2423,"priceLevel":"$"},{"name":"Nhơn Lý","tagline":"Fishing village with Eo Gió winds","description":"This fishing village north of town provides access to the famous Eo Gió cliff and Kỳ Co beach. Traditional fishing life continues while domestic tourists discover the area's natural beauty.","vibe":"Village coastal","bestFor":"Adventure seekers and culture lovers","pros":["Eo Gió access","Fishing village life","Beautiful beaches","Off the path"],"cons":["Very remote","Basic amenities","No English"],"lat":13.8234,"lng":109.2712,"priceLevel":"$"},{"name":"Xuân Diệu Area","tagline":"Local residential with beach access","description":"This neighborhood between center and beach offers local Vietnamese residential life with easy beach access. Morning markets, neighborhood cafes, and friendly locals welcome longer-staying visitors.","vibe":"Residential convenient","bestFor":"Long-term stays wanting local life","pros":["Near beach","Local atmosphere","Affordable rents","Daily markets"],"cons":["Limited English","Basic amenities","Quiet evenings"],"lat":13.7689,"lng":109.2245,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

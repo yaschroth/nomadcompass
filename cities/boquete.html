@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Downtown Boquete","tagline":"Highland village with coffee culture","description":"Downtown Boquete is Panama's highland escape - coffee shops, restaurants, cool mountain air. Where expats and travelers find respite from tropical heat.","vibe":"Village & Expat","bestFor":"Coffee lovers, retirees, and those escaping heat","pros":["Cool climate","Great coffee","Mountain setting","Expat services"],"cons":["Small town","Expat prices","Limited nightlife"],"lat":8.7794,"lng":-82.4393,"priceLevel":"$$"},{"name":"Alto Boquete","tagline":"Higher elevation with coffee farms","description":"Alto Boquete rises above town - coffee fincas, hiking trails, cloud forest. Where Panama's famous coffee grows in volcanic soil.","vibe":"Rural & Agricultural","bestFor":"Coffee enthusiasts, hikers, and nature lovers","pros":["Coffee tours","Mountain views","Cooler climate","Hiking trails"],"cons":["Need car","Basic services","Remote"],"lat":8.7989,"lng":-82.4512,"priceLevel":"$$"},{"name":"Volcán Barú Area","tagline":"Panama's highest peak access","description":"Volcán Barú rises above Boquete - Panama's highest point offers sunrise views of both oceans. For serious hikers seeking Central America's unique dual-coast vista.","vibe":"Adventure & Mountain","bestFor":"Hikers, sunrise seekers, and adventure travelers","pros":["Incredible views","Dual-ocean vista","Challenging hike","Unique experience"],"cons":["Very strenuous","Pre-dawn start","Weather dependent"],"lat":8.8078,"lng":-82.5423,"priceLevel":"$"},{"name":"Caldera","tagline":"Hot springs and local life","description":"Caldera offers Boquete's natural spa - hot springs in riverside settings, local Panamanian community. Where volcanic geology provides relaxation.","vibe":"Natural & Local","bestFor":"Hot springs lovers, local seekers, and relaxation","pros":["Hot springs","Local atmosphere","Natural setting","Affordable"],"cons":["Basic facilities","Need transport","Limited options"],"lat":8.7412,"lng":-82.4912,"priceLevel":"$"},{"name":"Bajo Mono","tagline":"Cloud forest trails and birdwatching","description":"Bajo Mono is Boquete's birding destination - cloud forest trails, resplendent quetzals, birdwatcher lodges. Where serious birders seek Central American species.","vibe":"Natural & Wildlife","bestFor":"Birdwatchers, nature lovers, and wildlife seekers","pros":["Quetzal sightings","Cloud forest","Wildlife","Peaceful"],"cons":["Early mornings","Need guide","Basic accommodation"],"lat":8.8312,"lng":-82.4789,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

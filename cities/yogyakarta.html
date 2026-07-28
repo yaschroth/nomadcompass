@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Prawirotaman","tagline":"Yogya's backpacker artistic hub","description":"Prawirotaman is Yogya's traveler heart - guesthouses, art galleries, and batik shops. It's the traditional backpacker base with genuine Javanese artistic heritage.","vibe":"Backpacker & Artistic","bestFor":"Budget travelers, art lovers, and those seeking traveler community","pros":["Artistic atmosphere","Affordable","Great guesthouses","Batik heritage"],"cons":["Touristy","Noisy streets","Persistent touts"],"lat":-7.818,"lng":110.368,"priceLevel":"$"},{"name":"Malioboro Area","tagline":"Yogya's bustling commercial heart","description":"Malioboro Street is Yogya's main artery - shops, street food, and constant energy. It's chaotic but essential for experiencing Yogya's commercial soul.","vibe":"Commercial & Busy","bestFor":"Shoppers, street food lovers, and those seeking local energy","pros":["Great shopping","Street food","Central location","Kraton access"],"cons":["Very crowded","Touts everywhere","Hot and noisy"],"lat":-7.7928,"lng":110.3656,"priceLevel":"$"},{"name":"Kotagede","tagline":"Yogya's ancient silver district","description":"Kotagede is Yogya's original capital - silver workshops, ancient mosques, and preserved Javanese houses. It's where you find authentic Javanese culture untouched by tourism.","vibe":"Historic & Authentic","bestFor":"History lovers, silver shoppers, and those seeking authentic Java","pros":["Silver workshops","Historic atmosphere","Less touristy","Authentic culture"],"cons":["Far from center","Limited food options","Hot afternoons"],"lat":-7.827,"lng":110.4,"priceLevel":"$"},{"name":"Kaliurang","tagline":"Yogya's cool mountain escape","description":"Kaliurang sits at Mount Merapi's base - cooler temperatures, volcano views, and escape from the heat. It's Yogya's weekend retreat for those seeking fresh air.","vibe":"Mountain & Cool","bestFor":"Nature lovers, volcano enthusiasts, and those escaping heat","pros":["Cooler weather","Volcano views","Fresh air","Nature access"],"cons":["Far from city","Limited nightlife","Volcanic risk"],"lat":-7.605,"lng":110.425,"priceLevel":"$"},{"name":"Sosrowijayan","tagline":"Yogya's original budget traveler base","description":"Sosrowijayan is Yogya's budget central - cheap rooms, travel agencies, and backpacker infrastructure. It's scruffier than Prawirotaman but more central.","vibe":"Budget & Central","bestFor":"Budget travelers, train arrivals, and those wanting central access","pros":["Very cheap","Near train station","Travel agencies","Central"],"cons":["Run down","Noisy","Basic facilities"],"lat":-7.79,"lng":110.36,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

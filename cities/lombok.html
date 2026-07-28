@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Senggigi","tagline":"Lombok's main tourist beach","description":"Senggigi is Lombok's original tourist area - beach resorts, restaurants, and services. It's faded from its heyday but still the most convenient base.","vibe":"Beach & Tourist","bestFor":"First-time visitors, convenience seekers, and those wanting infrastructure","pros":["Beach access","Restaurants","Tour operators","Services"],"cons":["Faded tourism","Quiet nightlife","Dated resorts"],"lat":-8.485,"lng":116.045,"priceLevel":"$$"},{"name":"Kuta Lombok","tagline":"Lombok's surf and beach paradise","description":"Kuta Lombok (not Bali's Kuta) is the island's coolest area - world-class surf, beautiful beaches, and emerging cafe scene. It's Lombok's future.","vibe":"Surf & Emerging","bestFor":"Surfers, beach lovers, and those seeking developing Lombok","pros":["Amazing beaches","Surf breaks","Emerging scene","Beautiful bays"],"cons":["Basic infrastructure","Dusty roads","Limited services"],"lat":-8.895,"lng":116.285,"priceLevel":"$"},{"name":"Gili Islands (Gili T)","tagline":"Lombok's party island trio","description":"Gili Trawangan is the party island - no motorized vehicles, beach bars, and backpacker vibes. Gili Air and Gili Meno offer quieter alternatives.","vibe":"Island & Party","bestFor":"Party seekers, divers, and those wanting car-free islands","pros":["No vehicles","Beach parties","Diving","Island vibes"],"cons":["Overtouristed","Party noise","Expensive for Indonesia"],"lat":-8.35,"lng":116.035,"priceLevel":"$$"},{"name":"Mataram","tagline":"Lombok's authentic capital city","description":"Mataram is Lombok's capital - markets, malls, and everyday Indonesian life. It's not touristy but essential for services and authentic Lombok.","vibe":"Local & Capital","bestFor":"Authentic seekers, long-term visitors, and those needing city services","pros":["Authentic Indonesia","Markets","Services","Affordable"],"cons":["No beaches","Hot city","Traffic"],"lat":-8.5833,"lng":116.1167,"priceLevel":"$"},{"name":"Tetebatu","tagline":"Lombok's cool rice terrace highlands","description":"Tetebatu is Lombok's mountain escape - rice terraces, waterfalls, and cooler temperatures. It's authentic Sasak culture away from the beaches.","vibe":"Mountain & Cultural","bestFor":"Trekkers, culture seekers, and those escaping beach heat","pros":["Rice terraces","Cool weather","Waterfalls","Sasak culture"],"cons":["Remote","Limited services","Basic accommodation"],"lat":-8.525,"lng":116.42,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

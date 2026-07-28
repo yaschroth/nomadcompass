@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Las Canteras","tagline":"One of Europe's best urban beaches","description":"Las Canteras is the main reason nomads flock to Las Palmas - a 3km golden beach with year-round swimming, beach bars, and surfing. The promenade is lined with apartments, restaurants, and cafes. Beach life meets city convenience.","vibe":"Beach & Urban","bestFor":"Beach lovers, surfers, and nomads seeking Europe's best beach-city lifestyle","pros":["Incredible beach","Year-round swimming","Great promenade","Surfing"],"cons":["Touristy","Expensive beachfront","Crowded peak season"],"lat":28.138,"lng":-15.437,"priceLevel":"$$"},{"name":"Triana","tagline":"Historic shopping streets with local character","description":"Triana is Las Palmas' traditional commercial heart - pedestrianized Calle Mayor lined with shops, plazas filled with terrace cafes, and genuine Canarian character. More local than touristy, with good value living.","vibe":"Traditional & Commercial","bestFor":"Culture seekers, shoppers, and nomads wanting authentic Canarian atmosphere","pros":["Local character","Shopping streets","Good cafes","Near beach"],"cons":["Less scenic","Busy streets","Limited nightlife"],"lat":28.105,"lng":-15.417,"priceLevel":"$$"},{"name":"Vegueta","tagline":"UNESCO colonial quarter with cobblestone charm","description":"Vegueta is Las Palmas' colonial heart - UNESCO-listed cobblestone streets, the cathedral, and Columbus' house. It's the city's most atmospheric neighborhood, with growing cafe scene in historic buildings.","vibe":"Historic & Charming","bestFor":"History lovers, romantics, and nomads seeking colonial atmosphere","pros":["Historic beauty","Cathedral quarter","Growing cafes","Museums"],"cons":["Far from beach","Quiet evenings","Limited services"],"lat":28.1,"lng":-15.414,"priceLevel":"$$"},{"name":"Guanarteme","tagline":"Local neighborhood between beach and city","description":"Guanarteme sits between Las Canteras and the city center - a residential neighborhood with excellent value. Local shops, good transport, and proximity to the beach make it popular with long-term nomads.","vibe":"Residential & Practical","bestFor":"Long-term nomads, budget travelers, and those seeking local neighborhood life","pros":["Good value","Near beach","Local shops","Central location"],"cons":["Less character","Basic infrastructure","Not scenic"],"lat":28.128,"lng":-15.435,"priceLevel":"$"},{"name":"Santa Catalina / Puerto","tagline":"Port area with urban renewal and nightlife","description":"Santa Catalina is Las Palmas' port district - currently undergoing renewal with new restaurants, bars, and cultural spaces. The area around Parque Santa Catalina has the best nightlife and international atmosphere.","vibe":"Urban & Nightlife","bestFor":"Nightlife seekers, young nomads, and those wanting urban energy","pros":["Best nightlife","International vibe","Near beach","Developing area"],"cons":["Can be rough","Noisy","Mixed areas"],"lat":28.132,"lng":-15.43,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

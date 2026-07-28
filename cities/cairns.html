@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre / Esplanade","tagline":"Reef gateway with lagoon swimming","description":"Cairns center focuses on the Esplanade - famous lagoon pool, waterfront dining, tour operators for the Great Barrier Reef. The tropical gateway to natural wonders.","vibe":"Tourist & Tropical","bestFor":"Reef visitors, backpackers, and tropical seekers","pros":["Lagoon pool","Tour access","Good dining","Walkable"],"cons":["Very touristy","Backpacker heavy","No beach"],"lat":-16.9186,"lng":145.7781,"priceLevel":"$$"},{"name":"Trinity Beach","tagline":"Beachside calm north of the city","description":"Trinity Beach offers what Cairns center lacks - an actual beach with palm trees, calm swimming, and village atmosphere. Where locals escape for coastal living.","vibe":"Beach & Residential","bestFor":"Beach lovers, families, and those wanting calm","pros":["Real beach","Calm water","Village feel","Less touristy"],"cons":["Far from center","Limited nightlife","Car needed"],"lat":-16.7867,"lng":145.7012,"priceLevel":"$$"},{"name":"Palm Cove","tagline":"Upmarket beach resort village","description":"Palm Cove is Cairns' boutique beach destination - palm-lined promenade, boutique resorts, day spas. Where couples and refined travelers find tropical elegance.","vibe":"Resort & Elegant","bestFor":"Couples, spa seekers, and those wanting upmarket beach","pros":["Beautiful beach","Boutique resorts","Day spas","Good dining"],"cons":["Expensive","Limited nightlife","Resort-focused"],"lat":-16.7489,"lng":145.6734,"priceLevel":"$$$"},{"name":"Port Douglas","tagline":"Reef and rainforest in boutique style","description":"Port Douglas is Cairns' sophisticated sibling - Four Mile Beach, upmarket resorts, Daintree access. Where reef meets rainforest with boutique elegance.","vibe":"Boutique & Natural","bestFor":"Nature lovers, luxury travelers, and those wanting both reef and rainforest","pros":["Stunning beach","Daintree access","Boutique feel","Great dining"],"cons":["1 hour from Cairns","Expensive","Limited public transport"],"lat":-16.4833,"lng":145.4589,"priceLevel":"$$$"},{"name":"Kuranda","tagline":"Rainforest village in the mountains","description":"Kuranda sits in the rainforest mountains - scenic railway, Skyrail access, arts markets. Where the tropics rise into cooler mountain air.","vibe":"Rainforest & Artsy","bestFor":"Nature lovers, market enthusiasts, and day-trippers","pros":["Rainforest setting","Scenic access","Markets","Cooler weather"],"cons":["Very touristy","Day-trip focused","Limited accommodation"],"lat":-16.8178,"lng":145.6389,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

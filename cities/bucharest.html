@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town (Lipscani)","tagline":"Bucharest's party heart with cobblestone charm","description":"Bucharest's Old Town is the city's entertainment center - cobblestone streets, restored buildings, and endless bars and restaurants. It's touristy and loud, but has the best nightlife and central atmosphere.","vibe":"Party & Historic","bestFor":"Nightlife lovers, tourists, and nomads seeking central entertainment","pros":["Best nightlife","Restored buildings","Central location","Great restaurants"],"cons":["Very loud","Touristy","Expensive for Bucharest"],"lat":44.431,"lng":26.099,"priceLevel":"$$"},{"name":"Floreasca","tagline":"Bucharest's upscale northern neighborhood","description":"Floreasca is Bucharest's most desirable residential area - Floreasca Lake, upscale restaurants, and modern apartments. Corporate offices and shopping centers serve professional residents. Quality living, Romanian style.","vibe":"Upscale & Modern","bestFor":"Professionals, families, and nomads seeking Bucharest's best quality of life","pros":["Lake access","Good restaurants","Modern apartments","Safe"],"cons":["Expensive","Traffic","Less character"],"lat":44.465,"lng":26.105,"priceLevel":"$$$"},{"name":"Aviatorilor / Primăverii","tagline":"Bucharest's embassy district with villa grandeur","description":"Aviatorilor and Primăverii house embassies and wealthy Romanians in grand villas. Herăstrău Park provides green escape. It's Bucharest's most exclusive area - quiet, safe, and prestigious.","vibe":"Exclusive & Green","bestFor":"Diplomats, executives, and nomads seeking prestigious Bucharest living","pros":["Herăstrău Park","Grand villas","Very safe","Prestigious"],"cons":["Most expensive","Quiet","Need transport"],"lat":44.472,"lng":26.087,"priceLevel":"$$$"},{"name":"Universitate / Romana","tagline":"Bucharest's intellectual center with student energy","description":"The university area brings intellectual energy to central Bucharest - students, cafes, and cultural venues. Architecture ranges from communist blocks to belle époque buildings. Central, affordable, and energetic.","vibe":"Student & Cultural","bestFor":"Students, academics, and budget nomads seeking central location","pros":["Central location","Student energy","Affordable","Cultural venues"],"cons":["Busy streets","Mixed quality","Noisy"],"lat":44.435,"lng":26.1,"priceLevel":"$"},{"name":"Cotroceni","tagline":"Presidential palace neighborhood with local charm","description":"Cotroceni surrounds the presidential palace with tree-lined streets and local character. It's quieter than center with growing cafe scene, attractive to young professionals seeking authenticity.","vibe":"Residential & Charming","bestFor":"Young professionals, long-term stayers, and nomads seeking authentic residential","pros":["Local character","Quiet streets","Growing cafes","Near center"],"cons":["Limited nightlife","Basic infrastructure","Residential"],"lat":44.435,"lng":26.067,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

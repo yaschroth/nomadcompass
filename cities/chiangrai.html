@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Chiang Rai's compact core","description":"Chiang Rai's center is small and walkable - clock tower, night bazaar, and main services. It's the practical base for temple trips and hill tribe treks.","vibe":"Compact & Practical","bestFor":"First-time visitors, practical travelers, and those wanting central access","pros":["Walkable","Night bazaar","Services","Restaurant variety"],"cons":["Limited charm","Small town","Hot days"],"lat":19.9105,"lng":99.8406,"priceLevel":"$"},{"name":"Riverside","tagline":"Chiang Rai's peaceful Kok River area","description":"Along the Kok River, cafes and guesthouses offer peaceful alternatives to the center. Boat trips to hill tribe villages depart from here.","vibe":"Peaceful & Scenic","bestFor":"Peace seekers, boat trip takers, and those wanting riverside calm","pros":["River views","Peaceful","Boat trips","Good cafes"],"cons":["Walk to center","Limited restaurants","Quiet evenings"],"lat":19.915,"lng":99.83,"priceLevel":"$"},{"name":"White Temple Area","tagline":"Chiang Rai's artistic temple zone","description":"South of town, the White Temple (Wat Rong Khun) area offers artistic accommodations near Chiang Rai's most famous sight. It's tourist-focused but unique.","vibe":"Artistic & Tourist","bestFor":"Art lovers, temple visitors, and those wanting unique stays","pros":["Near White Temple","Artistic venues","Unique atmosphere","Less crowded"],"cons":["Far from town","Transport needed","Limited services"],"lat":19.8244,"lng":99.7631,"priceLevel":"$$"},{"name":"Mae Fah Luang Area","tagline":"Chiang Rai's royal garden district","description":"Near Mae Fah Luang University and gardens, this area offers green spaces and cooler hillside locations away from the town center.","vibe":"Green & Academic","bestFor":"Garden lovers, students, and those wanting cooler hillsides","pros":["Gardens","University","Cooler","Less touristy"],"cons":["Far from center","Limited food options","Transport needed"],"lat":19.877,"lng":99.897,"priceLevel":"$"},{"name":"Night Bazaar Area","tagline":"Chiang Rai's evening market hub","description":"The night bazaar area comes alive each evening - hill tribe crafts, street food, and cultural performances. It's the social heart of evening Chiang Rai.","vibe":"Market & Social","bestFor":"Shoppers, foodies, and those seeking evening atmosphere","pros":["Night market","Street food","Hill tribe crafts","Performances"],"cons":["Evening only","Tourist prices","Crowded"],"lat":19.9085,"lng":99.835,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

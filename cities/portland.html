@@ -1441,6 +1441,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Pearl District","tagline":"Portland's transformed warehouse wonderland","description":"The Pearl is Portland's most dramatic transformation - former warehouses now galleries, restaurants, and upscale living. Polished urban renewal.","vibe":"Upscale & Gallery","bestFor":"Art lovers, foodies, and those seeking polished Portland","pros":["Art galleries","Great restaurants","Powell's Books","Walkable"],"cons":["Expensive","Gentrified","Less character"],"lat":45.528,"lng":-122.681,"priceLevel":"$$$"},{"name":"Alberta Arts District","tagline":"Portland's creative community heart","description":"Alberta is Portland's artsy soul - galleries, indie shops, and strong community character. It's where Portland's creative spirit thrives.","vibe":"Creative & Community","bestFor":"Artists, community seekers, and those seeking authentic Portland","pros":["Art galleries","Local shops","Last Thursday events","Community feel"],"cons":["Gentrifying","Far from downtown","Parking issues"],"lat":45.559,"lng":-122.647,"priceLevel":"$$"},{"name":"Hawthorne","tagline":"Portland's original hippie-turned-hip strip","description":"Hawthorne is Portland's eclectic east side - vintage shops, coffee roasters, and countercultural heritage. It's Portland's longest-running cool street.","vibe":"Eclectic & Vintage","bestFor":"Vintage shoppers, coffee lovers, and those seeking Portland character","pros":["Vintage shopping","Great coffee","Character","Mount Tabor nearby"],"cons":["Crowded weekends","Parking issues","Gentrifying"],"lat":45.512,"lng":-122.629,"priceLevel":"$$"},{"name":"Mississippi District","tagline":"Portland's revitalized north strip","description":"Mississippi is Portland's north-side revival - craft breweries, food carts, and creative businesses. It's Portland's beer and food cart culture concentrated.","vibe":"Brewery & Food Cart","bestFor":"Beer lovers, foodies, and those seeking Portland's food cart culture","pros":["Craft breweries","Food carts","Local businesses","Walkable"],"cons":["Crowded evenings","Limited parking","Gentrifying"],"lat":45.552,"lng":-122.676,"priceLevel":"$$"},{"name":"Division/Clinton","tagline":"Portland's foodie restaurant row","description":"Division Street has become Portland's restaurant destination - acclaimed dining, innovative chefs, and culinary creativity. It's where Portland eats.","vibe":"Foodie & Restaurant","bestFor":"Foodies, restaurant lovers, and those seeking Portland's dining scene","pros":["Best restaurants","Innovative dining","Walkable","Food variety"],"cons":["Crowded restaurants","Expensive dining","Needs reservations"],"lat":45.505,"lng":-122.635,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1492,6 +1493,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

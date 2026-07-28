@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Renaissance perfection in Florence's heart","description":"Florence's historic center is Renaissance perfection - the Duomo, Uffizi, and Ponte Vecchio within walking distance. It's extremely touristy but incomparably beautiful. Stay here for short-term immersion in history.","vibe":"Renaissance & Tourist","bestFor":"Art lovers, first-time visitors, and nomads seeking iconic Florence","pros":["Incredible art","Historic sites","Walkable","Beautiful"],"cons":["Extremely touristy","Very expensive","Crowded"],"lat":43.7696,"lng":11.2558,"priceLevel":"$$$"},{"name":"Oltrarno","tagline":"Artisan Florence on the other side of the river","description":"Oltrarno is Florence's artisan quarter - across the Arno, away from worst crowds. Traditional workshops, local restaurants, and Piazza Santo Spirito create authentic atmosphere. Florence for those who stay longer.","vibe":"Artisan & Authentic","bestFor":"Long-term nomads, craft lovers, and those seeking authentic Florence","pros":["Artisan character","Less touristy","Local restaurants","Authentic"],"cons":["Fewer sights","Basic infrastructure","Quieter"],"lat":43.765,"lng":11.245,"priceLevel":"$$"},{"name":"San Lorenzo","tagline":"Market life around Medici chapels","description":"San Lorenzo surrounds the famous market and Medici Chapels. It's busy and commercial but central, with leather goods markets and food halls. Working Florence rather than postcard Florence.","vibe":"Market & Central","bestFor":"Market lovers, food enthusiasts, and budget nomads seeking central location","pros":["Famous market","Central location","Food options","Affordable"],"cons":["Very busy","Tourist vendors","Noisy"],"lat":43.775,"lng":11.253,"priceLevel":"$$"},{"name":"Santa Croce","tagline":"Florentine neighborhood life near famous basilica","description":"Santa Croce offers more neighborhood feel - the famous basilica, Piazza Santa Croce, and local life just east of center. It's where Florentines actually live while staying close to everything.","vibe":"Local & Central","bestFor":"Long-term residents, sports fans (stadium nearby), and those seeking local life","pros":["Neighborhood feel","Great square","Near center","More local"],"cons":["Game day crowds","Some tourist overflow","Rising prices"],"lat":43.7684,"lng":11.262,"priceLevel":"$$"},{"name":"Campo di Marte","tagline":"Residential Florence near the stadium","description":"Campo di Marte is Florence's residential east - near the stadium, with parks and modern infrastructure. It's where Florentine families live, offering value and authentic life away from tourist center.","vibe":"Residential & Local","bestFor":"Families, long-term nomads, and those seeking authentic residential life","pros":["Good value","Local life","Parks","Train station"],"cons":["Far from center","Less charming","Game day chaos"],"lat":43.778,"lng":11.28,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

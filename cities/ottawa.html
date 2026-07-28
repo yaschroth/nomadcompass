@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"ByWard Market","tagline":"Historic market meets nightlife","description":"Ottawa's oldest neighborhood features the famous farmers market, restaurants, and lively nightlife. The pedestrian streets, pubs, and outdoor dining create the capital's most dynamic atmosphere.","vibe":"Market & Nightlife","bestFor":"Foodies, night owls, and market lovers","pros":["Famous market","Great restaurants","Active nightlife","Central location"],"cons":["Can be touristy","Noisy weekends","Expensive dining"],"lat":45.4278,"lng":-75.6912,"priceLevel":"$$$"},{"name":"Centretown","tagline":"Downtown living with Parliament views","description":"The downtown core offers proximity to Parliament Hill, government offices, and urban convenience. The mix of historic buildings and modern towers attracts professionals and visitors alike.","vibe":"Urban & Central","bestFor":"Business travelers, urban dwellers, and convenience seekers","pros":["Central location","Parliament access","Good transit","Restaurant variety"],"cons":["Can feel corporate","Expensive","Less character"],"lat":45.4167,"lng":-75.7012,"priceLevel":"$$$"},{"name":"Glebe","tagline":"Village charm with boutique shopping","description":"The charming neighborhood along Bank Street offers boutique shopping, excellent cafes, and family-friendly atmosphere. The tree-lined streets and local character make it Ottawa's most desirable residential area.","vibe":"Charming & Family","bestFor":"Families, shoppers, and those seeking neighborhood charm","pros":["Boutique shopping","Great cafes","Canal access","Village atmosphere"],"cons":["Expensive housing","Limited nightlife","Parking challenges"],"lat":45.3978,"lng":-75.6889,"priceLevel":"$$$"},{"name":"Hintonburg","tagline":"Hip and emerging with local flavor","description":"The gentrifying neighborhood west of downtown offers hip cafes, independent shops, and creative energy. The affordable options and local character attract young professionals and artists.","vibe":"Hip & Emerging","bestFor":"Creatives, young professionals, and local experience seekers","pros":["Hip cafes","Independent shops","More affordable","Creative scene"],"cons":["Still rough in parts","Less central","Limited transit"],"lat":45.4089,"lng":-75.7234,"priceLevel":"$$"},{"name":"Hull/Gatineau","tagline":"Quebec side with museum gems","description":"Across the river in Quebec, Hull offers the spectacular Canadian Museum of History, casino, and more affordable living. The French atmosphere and different provincial rules create distinct character.","vibe":"French & Cultural","bestFor":"Museum lovers, French speakers, and budget-conscious visitors","pros":["Major museums","More affordable","French atmosphere","Different character"],"cons":["Different province rules","Less nightlife","Need to cross bridge"],"lat":45.4312,"lng":-75.7112,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

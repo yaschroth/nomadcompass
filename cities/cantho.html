@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ninh Kiều District","tagline":"Riverside hub of Mekong Delta life","description":"The heart of Can Tho along the Hau River is where travelers base themselves. The riverside promenade, floating market boat tours, and concentration of hotels and restaurants make this the natural nomad hub.","vibe":"Central & Lively","bestFor":"First-time visitors, those wanting convenience, and river life enthusiasts","pros":["Walking distance to everything","Great riverside promenade","Best restaurant selection","Easy floating market access"],"cons":["Touristy in peak areas","Traffic noise","Higher prices than outer areas"],"lat":10.0341,"lng":105.7835,"priceLevel":"$$"},{"name":"An Hòa","tagline":"Local life beyond the tourist bubble","description":"Just north of the center, An Hòa offers a more residential Vietnamese experience with local markets, authentic eateries, and significantly lower prices. Great for those wanting to live like locals.","vibe":"Local & Authentic","bestFor":"Budget nomads, Vietnamese learners, and those seeking authentic experience","pros":["Very affordable","Authentic local markets","Less tourist influence","Great street food"],"cons":["Less English spoken","Fewer cafes for working","Basic accommodation"],"lat":10.0456,"lng":105.7789,"priceLevel":"$"},{"name":"Cai Rang Area","tagline":"Gateway to the famous floating market","description":"Located near the iconic Cai Rang floating market, this area offers early morning market access and a glimpse into Mekong Delta trading life. More residential but perfect for photography enthusiasts.","vibe":"Market & Traditional","bestFor":"Photographers, early risers, and floating market enthusiasts","pros":["Walk to floating market","Authentic delta life","Cheap accommodation","Less crowded"],"cons":["Far from main center","Need transport","Limited nightlife"],"lat":10.0089,"lng":105.7567,"priceLevel":"$"},{"name":"Hưng Lợi","tagline":"Modern district with green spaces","description":"Can Tho's newer residential area features modern apartments, parks, and a growing cafe culture. Popular with young Vietnamese professionals, it offers a more contemporary lifestyle.","vibe":"Modern & Residential","bestFor":"Long-term residents, those wanting modern amenities and quiet","pros":["Modern apartments","Parks and green spaces","Growing cafe scene","Quiet residential feel"],"cons":["Further from attractions","Less character","Fewer tourists means less English"],"lat":10.0234,"lng":105.7945,"priceLevel":"$$"},{"name":"Xuân Khánh","tagline":"University vibes and youthful energy","description":"Near Can Tho University, this area buzzes with student energy. Cheap food stalls, young cafes, and an active nightlife scene make it perfect for budget-conscious younger travelers.","vibe":"Youthful & Budget","bestFor":"Students, young nomads, and budget travelers seeking social scene","pros":["Very cheap food and drinks","Young social scene","Budget accommodation","Lively atmosphere"],"cons":["Can be noisy","Basic amenities","Less scenic"],"lat":10.0289,"lng":105.7698,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

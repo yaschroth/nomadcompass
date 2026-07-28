@@ -1464,6 +1464,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Itaewon","tagline":"Seoul's international hub where English flows freely","description":"Itaewon is Seoul's undisputed expat capital. International restaurants, English-speaking services, and a vibrant multicultural atmosphere make it the easiest landing spot in Korea. The nightlife is active and the community is established, though it comes at a premium.","vibe":"International & Vibrant","bestFor":"Expats, digital nomads, English speakers, and those new to Korea","pros":["English everywhere","International food","Active nightlife","Expat community"],"cons":["Expensive","Very busy","Less authentic Korean"],"lat":37.534,"lng":126.9948,"priceLevel":"$$$"},{"name":"Hongdae","tagline":"Seoul's creative heartbeat with unbeatable energy","description":"Named after Hongik University, Hongdae is Seoul's creative and youthful heart. Street performances, indie music venues, and affordable restaurants create constant buzz. More affordable than Gangnam, it's where young professionals, students, and creatives thrive.","vibe":"Young & Creative","bestFor":"Young professionals, creatives, students, and those who want Seoul's energy on a budget","pros":["Vibrant nightlife","Creative scene","Affordable","Young energy"],"cons":["Very crowded","Noisy weekends","Not for families"],"lat":37.5563,"lng":126.9237,"priceLevel":"$$"},{"name":"Gangnam","tagline":"Seoul's luxury district where business meets status","description":"Yes, that Gangnam. Seoul's business and luxury district delivers glass skyscrapers, department stores, and high-end everything. Perfect for professionals in finance, tech, and startups - you're close to global companies, coworking spaces, and corporate headquarters.","vibe":"Upscale & Professional","bestFor":"Business professionals, corporate remote workers, and those who need premium amenities","pros":["Modern infrastructure","Professional networking","Luxury amenities","Clean and safe"],"cons":["Most expensive","Can feel corporate","Less character"],"lat":37.4979,"lng":127.0276,"priceLevel":"$$$"},{"name":"Yeonnam-dong","tagline":"Seoul's trendiest up-and-comer for creative nomads","description":"Yeonnam-dong has become one of Seoul's trendiest neighborhoods for younger expats, artists, and digital nomads. Near Hongdae but quieter, it offers artistic energy, cafes, coworking spaces, and boutique guesthouses in a more laid-back setting.","vibe":"Trendy & Laid-back","bestFor":"Artists, digital nomads, and those seeking Hongdae proximity without the chaos","pros":["Trendy cafes","Artistic vibe","Quieter than Hongdae","Great for work"],"cons":["Small area","Getting popular","Limited late-night"],"lat":37.5603,"lng":126.9213,"priceLevel":"$$"},{"name":"Mapo","tagline":"The best balance of cost, convenience, and local charm","description":"Mapo District offers one of Seoul's best balances - close to Hongdae but much calmer, with access to Seoul's energy without the chaos. It's where digital nomads and cultural explorers find their sweet spot between authenticity and convenience.","vibe":"Balanced & Local","bestFor":"Long-term nomads, cultural explorers, and those seeking value with access","pros":["Great value","Local charm","Good transport","Near Hongdae"],"cons":["Less exciting","Fewer foreigners","Basic amenities"],"lat":37.5537,"lng":126.9368,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1515,6 +1516,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

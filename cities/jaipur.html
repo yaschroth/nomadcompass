@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Pink City (Old City)","tagline":"Terracotta walls and royal heritage","description":"The Pink City is Jaipur's historic heart - Hawa Mahal, City Palace, bazaars in rose-colored buildings. Where Rajput royalty created India's first planned city.","vibe":"Historic & Vibrant","bestFor":"History lovers, photographers, and bazaar enthusiasts","pros":["Iconic monuments","Amazing bazaars","Historic atmosphere","Walkable"],"cons":["Overwhelming chaos","Persistent touts","Very hot"],"lat":26.9239,"lng":75.8267,"priceLevel":"$$"},{"name":"C-Scheme","tagline":"Modern dining and upscale living","description":"C-Scheme is Jaipur's upscale area - modern restaurants, boutiques, upmarket housing. Where contemporary Jaipur shows its cosmopolitan aspirations.","vibe":"Modern & Upscale","bestFor":"Upscale travelers, foodies, and modern seekers","pros":["Good restaurants","Modern amenities","Safe area","Less chaos"],"cons":["Expensive","Less character","Tourist bubble"],"lat":26.8989,"lng":75.7956,"priceLevel":"$$$"},{"name":"Amer / Amber Fort Area","tagline":"Hilltop fortress and elephant rides","description":"Amer Fort rises above Jaipur - magnificent fortress, elephant ascents, Man Sagar Lake. The most spectacular of Rajasthan's many forts.","vibe":"Historic & Majestic","bestFor":"Fort enthusiasts, photographers, and history lovers","pros":["Stunning fort","Incredible architecture","Lake views","Elephant rides"],"cons":["Tourist crowds","Far from city","Hot climb"],"lat":26.9855,"lng":75.8513,"priceLevel":"$$"},{"name":"Bani Park","tagline":"Budget accommodation near station","description":"Bani Park is Jaipur's backpacker base - budget hotels, guesthouses, rooftop restaurants. Where travelers find affordable accommodation near the station.","vibe":"Budget & Backpacker","bestFor":"Budget travelers, backpackers, and train travelers","pros":["Affordable","Near station","Rooftop restaurants","Backpacker community"],"cons":["Basic standards","Touts","Traffic noise"],"lat":26.9312,"lng":75.7889,"priceLevel":"$"},{"name":"Nahargarh Fort Area","tagline":"Sunset views over the pink city","description":"Nahargarh crowns Jaipur's hills - fortress walls, sunset viewpoints, panoramic city views. Where to watch the Pink City glow at golden hour.","vibe":"Scenic & Peaceful","bestFor":"View seekers, sunset lovers, and photographers","pros":["Incredible views","Sunset spot","Less crowded","Peaceful"],"cons":["Need transport","Limited facilities","Evening only interest"],"lat":26.9376,"lng":75.8156,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

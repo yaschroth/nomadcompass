@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial charm in the oldest city","description":"South America's oldest surviving Spanish settlement features colorful colonial buildings, tree-shaded plazas, and a cathedral dating to the 16th century. Boutique hotels and restaurants fill restored mansions.","vibe":"Historic colonial","bestFor":"History lovers and culture seekers","pros":["Historic significance","Boutique stays","Walkable streets","Cultural sites"],"cons":["Hot climate","Tourist hassle","Limited beaches"],"lat":11.2412,"lng":-74.2089,"priceLevel":"$"},{"name":"El Rodadero","tagline":"Beach resort with Colombian families","description":"This beach resort area south of the city draws Colombian families and international visitors. Hotels line the beach while seafood restaurants and nightclubs create vacation atmosphere.","vibe":"Beach resort","bestFor":"Beach lovers and families","pros":["Beach access","Resort amenities","Seafood restaurants","Family-friendly"],"cons":["Crowded weekends","Tourist prices","Generic feel"],"lat":11.1967,"lng":-74.2312,"priceLevel":"$$"},{"name":"Taganga","tagline":"Backpacker fishing village vibes","description":"This former fishing village in a stunning bay has become a backpacker destination. Dive shops, hostels, and beach bars attract budget travelers while fishing boats still work the waters.","vibe":"Backpacker beach","bestFor":"Budget travelers and divers","pros":["Diving opportunities","Budget hostels","Bay views","Laid-back vibe"],"cons":["Drug reputation","Basic infrastructure","Safety concerns"],"lat":11.2689,"lng":-74.1923,"priceLevel":"$"},{"name":"Bello Horizonte","tagline":"Quiet beaches near Tayrona","description":"This residential beach area offers calmer alternatives to crowded El Rodadero. Local restaurants, quieter beaches, and proximity to Tayrona National Park attract those seeking peace.","vibe":"Quiet beach","bestFor":"Nature lovers near Tayrona","pros":["Quieter beaches","Near Tayrona","Local atmosphere","Better value"],"cons":["Limited nightlife","Basic amenities","Needs transport"],"lat":11.2534,"lng":-74.1623,"priceLevel":"$"},{"name":"Pozos Colorados","tagline":"Upscale beach development","description":"The newest beach development offers luxury resorts and modern apartments between the city and airport. Contemporary amenities and beach clubs serve those seeking comfort and convenience.","vibe":"Modern resort","bestFor":"Luxury seekers and business travelers","pros":["Modern facilities","Beach access","Near airport","Quality dining"],"cons":["Expensive","Less authentic","Spread out"],"lat":11.1734,"lng":-74.2456,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

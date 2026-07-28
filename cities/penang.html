@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"George Town (UNESCO Zone)","tagline":"Street art and heritage in Malaysia's cultural jewel","description":"George Town's UNESCO zone is Southeast Asia's most photogenic neighborhood - street art, colonial shophouses, and incredible street food. Every corner reveals history, from clan jetties to Cheong Fatt Tze mansion. Cultural immersion guaranteed.","vibe":"Heritage & Cultural","bestFor":"Culture lovers, photographers, and nomads seeking Malaysia's most characterful area","pros":["Incredible heritage","Street art","Best street food","Walkable"],"cons":["Touristy","Hot walking","Limited modern amenities"],"lat":5.4141,"lng":100.3288,"priceLevel":"$$"},{"name":"Gurney Drive","tagline":"Seaside promenade with hawker food fame","description":"Gurney Drive is Penang's upscale waterfront - famous hawker center, shopping malls, and sea views. High-rise condos attract expats seeking modern amenities with local food access. Penang's most comfortable living.","vibe":"Modern & Waterfront","bestFor":"Expats, families, and nomads seeking modern comforts with famous food","pros":["Famous hawkers","Sea views","Modern malls","Good condos"],"cons":["Expensive for Penang","Less character","Need transport"],"lat":5.438,"lng":100.31,"priceLevel":"$$$"},{"name":"Tanjung Bungah / Batu Ferringhi","tagline":"Beach resort living north of the city","description":"The northern beaches offer resort-style Penang living - beach access, hotels, and tourist infrastructure. Batu Ferringhi has night markets and water sports; Tanjung Bungah is quieter. Beach life, if you don't mind the commute.","vibe":"Beach & Resort","bestFor":"Beach lovers, families, and nomads prioritizing beach access","pros":["Beach access","Resort amenities","Night market","Water sports"],"cons":["Far from George Town","Touristy","Need transport"],"lat":5.468,"lng":100.247,"priceLevel":"$$"},{"name":"Pulau Tikus","tagline":"Quiet residential charm between heritage and beach","description":"Pulau Tikus is Penang's established residential area - tree-lined streets, good local food, and proximity to both George Town and Gurney Drive. Popular with long-term expats seeking neighborhood life.","vibe":"Residential & Local","bestFor":"Long-term expats, families, and nomads seeking quiet with access","pros":["Quiet streets","Good food","Central location","Local feel"],"cons":["Not exciting","Aging buildings","Limited nightlife"],"lat":5.433,"lng":100.31,"priceLevel":"$$"},{"name":"Jelutong / Gelugor","tagline":"Local Penang living at budget prices","description":"Jelutong and Gelugor are where Penangites actually live - local hawker centers, affordable apartments, and genuine neighborhood life. Best value on the island, though you'll trade convenience for authenticity.","vibe":"Local & Budget","bestFor":"Budget nomads, long-term stayers, and those seeking authentic local life","pros":["Best value","Authentic local","Great hawkers","Real Penang"],"cons":["Basic infrastructure","Little English","Need transport"],"lat":5.385,"lng":100.307,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

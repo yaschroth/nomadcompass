@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"İçəri Şəhər (Old City)","tagline":"UNESCO-listed ancient heart of Baku","description":"The Old City is a UNESCO World Heritage site - ancient walls surround the Maiden Tower, Palace of the Shirvanshahs, and winding stone alleys. It's like stepping back centuries while staying in the capital.","vibe":"Historic & Atmospheric","bestFor":"History lovers, photographers, and those seeking ancient Silk Road atmosphere","pros":["UNESCO heritage","Stunning architecture","Unique atmosphere","Central"],"cons":["Very touristy","Limited amenities","Cobblestones"],"lat":40.366,"lng":49.835,"priceLevel":"$$$"},{"name":"Fountain Square Area","tagline":"Baku's modern pedestrian heart","description":"The downtown core around Fountain Square is where modern Baku thrives - pedestrian streets, international brands, cafes, and the city's social scene. It's European-feeling yet uniquely Azerbaijani.","vibe":"Modern & Social","bestFor":"Social nomads, shoppers, and those wanting urban convenience","pros":["Walkable center","Great cafes","Shopping","Social scene"],"cons":["Touristy","Expensive dining","Crowded evenings"],"lat":40.37,"lng":49.842,"priceLevel":"$$$"},{"name":"White City","tagline":"Baku's ambitious new development","description":"White City is Baku's massive urban renewal project - a former industrial zone transformed into a gleaming modern district. It's the future of Baku with parks, towers, and new infrastructure.","vibe":"Modern & New","bestFor":"Modern living seekers, those wanting new apartments, and urban explorers","pros":["Brand new buildings","Modern amenities","Parks","Clean"],"cons":["Still developing","Can feel empty","Far from old city"],"lat":40.358,"lng":49.87,"priceLevel":"$$"},{"name":"Neftçilər (Boulevard)","tagline":"Baku's stunning Caspian seafront","description":"The Boulevard stretches along the Caspian - parks, Ferris wheel, museums, and the iconic Flame Towers backdrop. Evening walks here are a Baku ritual.","vibe":"Waterfront & Scenic","bestFor":"Walkers, joggers, and those wanting seafront lifestyle","pros":["Beautiful promenade","Great views","Parks","Flame Towers views"],"cons":["Residential limited","Wind from sea","Tourist pricing"],"lat":40.362,"lng":49.853,"priceLevel":"$$$"},{"name":"Nərimanov","tagline":"Modern residential Baku","description":"Nərimanov is a modern residential district - shopping malls, new apartments, and Turkish/Azerbaijani restaurants cater to the growing middle class. It's practical rather than picturesque.","vibe":"Residential & Practical","bestFor":"Long-term nomads, families, and those seeking modern residential life","pros":["Good apartments","Shopping malls","Metro access","Good value"],"cons":["Less character","Far from sights","Bland"],"lat":40.408,"lng":49.868,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

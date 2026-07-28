@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Civic (City Centre)","tagline":"Planned capital with cultural institutions","description":"Civic is Canberra's downtown - shopping, restaurants, and the gateway to national institutions. Where Australia's planned capital offers urban amenities.","vibe":"Urban & Planned","bestFor":"Practical visitors, shoppers, and those wanting central location","pros":["Central location","Good shopping","Restaurants","Transport hub"],"cons":["Can feel sterile","Quiet evenings","Limited character"],"lat":-35.2809,"lng":149.13,"priceLevel":"$$"},{"name":"Parliamentary Triangle","tagline":"National institutions and museums","description":"The Parliamentary Triangle holds Australia's democratic symbols - Parliament House, National Gallery, War Memorial. Where the nation's story is told in architecture.","vibe":"Institutional & Cultural","bestFor":"Culture seekers, history buffs, and patriotic visitors","pros":["Free museums","Impressive architecture","National significance","Parkland"],"cons":["Spread out","Tourist-focused","Limited dining"],"lat":-35.3078,"lng":149.1245,"priceLevel":"$$"},{"name":"Braddon","tagline":"Hipster precinct with container bars","description":"Braddon is Canberra's cool quarter - converted warehouses, container bars, independent shops. Where the capital proves it has character beyond politics.","vibe":"Hipster & Trendy","bestFor":"Foodies, young travelers, and those wanting alternative vibes","pros":["Great food scene","Character","Independent shops","Nightlife"],"cons":["Small area","Can be crowded","Trendy prices"],"lat":-35.2689,"lng":149.1367,"priceLevel":"$$"},{"name":"Kingston","tagline":"Lakeside dining and foreshore vibes","description":"Kingston stretches along Lake Burley Griffin's shore - restaurants, cafes, morning markets. Where Canberrans brunch and enjoy water views.","vibe":"Lakeside & Dining","bestFor":"Foodies, brunch lovers, and those wanting waterside","pros":["Great restaurants","Lake views","Saturday markets","Pleasant walks"],"cons":["Expensive dining","Weekend crowds","Limited nightlife"],"lat":-35.3156,"lng":149.1489,"priceLevel":"$$$"},{"name":"Manuka","tagline":"Established suburb with village feel","description":"Manuka is Canberra's established village - boutique shops, quality restaurants, diplomatic neighborhood. Where residents enjoy suburban elegance.","vibe":"Village & Elegant","bestFor":"Upscale travelers, shoppers, and those wanting village feel","pros":["Boutique shopping","Good restaurants","Village atmosphere","Safe"],"cons":["Expensive","Quiet","Limited nightlife"],"lat":-35.3189,"lng":149.1367,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

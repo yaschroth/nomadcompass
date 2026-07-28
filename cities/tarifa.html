@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Whitewashed streets meet wind and waves","description":"The historic center features Moorish-influenced architecture within ancient walls. Narrow streets open to tapas bars, surf shops, and views across to Africa, just 14 kilometers away.","vibe":"Historic windswept","bestFor":"Culture lovers and first-time visitors","pros":["Historic charm","Africa views","Great tapas","Central location"],"cons":["Very windy","Crowded summer","Limited parking"],"lat":36.0134,"lng":-5.6012,"priceLevel":"$$"},{"name":"Los Lances Beach","tagline":"Kitesurfing capital of Europe","description":"The long sandy beach north of town is Europe's kitesurfing mecca. Schools, equipment rentals, and beach bars serve the international wind sports community while beginners learn the ropes.","vibe":"Wind sports active","bestFor":"Kitesurfers and wind sports enthusiasts","pros":["World-class wind","Kite schools","Beach access","Sports community"],"cons":["Very windy","Sand in everything","Seasonal crowds"],"lat":36.0289,"lng":-5.6134,"priceLevel":"$$"},{"name":"Valdevaqueros","tagline":"Windsurf haven at the dune","description":"The famous dune and beach at the strait's narrowest point offers consistent wind for windsurfers and kiters. Beach clubs and surf camps cluster around this legendary spot.","vibe":"Surf legendary","bestFor":"Advanced wind sports and beach lovers","pros":["Legendary conditions","Beautiful dune","Beach clubs","Expert community"],"cons":["Very exposed","Crowded peak times","Expert conditions"],"lat":36.0534,"lng":-5.6423,"priceLevel":"$$"},{"name":"Bolonia","tagline":"Roman ruins and pristine beach","description":"Just outside Tarifa, this stunning beach features Roman ruins of Baelo Claudia and a massive sand dune. Protected status keeps development minimal while preserving natural beauty.","vibe":"Natural historic","bestFor":"Beach lovers and history buffs","pros":["Pristine beach","Roman ruins","Natural beauty","Less development"],"cons":["Far from town","Limited services","Crowded summer"],"lat":36.0889,"lng":-5.7623,"priceLevel":"$"},{"name":"Puerto Area","tagline":"Ferry port and fishing heritage","description":"The port area maintains fishing village character with fresh seafood restaurants and the ferry to Tangier. Morning markets and harbor walks provide glimpses of working Tarifa.","vibe":"Maritime authentic","bestFor":"Foodies and travelers to Morocco","pros":["Fresh seafood","Morocco ferries","Harbor atmosphere","Authentic feel"],"cons":["Limited accommodation","Port activity","Basic area"],"lat":36.0078,"lng":-5.5934,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

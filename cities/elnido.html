@@ -1456,6 +1456,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Town Proper/Beach","tagline":"El Nido's bustling main beach","description":"El Nido town proper fronts the main beach - restaurants, tour operators, and backpacker energy. It's busy but convenient for everything.","vibe":"Busy & Central","bestFor":"First-time visitors, backpackers, and those wanting convenience","pros":["Main beach","Restaurants","Tour booking","Nightlife"],"cons":["Crowded","Noisy","Development mess"],"lat":11.195,"lng":119.396,"priceLevel":"$$"},{"name":"Corong Corong","tagline":"El Nido's sunset beach alternative","description":"Corong Corong is El Nido's southern beach - better sunset views, quieter atmosphere, and good restaurants. It's the better choice for relaxation.","vibe":"Sunset & Quieter","bestFor":"Sunset lovers, relaxation seekers, and those avoiding town crowds","pros":["Better sunsets","Quieter","Good restaurants","Beach access"],"cons":["Tricycle to town","Limited services","Less nightlife"],"lat":11.175,"lng":119.385,"priceLevel":"$$"},{"name":"Nacpan Beach","tagline":"El Nido's pristine twin beach","description":"Nacpan is El Nido's beach escape - 4km of pristine sand, beach bars, and genuine paradise vibes. It's a bumpy ride but worth every minute.","vibe":"Paradise & Remote","bestFor":"Beach purists, paradise seekers, and those escaping town","pros":["Pristine beach","Long stretch","Beach bars","Paradise vibes"],"cons":["45min bumpy ride","Basic facilities","Day trip for most"],"lat":11.288,"lng":119.425,"priceLevel":"$"},{"name":"Lio Estate","tagline":"El Nido's upscale resort enclave","description":"Lio is El Nido's upscale development - resort hotels, private beach, and curated experience. It's El Nido for those who want luxury.","vibe":"Luxury & Resort","bestFor":"Luxury seekers, families, and those wanting resort experience","pros":["Upscale resorts","Private beach","Restaurants","Organized"],"cons":["Expensive","Removed from town","Artificial feel"],"lat":11.135,"lng":119.45,"priceLevel":"$$$"},{"name":"Island Tours (A, B, C, D)","tagline":"El Nido's legendary island hopping","description":"El Nido's island tours offer hidden lagoons, secret beaches, and limestone karsts - the reason everyone comes. Big and Small Lagoon are the highlights.","vibe":"Adventure & Islands","bestFor":"Island hoppers, snorkelers, and those seeking El Nido's magic","pros":["Hidden lagoons","Snorkeling","Stunning scenery","Boat tours"],"cons":["Crowded tours","Fixed schedules","Weather dependent"],"lat":11.25,"lng":119.35,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1507,6 +1508,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Granada","tagline":"Upscale dining and salsa sophistication","description":"Granada is Cali's upscale entertainment district - restaurants, bars, clubs, and salsa schools. Where the city's sophisticated side meets its dancing soul.","vibe":"Upscale & Lively","bestFor":"Foodies, salsa enthusiasts, and nightlife seekers","pros":["Great restaurants","Salsa scene","Safe area","Good nightlife"],"cons":["Expensive","Can feel touristy","Less authentic"],"lat":3.4512,"lng":-76.5367,"priceLevel":"$$$"},{"name":"San Antonio","tagline":"Bohemian hill with panoramic views","description":"San Antonio climbs Cali's hillside - bohemian cafés, art galleries, city views, colonial chapel. Where artists and travelers find character and perspective.","vibe":"Bohemian & Scenic","bestFor":"Artists, photographers, and those seeking atmosphere","pros":["Great views","Artsy atmosphere","Good cafés","Character"],"cons":["Hilly terrain","Limited nightlife","Safety concerns after dark"],"lat":3.4434,"lng":-76.5412,"priceLevel":"$$"},{"name":"Juanchito","tagline":"Salsa capital's legendary dance strip","description":"Juanchito is where salsa was born to dance - legendary clubs where Caleños demonstrate why this is the world capital of salsa. Authentic, sweaty, unforgettable.","vibe":"Salsa & Authentic","bestFor":"Salsa lovers, dancers, and nightlife adventurers","pros":["Authentic salsa","Legendary clubs","Real Cali culture","Affordable"],"cons":["Rough area","Safety concerns","Late night only"],"lat":3.4634,"lng":-76.4567,"priceLevel":"$"},{"name":"El Peñón","tagline":"Riverside park and local culture","description":"El Peñón stretches along the Cali River - local park life, street food, weekend gatherings. Where Caleños relax, exercise, and enjoy their tropical city.","vibe":"Local & Relaxed","bestFor":"Local seekers, runners, and those wanting authentic vibes","pros":["Park life","Local culture","Affordable","Riverside"],"cons":["Basic area","Safety at night","Limited dining"],"lat":3.4389,"lng":-76.5489,"priceLevel":"$"},{"name":"Ciudad Jardín","tagline":"Upmarket residential with green spaces","description":"Ciudad Jardín is Cali's garden suburb - tree-lined streets, upscale housing, country clubs. Where Cali's wealthy families enjoy tropical residential elegance.","vibe":"Residential & Upscale","bestFor":"Families, long-term visitors, and those wanting peace","pros":["Green spaces","Safe area","Good housing","Quiet"],"cons":["Far from action","Car essential","Limited dining"],"lat":3.4167,"lng":-76.5289,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

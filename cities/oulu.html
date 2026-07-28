@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Keskusta (City Center)","tagline":"University town in the Arctic circle","description":"Oulu's compact center offers the famous Market Square, pedestrian Rotuaari street, and technology hub atmosphere. The university presence and tech industry create a surprisingly dynamic northern city.","vibe":"Urban & Tech","bestFor":"Tech workers, students, and first-time visitors","pros":["Compact center","Good restaurants","Tech hub","University energy"],"cons":["Dark winters","Extreme cold","Limited nightlife"],"lat":65.0121,"lng":25.4651,"priceLevel":"$$"},{"name":"Pikisaari","tagline":"Island village with summer charm","description":"The small island connected by bridge offers wooden houses, summer terraces, and artistic atmosphere. The village charm within the city creates Oulu's most picturesque neighborhood.","vibe":"Village & Artistic","bestFor":"Artists, summer visitors, and charm seekers","pros":["Wooden houses","Summer terraces","Artistic atmosphere","Island charm"],"cons":["Very small","Limited winter activity","Few services"],"lat":65.0089,"lng":25.4778,"priceLevel":"$$"},{"name":"Linnanmaa","tagline":"University campus and student life","description":"The university area offers student housing, campus facilities, and academic atmosphere. The technology focus and innovation hubs make it Finland's northern tech center.","vibe":"Academic & Tech","bestFor":"Students, researchers, and tech professionals","pros":["University facilities","Tech companies","Affordable housing","Young atmosphere"],"cons":["Far from center","Campus feel","Less character"],"lat":65.0567,"lng":25.4667,"priceLevel":"$"},{"name":"Nallikari Beach","tagline":"Arctic beach and camping vibes","description":"The beach area offers summer swimming, camping, and the rare experience of Arctic beach life. The midnight sun swimming and outdoor activities attract summer visitors.","vibe":"Beach & Summer","bestFor":"Beach lovers, campers, and midnight sun seekers","pros":["Beach access","Camping facilities","Summer activities","Midnight sun"],"cons":["Seasonal only","Cold water","Far from center"],"lat":65.0289,"lng":25.4012,"priceLevel":"$"},{"name":"Tuira","tagline":"Residential calm with nature access","description":"The residential neighborhood offers quieter living with good nature access and typical Finnish suburban comfort. The balance of city proximity and nature suits families.","vibe":"Residential & Natural","bestFor":"Families, long-term residents, and nature lovers","pros":["Quiet residential","Nature access","Good schools","Family friendly"],"cons":["Less exciting","Need transport","Limited dining"],"lat":65.0234,"lng":25.4534,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Le Marais (3rd & 4th)","tagline":"Paris' historic heart with LGBTQ+ energy","description":"Le Marais is Paris' most beloved neighborhood - medieval streets, Jewish heritage, LGBTQ+ scene, and the best falafel in Europe. It's central, vibrant, and perpetually buzzing with locals and visitors alike.","vibe":"Historic & Vibrant","bestFor":"Culture lovers, LGBTQ+ travelers, and nomads seeking central Paris character","pros":["Historic charm","Great food","Central location","Vibrant scene"],"cons":["Very expensive","Crowded","Touristy areas"],"lat":48.8566,"lng":2.36,"priceLevel":"$$$"},{"name":"Canal Saint-Martin (10th)","tagline":"Hipster Paris with tree-lined canals","description":"Canal Saint-Martin is Paris' hipster heartland - tree-lined waterways, independent boutiques, and trendy cafes. It's where young Parisians live, offering a more relaxed, local alternative to tourist Paris.","vibe":"Hipster & Canal","bestFor":"Creatives, young professionals, and nomads seeking trendy local Paris","pros":["Canal atmosphere","Trendy cafes","Local vibe","Good restaurants"],"cons":["Far from sights","Noisy areas","Gentrifying fast"],"lat":48.872,"lng":2.365,"priceLevel":"$$"},{"name":"Montmartre (18th)","tagline":"Bohemian Paris with Sacré-Cœur views","description":"Montmartre is bohemian Paris - Sacré-Cœur, artist squares, and winding streets with city views. It's touristy near the basilica but retains village charm in the back streets. Romantic and artistic.","vibe":"Bohemian & Romantic","bestFor":"Artists, romantics, and nomads seeking classic Parisian atmosphere","pros":["Incredible views","Artistic history","Village feel","Character"],"cons":["Very touristy","Steep hills","Tourist traps"],"lat":48.8867,"lng":2.3431,"priceLevel":"$$"},{"name":"Saint-Germain-des-Prés (6th)","tagline":"Literary Paris with legendary cafes","description":"Saint-Germain is literary Paris - Café de Flore, Les Deux Magots, and the spirit of Sartre and Hemingway. It's elegant, expensive, and quintessentially Left Bank. Paris at its most refined.","vibe":"Literary & Elegant","bestFor":"Writers, intellectuals, and nomads seeking elegant Left Bank living","pros":["Legendary cafes","Elegant streets","Cultural history","Central"],"cons":["Very expensive","Touristy cafes","Quiet evenings"],"lat":48.8539,"lng":2.3338,"priceLevel":"$$$"},{"name":"Belleville (19th/20th)","tagline":"Multicultural Paris with street art and views","description":"Belleville is multicultural Paris - Chinese, North African, and artistic communities create vibrant mix. Parc de Belleville offers stunning city views. It's authentic, affordable, and increasingly hip.","vibe":"Multicultural & Authentic","bestFor":"Budget nomads, culture seekers, and those wanting diverse authentic Paris","pros":["Multicultural","Affordable","Great views","Authentic"],"cons":["Rougher areas","Far from center","Basic infrastructure"],"lat":48.872,"lng":2.388,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial grandeur in the White City","description":"Mérida's beautiful historic center features pastel colonial mansions, the grand cathedral, and tree-lined boulevards. The cultural richness and well-preserved architecture make it Yucatán's most charming city center.","vibe":"Colonial & Cultural","bestFor":"Culture lovers, architecture enthusiasts, and authentic Mexico seekers","pros":["Beautiful architecture","Great restaurants","Cultural events","Walkable streets"],"cons":["Very hot","Tourist prices in center","Can be noisy"],"lat":20.9674,"lng":-89.6245,"priceLevel":"$$"},{"name":"Santa Ana","tagline":"Quiet elegance and local life","description":"The residential neighborhood north of center offers quieter streets, local markets, and authentic Meridano life. The beautiful park and colonial homes attract those seeking peace near the center.","vibe":"Residential & Quiet","bestFor":"Long-term visitors, families, and those wanting quiet elegance","pros":["Quieter atmosphere","Local markets","Beautiful park","Colonial homes"],"cons":["Fewer restaurants","Less nightlife","Walk to center"],"lat":20.9778,"lng":-89.6212,"priceLevel":"$$"},{"name":"Paseo de Montejo","tagline":"Grand avenue of henequen wealth","description":"The famous boulevard showcases stunning French-style mansions built during the henequen boom. The tree-lined avenue, museums, and upscale dining define Mérida's most elegant thoroughfare.","vibe":"Grand & Upscale","bestFor":"Architecture lovers, museum visitors, and those seeking elegance","pros":["Stunning mansions","Museums","Upscale dining","Beautiful avenue"],"cons":["Expensive area","Hot for walking","Touristy"],"lat":20.9845,"lng":-89.6178,"priceLevel":"$$$"},{"name":"Santiago","tagline":"Hip transformation in old barrio","description":"The formerly working-class neighborhood is transforming with hip cafes, boutique hotels, and artisan shops. The authentic Yucatecan architecture and emerging scene attract creatives.","vibe":"Emerging & Hip","bestFor":"Creatives, budget travelers, and early gentrification seekers","pros":["Hip cafes emerging","Authentic architecture","More affordable","Local atmosphere"],"cons":["Still rough in parts","Less infrastructure","Walk to center"],"lat":20.9589,"lng":-89.6289,"priceLevel":"$"},{"name":"Norte (Altabrisa)","tagline":"Modern malls and suburban comfort","description":"The northern suburbs feature modern malls, chain restaurants, and contemporary housing. The air-conditioned comfort and familiar amenities attract those seeking modern conveniences.","vibe":"Suburban & Modern","bestFor":"Families, shoppers, and those wanting modern amenities","pros":["Modern malls","Air-conditioned","Familiar chains","Safe area"],"cons":["No character","Car required","Far from historic center"],"lat":21.0234,"lng":-89.6156,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

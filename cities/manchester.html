@@ -1421,6 +1421,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Northern Quarter","tagline":"Manchester's creative indie heart","description":"Northern Quarter is Manchester's creative epicenter - street art, vintage shops, record stores, and indie cafes. It's the city's most characterful neighborhood with excellent nightlife.","vibe":"Creative & Indie","bestFor":"Creatives, music lovers, and digital nomads seeking Manchester's soul","pros":["Best nightlife","Creative scene","Vintage shopping","Street art"],"cons":["Noisy weekends","Gritty areas","Crowded bars"],"lat":53.485,"lng":-2.235,"priceLevel":"$$"},{"name":"Ancoats","tagline":"Manchester's regenerated industrial cool","description":"Ancoats is Manchester's hottest neighborhood - former cotton mills transformed into apartments, restaurants, and creative spaces. It's been called the UK's coolest neighborhood.","vibe":"Industrial & Trendy","bestFor":"Young professionals, foodies, and those seeking modern Manchester","pros":["Best restaurants","Industrial character","New apartments","Emerging scene"],"cons":["Still developing","Limited retail","Can feel empty"],"lat":53.486,"lng":-2.22,"priceLevel":"$$$"},{"name":"Chorlton","tagline":"Manchester's bohemian village","description":"Chorlton is Manchester's bohemian suburb - independent shops, organic cafes, and strong community feel. It's where creative families and eco-conscious residents settle.","vibe":"Bohemian & Village","bestFor":"Families, eco-conscious travelers, and those seeking community","pros":["Village feel","Great community","Independent shops","Green spaces"],"cons":["Far from center","Limited nightlife","Can feel smug"],"lat":53.44,"lng":-2.273,"priceLevel":"$$"},{"name":"Didsbury","tagline":"Manchester's leafy southern suburb","description":"Didsbury is Manchester's desirable south - Victorian houses, excellent restaurants, and leafy parks. Popular with professionals and families seeking suburban quality.","vibe":"Suburban & Upscale","bestFor":"Families, professionals, and those seeking quiet quality","pros":["Excellent restaurants","Beautiful parks","Good schools","Quality housing"],"cons":["Expensive","Far from center","Suburban pace"],"lat":53.417,"lng":-2.227,"priceLevel":"$$$"},{"name":"Salford Quays/MediaCity","tagline":"Manchester's modern media hub","description":"Salford Quays houses BBC and ITV studios - modern waterfront development with museums, restaurants, and media businesses. It's corporate but with excellent cultural facilities.","vibe":"Modern & Media","bestFor":"Media professionals, culture lovers, and those seeking modern amenities","pros":["Lowry Museum","Waterfront living","Media connections","Modern facilities"],"cons":["No character","Corporate feel","Isolated from city"],"lat":53.472,"lng":-2.297,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1472,6 +1473,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Byron Town Center","tagline":"Australia's famous alternative heart","description":"Byron's center is where alternative Australia lives - surf shops, vegan cafes, crystal stores, and the famous Main Beach create a unique hippie-meets-hipster atmosphere.","vibe":"Alternative & Vibrant","bestFor":"Alternative travelers, wellness seekers, and those wanting classic Byron","pros":["Beach access","Great cafes","Alternative vibe","Walkable"],"cons":["Very expensive","Crowded","Can be pretentious"],"lat":-28.643,"lng":153.612,"priceLevel":"$$$$"},{"name":"Belongil Beach","tagline":"Byron's quieter northern stretch","description":"North of the lighthouse, Belongil offers a quieter beach experience - The Wreck bar, dog-friendly sand, and a more local crowd than Main Beach chaos.","vibe":"Relaxed & Local","bestFor":"Dog owners, couples, and those seeking quieter beach life","pros":["Less crowded","Dog friendly","Great sunset bar","More local"],"cons":["Walk to town","Limited facilities","Strong currents"],"lat":-28.633,"lng":153.601,"priceLevel":"$$$"},{"name":"Suffolk Park","tagline":"Byron's surf locals zone","description":"South of town, Suffolk Park is where local surfers and long-term residents settle - Tallow Beach, more affordable housing, and an authentic surf community away from tourist Byron.","vibe":"Surf & Local","bestFor":"Surfers, locals, and those seeking authentic Byron life","pros":["Great surf","More affordable","Local community","Less touristy"],"cons":["Need transport","Limited nightlife","Basic amenities"],"lat":-28.674,"lng":153.615,"priceLevel":"$$"},{"name":"Bangalow","tagline":"Hinterland village charm","description":"15 minutes inland, Bangalow is a charming hinterland village - heritage buildings, excellent restaurants, and weekend markets offer a different Byron experience.","vibe":"Village & Foodie","bestFor":"Foodies, families, and those seeking village life near Byron","pros":["Great restaurants","Village charm","Less crowded","Markets"],"cons":["No beach","Car needed","Quiet evenings"],"lat":-28.687,"lng":153.521,"priceLevel":"$$$"},{"name":"Mullumbimby","tagline":"Byron's spiritual alternative","description":"Mullum is Byron's more alternative cousin - crystal shops, alternative healing, and a strong spiritual community create the area's true hippie heart.","vibe":"Spiritual & Alternative","bestFor":"Spiritual seekers, alternative lifestyles, and true hippies","pros":["Authentic alternative","Strong community","More affordable","Less touristy"],"cons":["No beach","Very alternative","Limited mainstream amenities"],"lat":-28.554,"lng":153.5,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

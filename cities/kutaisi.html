@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Ancient churches above the Rioni","description":"Georgia's second city's historic core features the iconic Bagrati Cathedral, winding streets, and traditional Georgian houses. The ancient atmosphere and UNESCO heritage create a timeless feel.","vibe":"Historic & Traditional","bestFor":"History enthusiasts, architecture lovers, and those seeking authentic Georgia","pros":["UNESCO Bagrati Cathedral","Traditional architecture","Scenic river views","Authentic atmosphere"],"cons":["Steep hills","Limited modern amenities","Crumbling infrastructure"],"lat":42.2667,"lng":42.7178,"priceLevel":"$"},{"name":"City Center","tagline":"Soviet meets Georgian in the urban core","description":"The commercial center mixes Soviet-era buildings with Georgian character, hosting markets, cafes, and the main transportation hub. The most convenient base for exploring the city and region.","vibe":"Urban & Convenient","bestFor":"Transit travelers, those wanting convenience, and first-time visitors","pros":["Central location","Transport connections","Markets and shops","Restaurant options"],"cons":["Soviet architecture","Traffic noise","Less charming"],"lat":42.2689,"lng":42.6923,"priceLevel":"$"},{"name":"Gabashvili Street Area","tagline":"Art Nouveau gems and café culture","description":"The area around Gabashvili Street showcases Kutaisi's elegant past with Art Nouveau buildings and tree-lined boulevards. The growing café scene attracts young Georgians and travelers.","vibe":"Elegant & Emerging","bestFor":"Architecture lovers, café hoppers, and those seeking beauty","pros":["Art Nouveau architecture","Growing café scene","Tree-lined streets","Pleasant walking"],"cons":["Some buildings deteriorating","Limited nightlife","Small area"],"lat":42.2712,"lng":42.6978,"priceLevel":"$"},{"name":"Motsameta / Gelati Area","tagline":"Monastery circuit gateway","description":"The area near the UNESCO-listed Gelati Monastery and cliff-side Motsameta offers access to Georgia's most impressive religious sites. Perfect for those prioritizing cultural excursions.","vibe":"Spiritual & Rural","bestFor":"Pilgrims, history buffs, and nature lovers","pros":["UNESCO monastery access","Stunning scenery","Peaceful atmosphere","Georgian spirituality"],"cons":["Far from city","Need transport","Limited accommodation"],"lat":42.2945,"lng":42.7534,"priceLevel":"$"},{"name":"Airport Area","tagline":"Budget base for regional exploration","description":"The area near the new international airport offers budget accommodation and serves as a gateway for exploring Imereti region. Practical rather than charming but well-connected.","vibe":"Transit & Budget","bestFor":"Budget travelers, transit visitors, and regional explorers","pros":["Airport proximity","Budget options","Regional access","New development"],"cons":["No character","Far from city","Need transport everywhere"],"lat":42.1834,"lng":42.4823,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

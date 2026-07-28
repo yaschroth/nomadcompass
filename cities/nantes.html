@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centre-Ville","tagline":"Medieval meets mechanical elephant","description":"Nantes' city center blends medieval heritage with the famous Machines de l'île. The Château des Ducs, pedestrian streets, and creative energy define this culturally rich Loire city.","vibe":"Cultural & Central","bestFor":"Culture lovers, families, and first-time visitors","pros":["Château des Ducs","Mechanical elephant","Great restaurants","Walkable center"],"cons":["Tourist crowds","Parking difficult","Expensive dining"],"lat":47.2173,"lng":-1.5534,"priceLevel":"$$"},{"name":"Île de Nantes","tagline":"Industrial island turned creative hub","description":"The former shipyard island now hosts Les Machines de l'île, creative spaces, and modern development. The transformation showcases Nantes' creative reinvention.","vibe":"Creative & Industrial","bestFor":"Art lovers, families, and industrial heritage enthusiasts","pros":["Les Machines","Creative spaces","Waterfront walks","Innovative architecture"],"cons":["Still developing","Can feel empty","Limited evening life"],"lat":47.2089,"lng":-1.5612,"priceLevel":"$$"},{"name":"Talensac / Viarme","tagline":"Market life and local flavor","description":"The neighborhood around Talensac Market offers authentic Nantais life with the city's best market, local cafes, and residential atmosphere. Perfect for those wanting local immersion.","vibe":"Local & Market","bestFor":"Foodies, market lovers, and local experience seekers","pros":["Best market in Nantes","Local atmosphere","Good restaurants","Residential feel"],"cons":["Less scenic","Limited tourist attractions","Need transport"],"lat":47.2234,"lng":-1.5589,"priceLevel":"$$"},{"name":"Chantenay","tagline":"Village vibes on the hill","description":"The former village on the hill offers panoramic river views, village atmosphere, and emerging creative scene. The gentrifying area attracts artists and young professionals.","vibe":"Village & Emerging","bestFor":"Artists, view seekers, and village atmosphere lovers","pros":["Panoramic views","Village charm","Emerging cafes","Creative energy"],"cons":["Uphill walks","Limited services","Still rough edges"],"lat":47.2089,"lng":-1.5823,"priceLevel":"$"},{"name":"Erdre River Area","tagline":"Waterside walks and green escape","description":"The banks of the Erdre River offer green spaces, riverside restaurants, and boat trips. The natural beauty within the city provides escape from urban intensity.","vibe":"Green & Waterside","bestFor":"Nature lovers, families, and peace seekers","pros":["Beautiful river","Green spaces","Boat trips","Peaceful atmosphere"],"cons":["Far from center","Limited nightlife","Need transport"],"lat":47.2289,"lng":-1.5412,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

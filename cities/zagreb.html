@@ -1444,6 +1444,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Gornji Grad (Upper Town)","tagline":"Zagreb's historic hilltop heart","description":"Gornji Grad is Zagreb's medieval core - St. Mark's Church, Stone Gate, and funicular access. It's atmospheric and the city's historic soul.","vibe":"Historic & Atmospheric","bestFor":"History lovers, photographers, and those seeking old Zagreb","pros":["Historic sites","St. Mark's Church","Funicular","Views"],"cons":["Steep access","Limited dining","Tourist focused"],"lat":45.816,"lng":15.973,"priceLevel":"$$"},{"name":"Donji Grad (Lower Town)","tagline":"Zagreb's grand Austro-Hungarian center","description":"Donji Grad is Zagreb's elegant center - green horseshoe of parks, grand squares, and Austro-Hungarian architecture. It's Zagreb's sophisticated heart.","vibe":"Elegant & Cultural","bestFor":"Architecture lovers, culture seekers, and those seeking refined Zagreb","pros":["Grand architecture","Museums","Parks","Central location"],"cons":["Busy streets","Less character","Can feel formal"],"lat":45.81,"lng":15.977,"priceLevel":"$$"},{"name":"Tkalčićeva","tagline":"Zagreb's vibrant cafe and bar street","description":"Tkalčićeva is Zagreb's social artery - cafes, bars, and street life connecting Upper and Lower Town. It's where Zagreb comes alive.","vibe":"Social & Vibrant","bestFor":"Social travelers, bar hoppers, and those seeking Zagreb's energy","pros":["Best cafes","Vibrant atmosphere","Great bars","Central"],"cons":["Touristy","Can be crowded","Noisy evenings"],"lat":45.814,"lng":15.976,"priceLevel":"$$"},{"name":"Maksimir","tagline":"Zagreb's green eastern escape","description":"Maksimir surrounds Zagreb's largest park - green spaces, local life, and stadium atmosphere. It's where Zagreb breathes.","vibe":"Green & Local","bestFor":"Nature lovers, joggers, and those seeking local Zagreb","pros":["Beautiful park","Zoo","Local atmosphere","Green space"],"cons":["Far from center","Limited nightlife","Residential"],"lat":45.82,"lng":16.018,"priceLevel":"$"},{"name":"Novi Zagreb","tagline":"Zagreb's socialist-era south","description":"Novi Zagreb is Zagreb's Yugoslav-era expansion - brutalist architecture, Lake Jarun, and local residential life. It's different Zagreb.","vibe":"Local & Brutalist","bestFor":"Architecture fans, lake lovers, and those seeking alternative Zagreb","pros":["Lake Jarun","Brutalist architecture","Affordable","Local feel"],"cons":["Far from center","Less scenic","Limited tourism"],"lat":45.78,"lng":15.96,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1495,6 +1496,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

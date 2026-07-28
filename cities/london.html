@@ -1459,6 +1459,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Shoreditch","tagline":"London's creative hub with street art and nightlife","description":"Shoreditch is London's creative epicenter - street art, tech startups, and legendary nightlife. It's where creatives and tech workers mix in converted warehouses. Expensive now, but still London's most dynamic area.","vibe":"Creative & Tech","bestFor":"Creatives, tech workers, and nomads seeking London's most energetic neighborhood","pros":["Creative scene","Great nightlife","Street art","Tech hub"],"cons":["Expensive","Overcrowded weekends","Gentrified"],"lat":51.5246,"lng":-0.0794,"priceLevel":"$$$"},{"name":"Hackney","tagline":"East London's diverse creative heartland","description":"Hackney is diverse East London - Broadway Market, Victoria Park, and thriving creative scene. It's where young London actually lives, with better value than Shoreditch while maintaining creative energy.","vibe":"Diverse & Creative","bestFor":"Young professionals, creatives, and nomads seeking diverse London living","pros":["Great markets","Victoria Park","Creative scene","Better value"],"cons":["Gentrifying","Far from center","Variable areas"],"lat":51.545,"lng":-0.0553,"priceLevel":"$$"},{"name":"Soho","tagline":"London's entertainment heart with LGBTQ+ history","description":"Soho is central London's entertainment district - theaters, restaurants, bars, and LGBTQ+ venues in tight streets. It's the most central and expensive option, but offers unmatched London energy.","vibe":"Entertainment & Central","bestFor":"Nightlife lovers, entertainers, and nomads wanting central London action","pros":["Central location","Endless entertainment","Walkable","LGBTQ+ friendly"],"cons":["Very expensive","Noisy always","Crowded"],"lat":51.5137,"lng":-0.1337,"priceLevel":"$$$"},{"name":"Camden","tagline":"London's alternative icon with market culture","description":"Camden is London's alternative landmark - the famous market, live music venues, and counterculture heritage. It's touristy but retains edge, with good transport connections to everywhere.","vibe":"Alternative & Market","bestFor":"Music lovers, alternative types, and nomads seeking iconic London character","pros":["Famous market","Live music","Good transport","Character"],"cons":["Very touristy","Crowded weekends","Noisy"],"lat":51.539,"lng":-0.1426,"priceLevel":"$$"},{"name":"Brixton","tagline":"South London's Caribbean soul with market energy","description":"Brixton is South London's most vibrant neighborhood - Caribbean heritage, famous market, and legendary music scene. It's diverse, energetic, and increasingly popular with young professionals.","vibe":"Caribbean & Vibrant","bestFor":"Music lovers, culture seekers, and nomads seeking diverse South London","pros":["Great market","Music scene","Diverse food","Transport links"],"cons":["Gentrifying fast","Some rough areas","Expensive now"],"lat":51.4613,"lng":-0.1156,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1510,6 +1511,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

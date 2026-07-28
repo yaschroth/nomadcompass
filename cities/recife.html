@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Boa Viagem","tagline":"Urban beach lifestyle Brazilian style","description":"Recife's famous beach neighborhood stretches along golden sands with a palm-lined promenade. High-rise apartments, beachfront restaurants, and lively nightlife create Brazil's northeastern Copacabana.","vibe":"Beach urban","bestFor":"Beach lovers and nightlife seekers","pros":["Beautiful beach","Great restaurants","Vibrant nightlife","Good infrastructure"],"cons":["Shark warnings","Traffic congestion","Tourist prices"],"lat":-8.1234,"lng":-34.8934,"priceLevel":"$$"},{"name":"Recife Antigo","tagline":"Colonial streets meet creative scene","description":"The historic port district features 17th-century architecture now housing cultural centers, bars, and restaurants. Weekend nights bring street parties while creative enterprises revitalize colonial warehouses.","vibe":"Historic creative","bestFor":"Culture lovers and nightlife enthusiasts","pros":["Historic architecture","Cultural venues","Nightlife scene","Creative energy"],"cons":["Quiet weekdays","Safety concerns at night","Limited services"],"lat":-8.0623,"lng":-34.8712,"priceLevel":"$"},{"name":"Casa Forte","tagline":"Green oasis with cultural depth","description":"This leafy neighborhood hosts the famous Brennand sculpture park and Instituto Ricardo Brennand. Tree-lined streets, art galleries, and upscale dining attract culture-loving residents.","vibe":"Cultural upscale","bestFor":"Art lovers and families","pros":["Cultural institutions","Green spaces","Quality dining","Residential calm"],"cons":["Far from beach","Needs transport","Limited nightlife"],"lat":-8.0345,"lng":-34.9123,"priceLevel":"$$"},{"name":"Graças","tagline":"Central living with local character","description":"This traditional neighborhood offers authentic Recife life with local markets, family restaurants, and everyday commerce. Central location and affordable rents attract long-term visitors and students.","vibe":"Traditional central","bestFor":"Long-term stays on a budget","pros":["Central location","Affordable","Local atmosphere","Good transport"],"cons":["Less polished","Some areas rough","Limited parking"],"lat":-8.0534,"lng":-34.8967,"priceLevel":"$"},{"name":"Pina","tagline":"Beachfront alternative to Boa Viagem","description":"Just north of Boa Viagem, this neighborhood offers similar beach access with more local character. Seafood restaurants, surf schools, and a more relaxed vibe attract those seeking authentic beach life.","vibe":"Beach local","bestFor":"Surfers and beach lovers seeking value","pros":["Beach access","Lower prices","Local atmosphere","Seafood scene"],"cons":["Less developed","Basic amenities","Shark concerns"],"lat":-8.0987,"lng":-34.8856,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

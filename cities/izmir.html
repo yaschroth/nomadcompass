@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Alsancak","tagline":"Café culture and Mediterranean vibes","description":"Alsancak is Izmir's lifestyle center - pedestrian streets, seafood restaurants, Kordon promenade. Where Turkey's most liberal city shows its relaxed character.","vibe":"Lively & Cosmopolitan","bestFor":"Café lovers, nightlife seekers, and cosmopolitan travelers","pros":["Great restaurants","Kordon promenade","Nightlife","Cosmopolitan"],"cons":["Expensive","Crowded evenings","Noisy"],"lat":38.4362,"lng":27.1428,"priceLevel":"$$$"},{"name":"Konak / Kemeraltı","tagline":"Clock tower and historic bazaar","description":"Konak is Izmir's historic heart - iconic clock tower, Kemeraltı bazaar, Agora ruins. Where Ottoman history meets daily market commerce.","vibe":"Historic & Commercial","bestFor":"History lovers, bazaar enthusiasts, and culture seekers","pros":["Historic bazaar","Ancient agora","Authentic atmosphere","Good shopping"],"cons":["Can be overwhelming","Tourist hassle","Hot summers"],"lat":38.4189,"lng":27.1289,"priceLevel":"$"},{"name":"Karşıyaka","tagline":"Ferry-connected shore with local vibes","description":"Karşıyaka sits across the bay - ferry connection, local neighborhoods, escaped tourism. Where real Izmirians live with bay views.","vibe":"Local & Residential","bestFor":"Local seekers, ferry lovers, and residential experience","pros":["Ferry connection","Local atmosphere","Seafront","Less touristy"],"cons":["Far from center","Limited attractions","Basic services"],"lat":38.4567,"lng":27.1089,"priceLevel":"$$"},{"name":"Bornova","tagline":"University area with student energy","description":"Bornova hosts Ege University - student life, affordable eats, young energy. Where Izmir's academic population shapes neighborhood culture.","vibe":"Student & Budget","bestFor":"Students, budget travelers, and those wanting young atmosphere","pros":["Affordable","Student vibes","University facilities","Local life"],"cons":["Far from center","Basic area","Limited attractions"],"lat":38.4689,"lng":27.2156,"priceLevel":"$"},{"name":"Çeşme","tagline":"Beach resort and windsurfing paradise","description":"Çeşme is Izmir's beach escape - Alaçatı windsurf mecca, beach clubs, summer nightlife. Where Istanbul elite summers on the Aegean coast.","vibe":"Resort & Trendy","bestFor":"Beach lovers, windsurfers, and summer seekers","pros":["Amazing beaches","Windsurfing","Alaçatı charm","Beach clubs"],"cons":["Very seasonal","Expensive summer","Crowded weekends"],"lat":38.3234,"lng":26.3089,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

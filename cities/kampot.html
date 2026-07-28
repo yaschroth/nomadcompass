@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town/Riverfront","tagline":"Kampot's colonial riverside charm","description":"Kampot's old town stretches along the Praek Tuek Chhu River - French colonial buildings, riverside cafes, and small-town charm. It's Cambodia's most atmospheric town.","vibe":"Colonial & Charming","bestFor":"Atmosphere seekers, photographers, and those wanting small-town Cambodia","pros":["Colonial architecture","River views","Great cafes","Walkable"],"cons":["Small town limits","Limited nightlife","Hot afternoons"],"lat":10.594,"lng":104.18,"priceLevel":"$"},{"name":"Riverside North","tagline":"Kampot's guesthouse strip","description":"North along the river, guesthouses and restaurants cater to travelers. It's the main tourist area but retains Kampot's relaxed character.","vibe":"Traveler & Relaxed","bestFor":"Budget travelers, backpackers, and those wanting traveler community","pros":["Budget options","River views","Traveler cafes","Relaxed vibe"],"cons":["Touristy","Basic facilities","Walk to town"],"lat":10.6,"lng":104.178,"priceLevel":"$"},{"name":"Bokor Area","tagline":"Kampot's mountain escape","description":"Bokor Mountain rises above Kampot - cooler temperatures, abandoned French hill station, and stunning views. It's Kampot's adventure escape.","vibe":"Mountain & Adventure","bestFor":"Adventure seekers, history buffs, and those wanting cooler weather","pros":["Cooler weather","Ghost town","Views","Adventure"],"cons":["Transport needed","Limited accommodation","Foggy often"],"lat":10.632,"lng":104.023,"priceLevel":"$"},{"name":"Pepper Farms Area","tagline":"Kampot's famous spice countryside","description":"Kampot's countryside is famous for pepper - farm visits, rural cycling, and authentic Khmer villages. It's agricultural Cambodia at its best.","vibe":"Rural & Agricultural","bestFor":"Foodies, cyclists, and those wanting rural Cambodia","pros":["Pepper farms","Cycling routes","Rural scenery","Authentic"],"cons":["Transport needed","Very rural","Limited services"],"lat":10.57,"lng":104.14,"priceLevel":"$"},{"name":"Kep Connection","tagline":"Kampot's seaside sister access","description":"Between Kampot and the seaside town of Kep, this area offers easy access to both - crab market dining, beaches, and Kampot's charm combined.","vibe":"Coastal & Connected","bestFor":"Seafood lovers, beach seekers, and those wanting both towns","pros":["Kep crab market","Beach access","Best of both","Scenic road"],"cons":["Between places","Transport needed","Split experience"],"lat":10.55,"lng":104.25,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

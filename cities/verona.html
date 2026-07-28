@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Verona's Romeo and Juliet heart","description":"Verona's historic center is UNESCO-listed romance - Arena amphitheater, Juliet's balcony, and pink marble streets. It's Shakespeare come to life.","vibe":"Romantic & Historic","bestFor":"Romantics, opera lovers, and those seeking Shakespeare's Verona","pros":["Roman Arena","Juliet's House","Beautiful squares","Opera season"],"cons":["Very touristy","Expensive","Crowded peak season"],"lat":45.4384,"lng":10.9916,"priceLevel":"$$$"},{"name":"Veronetta","tagline":"Verona's authentic student quarter","description":"Across the Adige River, Veronetta is Verona's university district - student bars, authentic trattorias, and local life away from tourists.","vibe":"Student & Authentic","bestFor":"Students, budget travelers, and those seeking real Verona","pros":["Student atmosphere","Authentic food","Affordable","Less touristy"],"cons":["Less scenic","Across river","Basic facilities"],"lat":45.445,"lng":11,"priceLevel":"$"},{"name":"San Zeno","tagline":"Verona's Romanesque treasure","description":"San Zeno is Verona's local gem - the stunning Romanesque basilica, neighborhood markets, and authentic character. It's Verona for Veronese.","vibe":"Local & Religious","bestFor":"Church lovers, locals seekers, and those wanting authentic Verona","pros":["San Zeno Basilica","Local markets","Authentic","Less crowded"],"cons":["Far from center","Limited restaurants","Quiet evenings"],"lat":45.442,"lng":10.978,"priceLevel":"$$"},{"name":"Porta Nuova/Station","tagline":"Verona's modern gateway","description":"Near the station, this area offers practical accommodation and easy connections. It's functional rather than romantic.","vibe":"Practical & Transit","bestFor":"Transit connections, budget hotels, and those passing through","pros":["Train station","Budget hotels","Easy connections","Practical"],"cons":["Not scenic","Generic","Far from attractions"],"lat":45.429,"lng":10.982,"priceLevel":"$$"},{"name":"Castel San Pietro","tagline":"Verona's hilltop viewpoint","description":"Above the city, Castel San Pietro offers Verona's best panorama - sunset views over terracotta roofs and the winding Adige River.","vibe":"Viewpoint & Quiet","bestFor":"View seekers, sunset watchers, and those wanting panoramas","pros":["Best views","Sunset spot","Peaceful","Romantic"],"cons":["Steep climb","No services","Far from center"],"lat":45.448,"lng":10.997,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

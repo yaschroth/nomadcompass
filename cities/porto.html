@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ribeira","tagline":"UNESCO riverside magic with port wine views","description":"Ribeira is Porto's historic heart - a UNESCO World Heritage site cascading down to the Douro River. Colorful buildings, riverside cafes, and port wine lodges across the water create unforgettable atmosphere. Touristy but essential Porto experiencing.","vibe":"Historic & Scenic","bestFor":"First-time visitors, photographers, and nomads seeking Porto's most iconic setting","pros":["Stunning river views","Historic atmosphere","Port wine access","Walkable"],"cons":["Very touristy","Steep hills","Higher prices","Crowded"],"lat":41.1408,"lng":-8.6131,"priceLevel":"$$$"},{"name":"Cedofeita / Baixa","tagline":"Porto's creative downtown with the best cafes","description":"Cedofeita and Baixa form Porto's creative core - independent shops, specialty coffee, art galleries, and a thriving nomad scene. Rua de Cedofeita and Miguel Bombarda streets are lined with cafes perfect for remote work. Central and increasingly popular.","vibe":"Creative & Central","bestFor":"Digital nomads, creatives, and anyone seeking Porto's best work-from-cafe scene","pros":["Best cafes","Creative scene","Central location","Growing community"],"cons":["Getting expensive","Busy streets","Limited parking"],"lat":41.1496,"lng":-8.6108,"priceLevel":"$$"},{"name":"Foz do Douro","tagline":"Where the river meets the Atlantic","description":"Foz is Porto's upscale seaside neighborhood where the Douro meets the Atlantic. Beach access, ocean promenades, and elegant restaurants attract a more affluent crowd. It's Porto's best quality of life, though further from the historic center.","vibe":"Coastal & Upscale","bestFor":"Beach lovers, families, and nomads seeking ocean access with city proximity","pros":["Beach access","Ocean views","Quieter streets","Good restaurants"],"cons":["Far from center","More expensive","Need transport"],"lat":41.15,"lng":-8.6764,"priceLevel":"$$$"},{"name":"Bonfim","tagline":"Porto's emerging neighborhood with local soul","description":"Bonfim is where Porto locals actually live - a residential neighborhood with growing creative energy. Cheaper rents, local tascas, and proximity to the center make it increasingly popular with nomads who've discovered its authentic charm.","vibe":"Local & Emerging","bestFor":"Budget nomads, long-term stayers, and those seeking authentic Porto life","pros":["Affordable","Local character","Near center","Emerging cafes"],"cons":["Less polished","Fewer tourists","Basic amenities"],"lat":41.1514,"lng":-8.5958,"priceLevel":"$"},{"name":"Vila Nova de Gaia","tagline":"Port wine cellars with the best Porto views","description":"Technically a different city across the river, Gaia offers the best views of Porto's skyline. Famous for port wine cellars, it's increasingly popular with nomads for its value and stunning vistas. The cable car and riverfront add to its appeal.","vibe":"Scenic & Value","bestFor":"Wine lovers, view seekers, and nomads wanting Porto views at better prices","pros":["Best Porto views","Port wine cellars","Good value","Less crowded"],"cons":["Across the river","Fewer cafes","Uphill walks"],"lat":41.1336,"lng":-8.6172,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

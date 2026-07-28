@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Malecón Central","tagline":"Surf breaks and caballitos de totora","description":"The heart of Huanchaco along the oceanfront promenade features the iconic reed fishing boats, surf breaks, and the main concentration of restaurants and hostels. This is where the action happens.","vibe":"Surf & Social","bestFor":"Surfers, social travelers, and those wanting beach life convenience","pros":["Steps from the surf","Best restaurant selection","Social atmosphere","Traditional fishing culture"],"cons":["Touristy and pricier","Can be noisy","Crowded in peak season"],"lat":-8.0834,"lng":-79.1189,"priceLevel":"$$"},{"name":"El Elio","tagline":"Quiet residential with surf access","description":"The northern extension of the beach offers a quieter alternative with apartments and guesthouses. Still walkable to the main strip but with more local residential character.","vibe":"Quiet & Residential","bestFor":"Long-term visitors, families, and those seeking peace","pros":["Quieter atmosphere","Residential feel","Easy beach access","More affordable"],"cons":["Fewer restaurants nearby","Less social scene","Walk to main area"],"lat":-8.0767,"lng":-79.1234,"priceLevel":"$"},{"name":"Las Lomas","tagline":"Hilltop views over surf and sea","description":"Set on the hills behind the beach, Las Lomas offers panoramic ocean views and a more local Peruvian atmosphere. Cheaper accommodation but requires walking downhill to the beach.","vibe":"Hillside & Local","bestFor":"Budget travelers, those wanting views, and local experience seekers","pros":["Ocean panoramas","Budget accommodation","Local atmosphere","Cooler breezes"],"cons":["Uphill walk home","Far from beach","Limited amenities"],"lat":-8.0889,"lng":-79.1123,"priceLevel":"$"},{"name":"South Beach","tagline":"Locals' beach with emptier breaks","description":"South of the main pier, this stretch of beach sees fewer tourists and offers uncrowded surf breaks. The walk along the sand reveals a more authentic fishing village atmosphere.","vibe":"Local & Uncrowded","bestFor":"Intermediate surfers wanting empty waves, local life seekers","pros":["Uncrowded surf breaks","Authentic atmosphere","Cheaper food","Peaceful walks"],"cons":["Fewer tourist services","Basic facilities","Less English spoken"],"lat":-8.0912,"lng":-79.1156,"priceLevel":"$"},{"name":"La Arena","tagline":"Budget backpacker strip","description":"The area just inland from the malecón houses most of the budget hostels and surf camps. A young, social atmosphere with cheap eats and party vibes.","vibe":"Backpacker & Social","bestFor":"Budget travelers, young surfers, and solo travelers wanting to meet people","pros":["Cheapest accommodation","Social hostel scene","Surf lessons available","Young crowd"],"cons":["Can be noisy","Party atmosphere not for everyone","Basic facilities"],"lat":-8.0856,"lng":-79.1167,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

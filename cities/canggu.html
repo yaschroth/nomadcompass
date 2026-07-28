@@ -1463,6 +1463,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Batu Bolong","tagline":"Canggu's original surf and cafe strip","description":"Batu Bolong is Canggu's heart - the main street lined with cafes, surf shops, and restaurants. It's where Canggu's digital nomad culture began.","vibe":"Surf & Digital Nomad","bestFor":"Digital nomads, surfers, and those seeking Canggu's core scene","pros":["Best cafes","Surf beach","Main street energy","Coworking nearby"],"cons":["Very crowded","Traffic","Expensive now"],"lat":-8.656,"lng":115.134,"priceLevel":"$$"},{"name":"Berawa","tagline":"Canggu's upscale beach club zone","description":"Berawa is Canggu's polished side - beach clubs, boutique hotels, and upscale dining. It's where Canggu meets Seminyak sophistication.","vibe":"Upscale & Beach Club","bestFor":"Beach club lovers, couples, and those seeking upscale Canggu","pros":["Beach clubs","Better restaurants","Less chaotic","Nice beach"],"cons":["Expensive","Less backpacker vibe","Spread out"],"lat":-8.665,"lng":115.145,"priceLevel":"$$$"},{"name":"Echo Beach","tagline":"Canggu's sunset surf spot","description":"Echo Beach is Canggu's surf mecca - powerful waves, sunset bars, and laid-back atmosphere. It's more authentic surf culture than the main strip.","vibe":"Surf & Sunset","bestFor":"Serious surfers, sunset chasers, and those seeking beach focus","pros":["Best surf","Sunset views","Beach bars","Surf community"],"cons":["Strong currents","Limited cafes","Far from main strip"],"lat":-8.651,"lng":115.124,"priceLevel":"$$"},{"name":"Pererenan","tagline":"Canggu's quiet rice field escape","description":"Pererenan is Canggu's peaceful north - rice field views, yoga studios, and quieter atmosphere. It's where those escaping Canggu's crowds retreat.","vibe":"Peaceful & Yoga","bestFor":"Yoga lovers, long-term stayers, and those seeking quiet Canggu","pros":["Rice field views","Yoga studios","Peaceful","Less traffic"],"cons":["Far from action","Limited nightlife","Need scooter"],"lat":-8.64,"lng":115.12,"priceLevel":"$$"},{"name":"Nelayan","tagline":"Canggu's local fishing village","description":"Nelayan is Canggu's authentic corner - traditional fishing village with local warungs and real Balinese life. It's Canggu before the expats arrived.","vibe":"Local & Authentic","bestFor":"Culture seekers, budget travelers, and those seeking real Bali","pros":["Authentic village","Local food","Affordable","Real Bali"],"cons":["Basic amenities","Limited cafes","Far from beach"],"lat":-8.662,"lng":115.13,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1514,6 +1515,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

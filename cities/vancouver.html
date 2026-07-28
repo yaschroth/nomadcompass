@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Downtown / Yaletown","tagline":"Glass towers between mountains and sea","description":"Downtown Vancouver sits dramatically between mountains and ocean. Yaletown's converted warehouses house trendy restaurants and boutiques, while the seawall offers urban nature access. Canada's most walkable downtown with Asian food to match Hong Kong.","vibe":"Urban & Scenic","bestFor":"Young professionals, foodies, and nomads seeking Canada's most walkable city center","pros":["Stunning scenery","Very walkable","Great food","Seawall access"],"cons":["Very expensive","Rainy winters","Small apartments"],"lat":49.2765,"lng":-123.1216,"priceLevel":"$$$"},{"name":"Gastown","tagline":"Historic cobblestones with trendy tech energy","description":"Gastown is Vancouver's oldest neighborhood - Victorian buildings, cobblestone streets, and the famous steam clock. Now home to tech startups and creative agencies, it blends history with modern energy. Great for work-from-cafe nomads.","vibe":"Historic & Tech","bestFor":"Tech workers, history lovers, and nomads seeking character with connectivity","pros":["Historic charm","Great cafes","Tech scene","Central location"],"cons":["East side issues","Expensive","Limited parking"],"lat":49.2844,"lng":-123.1086,"priceLevel":"$$"},{"name":"Kitsilano","tagline":"Beach vibes and health-conscious Vancouver living","description":"Kitsilano is Vancouver's beach neighborhood - yoga studios, organic cafes, and views across to downtown. The beach attracts a health-conscious crowd, while 4th Avenue offers excellent dining. Vancouver living at its most West Coast.","vibe":"Beach & Healthy","bestFor":"Fitness enthusiasts, beach lovers, and nomads seeking active lifestyle","pros":["Beach access","Healthy lifestyle","Great restaurants","Mountain views"],"cons":["Expensive","Far from downtown","Parking issues"],"lat":49.2697,"lng":-123.1603,"priceLevel":"$$$"},{"name":"Commercial Drive","tagline":"Vancouver's bohemian heart with Italian roots","description":"Commercial Drive is Vancouver's alternative neighborhood - Italian heritage meets counterculture in a strip of independent cafes, ethnic restaurants, and vintage shops. It's where Vancouver's artists and activists live, at more affordable prices.","vibe":"Bohemian & Diverse","bestFor":"Creatives, artists, and nomads seeking Vancouver's most alternative neighborhood","pros":["Great character","More affordable","Diverse food","Local shops"],"cons":["East side reputation","Far from downtown","Limited transit"],"lat":49.2648,"lng":-123.0697,"priceLevel":"$$"},{"name":"Mount Pleasant","tagline":"Breweries and studios in Vancouver's creative middle","description":"Mount Pleasant is Vancouver's creative middle ground - craft breweries, design studios, and independent restaurants fill former industrial spaces. More affordable than downtown with growing nomad community discovering its potential.","vibe":"Creative & Emerging","bestFor":"Creatives, beer lovers, and nomads seeking Vancouver's emerging creative hub","pros":["Craft breweries","Creative scene","Better value","Good transit"],"cons":["Still developing","Mixed areas","Limited green space"],"lat":49.265,"lng":-123.1,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

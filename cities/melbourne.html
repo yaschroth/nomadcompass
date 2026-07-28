@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Fitzroy","tagline":"Melbourne's original hipster hood with street art soul","description":"Fitzroy is Melbourne's creative birthplace - street art, independent boutiques, and some of the city's best bars and restaurants. Brunswick Street's eclectic energy attracts artists, musicians, and nomads seeking Melbourne's most characterful neighborhood.","vibe":"Creative & Alternative","bestFor":"Creatives, artists, and nomads seeking Melbourne's most authentic inner-city character","pros":["Best street art","Great bars","Creative energy","Walkable"],"cons":["Expensive now","Gentrified","Parking nightmare"],"lat":-37.798,"lng":144.978,"priceLevel":"$$$"},{"name":"St Kilda","tagline":"Beach suburb with Luna Park charm","description":"St Kilda is Melbourne's beach neighborhood - the famous Luna Park, Acland Street cake shops, and bay views attract both tourists and locals. It's more affordable than inner-city with beach access, though the nightlife can get rowdy.","vibe":"Beach & Eclectic","bestFor":"Beach lovers, backpackers, and nomads seeking seaside Melbourne living","pros":["Beach access","Good nightlife","Cake shops","Tram connected"],"cons":["Can be seedy","Tourist crowds","Far from CBD"],"lat":-37.8676,"lng":144.98,"priceLevel":"$$"},{"name":"Carlton","tagline":"Little Italy with university energy","description":"Carlton is Melbourne's Little Italy - Lygon Street's pasta restaurants and espresso bars define the neighborhood. Melbourne University brings student energy, while the Royal Exhibition Building adds grandeur. Classic Melbourne.","vibe":"Italian & Academic","bestFor":"Foodies, students, and nomads seeking traditional Melbourne atmosphere","pros":["Great Italian food","University energy","Near CBD","Historic charm"],"cons":["Touristy Lygon St","Student chaos","Limited parking"],"lat":-37.798,"lng":144.967,"priceLevel":"$$"},{"name":"Collingwood / Abbotsford","tagline":"Warehouses turned breweries in Melbourne's craft beer capital","description":"Collingwood and Abbotsford are Melbourne's industrial revival - warehouses now house craft breweries, specialty coffee roasters, and creative studios. It's Fitzroy's edgier neighbor, with better value and growing nomad community.","vibe":"Industrial & Craft","bestFor":"Beer lovers, creatives, and nomads seeking Fitzroy vibes at lower prices","pros":["Craft breweries","Better value","Creative spaces","Good cafes"],"cons":["Still gentrifying","Mixed areas","Limited transport"],"lat":-37.802,"lng":144.993,"priceLevel":"$$"},{"name":"CBD / Southbank","tagline":"Laneway culture in Australia's cultural capital","description":"Melbourne's CBD is famous for laneway cafes, street art, and hidden bars. Southbank adds river walks and the Arts Centre. Dense, convenient, and quintessentially Melbourne - perfect for those who want everything walkable.","vibe":"Urban & Cultural","bestFor":"Urban enthusiasts, culture lovers, and nomads wanting maximum convenience","pros":["Laneway culture","Everything walkable","Great food","Cultural venues"],"cons":["Expensive","Can feel corporate","Small apartments"],"lat":-37.8136,"lng":144.9631,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

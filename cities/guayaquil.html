@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Malecón 2000","tagline":"Riverfront revival and urban renewal","description":"Malecón 2000 transformed Guayaquil's waterfront - 2.5km promenade, gardens, museums, restaurants. Where Ecuador's largest city reclaimed its river connection.","vibe":"Modern & Waterfront","bestFor":"Walkers, families, and urban explorers","pros":["Safe promenade","River views","Museums","Restaurants"],"cons":["Hot and humid","Tourist-focused","Limited after dark"],"lat":-2.1889,"lng":-79.8812,"priceLevel":"$$"},{"name":"Las Peñas","tagline":"Colorful colonial hillside with views","description":"Las Peñas is Guayaquil's historic gem - colonial houses climbing the hill, 444 steps to lighthouse viewpoint. Where the city's origins survive in colorful lanes.","vibe":"Historic & Colorful","bestFor":"Photographers, history lovers, and view seekers","pros":["Colorful houses","Great views","Historic atmosphere","Walkable"],"cons":["Steep climb","Hot","Tourist-focused"],"lat":-2.1812,"lng":-79.8789,"priceLevel":"$$"},{"name":"Urdesa","tagline":"Upscale dining and nightlife district","description":"Urdesa is Guayaquil's upscale entertainment district - restaurants, bars, safer streets. Where Guayaquileños dine and party in relative security.","vibe":"Upscale & Lively","bestFor":"Foodies, nightlife seekers, and upscale travelers","pros":["Good restaurants","Nightlife","Safe area","Modern"],"cons":["Expensive","Traffic","Generic feel"],"lat":-2.1534,"lng":-79.8989,"priceLevel":"$$$"},{"name":"Parque Histórico","tagline":"Open-air museum and wildlife","description":"Parque Histórico recreates old Ecuador - colonial architecture, wildlife sanctuary, cultural demonstrations. Where to understand coastal Ecuadorian heritage.","vibe":"Cultural & Natural","bestFor":"Families, culture seekers, and wildlife lovers","pros":["Wildlife","Historic buildings","Family-friendly","Educational"],"cons":["Far from center","Taxi needed","Limited scope"],"lat":-2.1312,"lng":-79.8612,"priceLevel":"$$"},{"name":"Centro (Downtown)","tagline":"Commercial chaos and urban grit","description":"Downtown Guayaquil is Ecuador's commercial engine - markets, business, urban intensity. Where the city's economic energy concentrates.","vibe":"Commercial & Gritty","bestFor":"Adventurous travelers, market lovers, and urban explorers","pros":["Authentic markets","Economic pulse","Affordable","Local life"],"cons":["Safety concerns","Overwhelming","Hot and chaotic"],"lat":-2.1867,"lng":-79.8912,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

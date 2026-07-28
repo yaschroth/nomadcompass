@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Dongseongno","tagline":"Shopping streets and youth culture","description":"Dongseongno is Daegu's Times Square - pedestrian shopping streets, department stores, cafés. Where Daegu's youth gathers for fashion and entertainment.","vibe":"Shopping & Young","bestFor":"Shoppers, young travelers, and urban explorers","pros":["Great shopping","Youth culture","Cafés","Central"],"cons":["Crowded","Commercial","Generic Korean city feel"],"lat":35.8692,"lng":128.5956,"priceLevel":"$$"},{"name":"Seomun Market","tagline":"Traditional market with local flavors","description":"Seomun is Daegu's traditional heart - massive market selling fabrics, food, daily necessities. Where to experience Korean market culture at its most authentic.","vibe":"Traditional & Authentic","bestFor":"Market lovers, food adventurers, and authentic seekers","pros":["Authentic market","Great food","Local culture","Affordable"],"cons":["Overwhelming","Language barrier","Crowded"],"lat":35.8689,"lng":128.5789,"priceLevel":"$"},{"name":"Suseong Lake","tagline":"Lakeside leisure and café culture","description":"Suseong Lake offers Daegu's leisure escape - café-lined lakefront, musical fountain, romantic evenings. Where Daegu residents relax and date.","vibe":"Leisure & Romantic","bestFor":"Couples, café lovers, and those wanting relaxation","pros":["Beautiful lake","Great cafés","Musical fountain","Peaceful"],"cons":["Far from center","Weekend crowds","Limited activities"],"lat":35.8312,"lng":128.6234,"priceLevel":"$$"},{"name":"Apsan Park Area","tagline":"Mountain escape with cable car views","description":"Apsan Park rises south of Daegu - cable car, hiking trails, city panoramas. Where Daegu meets nature on the city's southern edge.","vibe":"Natural & Scenic","bestFor":"Hikers, nature lovers, and view seekers","pros":["Nature access","Cable car","City views","Hiking trails"],"cons":["Need transport","Hot summers","Crowded weekends"],"lat":35.8234,"lng":128.5834,"priceLevel":"$"},{"name":"Kim Gwangseok Street","tagline":"Musical tribute in artistic alley","description":"Kim Gwangseok Street honors Daegu's folk music legend - murals, busking, café culture. Where Korean folk music heritage creates artistic atmosphere.","vibe":"Artistic & Musical","bestFor":"Music lovers, art enthusiasts, and Korean culture seekers","pros":["Artistic atmosphere","Musical tribute","Murals","Unique"],"cons":["Small area","Tourist-focused","Limited scope"],"lat":35.8656,"lng":128.6012,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bukit Bintang","tagline":"KL's entertainment heart with malls and street food","description":"Bukit Bintang is the heart of KL's shopping and entertainment - Pavilion KL, Berjaya Times Square, and a culinary paradise of street food stalls. Well-connected by MRT and monorail, with cafes and coworking spaces like Common Ground, it's where nomads who thrive on energy belong.","vibe":"Central & Energetic","bestFor":"Nomads who want nightlife, shopping, and total convenience at their doorstep","pros":["Central location","Great transport","Endless food options","Coworking nearby"],"cons":["Crowded","Noisy","Tourist-heavy"],"lat":3.1466,"lng":101.7108,"priceLevel":"$$"},{"name":"KLCC","tagline":"Petronas Towers and luxury living in the sky","description":"KLCC means living in the shadow of the Petronas Twin Towers and Merdeka 118. This is KL's luxury heart - upscale malls, world-class hotels, and high-end condos. Great for occasional sky dining and rooftop bars, though most expats find it better for visits than living.","vibe":"Luxury & Iconic","bestFor":"Professionals seeking luxury, impressive addresses, and corporate convenience","pros":["Iconic location","Luxury amenities","KLCC Park","Business hub"],"cons":["Most expensive","Touristy","Less authentic"],"lat":3.1579,"lng":101.7117,"priceLevel":"$$$"},{"name":"Bangsar","tagline":"Where KL's creatives and young professionals gather","description":"Bangsar is where you go to see and be seen. Trendy cafes, stylish boutiques, and vibrant nightlife attract young professionals and creatives. It's the bohemian, more affluent area with great coworking options and international community, well-connected to the city center.","vibe":"Trendy & Affluent","bestFor":"Creatives, young professionals, and those seeking KL's trendiest neighborhood","pros":["Trendy cafes","Good nightlife","Creative vibe","Train access"],"cons":["Getting expensive","Traffic","Spread out"],"lat":3.129,"lng":101.6721,"priceLevel":"$$"},{"name":"Mont Kiara","tagline":"KL's expat village with international everything","description":"Mont Kiara is undoubtedly KL's expat headquarters - high-end condos, international schools, Korean and Japanese restaurants, and upscale bars. It's the go-to neighborhood where you'll settle right in and feel at home, though you'll need a car to reach the action.","vibe":"Expat & Family-Friendly","bestFor":"Families, long-term expats, and nomads who prioritize comfort over local immersion","pros":["Expat community","International amenities","Safe and clean","Good condos"],"cons":["Need a car","Traffic to center","Isolated bubble"],"lat":3.1716,"lng":101.6511,"priceLevel":"$$$"},{"name":"Sri Hartamas","tagline":"Mont Kiara's more affordable, foodie-friendly neighbor","description":"Sri Hartamas offers the benefits of the Mont Kiara area without the premium prices. Great food options, cafes, and a local feel make it popular with younger expats and nomads. It bridges the gap between expat comfort and authentic KL living.","vibe":"Local & Foodie","bestFor":"Budget-conscious expats, foodies, and those seeking Mont Kiara proximity at better value","pros":["Great food scene","More affordable","Local feel","Near Mont Kiara"],"cons":["Need transport","Less polished","Fewer amenities"],"lat":3.16,"lng":101.6588,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

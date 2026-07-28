@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Mutrah","tagline":"Ancient port and souq traditions","description":"Oman's most atmospheric quarter features the famous corniche, traditional souq, and working port. The blend of old Oman and maritime heritage creates the sultanate's most authentic urban experience.","vibe":"Traditional & Maritime","bestFor":"Culture seekers, souq lovers, and authentic Oman experience","pros":["Famous souq","Beautiful corniche","Maritime atmosphere","Traditional Oman"],"cons":["Hot walking in summer","Tourist crowds","Limited parking"],"lat":23.6178,"lng":58.5678,"priceLevel":"$$"},{"name":"Old Muscat","tagline":"Royal palaces and Portuguese forts","description":"The historic capital features the Sultan's palace, Portuguese forts, and dramatic mountain backdrop. The ceremonial atmosphere and limited access preserve Oman's royal heritage.","vibe":"Royal & Historic","bestFor":"History buffs, palace enthusiasts, and photography seekers","pros":["Royal palaces","Historic forts","Dramatic setting","Well-preserved"],"cons":["Limited access","No accommodation","Spread out"],"lat":23.6145,"lng":58.5934,"priceLevel":"$$"},{"name":"Qurum","tagline":"Beach parks and diplomatic calm","description":"The upscale residential area offers Qurum Beach, the Natural Park, and embassy compounds. The tree-lined streets and international restaurants attract expats and diplomatic residents.","vibe":"Upscale & Green","bestFor":"Families, expats, and those wanting green spaces and beach","pros":["Qurum Beach","Natural Park","Good restaurants","Residential calm"],"cons":["Expensive","Need car","Spread out"],"lat":23.5856,"lng":58.4723,"priceLevel":"$$$"},{"name":"Al Mouj (The Wave)","tagline":"Waterfront development and marina life","description":"The modern waterfront development features a marina, Greg Norman golf course, and contemporary architecture. The international atmosphere and leisure facilities attract affluent residents.","vibe":"Modern & Resort","bestFor":"Golfers, marina lovers, and modern lifestyle seekers","pros":["Marina facilities","Golf course","Modern apartments","Waterfront dining"],"cons":["Expensive","Less authentic","Far from old town"],"lat":23.6434,"lng":58.3012,"priceLevel":"$$$"},{"name":"Ruwi","tagline":"Commercial heart with subcontinental flavor","description":"The commercial district features South Asian influence with Indian restaurants, budget shopping, and working-class energy. The authentic marketplace atmosphere contrasts with upscale neighborhoods.","vibe":"Commercial & Multicultural","bestFor":"Budget travelers, Indian food lovers, and market explorers","pros":["Indian food","Budget shopping","Authentic atmosphere","Central location"],"cons":["Hot and busy","Less scenic","Basic accommodation"],"lat":23.5912,"lng":58.5423,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

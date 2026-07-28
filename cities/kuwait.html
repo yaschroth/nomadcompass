@@ -1441,6 +1441,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kuwait City Center","tagline":"Oil wealth meets Gulf tradition","description":"The downtown area features the iconic Kuwait Towers, Grand Mosque, and modernist souks. The contrast of traditional markets and sleek towers showcases Kuwait's oil-era transformation.","vibe":"Modern & Traditional","bestFor":"Business travelers, architecture enthusiasts, and first-time visitors","pros":["Iconic landmarks","Traditional souks","Central location","Cultural attractions"],"cons":["Very hot in summer","Expensive","Traffic congestion"],"lat":29.3759,"lng":47.9774,"priceLevel":"$$$"},{"name":"Salmiya","tagline":"Expat hub with beach access","description":"The most popular expat neighborhood offers shopping, restaurants, and Gulf beach access. The cosmopolitan atmosphere and international food scene make it feel less conservative than other areas.","vibe":"Expat & Coastal","bestFor":"Expats, beach lovers, and those wanting international atmosphere","pros":["Beach access","International restaurants","Shopping malls","Expat community"],"cons":["Crowded","Traffic issues","Less authentic"],"lat":29.3334,"lng":48.0789,"priceLevel":"$$$"},{"name":"Jabriya","tagline":"Residential calm with university vibes","description":"Near Kuwait University, this residential area offers a quieter alternative with good facilities and green spaces. Popular with academics and families seeking suburban comfort.","vibe":"Suburban & Academic","bestFor":"Families, academics, and those wanting residential life","pros":["Quieter atmosphere","University facilities","Green spaces","Good schools"],"cons":["Less entertainment","Need car","Far from beach"],"lat":29.3189,"lng":48.0345,"priceLevel":"$$"},{"name":"Fahaheel","tagline":"Southern seaside town charm","description":"This southern coastal area offers a more traditional Kuwaiti atmosphere with a seaside promenade and local markets. Less developed than northern areas but more authentic.","vibe":"Traditional & Coastal","bestFor":"Those seeking authentic Kuwait, seaside walks, and local markets","pros":["Traditional atmosphere","Seaside promenade","Local markets","Less crowded"],"cons":["Far from city center","Less modern","Limited expat services"],"lat":29.0823,"lng":48.1323,"priceLevel":"$$"},{"name":"Avenues Area","tagline":"Mall of all malls with entertainment","description":"The area around the massive Avenues Mall offers retail therapy in air-conditioned comfort. The entertainment options and dining make it a destination in itself.","vibe":"Mall & Entertainment","bestFor":"Shoppers, families with kids, and summer heat escapers","pros":["Massive mall complex","Entertainment options","Air-conditioned","Restaurant variety"],"cons":["Consumerist","Need car to reach","Generic experience"],"lat":29.2978,"lng":47.9312,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1492,6 +1493,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

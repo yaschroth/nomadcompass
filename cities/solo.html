@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Keraton Area","tagline":"Royal palaces and Javanese tradition","description":"The historic heart around the Kasunanan and Mangkunegaran palaces preserves Java's aristocratic heritage. Batik workshops, traditional markets, and classical performances continue centuries-old traditions.","vibe":"Traditional royal","bestFor":"Culture enthusiasts and history lovers","pros":["Palace access","Batik culture","Traditional arts","Historic atmosphere"],"cons":["Very traditional","Limited nightlife","Hot climate"],"lat":-7.5706,"lng":110.8267,"priceLevel":"$"},{"name":"Pasar Gede Area","tagline":"Market life and colonial architecture","description":"The great market and surrounding colonial buildings showcase Solo's commercial heritage. Early mornings bring traditional trade while the area's restaurants serve legendary Javanese cuisine.","vibe":"Market bustling","bestFor":"Food lovers and morning explorers","pros":["Historic market","Legendary food","Colonial architecture","Authentic atmosphere"],"cons":["Crowded mornings","Basic facilities","Overwhelming sensory"],"lat":-7.5689,"lng":110.8234,"priceLevel":"$"},{"name":"Laweyan","tagline":"Historic batik village","description":"This ancient trading neighborhood features traditional batik workshops in historic merchant houses. UNESCO-recognized heritage combines with working artisans creating Solo's most distinctive area.","vibe":"Artisan historic","bestFor":"Batik enthusiasts and photographers","pros":["Batik workshops","Historic houses","Artisan culture","Unique atmosphere"],"cons":["Can feel quiet","Limited services","Mostly daytime activity"],"lat":-7.5778,"lng":110.7989,"priceLevel":"$"},{"name":"Jebres","tagline":"University energy and modern growth","description":"Home to major universities, this northern area offers student energy, affordable dining, and modern development. Young Solonese gather in cafes and casual restaurants away from tourist areas.","vibe":"Student modern","bestFor":"Budget travelers and students","pros":["Affordable dining","Young atmosphere","Modern facilities","University access"],"cons":["Far from center","Less character","Limited attractions"],"lat":-7.5534,"lng":110.8512,"priceLevel":"$"},{"name":"The Park Mall Area","tagline":"Modern Solo's commercial center","description":"The newer commercial district offers malls, modern restaurants, and contemporary entertainment. Upper-middle-class Solonese and visitors find international brands and familiar amenities.","vibe":"Modern commercial","bestFor":"Shopping and modern convenience","pros":["Modern amenities","Air conditioning","Shopping options","Entertainment"],"cons":["Generic feel","Less authentic","Mall culture"],"lat":-7.5845,"lng":110.8134,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

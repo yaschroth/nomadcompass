@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Casco Antiguo/Barrio","tagline":"Alicante's colorful old town","description":"Alicante's old town climbs beneath the Santa Bárbara castle - narrow streets, tapas bars, and Mediterranean character. It's authentic coastal Spain.","vibe":"Historic & Colorful","bestFor":"Tapas lovers, history seekers, and those wanting old Alicante","pros":["Castle access","Tapas bars","Colorful streets","Authentic"],"cons":["Hilly","Can be rough","Hot summers"],"lat":38.346,"lng":-0.483,"priceLevel":"$"},{"name":"Explanada/Port Area","tagline":"Alicante's famous palm promenade","description":"The Explanada de España is Alicante's heart - marble wave promenade, port terraces, and evening paseo. It's the city's social soul.","vibe":"Promenade & Social","bestFor":"Evening strollers, port lovers, and those seeking social Alicante","pros":["Famous promenade","Port dining","Social scene","Beautiful"],"cons":["Touristy","Expensive drinks","Crowded"],"lat":38.343,"lng":-0.485,"priceLevel":"$$"},{"name":"Playa de San Juan","tagline":"Alicante's main beach strip","description":"San Juan Beach is Alicante's best - 7km of golden sand, beach bars, and summer atmosphere. It's where Alicante's beach life happens.","vibe":"Beach & Resort","bestFor":"Beach lovers, families, and those wanting sand and sun","pros":["Best beach","Long stretch","Beach bars","Clean sand"],"cons":["Crowded summer","Far from center","Resort atmosphere"],"lat":38.37,"lng":-0.425,"priceLevel":"$$"},{"name":"Centro/Mercado Central","tagline":"Alicante's commercial heart","description":"Alicante's center is the commercial hub - Mercado Central, shopping streets, and everyday Spanish life. It's practical Alicante.","vibe":"Commercial & Local","bestFor":"Shoppers, market lovers, and those wanting local Alicante","pros":["Mercado Central","Shopping","Local life","Practical"],"cons":["Less scenic","Hot summer","Commercial"],"lat":38.345,"lng":-0.49,"priceLevel":"$"},{"name":"Santa Bárbara Castle","tagline":"Alicante's commanding hilltop fortress","description":"Santa Bárbara dominates Alicante - medieval fortress with panoramic views over city and sea. It's essential for understanding the city.","vibe":"Historic & Viewpoint","bestFor":"History lovers, view seekers, and those wanting panoramas","pros":["Best views","Free entry","Historic fortress","Lift access"],"cons":["Hot climb","Crowded peak times","Limited shade"],"lat":38.349,"lng":-0.477,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

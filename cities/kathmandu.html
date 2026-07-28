@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Thamel","tagline":"Nepal's tourist heart with trekking shops and rooftop bars","description":"Thamel is Kathmandu's famous tourist hub - narrow streets packed with trekking gear shops, restaurants, and rooftop bars. It's where every traveler passes through, with full infrastructure for nomads including cafes and coworking spaces.","vibe":"Tourist & Backpacker","bestFor":"Travelers, trekkers, and nomads seeking full tourist infrastructure","pros":["Full services","Great food","Social scene","Trekking gear"],"cons":["Very touristy","Pushy vendors","Noisy","Crowded"],"lat":27.715,"lng":85.312,"priceLevel":"$$"},{"name":"Patan (Lalitpur)","tagline":"Ancient Newari culture in the artisan city","description":"Patan is Kathmandu Valley's artistic heart - ancient temples, traditional Newari architecture, and artisan workshops. Patan Durbar Square is UNESCO-listed, and the pace is slower than Thamel. Culture over convenience.","vibe":"Cultural & Artisan","bestFor":"Culture lovers, artists, and nomads seeking authentic Newari heritage","pros":["Stunning temples","Artisan culture","Less touristy","Beautiful squares"],"cons":["Limited cafes","Basic infrastructure","Far from Thamel"],"lat":27.6728,"lng":85.324,"priceLevel":"$"},{"name":"Boudha","tagline":"Tibetan Buddhism around the great stupa","description":"Boudha centers on the magnificent Boudhanath Stupa - one of Buddhism's holiest sites. Tibetan monasteries, meditation centers, and spiritual seekers create unique atmosphere. Growing cafe scene serves the mindful nomad community.","vibe":"Spiritual & Tibetan","bestFor":"Spiritual seekers, meditators, and nomads seeking peaceful Buddhist atmosphere","pros":["Spiritual atmosphere","Great cafes","Peaceful","Tibetan culture"],"cons":["Far from center","Limited nightlife","Tourist crowds at stupa"],"lat":27.7215,"lng":85.362,"priceLevel":"$$"},{"name":"Jhamsikhel / Sanepa","tagline":"Kathmandu's expat enclave with modern cafes","description":"Jhamsikhel and Sanepa have become Kathmandu's expat hub - modern cafes, international restaurants, and a growing coworking scene. It's where NGO workers and long-term expats live, offering Kathmandu comfort.","vibe":"Expat & Modern","bestFor":"Long-term expats, professionals, and nomads seeking modern Kathmandu","pros":["Modern cafes","Expat community","Good restaurants","Quieter"],"cons":["Expensive for Nepal","Less character","Need transport"],"lat":27.675,"lng":85.313,"priceLevel":"$$"},{"name":"Bhaktapur","tagline":"Medieval city frozen in time","description":"Bhaktapur is a living museum - medieval Newari architecture, traditional pottery squares, and minimal motorized traffic. It's 45 minutes from Kathmandu but feels centuries away. For those seeking complete cultural immersion.","vibe":"Medieval & Traditional","bestFor":"History buffs, photographers, and nomads seeking complete cultural immersion","pros":["Incredible heritage","Car-free areas","Traditional crafts","Peaceful"],"cons":["Far from Kathmandu","Very basic infrastructure","Limited services"],"lat":27.671,"lng":85.4298,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

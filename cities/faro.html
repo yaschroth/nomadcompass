@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Cidade Velha (Old Town)","tagline":"Faro's walled historic heart","description":"Cidade Velha is Faro's peaceful center - walled old town, cathedral, and quiet cobblestone streets. It's surprisingly atmospheric for an airport city.","vibe":"Historic & Peaceful","bestFor":"History lovers, those with layovers, and those seeking quiet Faro","pros":["Cathedral","Walled town","Peaceful","Historic character"],"cons":["Very small","Limited dining","Quiet evenings"],"lat":37.014,"lng":-7.935,"priceLevel":"$$"},{"name":"Downtown/Pedestrian Zone","tagline":"Faro's shopping and cafe center","description":"Faro's downtown is the city's commercial heart - pedestrian streets, cafes, and local shopping. It's functional Faro beyond the old walls.","vibe":"Commercial & Local","bestFor":"Shoppers, cafe lovers, and those seeking local Faro","pros":["Pedestrian streets","Local cafes","Shopping","Central"],"cons":["Not scenic","Limited character","Basic"],"lat":37.016,"lng":-7.932,"priceLevel":"$"},{"name":"Ria Formosa/Marina","tagline":"Faro's lagoon gateway","description":"The marina area connects Faro to Ria Formosa lagoon - boat trips, seafood restaurants, and natural park access. It's Faro's connection to nature.","vibe":"Marina & Nature","bestFor":"Nature lovers, boat trip seekers, and seafood lovers","pros":["Ria Formosa access","Boat trips","Seafood","Marina atmosphere"],"cons":["Limited nightlife","Seasonal boats","Away from center"],"lat":37.01,"lng":-7.928,"priceLevel":"$$"},{"name":"Praia de Faro","tagline":"Faro's beach island escape","description":"Praia de Faro is Faro's beach - a sand barrier island with beach bars and summer atmosphere. It's where Faro goes for beach time.","vibe":"Beach & Seasonal","bestFor":"Beach lovers, summer visitors, and those seeking sand","pros":["Real beach","Beach bars","Summer vibe","Accessible"],"cons":["Crowded summer","Seasonal","Needs transport"],"lat":36.984,"lng":-7.907,"priceLevel":"$$"},{"name":"Montenegro/Residential","tagline":"Faro's local residential area","description":"Montenegro and surrounding areas are where Faro's residents live - supermarkets, local restaurants, and real Portuguese life.","vibe":"Residential & Local","bestFor":"Long-term stayers, budget travelers, and those seeking local life","pros":["Affordable","Local restaurants","Real life","Supermarkets"],"cons":["Not scenic","Far from sights","No tourism"],"lat":37.02,"lng":-7.915,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

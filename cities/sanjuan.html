@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Viejo San Juan","tagline":"Spanish colonial jewel on the Caribbean","description":"This UNESCO-listed old city captivates with blue cobblestones, pastel colonial buildings, and massive fortresses. Art galleries, rooftop bars, and historic plazas create Caribbean history come alive.","vibe":"Historic magical","bestFor":"History buffs and romantic travelers","pros":["Stunning architecture","Historic forts","Art galleries","Walkable"],"cons":["Cruise ship crowds","Expensive dining","Limited parking"],"lat":18.4663,"lng":-66.1167,"priceLevel":"$$"},{"name":"Condado","tagline":"Miami vibes on Puerto Rican shores","description":"This beachfront strip offers high-rise hotels, designer boutiques, and beach clubs. San Juan's most glamorous neighborhood attracts those seeking Caribbean luxury with urban amenities.","vibe":"Upscale beach","bestFor":"Luxury seekers and beach lovers","pros":["Beautiful beach","Luxury hotels","Fine dining","Nightlife"],"cons":["Very expensive","Traffic congestion","Tourist-heavy"],"lat":18.4534,"lng":-66.0712,"priceLevel":"$$$"},{"name":"Santurce","tagline":"Street art capital with creative pulse","description":"Puerto Rico's creative district features massive murals, art galleries, and emerging restaurants. Former industrial spaces now house breweries and markets while artists transform the neighborhood.","vibe":"Artsy emerging","bestFor":"Creatives and culture seekers","pros":["Street art scene","Emerging restaurants","Creative energy","Affordable"],"cons":["Gentrifying","Some rough areas","Variable quality"],"lat":18.4456,"lng":-66.0567,"priceLevel":"$"},{"name":"Ocean Park","tagline":"Local beach vibes without resort crowds","description":"This residential beach neighborhood offers a more authentic Puerto Rican experience. Local cafes, neighborhood restaurants, and a quieter beach attract those seeking real San Juan life.","vibe":"Beach residential","bestFor":"Long-term stays and beach lovers","pros":["Quieter beach","Local atmosphere","Affordable eats","Kiteboarding"],"cons":["Less nightlife","Basic amenities","Limited parking"],"lat":18.4545,"lng":-66.0623,"priceLevel":"$$"},{"name":"Isla Verde","tagline":"Airport-adjacent resort beach","description":"Near the airport, this strip of resort hotels offers convenient beach access. Business travelers and short-stay visitors appreciate the combination of beach and proximity to transit.","vibe":"Resort convenient","bestFor":"Short stays and business travelers","pros":["Near airport","Good beaches","Resort amenities","Easy access"],"cons":["Generic feel","Plane noise","Less authentic"],"lat":18.4412,"lng":-66.0012,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Lecce's Baroque wonderland","description":"Lecce's center is Baroque heaven - ornate churches, golden limestone, and the nickname 'Florence of the South'. It's Italy's best-kept architectural secret.","vibe":"Baroque & Beautiful","bestFor":"Architecture lovers, photographers, and those seeking undiscovered Italy","pros":["Stunning Baroque","Golden limestone","Uncrowded","Photogenic"],"cons":["Hot summers","Limited English","Quiet off-season"],"lat":40.3515,"lng":18.175,"priceLevel":"$$"},{"name":"Piazza Sant'Oronzo","tagline":"Lecce's Roman amphitheater heart","description":"Piazza Sant'Oronzo is Lecce's main square - Roman amphitheater ruins, cafes, and evening passeggiata. It's where Lecce's social life happens.","vibe":"Central & Social","bestFor":"People watchers, aperitivo lovers, and those seeking the passeggiata","pros":["Roman ruins","Central location","Cafes","Evening life"],"cons":["Touristy","Crowded evenings","Expensive drinks"],"lat":40.352,"lng":18.172,"priceLevel":"$$"},{"name":"Valle d'Itria Access","tagline":"Lecce's trulli countryside gateway","description":"Just outside Lecce, the countryside opens to the Valle d'Itria - trulli houses, olive groves, and traditional Puglia. It's the rural heart of Salento.","vibe":"Rural & Traditional","bestFor":"Trulli seekers, countryside lovers, and those exploring Puglia","pros":["Trulli houses","Olive groves","Rural beauty","Traditional life"],"cons":["Car needed","Limited services","Spread out"],"lat":40.155,"lng":18.2,"priceLevel":"$"},{"name":"San Cataldo Beach","tagline":"Lecce's nearest coastal escape","description":"San Cataldo is Lecce's beach - just 10km away, offering sandy shores and Adriatic swimming. It's where Leccesi escape summer heat.","vibe":"Beach & Local","bestFor":"Beach seekers, locals, and those wanting coastal Lecce","pros":["Nearest beach","Sandy shores","Local atmosphere","Easy access"],"cons":["Crowded summer","Basic facilities","Not the best Puglia beaches"],"lat":40.388,"lng":18.295,"priceLevel":"$"},{"name":"Santa Croce Area","tagline":"Lecce's Baroque church quarter","description":"Around the Basilica di Santa Croce, Lecce's most ornate church, narrow streets reveal the city's Baroque soul at every turn.","vibe":"Baroque & Quiet","bestFor":"Church lovers, architecture enthusiasts, and those seeking quiet corners","pros":["Santa Croce basilica","Baroque details","Quiet streets","Photogenic"],"cons":["Limited dining","Quiet evenings","Very hot summer"],"lat":40.354,"lng":18.173,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

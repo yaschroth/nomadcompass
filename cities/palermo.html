@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kalsa","tagline":"Palermo's regenerated Arab quarter","description":"Kalsa is Palermo's transformed area - former Arab quarter now filled with galleries, trattorias, and creative energy. It's Palermo's most exciting neighborhood.","vibe":"Creative & Historic","bestFor":"Creatives, culture lovers, and those seeking regenerating Palermo","pros":["Great galleries","Good restaurants","Historic character","Creative scene"],"cons":["Still rough edges","Variable quality","Some decay"],"lat":38.115,"lng":13.371,"priceLevel":"$$"},{"name":"Vucciria/Ballarò","tagline":"Palermo's chaotic market heart","description":"Vucciria and Ballarò are Palermo's legendary markets - chaotic street food, theatrical vendors, and intense Sicilian life. Raw and unforgettable.","vibe":"Market & Chaotic","bestFor":"Food lovers, adventure seekers, and those seeking authentic Sicily","pros":["Amazing markets","Street food","Authentic chaos","Affordable"],"cons":["Can be overwhelming","Pickpocket risk","Gritty"],"lat":38.118,"lng":13.363,"priceLevel":"$"},{"name":"Quattro Canti/Centro","tagline":"Palermo's baroque crossroads","description":"Quattro Canti is Palermo's ceremonial center - baroque architecture, major churches, and the city's grandest street. It's historic Palermo at its finest.","vibe":"Historic & Grand","bestFor":"History lovers, architecture fans, and those seeking baroque Palermo","pros":["Stunning architecture","Major sites","Central location","Grand streets"],"cons":["Touristy","Crowded","Expensive near sites"],"lat":38.1157,"lng":13.3615,"priceLevel":"$$"},{"name":"Politeama/Libertà","tagline":"Palermo's elegant modern quarter","description":"Politeama is Palermo's bourgeois area - elegant theaters, upscale shopping, and refined atmosphere. It's where Palermo feels almost northern Italian.","vibe":"Elegant & Modern","bestFor":"Shoppers, theater lovers, and those seeking refined Palermo","pros":["Good shopping","Elegant streets","Theaters","Safe area"],"cons":["Less character","Expensive","Less authentic"],"lat":38.124,"lng":13.357,"priceLevel":"$$$"},{"name":"Mondello","tagline":"Palermo's beach escape","description":"Mondello is Palermo's beach - beautiful bay, art nouveau villas, and summer crowds. It's where Palermitani escape the city heat.","vibe":"Beach & Resort","bestFor":"Beach lovers, families, and those seeking seaside Palermo","pros":["Beautiful beach","Art nouveau","Seafood restaurants","Mountain backdrop"],"cons":["Crowded summer","Far from center","Seasonal"],"lat":38.202,"lng":13.327,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

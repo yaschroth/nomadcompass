@@ -1445,6 +1445,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Walking Street","tagline":"Pai's lively night market heart","description":"Pai's Walking Street transforms each evening into a vibrant night market - street food, handmade crafts, and live music. It's the social heart of this mountain town.","vibe":"Market & Social","bestFor":"Night market lovers, foodies, and those seeking Pai's evening buzz","pros":["Great night market","Street food","Live music","Social scene"],"cons":["Crowded evenings","Touristy","Closes early"],"lat":19.3592,"lng":98.44,"priceLevel":"$"},{"name":"Town Centre","tagline":"Pai's compact traveler hub","description":"Pai's tiny center packs in cafes, bars, and travel services. Everything is walkable and the vibe is distinctly backpacker-bohemian.","vibe":"Backpacker & Compact","bestFor":"Backpackers, first-time visitors, and those wanting central access","pros":["Walkable","Cafes everywhere","Social atmosphere","Services"],"cons":["Very touristy","No authentic Thai feel","Small town limits"],"lat":19.359,"lng":98.441,"priceLevel":"$"},{"name":"Riverside/Mae Pai","tagline":"Pai's peaceful riverside retreat","description":"Along the Pai River, bamboo bungalows and riverside restaurants offer a mellower experience. It's more peaceful than the center with beautiful morning mist.","vibe":"Peaceful & Nature","bestFor":"Peace seekers, nature lovers, and those wanting tranquil Pai","pros":["River views","Peaceful","Morning mist","Nature access"],"cons":["Walk to town","Basic facilities","Quiet evenings"],"lat":19.355,"lng":98.435,"priceLevel":"$"},{"name":"Pai Canyon Area","tagline":"Pai's scenic rice field surrounds","description":"Outside town, bungalows dot the rice fields with mountain views. Pai Canyon and hot springs are nearby. It's scenic but requires transport.","vibe":"Scenic & Rural","bestFor":"Nature lovers, photographers, and those seeking scenic Pai","pros":["Mountain views","Rice fields","Near attractions","Peaceful"],"cons":["Motorbike needed","Far from town","Isolated"],"lat":19.342,"lng":98.428,"priceLevel":"$"},{"name":"Chinese Village Area","tagline":"Pai's photogenic mountain viewpoint","description":"The Chinese Village and Yun Lai viewpoint offer Pai's best sunrise views. Accommodation here trades convenience for incredible scenery.","vibe":"Viewpoint & Remote","bestFor":"Photographers, sunrise seekers, and those wanting spectacular views","pros":["Best views","Sunrise spot","Tea plantations","Scenic"],"cons":["Very remote","Steep roads","Cold mornings"],"lat":19.385,"lng":98.465,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1496,6 +1497,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

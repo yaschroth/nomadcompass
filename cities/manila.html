@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Makati","tagline":"Philippines' business capital with expat infrastructure","description":"Makati is Manila's financial heart - gleaming towers, upscale malls, and the best international restaurants. Poblacion offers nightlife, while Legazpi Village hosts weekend markets. It's where most expats and digital nomads base themselves.","vibe":"Business & Expat","bestFor":"Business professionals, expats, and nomads seeking Manila's best infrastructure","pros":["Best infrastructure","Great restaurants","Expat community","Safe"],"cons":["Very expensive","Traffic nightmare","Corporate feel"],"lat":14.5547,"lng":121.0244,"priceLevel":"$$$"},{"name":"BGC (Bonifacio Global City)","tagline":"Manila's newest city with planned streets","description":"BGC is Manila's modern showpiece - planned streets, pedestrian-friendly zones, and the newest malls and restaurants. It feels more Singapore than Manila, attracting young professionals and families seeking order in the chaos.","vibe":"Modern & Planned","bestFor":"Families, professionals, and nomads wanting modern, walkable Manila","pros":["Walkable streets","Modern everything","Very safe","Great dining"],"cons":["Most expensive","Artificial feel","Far from culture"],"lat":14.5514,"lng":121.0502,"priceLevel":"$$$"},{"name":"Poblacion, Makati","tagline":"Manila's hippest nightlife and food scene","description":"Poblacion is Makati's old town turned nightlife hub - rooftop bars, trendy restaurants, and creative energy in historic streets. It's Manila's equivalent of Brooklyn, attracting young professionals and creative types.","vibe":"Hip & Nightlife","bestFor":"Nightlife lovers, foodies, and nomads seeking Manila's trendiest scene","pros":["Best nightlife","Trendy restaurants","Creative energy","Walkable"],"cons":["Noisy nights","Limited accommodation","Party-focused"],"lat":14.563,"lng":121.026,"priceLevel":"$$"},{"name":"Ortigas","tagline":"Manila's second CBD with value proposition","description":"Ortigas is Manila's second business district - high-rises, malls, and corporate offices at more affordable prices than Makati. It lacks character but offers practical living with excellent shopping access.","vibe":"Business & Practical","bestFor":"Business travelers, budget nomads, and those seeking Makati alternative","pros":["More affordable","Big malls","Business facilities","Good transport"],"cons":["Less character","Traffic","Corporate feel"],"lat":14.588,"lng":121.061,"priceLevel":"$$"},{"name":"Quezon City","tagline":"Manila's largest city with local character","description":"Quezon City is Manila's largest component city - universities, entertainment centers, and genuine Filipino neighborhood life. It's cheaper and more authentic than Makati, though less convenient for typical nomad needs.","vibe":"Local & Sprawling","bestFor":"Budget nomads, students, and those seeking authentic Filipino city life","pros":["Affordable","Authentic","University energy","Entertainment"],"cons":["Very spread out","Traffic","Less English"],"lat":14.676,"lng":121.0437,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

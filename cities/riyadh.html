@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Diriyah","tagline":"UNESCO heritage meets luxury development","description":"The birthplace of Saudi Arabia is being transformed into a cultural destination. Ancient mud-brick ruins contrast with new luxury hotels, restaurants, and the expanding At-Turaif district.","vibe":"Historic developing","bestFor":"History lovers and luxury seekers","pros":["UNESCO heritage","Luxury hotels","Cultural depth","Expanding attractions"],"cons":["Still developing","Expensive","Far from center"],"lat":24.7334,"lng":46.5745,"priceLevel":"$$$"},{"name":"Al Olaya","tagline":"Business district with modern skyline","description":"Riyadh's commercial heart features gleaming towers, luxury hotels, and upscale shopping. Kingdom Tower and Al Faisaliah Tower anchor a district of international restaurants and business facilities.","vibe":"Corporate luxury","bestFor":"Business travelers and luxury shoppers","pros":["Modern infrastructure","Luxury dining","Major hotels","Business facilities"],"cons":["Very expensive","Corporate atmosphere","Traffic congestion"],"lat":24.6912,"lng":46.6845,"priceLevel":"$$$"},{"name":"Diplomatic Quarter","tagline":"Green oasis with international community","description":"This planned district hosts embassies, international schools, and expatriate housing. Parks, sports facilities, and relative openness make it the most comfortable area for Western visitors.","vibe":"International planned","bestFor":"Expats and diplomatic visitors","pros":["Green spaces","International feel","Sports facilities","Comfortable for Westerners"],"cons":["Isolated bubble","Requires invitation","Not authentic Saudi"],"lat":24.6734,"lng":46.6234,"priceLevel":"$$"},{"name":"Al Malaz","tagline":"Traditional Riyadh with local flavor","description":"One of Riyadh's older planned neighborhoods offers a glimpse into Saudi family life. Local markets, traditional restaurants, and residential streets provide authentic atmosphere away from corporate towers.","vibe":"Traditional local","bestFor":"Cultural immersion seekers","pros":["Authentic atmosphere","Local dining","Traditional markets","Affordable"],"cons":["Basic amenities","Limited English","Conservative area"],"lat":24.6623,"lng":46.7234,"priceLevel":"$"},{"name":"Al Bujairi","tagline":"Historic terrace dining in Diriyah","description":"This restaurant district opposite the At-Turaif ruins offers stunning heritage views with modern Saudi cuisine. Evening dining on terraces overlooking illuminated ruins creates magical experiences.","vibe":"Heritage dining","bestFor":"Foodies and evening entertainment","pros":["Stunning views","Quality restaurants","Cultural setting","Evening atmosphere"],"cons":["Expensive dining","Limited activities","Reservation needed"],"lat":24.7312,"lng":46.5812,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

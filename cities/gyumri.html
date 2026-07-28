@@ -1445,6 +1445,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kumayri Old Town","tagline":"Earthquake scars and architectural beauty","description":"Armenia's best-preserved old town features stunning 19th-century black stone architecture, artisan workshops, and a melancholic beauty. Many buildings still show earthquake damage, adding to the haunting atmosphere.","vibe":"Historic & Artistic","bestFor":"History enthusiasts, photographers, and those seeking authentic Armenian culture","pros":["Stunning architecture","Artisan workshops","Authentic atmosphere","Cheap cafes and restaurants"],"cons":["Earthquake damage visible","Can feel somber","Limited modern amenities"],"lat":40.7892,"lng":43.8467,"priceLevel":"$"},{"name":"Central Square","tagline":"Soviet meets Armenian in the heart of town","description":"The area around Vartanants Square showcases Gyumri's dual identity with Soviet-era buildings alongside Armenian churches. The main museums, hotels, and restaurants cluster here.","vibe":"Central & Mixed","bestFor":"First-time visitors, those wanting convenience and access to main sights","pros":["Walking distance to everything","Best restaurant selection","Museums nearby","Main transport hub"],"cons":["Most touristy area","Soviet architecture not charming","Busy traffic"],"lat":40.7834,"lng":43.8423,"priceLevel":"$$"},{"name":"Polytechnic Area","tagline":"Student energy and budget living","description":"Near the university, this district offers the cheapest accommodation and a young, energetic atmosphere. Local cafes and student hangouts provide an authentic glimpse of young Armenian life.","vibe":"Student & Budget","bestFor":"Budget travelers, young nomads, and those seeking local interaction","pros":["Very cheap accommodation","Student atmosphere","Local cafes","Authentic experience"],"cons":["Basic infrastructure","Less English spoken","Far from old town"],"lat":40.7756,"lng":43.8534,"priceLevel":"$"},{"name":"Shirak Area","tagline":"Residential calm away from the center","description":"A quiet residential neighborhood offering apartment rentals and a slower pace. Soviet-era blocks dominate but provide affordable long-term options for those wanting to settle in.","vibe":"Residential & Quiet","bestFor":"Long-term stays, writers, and those seeking quiet","pros":["Affordable apartments","Quiet atmosphere","Local markets","Residential feel"],"cons":["Soviet housing blocks","Less character","Need transport to center"],"lat":40.7923,"lng":43.8512,"priceLevel":"$"},{"name":"Black Fortress Area","tagline":"Panoramic views and Russian military heritage","description":"The hilltop area around the iconic Black Fortress offers the best views of the city and surrounding mountains. Less developed but perfect for those wanting quiet with easy access to hiking.","vibe":"Scenic & Historical","bestFor":"Hikers, history buffs, and those wanting views and nature access","pros":["Amazing city views","Historic fortress","Nature access","Peaceful setting"],"cons":["Uphill walks","Limited accommodation","Far from center"],"lat":40.7978,"lng":43.8389,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1496,6 +1497,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

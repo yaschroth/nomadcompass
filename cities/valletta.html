@@ -1418,6 +1418,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central Valletta","tagline":"Malta's UNESCO capital fortress","description":"Central Valletta is a UNESCO masterpiece - baroque architecture, Grand Master's Palace, and compact historic streets. Europe's smallest capital with outsized grandeur.","vibe":"Historic & Grand","bestFor":"History lovers, architecture fans, and those seeking Maltese heritage","pros":["UNESCO site","Baroque architecture","Walkable","Cultural venues"],"cons":["Crowded cruise days","Expensive","Limited accommodation"],"lat":35.8989,"lng":14.5146,"priceLevel":"$$$"},{"name":"Strait Street","tagline":"Valletta's revived nightlife strip","description":"Strait Street was once 'The Gut' - sailors' entertainment strip now reborn as Valletta's nightlife and dining destination. Historic with modern energy.","vibe":"Nightlife & Revival","bestFor":"Night owls, diners, and those seeking Valletta's social scene","pros":["Best nightlife","Historic character","Good restaurants","Revived energy"],"cons":["Can be loud","Narrow street","Crowded weekends"],"lat":35.898,"lng":14.513,"priceLevel":"$$"},{"name":"Upper Barrakka","tagline":"Valletta's panoramic terrace","description":"Upper Barrakka Gardens offer Valletta's best views - Grand Harbour panorama, noon cannon salute, and elegant terrace. Essential Valletta experience.","vibe":"Scenic & Elegant","bestFor":"View seekers, photographers, and everyone visiting Valletta","pros":["Stunning views","Noon cannon","Beautiful gardens","Free"],"cons":["Very crowded","Tourist central","Limited seating"],"lat":35.8963,"lng":14.5117,"priceLevel":"$$"},{"name":"Three Cities (Vittoriosa)","tagline":"Valletta's authentic harbor neighbors","description":"The Three Cities across the harbor - Vittoriosa, Senglea, and Cospicua - offer authentic Malta. Older than Valletta with local character.","vibe":"Authentic & Historic","bestFor":"History lovers, those seeking authentic Malta beyond tourism","pros":["More authentic","Older history","Local life","Harbor views"],"cons":["Needs ferry","Limited dining","Quiet evenings"],"lat":35.888,"lng":14.522,"priceLevel":"$"},{"name":"Sliema/St. Julian's","tagline":"Malta's modern resort strip","description":"Sliema and St. Julian's are Malta's modern face - seafront promenades, shopping, and Paceville nightlife. Tourist-focused but convenient.","vibe":"Modern & Resort","bestFor":"Beach seekers, shoppers, and those seeking modern Malta","pros":["Seafront walks","Shopping","Nightlife","Modern amenities"],"cons":["No character","Overdeveloped","Tourist prices"],"lat":35.912,"lng":14.5,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1469,6 +1470,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

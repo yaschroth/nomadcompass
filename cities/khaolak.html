@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bang La On Beach","tagline":"Main strip with resort convenience","description":"The central area of Khao Lak offers the highest concentration of hotels, restaurants, and tourist services. The long sandy beach and easy access to Similan Island tours make it the natural base.","vibe":"Resort & Convenient","bestFor":"First-time visitors, divers heading to Similans, and beach lovers","pros":["Best restaurant selection","Tour operator access","Long beach","Good infrastructure"],"cons":["Most developed area","Higher prices","Can feel touristy"],"lat":8.6534,"lng":98.2412,"priceLevel":"$$"},{"name":"Nang Thong Beach","tagline":"Classic Khao Lak beach vibes","description":"Perhaps the most picturesque stretch of Khao Lak, Nang Thong offers classic tropical beach scenery with palm trees, soft sand, and excellent swimming. A good balance of development and natural beauty.","vibe":"Beach & Balanced","bestFor":"Beach lovers, families, and those wanting classic Thai beach experience","pros":["Beautiful beach","Good swimming","Sunset views","Mix of budget to upscale"],"cons":["Popular with tourists","Beach vendors","Seasonal crowds"],"lat":8.6689,"lng":98.2345,"priceLevel":"$$"},{"name":"Khuk Khak","tagline":"Quieter beach with local flavor","description":"North of the main tourist strip, Khuk Khak offers a more local Thai atmosphere with village life, long empty beaches, and fewer tourists. The tsunami memorial is a poignant reminder of 2004.","vibe":"Quiet & Local","bestFor":"Those seeking peace, long-term visitors, and authentic Thailand seekers","pros":["Quiet beaches","Local village life","Lower prices","Less crowded"],"cons":["Fewer restaurants","Need transport","Limited nightlife"],"lat":8.6934,"lng":98.2234,"priceLevel":"$"},{"name":"Pakarang Cape","tagline":"Dramatic coastline and surf spots","description":"The rocky headland area offers dramatic coastal scenery, emerging surf spots, and luxury resorts. The natural beauty and isolation appeal to those seeking exclusivity.","vibe":"Scenic & Upscale","bestFor":"Luxury seekers, surfers, and couples wanting romantic settings","pros":["Stunning scenery","Luxury resorts","Surf possibilities","Secluded beaches"],"cons":["Expensive","Need transport","Limited budget options"],"lat":8.7134,"lng":98.2178,"priceLevel":"$$$"},{"name":"Bang Sak Beach","tagline":"South end serenity","description":"The southern stretch of Khao Lak's coastline offers long, empty beaches and a handful of low-key resorts. Perfect for those who want beach isolation without venturing too far from services.","vibe":"Secluded & Peaceful","bestFor":"Peace seekers, writers, and couples wanting privacy","pros":["Empty beaches","Peaceful atmosphere","Good value resorts","Natural setting"],"cons":["Far from services","Limited dining","Need own transport"],"lat":8.6234,"lng":98.2534,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

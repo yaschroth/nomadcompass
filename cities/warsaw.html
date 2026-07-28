@@ -1420,6 +1420,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Śródmieście (City Center)","tagline":"Warsaw's rebuilt heart with communist contrasts","description":"Śródmieście is Warsaw's central district - rebuilt Old Town, Palace of Culture, and modern skyscrapers create unique contrasts. It's where history and modernity collide, offering full urban convenience.","vibe":"Central & Contrasting","bestFor":"Urban enthusiasts, history buffs, and nomads wanting central access","pros":["Central location","Historic sites","Metro access","Full amenities"],"cons":["Touristy areas","Expensive","Busy streets"],"lat":52.2297,"lng":21.0122,"priceLevel":"$$$"},{"name":"Praga","tagline":"Warsaw's edgy east bank with authentic soul","description":"Praga is Warsaw's alternative heartbeat - pre-war buildings that survived bombing, street art, and underground bars. Once avoided, now embraced by artists and creatives seeking authentic, affordable Warsaw.","vibe":"Alternative & Authentic","bestFor":"Artists, creatives, and nomads seeking Warsaw's edgiest neighborhood","pros":["Authentic character","Street art","Affordable","Creative scene"],"cons":["Rougher areas","Less infrastructure","Perception issues"],"lat":52.252,"lng":21.044,"priceLevel":"$"},{"name":"Mokotów","tagline":"Warsaw's residential favorite with park access","description":"Mokotów is Warsaw's most popular residential district - tree-lined streets, Pole Mokotowskie park, and excellent infrastructure. It's where young professionals live, with growing cafe and restaurant scene.","vibe":"Residential & Green","bestFor":"Young professionals, families, and nomads seeking quality residential living","pros":["Great parks","Good infrastructure","Residential calm","Metro access"],"cons":["Less exciting","Spread out","Suburban feel"],"lat":52.19,"lng":21.02,"priceLevel":"$$"},{"name":"Żoliborz","tagline":"Warsaw's intellectual neighborhood with green spaces","description":"Żoliborz is Warsaw's intellectual heart - journalists, academics, and artists in tree-lined streets. It's known for its interwar architecture and strong community spirit. Peaceful with character.","vibe":"Intellectual & Green","bestFor":"Academics, writers, and nomads seeking peaceful intellectual atmosphere","pros":["Beautiful streets","Intellectual vibe","Community spirit","Green spaces"],"cons":["Far from center","Limited nightlife","Residential quiet"],"lat":52.269,"lng":20.985,"priceLevel":"$$"},{"name":"Wilanów","tagline":"Warsaw's royal suburb with palace grandeur","description":"Wilanów centers on the famous palace and gardens, surrounded by new upscale developments. It's Warsaw's most exclusive suburb - modern apartments, good schools, and green spaces for affluent families.","vibe":"Upscale & Suburban","bestFor":"Families, luxury seekers, and nomads wanting exclusive suburban living","pros":["Palace and gardens","New developments","Good schools","Safe"],"cons":["Far from center","Need car","Limited nightlife"],"lat":52.165,"lng":21.09,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1471,6 +1472,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

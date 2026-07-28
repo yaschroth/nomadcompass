@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Diplomatic Area","tagline":"Skyscrapers and business towers","description":"Bahrain's modern business district features gleaming towers, luxury hotels, and the World Trade Center's iconic wind turbines. The concentration of corporate offices and upscale venues makes it the business hub.","vibe":"Business & Modern","bestFor":"Business travelers, luxury seekers, and architecture enthusiasts","pros":["Luxury hotels","Modern infrastructure","Corporate facilities","Iconic architecture"],"cons":["Very expensive","Little character","Dead at night"],"lat":26.2334,"lng":50.5912,"priceLevel":"$$$"},{"name":"Adliya","tagline":"Art galleries and expatriate dining","description":"The artsy neighborhood attracts Bahrain's creative community with galleries, restaurants, and a more bohemian atmosphere. The concentration of international dining and nightlife makes it the expat social hub.","vibe":"Artsy & Expat","bestFor":"Foodies, art lovers, and expats seeking social scene","pros":["Art galleries","Great restaurants","Nightlife options","Expat friendly"],"cons":["Expensive dining","Limited traditional culture","Parking challenges"],"lat":26.2123,"lng":50.5678,"priceLevel":"$$$"},{"name":"Muharraq","tagline":"Traditional Bahrain preserved","description":"The old capital on a separate island preserves traditional Bahraini life with heritage houses, old souks, and the UNESCO-listed pearl diving heritage. The authentic atmosphere contrasts with modern Manama.","vibe":"Traditional & Heritage","bestFor":"Culture seekers, history buffs, and authentic experience lovers","pros":["UNESCO heritage","Traditional architecture","Pearl diving history","Authentic souks"],"cons":["Requires crossing to island","Conservative area","Limited nightlife"],"lat":26.2578,"lng":50.6123,"priceLevel":"$$"},{"name":"Juffair","tagline":"Expat nightlife and apartment living","description":"The residential area popular with expats and US Navy personnel offers nightlife, international restaurants, and apartment living. The 24-hour energy and relaxed atmosphere attract younger crowds.","vibe":"Expat & Nightlife","bestFor":"Night owls, young expats, and those seeking social scene","pros":["Active nightlife","International food","Apartment availability","24-hour venues"],"cons":["Seedy reputation","Can feel rowdy","Not family-oriented"],"lat":26.2189,"lng":50.5989,"priceLevel":"$$"},{"name":"Seef","tagline":"Mall culture and suburban comfort","description":"The commercial district features major shopping malls, chain restaurants, and suburban living. The family-friendly atmosphere and air-conditioned comfort appeal to those escaping the heat.","vibe":"Suburban & Commercial","bestFor":"Families, shoppers, and those wanting modern convenience","pros":["Major malls","Family friendly","Air-conditioned comfort","Restaurant variety"],"cons":["Generic feel","No character","Mall-focused lifestyle"],"lat":26.2445,"lng":50.5445,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

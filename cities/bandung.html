@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Braga / Asia-Afrika","tagline":"Art deco strip and colonial heritage","description":"Braga Street is Bandung's historic heart - art deco architecture, colonial buildings, cafés. Where Indonesia's 'Paris of Java' nickname makes sense.","vibe":"Historic & Trendy","bestFor":"History lovers, café enthusiasts, and architecture fans","pros":["Art deco buildings","Great cafés","Historic atmosphere","Walkable"],"cons":["Traffic around","Tourist prices","Limited parking"],"lat":-6.9175,"lng":107.6091,"priceLevel":"$$"},{"name":"Dago","tagline":"Student area with café culture","description":"Dago serves Bandung's universities - student cafés, night markets, youthful energy. Where Indonesia's creative youth gathers and creates.","vibe":"Student & Creative","bestFor":"Students, young travelers, and café hoppers","pros":["Great cafés","Young energy","Creative scene","Affordable"],"cons":["Traffic congestion","Crowded weekends","Noisy"],"lat":-6.8789,"lng":107.6134,"priceLevel":"$"},{"name":"Lembang","tagline":"Highland escape with volcanic views","description":"Lembang rises north of Bandung - cooler highlands, Tangkuban Perahu volcano, resorts and farms. Where Jakartans and Bandungites escape the heat.","vibe":"Highland & Resort","bestFor":"Nature lovers, families, and those escaping heat","pros":["Cooler climate","Volcano views","Farm stays","Nature activities"],"cons":["Weekend traffic","Touristy","Need transport"],"lat":-6.8134,"lng":107.6189,"priceLevel":"$$"},{"name":"Cihampelas","tagline":"Factory outlet strip and local shopping","description":"Cihampelas is Bandung's factory outlet strip - jeans, clothes, local manufacturing. Where Indonesia's garment industry meets domestic tourism.","vibe":"Shopping & Local","bestFor":"Shoppers, bargain hunters, and local experience","pros":["Cheap clothes","Factory outlets","Local shopping","Bargains"],"cons":["Chaotic traffic","Basic area","Overwhelming"],"lat":-6.8934,"lng":107.6056,"priceLevel":"$"},{"name":"Ciumbuleuit","tagline":"University area with highland views","description":"Ciumbuleuit climbs toward the highlands - universities, guesthouses, coffee plantations nearby. Quieter Bandung with access to nature.","vibe":"Academic & Quiet","bestFor":"Students, quiet seekers, and nature lovers","pros":["Near nature","Quieter","University atmosphere","Cooler"],"cons":["Hilly terrain","Limited nightlife","Transport needed"],"lat":-6.8612,"lng":107.5989,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

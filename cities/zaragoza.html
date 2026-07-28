@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"El Pilar/Casco Viejo","tagline":"Basilica majesty in Roman bones","description":"The old town features the magnificent Basilica del Pilar, Roman walls, and La Seo cathedral. Tapas bars, historic squares, and layers of history create Spain's hidden gem.","vibe":"Historic monumental","bestFor":"History lovers and pilgrims","pros":["Stunning basilica","Roman ruins","Great tapas","Historic atmosphere"],"cons":["Tourist-oriented","Hot summers","Limited parking"],"lat":41.656,"lng":-0.8773,"priceLevel":"$$"},{"name":"El Tubo","tagline":"Tapas trail through narrow streets","description":"This network of narrow streets near the center is Zaragoza's tapas heartland. Bar-hopping from pintxo to pintxo creates legendary food experiences in intimate surroundings.","vibe":"Tapas lively","bestFor":"Foodies and nightlife seekers","pros":["Legendary tapas","Bar-hopping culture","Local atmosphere","Evening energy"],"cons":["Crowded nights","Can be noisy","Tourist-heavy"],"lat":41.6545,"lng":-0.8789,"priceLevel":"$"},{"name":"Universidad","tagline":"Student energy and affordable culture","description":"The university area offers student bars, affordable dining, and youthful energy. Budget travelers and young visitors find their people in this accessible neighborhood.","vibe":"Student lively","bestFor":"Students and budget travelers","pros":["Affordable dining","Student atmosphere","Good nightlife","Young energy"],"cons":["Can be rowdy","Basic amenities","Less historic"],"lat":41.6478,"lng":-0.8834,"priceLevel":"$"},{"name":"Expo Area","tagline":"Modern development with river views","description":"The 2008 Expo site features modern architecture, parks, and riverside development. Contemporary Zaragoza showcases Spanish urban renewal with business facilities.","vibe":"Modern developed","bestFor":"Modern architecture fans and business travelers","pros":["Modern architecture","River parks","Business facilities","Contemporary design"],"cons":["Soulless areas","Far from center","Limited dining"],"lat":41.6623,"lng":-0.9134,"priceLevel":"$$"},{"name":"La Almozara","tagline":"Residential calm with local life","description":"This working-class residential area offers authentic Zaragozan life with local bars, neighborhood shops, and affordable living. Long-term visitors integrate into community.","vibe":"Residential authentic","bestFor":"Long-term stays and authenticity seekers","pros":["Affordable living","Local atmosphere","Neighborhood bars","Authentic Spain"],"cons":["Far from attractions","Basic neighborhood","Spanish essential"],"lat":41.6634,"lng":-0.9023,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

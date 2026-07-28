@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Downtown bustle and market life","description":"Aqaba's center is Jordan's Red Sea gateway - markets, restaurants, everyday Jordanian life. Where local commerce meets transit to Petra and Wadi Rum.","vibe":"Urban & Commercial","bestFor":"Budget travelers, local seekers, and transit visitors","pros":["Affordable","Local markets","Central location","Good transport"],"cons":["Not scenic","Basic infrastructure","Hot summers"],"lat":29.5267,"lng":35.0078,"priceLevel":"$"},{"name":"South Beach (Resort Area)","tagline":"Red Sea resorts and diving access","description":"South Beach hosts Aqaba's resort strip - diving centers, beach hotels, water sports. Where travelers come for Red Sea diving and beach relaxation.","vibe":"Resort & Diving","bestFor":"Divers, beach lovers, and resort seekers","pros":["Diving access","Beach facilities","Resort amenities","Clear water"],"cons":["Expensive","Touristy","Far from center"],"lat":29.4712,"lng":34.9834,"priceLevel":"$$$"},{"name":"Tala Bay","tagline":"Luxury development south of town","description":"Tala Bay is Aqaba's upscale development - luxury resorts, marina, private beaches. Jordan's attempt at Red Sea riviera sophistication.","vibe":"Luxury & Resort","bestFor":"Luxury seekers, families, and those wanting resort experience","pros":["Private beaches","Luxury hotels","Marina","Clean facilities"],"cons":["Isolated","Very expensive","Limited local feel"],"lat":29.4134,"lng":34.9712,"priceLevel":"$$$$"},{"name":"Berenice Beach Club Area","tagline":"Public beach with local atmosphere","description":"The public beach area offers accessible Red Sea - local families swimming, beachside restaurants, more authentic Aqaba experience than resorts.","vibe":"Local & Beach","bestFor":"Budget travelers, local seekers, and beach lovers","pros":["Affordable","Local atmosphere","Beach access","Good food"],"cons":["Crowded weekends","Basic facilities","Less pristine"],"lat":29.5089,"lng":34.9989,"priceLevel":"$"},{"name":"Old Town / Fort Area","tagline":"Historic fort and archaeological sites","description":"Aqaba's old town holds its historic core - Mamluk fort, ancient Ayla ruins, traditional quarter. Where Jordan's Red Sea history reveals itself.","vibe":"Historic & Authentic","bestFor":"History lovers, archaeological enthusiasts, and culture seekers","pros":["Historic sites","Authentic character","Museum","Affordable"],"cons":["Limited dining","Basic area","Small zone"],"lat":29.5312,"lng":35.0034,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

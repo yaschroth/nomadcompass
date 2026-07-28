@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Pantai Cenang","tagline":"Langkawi's main tourist beach","description":"Pantai Cenang is Langkawi's busiest beach - duty-free shopping, beach bars, and tourist services. It's the island's social hub with the best infrastructure.","vibe":"Tourist & Beach","bestFor":"First-time visitors, shoppers, and those wanting convenience","pros":["Best beach","Duty-free shopping","Restaurants","Nightlife"],"cons":["Touristy","Crowded beach","Traffic"],"lat":6.278,"lng":99.726,"priceLevel":"$$"},{"name":"Pantai Tengah","tagline":"Langkawi's quieter beach alternative","description":"Pantai Tengah is Cenang's quieter southern neighbor - same beautiful beach, fewer crowds, and more relaxed atmosphere. It's the better choice for peace.","vibe":"Quiet & Beach","bestFor":"Peace seekers, couples, and those wanting beach without crowds","pros":["Quieter beach","Good restaurants","More relaxed","Near Cenang"],"cons":["Smaller area","Limited nightlife","Walk to Cenang"],"lat":6.268,"lng":99.72,"priceLevel":"$$"},{"name":"Kuah Town","tagline":"Langkawi's local ferry port hub","description":"Kuah is Langkawi's main town - ferry terminal, duty-free malls, and local services. It's not scenic but practical for shopping and authentic Malaysian food.","vibe":"Local & Practical","bestFor":"Duty-free shoppers, ferry connections, and local food","pros":["Duty-free malls","Ferry port","Local food","Affordable"],"cons":["No beach","Not scenic","Hot town"],"lat":6.323,"lng":99.848,"priceLevel":"$"},{"name":"Datai Bay","tagline":"Langkawi's exclusive rainforest retreat","description":"Datai Bay is Langkawi's most exclusive area - world-class resorts hidden in rainforest with pristine beach. It's luxury eco-tourism at its finest.","vibe":"Luxury & Nature","bestFor":"Luxury seekers, nature lovers, and those seeking seclusion","pros":["World-class resorts","Pristine beach","Rainforest","Wildlife"],"cons":["Very expensive","Isolated","Resort-dependent"],"lat":6.43,"lng":99.67,"priceLevel":"$$$$"},{"name":"Padang Matsirat","tagline":"Langkawi's local heartland","description":"Interior Langkawi offers rice paddies, local villages, and authentic Malay life. It's where the island's soul lives away from the beaches.","vibe":"Rural & Authentic","bestFor":"Culture seekers, adventure travelers, and those wanting real Langkawi","pros":["Authentic Malay","Rice paddies","Local food","Affordable"],"cons":["No beaches","Transport needed","Limited tourist services"],"lat":6.36,"lng":99.77,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

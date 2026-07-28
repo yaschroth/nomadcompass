@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Dalt Vila (Old Town)","tagline":"UNESCO fortress above the party island","description":"Dalt Vila rises above Ibiza Town - UNESCO World Heritage fortress with panoramic views, medieval streets, and sunset terraces. The island's cultural soul beyond clubs.","vibe":"Historic & Scenic","bestFor":"Culture seekers, history lovers, and sunset chasers","pros":["Stunning views","Historic atmosphere","Beautiful sunsets","UNESCO site"],"cons":["Steep climbs","Limited nightlife","Expensive dining"],"lat":38.9073,"lng":1.4362,"priceLevel":"$$$"},{"name":"Marina Botafoch","tagline":"Superyacht glamour and celebrity scene","description":"Marina Botafoch is Ibiza's millionaire's row - superyachts, exclusive restaurants, celebrity sightings. The island's most glamorous address for those who can afford it.","vibe":"Luxury & Exclusive","bestFor":"High-rollers, yacht enthusiasts, and celebrity watchers","pros":["Ultimate luxury","Amazing boats","Top restaurants","VIP scene"],"cons":["Extremely expensive","Pretentious vibes","Exclusive to a fault"],"lat":38.9145,"lng":1.4456,"priceLevel":"$$$$"},{"name":"Playa d'en Bossa","tagline":"Beach clubs and 24-hour party energy","description":"Playa d'en Bossa is party central - longest beach, biggest clubs (Ushuaïa, Hï), and endless beach parties. Where the world comes to dance from sunset to sunrise.","vibe":"Party & Beach","bestFor":"Club enthusiasts, party seekers, and beach lovers","pros":["Best clubs","Long beach","Constant action","Famous DJs"],"cons":["Extremely noisy","No sleep possible","Expensive everything"],"lat":38.8889,"lng":1.4012,"priceLevel":"$$$"},{"name":"San Antonio","tagline":"Sunset Strip and British party hub","description":"San Antonio draws sunset crowds to Café del Mar and party crowds to the West End. The original Ibiza party town - more accessible and less exclusive than Ibiza Town.","vibe":"Party & Sunset","bestFor":"Sunset lovers, budget partiers, and British tourists","pros":["Famous sunsets","More affordable","Lively atmosphere","Accessible nightlife"],"cons":["Can feel trashy","Very touristy","Rowdy crowds"],"lat":38.9812,"lng":1.3012,"priceLevel":"$$"},{"name":"Santa Gertrudis","tagline":"Bohemian village in the island's heart","description":"Santa Gertrudis is Ibiza's bohemian soul - island interior village with artists, organic restaurants, yoga retreats. Where those seeking the 'real' Ibiza retreat.","vibe":"Bohemian & Peaceful","bestFor":"Yogis, artists, and those escaping the party scene","pros":["Peaceful vibes","Artistic community","Great restaurants","Authentic feel"],"cons":["Car needed","No beach","Limited nightlife"],"lat":39.0212,"lng":1.4298,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

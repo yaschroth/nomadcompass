@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ano Poli (Upper Town)","tagline":"Thessaloniki's Byzantine hilltop soul","description":"Ano Poli is Thessaloniki's historic heart - Byzantine walls, Ottoman houses, and stunning views. It's where the city's ancient soul survives.","vibe":"Historic & Panoramic","bestFor":"History lovers, view seekers, and those wanting authentic Thessaloniki","pros":["Byzantine heritage","City views","Historic character","Authentic"],"cons":["Very steep","Limited transport","Far from waterfront"],"lat":40.644,"lng":22.952,"priceLevel":"$"},{"name":"Ladadika","tagline":"Thessaloniki's revived entertainment quarter","description":"Ladadika is Thessaloniki's nightlife hub - restored warehouses now bars and restaurants. It's where the city goes out.","vibe":"Nightlife & Dining","bestFor":"Night owls, diners, and those seeking Thessaloniki's social scene","pros":["Best nightlife","Good restaurants","Restored character","Central"],"cons":["Can be loud","Touristy","Crowded weekends"],"lat":40.635,"lng":22.937,"priceLevel":"$$"},{"name":"Aristotelous Square/Center","tagline":"Thessaloniki's grand central axis","description":"Aristotelous is Thessaloniki's showpiece - grand square opening to the waterfront with impressive architecture. The city's ceremonial heart.","vibe":"Grand & Central","bestFor":"First-time visitors, architecture lovers, and those seeking central convenience","pros":["Grand architecture","Waterfront access","Central location","Cafes"],"cons":["Touristy","Expensive cafes","Crowded"],"lat":40.633,"lng":22.941,"priceLevel":"$$"},{"name":"Kalamaria","tagline":"Thessaloniki's upscale coastal suburb","description":"Kalamaria is Thessaloniki's affluent southeast - waterfront promenades, good restaurants, and residential calm. It's quality Greek living.","vibe":"Upscale & Coastal","bestFor":"Long-term stayers, families, and those seeking quality living","pros":["Waterfront walks","Good restaurants","Residential calm","Quality area"],"cons":["Far from center","Less historic","Needs transport"],"lat":40.585,"lng":22.956,"priceLevel":"$$$"},{"name":"Modiano/Kapani Markets","tagline":"Thessaloniki's vibrant food market heart","description":"The market area is Thessaloniki's culinary soul - Modiano and Kapani markets, mezedopoleia, and Greek food culture. It's where Thessaloniki eats.","vibe":"Market & Foodie","bestFor":"Foodies, market lovers, and those seeking Greek food culture","pros":["Amazing markets","Authentic food","Local atmosphere","Affordable"],"cons":["Crowded","Chaotic","Limited seating"],"lat":40.636,"lng":22.943,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

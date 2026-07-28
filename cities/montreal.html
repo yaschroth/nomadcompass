@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Le Plateau-Mont-Royal","tagline":"Montreal's bohemian francophone heart","description":"The Plateau is Montreal's most beloved neighborhood - colorful row houses, French cafes, and artistic energy. It's quintessentially Montreal with the city's best street life.","vibe":"Bohemian & French","bestFor":"Creatives, francophiles, and those seeking authentic Montreal","pros":["Beautiful streets","Best cafes","Artistic vibe","Walkable"],"cons":["Expensive rent","Parking nightmare","Winter harsh"],"lat":45.522,"lng":-73.578,"priceLevel":"$$$"},{"name":"Mile End","tagline":"Montreal's hipster creative hub","description":"Mile End is Montreal's coolest neighborhood - bagels, indie music, and startup culture. It's where Montreal's creative industries and hipster culture thrive.","vibe":"Hipster & Creative","bestFor":"Creatives, tech workers, and those seeking trendy Montreal","pros":["Best bagels","Music scene","Creative energy","Great coffee"],"cons":["Very hip","Expensive","Crowded cafes"],"lat":45.525,"lng":-73.597,"priceLevel":"$$$"},{"name":"Old Montreal (Vieux-Montréal)","tagline":"Montreal's historic cobblestone charm","description":"Old Montreal is the city's historic heart - cobblestone streets, 17th-century architecture, and waterfront dining. It's beautiful but touristy.","vibe":"Historic & Tourist","bestFor":"History lovers, first-time visitors, and those seeking classic Montreal","pros":["Historic beauty","Waterfront access","Great restaurants","Photogenic"],"cons":["Very touristy","Expensive","Less local feel"],"lat":45.508,"lng":-73.554,"priceLevel":"$$$$"},{"name":"Griffintown","tagline":"Montreal's modern condo frontier","description":"Griffintown is Montreal's newest neighborhood - former industrial area now packed with condos, restaurants, and young professionals. It's modern Montreal.","vibe":"Modern & Young Professional","bestFor":"Young professionals, foodies, and those seeking modern living","pros":["New condos","Good restaurants","Near downtown","Canal walks"],"cons":["No character yet","Construction","Generic feel"],"lat":45.495,"lng":-73.558,"priceLevel":"$$$"},{"name":"Jean-Talon/Little Italy","tagline":"Montreal's foodie paradise","description":"Jean-Talon Market is Montreal's culinary heart - the famous market, Italian heritage, and amazing restaurants. It's where Montreal's food culture shines brightest.","vibe":"Foodie & Italian","bestFor":"Food lovers, market enthusiasts, and those seeking culinary Montreal","pros":["Best market","Amazing food","Italian heritage","Local atmosphere"],"cons":["Far from downtown","Limited nightlife","Crowded weekends"],"lat":45.536,"lng":-73.614,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

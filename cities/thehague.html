@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Royal residence meets international justice","description":"The political capital features the Binnenhof parliament, royal palaces, and international courts. Museums, historic buildings, and shopping streets create sophisticated urban atmosphere.","vibe":"Political elegant","bestFor":"Culture seekers and history lovers","pros":["Historic buildings","World-class museums","Royal atmosphere","Good shopping"],"cons":["Expensive","Formal feel","Limited nightlife"],"lat":52.0799,"lng":4.3113,"priceLevel":"$$"},{"name":"Scheveningen","tagline":"Beach resort with year-round appeal","description":"The seaside district offers sandy beaches, the famous pier, and seafood restaurants. Summer brings crowds while winter attracts those seeking dramatic North Sea weather.","vibe":"Beach resort","bestFor":"Beach lovers and seafood fans","pros":["Beach access","Seafood restaurants","Year-round activity","Pier entertainment"],"cons":["Tourist-heavy","Weather dependent","Expensive summer"],"lat":52.1034,"lng":4.2712,"priceLevel":"$$"},{"name":"Zeeheldenkwartier","tagline":"Trendy neighborhood with local soul","description":"This gentrified area features independent boutiques, specialty coffee, and creative businesses. Young professionals and artists create the city's hippest neighborhood.","vibe":"Trendy local","bestFor":"Hipsters and creative types","pros":["Trendy cafes","Local boutiques","Creative energy","Neighborhood feel"],"cons":["Small area","Gentrified prices","Limited nightlife"],"lat":52.0845,"lng":4.2967,"priceLevel":"$$"},{"name":"Statenkwartier","tagline":"International community and embassy row","description":"Home to embassies and international organizations, this leafy area hosts The Hague's diverse expatriate community. International schools, restaurants, and services cater to global residents.","vibe":"International residential","bestFor":"Expats and diplomats","pros":["International community","Green streets","Good services","Family-friendly"],"cons":["Expensive","Quiet evenings","Car-dependent"],"lat":52.0912,"lng":4.2823,"priceLevel":"$$$"},{"name":"Schilderswijk","tagline":"Multicultural markets and diversity","description":"This diverse neighborhood offers authentic Turkish and Moroccan markets, affordable dining, and multicultural atmosphere. Those seeking real Dutch immigration story find it here.","vibe":"Multicultural diverse","bestFor":"Budget travelers and culture seekers","pros":["Affordable food","Authentic markets","Cultural diversity","Real neighborhood"],"cons":["Some tension","Less polished","Safety concerns"],"lat":52.0712,"lng":4.3234,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

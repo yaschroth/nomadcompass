@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Belgisches Viertel","tagline":"Cologne's hip creative quarter","description":"The Belgian Quarter is Cologne's coolest neighborhood - boutiques, galleries, and excellent cafes on streets named after Belgian cities. It's where Cologne's creative class lives and works.","vibe":"Creative & Hip","bestFor":"Creatives, young professionals, and those seeking trendy Cologne","pros":["Best boutiques","Great cafes","Creative scene","Central location"],"cons":["Expensive","Crowded weekends","Parking impossible"],"lat":50.938,"lng":6.935,"priceLevel":"$$$"},{"name":"Ehrenfeld","tagline":"Cologne's multicultural alternative hub","description":"Ehrenfeld is Cologne's most diverse neighborhood - Turkish shops, street art, and underground clubs. It's grittier than the Belgian Quarter but equally creative.","vibe":"Alternative & Multicultural","bestFor":"Alternative travelers, night owls, and those seeking diverse Cologne","pros":["Multicultural food","Street art","Underground clubs","Affordable"],"cons":["Rough areas","Industrial feel","Far from center"],"lat":50.95,"lng":6.91,"priceLevel":"$"},{"name":"Altstadt (Old Town)","tagline":"Cologne's historic beer hall heart","description":"The Altstadt is Cologne's tourist center - the Dom cathedral, Kölsch beer halls, and Rhine waterfront. It's touristy but essential for experiencing traditional Cologne.","vibe":"Historic & Tourist","bestFor":"First-time visitors, beer lovers, and those seeking traditional Cologne","pros":["Dom cathedral","Beer halls","Rhine views","Historic atmosphere"],"cons":["Very touristy","Crowded","Expensive beer halls"],"lat":50.9375,"lng":6.9603,"priceLevel":"$$"},{"name":"Südstadt","tagline":"Cologne's charming southern village","description":"Südstadt feels like a village within the city - beautiful Altbau apartments, local shops, and the Volksgarten park. It's Cologne's most livable residential neighborhood.","vibe":"Residential & Charming","bestFor":"Families, long-term stayers, and those seeking neighborhood life","pros":["Beautiful buildings","Great park","Local shops","Community feel"],"cons":["Quiet evenings","Expensive rent","Limited nightlife"],"lat":50.92,"lng":6.955,"priceLevel":"$$"},{"name":"Deutz","tagline":"Cologne's right-bank rising star","description":"Deutz sits across the Rhine with postcard views of the Dom. The Koelnmesse trade fair brings business travelers, while the Lanxess arena hosts major events.","vibe":"Business & Views","bestFor":"Business travelers, view seekers, and those wanting easy access","pros":["Best Dom views","Good hotels","Easy train access","Less crowded"],"cons":["Less character","Business-focused","Limited dining"],"lat":50.936,"lng":6.975,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

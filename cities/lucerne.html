@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt (Old Town)","tagline":"Lucerne's medieval lakeside jewel","description":"Lucerne's Altstadt is Switzerland's most picturesque - Chapel Bridge, painted buildings, and lake views. It's postcard-perfect Swiss charm.","vibe":"Medieval & Scenic","bestFor":"First-time visitors, photographers, and those seeking Swiss beauty","pros":["Chapel Bridge","Lake views","Medieval charm","Walkable"],"cons":["Very touristy","Expensive","Crowded"],"lat":47.0502,"lng":8.3093,"priceLevel":"$$$$"},{"name":"Neustadt (Right Bank)","tagline":"Lucerne's quieter residential side","description":"Across the Reuss River, Neustadt offers quieter streets, local restaurants, and easy Old Town access without the tourist crowds.","vibe":"Quiet & Residential","bestFor":"Peace seekers, long-term visitors, and those avoiding crowds","pros":["Quieter","Local feel","Near Old Town","Better value"],"cons":["Less scenic","Limited nightlife","Residential"],"lat":47.052,"lng":8.315,"priceLevel":"$$$"},{"name":"Tribschen","tagline":"Lucerne's lakeside cultural quarter","description":"Tribschen is where Wagner composed - lakeside walks, the Wagner Museum, and residential quiet. It's Lucerne's cultured escape.","vibe":"Cultural & Lakeside","bestFor":"Culture lovers, walkers, and those seeking lakeside peace","pros":["Wagner Museum","Lake walks","Peaceful","Views"],"cons":["Far from center","Limited dining","Residential"],"lat":47.04,"lng":8.32,"priceLevel":"$$$"},{"name":"Bahnhof/Station Area","tagline":"Lucerne's modern transit gateway","description":"Lucerne's station area is a modern gateway - KKL concert hall, lake ferries, and mountain train connections. It's where journeys begin.","vibe":"Modern & Transit","bestFor":"Transit connections, concert-goers, and those wanting modern Lucerne","pros":["KKL concert hall","Lake ferries","Train connections","Modern architecture"],"cons":["Not historic","Tourist crowds","Expensive"],"lat":47.05,"lng":8.31,"priceLevel":"$$$$"},{"name":"Pilatus/Mountain Access","tagline":"Lucerne's dramatic peak gateway","description":"The Pilatus area offers Lucerne's mountain adventure - world's steepest cogwheel railway, Alpine views, and dramatic landscapes.","vibe":"Mountain & Adventure","bestFor":"Mountain lovers, adventure seekers, and those wanting Alpine drama","pros":["Pilatus access","Cogwheel railway","Alpine views","Adventure"],"cons":["Weather dependent","Expensive","Day trip only"],"lat":46.979,"lng":8.255,"priceLevel":"$$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

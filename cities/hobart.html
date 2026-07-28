@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Salamanca","tagline":"Waterfront warehouses and Saturday market","description":"Salamanca is Hobart's heartbeat - Georgian sandstone warehouses, famous Saturday market, waterfront dining. Where Tasmania's capital shows its creative best.","vibe":"Historic & Creative","bestFor":"Market lovers, foodies, and art enthusiasts","pros":["Saturday market","Great restaurants","Historic warehouses","Waterfront"],"cons":["Weekend crowds","Expensive dining","Parking difficult"],"lat":-42.8864,"lng":147.3318,"priceLevel":"$$$"},{"name":"North Hobart","tagline":"Bohemian strip with local flavor","description":"North Hobart is Hobart's alternative heart - Elizabeth Street restaurants, bars, small shops. Where locals eat and drink away from tourism.","vibe":"Bohemian & Local","bestFor":"Foodies, local seekers, and alternative travelers","pros":["Great restaurants","Local atmosphere","Less touristy","Character"],"cons":["Basic area","Limited attractions","Evening focused"],"lat":-42.8712,"lng":147.3156,"priceLevel":"$$"},{"name":"Battery Point","tagline":"Colonial cottages and village charm","description":"Battery Point preserves colonial Hobart - sandstone cottages, Arthur Circus, village atmosphere. Where early Hobart survives in charming miniature.","vibe":"Historic & Charming","bestFor":"History lovers, architecture enthusiasts, and charming strolls","pros":["Beautiful cottages","Village atmosphere","Historic","Near Salamanca"],"cons":["Quiet evenings","Limited dining","Steep streets"],"lat":-42.8889,"lng":147.3312,"priceLevel":"$$$"},{"name":"MONA (Moorilla)","tagline":"Museum of Old and New Art precinct","description":"MONA is Hobart's cultural phenomenon - David Walsh's extraordinary museum, winery, accommodation. Where provocative art meets Tasmanian wine country.","vibe":"Cultural & Provocative","bestFor":"Art lovers, wine enthusiasts, and curious travelers","pros":["World-class museum","Winery","Unique experience","Ferry access"],"cons":["Entry fees","Confronting art","Half-day minimum"],"lat":-42.8312,"lng":147.2712,"priceLevel":"$$$"},{"name":"Mount Wellington / kunanyi","tagline":"Snow-capped summit above the city","description":"Mount Wellington rises above Hobart - wilderness at the city's edge, panoramic views, sudden weather changes. Tasmania's dramatic nature minutes from downtown.","vibe":"Natural & Wild","bestFor":"Hikers, view seekers, and nature lovers","pros":["Incredible views","Close to city","Wilderness","Free access"],"cons":["Weather changes rapidly","Snow in winter","Need transport"],"lat":-42.8967,"lng":147.2356,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

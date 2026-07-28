@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ciudad Vieja","tagline":"Colonial heart with art deco treasures","description":"Ciudad Vieja is Montevideo's historic heart - colonial architecture, art deco buildings, and the famous Mercado del Puerto. By day it's business and culture; by night, increasingly vibrant with bars and restaurants revitalizing old buildings.","vibe":"Historic & Cultural","bestFor":"History lovers, foodies, and nomads seeking Montevideo's most atmospheric neighborhood","pros":["Historic architecture","Mercado del Puerto","Cultural venues","Walkable"],"cons":["Quiet evenings","Safety concerns","Limited residential"],"lat":-34.908,"lng":-56.209,"priceLevel":"$$"},{"name":"Pocitos","tagline":"Beach life in Montevideo's most desirable neighborhood","description":"Pocitos is Montevideo's golden neighborhood - a curved beach, rambla promenade, and tree-lined streets filled with cafes and restaurants. It's where most expats and upper-middle-class Uruguayans live. Quality of life capital.","vibe":"Beach & Upscale","bestFor":"Beach lovers, families, and nomads seeking Montevideo's best quality of life","pros":["Beach access","Best restaurants","Safe and clean","Rambla walks"],"cons":["Most expensive","Quiet nightlife","Residential calm"],"lat":-34.921,"lng":-56.152,"priceLevel":"$$$"},{"name":"Punta Carretas","tagline":"Shopping and seaside elegance","description":"Punta Carretas is Pocitos' upscale neighbor - the famous shopping mall, golf club, and dramatic coastline. Elegant apartments and houses attract wealthy Uruguayans and diplomats. Montevideo at its most refined.","vibe":"Elegant & Coastal","bestFor":"Luxury seekers, golfers, and nomads wanting upscale seaside living","pros":["Coastal beauty","Shopping mall","Very safe","Elegant"],"cons":["Very expensive","Limited restaurants","Quiet"],"lat":-34.928,"lng":-56.161,"priceLevel":"$$$"},{"name":"Cordón","tagline":"Student energy near the university","description":"Cordón surrounds the university, bringing student energy and more affordable living. Cafes, bookshops, and cultural venues serve the academic crowd. More authentic and affordable than coastal neighborhoods.","vibe":"Student & Cultural","bestFor":"Students, academics, and budget nomads seeking central location","pros":["Affordable","Central location","Cultural venues","Student energy"],"cons":["Less polished","Busier streets","Limited beach access"],"lat":-34.906,"lng":-56.18,"priceLevel":"$"},{"name":"Carrasco","tagline":"Garden suburb with old-money elegance","description":"Carrasco is Montevideo's most exclusive suburb - grand houses, tree-lined streets, and proximity to the airport. It's where old money lives, offering space and tranquility far from the urban center.","vibe":"Exclusive & Suburban","bestFor":"Families, luxury seekers, and nomads wanting suburban elegance","pros":["Beautiful houses","Very safe","Near airport","Space"],"cons":["Far from center","Need car","Expensive"],"lat":-34.875,"lng":-56.051,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

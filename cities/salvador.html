@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Pelourinho","tagline":"Afro-Brazilian soul in colonial colors","description":"This UNESCO World Heritage center pulses with African-influenced culture, colorful colonial buildings, and live music every night. Capoeira circles, terreiro temples, and vibrant festivals define Brazil's most culturally rich neighborhood.","vibe":"Cultural vibrant","bestFor":"Culture lovers and music enthusiasts","pros":["UNESCO heritage","Live music nightly","Afro-Brazilian culture","Photogenic streets"],"cons":["Safety concerns","Tourist prices","Crowded streets"],"lat":-12.9734,"lng":-38.5089,"priceLevel":"$"},{"name":"Barra","tagline":"Beach boulevard with sunset lighthouse","description":"This popular neighborhood features the famous Farol da Barra lighthouse and beach promenade. Restaurants, hotels, and nightlife cluster around the scenic point where bay meets ocean.","vibe":"Beach lively","bestFor":"Beach lovers and sunset chasers","pros":["Beautiful beaches","Sunset views","Good restaurants","Walkable area"],"cons":["Crowded weekends","Tourist prices","Traffic congestion"],"lat":-13.0012,"lng":-38.5312,"priceLevel":"$$"},{"name":"Rio Vermelho","tagline":"Bohemian nights and creative days","description":"Salvador's bohemian neighborhood attracts artists, musicians, and young professionals. Live music venues, craft beer bars, and local restaurants create vibrant nightlife while maintaining residential charm.","vibe":"Bohemian creative","bestFor":"Nightlife seekers and creative types","pros":["Great nightlife","Music scene","Local atmosphere","Food variety"],"cons":["Noisy nights","Some safety issues","Limited parking"],"lat":-13.0123,"lng":-38.4867,"priceLevel":"$"},{"name":"Ondina","tagline":"Upscale beach living with Carnival views","description":"This affluent beachfront area hosts major Carnival parades along its wide avenue. Luxury hotels, condos, and restaurants serve those seeking comfort with beach access.","vibe":"Upscale beach","bestFor":"Carnival visitors and beach seekers","pros":["Beach access","Carnival circuit","Quality hotels","Safe area"],"cons":["Expensive","Crowded Carnival","Car-dependent"],"lat":-13.0067,"lng":-38.5023,"priceLevel":"$$"},{"name":"Itapuã","tagline":"Fishermen's village with musical legacy","description":"Made famous by Tom Jobim and Vinícius de Moraes, this former fishing village maintains local character. Weekend markets, fresh seafood, and Bahian hospitality attract those seeking authentic Salvador.","vibe":"Traditional coastal","bestFor":"Music lovers and authenticity seekers","pros":["Musical heritage","Fresh seafood","Local character","Affordable"],"cons":["Far from center","Basic infrastructure","Limited nightlife"],"lat":-12.9434,"lng":-38.3712,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

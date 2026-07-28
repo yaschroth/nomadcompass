@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bodrum Center","tagline":"Marina life meets ancient castle","description":"Central Bodrum wraps around the stunning marina and Castle of St. Peter - whitewashed buildings, seafood restaurants, and the famous Bar Street create Turkey's most glamorous coastal scene.","vibe":"Glamorous & Central","bestFor":"Nightlife lovers, marina enthusiasts, and those wanting classic Bodrum","pros":["Castle views","Marina atmosphere","Great nightlife","Walkable"],"cons":["Very touristy","Expensive","Noisy summer nights"],"lat":37.0343,"lng":27.4305,"priceLevel":"$$$"},{"name":"Gümbet","tagline":"Bodrum's party beach","description":"Just west of center, Gümbet is where the party happens - beach clubs, British tourists, and non-stop summer energy. It's loud, fun, and definitely not for quiet seekers.","vibe":"Party & Beach","bestFor":"Party people, young travelers, and beach club lovers","pros":["Beach clubs","Active nightlife","Water sports","Budget options"],"cons":["Very touristy","Loud","Package tourist crowd"],"lat":37.029,"lng":27.405,"priceLevel":"$$"},{"name":"Bitez","tagline":"Quieter beach sophistication","description":"Bitez offers a more refined beach experience - orange and tangerine groves backdrop a beautiful bay popular with windsurfers. It's Bodrum's relaxed alternative to the party scene.","vibe":"Relaxed & Sporty","bestFor":"Windsurfers, families, and those seeking calmer beaches","pros":["Beautiful bay","Windsurfing","Quieter","Good restaurants"],"cons":["Limited nightlife","Need transport","Seasonal"],"lat":37.026,"lng":27.383,"priceLevel":"$$"},{"name":"Yalıkavak","tagline":"Bodrum's upscale marina village","description":"Yalıkavak has transformed from fishing village to luxury destination - the massive Palmarina hosts mega-yachts while the old village retains some charm. It's where Bodrum goes premium.","vibe":"Luxury & Upscale","bestFor":"Luxury seekers, yacht enthusiasts, and upscale travelers","pros":["Palmarina","Upscale dining","Beautiful setting","Less crowded"],"cons":["Expensive","Far from center","Can feel exclusive"],"lat":37.104,"lng":27.292,"priceLevel":"$$$$"},{"name":"Türkbükü","tagline":"Turkish St. Tropez","description":"Türkbükü is Turkey's most exclusive beach destination - celebrities, Istanbul elite, and serious money create a scene of beach clubs and designer everything. Beautiful but intimidatingly chic.","vibe":"Exclusive & Celebrity","bestFor":"High-end travelers, celebrity spotters, and those with serious budgets","pros":["Exclusive atmosphere","Beautiful beach","Top restaurants","People watching"],"cons":["Very expensive","Pretentious","Hard to fit in"],"lat":37.115,"lng":27.365,"priceLevel":"$$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt (Old Town)","tagline":"Baroque beauty beneath the castle","description":"Heidelberg's Altstadt is German romanticism perfected - baroque buildings, Hauptstraße pedestrian zone, castle views. Where philosophers walked and poets dreamed.","vibe":"Historic & Romantic","bestFor":"Romantics, history lovers, and architecture enthusiasts","pros":["Stunning architecture","Castle views","Great restaurants","Walkable"],"cons":["Very touristy","Expensive","Crowded summers"],"lat":49.4094,"lng":8.7069,"priceLevel":"$$$"},{"name":"Neuenheim","tagline":"University quarter across the river","description":"Neuenheim is Heidelberg's academic heart - university campus, student cafés, intellectual atmosphere. Where Germany's oldest university shapes daily life.","vibe":"Academic & Lively","bestFor":"Students, academics, and young travelers","pros":["University atmosphere","Good cafés","Affordable dining","River views"],"cons":["Student housing","Quiet in breaks","Limited nightlife"],"lat":49.4156,"lng":8.6934,"priceLevel":"$$"},{"name":"Bergheim","tagline":"Alternative quarter with local character","description":"Bergheim offers Heidelberg's alternative side - independent shops, student bars, more affordable living. Where locals live beyond the tourist trail.","vibe":"Alternative & Local","bestFor":"Budget travelers, local seekers, and alternative crowd","pros":["Affordable","Local atmosphere","Good bars","Less touristy"],"cons":["Basic area","Far from old town","Limited attractions"],"lat":49.4089,"lng":8.6812,"priceLevel":"$"},{"name":"Philosophenweg Area","tagline":"Hillside walks with panoramic views","description":"The Philosophers' Walk climbs the north bank - panoramic old town views, gardens, contemplative atmosphere. Where Heidelberg's intellectuals found inspiration.","vibe":"Scenic & Contemplative","bestFor":"Walkers, philosophers, and view seekers","pros":["Incredible views","Peaceful walks","Historic path","Gardens"],"cons":["Steep climb","No amenities","Weather dependent"],"lat":49.4134,"lng":8.7112,"priceLevel":"$"},{"name":"Schloss (Castle) Area","tagline":"Romantic ruins above the city","description":"Heidelberg Castle is Germany's most romantic ruin - Renaissance palace, world's largest wine barrel, terraced gardens. The city's defining landmark.","vibe":"Historic & Romantic","bestFor":"History lovers, romantics, and photographers","pros":["Iconic castle","Great views","Historic depth","Beautiful gardens"],"cons":["Tourist crowds","Entry fees","Steep access"],"lat":49.4106,"lng":8.7156,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

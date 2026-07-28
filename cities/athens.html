@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Koukaki","tagline":"Acropolis views with local neighborhood soul","description":"Koukaki is Athens' best-kept secret - Acropolis views, local tavernas, and genuine neighborhood life. Artists and young professionals have discovered its charm, creating growing cafe scene without tourist overwhelm.","vibe":"Local & Authentic","bestFor":"Culture seekers, long-term nomads, and those wanting authentic Athens living","pros":["Acropolis views","Local tavernas","Growing cafes","Authentic feel"],"cons":["Limited metro","Basic infrastructure","Residential quiet"],"lat":37.9625,"lng":23.726,"priceLevel":"$$"},{"name":"Plaka","tagline":"Athens' ancient quarter beneath the Acropolis","description":"Plaka is Athens' oldest neighborhood - neoclassical buildings, ancient ruins, and tourist restaurants beneath the Acropolis. It's picturesque but touristy, perfect for short stays wanting historic atmosphere.","vibe":"Historic & Tourist","bestFor":"First-time visitors, history lovers, and nomads seeking iconic Athens experience","pros":["Acropolis access","Historic streets","Tourist amenities","Walkable"],"cons":["Very touristy","Expensive","Tourist traps","Crowded"],"lat":37.9725,"lng":23.73,"priceLevel":"$$$"},{"name":"Exarchia","tagline":"Athens' anarchist quarter with alternative energy","description":"Exarchia is Athens' alternative heart - anarchist politics, street art, and counterculture energy. Student population creates cafe culture and nightlife. It's edgy and not for everyone, but authentic and affordable.","vibe":"Alternative & Edgy","bestFor":"Creatives, students, and nomads seeking Athens' alternative scene","pros":["Alternative culture","Affordable","Great cafes","Student energy"],"cons":["Occasional unrest","Gritty areas","Not for families"],"lat":37.9867,"lng":23.7344,"priceLevel":"$"},{"name":"Kolonaki","tagline":"Athens' upscale shopping and dining destination","description":"Kolonaki is Athens' most upscale neighborhood - designer boutiques, expensive restaurants, and well-heeled residents beneath Lycabettus Hill. It's where wealthy Athenians shop and dine. Polished but pricey.","vibe":"Upscale & Polished","bestFor":"Luxury seekers, shoppers, and nomads wanting Athens' most refined area","pros":["Best shopping","Fine dining","Safe and clean","Lycabettus access"],"cons":["Very expensive","Less character","Pretentious"],"lat":37.98,"lng":23.74,"priceLevel":"$$$"},{"name":"Psyrri","tagline":"Athens' nightlife district with street art","description":"Psyrri is Athens' nightlife center - bars, clubs, and restaurants fill former workshop spaces. Street art covers walls, and the energy runs from afternoon coffee to late-night dancing. Central and social.","vibe":"Nightlife & Creative","bestFor":"Night owls, social nomads, and those seeking central Athens action","pros":["Best nightlife","Street art","Central location","Restaurant variety"],"cons":["Noisy nights","Tourist overflow","Can feel seedy"],"lat":37.978,"lng":23.723,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

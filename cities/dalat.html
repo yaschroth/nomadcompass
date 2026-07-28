@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center/Hồ Xuân Hương","tagline":"Dalat's lakeside colonial heart","description":"Central Dalat surrounds the lake - French colonial architecture, central market, and cool highland atmosphere. It's Dalat's scenic heart.","vibe":"Colonial & Scenic","bestFor":"First-time visitors, architecture lovers, and those seeking central Dalat","pros":["Lake views","Colonial architecture","Central market","Cool weather"],"cons":["Touristy","Crowded weekends","Traffic around lake"],"lat":11.94,"lng":108.438,"priceLevel":"$$"},{"name":"Ward 3/Coffee Zone","tagline":"Dalat's specialty coffee hub","description":"Ward 3 is Dalat's coffee heart - specialty roasters, hilltop cafes, and Vietnamese coffee culture. It's where Dalat's coffee scene thrives.","vibe":"Coffee & Trendy","bestFor":"Coffee lovers, cafe hoppers, and those seeking Dalat's coffee culture","pros":["Best coffee","Hilltop cafes","Cool atmosphere","Local roasters"],"cons":["Spread out","Need motorbike","Trendy prices"],"lat":11.95,"lng":108.45,"priceLevel":"$$"},{"name":"French Quarter/Tran Hung Dao","tagline":"Dalat's elegant villa district","description":"The French Quarter has Dalat's grandest villas - colonial architecture, boutique hotels, and elegant atmosphere. Dalat's romantic heritage.","vibe":"Colonial & Elegant","bestFor":"Architecture lovers, couples, and those seeking elegant Dalat","pros":["Beautiful villas","Boutique hotels","Romantic","Colonial heritage"],"cons":["Expensive stays","Spread out","Limited dining"],"lat":11.935,"lng":108.43,"priceLevel":"$$$"},{"name":"Night Market Area","tagline":"Dalat's evening street food hub","description":"The night market is Dalat's evening heart - street food, local shopping, and Vietnamese highland atmosphere. Essential Dalat experience.","vibe":"Market & Street Food","bestFor":"Foodies, market lovers, and those seeking local Dalat evenings","pros":["Great street food","Local shopping","Evening atmosphere","Affordable"],"cons":["Crowded","Weekend chaos","Limited seating"],"lat":11.941,"lng":108.44,"priceLevel":"$"},{"name":"Valley of Love Area","tagline":"Dalat's kitschy tourist zone","description":"Valley of Love area is Dalat's tourist attraction zone - kitschy parks, adventure activities, and domestic tourism. Very Vietnamese tourist culture.","vibe":"Tourist & Kitschy","bestFor":"Those curious about Vietnamese domestic tourism culture","pros":["Adventure activities","Parks","Unique experience","Cable car"],"cons":["Very kitschy","Entrance fees","Far from center"],"lat":11.96,"lng":108.432,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

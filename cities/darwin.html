@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"CBD / Mitchell Street","tagline":"Backpacker strip and tropical nightlife","description":"Darwin's CBD centers on Mitchell Street - backpacker hostels, bars, and tropical nightlife. Australia's gateway to the Top End with frontier energy.","vibe":"Backpacker & Lively","bestFor":"Backpackers, nightlife seekers, and budget travelers","pros":["Great nightlife","Backpacker hub","Central location","Wet season energy"],"cons":["Can be rowdy","Tourist-focused","Hot and humid"],"lat":-12.4634,"lng":130.8456,"priceLevel":"$$"},{"name":"Waterfront Precinct","tagline":"Modern development with wave lagoon","description":"Darwin Waterfront is the city's modern face - wave lagoon, restaurants, cruise terminal. Where Darwin shows its contemporary ambitions.","vibe":"Modern & Family","bestFor":"Families, cruise passengers, and modern seekers","pros":["Wave lagoon","Safe swimming","Good restaurants","Modern facilities"],"cons":["Artificial feel","Expensive dining","Limited nightlife"],"lat":-12.4534,"lng":130.8512,"priceLevel":"$$$"},{"name":"Cullen Bay","tagline":"Marina lifestyle and sunset dining","description":"Cullen Bay offers Darwin's marina atmosphere - waterfront apartments, sunset dining, boat access. Where locals and visitors enjoy harbor views.","vibe":"Marina & Upscale","bestFor":"Foodies, sunset lovers, and marina enthusiasts","pros":["Great restaurants","Sunset views","Marina atmosphere","Safe area"],"cons":["Expensive","Limited activities","Residential feel"],"lat":-12.4412,"lng":130.8289,"priceLevel":"$$$"},{"name":"Mindil Beach","tagline":"Famous sunset markets and beach vibes","description":"Mindil Beach is Darwin institution - famous sunset markets (dry season), beach swimming, multicultural food. Where Darwin shows its diversity and tropical lifestyle.","vibe":"Market & Beach","bestFor":"Market lovers, foodies, and sunset seekers","pros":["Sunset markets","Beach access","Multicultural food","Free entertainment"],"cons":["Seasonal markets","Crowded market nights","Crocodile warnings"],"lat":-12.4312,"lng":130.8389,"priceLevel":"$$"},{"name":"Fannie Bay","tagline":"Museums and botanical gardens","description":"Fannie Bay holds Darwin's cultural side - Museum of Northern Territory, botanical gardens, casino. Where history and nature meet in tropical surroundings.","vibe":"Cultural & Green","bestFor":"Culture seekers, nature lovers, and families","pros":["Great museum","Botanical gardens","Casino","Cultural depth"],"cons":["Spread out","Limited dining","Need transport"],"lat":-12.4534,"lng":130.8412,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

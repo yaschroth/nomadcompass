@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Piața Mare","tagline":"Grand square with watching eyes","description":"Sibiu's magnificent main square features colorful baroque buildings with distinctive 'eyes' in the roofs. Cafes, the Brukenthal Palace, and historic council tower create one of Romania's most beautiful spaces.","vibe":"Historic grand","bestFor":"Culture lovers and photographers","pros":["Stunning architecture","Cultural sites","Great cafes","Central location"],"cons":["Tourist prices","Crowded summer","Limited parking"],"lat":45.7972,"lng":24.1512,"priceLevel":"$$"},{"name":"Lower Town","tagline":"Artisan quarter with medieval walls","description":"Below the citadel, this historic neighborhood features craftsmen's houses, medieval towers, and the famous Liars' Bridge. Local workshops, small museums, and authentic restaurants attract curious visitors.","vibe":"Medieval artisan","bestFor":"History buffs and wanderers","pros":["Medieval atmosphere","Less crowded","Artisan shops","Authentic feel"],"cons":["Steep streets","Limited services","Basic infrastructure"],"lat":45.7934,"lng":24.1534,"priceLevel":"$"},{"name":"Strada Nicolae Bălcescu","tagline":"Shopping promenade with local life","description":"This main commercial street connects the historic squares to modern Sibiu. Local shops, cafes, and everyday commerce create a blend of tourism and authentic Romanian life.","vibe":"Commercial local","bestFor":"Shoppers and people watchers","pros":["Shopping options","Local atmosphere","Central location","Good connections"],"cons":["Crowded shopping hours","Mixed quality","Tourist shops"],"lat":45.7989,"lng":24.1467,"priceLevel":"$"},{"name":"Turnișor","tagline":"Residential calm with fortress views","description":"This residential neighborhood offers affordable living near the historic center. Local markets, neighborhood restaurants, and tree-lined streets attract long-term visitors and working professionals.","vibe":"Residential peaceful","bestFor":"Long-term stays and budget travelers","pros":["Affordable housing","Local markets","Near center","Quiet streets"],"cons":["Less charming","Basic amenities","Romanian helpful"],"lat":45.7889,"lng":24.1623,"priceLevel":"$"},{"name":"Păltiniș Area","tagline":"Mountain resort gateway","description":"Romania's oldest mountain resort above Sibiu offers skiing, hiking, and alpine scenery. Day trips and overnight stays provide escape to fresh mountain air and Carpathian nature.","vibe":"Mountain resort","bestFor":"Nature lovers and outdoor enthusiasts","pros":["Mountain scenery","Skiing access","Fresh air","Nature activities"],"cons":["Far from city","Seasonal appeal","Limited services"],"lat":45.6723,"lng":23.9312,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

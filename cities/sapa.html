@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Sapa Town Center","tagline":"Sapa's misty mountain hub","description":"Sapa town is the base for rice terrace treks - hotels, restaurants, and tour operators packed into a foggy mountain town. It's touristy but convenient.","vibe":"Mountain & Tourist","bestFor":"Trekkers, first-time visitors, and those wanting convenience","pros":["Trek starting point","Hotels","Restaurants","Market"],"cons":["Very touristy","Persistent vendors","Overdeveloped"],"lat":22.3364,"lng":103.8438,"priceLevel":"$"},{"name":"Cat Cat Village","tagline":"Sapa's closest H'mong village","description":"Cat Cat is the nearest ethnic minority village - H'mong culture, waterfalls, and easy walking distance from town. It's touristy but accessible.","vibe":"Cultural & Accessible","bestFor":"Easy trekkers, culture seekers, and those with limited time","pros":["Walking distance","H'mong culture","Waterfall","Easy access"],"cons":["Very touristy","Commercialized","Entrance fee"],"lat":22.32,"lng":103.835,"priceLevel":"$"},{"name":"Ta Van Village","tagline":"Sapa's Giay homestay valley","description":"Ta Van sits in the Muong Hoa Valley - Giay ethnic minority, rice terraces, and authentic homestays. It's the sweet spot between access and authenticity.","vibe":"Authentic & Scenic","bestFor":"Homestay seekers, photographers, and those wanting authentic Sapa","pros":["Stunning terraces","Authentic homestays","Less touristy","Valley views"],"cons":["Limited facilities","Trek or drive access","Basic comfort"],"lat":22.303,"lng":103.87,"priceLevel":"$"},{"name":"Lao Chai Village","tagline":"Sapa's Black H'mong heartland","description":"Lao Chai is a larger Black H'mong village - traditional life, rice terraces, and the start of many treks. More authentic than Cat Cat but still accessible.","vibe":"Traditional & Trekking","bestFor":"Serious trekkers, culture seekers, and those wanting H'mong immersion","pros":["Traditional life","Trek starting point","Less commercialized","Authentic"],"cons":["Basic facilities","Persistent guides","Muddy paths"],"lat":22.31,"lng":103.855,"priceLevel":"$"},{"name":"Fansipan Area","tagline":"Sapa's summit cable car zone","description":"The Fansipan cable car area offers Vietnam's highest peak access - modern infrastructure, mountain views, and day-trip summiting without the trek.","vibe":"Mountain & Modern","bestFor":"Summit seekers, cable car riders, and those wanting peak views","pros":["Fansipan access","Cable car","Mountain views","Modern facilities"],"cons":["Expensive","Crowded","Less authentic"],"lat":22.303,"lng":103.775,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Bohemian beach town heart","description":"The colorful center pulses with surf shops, boutiques, and restaurants spilling onto cobblestone streets. International visitors and Mexican artists create a vibrant creative community around the main plaza.","vibe":"Bohemian colorful","bestFor":"Social travelers and creative types","pros":["Vibrant atmosphere","Walkable center","Great restaurants","Art scene"],"cons":["Very crowded","Expensive","Noisy nights"],"lat":20.8689,"lng":-105.4389,"priceLevel":"$$"},{"name":"North Beach","tagline":"Surfer sanctuary with perfect breaks","description":"The main beach north of the river mouth offers consistent surf breaks and the town's best swimming. Surf schools, beach bars, and locals selling coconuts create quintessential Mexican beach vibes.","vibe":"Surf relaxed","bestFor":"Surfers and beach lovers","pros":["Great surf","Beach activities","Social scene","Sunset views"],"cons":["Crowded beach","Strong currents","Vendor pressure"],"lat":20.8712,"lng":-105.4412,"priceLevel":"$$"},{"name":"South Side","tagline":"Local neighborhood with authenticity","description":"Across the river, this more Mexican neighborhood offers affordable tacos, local tiendas, and residential calm. Long-term visitors and budget travelers find community beyond the tourist center.","vibe":"Local authentic","bestFor":"Budget travelers and long-term stays","pros":["Affordable options","Local restaurants","Quieter streets","Authentic feel"],"cons":["River crossing","Basic amenities","Less polished"],"lat":20.8623,"lng":-105.4367,"priceLevel":"$"},{"name":"Patzcuarito","tagline":"Jungle hillside retreat","description":"The hills above town offer jungle properties, yoga retreats, and stunning bay views. Those seeking nature, privacy, and wellness find sanctuary away from the party below.","vibe":"Jungle wellness","bestFor":"Wellness seekers and nature lovers","pros":["Nature setting","Bay views","Yoga retreats","Peaceful escape"],"cons":["Steep access","Needs vehicle","Isolated"],"lat":20.8756,"lng":-105.4312,"priceLevel":"$$"},{"name":"Carricitos Beach","tagline":"Hidden cove for the adventurous","description":"This secluded beach north of town requires a jungle hike to access. Dedicated travelers find pristine sands, better surf, and escape from Sayulita's crowds.","vibe":"Secluded natural","bestFor":"Adventure seekers and experienced surfers","pros":["Secluded beach","Better waves","Natural beauty","No crowds"],"cons":["Difficult access","No services","Strong currents"],"lat":20.8834,"lng":-105.4423,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

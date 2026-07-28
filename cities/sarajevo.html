@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Baščaršija","tagline":"Ottoman soul in the heart of Europe","description":"The old Ottoman bazaar features copper workshops, mosque courtyards, and the famous Sebilj fountain. Turkish coffee, ćevapi, and centuries of craft tradition create a living museum of Balkan heritage.","vibe":"Ottoman historic","bestFor":"History lovers and culture seekers","pros":["Historic atmosphere","Traditional crafts","Great food","Photogenic streets"],"cons":["Very touristy","Crowded days","Tourist prices"],"lat":43.8598,"lng":18.4312,"priceLevel":"$"},{"name":"Ferhadija","tagline":"Where empires meet on one street","description":"The famous pedestrian street transitions from Ottoman to Austro-Hungarian architecture in meters. Cafes, shops, and the eternal flame create social gathering space for all of Sarajevo.","vibe":"Urban social","bestFor":"People watchers and shoppers","pros":["Unique architecture","Great cafes","Social atmosphere","Shopping options"],"cons":["Crowded evenings","Tourist shops","Limited parking"],"lat":43.8589,"lng":18.4234,"priceLevel":"$$"},{"name":"Marijin Dvor","tagline":"Modern center with brutalist charm","description":"The administrative and business center features Yugoslav-era architecture, the National Museum, and modern offices. Hotels and restaurants serve business travelers while parks provide green space.","vibe":"Modern business","bestFor":"Business travelers and museum goers","pros":["Central location","Museums nearby","Modern amenities","Good hotels"],"cons":["Concrete heavy","Less charming","Office atmosphere"],"lat":43.8567,"lng":18.4089,"priceLevel":"$$"},{"name":"Grbavica","tagline":"Residential recovery and renewal","description":"This once war-torn neighborhood has rebuilt into a residential area with parks, local markets, and everyday Sarajevan life. Visitors seeking authenticity find welcoming neighbors and affordable living.","vibe":"Residential authentic","bestFor":"Long-term stays seeking local life","pros":["Affordable rents","Local atmosphere","Parks nearby","Authentic feel"],"cons":["War history visible","Basic amenities","Far from attractions"],"lat":43.8456,"lng":18.3978,"priceLevel":"$"},{"name":"Ilidža","tagline":"Spa suburb with spring origins","description":"At the source of the Bosna River, this suburb offers parks, spas, and access to the Vrelo Bosne spring. Horse-drawn carriages take visitors through tree-lined avenues to nature areas.","vibe":"Spa suburban","bestFor":"Nature lovers and relaxation seekers","pros":["Natural springs","Park access","Spa facilities","Quieter atmosphere"],"cons":["Far from center","Limited nightlife","Needs transport"],"lat":43.8312,"lng":18.3123,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

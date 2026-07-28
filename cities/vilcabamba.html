@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Town Center","tagline":"Valley of longevity with peaceful plaza","description":"The small town center features the main plaza, a few restaurants, and the laid-back atmosphere that has attracted longevity seekers for decades. Expat retirees and backpackers share the tranquil space.","vibe":"Tranquil small-town","bestFor":"Peace seekers and wellness travelers","pros":["Peaceful atmosphere","Wellness focus","Affordable","Natural beauty"],"cons":["Very small","Limited services","Quiet nightlife"],"lat":-4.2589,"lng":-79.2267,"priceLevel":"$"},{"name":"Yamburara Alto","tagline":"Hillside views and eco-retreats","description":"Above town, this area hosts eco-lodges, retreat centers, and private homes with valley views. Those seeking total peace find sanctuary in the cloud forest surroundings.","vibe":"Retreat natural","bestFor":"Retreat seekers and nature lovers","pros":["Valley views","Retreat centers","Nature access","Complete peace"],"cons":["Isolated","Basic access roads","No services"],"lat":-4.2534,"lng":-79.2312,"priceLevel":"$$"},{"name":"Quinara Road","tagline":"River valley with organic farms","description":"Along the road toward Quinara, organic farms, guesthouses, and alternative communities dot the river valley. Self-sufficient living and permaculture attract like-minded settlers.","vibe":"Alternative farming","bestFor":"Permaculture enthusiasts and long-term settlers","pros":["Organic farms","Alternative community","River access","Sustainable living"],"cons":["Very remote","Basic living","Limited options"],"lat":-4.2689,"lng":-79.2423,"priceLevel":"$"},{"name":"Podocarpus Area","tagline":"Gateway to national park wilderness","description":"Near the national park entrance, this area provides access to pristine cloud forest and hiking trails. Bird watchers and nature lovers find Ecuador's biodiversity.","vibe":"Nature gateway","bestFor":"Hikers and bird watchers","pros":["Park access","Biodiversity","Hiking trails","Wildlife"],"cons":["Remote location","Basic facilities","Weather dependent"],"lat":-4.2789,"lng":-79.2134,"priceLevel":"$"},{"name":"Malacatos Road","tagline":"Valley connection with local life","description":"The road toward Malacatos passes through agricultural areas with local restaurants and affordable accommodations. Travelers seeking the most budget options base here.","vibe":"Budget rural","bestFor":"Budget travelers and rural explorers","pros":["Lowest prices","Local restaurants","Agricultural scenery","Authentic Ecuador"],"cons":["Basic everything","Needs transport","Limited amenities"],"lat":-4.2412,"lng":-79.2145,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

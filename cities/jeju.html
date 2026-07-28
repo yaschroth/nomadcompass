@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Jeju City","tagline":"Island capital with black pork BBQ","description":"Jeju City is the island's urban center - airport gateway, black pork restaurants, departure point for exploration. Where to base before discovering the island.","vibe":"Urban & Gateway","bestFor":"Practical visitors, foodies, and transit stays","pros":["Airport access","Good restaurants","Accommodation range","Transport hub"],"cons":["Not scenic","Urban sprawl","Traffic congestion"],"lat":33.4996,"lng":126.5312,"priceLevel":"$$"},{"name":"Seogwipo","tagline":"Southern coast with natural wonders","description":"Seogwipo is Jeju's scenic south - waterfalls, Jungmun beach, coastal walks. Where the island's natural beauty concentrates.","vibe":"Natural & Scenic","bestFor":"Nature lovers, waterfall seekers, and scenic travelers","pros":["Beautiful nature","Waterfalls","Coastal walks","Beaches"],"cons":["Far from airport","Limited nightlife","Spread out"],"lat":33.2497,"lng":126.5612,"priceLevel":"$$"},{"name":"Hallasan National Park","tagline":"Sacred mountain at island center","description":"Hallasan is Jeju's volcanic heart - Korea's highest peak, crater lake, hiking trails. Where serious hikers tackle the island's UNESCO-listed volcano.","vibe":"Mountain & Sacred","bestFor":"Hikers, nature lovers, and mountain enthusiasts","pros":["Stunning hiking","Crater lake","UNESCO site","Wildlife"],"cons":["Weather dependent","Strenuous hikes","Crowded trails"],"lat":33.3617,"lng":126.5292,"priceLevel":"$"},{"name":"Udo Island","tagline":"Island off an island with emerald waters","description":"Udo is Jeju's island escape - ferry trip to peanut-shaped isle with coral beaches. Where to escape the escape and find ultimate island peace.","vibe":"Island & Peaceful","bestFor":"Island hoppers, beach lovers, and peace seekers","pros":["Beautiful beaches","Island vibe","Quieter","Unique landscape"],"cons":["Ferry dependent","Limited accommodation","Day-trip crowds"],"lat":33.5089,"lng":126.9512,"priceLevel":"$$"},{"name":"Aewol","tagline":"Café culture and sunset coast","description":"Aewol is Jeju's trendy west coast - Instagram cafés, sunset views, Hallasan backdrop. Where Seoul style meets island relaxation.","vibe":"Trendy & Scenic","bestFor":"Café lovers, sunset seekers, and Instagram travelers","pros":["Amazing cafés","Sunset views","Scenic coast","Trendy vibe"],"cons":["Crowded weekends","Instagrammer crowds","Overpriced"],"lat":33.4712,"lng":126.3234,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

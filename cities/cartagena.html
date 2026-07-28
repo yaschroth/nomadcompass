@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico (Walled City)","tagline":"Cartagena's UNESCO colonial jewel","description":"The Walled City is Cartagena's heart - colonial architecture, colorful streets, and romantic plazas. It's UNESCO-listed and absolutely essential.","vibe":"Colonial & Romantic","bestFor":"History lovers, romantics, and those seeking iconic Cartagena","pros":["Stunning architecture","Historic atmosphere","Great restaurants","Walkable"],"cons":["Very touristy","Expensive","Aggressive vendors"],"lat":10.4236,"lng":-75.548,"priceLevel":"$$$"},{"name":"Getsemaní","tagline":"Cartagena's colorful artistic revival","description":"Getsemaní is Cartagena's coolest neighborhood - street art, boutique hostels, and local character. It's where the city's creative energy thrives.","vibe":"Artistic & Local","bestFor":"Backpackers, artists, and those seeking authentic Cartagena","pros":["Street art","Local vibes","Affordable","Best nightlife"],"cons":["Can be noisy","Some safety concerns","Gentrifying"],"lat":10.422,"lng":-75.552,"priceLevel":"$$"},{"name":"Bocagrande","tagline":"Cartagena's modern beach strip","description":"Bocagrande is Cartagena's Miami - high-rise hotels, beach access, and modern amenities. It's less charming but offers beaches and infrastructure.","vibe":"Beach & Modern","bestFor":"Beach lovers, families, and those seeking modern comfort","pros":["Beach access","Modern hotels","Good restaurants","Safe"],"cons":["No character","Beach vendors","Far from old city"],"lat":10.4,"lng":-75.556,"priceLevel":"$$$"},{"name":"San Diego","tagline":"Cartagena's quieter colonial corner","description":"San Diego is the Walled City's peaceful side - residential colonial streets, local restaurants, and authentic atmosphere without the tourist crowds.","vibe":"Quiet Colonial","bestFor":"Long-term stayers, those seeking quiet colonial charm","pros":["Quieter streets","Local feel","Colonial beauty","Good restaurants"],"cons":["Limited nightlife","Fewer shops","Can be too quiet"],"lat":10.427,"lng":-75.551,"priceLevel":"$$"},{"name":"Castillogrande","tagline":"Cartagena's upscale residential peninsula","description":"Castillogrande is Cartagena's exclusive peninsula - luxury apartments, yacht club, and quiet beaches. It's residential and upscale.","vibe":"Upscale & Residential","bestFor":"Luxury travelers, long-term stayers seeking quiet","pros":["Quiet beaches","Upscale living","Safe","Good restaurants"],"cons":["Far from attractions","Limited nightlife","Requires transport"],"lat":10.395,"lng":-75.565,"priceLevel":"$$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

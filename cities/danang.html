@@ -1479,6 +1479,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Mỹ An / Mỹ Khê Beach","tagline":"Vietnam's most beautiful urban beach","description":"Mỹ Khê is consistently rated one of the world's best urban beaches - white sand, warm water, and increasingly good infrastructure. The Mỹ An area behind the beach offers cafes, restaurants, and modern apartments. Da Nang's default nomad choice.","vibe":"Beach & Modern","bestFor":"Beach lovers, surfers, and nomads seeking Vietnam's best beach-city balance","pros":["Stunning beach","Good surfing","Modern cafes","Clean"],"cons":["Getting touristy","Rising prices","Limited nightlife"],"lat":16.0544,"lng":108.2458,"priceLevel":"$$"},{"name":"An Thượng","tagline":"Backpacker beach area turning nomad hub","description":"An Thượng is Da Nang's backpacker-turned-digital-nomad neighborhood. Budget accommodation, beach bars, and international restaurants line the streets. It's more developed than other beach areas, with growing coworking options.","vibe":"Backpacker & Social","bestFor":"Budget nomads, social travelers, and those seeking established tourist infrastructure","pros":["Budget friendly","Social scene","Beach close","Restaurants"],"cons":["Backpacker vibe","Can feel touristy","Party noise"],"lat":16.063,"lng":108.246,"priceLevel":"$"},{"name":"Sơn Trà Peninsula","tagline":"Luxury resorts and monkey mountain nature","description":"Sơn Trà is Da Nang's natural escape - a forested peninsula with luxury resorts, hiking trails, and the famous Linh Ung Pagoda. It's isolated but spectacular, perfect for those prioritizing nature and peace over convenience.","vibe":"Nature & Luxury","bestFor":"Nature lovers, hikers, and nomads seeking peace with spectacular scenery","pros":["Incredible nature","Beautiful beaches","Monkey sightings","Peaceful"],"cons":["Very isolated","Need transport","Limited services","Expensive resorts"],"lat":16.1178,"lng":108.278,"priceLevel":"$$$"},{"name":"Hải Châu (City Center)","tagline":"Da Nang's downtown with Dragon Bridge views","description":"Hải Châu is Da Nang's city center - the Dragon Bridge, Han River promenade, and local Vietnamese life. Less touristy than the beach areas, it offers authentic city experience with growing cafe scene and easy transport.","vibe":"Urban & Authentic","bestFor":"Culture seekers, city lovers, and nomads who prefer urban energy over beach","pros":["Dragon Bridge","Local life","Good value","Central transport"],"cons":["No beach access","Less scenic","More traffic"],"lat":16.0678,"lng":108.2208,"priceLevel":"$"},{"name":"Ngũ Hành Sơn (Marble Mountains)","tagline":"Spiritual mountains between Da Nang and Hoi An","description":"The Marble Mountains area sits between Da Nang and Hoi An, offering the best of both. Beach access, mountain hiking, and easy day trips to Hoi An's ancient town. Growing expat community discovering this sweet spot location.","vibe":"Scenic & Strategic","bestFor":"Explorers, photographers, and nomads wanting access to both Da Nang and Hoi An","pros":["Beach and mountains","Near Hoi An","Less crowded","Good value"],"cons":["Between cities","Need transport","Limited nightlife"],"lat":16.003,"lng":108.263,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1530,6 +1531,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

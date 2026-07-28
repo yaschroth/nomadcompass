@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Binnenstad (City Centre)","tagline":"Historic center with youthful energy","description":"Groningen's center is the Netherlands' youngest city center - medieval streets filled with students, cafes, and bicycles. Where Dutch charm meets university energy.","vibe":"Historic & Young","bestFor":"Students, café lovers, and urban explorers","pros":["Beautiful center","Great cafés","Bike-friendly","Young atmosphere"],"cons":["Crowded","Student parties","Limited parking"],"lat":53.2194,"lng":6.5665,"priceLevel":"$$"},{"name":"Grote Markt","tagline":"Main square with Martinitoren views","description":"Grote Markt is Groningen's heart - Martinitoren church tower, market days, terrace cafés. Where the city gathers beneath the northern Netherlands' tallest church.","vibe":"Central & Social","bestFor":"People watchers, market lovers, and central location seekers","pros":["Central location","Markets","Terrace cafés","Historic tower"],"cons":["Touristy","Expensive terraces","Crowded"],"lat":53.219,"lng":6.5681,"priceLevel":"$$"},{"name":"Noorderplantsoen Area","tagline":"Park neighborhood with student housing","description":"Noorderplantsoen surrounds Groningen's main park - student housing, local bars, relaxed atmosphere. Where students live and the city relaxes.","vibe":"Residential & Green","bestFor":"Students, park lovers, and residential seekers","pros":["Beautiful park","Local bars","Student vibes","Affordable"],"cons":["Student housing quality","Far from center","Quiet weekends"],"lat":53.2267,"lng":6.5589,"priceLevel":"$"},{"name":"Paddepoel / Zernike","tagline":"University campus on the outskirts","description":"Zernike campus hosts Groningen University's modern facilities - research institutes, student life, innovation hub. Academic Groningen at work.","vibe":"Academic & Modern","bestFor":"Students, researchers, and academic visitors","pros":["University facilities","Modern campus","Bike paths","Affordable"],"cons":["Far from center","Dead weekends","Campus atmosphere"],"lat":53.2412,"lng":6.5334,"priceLevel":"$"},{"name":"Oosterpoort","tagline":"Trendy area with converted warehouses","description":"Oosterpoort is Groningen's emerging district - old warehouses becoming cafés, young professionals arriving. Where the city's transformation continues.","vibe":"Trendy & Emerging","bestFor":"Creatives, young professionals, and trend seekers","pros":["Up-and-coming","Good cafés","Character","Affordable still"],"cons":["Still developing","Limited amenities","East of center"],"lat":53.2156,"lng":6.5812,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

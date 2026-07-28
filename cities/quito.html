@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Quito's UNESCO colonial jewel","description":"Quito's historic center is South America's best-preserved colonial district - churches, plazas, and 16th-century architecture. It's UNESCO-listed and absolutely stunning.","vibe":"Historic & Colonial","bestFor":"History lovers, architecture buffs, and culture seekers","pros":["Stunning architecture","Museums","Authentic atmosphere","Affordable"],"cons":["Safety concerns","Altitude challenging","Limited nightlife"],"lat":-0.22,"lng":-78.513,"priceLevel":"$"},{"name":"La Mariscal","tagline":"Quito's gringo backpacker zone","description":"La Mariscal (Gringolandia) is Quito's tourist hub - hostels, travel agencies, and Plaza Foch nightlife. It's touristy but convenient for first-time visitors.","vibe":"Tourist & Backpacker","bestFor":"Backpackers, first-time visitors, and those seeking convenience","pros":["Travel infrastructure","Nightlife","Hostels","English spoken"],"cons":["Very touristy","Safety concerns","Not authentic"],"lat":-0.207,"lng":-78.493,"priceLevel":"$$"},{"name":"La Floresta","tagline":"Quito's artistic bohemian quarter","description":"La Floresta is Quito's emerging cool - street art, independent cafes, and creative energy. It's where Quito's artists and young professionals are creating something new.","vibe":"Artistic & Emerging","bestFor":"Creatives, coffee lovers, and those seeking alternative Quito","pros":["Street art","Great cafes","Creative scene","Less touristy"],"cons":["Spread out","Variable areas","Limited late night"],"lat":-0.202,"lng":-78.483,"priceLevel":"$"},{"name":"González Suárez","tagline":"Quito's upscale modern district","description":"González Suárez is Quito's most upscale residential area - modern apartments, stunning views, and expat community. It's safe, comfortable, and very different from colonial Quito.","vibe":"Upscale & Modern","bestFor":"Expats, professionals, and those seeking safety and comfort","pros":["Safe area","Great views","Modern amenities","Good restaurants"],"cons":["Expensive","Isolated feel","Car dependent"],"lat":-0.195,"lng":-78.488,"priceLevel":"$$$"},{"name":"Cumbayá","tagline":"Quito's sunny valley escape","description":"Cumbayá sits in a valley below Quito - sunnier weather, university campus, and affluent residents. It's where Quiteños escape the city chill.","vibe":"Suburban & Sunny","bestFor":"Families, university visitors, and those wanting warmer weather","pros":["Warmer weather","Good restaurants","University area","Modern malls"],"cons":["Traffic to city","Suburban feel","Car needed"],"lat":-0.205,"lng":-78.435,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

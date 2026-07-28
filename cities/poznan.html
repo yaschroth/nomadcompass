@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Stare Miasto","tagline":"Renaissance splendor in the Old Town","description":"Poznań's magnificent Old Market Square features colorful merchant houses and the famous mechanical goats clock. Historic cellars now house craft beer bars while the upper floors host creative offices.","vibe":"Historic vibrant","bestFor":"First-time visitors and culture lovers","pros":["Stunning architecture","Vibrant nightlife","Historic atmosphere","Central location"],"cons":["Tourist prices","Crowded weekends","Party noise at night"],"lat":52.4082,"lng":16.9335,"priceLevel":"$$"},{"name":"Jeżyce","tagline":"Hipster haven with creative energy","description":"This trendy neighborhood northwest of center has transformed into Poznań's creative district. Independent coffee shops, vintage stores, and street art murals attract young professionals and artists.","vibe":"Artsy bohemian","bestFor":"Creatives and young professionals","pros":["Trendy cafes","Affordable rents","Local character","Art scene"],"cons":["Some rough edges","Limited parking","Gentrifying fast"],"lat":52.4167,"lng":16.9089,"priceLevel":"$"},{"name":"Wilda","tagline":"Post-industrial revival district","description":"Former industrial areas have been converted into loft spaces, galleries, and tech offices. The neighborhood maintains gritty authenticity while attracting creative businesses and affordable housing seekers.","vibe":"Industrial creative","bestFor":"Budget-conscious creatives and startups","pros":["Affordable rents","Large spaces","Authentic feel","Good transport"],"cons":["Still developing","Less scenic","Some areas neglected"],"lat":52.3956,"lng":16.9234,"priceLevel":"$"},{"name":"Grunwald","tagline":"Green oasis with university vibes","description":"Home to parks and university facilities, this area offers a balance of nature and academic atmosphere. Student-friendly prices and green spaces make it popular with long-term residents.","vibe":"Academic green","bestFor":"Students and nature lovers","pros":["Parks nearby","Student prices","Quiet atmosphere","University access"],"cons":["Far from nightlife","Spread out","Less dining options"],"lat":52.4012,"lng":16.8932,"priceLevel":"$"},{"name":"Łazarz","tagline":"Local neighborhood with market charm","description":"Centered around the Jeżycki market, this residential area offers authentic Polish neighborhood life. Morning market visits and traditional bakeries provide daily rhythms away from tourist areas.","vibe":"Authentic local","bestFor":"Long-term stays seeking local life","pros":["Daily market","Local feel","Affordable","Good connections"],"cons":["Tourist-unfriendly","Basic amenities","Polish language needed"],"lat":52.4023,"lng":16.9156,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

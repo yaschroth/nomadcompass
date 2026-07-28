@@ -1419,6 +1419,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Surry Hills","tagline":"Sydney's creative heart with the best brunch","description":"Surry Hills is Sydney's most creative neighborhood - terrace houses, laneway cafes, and some of the city's best restaurants. The brunch scene is legendary, galleries dot the streets, and it's walkable to the CBD. Sydney's default nomad choice.","vibe":"Creative & Foodie","bestFor":"Foodies, creatives, and nomads seeking Sydney's most walkable inner-city living","pros":["Best cafes","Walkable to CBD","Great restaurants","Creative energy"],"cons":["Very expensive","Limited parking","Crowded weekends"],"lat":-33.883,"lng":151.213,"priceLevel":"$$$"},{"name":"Bondi Beach","tagline":"Australia's most famous beach with backpacker energy","description":"Bondi is Australia's most iconic beach - the curved bay, coastal walks, and beach culture that defines Australian lifestyle. Popular with backpackers and fitness enthusiasts, it's expensive but delivers the Australian dream.","vibe":"Beach & Active","bestFor":"Beach lovers, fitness enthusiasts, and nomads seeking iconic Australian lifestyle","pros":["Famous beach","Coastal walks","Active lifestyle","Strong community"],"cons":["Expensive","Tourist crowds","Far from CBD"],"lat":-33.8908,"lng":151.2743,"priceLevel":"$$$"},{"name":"Newtown","tagline":"Sydney's alternative heart with live music","description":"Newtown is Sydney's alternative neighborhood - vintage shops, live music venues, and proudly queer community. King Street's endless restaurants and bars attract students, artists, and longtime locals. Character over convenience.","vibe":"Alternative & Diverse","bestFor":"Artists, students, and nomads seeking Sydney's most alternative neighborhood","pros":["Great nightlife","Diverse community","Live music","Vintage shopping"],"cons":["Can be gritty","Limited parking","Far from beach"],"lat":-33.8975,"lng":151.1792,"priceLevel":"$$"},{"name":"Manly","tagline":"Beach town vibes just a ferry from the city","description":"Manly offers small-town beach life with city access via iconic ferry ride. Surf beaches, walking trails, and laid-back atmosphere attract those who prioritize beach lifestyle over urban convenience. A different Sydney experience.","vibe":"Beach Town","bestFor":"Surfers, families, and nomads seeking beach town vibes with city access","pros":["Great beaches","Ferry commute","Laid-back vibe","Surf culture"],"cons":["Far from city","Ferry dependent","Limited nightlife"],"lat":-33.7969,"lng":151.2844,"priceLevel":"$$"},{"name":"Potts Point / Darlinghurst","tagline":"Sydney's cosmopolitan heart with heritage charm","description":"Potts Point and Darlinghurst are Sydney's most cosmopolitan neighborhoods - art deco apartments, excellent restaurants, and vibrant nightlife. Walking distance to the CBD with Kings Cross history adding edge. Dense and European-feeling.","vibe":"Cosmopolitan & Dense","bestFor":"Young professionals, foodies, and nomads seeking dense urban Sydney living","pros":["Great restaurants","Near CBD","Nightlife","Character buildings"],"cons":["Expensive","Dense living","Noisy areas"],"lat":-33.8708,"lng":151.2242,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1470,6 +1471,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

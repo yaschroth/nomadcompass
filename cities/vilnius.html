@@ -1465,6 +1465,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Senamiestis (Old Town)","tagline":"Europe's largest baroque old town","description":"Vilnius' Old Town is one of Europe's largest - UNESCO-listed baroque architecture, countless churches, and cobblestone character. It's where history, restaurants, and atmosphere concentrate. Vilnius' essential experience.","vibe":"Baroque & Historic","bestFor":"History lovers, culture seekers, and nomads wanting atmospheric Old Town living","pros":["Incredible architecture","Great restaurants","Walkable","Historic"],"cons":["Touristy areas","Higher prices","Cold winters"],"lat":54.6792,"lng":25.287,"priceLevel":"$$"},{"name":"Užupis","tagline":"Vilnius' bohemian republic with artistic soul","description":"Užupis is Vilnius' famous artistic quarter - a self-declared republic with its own constitution. Street art, galleries, and bohemian atmosphere attract creatives. Quirky, affordable, and uniquely Lithuanian.","vibe":"Bohemian & Artistic","bestFor":"Artists, creatives, and nomads seeking quirky alternative community","pros":["Artistic atmosphere","Unique character","Affordable","Creative community"],"cons":["Basic infrastructure","Isolated feel","Limited services"],"lat":54.678,"lng":25.296,"priceLevel":"$"},{"name":"Naujamiestis (New Town)","tagline":"Vilnius' modern center with business energy","description":"Naujamiestis is Vilnius' modern face - business towers, shopping malls, and contemporary infrastructure. It's practical rather than charming, where corporate Lithuania operates.","vibe":"Modern & Business","bestFor":"Business travelers, professionals, and nomads needing modern infrastructure","pros":["Modern facilities","Shopping access","Business infrastructure","Transport hub"],"cons":["No character","Corporate feel","Less interesting"],"lat":54.687,"lng":25.275,"priceLevel":"$$"},{"name":"Žvėrynas","tagline":"Vilnius' wooden villa neighborhood with green peace","description":"Žvėrynas is Vilnius' most charming residential area - wooden villas, quiet streets, and proximity to Vingis Park. It's where established families live, offering peaceful character near the center.","vibe":"Residential & Peaceful","bestFor":"Families, peace seekers, and nomads wanting quiet with character","pros":["Wooden villas","Very peaceful","Near park","Character"],"cons":["Limited dining","Quiet evenings","Need transport"],"lat":54.695,"lng":25.255,"priceLevel":"$$"},{"name":"Šnipiškės","tagline":"Vilnius' emerging modern district","description":"Šnipiškės houses Vilnius' emerging modern skyline - Europa Tower, new developments, and business expansion. It's developing fast with growing restaurant scene. Vilnius' future, taking shape.","vibe":"Emerging & Modern","bestFor":"Business professionals, modern lifestyle seekers, and early adopters","pros":["New development","Modern living","Growing scene","River views"],"cons":["Still developing","Construction","Limited character"],"lat":54.699,"lng":25.28,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1516,6 +1517,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

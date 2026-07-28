@@ -1412,6 +1412,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial charm of Peru's north","description":"The historic center features Peru's finest colonial architecture with colorful mansions, grand churches, and the famous Plaza de Armas. Museums and cultural venues celebrate pre-Columbian and colonial heritage.","vibe":"Colonial historic","bestFor":"History lovers and culture seekers","pros":["Colonial architecture","Cultural sites","Plaza atmosphere","Good museums"],"cons":["Limited nightlife","Hot climate","Tourist hassle"],"lat":-8.1091,"lng":-79.0261,"priceLevel":"$"},{"name":"Huanchaco","tagline":"Traditional fishing village with reed boats","description":"Just outside Trujillo, this beach village preserves traditional caballitos de totora reed boats still used for fishing. Surf breaks, ceviche restaurants, and laid-back atmosphere attract travelers.","vibe":"Beach traditional","bestFor":"Surfers and beach lovers","pros":["Traditional boats","Good surf","Fresh ceviche","Relaxed atmosphere"],"cons":["Far from center","Cold water","Limited nightlife"],"lat":-8.0789,"lng":-79.1234,"priceLevel":"$"},{"name":"Urbanización California","tagline":"Modern residential comfort","description":"This middle-class residential area offers modern apartments, shopping centers, and everyday amenities. Long-term visitors find comfortable living with good infrastructure.","vibe":"Modern residential","bestFor":"Long-term stays and families","pros":["Modern amenities","Good shopping","Family-friendly","Safe area"],"cons":["Less character","Needs transport","Generic feel"],"lat":-8.1178,"lng":-79.0389,"priceLevel":"$$"},{"name":"Chan Chan Area","tagline":"UNESCO ruins in desert setting","description":"Near the massive Chan Chan archaeological complex, this area serves visitors to the world's largest adobe city. The Chimú civilization's capital offers profound cultural experience.","vibe":"Archaeological historic","bestFor":"History buffs and archaeology lovers","pros":["UNESCO site access","Fascinating history","Quiet setting","Cultural depth"],"cons":["Hot and dusty","Limited services","Archaeological focus only"],"lat":-8.0912,"lng":-79.0745,"priceLevel":"$"},{"name":"El Golf","tagline":"Upscale living in the suburbs","description":"This affluent area offers gated communities, golf courses, and upscale restaurants. Wealthy Trujillanos and business visitors find comfort away from the historic center.","vibe":"Upscale suburban","bestFor":"Luxury seekers and business travelers","pros":["Quality dining","Safe area","Golf courses","Modern comforts"],"cons":["Isolated","Car required","Expensive"],"lat":-8.1234,"lng":-79.0134,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1463,6 +1464,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

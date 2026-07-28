@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"La Punta (Zicatela)","tagline":"Surfer soul and yoga vibes","description":"The southern end of the famous Zicatela beach has become a digital nomad haven. Yoga shalas, healthy cafes, and surf shops line sandy streets while world-class waves break just offshore.","vibe":"Surfer bohemian","bestFor":"Surfers and wellness seekers","pros":["Beach access","Yoga community","Healthy food","Nomad scene"],"cons":["Strong currents","Sandy roads","Basic infrastructure"],"lat":15.8534,"lng":-97.0456,"priceLevel":"$"},{"name":"Rinconada","tagline":"The calm bay for families and swimmers","description":"This protected bay offers calm waters perfect for swimming and paddleboarding. More developed than La Punta with better restaurants and services, it attracts a mix of Mexican families and travelers.","vibe":"Relaxed family-friendly","bestFor":"Swimmers and those wanting convenience","pros":["Swimmable beach","Good restaurants","Better services","Calmer vibe"],"cons":["More crowded","Less surf culture","Higher prices"],"lat":15.8612,"lng":-97.0534,"priceLevel":"$$"},{"name":"Centro","tagline":"Authentic Mexican town life","description":"The original town center maintains Mexican authenticity with local markets, traditional restaurants, and everyday commerce. Travelers seeking real Mexican experience over beach life find their place here.","vibe":"Traditional authentic","bestFor":"Culture seekers and budget travelers","pros":["Authentic Mexico","Lowest prices","Local markets","Real community"],"cons":["No beach access","Hot and dusty","Limited English"],"lat":15.8687,"lng":-97.0712,"priceLevel":"$"},{"name":"Carrizalillo","tagline":"Stairway to paradise bay","description":"Down 167 steps lies one of Oaxaca's most beautiful bays. The cliffside area above offers stunning views and upscale accommodations while the beach below provides excellent swimming and snorkeling.","vibe":"Upscale scenic","bestFor":"Those wanting beauty and comfort","pros":["Stunning beach","Great snorkeling","Beautiful views","Quality dining"],"cons":["Many stairs","Higher prices","Isolated location"],"lat":15.8723,"lng":-97.0789,"priceLevel":"$$"},{"name":"Bacocho","tagline":"Emerging neighborhood with potential","description":"This developing area between the airport and town offers newer accommodations and growing infrastructure. Long-term renters find value here while new cafes and coworking spaces continue opening.","vibe":"Developing modern","bestFor":"Long-term stays seeking value","pros":["Affordable long-term","Newer buildings","Growing amenities","Less crowded"],"cons":["Needs transport","Still developing","Beach walk required"],"lat":15.8756,"lng":-97.0867,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Higashi Chaya","tagline":"Geisha district frozen in time","description":"One of Japan's best-preserved geisha districts features wooden teahouses, gold leaf shops, and traditional atmosphere. The narrow streets and historic architecture transport visitors to Edo-period Japan.","vibe":"Historic & Traditional","bestFor":"Culture seekers, photographers, and those wanting traditional Japan","pros":["Stunning traditional architecture","Active geisha culture","Gold leaf experiences","Excellent cafes"],"cons":["Touristy during day","Expensive tea experiences","Limited accommodation"],"lat":36.5734,"lng":136.6623,"priceLevel":"$$$"},{"name":"Kenroku-en Area","tagline":"Japan's finest garden at your doorstep","description":"Surrounding one of Japan's three great gardens, this area includes Kanazawa Castle, the 21st Century Museum, and premium ryokans. The cultural concentration makes it the natural base for visitors.","vibe":"Cultural & Central","bestFor":"First-time visitors, culture enthusiasts, and garden lovers","pros":["Walk to major attractions","Museum access","Traditional ryokans","Central location"],"cons":["Higher prices","Very touristy","Less local atmosphere"],"lat":36.5617,"lng":136.6589,"priceLevel":"$$$"},{"name":"Kazuemachi","tagline":"Riverside calm in the geisha quarters","description":"The smaller geisha district along the Asano River offers a quieter alternative to Higashi Chaya. The willow-lined riverbanks and cherry blossoms create picture-perfect scenes.","vibe":"Quiet & Scenic","bestFor":"Those seeking traditional atmosphere without crowds, photographers","pros":["Less crowded than Higashi","Beautiful river views","Quiet atmosphere","Authentic feel"],"cons":["Fewer shops and cafes","Limited nightlife","Small area"],"lat":36.5712,"lng":136.6567,"priceLevel":"$$"},{"name":"Omicho Market Area","tagline":"Fresh seafood and local life","description":"Kanazawa's kitchen offers the freshest seafood from the Sea of Japan. The surrounding streets feature local restaurants, shopping, and a more everyday Japanese atmosphere.","vibe":"Market & Local","bestFor":"Foodies, those wanting local experience, and seafood lovers","pros":["Amazing fresh seafood","Local atmosphere","Great restaurants","Central location"],"cons":["Market closes early","Crowds at meal times","Tourist-oriented pricing"],"lat":36.5689,"lng":136.6534,"priceLevel":"$$"},{"name":"Kanazawa Station Area","tagline":"Modern gateway with iconic architecture","description":"The area around the stunning Tsuzumi Gate station offers modern hotels, shopping malls, and excellent transport connections. The striking contemporary architecture contrasts with the historic districts.","vibe":"Modern & Convenient","bestFor":"Transit travelers, those wanting modern amenities and convenience","pros":["Excellent transport links","Modern hotels","Shopping convenience","Iconic architecture"],"cons":["Less character","Further from historic areas","Commercial feel"],"lat":36.578,"lng":136.6478,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

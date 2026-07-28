@@ -1441,6 +1441,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Naples' chaotic UNESCO heart","description":"The Centro Storico is Naples' ancient core - Spaccanapoli street, churches, and intense street life. It's chaotic, authentic, and the essence of Naples.","vibe":"Historic & Chaotic","bestFor":"Culture lovers, foodies, and those seeking authentic Naples","pros":["UNESCO site","Amazing pizza","Authentic life","Historic churches"],"cons":["Chaotic streets","Petty crime risk","Overwhelming"],"lat":40.8518,"lng":14.2581,"priceLevel":"$"},{"name":"Chiaia","tagline":"Naples' elegant seaside quarter","description":"Chiaia is Naples' chic neighborhood - upscale shopping, seaside promenade, and refined atmosphere. It's where Naples shows its sophisticated side.","vibe":"Elegant & Seaside","bestFor":"Shoppers, romantics, and those seeking refined Naples","pros":["Elegant streets","Seaside walks","Good shopping","Safe area"],"cons":["Expensive","Less authentic","Formal atmosphere"],"lat":40.835,"lng":14.233,"priceLevel":"$$$"},{"name":"Quartieri Spagnoli","tagline":"Naples' intense Spanish quarter","description":"The Spanish Quarters are Naples at its most intense - narrow alleys, hanging laundry, and street life spilling everywhere. Gritty but fascinating.","vibe":"Gritty & Authentic","bestFor":"Adventurous travelers, photographers, and those seeking real Naples","pros":["Intense atmosphere","Authentic life","Great food","Character"],"cons":["Can feel unsafe","Gritty streets","Not for everyone"],"lat":40.843,"lng":14.248,"priceLevel":"$"},{"name":"Vomero","tagline":"Naples' hilltop residential escape","description":"Vomero sits above the chaos - funicular access, stunning views, and middle-class calm. It's Naples with breathing room.","vibe":"Residential & Scenic","bestFor":"Families, view seekers, and those seeking calm Naples","pros":["Stunning views","Peaceful streets","Good shopping","Castel Sant'Elmo"],"cons":["Far from centro","Less atmosphere","Expensive"],"lat":40.85,"lng":14.228,"priceLevel":"$$"},{"name":"Santa Lucia/Lungomare","tagline":"Naples' waterfront with Vesuvius views","description":"Santa Lucia offers the classic Naples postcard - Castel dell'Ovo, seafront dining, and Vesuvius backdrop. It's touristy but undeniably beautiful.","vibe":"Waterfront & Tourist","bestFor":"First-time visitors, romantics, and those seeking classic views","pros":["Vesuvius views","Waterfront walks","Castel dell'Ovo","Seafood"],"cons":["Touristy","Expensive restaurants","Can be crowded"],"lat":40.829,"lng":14.248,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1492,6 +1493,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

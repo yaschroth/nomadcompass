@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Südvorstadt","tagline":"Student quarter with alternative soul","description":"Leipzig's most vibrant neighborhood pulses with student energy, alternative culture, and Karl-Liebknecht-Strasse's legendary nightlife. The affordable rents and creative scene make it the natural nomad hub.","vibe":"Alternative & Student","bestFor":"Young nomads, night owls, and alternative culture seekers","pros":["Best nightlife","Affordable rents","Young energy","Great cafes and bars"],"cons":["Can be noisy","Graffiti everywhere","Party atmosphere"],"lat":51.3278,"lng":12.3734,"priceLevel":"$"},{"name":"Plagwitz","tagline":"Industrial heritage turned hipster heaven","description":"The gentrified former industrial district showcases brick factories converted to studios, galleries, and cafes. The canal-side setting and creative atmosphere attract artists and young professionals.","vibe":"Industrial & Creative","bestFor":"Creatives, hipsters, and those seeking trendy atmosphere","pros":["Creative spaces","Canal walks","Hip cafes","Industrial aesthetics"],"cons":["Gentrifying fast","Rising rents","Can feel pretentious"],"lat":51.3312,"lng":12.3289,"priceLevel":"$$"},{"name":"Zentrum","tagline":"Bach's city and grand arcades","description":"The historic center features the St. Thomas Church where Bach worked, grand shopping arcades, and impressive architecture. The cultural weight and convenience make it the natural starting point.","vibe":"Historic & Central","bestFor":"Culture enthusiasts, shoppers, and first-time visitors","pros":["Musical heritage","Grand architecture","Central location","Shopping arcades"],"cons":["Tourist prices","Less local feel","Quiet at night"],"lat":51.34,"lng":12.3756,"priceLevel":"$$"},{"name":"Connewitz","tagline":"Punk rock stronghold of the East","description":"Leipzig's most politically alternative neighborhood maintains its punk and autonomous scene despite gentrification. The squats, underground venues, and activist culture attract those seeking radical authenticity.","vibe":"Punk & Alternative","bestFor":"Alternative lifestyle seekers, punk enthusiasts, and activists","pros":["Authentic subculture","Underground venues","Affordable","Strong community"],"cons":["Can feel rough","Political tensions","Not for everyone"],"lat":51.3089,"lng":12.3812,"priceLevel":"$"},{"name":"Lindenau","tagline":"Next-wave neighborhood for creatives","description":"The emerging neighborhood west of Plagwitz offers cheaper rents and a growing creative scene. The Spinnerei cotton mill complex houses world-class galleries and artist studios.","vibe":"Emerging & Artistic","bestFor":"Artists, budget creatives, and early gentrifiers","pros":["Spinnerei galleries","Affordable rents","Creative energy","Less crowded"],"cons":["Still rough around edges","Fewer amenities","Remote from center"],"lat":51.3345,"lng":12.3145,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

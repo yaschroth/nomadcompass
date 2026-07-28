@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Koregaon Park","tagline":"Expat hub with Osho legacy","description":"This upscale neighborhood hosts the famous Osho Ashram and has evolved into Pune's most international area. Tree-lined streets feature organic cafes, yoga studios, and boutique hotels attracting global seekers.","vibe":"Spiritual cosmopolitan","bestFor":"Wellness seekers and expats","pros":["International community","Wellness focus","Great cafes","Leafy streets"],"cons":["Expensive by Pune standards","Spiritual tourism crowds","Traffic congestion"],"lat":18.5362,"lng":73.8923,"priceLevel":"$$"},{"name":"Viman Nagar","tagline":"IT hub convenience near the airport","description":"This modern neighborhood serves Pune's booming IT industry with malls, restaurants, and contemporary apartments. International food chains and coworking spaces make it comfortable for remote workers.","vibe":"Modern corporate","bestFor":"Digital nomads and IT professionals","pros":["Near airport","Modern amenities","Good WiFi","International food"],"cons":["Less character","Traffic issues","Generic feel"],"lat":18.5679,"lng":73.9143,"priceLevel":"$$"},{"name":"Deccan Gymkhana","tagline":"Cultural heart with academic energy","description":"This central area hosts theaters, bookstores, and the famous FC Road student scene. Pune's intellectual traditions live on through cultural programs while street food vendors serve legendary fare.","vibe":"Cultural academic","bestFor":"Culture lovers and budget travelers","pros":["Cultural scene","Street food","Central location","Student energy"],"cons":["Crowded streets","Old buildings","Parking nightmare"],"lat":18.5178,"lng":73.8412,"priceLevel":"$"},{"name":"Aundh","tagline":"Family-friendly with startup energy","description":"This planned suburb offers wide roads, parks, and a mix of IT companies and residential areas. Growing cafe culture and proximity to universities make it popular with young professionals and families.","vibe":"Suburban modern","bestFor":"Families and startup workers","pros":["Planned roads","Good parks","Growing scene","Family-friendly"],"cons":["Sprawling area","Needs transport","Far from center"],"lat":18.5589,"lng":73.8078,"priceLevel":"$$"},{"name":"Kothrud","tagline":"Residential calm with hill views","description":"One of Pune's most sought-after residential areas offers views of surrounding hills and a quieter pace. Local markets, temples, and family restaurants serve the established middle-class community.","vibe":"Residential peaceful","bestFor":"Long-term stays seeking quiet","pros":["Hill views","Peaceful atmosphere","Good markets","Established area"],"cons":["Far from action","Limited nightlife","Needs vehicle"],"lat":18.5012,"lng":73.8112,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Nørrebro","tagline":"Copenhagen's multicultural creative heart","description":"Nørrebro is Copenhagen's most diverse and creative neighborhood - multicultural communities, independent shops, and thriving cafe culture. It's where young Copenhageners live, with amazing food scene and character.","vibe":"Multicultural & Creative","bestFor":"Creatives, foodies, and nomads seeking diverse Copenhagen living","pros":["Great food","Diverse culture","Creative scene","Good cafes"],"cons":["Busy streets","Variable areas","Far from center"],"lat":55.697,"lng":12.546,"priceLevel":"$$"},{"name":"Vesterbro","tagline":"Copenhagen's hip former red-light district","description":"Vesterbro has transformed from red-light district to Copenhagen's hippest neighborhood - Meatpacking District bars, specialty coffee, and young energy. It's trendy, central, and very Danish cool.","vibe":"Hip & Transformed","bestFor":"Young professionals, nightlife lovers, and nomads seeking trendy Copenhagen","pros":["Best nightlife","Trendy cafes","Central location","Meatpacking District"],"cons":["Expensive","Crowded bars","Remaining rough areas"],"lat":55.669,"lng":12.549,"priceLevel":"$$$"},{"name":"Christianshavn","tagline":"Canal district with Freetown Christiania","description":"Christianshavn is Copenhagen's canal neighborhood - Dutch-inspired waterways and the famous Freetown Christiania. It's unique, charming, and offers Copenhagen's most distinctive living experience.","vibe":"Canal & Alternative","bestFor":"Alternative types, canal lovers, and nomads seeking unique Copenhagen","pros":["Beautiful canals","Christiania","Unique character","Central"],"cons":["Expensive","Tourist crowds","Christiania tensions"],"lat":55.673,"lng":12.594,"priceLevel":"$$"},{"name":"Frederiksberg","tagline":"Copenhagen's elegant green municipality","description":"Frederiksberg is technically its own municipality - elegant apartments, beautiful parks, and refined atmosphere. It's where established Danes live, with excellent quality of life.","vibe":"Elegant & Green","bestFor":"Families, professionals, and nomads seeking refined Copenhagen living","pros":["Beautiful parks","Elegant streets","Safe","Good cafes"],"cons":["Most expensive","Quiet evenings","Residential"],"lat":55.678,"lng":12.525,"priceLevel":"$$$"},{"name":"Østerbro","tagline":"Copenhagen's family neighborhood with harbor access","description":"Østerbro is Copenhagen's family favorite - wide streets, Fælledparken, and waterfront access. It's upscale and residential, where professional families settle for quality of life.","vibe":"Family & Waterfront","bestFor":"Families, professionals, and nomads seeking quality residential living","pros":["Great parks","Waterfront","Family-friendly","Safe"],"cons":["Expensive","Limited nightlife","Residential quiet"],"lat":55.705,"lng":12.578,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

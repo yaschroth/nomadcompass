@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Gion","tagline":"Kyoto's legendary geisha district","description":"Gion is Kyoto's most atmospheric neighborhood - wooden machiya houses, geiko (geisha) culture, and traditional tea houses. Evening walks here transport you to old Japan.","vibe":"Traditional & Atmospheric","bestFor":"Culture lovers, photographers, and those seeking traditional Japan","pros":["Geisha sightings","Historic atmosphere","Traditional architecture","Tea houses"],"cons":["Very touristy","Expensive","Crowded evenings"],"lat":35.003,"lng":135.775,"priceLevel":"$$$$"},{"name":"Higashiyama","tagline":"Kyoto's temple-filled eastern hills","description":"Higashiyama is temple heaven - Kiyomizu-dera, Yasaka Pagoda, and preserved streets. The slopes here offer Kyoto's most iconic views and traditional shopping.","vibe":"Temple & Historic","bestFor":"Temple lovers, photographers, and those seeking iconic Kyoto","pros":["Major temples","Preserved streets","Traditional shops","Scenic walks"],"cons":["Extremely crowded","Hilly terrain","Touristy shops"],"lat":34.998,"lng":135.78,"priceLevel":"$$$"},{"name":"Downtown (Kawaramachi/Pontocho)","tagline":"Kyoto's modern heart with traditional alleys","description":"Downtown Kyoto blends modern shopping with the atmospheric Pontocho alley along the Kamo River. It's where Kyoto's contemporary life meets tradition.","vibe":"Mixed & Central","bestFor":"Shoppers, diners, and those seeking Kyoto's social scene","pros":["Central location","Pontocho dining","Shopping","River views"],"cons":["Less traditional feel","Crowded","Can be touristy"],"lat":35.005,"lng":135.768,"priceLevel":"$$$"},{"name":"Arashiyama","tagline":"Kyoto's bamboo grove escape","description":"Arashiyama is Kyoto's western retreat - the famous bamboo grove, monkey park, and scenic river. It's essential Kyoto but requires a day trip from central areas.","vibe":"Nature & Scenic","bestFor":"Nature lovers, photographers, and those seeking peaceful Kyoto","pros":["Bamboo grove","Monkey park","River scenery","Less urban"],"cons":["Far from center","Very crowded","Limited accommodation"],"lat":35.017,"lng":135.672,"priceLevel":"$$"},{"name":"Nishiki/Teramachi","tagline":"Kyoto's kitchen and shopping streets","description":"Nishiki Market is Kyoto's culinary heart - centuries of food culture in one covered arcade. Nearby Teramachi adds traditional shopping for a full Kyoto experience.","vibe":"Food & Shopping","bestFor":"Foodies, shoppers, and those seeking Kyoto's culinary culture","pros":["Amazing food market","Traditional shops","Central location","Covered arcade"],"cons":["Extremely crowded","Narrow passages","Can be overwhelming"],"lat":35.005,"lng":135.764,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

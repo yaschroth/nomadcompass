@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Waterfront","tagline":"Colonial charm along the Sarawak River","description":"Kuching's picturesque waterfront showcases Brooke-era colonial buildings, the iconic Astana across the river, and the vibrant evening scene. The concentration of hotels, cafes, and the cat statues make it the natural tourist hub.","vibe":"Historic & Scenic","bestFor":"First-time visitors, history buffs, and photography enthusiasts","pros":["Beautiful river views","Colonial architecture","Best restaurants","Evening atmosphere"],"cons":["Touristy","Higher prices","Crowded during festivals"],"lat":1.5575,"lng":110.3499,"priceLevel":"$$"},{"name":"Carpenter Street","tagline":"Chinese heritage and street art","description":"The oldest street in Kuching features Chinese temples, traditional shophouses, and an emerging street art scene. The authentic hawker food and cultural heritage offer a glimpse of old Sarawak.","vibe":"Heritage & Artistic","bestFor":"Culture seekers, food lovers, and street art enthusiasts","pros":["Amazing street food","Chinese temples","Street art murals","Historic atmosphere"],"cons":["Can feel congested","Basic accommodation","Hot for walking"],"lat":1.5589,"lng":110.3512,"priceLevel":"$"},{"name":"India Street / Padungan","tagline":"Little India meets modern Kuching","description":"This multicultural area features Indian textiles and spices alongside hip cafes and modern restaurants. The blend of old Indian quarter and contemporary development creates Kuching's most dynamic neighborhood.","vibe":"Multicultural & Trendy","bestFor":"Foodies, culture enthusiasts, and those seeking neighborhood variety","pros":["Cultural diversity","Great food variety","Hip cafes","Shopping options"],"cons":["Traffic congestion","Busy during day","Can feel chaotic"],"lat":1.5534,"lng":110.3534,"priceLevel":"$$"},{"name":"Satok","tagline":"Sunday market and suburban authenticity","description":"Known for the famous Satok Sunday Market, this residential area offers authentic Sarawakian life beyond the tourist center. The market showcases exotic jungle produce and indigenous crafts.","vibe":"Local & Market","bestFor":"Market enthusiasts, foodies seeking authentic, and local experience seekers","pros":["Famous Sunday Market","Authentic local life","Exotic produce","Affordable area"],"cons":["Far from center","Market only on weekends","Less tourist infrastructure"],"lat":1.5412,"lng":110.3389,"priceLevel":"$"},{"name":"Pending","tagline":"Industrial heritage with café culture","description":"This former industrial area has transformed with hip cafes in converted warehouses. The emerging creative scene and affordable spaces attract young entrepreneurs and digital nomads.","vibe":"Industrial & Hip","bestFor":"Digital nomads, cafe hoppers, and those seeking emerging neighborhoods","pros":["Hip cafe scene","Converted warehouse spaces","Affordable rent","Creative energy"],"cons":["Still developing","Need transport","Limited nightlife"],"lat":1.5456,"lng":110.3612,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bari Vecchia","tagline":"Ancient lanes where nonnas make orecchiette","description":"Bari's Old Town is unforgettable - labyrinthine alleys where grandmothers roll pasta outside their doors. San Nicola's relics rest here, and the sea laps ancient walls.","vibe":"Historic & Authentic","bestFor":"Culture seekers, foodies, and those wanting real Italy","pros":["Incredibly authentic","Street food scene","Historic sites","Seaside location"],"cons":["Can feel rough","Tourist scams","Limited amenities"],"lat":41.1285,"lng":16.8682,"priceLevel":"$$"},{"name":"Murat (New Town)","tagline":"19th-century grid with elegant shopping","description":"Murat is Bari's planned downtown - Napoleonic-era grid of wide streets, elegant shops, and tree-lined boulevards. The economic heart of Puglia's capital.","vibe":"Urban & Commercial","bestFor":"Shoppers, professionals, and those wanting city convenience","pros":["Great shopping","Central location","Good restaurants","Well-maintained"],"cons":["Less character","Expensive","Traffic noise"],"lat":41.124,"lng":16.869,"priceLevel":"$$$"},{"name":"Lungomare","tagline":"Bari's elegant seaside promenade","description":"The Lungomare stretches along Bari's coast - palm-lined promenades, sea views, evening passeggiata tradition. Where Baresi go to see and be seen.","vibe":"Seaside & Social","bestFor":"Walkers, romantics, and those wanting coastal vibes","pros":["Beautiful views","Great walks","Sea access","Evening atmosphere"],"cons":["Windy exposure","Limited shade","Crowded evenings"],"lat":41.1198,"lng":16.8755,"priceLevel":"$$"},{"name":"Poggiofranco","tagline":"Modern residential with local flavor","description":"Poggiofranco is where young Baresi live - modern apartments, good restaurants, local bars without tourists. University nearby brings youthful energy.","vibe":"Residential & Modern","bestFor":"Long-term visitors, students, and those wanting local life","pros":["Affordable","Local vibes","Good food","Modern amenities"],"cons":["Far from old town","Less scenic","Limited sights"],"lat":41.1062,"lng":16.8574,"priceLevel":"$$"},{"name":"San Pasquale","tagline":"Trendy neighborhood with creative energy","description":"San Pasquale has emerged as Bari's creative quarter - young entrepreneurs, craft cocktail bars, boutique shops. The neighborhood is transforming before your eyes.","vibe":"Trendy & Creative","bestFor":"Creatives, young professionals, and trend-seekers","pros":["Up-and-coming","Creative scene","Good nightlife","Central-ish"],"cons":["Gentrifying fast","Prices rising","Some rough edges"],"lat":41.1152,"lng":16.8612,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

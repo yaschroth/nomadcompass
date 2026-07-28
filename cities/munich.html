@@ -1444,6 +1444,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Schwabing","tagline":"Munich's bohemian heart turned upscale","description":"Schwabing is Munich's historic bohemian quarter - tree-lined streets, university energy, and the English Garden. Once home to artists and intellectuals, now upscale but retaining creative spirit.","vibe":"Bohemian & Upscale","bestFor":"Professionals, academics, and nomads seeking Munich's most desirable living","pros":["English Garden","University area","Great cafes","Beautiful streets"],"cons":["Very expensive","Crowded parks","Competitive housing"],"lat":48.165,"lng":11.585,"priceLevel":"$$$"},{"name":"Maxvorstadt","tagline":"Museum quarter with student energy","description":"Maxvorstadt is Munich's museum district - Pinakotheken, universities, and intellectual atmosphere. It's central and cultural, where Munich's academic and artistic life concentrates.","vibe":"Cultural & Academic","bestFor":"Academics, culture lovers, and nomads seeking intellectual Munich","pros":["Great museums","Central location","Good cafes","Cultural life"],"cons":["Expensive","Limited nightlife","Student crowds"],"lat":48.15,"lng":11.57,"priceLevel":"$$"},{"name":"Glockenbachviertel","tagline":"Munich's LGBTQ+ neighborhood with nightlife","description":"Glockenbachviertel is Munich's LGBTQ+ center - colorful bars, good restaurants, and the city's most progressive atmosphere. It's vibrant, central, and increasingly popular with all communities.","vibe":"LGBTQ+ & Vibrant","bestFor":"LGBTQ+ travelers, nightlife lovers, and nomads seeking vibrant Munich","pros":["Great nightlife","Progressive atmosphere","Good restaurants","Central"],"cons":["Noisy weekends","Expensive","Crowded bars"],"lat":48.131,"lng":11.568,"priceLevel":"$$"},{"name":"Haidhausen","tagline":"Munich's French quarter with village feel","description":"Haidhausen is Munich's 'French quarter' - elegant streets, local shops, and village atmosphere east of the Isar. It's residential and charming, with excellent quality of life.","vibe":"Village & Elegant","bestFor":"Families, professionals, and nomads seeking village Munich living","pros":["Village character","Elegant streets","Good restaurants","Quieter"],"cons":["Expensive","Limited nightlife","Residential"],"lat":48.128,"lng":11.6,"priceLevel":"$$$"},{"name":"Neuhausen-Nymphenburg","tagline":"Palace gardens and local Munich life","description":"Neuhausen-Nymphenburg surrounds the famous palace and gardens - local atmosphere, good infrastructure, and easy park access. It's where Munich families live, with excellent quality of life.","vibe":"Local & Green","bestFor":"Families, nature lovers, and nomads seeking green Munich living","pros":["Palace gardens","Local feel","Good infrastructure","Family-friendly"],"cons":["Far from center","Limited nightlife","Suburban feel"],"lat":48.158,"lng":11.52,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1495,6 +1496,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

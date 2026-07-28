@@ -1447,6 +1447,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vieux Nice (Old Town)","tagline":"Colorful alleys and Mediterranean soul","description":"Vieux Nice is the city's historic heart - pastel buildings, narrow streets, and the famous Cours Saleya market. Italian influence blends with French sophistication in this charming quarter.","vibe":"Historic & Charming","bestFor":"Culture lovers, foodies, and those seeking traditional Nice","pros":["Beautiful architecture","Famous market","Restaurant scene","Historic charm"],"cons":["Very touristy","Crowded streets","Noisy at night"],"lat":43.697,"lng":7.276,"priceLevel":"$$$"},{"name":"Carré d'Or","tagline":"Nice's golden square of luxury","description":"Carré d'Or is Nice's luxury district - designer boutiques, grand hotels, and elegant promenades. It's where the Riviera glamour lives on along the famous Promenade des Anglais.","vibe":"Luxury & Elegant","bestFor":"Luxury travelers, shoppers, and those seeking Riviera glamour","pros":["Beach access","Designer shopping","Grand hotels","Promenade des Anglais"],"cons":["Very expensive","Touristy","Formal atmosphere"],"lat":43.695,"lng":7.265,"priceLevel":"$$$$"},{"name":"Libération","tagline":"Local Nice with daily market life","description":"Libération is where locals shop - centered around the daily market and tram line. It's authentic Nice without tourists, with good value restaurants and real neighborhood feel.","vibe":"Local & Authentic","bestFor":"Long-term stayers, budget travelers, and those seeking local life","pros":["Daily market","Local atmosphere","Good value","Authentic Nice"],"cons":["Far from beach","Less scenic","Limited nightlife"],"lat":43.71,"lng":7.27,"priceLevel":"$$"},{"name":"Port","tagline":"Nice's maritime neighborhood","description":"The Port quarter surrounds Nice's harbor - seafood restaurants, antique shops, and maritime atmosphere. It's less touristy than Old Town with excellent Sunday antique market.","vibe":"Maritime & Local","bestFor":"Seafood lovers, antique hunters, and those seeking port atmosphere","pros":["Seafood restaurants","Antique market","Less touristy","Harbor views"],"cons":["Far from main beach","Limited shopping","Quiet evenings"],"lat":43.695,"lng":7.285,"priceLevel":"$$"},{"name":"Cimiez","tagline":"Nice's elegant hilltop retreat","description":"Cimiez is Nice's aristocratic hill - Belle Époque villas, Matisse Museum, and Roman ruins. It's quiet, residential, and perfect for those seeking refined Nice away from crowds.","vibe":"Elegant & Residential","bestFor":"Culture lovers, families, and those seeking peaceful elegance","pros":["Matisse Museum","Roman ruins","Beautiful villas","Quiet atmosphere"],"cons":["Far from beach","Limited dining","Needs transport"],"lat":43.72,"lng":7.275,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1498,6 +1499,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

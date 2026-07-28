@@ -1446,6 +1446,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"German Colony (HaMoshava)","tagline":"Templar architecture and Bahá'í views","description":"The German Colony is Haifa's gem - Templar-built avenue leading to Bahá'í Gardens above. Where 19th-century German settlers created lasting beauty.","vibe":"Historic & Scenic","bestFor":"Architecture lovers, café enthusiasts, and Bahá'í visitors","pros":["Beautiful boulevard","Bahá'í Gardens view","Great restaurants","Historic atmosphere"],"cons":["Tourist prices","Crowded weekends","Parking difficult"],"lat":32.8167,"lng":34.9889,"priceLevel":"$$$"},{"name":"Bahá'í Gardens & Mount Carmel","tagline":"UNESCO terraces cascading down the mountain","description":"The Bahá'í Gardens are Haifa's crown - UNESCO-listed terraces descending Mount Carmel. Spiritual beauty and meticulous landscaping creating unforgettable vistas.","vibe":"Spiritual & Stunning","bestFor":"Spiritual seekers, garden lovers, and photographers","pros":["Breathtaking beauty","UNESCO site","Free entry","Peaceful"],"cons":["Strict dress code","Limited access times","No photography inside"],"lat":32.8134,"lng":34.9856,"priceLevel":"$"},{"name":"Downtown (Hadar)","tagline":"Multicultural markets and urban energy","description":"Hadar is Haifa's working downtown - markets, affordable shops, multicultural population. Where Arab, Jewish, and immigrant communities mix in daily commerce.","vibe":"Diverse & Urban","bestFor":"Market lovers, budget travelers, and diversity seekers","pros":["Authentic markets","Affordable","Multicultural","Real Haifa"],"cons":["Run-down areas","Can feel chaotic","Safety concerns at night"],"lat":32.8089,"lng":34.9912,"priceLevel":"$"},{"name":"Carmel Center","tagline":"Upscale shopping on the mountain","description":"Carmel Center is Haifa's upscale district - shopping, restaurants, panoramic views. Where middle-class Haifa lives with Mediterranean vistas.","vibe":"Upscale & Scenic","bestFor":"Shoppers, view seekers, and upscale travelers","pros":["Great views","Good shopping","Nice restaurants","Safe area"],"cons":["Expensive","Steep terrain","Less character"],"lat":32.7956,"lng":34.9789,"priceLevel":"$$$"},{"name":"Wadi Nisnas","tagline":"Arab neighborhood with street art","description":"Wadi Nisnas is Haifa's Arab heart - narrow streets, hummus restaurants, street art festival legacy. Where coexistence takes physical form in daily life.","vibe":"Authentic & Artistic","bestFor":"Food lovers, art seekers, and coexistence witnesses","pros":["Great Arab food","Street art","Authentic atmosphere","Affordable"],"cons":["Basic area","Can feel foreign","Limited English"],"lat":32.8112,"lng":34.9834,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1497,6 +1498,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

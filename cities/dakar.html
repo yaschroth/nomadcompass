@@ -1420,6 +1420,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Plateau","tagline":"Colonial core and government center","description":"Plateau is Dakar's downtown - colonial architecture, government buildings, business center. Where Senegal's administration and commerce concentrate.","vibe":"Business & Colonial","bestFor":"Business travelers, history lovers, and practical visitors","pros":["Central location","Colonial architecture","Business facilities","Good transport"],"cons":["Dead evenings","Limited nightlife","Office district"],"lat":14.6728,"lng":-17.4381,"priceLevel":"$$"},{"name":"Les Almadies","tagline":"Peninsula nightlife and beach clubs","description":"Les Almadies is Africa's westernmost point - upscale restaurants, beach clubs, nightlife. Where wealthy Dakarois and expats gather for weekends.","vibe":"Upscale & Nightlife","bestFor":"Nightlife seekers, beach lovers, and upscale diners","pros":["Great nightlife","Beach clubs","Good restaurants","Safe area"],"cons":["Expensive","Far from center","Expat bubble"],"lat":14.7412,"lng":-17.5189,"priceLevel":"$$$"},{"name":"Ngor","tagline":"Island escape and surf village","description":"Ngor is Dakar's beach village - fishing community, surf spots, pirogue trips to Ngor Island. Where local beach life meets accessible tourism.","vibe":"Beach & Local","bestFor":"Surfers, beach lovers, and island seekers","pros":["Island trips","Surf breaks","Beach access","Local character"],"cons":["Basic facilities","Can be hassled","Rough seas"],"lat":14.7534,"lng":-17.5134,"priceLevel":"$"},{"name":"Médina","tagline":"Traditional market neighborhood","description":"Médina is Dakar's original African quarter - built for Senegalese outside colonial Plateau, now vibrant with markets and daily life. Authentic and overwhelming.","vibe":"Authentic & Bustling","bestFor":"Adventurous travelers, market lovers, and authentic seekers","pros":["Authentic atmosphere","Markets","Local life","Affordable"],"cons":["Overwhelming","Basic infrastructure","Can feel challenging"],"lat":14.6834,"lng":-17.4489,"priceLevel":"$"},{"name":"Île de Gorée","tagline":"Historic slave island and UNESCO site","description":"Gorée is Dakar's haunting heritage - UNESCO island of colonial houses and slave history. Where Africa confronts its tragic past in beautiful setting.","vibe":"Historic & Emotional","bestFor":"History seekers, cultural travelers, and those wanting perspective","pros":["Powerful history","Beautiful island","Day trip","UNESCO site"],"cons":["Day visit only","Limited facilities","Emotional weight"],"lat":14.6678,"lng":-17.3989,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1471,6 +1472,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

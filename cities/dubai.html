@@ -1438,6 +1438,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Dubai Marina","tagline":"Skyscraper living with yacht-lined waterways","description":"Dubai Marina is the city's most popular expat neighborhood - a forest of skyscrapers around an artificial canal lined with yachts, restaurants, and beach access. Walking-friendly by Dubai standards, with excellent metro connections and endless amenities.","vibe":"Modern & Vibrant","bestFor":"Young professionals, social nomads, and those seeking Dubai's most walkable lifestyle","pros":["Beach access","Metro connected","Walkable","Great restaurants"],"cons":["Expensive","Tourist crowds","Can feel artificial"],"lat":25.0767,"lng":55.1337,"priceLevel":"$$$"},{"name":"Downtown Dubai","tagline":"Burj Khalifa and the Dubai Mall at your door","description":"Downtown is Dubai's showpiece - the Burj Khalifa, Dubai Mall, and Dubai Fountain define this ultra-modern district. It's impressive but expensive, perfect for those who want Dubai's most iconic address and don't mind the tourist crowds.","vibe":"Iconic & Luxurious","bestFor":"Luxury seekers, business travelers, and nomads wanting Dubai's most prestigious address","pros":["Iconic landmarks","Luxury amenities","Dubai Mall","Metro access"],"cons":["Most expensive","Very touristy","Overwhelming"],"lat":25.1972,"lng":55.2744,"priceLevel":"$$$"},{"name":"JLT (Jumeirah Lake Towers)","tagline":"Dubai Marina's more affordable neighbor","description":"JLT offers Dubai Marina lifestyle at lower prices. Towers surround artificial lakes with restaurants, cafes, and metro access. Popular with younger expats and budget-conscious professionals, it's Dubai living without the premium.","vibe":"Affordable & Community","bestFor":"Budget-conscious professionals, young expats, and nomads seeking Marina proximity","pros":["Better value","Metro access","Good restaurants","Community vibe"],"cons":["Less prestigious","Construction ongoing","Fewer beaches"],"lat":25.07,"lng":55.14,"priceLevel":"$$"},{"name":"Deira / Old Dubai","tagline":"Gold souks and spice markets in authentic Dubai","description":"Deira is old Dubai - gold souks, spice markets, and the Dubai Creek. It's where you find authentic Middle Eastern atmosphere, incredible Indian food, and prices that remind you Dubai wasn't always about skyscrapers. Gritty but real.","vibe":"Authentic & Traditional","bestFor":"Culture seekers, foodies, and budget nomads seeking authentic Middle Eastern experience","pros":["Authentic markets","Best Indian food","Affordable","Historic character"],"cons":["Not glamorous","Limited metro","Hot walking","Basic infrastructure"],"lat":25.2697,"lng":55.3094,"priceLevel":"$"},{"name":"Business Bay","tagline":"Dubai's commercial heart with canal views","description":"Business Bay is Dubai's business district - towers, offices, and the Dubai Canal. It's where corporate Dubai happens, with growing residential options and improving restaurants. Perfect for business-focused travelers.","vibe":"Business & Modern","bestFor":"Business professionals, corporate remote workers, and those preferring commercial energy","pros":["Canal walks","Business facilities","Metro coming","Modern towers"],"cons":["Corporate feel","Limited nightlife","Still developing"],"lat":25.185,"lng":55.26,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1489,6 +1490,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

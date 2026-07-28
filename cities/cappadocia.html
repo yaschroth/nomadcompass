@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Göreme","tagline":"Fairy chimneys and cave hotels","description":"Göreme is Cappadocia's heart - fairy chimneys, open-air museum, cave hotels. Where hot air balloons rise at dawn over surreal volcanic landscapes.","vibe":"Touristic & Magical","bestFor":"Balloon seekers, photographers, and cave hotel enthusiasts","pros":["Iconic landscapes","Cave hotels","Balloon flights","Open-air museum"],"cons":["Very touristy","Crowded","Expensive peak season"],"lat":38.6431,"lng":34.8287,"priceLevel":"$$$"},{"name":"Ürgüp","tagline":"Wine town with Ottoman houses","description":"Ürgüp offers Cappadocia's sophisticated side - wine cellars, restored Ottoman mansions, boutique hotels. Where local wine culture meets refined accommodation.","vibe":"Refined & Historic","bestFor":"Wine lovers, luxury seekers, and those wanting refinement","pros":["Wine culture","Boutique hotels","Historic architecture","Good restaurants"],"cons":["Less scenic","Further from sights","Car helpful"],"lat":38.6289,"lng":34.9089,"priceLevel":"$$$"},{"name":"Uçhisar","tagline":"Castle rock with panoramic views","description":"Uçhisar is dominated by its volcanic rock castle - highest point in Cappadocia with 360-degree views. Smaller, quieter, with stunning perspectives over the region.","vibe":"Scenic & Quiet","bestFor":"View seekers, peaceful visitors, and photographers","pros":["Incredible views","Quieter","Castle experience","Central location"],"cons":["Steep climbs","Limited restaurants","Basic nightlife"],"lat":38.6334,"lng":34.8012,"priceLevel":"$$"},{"name":"Ortahisar","tagline":"Authentic village with castle views","description":"Ortahisar preserves village authenticity - another dramatic rock castle, fewer tourists, genuine local life. Where to experience Cappadocia beyond the tourist trail.","vibe":"Authentic & Quiet","bestFor":"Authentic seekers, budget travelers, and those avoiding crowds","pros":["Less touristy","Affordable","Castle views","Local atmosphere"],"cons":["Limited tourism infrastructure","Basic amenities","Less polished"],"lat":38.6212,"lng":34.8612,"priceLevel":"$"},{"name":"Avanos","tagline":"Pottery town on the Red River","description":"Avanos is Cappadocia's pottery center - workshops along the Red River, traditional crafts, and quieter tourism. Where ancient pottery traditions continue.","vibe":"Artisan & Quiet","bestFor":"Craft lovers, pottery enthusiasts, and those wanting quiet","pros":["Pottery workshops","River setting","Less crowded","Authentic crafts"],"cons":["Far from main sights","Limited nightlife","Basic town"],"lat":38.7134,"lng":34.8489,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

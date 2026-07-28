@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vila Madalena","tagline":"São Paulo's bohemian street art heart","description":"Vila Madalena is São Paulo's creative soul - Beco do Batman street art, indie bars, and bohemian energy. It's where São Paulo's artists and young creatives gather.","vibe":"Bohemian & Creative","bestFor":"Creatives, night owls, and those seeking artistic São Paulo","pros":["Best street art","Great nightlife","Creative scene","Good restaurants"],"cons":["Hilly streets","Weekend crowds","Parking nightmare"],"lat":-23.556,"lng":-46.691,"priceLevel":"$$"},{"name":"Jardins","tagline":"São Paulo's upscale shopping paradise","description":"Jardins is São Paulo's most upscale area - designer shopping, fine dining, and tree-lined streets. It's expensive but beautiful and safe.","vibe":"Upscale & Elegant","bestFor":"Luxury seekers, shoppers, and those seeking polished São Paulo","pros":["Best shopping","Safe streets","Fine dining","Beautiful area"],"cons":["Very expensive","Can feel sterile","Traffic"],"lat":-23.57,"lng":-46.67,"priceLevel":"$$$$"},{"name":"Pinheiros","tagline":"São Paulo's foodie and nightlife hub","description":"Pinheiros is São Paulo's hottest neighborhood - top restaurants, rooftop bars, and the Saturday Benedito Calixto fair. It's where the city's food scene thrives.","vibe":"Foodie & Trendy","bestFor":"Foodies, young professionals, and those seeking trendy São Paulo","pros":["Best restaurants","Saturday fair","Great bars","Creative energy"],"cons":["Expensive","Crowded weekends","Noisy"],"lat":-23.563,"lng":-46.685,"priceLevel":"$$$"},{"name":"Liberdade","tagline":"São Paulo's Japanese-Asian quarter","description":"Liberdade is the heart of São Paulo's Japanese community - Asian markets, authentic restaurants, and cultural heritage. It's the largest Japanese district outside Japan.","vibe":"Asian & Cultural","bestFor":"Food lovers, culture seekers, and those seeking diverse São Paulo","pros":["Amazing Asian food","Cultural markets","Affordable","Unique character"],"cons":["Crowded weekends","Some safety concerns","Metro dependent"],"lat":-23.558,"lng":-46.634,"priceLevel":"$"},{"name":"Centro/República","tagline":"São Paulo's gritty historic core","description":"Centro is São Paulo's historic heart - grand architecture, cultural centers, and urban grit. It's challenging but essential for understanding the city's complexity.","vibe":"Historic & Gritty","bestFor":"Urban explorers, culture lovers, and those seeking real São Paulo","pros":["Historic buildings","Cultural venues","Affordable food","Metro access"],"cons":["Safety concerns","Very gritty","Homeless population"],"lat":-23.543,"lng":-46.634,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

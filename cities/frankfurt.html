@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Sachsenhausen","tagline":"Frankfurt's traditional apple wine quarter","description":"Sachsenhausen is Frankfurt's soul - traditional apple wine taverns, cobblestone streets, and the museum embankment. Alt-Sachsenhausen is touristy but the real neighborhood extends beyond.","vibe":"Traditional & Local","bestFor":"Culture lovers, foodies, and those seeking traditional Frankfurt","pros":["Apple wine taverns","Museum Mile","River walks","Local character"],"cons":["Touristy old town","Noisy weekends","Uneven quality"],"lat":50.1,"lng":8.69,"priceLevel":"$$"},{"name":"Nordend","tagline":"Frankfurt's hip residential favorite","description":"Nordend is Frankfurt's most livable neighborhood - beautiful Altbau apartments, Berger Strasse cafes, and strong community feel. It's where Frankfurt's young professionals settle.","vibe":"Hip & Residential","bestFor":"Long-term stayers, young professionals, and those seeking neighborhood life","pros":["Beautiful apartments","Great cafes","Local markets","Community feel"],"cons":["Expensive rent","Limited nightlife","Residential quiet"],"lat":50.128,"lng":8.695,"priceLevel":"$$$"},{"name":"Bahnhofsviertel","tagline":"Frankfurt's edgy red-light revival","description":"The station district is Frankfurt's most controversial - red-light history meets hipster bars and diverse food. It's gritty, authentic, and increasingly cool.","vibe":"Edgy & Diverse","bestFor":"Adventurous travelers, foodies, and those seeking authentic urban grit","pros":["Best diverse food","Hipster bars","Central location","Authentic"],"cons":["Red-light district","Drug scene","Safety concerns at night"],"lat":50.107,"lng":8.665,"priceLevel":"$"},{"name":"Westend","tagline":"Frankfurt's elegant villa district","description":"Westend is Frankfurt's most elegant neighborhood - grand villas, consulates, and the Palmengarten. It's quiet, green, and where Frankfurt's old money resides.","vibe":"Elegant & Quiet","bestFor":"Professionals, families, and those seeking upscale quiet","pros":["Beautiful villas","Palmengarten","Safe streets","University area"],"cons":["Very expensive","Quiet evenings","Limited nightlife"],"lat":50.12,"lng":8.66,"priceLevel":"$$$$"},{"name":"Bornheim","tagline":"Frankfurt's village within the city","description":"Bornheim is Frankfurt's coziest neighborhood - Berger Strasse shopping, weekly markets, and genuine village feel despite city location. It's local, friendly, and unpretentious.","vibe":"Village & Cozy","bestFor":"Families, long-term visitors, and those seeking community","pros":["Village atmosphere","Great market","Local shops","Family-friendly"],"cons":["Far from center","Limited nightlife","Quiet evenings"],"lat":50.135,"lng":8.715,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

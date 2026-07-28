@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Het Zuid","tagline":"Antwerp's trendy art district","description":"The South is Antwerp's coolest neighborhood - museums, galleries, designer boutiques, and the city's best restaurants cluster around the beautiful Museum Quarter. It's where fashion meets art.","vibe":"Artistic & Trendy","bestFor":"Creatives, art lovers, and those seeking Antwerp's cutting edge","pros":["Museum quarter","Great restaurants","Fashion scene","Beautiful architecture"],"cons":["Expensive","Hipster pretense","Limited parking"],"lat":51.207,"lng":4.395,"priceLevel":"$$$$"},{"name":"Het Eilandje","tagline":"Antwerp's transformed harbor","description":"The Island is Antwerp's regenerated port district - MAS museum towers over converted warehouses, waterfront cafes, and modern apartments. It's urban renewal done spectacularly.","vibe":"Modern & Waterfront","bestFor":"Architecture lovers, modern living seekers, and those wanting waterfront life","pros":["Stunning MAS museum","Waterfront living","Modern buildings","Great views"],"cons":["Can feel empty","Wind off water","Far from center"],"lat":51.23,"lng":4.405,"priceLevel":"$$$"},{"name":"Oude Stad","tagline":"Antwerp's historic diamond heart","description":"The Old Town centers on the stunning Grote Markt and Cathedral - guild houses, diamond district, and centuries of Flemish history. It's beautiful but very touristy.","vibe":"Historic & Central","bestFor":"History buffs, first-time visitors, and those wanting iconic Antwerp","pros":["Stunning architecture","Central location","Historic sites","Good transport"],"cons":["Very touristy","Expensive","Crowded"],"lat":51.221,"lng":4.401,"priceLevel":"$$$"},{"name":"Zurenborg","tagline":"Art Nouveau architectural treasure","description":"Zurenborg is a hidden gem - streets of perfectly preserved Art Nouveau and Belle Époque houses, especially on Cogels-Osylei. It's one of Europe's most beautiful residential neighborhoods.","vibe":"Architectural & Residential","bestFor":"Architecture enthusiasts, families, and those seeking beautiful residential life","pros":["Stunning Art Nouveau","Quiet residential","Good value","Family-friendly"],"cons":["Far from center","Limited nightlife","Fewer cafes"],"lat":51.205,"lng":4.425,"priceLevel":"$$"},{"name":"Borgerhout","tagline":"Antwerp's multicultural edge","description":"Borgerhout is Antwerp's most diverse neighborhood - Moroccan markets, African restaurants, and a growing creative scene. It's edgy, affordable, and increasingly popular with artists.","vibe":"Multicultural & Emerging","bestFor":"Budget nomads, cultural explorers, and those seeking authentic diversity","pros":["Very affordable","Great ethnic food","Diverse community","Up-and-coming"],"cons":["Rougher edges","Less polished","Safety concerns in areas"],"lat":51.212,"lng":4.435,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Back Bay","tagline":"Boston's elegant Victorian showcase","description":"Back Bay is Boston's most elegant neighborhood - Victorian brownstones, Newbury Street shopping, and the Charles River Esplanade. It's refined Boston.","vibe":"Elegant & Victorian","bestFor":"Shoppers, architecture lovers, and those seeking refined Boston","pros":["Beautiful architecture","Newbury Street","Charles River","Central"],"cons":["Expensive","Formal","Limited nightlife"],"lat":42.351,"lng":-71.081,"priceLevel":"$$$$"},{"name":"Beacon Hill","tagline":"Boston's historic gas-lit charm","description":"Beacon Hill is historic Boston - cobblestone streets, gas lamps, and Federal architecture. It's the city's most photogenic and preserved neighborhood.","vibe":"Historic & Charming","bestFor":"History lovers, photographers, and those seeking old Boston","pros":["Gas-lit streets","Historic charm","Acorn Street","Charles Street shops"],"cons":["Very hilly","Expensive","Quiet evenings"],"lat":42.358,"lng":-71.068,"priceLevel":"$$$$"},{"name":"North End","tagline":"Boston's authentic Italian quarter","description":"The North End is Boston's Little Italy - authentic Italian restaurants, pastry shops, and European character. It's Boston's most flavorful neighborhood.","vibe":"Italian & Foodie","bestFor":"Food lovers, Italian culture seekers, and those seeking European Boston","pros":["Amazing Italian food","Pastry shops","European feel","Historic sites"],"cons":["Very crowded","Narrow streets","Parking impossible"],"lat":42.3647,"lng":-71.0542,"priceLevel":"$$"},{"name":"South End","tagline":"Boston's trendy restaurant row","description":"The South End is Boston's dining destination - excellent restaurants, LGBTQ+ friendly, and beautiful Victorian bow-fronts. It's Boston's most dynamic neighborhood.","vibe":"Foodie & LGBTQ+","bestFor":"Foodies, LGBTQ+ travelers, and those seeking trendy Boston","pros":["Best restaurants","Beautiful architecture","LGBTQ+ friendly","SoWa market"],"cons":["Expensive dining","Gentrified","Parking issues"],"lat":42.342,"lng":-71.076,"priceLevel":"$$$"},{"name":"Cambridge/Harvard Square","tagline":"Boston's academic intellectual hub","description":"Harvard Square is Boston's intellectual center - Harvard University, bookstores, and academic atmosphere. It's where Boston's brain power concentrates.","vibe":"Academic & Intellectual","bestFor":"Academics, students, and those seeking intellectual Boston","pros":["Harvard campus","Great bookstores","Intellectual vibe","Historic"],"cons":["Expensive","Student crowds","Can feel exclusive"],"lat":42.3736,"lng":-71.119,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

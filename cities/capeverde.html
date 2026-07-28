@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Santa Maria (Sal)","tagline":"Beach paradise and kite surfing capital","description":"The main tourist hub on Sal island features a long sandy beach, colorful pier, and growing infrastructure for nomads. The constant trade winds make it a world-class kitesurfing destination with a laid-back beach town vibe.","vibe":"Beach & Active","bestFor":"Kitesurfers, beach lovers, and water sports enthusiasts","pros":["World-class kitesurfing","Beautiful beach","Good restaurant selection","Growing nomad scene"],"cons":["Touristy and pricier","Limited cultural experiences","Windy conditions always"],"lat":16.599,"lng":-22.905,"priceLevel":"$$$"},{"name":"Mindelo (São Vicente)","tagline":"Cultural capital with musical soul","description":"Cape Verde's cultural heart is a colorful port city famous for morna music and literary heritage. The colonial architecture, live music venues, and artistic community make it the archipelago's most culturally rich destination.","vibe":"Cultural & Artistic","bestFor":"Music lovers, culture seekers, and those wanting authentic Cape Verdean experience","pros":["Amazing live music scene","Rich cultural heritage","Colorful architecture","Authentic atmosphere"],"cons":["Less beach focused","More urban feel","Ferry needed for other islands"],"lat":16.8909,"lng":-24.9876,"priceLevel":"$$"},{"name":"Sal Rei (Boa Vista)","tagline":"Untouched beaches and desert landscapes","description":"The main town on Boa Vista island offers pristine beaches, desert dunes, and sea turtle nesting sites. Less developed than Sal, it appeals to those seeking raw natural beauty and quiet.","vibe":"Remote & Natural","bestFor":"Nature lovers, beach seekers wanting solitude, and eco-tourists","pros":["Stunning empty beaches","Sea turtle experiences","Desert landscapes","Peaceful atmosphere"],"cons":["Very limited infrastructure","Less social scene","Need car to explore"],"lat":16.1767,"lng":-22.9125,"priceLevel":"$$"},{"name":"Praia (Santiago)","tagline":"Capital city with African roots","description":"Cape Verde's capital on Santiago island offers the most authentic African influence in the archipelago. The Plateau district features colonial buildings, while the markets and music show the country's African heritage.","vibe":"Urban & Cultural","bestFor":"History buffs, those seeking authentic Cape Verde, and urban amenities","pros":["Most African atmosphere","Best shopping and services","Historical sites","Cultural museums"],"cons":["Less beach oriented","More urban challenges","Less tourist infrastructure"],"lat":14.933,"lng":-23.5133,"priceLevel":"$$"},{"name":"Tarrafal (Santiago)","tagline":"Black sand beaches and fishing village charm","description":"At the northern tip of Santiago, this fishing village offers volcanic black sand beaches, calm swimming waters, and an escape from the capital. The laid-back atmosphere contrasts with the island's urban south.","vibe":"Fishing Village & Relaxed","bestFor":"Beach lovers seeking quiet, slow travelers, and those escaping crowds","pros":["Beautiful black sand beach","Calm swimming waters","Authentic fishing village","Very relaxed pace"],"cons":["Remote location","Limited amenities","Long journey from Praia"],"lat":15.2778,"lng":-23.7522,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1412,6 +1412,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Losari Beach","tagline":"Sunset promenade and seafood heaven","description":"Makassar's famous waterfront offers the iconic Losari Beach promenade, stunning sunsets, and endless seafood stalls. The evening transformation into a food paradise makes it the city's social center.","vibe":"Waterfront & Social","bestFor":"Sunset lovers, seafood enthusiasts, and social travelers","pros":["Stunning sunsets","Amazing seafood","Social atmosphere","Waterfront walks"],"cons":["Crowded evenings","Tourist prices at stalls","Hot during day"],"lat":-5.1367,"lng":119.4089,"priceLevel":"$$"},{"name":"Fort Rotterdam Area","tagline":"Dutch colonial heritage preserved","description":"The area around the beautifully preserved Dutch fort offers museums, cultural venues, and historic atmosphere. The concentration of colonial architecture creates Makassar's most photogenic zone.","vibe":"Historic & Cultural","bestFor":"History buffs, photographers, and culture seekers","pros":["Historic fort","Museums","Colonial architecture","Cultural events"],"cons":["Limited accommodation","Can be hot","Tourist-focused"],"lat":-5.1334,"lng":119.4045,"priceLevel":"$$"},{"name":"Panakkukang","tagline":"Modern malls and urban convenience","description":"The commercial district features major shopping malls, modern hotels, and urban amenities. The air-conditioned comfort and international chains appeal to those seeking familiar conveniences.","vibe":"Modern & Commercial","bestFor":"Shoppers, business travelers, and modern comfort seekers","pros":["Major malls","Modern hotels","Air-conditioned","International food"],"cons":["No character","Generic feel","Far from waterfront"],"lat":-5.1534,"lng":119.4312,"priceLevel":"$$"},{"name":"Chinatown (Pecinan)","tagline":"Temples and traditional trade","description":"Makassar's historic Chinese quarter features temples, traditional medicine shops, and authentic Indonesian-Chinese culture. The narrow streets and market atmosphere offer glimpses of old Makassar.","vibe":"Traditional & Multicultural","bestFor":"Culture seekers, food lovers, and photography enthusiasts","pros":["Temple visits","Traditional markets","Authentic atmosphere","Good street food"],"cons":["Crowded streets","Basic infrastructure","Hot and busy"],"lat":-5.1278,"lng":119.4123,"priceLevel":"$"},{"name":"Samalona Island Area","tagline":"Island hopping gateway","description":"The port area provides access to nearby islands including Samalona, offering beach escapes from the city. The departure point for island adventures and marine activities.","vibe":"Port & Island Gateway","bestFor":"Beach seekers, snorkelers, and island hoppers","pros":["Island access","Beach escapes","Marine activities","Fresh seafood"],"cons":["Port atmosphere","Need boat for islands","Limited mainland attractions"],"lat":-5.1189,"lng":119.3812,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1463,6 +1464,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

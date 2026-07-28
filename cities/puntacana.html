@@ -1445,6 +1445,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Punta Cana Village","tagline":"Local life outside the resorts","description":"This growing town outside resort gates offers authentic Dominican life with local restaurants, supermarkets, and services. Digital nomads find affordable apartments and genuine community away from all-inclusive bubbles.","vibe":"Authentic developing","bestFor":"Long-term nomads seeking real DR","pros":["Affordable living","Local community","Real restaurants","Growing services"],"cons":["Basic infrastructure","Far from beaches","Needs transport"],"lat":18.5623,"lng":-68.3654,"priceLevel":"$"},{"name":"Cap Cana","tagline":"Ultra-luxury Caribbean living","description":"This exclusive gated resort community features mega-yachts, designer golf courses, and private beaches. Wealthy visitors find privacy and world-class amenities in this Caribbean Monaco.","vibe":"Ultra-luxury exclusive","bestFor":"Luxury seekers and high-net-worth individuals","pros":["Ultimate luxury","Private beaches","World-class dining","Complete privacy"],"cons":["Extremely expensive","Isolated bubble","No local culture"],"lat":18.4534,"lng":-68.3723,"priceLevel":"$$$"},{"name":"Bávaro","tagline":"Resort strip with beach access","description":"The famous Bávaro Beach area hosts most of Punta Cana's all-inclusive resorts. Those staying outside resorts can access beaches and enjoy the area's restaurants, clubs, and tourist infrastructure.","vibe":"Resort tourism","bestFor":"Beach lovers wanting resort access","pros":["Famous beaches","Many restaurants","Tourist services","Nightlife options"],"cons":["Very touristy","Resort prices","Aggressive vendors"],"lat":18.6789,"lng":-68.4345,"priceLevel":"$$"},{"name":"El Cortecito","tagline":"Beach town vibes in tourist country","description":"This beachfront area offers a more village-like feel among the mega-resorts. Local vendors, beach bars, and fishermen provide glimpses of traditional life while still accessing beautiful beaches.","vibe":"Beach village","bestFor":"Those wanting beach access without resort stays","pros":["Public beach access","Local vendors","Beach restaurants","Village atmosphere"],"cons":["Vendor pressure","Basic accommodations","Limited services"],"lat":18.6856,"lng":-68.4234,"priceLevel":"$"},{"name":"Downtown Punta Cana","tagline":"Modern development hub","description":"The newer downtown area features shopping centers, medical facilities, and modern apartments. Growing infrastructure serves both tourists and the expanding local population with contemporary amenities.","vibe":"Modern commercial","bestFor":"Those needing urban amenities","pros":["Modern shopping","Medical facilities","Good services","Growing options"],"cons":["No beach","Still developing","Generic feel"],"lat":18.5823,"lng":-68.4045,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1496,6 +1497,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

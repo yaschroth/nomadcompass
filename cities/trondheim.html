@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bakklandet","tagline":"Wooden houses along the river","description":"The charming east bank neighborhood features colorful wooden houses, cobblestone streets, and the famous bicycle lift. Cafes, antique shops, and artisan businesses fill restored buildings.","vibe":"Historic charming","bestFor":"Photographers and charm seekers","pros":["Beautiful architecture","Great cafes","River views","Bicycle lift"],"cons":["Can be crowded","Expensive dining","Small area"],"lat":63.4278,"lng":10.4034,"priceLevel":"$$"},{"name":"Sentrum","tagline":"Nidaros Cathedral and city heart","description":"The city center features the magnificent Nidaros Cathedral, archbishop's palace, and pedestrian shopping streets. Norway's historic coronation church anchors modern urban life.","vibe":"Historic central","bestFor":"History lovers and shoppers","pros":["Nidaros Cathedral","Good shopping","Central location","Historic sites"],"cons":["Tourist-heavy","Expensive","Limited nightlife"],"lat":63.4269,"lng":10.3925,"priceLevel":"$$"},{"name":"Solsiden","tagline":"Waterfront revival and social scene","description":"The former shipyard has transformed into a trendy waterfront area with restaurants, bars, and cultural venues. Summer brings outdoor dining and evening promenades along the harbor.","vibe":"Waterfront trendy","bestFor":"Foodies and nightlife seekers","pros":["Waterfront dining","Trendy bars","Summer atmosphere","Modern development"],"cons":["Expensive","Seasonal appeal","Commercial focus"],"lat":63.4345,"lng":10.4089,"priceLevel":"$$$"},{"name":"Ila","tagline":"Student energy and affordable vibes","description":"Near the technical university, this area attracts students with affordable dining, casual bars, and young energy. Authentic neighborhood life continues alongside student culture.","vibe":"Student casual","bestFor":"Students and budget travelers","pros":["Affordable","Student atmosphere","Local feel","Good transport"],"cons":["Less polished","Far from attractions","Basic amenities"],"lat":63.4312,"lng":10.3734,"priceLevel":"$"},{"name":"Nidelven Banks","tagline":"River walks and warehouse charm","description":"The historic wharves along the river feature the iconic painted warehouses on stilts. Walking paths connect neighborhoods while historic buildings house modern restaurants and offices.","vibe":"Riverside scenic","bestFor":"Walkers and photographers","pros":["Iconic views","Walking paths","Historic warehouses","Scenic atmosphere"],"cons":["Limited accommodation","Weather dependent","Spread out"],"lat":63.4289,"lng":10.3978,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

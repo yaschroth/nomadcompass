@@ -1446,6 +1446,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro / Quinta Avenida","tagline":"The famous Fifth Avenue and beach access","description":"Centro is Playa's tourist heart - the famous Quinta Avenida (5th Avenue) pedestrian street lined with restaurants, shops, and nightlife. Beach access is steps away. It's touristy but convenient, with everything a nomad needs within walking distance.","vibe":"Tourist & Convenient","bestFor":"First-time visitors, social nomads, and those who want beach and nightlife combined","pros":["Beach access","Endless restaurants","Walkable","Nightlife"],"cons":["Very touristy","Expensive","Noisy","Pushy vendors"],"lat":20.6296,"lng":-87.0739,"priceLevel":"$$$"},{"name":"Playacar","tagline":"Gated community with golf courses and resorts","description":"Playacar is Playa's upscale gated community south of the ferry terminal. All-inclusive resorts, golf courses, and luxury condos attract a more affluent crowd. Safe and polished, but isolated from authentic Mexican life.","vibe":"Resort & Exclusive","bestFor":"Families, safety-focused travelers, and those seeking resort-style amenities","pros":["Very safe","Beaches","Golf courses","Peaceful"],"cons":["Isolated bubble","Need transport","Not authentic","Expensive"],"lat":20.6125,"lng":-87.0711,"priceLevel":"$$$"},{"name":"Gonzalo Guerrero","tagline":"Local Playa living with authentic tacos","description":"Gonzalo Guerrero is where locals live - just west of Quinta Avenida, prices drop and authenticity rises. Street tacos, local markets, and Mexican neighborhood life await. Growing nomad community discovering the value.","vibe":"Local & Authentic","bestFor":"Budget nomads, Spanish learners, and those seeking real Mexican neighborhood life","pros":["Authentic tacos","Great value","Local markets","Near center"],"cons":["Less polished","Limited English","Basic infrastructure"],"lat":20.63,"lng":-87.0839,"priceLevel":"$"},{"name":"Calle CTM / Calle 38","tagline":"Playa's emerging nomad hub with coworking","description":"The area around Calle 38 and CTM is becoming Playa's nomad center. Coworking spaces, healthy cafes, and modern apartments attract remote workers seeking Playa lifestyle without Quinta Avenida prices. The sweet spot for long-term stays.","vibe":"Nomad & Emerging","bestFor":"Digital nomads, coworking seekers, and long-term visitors","pros":["Coworking options","Modern apartments","Good value","Nomad community"],"cons":["Far from beach","Still developing","Less exciting"],"lat":20.638,"lng":-87.075,"priceLevel":"$$"},{"name":"Playa del Carmen Norte","tagline":"Quieter beaches north of the crowds","description":"North Playa offers beach access without the centro chaos. Fewer tourists, wider beaches, and growing condo developments attract those seeking quieter Caribbean life. Still walkable to 5th Avenue when you want the action.","vibe":"Quiet & Beach","bestFor":"Beach lovers seeking calm, couples, and nomads escaping crowds","pros":["Quieter beaches","Less crowded","Beach access","Growing area"],"cons":["Fewer restaurants","Long walk to center","Limited nightlife"],"lat":20.645,"lng":-87.068,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1497,6 +1498,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

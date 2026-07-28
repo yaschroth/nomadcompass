@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centrs (City Center)","tagline":"Art Nouveau grandeur in Riga's heart","description":"Riga's center boasts Europe's finest Art Nouveau architecture - stunning facades line every street. It's where culture, dining, and history concentrate. The default choice for experiencing Riga's unique character.","vibe":"Art Nouveau & Central","bestFor":"Architecture lovers, culture seekers, and nomads wanting central Riga","pros":["Incredible architecture","Central location","Great restaurants","Walkable"],"cons":["Tourist prices","Limited parking","Cold winters"],"lat":56.9496,"lng":24.1052,"priceLevel":"$$"},{"name":"Vecrīga (Old Town)","tagline":"Medieval streets in Riga's UNESCO heart","description":"Vecrīga is Riga's medieval core - narrow cobblestone streets, church spires, and historic squares. It's tourist central but atmospheric, especially in the evening when day-trippers leave.","vibe":"Medieval & Tourist","bestFor":"First-time visitors, history lovers, and those seeking medieval atmosphere","pros":["Historic atmosphere","Walking streets","Tourist amenities","Beautiful"],"cons":["Very touristy","Expensive","Limited residential"],"lat":56.9467,"lng":24.1064,"priceLevel":"$$$"},{"name":"Āgenskalns","tagline":"Riga's wooden architecture gem across the river","description":"Āgenskalns showcases Riga's wooden architecture heritage - colorful houses, local markets, and genuine Latvian life. Across the Daugava River, it offers authentic character rare in the center.","vibe":"Authentic & Wooden","bestFor":"Culture seekers, photographers, and nomads seeking authentic Riga","pros":["Wooden architecture","Local markets","Authentic","Affordable"],"cons":["Across river","Less infrastructure","Basic amenities"],"lat":56.938,"lng":24.065,"priceLevel":"$"},{"name":"Mežaparks","tagline":"Riga's garden city with forest and zoo","description":"Mežaparks is Riga's garden suburb - forest, zoo, and wooden villas in peaceful setting. It's where families and nature lovers escape while staying connected to the city by tram.","vibe":"Green & Residential","bestFor":"Families, nature lovers, and nomads seeking peaceful green living","pros":["Forest access","Zoo nearby","Peaceful","Beautiful villas"],"cons":["Far from center","Limited dining","Quiet evenings"],"lat":56.978,"lng":24.14,"priceLevel":"$$"},{"name":"Miera iela area","tagline":"Riga's hipster strip with cafes and design","description":"Miera iela (Peace Street) has become Riga's trendiest strip - design shops, specialty coffee, and creative spaces. It's where young Latvians and creative nomads gather. The emerging alternative.","vibe":"Hipster & Creative","bestFor":"Creatives, coffee lovers, and nomads seeking Riga's trendy scene","pros":["Best cafes","Design shops","Creative vibe","Emerging scene"],"cons":["Small area","Developing","Weather dependent"],"lat":56.96,"lng":24.12,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

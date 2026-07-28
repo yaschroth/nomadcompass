@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Anjuna / Vagator","tagline":"Goa's bohemian heart with trance music legacy","description":"Anjuna and Vagator are Goa's legendary bohemian zone - famous flea markets, trance parties, and backpacker culture since the 60s. Digital nomads mix with old hippies at beach cafes. Creative, chaotic, and uniquely Goan.","vibe":"Bohemian & Party","bestFor":"Creatives, party people, and nomads seeking Goa's legendary hippie vibe","pros":["Famous flea market","Beach parties","Creative energy","Nomad community"],"cons":["Seasonal","Can be seedy","Noisy parties","Basic infrastructure"],"lat":15.5737,"lng":73.742,"priceLevel":"$$"},{"name":"Assagao / Siolim","tagline":"North Goa's upscale village escape","description":"Assagao and Siolim represent upscale North Goa - Portuguese villas, boutique hotels, and excellent restaurants away from beach chaos. Popular with long-term nomads and expats seeking quality village life.","vibe":"Upscale & Village","bestFor":"Long-term stayers, couples, and nomads seeking quality over chaos","pros":["Beautiful villas","Great restaurants","Peaceful","Quality life"],"cons":["Away from beach","Need transport","Expensive for Goa"],"lat":15.6,"lng":73.775,"priceLevel":"$$$"},{"name":"Palolem / Agonda","tagline":"South Goa's paradise beaches","description":"South Goa's Palolem and Agonda offer palm-fringed crescents of sand far from North Goa's party scene. Beach huts, yoga retreats, and dolphin watching create relaxed atmosphere. Seasonal paradise for beach lovers.","vibe":"Beach Paradise","bestFor":"Beach lovers, yoga enthusiasts, and nomads seeking tropical paradise","pros":["Stunning beaches","Yoga retreats","Relaxed vibe","Dolphin watching"],"cons":["Very seasonal","Limited infrastructure","Far from everything"],"lat":15.01,"lng":74.023,"priceLevel":"$$"},{"name":"Panjim (Panaji)","tagline":"Goa's Portuguese capital with urban conveniences","description":"Panjim is Goa's charming capital - Portuguese architecture, riverside promenades, and Latin Quarter of Fontainhas. It's where Goa feels most like Portugal, with proper urban infrastructure and year-round life.","vibe":"Urban & Portuguese","bestFor":"Culture lovers, long-term residents, and nomads needing urban infrastructure","pros":["Year-round life","Portuguese charm","Good infrastructure","Cultural events"],"cons":["No beach","City traffic","Less exciting"],"lat":15.4989,"lng":73.8278,"priceLevel":"$$"},{"name":"Morjim / Ashwem","tagline":"Little Russia with upscale beach vibes","description":"Morjim and Ashwem have become North Goa's upscale beach alternative - Russian expat community, boutique shacks, and turtle nesting beaches. Quieter than Anjuna with better facilities. The comfortable middle ground.","vibe":"Upscale Beach","bestFor":"Beach lovers seeking comfort, couples, and nomads avoiding party scene","pros":["Beautiful beaches","Better facilities","Quieter","Turtle nesting"],"cons":["Russian dominated","Expensive","Less Indian feel"],"lat":15.633,"lng":73.735,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

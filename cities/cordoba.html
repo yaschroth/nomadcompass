@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Colonial architecture and Jesuit heritage","description":"Córdoba's center is Argentina's colonial jewel - Jesuit block, cathedral, university. Where Spanish colonial heritage meets bohemian modern culture.","vibe":"Historic & Cultural","bestFor":"History lovers, culture seekers, and architecture enthusiasts","pros":["Colonial architecture","Great museums","Walkable","Cultural events"],"cons":["Hot summers","Tourist prices","Crowded weekends"],"lat":-31.4201,"lng":-64.1888,"priceLevel":"$$"},{"name":"Nueva Córdoba","tagline":"Student quarter with nightlife energy","description":"Nueva Córdoba pulses with university life - students fill bars and clubs, restaurants stay open late. Argentina's largest student population creates non-stop energy.","vibe":"Student & Nightlife","bestFor":"Nightlife seekers, students, and young travelers","pros":["Great nightlife","Young energy","Good restaurants","Affordable"],"cons":["Very noisy","Crowded","Student housing quality"],"lat":-31.4289,"lng":-64.1834,"priceLevel":"$"},{"name":"Güemes","tagline":"Bohemian market and craft beer scene","description":"Güemes is Córdoba's bohemian heart - weekend craft market, vintage shops, craft breweries. Where the city's creative and alternative community gathers.","vibe":"Bohemian & Creative","bestFor":"Market lovers, craft beer enthusiasts, and creatives","pros":["Famous market","Great craft beer","Character","Artsy vibe"],"cons":["Busy weekends","Limited parking","Can feel crowded"],"lat":-31.4234,"lng":-64.1967,"priceLevel":"$$"},{"name":"Alto Alberdi","tagline":"Residential with local character","description":"Alto Alberdi offers local Córdoba - residential streets, neighborhood markets, everyday Argentine life. Away from students and tourists.","vibe":"Residential & Authentic","bestFor":"Long-term visitors, authentic seekers, and families","pros":["Authentic vibes","Affordable","Local markets","Quiet"],"cons":["Far from center","Basic area","Limited nightlife"],"lat":-31.4134,"lng":-64.2089,"priceLevel":"$"},{"name":"Cerro de las Rosas","tagline":"Upscale suburb with restaurants","description":"Cerro de las Rosas is Córdoba's upscale suburb - fine restaurants, safe streets, residential elegance. Where the city's elite lives and dines.","vibe":"Upscale & Residential","bestFor":"Upscale travelers, families, and those wanting refinement","pros":["Great restaurants","Safe area","Green streets","Quality housing"],"cons":["Expensive","Far from center","Car essential"],"lat":-31.3989,"lng":-64.2134,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

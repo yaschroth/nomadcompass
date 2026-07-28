@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Capitole/Centre","tagline":"Toulouse's grand pink heart","description":"Place du Capitole is Toulouse's majestic center - the pink brick square, opera house, and main shopping streets. It's the city's social and commercial heart.","vibe":"Central & Grand","bestFor":"First-time visitors, shoppers, and those seeking central Toulouse","pros":["Iconic square","Central location","Shopping","Restaurants"],"cons":["Touristy","Crowded","Expensive"],"lat":43.6045,"lng":1.444,"priceLevel":"$$$"},{"name":"Saint-Cyprien","tagline":"Toulouse's artsy left bank","description":"Saint-Cyprien is Toulouse's left bank alternative - Les Abattoirs museum, local markets, and artistic energy. It's less polished but more authentic than the center.","vibe":"Artistic & Local","bestFor":"Art lovers, budget travelers, and those seeking local atmosphere","pros":["Les Abattoirs","Local markets","Authentic feel","Affordable"],"cons":["Less pretty","Some gritty areas","Fewer restaurants"],"lat":43.6,"lng":1.432,"priceLevel":"$$"},{"name":"Carmes","tagline":"Toulouse's foodie paradise","description":"Les Carmes centers on Toulouse's best market - the covered Marché des Carmes surrounded by excellent restaurants. It's the city's gastronomic heart.","vibe":"Foodie & Market","bestFor":"Food lovers, market enthusiasts, and those seeking Toulouse's cuisine","pros":["Best market","Great restaurants","Central location","Foodie heaven"],"cons":["Crowded mornings","Limited nightlife","Expensive produce"],"lat":43.6,"lng":1.448,"priceLevel":"$$"},{"name":"Saint-Étienne","tagline":"Toulouse's cathedral quarter charm","description":"Saint-Étienne surrounds Toulouse's cathedral - antique shops, quiet squares, and old-money elegance. It's the city's most refined residential neighborhood.","vibe":"Elegant & Quiet","bestFor":"Antique lovers, culture seekers, and those seeking peaceful charm","pros":["Cathedral","Antique shops","Quiet streets","Beautiful architecture"],"cons":["Very quiet","Limited nightlife","Expensive"],"lat":43.599,"lng":1.453,"priceLevel":"$$$"},{"name":"Saint-Aubin/Saint-Georges","tagline":"Toulouse's student nightlife hub","description":"Saint-Aubin and Saint-Georges are Toulouse's party quarters - cheap bars, late nights, and student energy. Place Saint-Georges is the city's social hub.","vibe":"Student & Nightlife","bestFor":"Students, young travelers, and those seeking nightlife","pros":["Best nightlife","Student prices","Social atmosphere","Central"],"cons":["Noisy nights","Can be rowdy","Variable quality"],"lat":43.608,"lng":1.451,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

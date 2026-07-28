@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Zona Colonial","tagline":"First city of the Americas","description":"The oldest European settlement in the Americas features UNESCO-listed architecture, the first cathedral, and cobblestone streets echoing 500 years of history. Restaurants and hotels fill colonial mansions.","vibe":"Historic monumental","bestFor":"History buffs and culture seekers","pros":["Historic significance","UNESCO heritage","Walkable streets","Cultural venues"],"cons":["Tourist prices","Safety at night","Hot and humid"],"lat":18.4734,"lng":-69.8812,"priceLevel":"$$"},{"name":"Piantini","tagline":"Upscale living and fine dining","description":"Santo Domingo's most affluent neighborhood offers international restaurants, designer boutiques, and luxury apartments. Embassy row and corporate offices create a cosmopolitan atmosphere.","vibe":"Upscale cosmopolitan","bestFor":"Luxury seekers and business travelers","pros":["Fine dining","Safe area","Modern amenities","Quality shopping"],"cons":["Very expensive","Less authentic","Car required"],"lat":18.4623,"lng":-69.9234,"priceLevel":"$$$"},{"name":"Gazcue","tagline":"Cultural district with art deco charm","description":"This historic residential neighborhood features art deco and Victorian architecture alongside cultural institutions. Museums, theaters, and the Malecón waterfront create intellectual atmosphere.","vibe":"Cultural historic","bestFor":"Culture lovers and students","pros":["Cultural institutions","Historic architecture","Malecón access","Affordable"],"cons":["Aging infrastructure","Some rough areas","Limited dining"],"lat":18.4612,"lng":-69.8978,"priceLevel":"$"},{"name":"Naco","tagline":"Modern living with urban convenience","description":"This commercial and residential neighborhood offers modern apartments, shopping malls, and diverse dining. Middle-class Dominicans and long-term visitors appreciate the practical amenities.","vibe":"Modern commercial","bestFor":"Digital nomads and long-term stays","pros":["Modern amenities","Good shopping","Diverse dining","Central location"],"cons":["Traffic congestion","Less character","Hot and urban"],"lat":18.4534,"lng":-69.9123,"priceLevel":"$$"},{"name":"Boca Chica","tagline":"Beach escape near the capital","description":"This beach town east of the city offers calm, reef-protected waters and a lively beach scene. Dominican families and international visitors share the beach while restaurants serve fresh seafood.","vibe":"Beach casual","bestFor":"Beach lovers near the city","pros":["Calm waters","Beach restaurants","Local atmosphere","Weekend escape"],"cons":["Persistent vendors","Crowded weekends","Party atmosphere"],"lat":18.4545,"lng":-69.6089,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Baroque splendor built on lava","description":"Catania's historic center is UNESCO-listed Baroque magnificence - rebuilt from volcanic stone after Etna's eruption. Piazza Duomo, elephant fountain, and fish markets define Sicily.","vibe":"Historic & Vibrant","bestFor":"Culture lovers, foodies, and those wanting Sicilian authenticity","pros":["Stunning architecture","Amazing food","Cultural heart","Walkable"],"cons":["Can be chaotic","Tourist crowds","Petty crime risk"],"lat":37.5024,"lng":15.0876,"priceLevel":"$$"},{"name":"San Berillo","tagline":"Regenerating red-light district turned creative","description":"San Berillo's transformation is remarkable - former red-light area now hosting artists, cafes, and young entrepreneurs. Authentic edge with creative potential.","vibe":"Alternative & Emerging","bestFor":"Creatives, adventurous types, and urban explorers","pros":["Cheap rents","Creative scene","Authentic character","Central location"],"cons":["Still rough areas","Limited amenities","Safety concerns after dark"],"lat":37.5056,"lng":15.0845,"priceLevel":"$"},{"name":"Ognina","tagline":"Fishing village swallowed by the city","description":"Ognina retains its fishing village soul despite city absorption - small harbor, seafood restaurants, local swimmers. Authentic coastal Catania life.","vibe":"Coastal & Local","bestFor":"Seafood lovers, swimmers, and those wanting local vibes","pros":["Fresh seafood","Sea access","Local atmosphere","Less touristy"],"cons":["Far from center","Limited transport","Simple facilities"],"lat":37.5284,"lng":15.1089,"priceLevel":"$$"},{"name":"Borgo","tagline":"Art nouveau elegance and Bellini vibes","description":"Borgo showcases Catania's elegant side - liberty-style buildings, Teatro Bellini, upscale shopping. The cultural and commercial heart of modern Catania.","vibe":"Elegant & Cultural","bestFor":"Culture seekers, shoppers, and those wanting refinement","pros":["Beautiful architecture","Great theater","Safe area","Good shopping"],"cons":["Expensive","Less authentic","Tourist-oriented"],"lat":37.5076,"lng":15.0901,"priceLevel":"$$$"},{"name":"San Giovanni Galermo","tagline":"University quarter with student energy","description":"San Giovanni Galermo pulses with university life - students from across Sicily bring youthful energy. Affordable eats, casual bars, and academic atmosphere.","vibe":"Student & Casual","bestFor":"Students, budget travelers, and those wanting young crowds","pros":["Affordable","Young atmosphere","University resources","Local life"],"cons":["Far from sights","Basic amenities","Limited at night"],"lat":37.5234,"lng":15.0612,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"UNESCO baroque beauty","description":"Querétaro's UNESCO-listed historic center showcases stunning colonial architecture with pink stone buildings, ornate churches, and peaceful plazas. Cafes and restaurants fill renovated mansions while street musicians serenade passersby.","vibe":"Colonial elegant","bestFor":"History lovers and architecture enthusiasts","pros":["Stunning architecture","Walkable center","Cultural events","Great dining"],"cons":["Tourist prices","Limited parking","Can feel small"],"lat":20.5881,"lng":-100.3899,"priceLevel":"$$"},{"name":"Juriquilla","tagline":"Modern suburb with tech scene","description":"This planned development north of town has become Querétaro's tech hub with universities, research centers, and modern living. Young professionals and families enjoy parks, malls, and contemporary restaurants.","vibe":"Modern suburban","bestFor":"Tech workers and families","pros":["Modern amenities","Good universities","Tech companies","Family-friendly"],"cons":["Far from center","Needs car","Less character"],"lat":20.7034,"lng":-100.4523,"priceLevel":"$$"},{"name":"Santiago de Querétaro","tagline":"Traditional neighborhood charm","description":"One of the city's oldest neighborhoods offers traditional Mexican life with local markets, family restaurants, and neighborhood tiendas. The iconic aqueduct frames views while locals go about daily routines.","vibe":"Traditional authentic","bestFor":"Culture seekers and budget travelers","pros":["Authentic Mexico","Affordable","Near aqueduct","Local markets"],"cons":["Basic amenities","Older buildings","Spanish needed"],"lat":20.5812,"lng":-100.4012,"priceLevel":"$"},{"name":"El Pueblito","tagline":"Small town feel with city access","description":"This former separate town now connects to Querétaro while maintaining village character. An archaeological site, local markets, and traditional festivities preserve cultural heritage near modern conveniences.","vibe":"Village traditional","bestFor":"Those seeking small-town Mexico","pros":["Village atmosphere","Archaeological site","Lower costs","Traditional festivals"],"cons":["Far from center","Limited nightlife","Needs transport"],"lat":20.5312,"lng":-100.4234,"priceLevel":"$"},{"name":"Zibatá","tagline":"Master-planned luxury living","description":"This exclusive gated development offers golf courses, equestrian facilities, and luxury homes. International residents and wealthy Mexicans find security, amenities, and manicured environments.","vibe":"Luxury planned","bestFor":"Luxury seekers and golf enthusiasts","pros":["Golf courses","High security","Luxury amenities","Beautiful grounds"],"cons":["Very expensive","Isolated feel","Gate community bubble"],"lat":20.6756,"lng":-100.4789,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

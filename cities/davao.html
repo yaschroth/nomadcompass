@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Downtown / Poblacion","tagline":"City center with Durian culture","description":"Davao's downtown is Mindanao's metropolis - markets, malls, famous durian stalls. Where the Philippines' safest city shows its urban face.","vibe":"Urban & Commercial","bestFor":"City explorers, durian adventurers, and practical visitors","pros":["City amenities","Durian paradise","Safe","Good transport"],"cons":["Traffic congestion","Hot and humid","Not scenic"],"lat":7.0707,"lng":125.6087,"priceLevel":"$"},{"name":"Lanang","tagline":"Business district with modern amenities","description":"Lanang is Davao's business and lifestyle center - SM Lanang mall, BPO offices, modern restaurants. Where Davao's emerging middle class gathers.","vibe":"Modern & Commercial","bestFor":"Business travelers, modern seekers, and mall lovers","pros":["Modern facilities","Good shopping","Safe area","Restaurants"],"cons":["Generic","Traffic","Mall-centric"],"lat":7.1012,"lng":125.6312,"priceLevel":"$$"},{"name":"Samal Island","tagline":"Resort island across the gulf","description":"Samal Island is Davao's beach escape - resorts, beaches, weekend getaways. Where Davaoeños escape to the Gulf of Davao's island paradise.","vibe":"Beach & Resort","bestFor":"Beach lovers, resort seekers, and weekend escapers","pros":["Beach resorts","Island escape","Water activities","Peaceful"],"cons":["Ferry access only","Limited nightlife","Resort prices"],"lat":7.0912,"lng":125.7234,"priceLevel":"$$"},{"name":"Toril / Eden Nature Park","tagline":"Highland escape with mountain cool","description":"Toril district offers highland attractions - Eden Nature Park, fishing villages, mountain air. Where Davao escapes the lowland heat.","vibe":"Natural & Cool","bestFor":"Nature lovers, families, and those escaping heat","pros":["Cooler climate","Nature park","Mountain scenery","Activities"],"cons":["Far from center","Need transport","Day-trip focused"],"lat":7.0134,"lng":125.5012,"priceLevel":"$$"},{"name":"Matina","tagline":"University area with student energy","description":"Matina serves Davao's universities - student housing, affordable eats, youthful atmosphere. Where Mindanao's student population gathers.","vibe":"Student & Budget","bestFor":"Students, budget travelers, and those wanting local vibes","pros":["Affordable","Student energy","Local food","Near universities"],"cons":["Basic area","Student housing","Limited attractions"],"lat":7.0567,"lng":125.5789,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

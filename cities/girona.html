@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Barri Vell (Old Town)","tagline":"Medieval magnificence and Game of Thrones fame","description":"Girona's Old Town is exceptionally preserved - Jewish quarter El Call, the cathedral's baroque staircase (that's Braavos!), and colorful houses along the Onyar River.","vibe":"Historic & Charming","bestFor":"History buffs, photographers, and Game of Thrones fans","pros":["Stunning architecture","Well-preserved","Great restaurants","Walkable"],"cons":["Tourist crowds","Expensive dining","Cobblestone challenges"],"lat":41.9878,"lng":2.8258,"priceLevel":"$$$"},{"name":"Mercadal","tagline":"Shopping streets and local commerce","description":"Mercadal is Girona's commercial heart - pedestrian shopping streets, local markets, and daily life. Where Gironins actually shop and conduct business.","vibe":"Commercial & Local","bestFor":"Shoppers, practical visitors, and those wanting local vibes","pros":["Good shopping","Local atmosphere","Practical amenities","Central"],"cons":["Less scenic","Commercial feel","Crowded Saturdays"],"lat":41.9823,"lng":2.8234,"priceLevel":"$$"},{"name":"Sant Narcís","tagline":"Working-class authenticity and local bars","description":"Sant Narcís keeps it real - working-class neighborhood with authentic bars, affordable restaurants, and local character. Where to experience Girona beyond tourism.","vibe":"Local & Authentic","bestFor":"Budget travelers, authenticity seekers, and those escaping crowds","pros":["Very affordable","Authentic vibes","Local bars","No tourists"],"cons":["Not pretty","Basic amenities","Limited English"],"lat":41.9756,"lng":2.8145,"priceLevel":"$"},{"name":"Devesa","tagline":"Green space and riverside relaxation","description":"Devesa offers Girona's green lung - sprawling park along the river, weekend markets, sports facilities. Where locals run, picnic, and escape the medieval density.","vibe":"Green & Recreational","bestFor":"Runners, families, and nature lovers","pros":["Beautiful park","River walks","Sports facilities","Weekend markets"],"cons":["Residential area","Far from old town","Limited dining"],"lat":41.9912,"lng":2.8156,"priceLevel":"$$"},{"name":"Pedret","tagline":"Quiet residential beyond the walls","description":"Pedret extends north of the old town - residential neighborhood with affordable housing, local shops, and easy access to both historic center and nature.","vibe":"Residential & Quiet","bestFor":"Long-term visitors, families, and those wanting peace","pros":["Affordable","Quiet streets","Near nature","Good for stays"],"cons":["Not scenic","Limited nightlife","Basic area"],"lat":41.9923,"lng":2.8298,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

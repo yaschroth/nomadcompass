@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Casco Antiguo","tagline":"Ancient peninsula old town","description":"Cádiz's Old Town claims to be Europe's oldest continuously inhabited city - narrow streets, plazas, and Atlantic views create a unique atmosphere on this peninsula jutting into the sea.","vibe":"Historic & Atmospheric","bestFor":"History lovers, atmosphere seekers, and those wanting ancient Spain","pros":["Ancient history","Ocean views","Great tapas","Unique atmosphere"],"cons":["Narrow streets","Limited parking","Some rundown areas"],"lat":36.5271,"lng":-6.2886,"priceLevel":"$$"},{"name":"La Viña","tagline":"Cádiz's carnival soul","description":"La Viña is the heart of Cádiz's famous carnival - working-class tradition, the best tapas bars, and authentic gaditano culture. Carnival season here is unforgettable.","vibe":"Traditional & Authentic","bestFor":"Carnival lovers, foodies, and those seeking authentic Cádiz","pros":["Best tapas","Carnival heart","Authentic","Great atmosphere"],"cons":["Basic housing","Noisy carnival season","Working class"],"lat":36.523,"lng":-6.295,"priceLevel":"$"},{"name":"Playa de la Victoria","tagline":"Cádiz's urban beach paradise","description":"The Victoria Beach stretches for kilometers along modern Cádiz - beach bars, promenades, and contemporary apartments offer a different experience from the ancient old town.","vibe":"Beach & Modern","bestFor":"Beach lovers, modern comfort seekers, and families","pros":["Great beach","Modern amenities","Beach bars","Easy parking"],"cons":["Far from old town","Less character","Seasonal"],"lat":36.51,"lng":-6.265,"priceLevel":"$$"},{"name":"Puerta Tierra","tagline":"Cádiz's affordable gateway","description":"Just outside the ancient walls, Puerta Tierra offers more affordable living while keeping old town access. It's practical rather than picturesque but good value.","vibe":"Affordable & Practical","bestFor":"Budget travelers, long-term visitors, and value seekers","pros":["Affordable","Near old town","Good transport","Local markets"],"cons":["Less charming","Busy roads","Industrial areas"],"lat":36.532,"lng":-6.276,"priceLevel":"$"},{"name":"Santa María","tagline":"Quiet corner of ancient Cádiz","description":"Santa María is the quieter side of the old town - the cathedral, peaceful plazas, and residential calm offer a more relaxed old town experience.","vibe":"Quiet & Residential","bestFor":"Peace seekers, cathedral visitors, and those wanting quiet old town life","pros":["Near cathedral","Quieter","Beautiful plazas","Local feel"],"cons":["Fewer restaurants","Very quiet evenings","Some neglected areas"],"lat":36.529,"lng":-6.293,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

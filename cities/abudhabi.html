@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Corniche","tagline":"Waterfront promenade of Gulf luxury","description":"The Corniche defines Abu Dhabi - 8km waterfront with pristine beaches, cycling paths, and Gulf views. Where the capital showcases its modern ambition.","vibe":"Waterfront & Modern","bestFor":"Beach lovers, joggers, and those wanting luxury waterfront","pros":["Beautiful beaches","Great promenade","Clean facilities","Safe area"],"cons":["Very hot","Expensive","Can feel sterile"],"lat":24.467,"lng":54.3283,"priceLevel":"$$$"},{"name":"Al Maryah Island","tagline":"Financial district with luxury shopping","description":"Al Maryah Island is Abu Dhabi's business hub - Cleveland Clinic, The Galleria mall, Four Seasons, and waterfront dining. Where corporate Abu Dhabi meets luxury retail.","vibe":"Business & Luxury","bestFor":"Business travelers, luxury shoppers, and professionals","pros":["Luxury shopping","Fine dining","Modern facilities","Waterfront"],"cons":["Very expensive","Corporate feel","Limited nightlife"],"lat":24.4989,"lng":54.3899,"priceLevel":"$$$$"},{"name":"Saadiyat Island","tagline":"Cultural district with Louvre Abu Dhabi","description":"Saadiyat Island is Abu Dhabi's cultural ambition realized - Louvre Abu Dhabi, beach clubs, and future Guggenheim. Where art meets pristine beaches.","vibe":"Cultural & Beach","bestFor":"Art lovers, beach enthusiasts, and culture seekers","pros":["Louvre Abu Dhabi","Beautiful beaches","Resort hotels","Peaceful"],"cons":["Expensive","Isolated","Limited dining options"],"lat":24.5432,"lng":54.4345,"priceLevel":"$$$$"},{"name":"Yas Island","tagline":"Entertainment island with F1 circuit","description":"Yas Island is Abu Dhabi's fun zone - Ferrari World, Yas Waterworld, F1 circuit, Warner Bros. Where families and thrill-seekers find endless entertainment.","vibe":"Entertainment & Family","bestFor":"Families, F1 fans, and entertainment seekers","pros":["Theme parks","F1 circuit","Good hotels","Entertainment options"],"cons":["Far from center","Hot outdoors","Can feel artificial"],"lat":24.4978,"lng":54.6078,"priceLevel":"$$$"},{"name":"Downtown / Tourist Club Area","tagline":"Urban core with accessible shopping","description":"Downtown Abu Dhabi offers the city's urban heart - Abu Dhabi Mall, business towers, and more accessible hotels. Where practical Abu Dhabi happens.","vibe":"Urban & Commercial","bestFor":"Budget travelers, business visitors, and practical stays","pros":["More affordable","Good shopping","Central location","Good transport"],"cons":["Less scenic","Traffic congestion","Older buildings"],"lat":24.487,"lng":54.3673,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Sopocachi","tagline":"Bohemian heart at altitude","description":"La Paz's coolest neighborhood features tree-lined streets, excellent restaurants, and cultural venues. The bohemian atmosphere, colonial architecture, and Montículo park attract locals and travelers alike.","vibe":"Bohemian & Cultural","bestFor":"Foodies, culture seekers, and those wanting upscale La Paz","pros":["Best restaurants and bars","Cultural venues","Tree-lined streets","Safe area"],"cons":["Expensive for Bolivia","Altitude challenges","Steep hills"],"lat":-16.5089,"lng":-68.1178,"priceLevel":"$$"},{"name":"San Jorge","tagline":"Embassy district with city views","description":"The upscale residential area houses embassies and foreign residents. The quieter streets, good security, and dramatic city views make it popular with expats and business travelers.","vibe":"Diplomatic & Quiet","bestFor":"Business travelers, diplomats, and those wanting quiet security","pros":["Safe and quiet","City views","Good infrastructure","Embassy proximity"],"cons":["Less character","Residential quietness","Higher prices"],"lat":-16.5134,"lng":-68.1256,"priceLevel":"$$$"},{"name":"Centro Histórico","tagline":"Colonial churches and chaotic markets","description":"The historic center showcases colonial architecture, San Francisco church, and the famous Witches' Market. The sensory overload of markets, vendors, and Bolivian life defines authentic La Paz.","vibe":"Historic & Chaotic","bestFor":"Culture seekers, market lovers, and budget travelers","pros":["Historic architecture","Famous markets","Authentic atmosphere","Budget options"],"cons":["Altitude hits hardest here","Crowded and chaotic","Petty theft concerns"],"lat":-16.4956,"lng":-68.1345,"priceLevel":"$"},{"name":"Zona Sur","tagline":"The low-altitude escape","description":"The wealthy southern zone sits 1,000m lower than the center, offering relief from altitude effects. The upscale malls, restaurants, and residential comfort attract affluent Paceños and expats.","vibe":"Affluent & Modern","bestFor":"Altitude sufferers, families, and those wanting modern comfort","pros":["Lower altitude","Modern amenities","Safe area","Good restaurants"],"cons":["Far from attractions","Need transport","Less character"],"lat":-16.5367,"lng":-68.0834,"priceLevel":"$$$"},{"name":"El Alto","tagline":"Indigenous markets on the altiplano","description":"The sprawling city above La Paz offers the famous Thursday/Sunday markets and indigenous Aymara culture. The raw Bolivian experience at 4,000m isn't for everyone but rewards adventurous travelers.","vibe":"Indigenous & Market","bestFor":"Market enthusiasts, culture seekers, and adventurous travelers","pros":["Incredible markets","Authentic Aymara culture","Cholita wrestling","Very affordable"],"cons":["Even higher altitude","Cold and windy","Safety concerns"],"lat":-16.5045,"lng":-68.1789,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

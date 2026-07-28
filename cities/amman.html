@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Downtown (Al-Balad)","tagline":"Ancient souks and Roman ruins","description":"Downtown Amman is the city's historic heart - Roman amphitheater, traditional souks, gold markets, and falafel shops. Authentic Amman at its most vibrant.","vibe":"Historic & Authentic","bestFor":"Culture seekers, history lovers, and authentic experience hunters","pros":["Roman ruins","Authentic souks","Great food","Affordable"],"cons":["Chaotic traffic","Can be overwhelming","Few hotels"],"lat":31.9539,"lng":35.934,"priceLevel":"$"},{"name":"Jabal Amman","tagline":"Bohemian hillside with Rainbow Street","description":"Jabal Amman combines old and new - Rainbow Street's cafés and galleries, traditional houses, panoramic views. Where young Amman creates and socializes.","vibe":"Bohemian & Trendy","bestFor":"Young travelers, café lovers, and art enthusiasts","pros":["Great cafés","Art galleries","City views","Cool atmosphere"],"cons":["Hilly terrain","Parking difficult","Can be noisy"],"lat":31.9512,"lng":35.9234,"priceLevel":"$$"},{"name":"Abdoun","tagline":"Upscale expat enclave with modern dining","description":"Abdoun is where Amman's wealthy and expats live - villas, international restaurants, embassy row. Where modern dining and cocktails are possible.","vibe":"Upscale & International","bestFor":"Expats, luxury seekers, and those wanting international options","pros":["Fine dining","Modern cafés","Safe area","International feel"],"cons":["Expensive","Removed from culture","Car needed"],"lat":31.9456,"lng":35.8912,"priceLevel":"$$$"},{"name":"Sweifieh","tagline":"Shopping malls and middle-class modernity","description":"Sweifieh represents modern Amman - shopping malls, chain restaurants, middle-class living. Practical and accessible for everyday needs.","vibe":"Modern & Commercial","bestFor":"Shoppers, practical travelers, and those wanting convenience","pros":["Good shopping","Modern amenities","Accessible","Good transport"],"cons":["Generic feel","Traffic congestion","No historic charm"],"lat":31.9634,"lng":35.8567,"priceLevel":"$$"},{"name":"Citadel Area (Jabal al-Qal'a)","tagline":"Ancient hilltop overlooking the city","description":"The Citadel hill holds Amman's ancient secrets - ruins spanning Bronze Age to Umayyad, Temple of Hercules, panoramic views. The city's spiritual heart.","vibe":"Ancient & Panoramic","bestFor":"History enthusiasts, photographers, and view seekers","pros":["Incredible history","Amazing views","Archaeological sites","Cultural depth"],"cons":["Exposed heat","Limited shade","Tourism focused"],"lat":31.9578,"lng":35.9344,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

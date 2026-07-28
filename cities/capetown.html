@@ -1421,6 +1421,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Bowl / Gardens","tagline":"Table Mountain views and Cape Town's beating heart","description":"The City Bowl sits dramatically beneath Table Mountain, with Gardens being its leafy residential side. Government Avenue, Company's Garden, and excellent cafes make this central area ideal. Kloof Street offers restaurants and nightlife, all with mountain views.","vibe":"Central & Scenic","bestFor":"First-time visitors, professionals, and nomads wanting mountain views with city access","pros":["Table Mountain views","Central location","Great cafes","Walkable"],"cons":["Higher crime","Expensive","Busy streets"],"lat":-33.93,"lng":18.41,"priceLevel":"$$"},{"name":"Sea Point","tagline":"Oceanside promenade living with sunset views","description":"Sea Point is Cape Town's Atlantic beachfront neighborhood, famous for its promenade and sunset views. This diverse, walkable area attracts a mix of young professionals, families, and nomads who enjoy coastal living. Great restaurants and excellent security.","vibe":"Coastal & Active","bestFor":"Fitness enthusiasts, ocean lovers, and nomads seeking active seaside lifestyle","pros":["Ocean access","Promenade walks","Great security","Diverse restaurants"],"cons":["Cold water","Limited nightlife","Foggy mornings"],"lat":-33.9161,"lng":18.3867,"priceLevel":"$$"},{"name":"Camps Bay","tagline":"Postcard-perfect beaches with celebrity appeal","description":"Camps Bay is Cape Town at its most glamorous - white sand beaches, palm trees, and the Twelve Apostles mountain range as backdrop. Beach bars and upscale restaurants line the strip. It's expensive and touristy, but the setting is undeniably spectacular.","vibe":"Glamorous & Beach","bestFor":"Beach lovers, luxury seekers, and nomads who want the Cape Town postcard lifestyle","pros":["Stunning beach","Mountain views","Beach bars","Exclusive vibe"],"cons":["Very expensive","Touristy","Far from CBD"],"lat":-33.9506,"lng":18.3783,"priceLevel":"$$$"},{"name":"Woodstock","tagline":"Cape Town's creative hub with craft beer and street art","description":"Woodstock is Cape Town's creative revival story. Former industrial spaces now house galleries, craft breweries, design studios, and the famous Old Biscuit Mill market. It's gentrifying fast, attracting creatives and startups who appreciate its raw energy.","vibe":"Creative & Emerging","bestFor":"Creatives, entrepreneurs, and nomads seeking Cape Town's most dynamic neighborhood","pros":["Creative scene","Food markets","Street art","Lower rents"],"cons":["Safety concerns","Gentrifying","Mixed infrastructure"],"lat":-33.9267,"lng":18.4444,"priceLevel":"$"},{"name":"Observatory","tagline":"Student village with bohemian energy","description":"Observatory is Cape Town's bohemian student neighborhood, centered around Lower Main Road's quirky shops and cafes. The university energy keeps it young and affordable, while its alternative character attracts artists and free spirits. Great for budget nomads.","vibe":"Bohemian & Student","bestFor":"Students, artists, and budget nomads seeking alternative community","pros":["Affordable","Alternative vibe","Great cafes","Young energy"],"cons":["Safety concerns at night","Student chaos","Basic infrastructure"],"lat":-33.9384,"lng":18.4711,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1472,6 +1473,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1446,6 +1446,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Kotor's UNESCO walled wonder","description":"Kotor's Old Town is Montenegro's jewel - medieval walls, Venetian architecture, and dramatic mountain backdrop. Compact and stunning.","vibe":"Historic & Dramatic","bestFor":"History lovers, photographers, and those seeking Kotor's essence","pros":["UNESCO site","Venetian architecture","Mountain backdrop","Compact"],"cons":["Cruise ship crowds","Very small","Limited accommodation"],"lat":42.4247,"lng":18.7712,"priceLevel":"$$$"},{"name":"Fortress/City Walls","tagline":"Kotor's dramatic hillside climb","description":"The fortress climb offers Kotor's best views - 1,350 steps up medieval walls to San Giovanni fortress. Challenging but rewarding.","vibe":"Active & Scenic","bestFor":"Hikers, photographers, and those seeking dramatic views","pros":["Stunning views","Medieval walls","Great exercise","Bay panorama"],"cons":["Very steep","Entrance fee","Crowded in season"],"lat":42.427,"lng":18.773,"priceLevel":"$"},{"name":"Dobrota","tagline":"Kotor's waterfront residential strip","description":"Dobrota stretches along the bay north of Old Town - local restaurants, waterfront walks, and more authentic atmosphere.","vibe":"Waterfront & Local","bestFor":"Long-term stayers, local food lovers, and those seeking quiet Kotor","pros":["Waterfront walks","Local restaurants","Quieter","Bay views"],"cons":["Far from Old Town","Limited nightlife","Need transport"],"lat":42.44,"lng":18.765,"priceLevel":"$$"},{"name":"Muo","tagline":"Kotor's southern bay village","description":"Muo is a small village south of Old Town - traditional stone houses, local restaurants, and authentic bay life.","vibe":"Village & Authentic","bestFor":"Those seeking village atmosphere and authentic Montenegro","pros":["Village feel","Local restaurants","Authentic","Bay views"],"cons":["Very small","Limited options","Far from action"],"lat":42.415,"lng":18.763,"priceLevel":"$"},{"name":"Prčanj","tagline":"Kotor's captain's village","description":"Prčanj was historically home to sea captains - impressive churches, traditional architecture, and peaceful bay atmosphere.","vibe":"Historic Village","bestFor":"History lovers, church visitors, and those seeking peaceful bay life","pros":["Historic churches","Captain's houses","Peaceful","Authentic"],"cons":["Very quiet","Limited dining","Needs transport"],"lat":42.435,"lng":18.74,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1497,6 +1498,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

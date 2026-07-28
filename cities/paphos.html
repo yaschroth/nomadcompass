@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kato Paphos","tagline":"Harbor mosaics and tourist buzz","description":"The lower town features the famous archaeological park with Roman mosaics, the medieval castle, and tourist-focused harbor. The concentration of ancient sites makes it Paphos' must-visit area.","vibe":"Archaeological & Tourist","bestFor":"History enthusiasts, first-time visitors, and archaeology lovers","pros":["UNESCO mosaics","Harbor atmosphere","Restaurant variety","Medieval castle"],"cons":["Very touristy","Crowded in summer","Tourist prices"],"lat":34.7534,"lng":32.4089,"priceLevel":"$$$"},{"name":"Pano Paphos (Upper Town)","tagline":"Local life on the hill","description":"The upper town offers more authentic Cypriot atmosphere with local markets, traditional tavernas, and less tourist influence. The contrast with the coastal strip provides insight into real Cyprus.","vibe":"Local & Traditional","bestFor":"Local experience seekers, budget travelers, and authentic Cyprus lovers","pros":["Local atmosphere","Traditional tavernas","More affordable","Market shopping"],"cons":["Less scenic","Need transport to beach","Limited nightlife"],"lat":34.7589,"lng":32.4234,"priceLevel":"$$"},{"name":"Coral Bay","tagline":"Beach resort family favorite","description":"The popular beach resort area north of Paphos offers sandy beaches, family-friendly atmosphere, and resort hotels. The protected bay and clear waters make it ideal for swimming.","vibe":"Beach & Family","bestFor":"Families, beach lovers, and resort seekers","pros":["Sandy beach","Clear waters","Family friendly","Good facilities"],"cons":["Very touristy","Resort atmosphere","Far from town"],"lat":34.8234,"lng":32.3534,"priceLevel":"$$$"},{"name":"Peyia","tagline":"Expat haven with sea views","description":"The hillside village popular with British expats offers sea views, affordable living, and quiet atmosphere. The mix of retirement community and long-term visitors creates relaxed energy.","vibe":"Expat & Quiet","bestFor":"Long-term visitors, retirees, and view seekers","pros":["Sea views","Expat community","More affordable","Quiet living"],"cons":["Very expat-oriented","Need car","Limited Cypriot culture"],"lat":34.8556,"lng":32.3312,"priceLevel":"$$"},{"name":"Aphrodite's Rock Area","tagline":"Mythological beauty on the coast","description":"The coastal area near the famous Petra tou Romiou rock offers dramatic scenery and mythological significance. The birthplace of Aphrodite legend adds romance to stunning coastal views.","vibe":"Mythological & Scenic","bestFor":"Romantics, photographers, and mythology enthusiasts","pros":["Famous rock","Dramatic coast","Romantic setting","Photo opportunities"],"cons":["No swimming allowed","Limited services","Need transport"],"lat":34.6634,"lng":32.6312,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

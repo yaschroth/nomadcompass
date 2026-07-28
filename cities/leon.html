@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial grandeur with revolutionary soul","description":"León's historic center features one of Central America's largest cathedrals, revolutionary murals, and colonial architecture. The cultural intensity and student energy create Nicaragua's most intellectual atmosphere.","vibe":"Historic & Revolutionary","bestFor":"History buffs, culture seekers, and those wanting authentic Nicaragua","pros":["Stunning cathedral","Revolutionary history","Colonial architecture","Cultural venues"],"cons":["Very hot climate","Basic infrastructure","Some areas run-down"],"lat":12.4379,"lng":-86.8779,"priceLevel":"$"},{"name":"Sutiava","tagline":"Indigenous neighborhood with living traditions","description":"The indigenous barrio adjacent to the center maintains pre-colonial traditions, unique churches, and authentic local life. The community pride and cultural preservation offer a different perspective.","vibe":"Indigenous & Traditional","bestFor":"Culture seekers, those wanting authentic indigenous experience","pros":["Indigenous heritage","Unique traditions","Authentic atmosphere","Affordable"],"cons":["Basic infrastructure","Less tourist services","Hot and dusty"],"lat":12.4356,"lng":-86.8912,"priceLevel":"$"},{"name":"Via Bypass Area","tagline":"Modern Nicaragua emerging","description":"The commercial strip along the bypass road features modern malls, supermarkets, and newer development. The air-conditioned comfort and international chains appeal to those seeking modern amenities.","vibe":"Modern & Commercial","bestFor":"Those wanting modern amenities, shoppers, and chain store seekers","pros":["Air-conditioned malls","Modern supermarkets","International chains","Better infrastructure"],"cons":["No character","Need transport","Generic feel"],"lat":12.4234,"lng":-86.8534,"priceLevel":"$$"},{"name":"Las Peñitas Beach","tagline":"Pacific surf escape from the heat","description":"This beach community just 30 minutes from León offers relief from city heat with surf breaks, seafood, and turtle conservation. The laid-back atmosphere attracts surfers and beach seekers.","vibe":"Beach & Surf","bestFor":"Surfers, beach lovers, and those escaping city heat","pros":["Beach access","Surf breaks","Turtle watching","Cooler than city"],"cons":["Basic infrastructure","Limited services","Can feel isolated"],"lat":12.3567,"lng":-87.0234,"priceLevel":"$"},{"name":"University Area","tagline":"Student energy and cheap eats","description":"The area around UNAN-León university buzzes with student life, cheap eateries, and young energy. The academic atmosphere and affordable prices attract budget travelers and Spanish learners.","vibe":"Student & Budget","bestFor":"Budget travelers, Spanish learners, and those seeking student atmosphere","pros":["Cheapest food","Student energy","Language practice","Affordable accommodation"],"cons":["Basic amenities","Can be noisy","Less scenic"],"lat":12.4423,"lng":-86.8678,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

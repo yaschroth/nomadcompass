@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt","tagline":"Medieval streets and Münster majesty","description":"Freiburg's Old Town centers on its magnificent Münster - Gothic cathedral towering over cobbled streets, Bächle water channels, and traditional wine taverns.","vibe":"Historic & Charming","bestFor":"History lovers, wine enthusiasts, and romantic travelers","pros":["Beautiful cathedral","Unique Bächle","Wine culture","Walkable"],"cons":["Tourist crowds","Expensive","Limited parking"],"lat":47.996,"lng":7.8492,"priceLevel":"$$$"},{"name":"Vauban","tagline":"Europe's greenest neighborhood","description":"Vauban is sustainability incarnate - former French barracks transformed into car-free, solar-powered eco-district. Families bike, trams run, and sustainability lives.","vibe":"Eco & Family","bestFor":"Eco-conscious travelers, families, and urban planning enthusiasts","pros":["Ultra-sustainable","Car-free living","Family-friendly","Community spirit"],"cons":["Very residential","Limited nightlife","Far from center"],"lat":47.9678,"lng":7.8234,"priceLevel":"$$"},{"name":"Stühlinger","tagline":"Station quarter with multicultural energy","description":"Stühlinger bridges old and new Freiburg - near main station, multicultural restaurants, student energy. Practical location with increasingly creative character.","vibe":"Urban & Diverse","bestFor":"Budget travelers, students, and transit-users","pros":["Near station","Diverse food","Affordable","Good transport"],"cons":["Less pretty","Some rough edges","Not scenic"],"lat":47.9989,"lng":7.8312,"priceLevel":"$"},{"name":"Wiehre","tagline":"Gründerzeit elegance and student life","description":"Wiehre combines late 19th-century architecture with university life - elegant apartment buildings, tree-lined streets, cafes filled with students and professors.","vibe":"Elegant & Academic","bestFor":"Students, academics, and those wanting beautiful residential areas","pros":["Beautiful architecture","Great cafes","Safe area","University nearby"],"cons":["Expensive","Quiet nights","Residential focus"],"lat":47.9856,"lng":7.8567,"priceLevel":"$$"},{"name":"Herdern","tagline":"Hillside living with vineyard views","description":"Herdern climbs Freiburg's hillsides - residential streets leading to vineyards and Black Forest trails. Where city meets nature in quintessential Baden style.","vibe":"Residential & Natural","bestFor":"Hikers, nature lovers, and those wanting peaceful stays","pros":["Near nature","Vineyard access","Quiet streets","Beautiful views"],"cons":["Hilly terrain","Limited dining","Far from center"],"lat":48.0089,"lng":7.8534,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

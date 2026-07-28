@@ -1445,6 +1445,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ville Haute","tagline":"Medieval fortress meets EU institutions","description":"The upper town features Luxembourg's UNESCO-listed old town, the Grand Ducal Palace, and dramatic views over the Pétrusse valley. The concentration of historic sites and upscale dining makes it the natural center.","vibe":"Historic & Upscale","bestFor":"History lovers, first-time visitors, and those seeking old town charm","pros":["UNESCO heritage","Grand Ducal Palace","Valley views","Fine dining"],"cons":["Very expensive","Tourist crowds","Quiet at night"],"lat":49.6116,"lng":6.1319,"priceLevel":"$$$"},{"name":"Grund","tagline":"Valley village beneath the fortress walls","description":"The lower town in the Alzette valley offers a village atmosphere with the famous Neumünster Abbey, riverside paths, and cozy restaurants. The dramatic setting beneath fortress walls creates unique charm.","vibe":"Village & Scenic","bestFor":"Romantics, photographers, and those seeking peaceful atmosphere","pros":["Stunning setting","Riverside walks","Cozy restaurants","Abbey venue"],"cons":["Steep walks to upper town","Limited accommodation","Can flood"],"lat":49.6089,"lng":6.1356,"priceLevel":"$$"},{"name":"Kirchberg","tagline":"EU quarter with cultural mega-projects","description":"The modern plateau hosts EU institutions, the Philharmonie, and MUDAM contemporary art museum. The striking modern architecture and international atmosphere contrast sharply with the old town.","vibe":"Modern & Institutional","bestFor":"Architecture enthusiasts, EU professionals, and modern art lovers","pros":["Modern architecture","Major museums","EU institutions","Conference facilities"],"cons":["Sterile atmosphere","Expensive","Less character"],"lat":49.6234,"lng":6.1523,"priceLevel":"$$$"},{"name":"Clausen","tagline":"Former brewery district with nightlife revival","description":"The historic brewery quarter along the Alzette has transformed into Luxembourg's nightlife hub with restaurants, bars, and clubs. The industrial heritage adds character to the entertainment scene.","vibe":"Nightlife & Historic","bestFor":"Night owls, foodies, and those seeking entertainment","pros":["Best nightlife","Restaurant variety","Industrial heritage","Riverside setting"],"cons":["Noisy weekends","Parking challenges","Can feel rowdy"],"lat":49.6134,"lng":6.1423,"priceLevel":"$$"},{"name":"Bonnevoie","tagline":"Multicultural neighborhood with real life","description":"The diverse residential neighborhood near the station offers affordable options and international restaurants. The authentic Luxembourg residential life contrasts with touristic old town.","vibe":"Multicultural & Residential","bestFor":"Budget travelers, long-term visitors, and local experience seekers","pros":["More affordable","International food","Station access","Real neighborhood"],"cons":["Less scenic","Some rough areas","Far from sights"],"lat":49.6034,"lng":6.1278,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1496,6 +1497,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

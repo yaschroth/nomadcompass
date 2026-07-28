@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Alun-Alun Merdeka","tagline":"Colonial center with Dutch grandeur","description":"Malang's town square showcases some of Indonesia's finest Dutch colonial architecture. The grand buildings, churches, and heritage hotels create a distinctly European atmosphere unusual for Java.","vibe":"Colonial & Grand","bestFor":"Architecture lovers, history buffs, and those seeking colonial heritage","pros":["Stunning colonial architecture","Central location","Heritage hotels","Historic atmosphere"],"cons":["Limited nightlife","Tourist-oriented","Can feel sleepy"],"lat":-7.9774,"lng":112.6312,"priceLevel":"$$"},{"name":"Kayutangan","tagline":"Heritage street with art deco gems","description":"The historic commercial street features art deco shophouses and colonial-era businesses. The nostalgic atmosphere and traditional shops offer glimpses of old Malang commerce.","vibe":"Heritage & Commercial","bestFor":"Architecture enthusiasts, shoppers, and nostalgia seekers","pros":["Art deco architecture","Traditional shops","Heritage walking","Photo opportunities"],"cons":["Busy traffic","Some buildings deteriorating","Limited dining"],"lat":-7.9789,"lng":112.6289,"priceLevel":"$"},{"name":"Batu","tagline":"Cool highlands with theme parks","description":"The highland town west of Malang offers cooler temperatures, apple orchards, and theme parks. The mountain resort atmosphere attracts domestic tourists and those escaping lowland heat.","vibe":"Highland & Recreation","bestFor":"Families, theme park lovers, and heat escapers","pros":["Cool climate","Theme parks","Apple orchards","Mountain scenery"],"cons":["Very touristy","Weekend crowds","Distance from Malang center"],"lat":-7.8712,"lng":112.5278,"priceLevel":"$$"},{"name":"Sengkaling","tagline":"Student town with cheap eats","description":"Near Brawijaya University, this area buzzes with student life, affordable eateries, and young energy. The budget-friendly atmosphere and educational vibe attract young travelers.","vibe":"Student & Budget","bestFor":"Budget travelers, young nomads, and student atmosphere seekers","pros":["Cheap food","Student energy","Budget accommodation","Young atmosphere"],"cons":["Basic amenities","Less scenic","Can be noisy"],"lat":-7.9534,"lng":112.6089,"priceLevel":"$"},{"name":"Singosari","tagline":"Temple ruins and volcanic foothills","description":"The area north of Malang features ancient Hindu-Buddhist temple ruins and access to Mount Bromo. The historical depth and natural beauty attract archaeology and volcano enthusiasts.","vibe":"Ancient & Natural","bestFor":"Temple explorers, volcano chasers, and history buffs","pros":["Ancient temples","Bromo access point","Historical significance","Natural beauty"],"cons":["Spread out","Need transport","Limited accommodation"],"lat":-7.8889,"lng":112.6523,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

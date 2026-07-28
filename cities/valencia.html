@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"El Carmen","tagline":"Valencia's bohemian heart with street art","description":"El Carmen is Valencia's oldest and most bohemian neighborhood - medieval walls, street art, and alternative bars. It's the city's creative heart, where artists and students create vibrant atmosphere.","vibe":"Bohemian & Creative","bestFor":"Artists, students, and nomads seeking Valencia's most creative neighborhood","pros":["Street art","Great bars","Creative scene","Historic"],"cons":["Noisy nights","Gritty areas","Basic infrastructure"],"lat":39.479,"lng":-0.381,"priceLevel":"$$"},{"name":"Ruzafa","tagline":"Valencia's trendiest neighborhood with foodie scene","description":"Ruzafa is Valencia's hippest neighborhood - trendy cafes, excellent restaurants, and multicultural character. It's where young Valencians and nomads gather, with the best food scene in the city.","vibe":"Trendy & Foodie","bestFor":"Foodies, young professionals, and nomads seeking Valencia's trendiest area","pros":["Best restaurants","Trendy cafes","Multicultural","Great markets"],"cons":["Getting expensive","Crowded weekends","Parking nightmare"],"lat":39.461,"lng":-0.37,"priceLevel":"$$"},{"name":"Cabanyal","tagline":"Fishermen's quarter with beach access","description":"Cabanyal is Valencia's beach neighborhood - traditional fishermen's houses, beach access, and emerging creative scene. It's raw but rapidly improving, with excellent value and beach lifestyle.","vibe":"Beach & Emerging","bestFor":"Beach lovers, budget nomads, and those seeking authentic coastal living","pros":["Beach access","Character","Affordable","Emerging scene"],"cons":["Rough areas","Basic infrastructure","Far from center"],"lat":39.469,"lng":-0.328,"priceLevel":"$"},{"name":"Ciutat Vella (Old Town)","tagline":"Valencia's historic center with cathedral","description":"Ciutat Vella is Valencia's historic heart - the cathedral, La Lonja, and Central Market. It's touristy but magnificent, with beautiful plazas and historic atmosphere. Classic Valencia experience.","vibe":"Historic & Central","bestFor":"History lovers, first-time visitors, and nomads wanting central historic living","pros":["Historic sites","Central Market","Beautiful plazas","Walkable"],"cons":["Touristy","Expensive","Noisy"],"lat":39.4753,"lng":-0.3751,"priceLevel":"$$$"},{"name":"Benimaclet","tagline":"Valencia's student village with local character","description":"Benimaclet is Valencia's student neighborhood - university proximity, affordable living, and village character. It maintains small-town feel despite city location, with excellent local restaurants.","vibe":"Student & Village","bestFor":"Students, budget nomads, and those seeking village atmosphere","pros":["Very affordable","Village feel","Student energy","Local restaurants"],"cons":["Far from center","Basic amenities","Student chaos"],"lat":39.488,"lng":-0.355,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

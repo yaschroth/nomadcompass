@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Borgo Teresiano","tagline":"Trieste's elegant canal district","description":"Borgo Teresiano is Trieste's Habsburg heart - the Grand Canal, elegant squares, and coffee house culture. It's Vienna on the Adriatic.","vibe":"Elegant & Habsburg","bestFor":"Coffee lovers, architecture fans, and those seeking Habsburg Trieste","pros":["Grand Canal","Coffee houses","Elegant architecture","Central"],"cons":["Expensive","Formal atmosphere","Limited nightlife"],"lat":45.65,"lng":13.77,"priceLevel":"$$$"},{"name":"Città Vecchia (Old Town)","tagline":"Trieste's medieval Italian heart","description":"The Old Town is Trieste's Italian soul - narrow streets, Roman ruins, and San Giusto hill. It's where Trieste's Mediterranean character shines.","vibe":"Medieval & Italian","bestFor":"History lovers, Roman seekers, and those wanting Italian Trieste","pros":["Roman theater","San Giusto","Narrow streets","Historic"],"cons":["Hilly","Limited shops","Quiet evenings"],"lat":45.648,"lng":13.775,"priceLevel":"$$"},{"name":"Barcola","tagline":"Trieste's urban beach promenade","description":"Barcola is Trieste's beach - a long promenade with swimming spots and summer atmosphere. It's where Triestini escape for seaside relaxation.","vibe":"Beach & Local","bestFor":"Beach lovers, locals, and those wanting seaside Trieste","pros":["Beach access","Promenade","Local atmosphere","Sunset views"],"cons":["Rocky beach","Crowded summer","Far from center"],"lat":45.67,"lng":13.75,"priceLevel":"$"},{"name":"Miramare","tagline":"Trieste's fairytale castle quarter","description":"Miramare is Trieste's crown jewel - the fairytale castle, waterfront parks, and Adriatic views. It's one of Italy's most romantic spots.","vibe":"Romantic & Castle","bestFor":"Castle lovers, romantics, and those seeking scenic Trieste","pros":["Miramare Castle","Beautiful gardens","Sea views","Romantic"],"cons":["Far from center","Touristy","Expensive entry"],"lat":45.702,"lng":13.713,"priceLevel":"$$"},{"name":"Carso/Karst Plateau","tagline":"Trieste's rugged highland escape","description":"The Carso plateau rises behind Trieste - limestone landscapes, osmize wine cellars, and Slovenian border culture. It's wilder than expected.","vibe":"Rural & Wine","bestFor":"Wine lovers, hikers, and those seeking wild Trieste","pros":["Osmize wine","Hiking","Views","Wild landscape"],"cons":["Car needed","Limited services","Remote"],"lat":45.7,"lng":13.85,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

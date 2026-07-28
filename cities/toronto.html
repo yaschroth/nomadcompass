@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Queen West","tagline":"Toronto's art and fashion mile","description":"Queen West is Toronto's creative artery - galleries, indie boutiques, and street art. It's where Toronto's artists, designers, and creatives congregate.","vibe":"Creative & Trendy","bestFor":"Creatives, shoppers, and those seeking Toronto's artistic side","pros":["Best galleries","Indie shopping","Street art","Great cafes"],"cons":["Gentrifying fast","Crowded weekends","Expensive"],"lat":43.648,"lng":-79.41,"priceLevel":"$$$"},{"name":"Kensington Market","tagline":"Toronto's bohemian multicultural village","description":"Kensington Market is Toronto's soul - vintage shops, global food, and bohemian character. It's delightfully chaotic and fiercely independent.","vibe":"Bohemian & Multicultural","bestFor":"Free spirits, foodies, and those seeking authentic Toronto","pros":["Unique character","Global food","Vintage shopping","Pedestrian-friendly"],"cons":["Chaotic","Limited parking","Can be grungy"],"lat":43.654,"lng":-79.402,"priceLevel":"$$"},{"name":"The Annex","tagline":"Toronto's intellectual Victorian charm","description":"The Annex is Toronto's academic heart - University of Toronto, beautiful Victorian houses, and literary cafes. It's intellectual, leafy, and quintessentially Toronto.","vibe":"Academic & Residential","bestFor":"Academics, long-term stayers, and those seeking quiet charm","pros":["Beautiful architecture","Great bookshops","Quiet streets","University access"],"cons":["Quiet evenings","Limited nightlife","Expensive housing"],"lat":43.67,"lng":-79.405,"priceLevel":"$$$"},{"name":"Distillery District","tagline":"Toronto's Victorian industrial revival","description":"The Distillery District is Toronto's most photogenic area - restored Victorian industrial buildings housing galleries, restaurants, and artisan shops. Pedestrian-only and beautifully preserved.","vibe":"Historic & Artsy","bestFor":"Photographers, art lovers, and those seeking curated Toronto","pros":["Beautiful architecture","Art galleries","Pedestrian-only","Great restaurants"],"cons":["Touristy","Expensive","Can feel artificial"],"lat":43.6503,"lng":-79.3596,"priceLevel":"$$$"},{"name":"Leslieville","tagline":"Toronto's family-friendly east end","description":"Leslieville is Toronto's emerging east - young families, brunch spots, and independent shops. It's the city's most livable neighborhood with strong community feel.","vibe":"Family & Community","bestFor":"Families, foodies, and those seeking neighborhood life","pros":["Great brunch spots","Family-friendly","Community feel","Affordable"],"cons":["Far from downtown","Limited transit","Quiet nights"],"lat":43.663,"lng":-79.328,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

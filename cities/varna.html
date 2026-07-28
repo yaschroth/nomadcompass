@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Black Sea capital with European flair","description":"Bulgaria's third city features elegant architecture, pedestrian streets, and the famous Sea Garden. Opera houses, museums, and cafes create sophisticated coastal city atmosphere.","vibe":"Urban cultured","bestFor":"Culture seekers and urban explorers","pros":["Cultural venues","Sea Garden access","Good shopping","Architecture"],"cons":["Away from beach","Hot summers","Traffic congestion"],"lat":43.2141,"lng":27.9147,"priceLevel":"$"},{"name":"Sea Garden","tagline":"Park paradise along the Black Sea","description":"This massive seaside park stretches along the coast with gardens, cafes, and beach access. Summer concerts, outdoor bars, and evening promenades define Varna's leisure life.","vibe":"Park coastal","bestFor":"Nature lovers and beach seekers","pros":["Beautiful park","Beach access","Evening atmosphere","Summer events"],"cons":["Crowded summer","Seasonal appeal","Limited dining variety"],"lat":43.2089,"lng":27.9423,"priceLevel":"$"},{"name":"Golden Sands","tagline":"Resort paradise for all-inclusive crowds","description":"North of Varna, this massive resort complex offers hotels, water parks, and organized beach life. Package tourists from across Europe fill the high-rises in summer.","vibe":"Resort mass tourism","bestFor":"Resort seekers and families","pros":["All-inclusive options","Beach activities","Entertainment","Family facilities"],"cons":["Very touristy","Package tourism","Generic feel"],"lat":43.2823,"lng":28.0389,"priceLevel":"$$"},{"name":"Asparuhovo","tagline":"Local beach life south of center","description":"This residential area south of the center offers local beach access and authentic Bulgarian neighborhood life. Fewer tourists and lower prices attract long-term visitors.","vibe":"Residential beach","bestFor":"Long-term stays and budget travelers","pros":["Local atmosphere","Affordable","Beach access","Authentic feel"],"cons":["Less polished","Basic facilities","Bulgarian helpful"],"lat":43.1923,"lng":27.9145,"priceLevel":"$"},{"name":"Chaika","tagline":"Residential calm with nature access","description":"This quiet residential area offers affordable living with access to nature reserves. Long-term residents appreciate the balance of city amenities and natural surroundings.","vibe":"Residential green","bestFor":"Long-term residents seeking calm","pros":["Affordable housing","Nature nearby","Quiet streets","Local life"],"cons":["Far from center","Limited nightlife","Needs transport"],"lat":43.2245,"lng":27.8812,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

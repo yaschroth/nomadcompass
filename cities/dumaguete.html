@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Rizal Boulevard","tagline":"Dumaguete's scenic waterfront","description":"Rizal Boulevard is Dumaguete's heart - seaside promenade, university atmosphere, and sunset views. It's the most pleasant walk in the Visayas.","vibe":"Waterfront & University","bestFor":"Evening strollers, students, and those seeking Dumaguete's charm","pros":["Seaside promenade","University vibes","Sunset views","Restaurants"],"cons":["No beach","Hot days","Limited nightlife"],"lat":9.3065,"lng":123.306,"priceLevel":"$"},{"name":"Silliman University Area","tagline":"Dumaguete's academic heart","description":"Silliman is the Philippines' oldest American university - beautiful campus, anthropology museum, and student energy. It defines Dumaguete's character.","vibe":"Academic & Historic","bestFor":"Students, culture seekers, and those wanting university atmosphere","pros":["Historic campus","Museum","Student energy","Green spaces"],"cons":["No beach","Limited tourism services","Academic calendar dependent"],"lat":9.31,"lng":123.31,"priceLevel":"$"},{"name":"Dauin Beach","tagline":"Dumaguete's dive resort coast","description":"Dauin offers Dumaguete's best diving - muck diving, marine sanctuaries, and dive resorts. It's the dive destination of the central Visayas.","vibe":"Diving & Resort","bestFor":"Divers, snorkelers, and those wanting beach resort","pros":["World-class diving","Marine life","Beach resorts","Quieter"],"cons":["Far from town","Resort dependent","Expensive"],"lat":9.185,"lng":123.27,"priceLevel":"$$"},{"name":"Apo Island","tagline":"Dumaguete's marine sanctuary gem","description":"Apo Island is a marine sanctuary paradise - turtle encounters, pristine diving, and island simplicity. Day trips or basic overnight stays available.","vibe":"Marine & Island","bestFor":"Divers, snorkelers, and turtle seekers","pros":["Turtle guaranteed","Marine sanctuary","Island beauty","Great diving"],"cons":["Day trip logistics","Basic accommodation","Weather dependent"],"lat":9.075,"lng":123.27,"priceLevel":"$"},{"name":"Valencia/Twin Lakes","tagline":"Dumaguete's cool mountain escape","description":"Valencia offers Dumaguete's highland escape - cooler temperatures, twin crater lakes, and forest trails. It's perfect for escaping coastal heat.","vibe":"Mountain & Nature","bestFor":"Nature lovers, hikers, and those seeking cooler weather","pros":["Cooler weather","Twin lakes","Forest trails","Local culture"],"cons":["Far from coast","Transport needed","Limited services"],"lat":9.27,"lng":123.235,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Chartrons","tagline":"Bordeaux's antique and wine quarter","description":"Chartrons is Bordeaux's historic wine merchant district - antique shops, wine bars, and Sunday market. It's where Bordeaux's wine heritage meets contemporary lifestyle.","vibe":"Wine & Antiques","bestFor":"Wine lovers, antique hunters, and those seeking authentic Bordeaux","pros":["Sunday market","Wine heritage","Antique shops","River walks"],"cons":["Quiet evenings","Far from center","Limited nightlife"],"lat":44.853,"lng":-0.568,"priceLevel":"$$$"},{"name":"Saint-Pierre","tagline":"Bordeaux's charming historic heart","description":"Saint-Pierre is Bordeaux's old town - pedestrian streets, Place du Parlement, and traditional restaurants. It's beautifully restored with excellent dining and wine bars.","vibe":"Historic & Charming","bestFor":"First-time visitors, food lovers, and those seeking classic Bordeaux","pros":["Beautiful squares","Great restaurants","Historic charm","Central"],"cons":["Touristy","Expensive dining","Crowded"],"lat":44.84,"lng":-0.571,"priceLevel":"$$$"},{"name":"Saint-Michel","tagline":"Bordeaux's multicultural market quarter","description":"Saint-Michel surrounds Bordeaux's second-tallest spire - multicultural community, flea market, and affordable diversity. It's Bordeaux's most authentic working-class neighborhood.","vibe":"Multicultural & Market","bestFor":"Budget travelers, market lovers, and those seeking diversity","pros":["Great market","Multicultural food","Affordable","Authentic"],"cons":["Gritty areas","Less polished","Some safety concerns"],"lat":44.833,"lng":-0.565,"priceLevel":"$"},{"name":"Victoire","tagline":"Bordeaux's student party zone","description":"Place de la Victoire is Bordeaux's student hub - cheap bars, late nights, and university energy. It's young, loud, and the center of Bordeaux nightlife.","vibe":"Student & Nightlife","bestFor":"Students, young travelers, and those seeking nightlife","pros":["Cheapest drinks","Student energy","Late nights","Central"],"cons":["Noisy","Can be rowdy","Less sophisticated"],"lat":44.83,"lng":-0.574,"priceLevel":"$"},{"name":"Bassins à Flot","tagline":"Bordeaux's modern waterfront transformation","description":"Bassins à Flot is Bordeaux's newest neighborhood - transformed docks with the Cité du Vin, modern architecture, and waterfront dining. It's Bordeaux's vision of the future.","vibe":"Modern & Waterfront","bestFor":"Architecture lovers, wine enthusiasts, and those seeking modern Bordeaux","pros":["Cité du Vin","Modern architecture","Waterfront","Less crowded"],"cons":["Still developing","Far from center","Limited charm"],"lat":44.868,"lng":-0.555,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centrum","tagline":"Philips heritage meets modern design","description":"Eindhoven's center tells the Philips story - industrial heritage transformed into design destination. The Lichttoren, modern plazas, and international atmosphere.","vibe":"Modern & Design","bestFor":"Design enthusiasts, tech workers, and urban explorers","pros":["Design focus","Good shopping","Modern amenities","Walkable"],"cons":["Not traditionally pretty","Can feel corporate","Limited history"],"lat":51.4416,"lng":5.4697,"priceLevel":"$$"},{"name":"Strijp-S","tagline":"Former Philips factory turned creative hub","description":"Strijp-S is Eindhoven's creative transformation - abandoned Philips factories now housing design studios, cultural venues, and innovative restaurants. Industrial chic perfected.","vibe":"Creative & Industrial","bestFor":"Creatives, designers, and alternative travelers","pros":["Incredible transformation","Creative scene","Great events","Unique atmosphere"],"cons":["Still developing","Limited services","Can feel empty"],"lat":51.4467,"lng":5.4534,"priceLevel":"$$"},{"name":"Bergen","tagline":"Residential neighborhood with village feel","description":"Bergen offers Eindhoven's residential side - quiet streets, local shops, community character. A peaceful base for experiencing the design city.","vibe":"Residential & Quiet","bestFor":"Families, long-term visitors, and those wanting peace","pros":["Quiet atmosphere","Local shops","Safe area","Affordable"],"cons":["Not exciting","Basic amenities","Far from action"],"lat":51.4334,"lng":5.4567,"priceLevel":"$"},{"name":"Woensel","tagline":"Diverse north with international flavors","description":"Woensel is Eindhoven's multicultural north - diverse communities, international restaurants, authentic character. Less polished but genuinely diverse.","vibe":"Diverse & Authentic","bestFor":"Cultural explorers, food lovers, and budget travelers","pros":["Diverse food","Affordable","Authentic vibes","Near PSV stadium"],"cons":["Some rough areas","Less attractive","Limited English"],"lat":51.4612,"lng":5.4689,"priceLevel":"$"},{"name":"Gestel","tagline":"Green suburb with family focus","description":"Gestel spreads south of center - green spaces, family housing, local amenities. Where Eindhoven families live, connected to city but peacefully suburban.","vibe":"Suburban & Family","bestFor":"Families, nature lovers, and those wanting space","pros":["Green spaces","Family-friendly","Safe area","Good schools"],"cons":["Suburban feel","Limited nightlife","Car helpful"],"lat":51.4234,"lng":5.4712,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

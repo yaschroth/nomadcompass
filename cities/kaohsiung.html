@@ -1420,6 +1420,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Pier-2 Art Center","tagline":"Industrial warehouses turned creative hub","description":"The renovated harbor warehouses now house Taiwan's largest arts district with galleries, cafes, and creative spaces. The waterfront setting and artistic energy make it Kaohsiung's most vibrant area.","vibe":"Artistic & Waterfront","bestFor":"Creatives, art lovers, and those seeking trendy atmosphere","pros":["Amazing art installations","Great cafes and restaurants","Waterfront access","Bicycle-friendly"],"cons":["Touristy on weekends","Limited accommodation nearby","Can be hot in summer"],"lat":22.6212,"lng":120.2812,"priceLevel":"$$"},{"name":"Zuoying","tagline":"Dragon and tiger pagodas by the lotus lake","description":"Home to the iconic Lotus Pond temples, Zuoying blends ancient temples with the modern high-speed rail station. The contrast of spiritual sites and transit convenience creates a unique atmosphere.","vibe":"Spiritual & Transit","bestFor":"Temple enthusiasts, photographers, and HSR travelers","pros":["Iconic temple sites","HSR station access","Less crowded","Great cycling"],"cons":["Far from downtown","Spread out area","Less nightlife"],"lat":22.6834,"lng":120.2945,"priceLevel":"$$"},{"name":"Sanduo District","tagline":"Modern malls and city convenience","description":"The commercial heart features major department stores, the famous Dream Mall, and modern apartments. The MRT accessibility and urban convenience make it popular with young professionals.","vibe":"Urban & Commercial","bestFor":"Shoppers, urban lifestyle seekers, and those wanting modern convenience","pros":["Major shopping options","MRT accessible","Modern amenities","Restaurants and entertainment"],"cons":["Less character","Commercial atmosphere","Expensive housing"],"lat":22.6167,"lng":120.3078,"priceLevel":"$$$"},{"name":"Yancheng","tagline":"Historic district with street art revival","description":"The old commercial district has reinvented itself with street art, hip cafes, and revitalized heritage buildings. The area around Dayi Street showcases Kaohsiung's creative transformation.","vibe":"Hipster & Heritage","bestFor":"Foodies, street art fans, and those seeking authentic local culture","pros":["Amazing street food","Indie cafes","Street art scene","Historic architecture"],"cons":["Older infrastructure","Can feel run-down","Less English spoken"],"lat":22.6234,"lng":120.2712,"priceLevel":"$"},{"name":"Cijin Island","tagline":"Ferry-hop to beach life and fresh seafood","description":"This narrow barrier island offers black sand beaches, fresh seafood, and a laid-back fishing village atmosphere. A short ferry from downtown transports you to a different pace of life.","vibe":"Beach & Fishing Village","bestFor":"Beach lovers, seafood enthusiasts, and those seeking island vibes","pros":["Beach access","Fresh seafood","Island atmosphere","Easy ferry access"],"cons":["Limited accommodation","Small area","Crowded on weekends"],"lat":22.6145,"lng":120.2523,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1471,6 +1472,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

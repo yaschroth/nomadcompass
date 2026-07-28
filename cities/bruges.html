@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Markt Area","tagline":"Bruges's stunning central square","description":"The Markt is Bruges's postcard - the medieval Belfry towers over guild houses and horse-drawn carriages. It's tourist central but undeniably magnificent.","vibe":"Historic & Touristy","bestFor":"First-time visitors, photographers, and medieval atmosphere seekers","pros":["Stunning architecture","Central location","Historic","Restaurants"],"cons":["Very touristy","Expensive","Crowded"],"lat":51.2094,"lng":3.2247,"priceLevel":"$$$$"},{"name":"Burg Area","tagline":"Bruges's historic heart","description":"The Burg is Bruges's oldest square - the Basilica of the Holy Blood, Gothic city hall, and intimate atmosphere create a more refined historic experience than busy Markt.","vibe":"Historic & Intimate","bestFor":"History buffs, religious pilgrims, and those seeking quiet history","pros":["Less crowded","Historic sites","Beautiful square","Intimate"],"cons":["Limited dining","Still touristy","Small area"],"lat":51.2086,"lng":3.227,"priceLevel":"$$$"},{"name":"Sint-Anna","tagline":"Bruges's quiet residential quarter","description":"East of center, Sint-Anna is where Bruges gets local - windmills, the charming Jerusalem Church, and quiet canals offer a glimpse of non-touristy Belgian life.","vibe":"Local & Quiet","bestFor":"Long-term visitors, locals seekers, and those escaping crowds","pros":["Quiet","Windmills","Local feel","More affordable"],"cons":["Fewer restaurants","Far from sights","Very quiet"],"lat":51.213,"lng":3.234,"priceLevel":"$$"},{"name":"Langestraat Area","tagline":"Bruges's shopping corridor","description":"Langestraat connects the Markt to 't Zand square - shops, local boutiques, and practical amenities make this the shopping spine of tourist Bruges.","vibe":"Shopping & Practical","bestFor":"Shoppers, those seeking amenities, and practical visitors","pros":["Shopping","Central","Amenities","Less medieval crowds"],"cons":["Commercial","Less character","Busy"],"lat":51.205,"lng":3.219,"priceLevel":"$$"},{"name":"Station Area ('t Zand)","tagline":"Modern Bruges gateway","description":"Around the station and 't Zand square, this area offers modern amenities, the concert hall, and easy transport connections. It's functional Bruges rather than medieval Bruges.","vibe":"Modern & Practical","bestFor":"Transit visitors, budget seekers, and those wanting modern amenities","pros":["Near station","Modern facilities","More affordable","Easy access"],"cons":["Less charming","Tourist arrivals","Generic"],"lat":51.197,"lng":3.217,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

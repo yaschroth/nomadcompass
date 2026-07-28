@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Miraflores","tagline":"Lima's polished Pacific playground","description":"Miraflores is Lima's most tourist-friendly district - ocean cliffs, Parque Kennedy, and excellent infrastructure. It's safe, walkable, and has the city's best amenities.","vibe":"Tourist & Modern","bestFor":"First-time visitors, digital nomads, and those seeking comfort","pros":["Very safe","Ocean views","Good infrastructure","Walkable"],"cons":["Expensive","Touristy","Less authentic"],"lat":-12.119,"lng":-77.03,"priceLevel":"$$$"},{"name":"Barranco","tagline":"Lima's bohemian artistic heart","description":"Barranco is Lima's soul - colonial mansions, street art, and bohemian bars. It's the city's creative center with the best nightlife and artistic atmosphere.","vibe":"Bohemian & Artistic","bestFor":"Artists, night owls, and those seeking Lima's creative scene","pros":["Best nightlife","Art galleries","Colonial charm","Creative energy"],"cons":["Can be noisy","Variable safety","Hilly streets"],"lat":-12.147,"lng":-77.022,"priceLevel":"$$"},{"name":"San Isidro","tagline":"Lima's green business district","description":"San Isidro is Lima's financial heart - corporate towers, El Olivar park, and upscale residential areas. It's where Lima's business elite works and lives.","vibe":"Business & Upscale","bestFor":"Business travelers, professionals, and those seeking quiet luxury","pros":["Very safe","Beautiful parks","Upscale dining","Professional area"],"cons":["Expensive","Quiet evenings","Less character"],"lat":-12.097,"lng":-77.037,"priceLevel":"$$$$"},{"name":"Centro Histórico","tagline":"Lima's colonial UNESCO treasure","description":"Lima's historic center is UNESCO-listed - Plaza Mayor, colonial churches, and historic architecture. It's gritty but essential for understanding Lima's Spanish heritage.","vibe":"Historic & Gritty","bestFor":"History lovers, culture seekers, and those seeking authentic Lima","pros":["Historic architecture","Cultural sites","Local food","Affordable"],"cons":["Safety concerns","Crowded","Polluted"],"lat":-12.046,"lng":-77.03,"priceLevel":"$"},{"name":"Surquillo","tagline":"Lima's emerging foodie frontier","description":"Surquillo is Lima's next Barranco - traditional market, emerging restaurants, and authentic character. Foodies and locals are discovering this gritty gem.","vibe":"Emerging & Foodie","bestFor":"Foodies, adventurous travelers, and those seeking authentic vibes","pros":["Best market","Authentic food","Affordable","Local character"],"cons":["Gritty areas","Less polished","Variable safety"],"lat":-12.113,"lng":-77.008,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

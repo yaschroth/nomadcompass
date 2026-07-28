@@ -1445,6 +1445,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Namba/Dotonbori","tagline":"Osaka's neon-lit food paradise","description":"Dotonbori is Osaka's iconic entertainment district - glowing signs, street food heaven, and electric energy. It's where Osaka's 'eat till you drop' culture comes alive.","vibe":"Entertainment & Food","bestFor":"Food lovers, nightlife seekers, and those seeking iconic Osaka","pros":["Best street food","Iconic scenery","Nightlife","Shopping"],"cons":["Extremely crowded","Touristy","Noisy"],"lat":34.6687,"lng":135.501,"priceLevel":"$$"},{"name":"Shinsaibashi","tagline":"Osaka's premier shopping arcade","description":"Shinsaibashi is Osaka's shopping heart - covered arcades, department stores, and Amerika-mura (American Village) for youth fashion. It's retail therapy, Osaka-style.","vibe":"Shopping & Fashion","bestFor":"Shoppers, fashion lovers, and young travelers","pros":["Covered shopping","Fashion variety","Central location","Amerika-mura"],"cons":["Crowded","Overwhelming","Can be expensive"],"lat":34.675,"lng":135.502,"priceLevel":"$$$"},{"name":"Shinsekai","tagline":"Osaka's retro downtown soul","description":"Shinsekai is old Osaka - Tsutenkaku Tower, kushikatsu restaurants, and working-class charm. It's gritty, authentic, and beloved by locals seeking Osaka's traditional character.","vibe":"Retro & Authentic","bestFor":"Culture seekers, budget travelers, and those seeking real Osaka","pros":["Authentic atmosphere","Cheap eats","Tsutenkaku Tower","Local character"],"cons":["Rough edges","Can feel unsafe at night","Run-down areas"],"lat":34.652,"lng":135.506,"priceLevel":"$"},{"name":"Umeda/Kita","tagline":"Osaka's modern business center","description":"Umeda is Osaka's northern hub - towering skyscrapers, underground shopping cities, and transport connections. It's modern, efficient, and the business face of Osaka.","vibe":"Business & Modern","bestFor":"Business travelers, shoppers, and those seeking modern Osaka","pros":["Transport hub","Department stores","Sky Building views","Underground city"],"cons":["Impersonal","Confusing layout","Expensive"],"lat":34.705,"lng":135.498,"priceLevel":"$$$"},{"name":"Tennoji/Abeno","tagline":"Osaka's southern gateway with views","description":"Tennoji combines Japan's tallest building (Abeno Harukas) with traditional Shitennoji Temple and lovely park. It's Osaka's emerging southern hub with great accessibility.","vibe":"Mixed & Accessible","bestFor":"Families, culture lovers, and those seeking varied experiences","pros":["Harukas views","Temple grounds","Good park","Less crowded"],"cons":["Less character","Far from nightlife","Business-focused"],"lat":34.647,"lng":135.514,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1496,6 +1497,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

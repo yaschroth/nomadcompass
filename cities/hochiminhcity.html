@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"District 1","tagline":"Saigon's beating heart where everything happens","description":"District 1 is the center for all financial, commercial, and administrative activity in Ho Chi Minh City. Rooftop bars, colonial architecture, Ben Thanh Market, and international restaurants cluster here. Perfect for short stays and newcomers who want walkable city life.","vibe":"Central & Dynamic","bestFor":"Short-term nomads, newcomers, and those who thrive on walkable urban energy","pros":["Central to everything","Walkable","Vibrant nightlife","International options"],"cons":["Most expensive","Noisy and chaotic","Tourist-heavy"],"lat":10.7769,"lng":106.7009,"priceLevel":"$$$"},{"name":"District 3","tagline":"Leafy streets and the best bánh mì in town","description":"District 3 is considered by many the ideal place to live in Saigon. Close to District 1's action but with leafy, tree-lined streets, classic French villas, and a more relaxed, authentic Vietnamese atmosphere. The bánh mì here is legendary.","vibe":"Authentic & Charming","bestFor":"Long-term nomads seeking authentic Vietnam with D1 proximity","pros":["Leafy streets","Authentic vibe","Great food","10-15% cheaper than D1"],"cons":["Less nightlife","Fewer coworking spaces","Language barrier"],"lat":10.784,"lng":106.6848,"priceLevel":"$$"},{"name":"Thao Dien","tagline":"Saigon's expat island with riverside cafes","description":"Thao Dien is the main expat neighborhood - it acts and feels like an island, divided by the Saigon River or highway. Leafy streets, riverside cafés, and international schools blend global comforts with local charm. The community is established and welcoming.","vibe":"Expat & Comfortable","bestFor":"Families, long-term expats, and nomads prioritizing comfort and community","pros":["Strong expat community","Great cafes","International schools","Quieter"],"cons":["30-45 min to D1 in traffic","Can feel isolated","Expat bubble"],"lat":10.8031,"lng":106.739,"priceLevel":"$$"},{"name":"Binh Thanh","tagline":"Best of both worlds between D1 and Thao Dien","description":"Sandwiched between Districts 1 and 2, Binh Thanh offers best of both worlds for budget-conscious nomads. The strategic location (5-10 minutes to D1 and Thao Dien) makes it ideal. Home to Landmark 81, Vietnam's tallest building, and popular among English teachers and nomads.","vibe":"Strategic & Affordable","bestFor":"Budget nomads, young professionals, and couples wanting value with access","pros":["Great location","Most affordable central option","Modern high-rises","Good transport"],"cons":["Less character","Busy streets","Developing infrastructure"],"lat":10.8011,"lng":106.7102,"priceLevel":"$"},{"name":"District 7 (Phu My Hung)","tagline":"Singapore-style planned living in South Saigon","description":"District 7's Phu My Hung is a planned urban area offering low crime, clean streets, and peaceful environment. It feels more like Singapore than Vietnam - ideal for families and anyone seeking peace of mind. International supermarkets and schools abound.","vibe":"Modern & Planned","bestFor":"Families, safety-focused nomads, and those who value order over chaos","pros":["Very safe","Clean and organized","Family-friendly","Modern amenities"],"cons":["Far from center","Less authentic","Can feel sterile"],"lat":10.7285,"lng":106.718,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

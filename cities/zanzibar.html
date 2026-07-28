@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Stone Town","tagline":"Zanzibar's UNESCO labyrinth heart","description":"Stone Town is Zanzibar's historic core - UNESCO-listed maze of alleys, carved doors, and Swahili-Arab heritage. It's atmospheric, confusing, and unforgettable.","vibe":"Historic & Labyrinthine","bestFor":"History lovers, photographers, and those seeking cultural Zanzibar","pros":["UNESCO site","Historic atmosphere","Carved doors","Rooftop restaurants"],"cons":["Easy to get lost","Touts","Can be hot"],"lat":-6.1622,"lng":39.1875,"priceLevel":"$$"},{"name":"Nungwi","tagline":"Zanzibar's northern beach paradise","description":"Nungwi is Zanzibar's party beach - stunning white sand, beach bars, and vibrant nightlife. It's the most developed and liveliest beach area.","vibe":"Beach Party","bestFor":"Beach lovers, party seekers, and those seeking vibrant Zanzibar","pros":["Beautiful beach","No tide issues","Nightlife","Water sports"],"cons":["Touristy","Beach sellers","Can be rowdy"],"lat":-5.726,"lng":39.298,"priceLevel":"$$"},{"name":"Paje","tagline":"Zanzibar's kitesurf and backpacker hub","description":"Paje is Zanzibar's active beach - world-class kitesurfing, backpacker lodges, and laid-back atmosphere. The tide creates unique lagoon conditions.","vibe":"Active & Backpacker","bestFor":"Kitesurfers, backpackers, and those seeking active Zanzibar","pros":["World-class kiting","Backpacker vibe","Affordable","Tide pools"],"cons":["Big tide changes","Far from Stone Town","Limited luxury"],"lat":-6.267,"lng":39.532,"priceLevel":"$"},{"name":"Kendwa","tagline":"Zanzibar's upscale beach retreat","description":"Kendwa is Zanzibar's most upscale beach - no tide issues, resort hotels, and Full Moon parties. It's beautiful and more polished than Nungwi.","vibe":"Upscale Beach","bestFor":"Couples, luxury travelers, and those seeking polished Zanzibar","pros":["No tide issues","Beautiful beach","Good resorts","Full Moon parties"],"cons":["Expensive","Less authentic","Resort-dominated"],"lat":-5.755,"lng":39.226,"priceLevel":"$$$"},{"name":"Jambiani","tagline":"Zanzibar's authentic seaweed coast","description":"Jambiani is authentic Zanzibar - seaweed farming, local villages, and quiet beaches. It's peaceful and offers genuine Zanzibari culture.","vibe":"Authentic & Quiet","bestFor":"Culture seekers, peace lovers, and those seeking real Zanzibar","pros":["Authentic culture","Seaweed farming","Quiet beaches","Local life"],"cons":["Big tides","Limited nightlife","Basic infrastructure"],"lat":-6.327,"lng":39.546,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Lozenets","tagline":"Sofia's upscale southern neighborhood","description":"Lozenets is Sofia's most desirable residential area - tree-lined streets, good restaurants, and proximity to South Park. Embassies and affluent Bulgarians create polished atmosphere. Sofia's quality of life capital.","vibe":"Upscale & Green","bestFor":"Professionals, families, and nomads seeking Sofia's best quality of life","pros":["Great restaurants","Near South Park","Safe and clean","Quality life"],"cons":["Expensive for Sofia","Quieter","Limited nightlife"],"lat":42.675,"lng":23.317,"priceLevel":"$$$"},{"name":"City Center","tagline":"Sofia's historic heart with communist contrasts","description":"Sofia's center mixes ancient, communist, and modern - Roman ruins, monumental Soviet architecture, and contemporary cafes. Vitosha Boulevard offers shopping and dining. Central and convenient.","vibe":"Historic & Central","bestFor":"History buffs, urban enthusiasts, and nomads wanting central location","pros":["Historic sites","Central location","Metro access","Good cafes"],"cons":["Touristy areas","Noisy streets","Mixed quality"],"lat":42.6977,"lng":23.3219,"priceLevel":"$$"},{"name":"Oborishte","tagline":"Sofia's diplomatic quarter with elegant streets","description":"Oborishte houses embassies and diplomatic residences in elegant tree-lined streets. The Doctor's Garden provides green escape. It's quiet, safe, and refined - Sofia's most European-feeling neighborhood.","vibe":"Diplomatic & Elegant","bestFor":"Diplomats, professionals, and nomads seeking refined Sofia living","pros":["Elegant streets","Doctor's Garden","Safe","Near center"],"cons":["Expensive","Quiet evenings","Limited dining"],"lat":42.695,"lng":23.337,"priceLevel":"$$$"},{"name":"Studentski Grad","tagline":"Sofia's student city with budget everything","description":"Studentski Grad is exactly what it sounds like - student housing, cheap restaurants, and young energy. It's far from center but offers Sofia's best budget living with decent metro access.","vibe":"Student & Budget","bestFor":"Budget nomads, students, and young travelers seeking affordable Sofia","pros":["Very affordable","Student energy","Metro access","Nightlife"],"cons":["Far from center","Basic quality","Student chaos"],"lat":42.65,"lng":23.345,"priceLevel":"$"},{"name":"Vitosha Quarter","tagline":"Mountain access in Sofia's southern expansion","description":"The Vitosha quarter sits beneath the mountain - newer developments, good infrastructure, and easy access to Vitosha hiking trails. It's where active nomads can combine city work with mountain weekends.","vibe":"Modern & Active","bestFor":"Hikers, nature lovers, and nomads wanting mountain access","pros":["Mountain access","New buildings","Good infrastructure","Active lifestyle"],"cons":["Far from center","Need transport","Suburban feel"],"lat":42.64,"lng":23.29,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

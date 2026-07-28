@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Puerto Princesa","tagline":"Palawan's gateway capital","description":"Puerto Princesa is Palawan's main city - airport, services, and Underground River access. It's the practical gateway to Palawan's natural wonders.","vibe":"Gateway & City","bestFor":"Arrivals, Underground River visitors, and those needing city services","pros":["Airport","Services","Underground River","Restaurants"],"cons":["Not scenic","Far from beaches","Transit point"],"lat":9.75,"lng":118.75,"priceLevel":"$"},{"name":"Sabang/Underground River","tagline":"Palawan's UNESCO natural wonder","description":"Sabang hosts Palawan's UNESCO site - the Underground River. It's basic accommodation near the cave entrance for early access.","vibe":"Nature & Basic","bestFor":"Underground River visitors, nature lovers, and early access seekers","pros":["River access","Nature setting","Beach","Quiet"],"cons":["Basic facilities","Limited options","Mosquitoes"],"lat":10.19,"lng":118.905,"priceLevel":"$"},{"name":"Port Barton","tagline":"Palawan's off-grid beach village","description":"Port Barton is Palawan's chill alternative - no ATMs, limited electricity, and genuine beach village vibes. It's for those escaping El Nido crowds.","vibe":"Off-Grid & Chill","bestFor":"Off-grid seekers, budget travelers, and those wanting quiet beaches","pros":["Uncrowded beaches","Chill vibe","Cheap","Island hopping"],"cons":["No ATM","Limited electricity","Basic"],"lat":10.475,"lng":119.135,"priceLevel":"$"},{"name":"San Vicente/Long Beach","tagline":"Palawan's emerging 14km beach","description":"San Vicente boasts the Philippines' longest white beach - 14km of largely empty sand. It's Palawan's emerging destination before the crowds arrive.","vibe":"Emerging & Beach","bestFor":"Beach seekers, pioneers, and those wanting undeveloped Palawan","pros":["Longest beach","Uncrowded","New airport","Pristine"],"cons":["Developing","Limited services","Basic accommodation"],"lat":10.51,"lng":119.27,"priceLevel":"$"},{"name":"Coron Town","tagline":"Palawan's wreck diving capital","description":"Coron is Palawan's northern hub - WWII wreck diving, island hopping, and lake adventures. It's the adventure base of northern Palawan.","vibe":"Adventure & Diving","bestFor":"Divers, wreck enthusiasts, and those seeking northern Palawan","pros":["Wreck diving","Island hopping","Kayangan Lake","Tours"],"cons":["Crowded tours","Town not scenic","Expensive tours"],"lat":11.9987,"lng":120.2037,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

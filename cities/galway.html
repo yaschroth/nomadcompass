@@ -1446,6 +1446,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Latin Quarter","tagline":"Galway's medieval pub-filled heart","description":"The Latin Quarter is Galway's essence - medieval lanes, traditional pubs with live music, and bohemian shops. It's where Galway's famous craic happens every night.","vibe":"Bohemian & Musical","bestFor":"Music lovers, pub enthusiasts, and those seeking Irish culture","pros":["Best pubs","Live music everywhere","Medieval character","Walkable"],"cons":["Very touristy","Crowded nights","Expensive"],"lat":53.2719,"lng":-9.053,"priceLevel":"$$"},{"name":"West End/Claddagh","tagline":"Galway's authentic fishing village soul","description":"The West End and Claddagh retain Galway's fishing village heritage - colorful cottages, Spanish Arch, and views across the bay. It's more authentic than the tourist center.","vibe":"Authentic & Coastal","bestFor":"History lovers, photographers, and those seeking authentic Galway","pros":["Spanish Arch","Bay views","Less touristy","Historic character"],"cons":["Limited restaurants","Quiet evenings","Residential"],"lat":53.268,"lng":-9.058,"priceLevel":"$$"},{"name":"Salthill","tagline":"Galway's seaside promenade escape","description":"Salthill is Galway's beach suburb - the famous promenade, Blackrock diving tower, and Atlantic views. Kick the wall at the end of the prom for good luck.","vibe":"Seaside & Relaxed","bestFor":"Beach lovers, walkers, and those seeking seaside Galway","pros":["Famous promenade","Beach access","Atlantic views","Aquarium"],"cons":["Far from center","Weather dependent","Seasonal"],"lat":53.259,"lng":-9.078,"priceLevel":"$$"},{"name":"Woodquay/Newcastle","tagline":"Galway's local university fringe","description":"Between the center and university, this area offers more affordable options and local character. It's where students and young professionals find balance.","vibe":"Local & Affordable","bestFor":"Students, budget travelers, and those seeking local Galway","pros":["More affordable","Local feel","University access","Good pubs"],"cons":["Less charming","Student housing","Variable quality"],"lat":53.275,"lng":-9.06,"priceLevel":"$"},{"name":"Eyre Square Area","tagline":"Galway's transport and shopping hub","description":"Eyre Square is Galway's central plaza - bus and train connections, shopping streets, and the gateway to the Latin Quarter. It's practical rather than pretty.","vibe":"Central & Practical","bestFor":"Transport connections, shoppers, and those wanting central access","pros":["Transport hub","Shopping","Central location","Hotel options"],"cons":["Less character","Busy traffic","Generic"],"lat":53.2743,"lng":-9.049,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1497,6 +1498,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

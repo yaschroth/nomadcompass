@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Odori","tagline":"Park-lined heart of Hokkaido's capital","description":"Centered on the famous Odori Park, this district hosts seasonal festivals, the TV Tower, and tree-lined promenades. Underground shopping and department stores connect to the transit hub.","vibe":"Urban green","bestFor":"First-time visitors and festival goers","pros":["Central location","Park access","Festival venue","Shopping options"],"cons":["Tourist crowds","Cold winters","Generic urban"],"lat":43.0589,"lng":141.3545,"priceLevel":"$$"},{"name":"Susukino","tagline":"Neon-lit entertainment district","description":"Hokkaido's largest entertainment area pulses with restaurants, bars, and nightlife. Soup curry shops, izakayas, and ramen joints fuel late-night adventures while neon signs light the snow.","vibe":"Entertainment lively","bestFor":"Nightlife seekers and food lovers","pros":["Incredible ramen","Vibrant nightlife","Late-night dining","Winter atmosphere"],"cons":["Can be seedy","Expensive drinks","Crowded nights"],"lat":43.0523,"lng":141.3534,"priceLevel":"$$"},{"name":"Tanukikoji","tagline":"Covered arcade shopping tradition","description":"Japan's oldest covered shopping arcade stretches through the city center offering traditional shops, local restaurants, and protection from weather. Generations of merchants serve loyal customers.","vibe":"Traditional shopping","bestFor":"Shoppers and culture seekers","pros":["Weather protection","Local shops","Traditional atmosphere","Good food"],"cons":["Aging facilities","Limited evening activity","Tourist-oriented"],"lat":43.0545,"lng":141.3523,"priceLevel":"$"},{"name":"Maruyama","tagline":"Upscale residential with park access","description":"This affluent neighborhood west of center offers proximity to Maruyama Park and zoo. Boutique shops, quality bakeries, and refined restaurants serve well-heeled residents and visitors.","vibe":"Upscale residential","bestFor":"Families and nature lovers","pros":["Park access","Quality dining","Refined atmosphere","Zoo nearby"],"cons":["Higher prices","Residential quiet","Far from nightlife"],"lat":43.0534,"lng":141.3189,"priceLevel":"$$"},{"name":"Nishi 18-chome","tagline":"Student energy and affordable eats","description":"Near universities, this area attracts students with affordable restaurants, casual bars, and budget-friendly accommodations. Authentic Japanese student life continues away from tourist areas.","vibe":"Student casual","bestFor":"Budget travelers and students","pros":["Affordable dining","Student atmosphere","Authentic Japan","Budget stays"],"cons":["Far from center","Basic amenities","Limited English"],"lat":43.0612,"lng":141.3234,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

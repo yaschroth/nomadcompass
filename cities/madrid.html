@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Malasaña","tagline":"Madrid's hipster heart with rebellious spirit","description":"Malasaña is Madrid's countercultural epicenter - vintage shops, indie bars, and creative energy. Born from the Movida Madrileña, it remains the city's most alternative neighborhood with excellent cafes and nightlife.","vibe":"Hipster & Alternative","bestFor":"Creatives, young professionals, and digital nomads seeking authentic Madrid culture","pros":["Best cafe culture","Indie scene","Central location","Nightlife"],"cons":["Noisy at night","Crowded weekends","Rising prices"],"lat":40.426,"lng":-3.705,"priceLevel":"$$"},{"name":"Lavapiés","tagline":"Madrid's multicultural melting pot","description":"Lavapiés is Madrid's most diverse neighborhood - immigrant communities, street art, and affordable eats. The multicultural vibe creates unique fusion restaurants and a bohemian atmosphere.","vibe":"Multicultural & Bohemian","bestFor":"Budget travelers, food lovers, artists, and those seeking authentic diversity","pros":["Cheapest central area","Amazing ethnic food","Art galleries","Community feel"],"cons":["Gritty streets","Some safety concerns","Less polished"],"lat":40.409,"lng":-3.701,"priceLevel":"$"},{"name":"Chueca","tagline":"Madrid's vibrant LGBTQ+ neighborhood","description":"Chueca is Madrid's LGBTQ+ heartland - trendy boutiques, excellent restaurants, and welcoming atmosphere. It's one of Europe's most inclusive neighborhoods with great nightlife and shopping.","vibe":"LGBTQ+ & Trendy","bestFor":"LGBTQ+ travelers, shoppers, and those seeking open-minded community","pros":["Inclusive atmosphere","Great shopping","Excellent dining","Central"],"cons":["Expensive","Crowded","Tourist presence"],"lat":40.422,"lng":-3.697,"priceLevel":"$$$"},{"name":"La Latina","tagline":"Traditional Madrid with tapas heritage","description":"La Latina is historic Madrid - medieval streets, traditional tapas bars, and the famous El Rastro flea market. Sunday afternoons here are a Madrid tradition with cañas and crowds.","vibe":"Traditional & Historic","bestFor":"Food lovers, history buffs, and those seeking authentic Spanish culture","pros":["Best tapas","El Rastro market","Historic charm","Local atmosphere"],"cons":["Sunday crowds","Limited workspace","Old buildings"],"lat":40.411,"lng":-3.711,"priceLevel":"$$"},{"name":"Salamanca","tagline":"Madrid's elegant upscale district","description":"Salamanca is Madrid's poshest neighborhood - designer boutiques, Michelin restaurants, and beautiful architecture. Wide boulevards and sophisticated atmosphere for those seeking refinement.","vibe":"Upscale & Elegant","bestFor":"Luxury travelers, business professionals, and those seeking refined atmosphere","pros":["Beautiful architecture","High-end shopping","Fine dining","Safe"],"cons":["Very expensive","Less character","Formal atmosphere"],"lat":40.43,"lng":-3.68,"priceLevel":"$$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

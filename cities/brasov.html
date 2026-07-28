@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centrul Vechi (Old Town)","tagline":"Medieval Transylvania perfection","description":"Brasov's Old Town is a perfectly preserved medieval gem - the stunning Council Square, Black Church, and colorful baroque buildings create one of Romania's most photogenic settings.","vibe":"Historic & Charming","bestFor":"History lovers, photographers, and those seeking Transylvanian atmosphere","pros":["Stunning architecture","Great restaurants","Walkable","Central"],"cons":["Touristy","Expensive for Romania","Crowded summer"],"lat":45.641,"lng":25.589,"priceLevel":"$$$"},{"name":"Schei","tagline":"Brasov's authentic Romanian quarter","description":"Schei is the traditional Romanian neighborhood - the First Romanian School, Orthodox churches, and a more local atmosphere. It's where Brasov's Romanian heritage lives on.","vibe":"Traditional & Authentic","bestFor":"Culture seekers, history buffs, and those wanting local Romanian life","pros":["Authentic atmosphere","Less touristy","Historic sites","Good value"],"cons":["Fewer restaurants","Hilly streets","Basic amenities"],"lat":45.635,"lng":25.582,"priceLevel":"$$"},{"name":"Blumăna","tagline":"Residential Brasov comfort","description":"Blumăna is a pleasant residential area between old town and the station - good apartments, local markets, and easy access to everything without old town prices.","vibe":"Residential & Practical","bestFor":"Long-term visitors, families, and those seeking residential comfort","pros":["Good apartments","Local markets","Affordable","Near station"],"cons":["Less character","Tourist sights walkable","Basic"],"lat":45.648,"lng":25.595,"priceLevel":"$$"},{"name":"Tractorul","tagline":"Communist-era budget living","description":"The Tractor district is Brasov's communist legacy - massive apartment blocks built for factory workers. It's not pretty but offers rock-bottom prices and authentic Romanian daily life.","vibe":"Budget & Local","bestFor":"Budget nomads, local life seekers, and long-term stays","pros":["Very cheap","Authentic local life","Large apartments","Good transport"],"cons":["Communist architecture","Far from center","Basic area"],"lat":45.656,"lng":25.618,"priceLevel":"$"},{"name":"Poiana Brașov","tagline":"Mountain resort paradise","description":"Poiana is Brasov's ski resort 12km up the mountain - in winter it's Romania's best skiing, in summer it's hiking paradise. Forest chalets offer mountain living with city access.","vibe":"Mountain & Resort","bestFor":"Skiers, hikers, and mountain lifestyle seekers","pros":["Skiing/hiking","Mountain air","Beautiful nature","Resort facilities"],"cons":["Far from city","Seasonal","Car needed","Expensive"],"lat":45.594,"lng":25.555,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

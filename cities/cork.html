@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre","tagline":"Cork's compact island heart","description":"Cork's center sits on an island between river channels - Oliver Plunkett Street bars, English Market, and walkable charm. It's compact, friendly, and quintessentially Cork.","vibe":"Central & Friendly","bestFor":"First-time visitors, pub lovers, and those seeking walkable Cork","pros":["English Market","Great pubs","Walkable","Central location"],"cons":["Limited accommodation","Weekend crowds","Expensive parking"],"lat":51.8985,"lng":-8.4756,"priceLevel":"$$"},{"name":"Shandon","tagline":"Cork's historic hilltop quarter","description":"Shandon rises above the city - St. Anne's Church bells, colorful houses, and old Cork character. It's where Cork's working-class heritage remains visible.","vibe":"Historic & Authentic","bestFor":"History lovers, photographers, and those seeking old Cork","pros":["St. Anne's Church","Butter Museum","Colorful streets","Authentic"],"cons":["Steep hills","Limited restaurants","Rough edges"],"lat":51.903,"lng":-8.478,"priceLevel":"$"},{"name":"Douglas","tagline":"Cork's leafy southern suburb","description":"Douglas is Cork's affluent southern suburb - shopping centers, good restaurants, and family-friendly atmosphere. It's suburban but well-connected to the city.","vibe":"Suburban & Family","bestFor":"Families, long-term visitors, and those seeking suburban comfort","pros":["Good shopping","Family-friendly","Safe area","Good restaurants"],"cons":["Suburban feel","Car needed","Less character"],"lat":51.877,"lng":-8.435,"priceLevel":"$$"},{"name":"Victorian Quarter","tagline":"Cork's emerging creative district","description":"MacCurtain Street and the surrounding Victorian Quarter is Cork's emerging scene - independent cafes, small theaters, and creative energy. It's where Cork's future is being built.","vibe":"Creative & Emerging","bestFor":"Creatives, culture lovers, and those seeking emerging Cork","pros":["Independent cafes","Theater scene","Creative energy","Victorian architecture"],"cons":["Still developing","Variable areas","Limited late night"],"lat":51.902,"lng":-8.468,"priceLevel":"$"},{"name":"UCC/Western Road","tagline":"Cork's academic green quarter","description":"University College Cork and the Western Road area offer green spaces, student energy, and beautiful campus grounds. It's Cork's intellectual heart.","vibe":"Academic & Green","bestFor":"Students, academics, and those seeking university atmosphere","pros":["Beautiful campus","Green spaces","Student energy","Good cafes"],"cons":["Student crowds","Term-time only","Limited evening options"],"lat":51.893,"lng":-8.492,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Grote Markt","tagline":"Gothic grandeur in Belgium's university city","description":"The stunning main square features the ornate Gothic town hall and St. Peter's Church. The concentration of historic buildings, student bars, and outdoor terraces creates Leuven's most photogenic atmosphere.","vibe":"Historic & Central","bestFor":"First-time visitors, architecture lovers, and those wanting central location","pros":["Stunning Gothic architecture","Best terraces","Central to everything","Great restaurants"],"cons":["Tourist prices","Crowded on weekends","Noisy student nights"],"lat":50.8787,"lng":4.7012,"priceLevel":"$$"},{"name":"Oude Markt","tagline":"Europe's longest bar counter","description":"The famous student square lined with dozens of bars lives up to its nickname. The nonstop student energy, outdoor seating, and social atmosphere make it Leuven's nightlife epicenter.","vibe":"Student & Party","bestFor":"Night owls, social butterflies, and those seeking student atmosphere","pros":["Legendary nightlife","Social atmosphere","Outdoor terraces","Young energy"],"cons":["Very noisy","Can feel rowdy","Not for quiet seekers"],"lat":50.8778,"lng":4.7034,"priceLevel":"$$"},{"name":"Vaartkom","tagline":"Industrial docks turned creative harbor","description":"The renovated harbor area showcases modern architecture, hip restaurants, and creative businesses. The waterfront setting and contemporary design attract young professionals and design enthusiasts.","vibe":"Modern & Trendy","bestFor":"Design lovers, young professionals, and those seeking modern atmosphere","pros":["Modern architecture","Waterfront dining","Creative businesses","Less crowded"],"cons":["Less historic charm","Higher prices","Can feel corporate"],"lat":50.8889,"lng":4.7089,"priceLevel":"$$$"},{"name":"Heverlee","tagline":"Green suburbs with arboretum beauty","description":"The southern residential area offers the famous Arboretum, Abbey of Park, and Celestijnenlaan university buildings. The green spaces and quieter atmosphere attract families and nature lovers.","vibe":"Green & Residential","bestFor":"Nature lovers, families, and those seeking quiet","pros":["Beautiful arboretum","Historic abbey","Quiet residential","University access"],"cons":["Far from center","Limited nightlife","Suburban feel"],"lat":50.8634,"lng":4.6878,"priceLevel":"$$"},{"name":"Bondgenotenlaan Area","tagline":"Shopping street with residential calm","description":"The main shopping street connects the station to the center with shops, cafes, and residential side streets. A practical base combining retail convenience with livable neighborhoods.","vibe":"Shopping & Residential","bestFor":"Shoppers, long-term visitors, and those wanting convenience","pros":["Shopping convenience","Station access","Residential streets","Good cafes"],"cons":["Commercial main street","Less character","Chain stores dominate"],"lat":50.8812,"lng":4.7089,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

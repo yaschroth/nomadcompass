@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Blloku","tagline":"Former forbidden zone turned hotspot","description":"Once reserved for communist elite, this neighborhood now pulses with cafes, restaurants, and Albania's best nightlife. Trendy bars, international restaurants, and youthful energy define new Albania.","vibe":"Trendy vibrant","bestFor":"Nightlife seekers and social travelers","pros":["Best nightlife","Trendy cafes","International dining","Young energy"],"cons":["Can be pretentious","Expensive by local standards","Noisy nights"],"lat":41.3189,"lng":19.8234,"priceLevel":"$$"},{"name":"Skanderbeg Square","tagline":"Heart of Albania's transformation","description":"The renovated main square showcases Albania's remarkable transformation with the National Museum, Et'hem Bey Mosque, and modernist buildings. The vast pedestrian space hosts events and gatherings.","vibe":"Monumental central","bestFor":"First-time visitors and culture seekers","pros":["Central location","Major museums","Historic mosque","Public space"],"cons":["Exposed to sun","Tourist-oriented","Limited shade"],"lat":41.3275,"lng":19.8187,"priceLevel":"$$"},{"name":"New Bazaar","tagline":"Revitalized market with foodie heaven","description":"The renovated New Bazaar area features fresh markets, artisanal restaurants, and reclaimed public space. Foodies discover Albanian cuisine while locals do daily shopping.","vibe":"Market foodie","bestFor":"Food lovers and market wanderers","pros":["Amazing food","Fresh markets","Local atmosphere","Revitalized area"],"cons":["Crowded mornings","Limited evening","Basic facilities"],"lat":41.3234,"lng":19.8267,"priceLevel":"$"},{"name":"Artificial Lake Area","tagline":"Green escape with café culture","description":"The large artificial lake provides Tirana's main green space with walking paths, outdoor cafes, and the Memorial of the Nation. Families and joggers escape urban chaos here.","vibe":"Green recreational","bestFor":"Nature seekers and families","pros":["Green space","Lake views","Jogging paths","Family-friendly"],"cons":["Far from center","Limited transport","Development pressure"],"lat":41.3089,"lng":19.8345,"priceLevel":"$"},{"name":"Komuna e Parisit","tagline":"Local neighborhood with value living","description":"This residential area offers affordable accommodations and authentic Albanian neighborhood life. Local bakeries, cafes, and markets serve residents while remaining accessible to attractions.","vibe":"Residential authentic","bestFor":"Budget travelers and long-term stays","pros":["Affordable","Local atmosphere","Good transport","Authentic feel"],"cons":["Less polished","Limited English","Basic amenities"],"lat":41.3145,"lng":19.8089,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

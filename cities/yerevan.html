@@ -1447,6 +1447,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kentron (City Center)","tagline":"Pink tufa elegance beneath Ararat","description":"The historic center features stunning Soviet-era architecture in distinctive pink volcanic stone. Republic Square, Cascade, and Opera House create Armenia's cultural heart with Mount Ararat views.","vibe":"Historic monumental","bestFor":"Culture seekers and first-time visitors","pros":["Stunning architecture","Cultural venues","Central location","Ararat views"],"cons":["Tourist prices","Crowded areas","Hot summers"],"lat":40.1792,"lng":44.4991,"priceLevel":"$$"},{"name":"Cascade/Northern Avenue","tagline":"Modern Armenia's beating heart","description":"The Cascade monument and Northern Avenue pedestrian street showcase modern Yerevan. Outdoor cafes, fashion boutiques, and the Cafesjian Art Museum create cosmopolitan atmosphere.","vibe":"Modern vibrant","bestFor":"Urban explorers and art lovers","pros":["Great cafes","Modern art","People watching","City views"],"cons":["Tourist-oriented","Higher prices","Crowded evenings"],"lat":40.1856,"lng":44.5145,"priceLevel":"$$"},{"name":"Kond","tagline":"Old quarter with authentic character","description":"Yerevan's oldest surviving neighborhood features crumbling traditional houses and genuine local life. Despite redevelopment threats, community spirit persists in this authentic corner.","vibe":"Historic authentic","bestFor":"Culture seekers and photography lovers","pros":["Authentic atmosphere","Historic character","Local community","Photo opportunities"],"cons":["Declining condition","Limited services","Uncertain future"],"lat":40.1778,"lng":44.5089,"priceLevel":"$"},{"name":"Nor Nork","tagline":"Soviet suburbs with local life","description":"This Soviet-era residential district offers authentic Armenian daily life with local markets, neighborhood restaurants, and affordable living. Long-term visitors integrate into community.","vibe":"Soviet residential","bestFor":"Long-term stays and budget seekers","pros":["Very affordable","Local atmosphere","Daily markets","Authentic experience"],"cons":["Soviet blocks","Far from center","Limited English"],"lat":40.2134,"lng":44.5423,"priceLevel":"$"},{"name":"Vernissage/Republic Square","tagline":"Weekend market and national gathering","description":"The famous weekend craft market and surrounding area showcases Armenian arts and culture. Antiques, carpets, and handcrafts draw visitors while Republic Square hosts national events.","vibe":"Cultural market","bestFor":"Shoppers and culture seekers","pros":["Famous market","Armenian crafts","Central location","Cultural events"],"cons":["Crowded weekends","Tourist prices","Weather dependent"],"lat":40.1778,"lng":44.5134,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1498,6 +1499,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ancient Town","tagline":"Hoi An's UNESCO lantern-lit heart","description":"The Ancient Town is Hoi An's UNESCO treasure - yellow buildings, Japanese bridge, and magical lantern nights. It's touristy but genuinely enchanting.","vibe":"Historic & Romantic","bestFor":"History lovers, photographers, and those seeking magical Hoi An","pros":["UNESCO site","Lantern nights","Historic beauty","Tailors"],"cons":["Very touristy","Crowded","Entrance tickets required"],"lat":15.877,"lng":108.326,"priceLevel":"$$"},{"name":"An Bang Beach","tagline":"Hoi An's laid-back beach escape","description":"An Bang is Hoi An's beach life - relaxed beach bars, seafood restaurants, and expat community. It's the perfect balance of beach and culture access.","vibe":"Beach & Relaxed","bestFor":"Beach lovers, digital nomads, and those seeking relaxed Hoi An","pros":["Beautiful beach","Beach bars","Expat community","Relaxed vibe"],"cons":["Far from old town","Seasonal weather","Limited nightlife"],"lat":15.899,"lng":108.358,"priceLevel":"$$"},{"name":"Cam Nam Island","tagline":"Hoi An's peaceful local escape","description":"Cam Nam is Hoi An's quiet side - a short bridge from the old town but a world away. Local life, riverside restaurants, and peaceful atmosphere.","vibe":"Local & Peaceful","bestFor":"Long-term stayers, cyclists, and those seeking quiet Hoi An","pros":["Peaceful atmosphere","Local life","Riverside dining","Affordable"],"cons":["Limited amenities","Need bicycle","Very quiet"],"lat":15.872,"lng":108.334,"priceLevel":"$"},{"name":"Tan An/West Old Town","tagline":"Hoi An's authentic local quarter","description":"Tan An is where locals live - just outside the tourist zone with authentic markets, local restaurants, and real Vietnamese life.","vibe":"Local & Authentic","bestFor":"Budget travelers, food lovers, and those seeking authentic Hoi An","pros":["Local markets","Authentic food","Affordable","Real life"],"cons":["Less picturesque","Limited English","Basic accommodation"],"lat":15.88,"lng":108.318,"priceLevel":"$"},{"name":"Cua Dai","tagline":"Hoi An's traditional beach road","description":"Cua Dai is the road to the beach - lined with homestays, local restaurants, and rice paddies. It's the classic Hoi An experience between town and sea.","vibe":"Traditional & Scenic","bestFor":"Cyclists, photographers, and those seeking rural Hoi An","pros":["Rice paddies","Cycling routes","Homestays","Authentic"],"cons":["Erosion issues at beach","Need transport","Limited nightlife"],"lat":15.887,"lng":108.345,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

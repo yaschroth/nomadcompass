@@ -1461,6 +1461,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centrum","tagline":"Brno's walkable historic heart","description":"Brno's center is compact and walkable - the Freedom Square, stunning cathedral, and underground ossuary create a historic core full of cafes, bars, and student energy.","vibe":"Historic & Vibrant","bestFor":"First-time visitors, nightlife lovers, and those wanting central living","pros":["Walkable","Great nightlife","Historic sites","Student energy"],"cons":["Noisy weekends","Touristy areas","Limited parking"],"lat":49.1951,"lng":16.6068,"priceLevel":"$$$"},{"name":"Veveří","tagline":"Brno's student quarter","description":"Between the center and university campus, Veveří is student territory - affordable restaurants, lively bars, and young energy. It's where Brno stays up late.","vibe":"Student & Lively","bestFor":"Students, young nomads, and nightlife seekers","pros":["Student prices","Lively atmosphere","Near university","Good bars"],"cons":["Can be noisy","Student party crowd","Basic accommodations"],"lat":49.202,"lng":16.592,"priceLevel":"$"},{"name":"Královo Pole","tagline":"Brno's tech and residential hub","description":"Královo Pole mixes old and new - the technical university, tech companies, and pleasant residential streets create a comfortable neighborhood for working professionals.","vibe":"Tech & Residential","bestFor":"Tech workers, families, and those seeking quiet with amenities","pros":["Tech hub","Good transport","Residential comfort","Parks"],"cons":["Less exciting","Far from center","Suburban feel"],"lat":49.223,"lng":16.585,"priceLevel":"$$"},{"name":"Žabovřesky","tagline":"Brno's leafy family neighborhood","description":"Žabovřesky is where Brno families settle - tree-lined streets, good schools, and the beautiful Wilsonův les park create a pleasant residential atmosphere.","vibe":"Family & Green","bestFor":"Families, nature lovers, and those seeking quiet living","pros":["Green spaces","Family-friendly","Quiet","Good schools"],"cons":["Far from nightlife","Residential","Car helpful"],"lat":49.211,"lng":16.57,"priceLevel":"$$"},{"name":"Brno-Střed","tagline":"Brno's inner ring nightlife","description":"The streets just outside the historic center offer Brno's best nightlife - Jakubské Square, local pubs, and a mix of old and new create a vibrant evening scene.","vibe":"Nightlife & Urban","bestFor":"Nightlife lovers, young professionals, and urban dwellers","pros":["Best nightlife","Near center","Local bars","Affordable"],"cons":["Noisy evenings","Some rundown areas","Busy"],"lat":49.199,"lng":16.612,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1512,6 +1513,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1458,6 +1458,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town (Vanalinn)","tagline":"Medieval magic with cobblestones and spires","description":"Tallinn's Old Town is a UNESCO World Heritage site - one of Europe's best-preserved medieval cities. Cobblestone streets, gothic spires, and centuries-old buildings create fairy-tale atmosphere. Touristy but magical, especially in winter with Christmas markets.","vibe":"Historic & Magical","bestFor":"History lovers, photographers, and nomads seeking unique atmospheric living","pros":["Incredible history","Beautiful architecture","Walking-friendly","Central"],"cons":["Very touristy","Limited housing","Cold winters"],"lat":59.437,"lng":24.745,"priceLevel":"$$$"},{"name":"Kalamaja","tagline":"Tallinn's hipster heart with wooden houses and street art","description":"Kalamaja is Tallinn's creative hub - wooden houses, street art, trendy cafes, and the famous Telliskivi Creative City. This former working-class neighborhood has become the go-to area for young professionals and nomads seeking contemporary Baltic culture.","vibe":"Hip & Creative","bestFor":"Creatives, young professionals, and nomads seeking Tallinn's trendiest neighborhood","pros":["Telliskivi Creative City","Great cafes","Wooden architecture","Community feel"],"cons":["Hipster overflow","Rising prices","Cold walk to center"],"lat":59.4435,"lng":24.735,"priceLevel":"$$"},{"name":"Kadriorg","tagline":"Royal palace and parks in Tallinn's elegant east","description":"Kadriorg is Tallinn's most elegant neighborhood, centered around the baroque Kadriorg Palace and its surrounding park. Ambassadors and wealthy locals live here among tree-lined streets and beautiful gardens. Perfect for those seeking peace with proximity.","vibe":"Elegant & Peaceful","bestFor":"Families, nature lovers, and nomads seeking tranquility near the center","pros":["Beautiful park","Quiet streets","Museums","Sea access"],"cons":["Fewer cafes","Residential quiet","Limited nightlife"],"lat":59.4378,"lng":24.79,"priceLevel":"$$"},{"name":"Kesklinn (City Center)","tagline":"Modern Tallinn with shopping and business","description":"Kesklinn is Tallinn's modern city center - shopping malls, offices, and new developments surrounding the Old Town. It lacks character but offers convenience, modern apartments, and excellent transport connections. Practical for business travelers.","vibe":"Modern & Practical","bestFor":"Business travelers, convenience seekers, and those wanting new apartments","pros":["New apartments","Shopping access","Transport hub","Modern amenities"],"cons":["No character","Commercial feel","Soviet remnants"],"lat":59.435,"lng":24.7536,"priceLevel":"$$"},{"name":"Noblessner","tagline":"Waterfront renewal with restaurants and sea views","description":"Noblessner is Tallinn's newest neighborhood - a former submarine factory turned modern waterfront district. Restaurants, galleries, and sea views attract a young professional crowd. It's developing fast as Tallinn's most exciting new destination.","vibe":"Waterfront & Emerging","bestFor":"Foodies, design lovers, and nomads seeking Tallinn's newest developments","pros":["Sea views","New restaurants","Modern development","Growing scene"],"cons":["Still developing","Wind exposed","Limited services"],"lat":59.452,"lng":24.728,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1509,6 +1510,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

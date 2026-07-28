@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Fira","tagline":"Santorini's bustling clifftop capital","description":"Fira is Santorini's main town - dramatic caldera views, shopping streets, and tourist services. It's busy but has the essential Santorini experience.","vibe":"Central & Tourist","bestFor":"First-time visitors, those wanting central convenience with views","pros":["Caldera views","Shopping","Transport hub","Services"],"cons":["Very crowded","Cruise ship chaos","Touristy"],"lat":36.4167,"lng":25.4315,"priceLevel":"$$$"},{"name":"Oia","tagline":"Santorini's famous sunset village","description":"Oia is Santorini's iconic postcard - whitewashed houses, blue domes, and world-famous sunsets. Stunning but mobbed by tourists.","vibe":"Iconic & Romantic","bestFor":"Photographers, romantics, and those seeking iconic Santorini","pros":["Famous sunsets","Blue domes","Stunning views","Romantic"],"cons":["Extremely crowded","Very expensive","Sunset chaos"],"lat":36.4614,"lng":25.3756,"priceLevel":"$$$$"},{"name":"Imerovigli","tagline":"Santorini's peaceful balcony village","description":"Imerovigli is the caldera's highest point - quieter than Oia, stunning views, and Skaros Rock hikes. Santorini's most peaceful clifftop spot.","vibe":"Peaceful & Scenic","bestFor":"Peace seekers, hikers, and those wanting quieter caldera views","pros":["Highest views","Peaceful","Skaros Rock","Quieter"],"cons":["Limited dining","Far from beaches","Expensive stays"],"lat":36.4333,"lng":25.422,"priceLevel":"$$$"},{"name":"Kamari/Perissa","tagline":"Santorini's black beach resorts","description":"Kamari and Perissa are Santorini's beach areas - black volcanic sand, beach bars, and more affordable accommodation. Beach Santorini.","vibe":"Beach & Affordable","bestFor":"Beach lovers, budget travelers, and those wanting beach focus","pros":["Black sand beaches","More affordable","Beach bars","Local feel"],"cons":["No caldera views","Far from main towns","Basic tourism"],"lat":36.378,"lng":25.484,"priceLevel":"$$"},{"name":"Pyrgos","tagline":"Santorini's authentic hilltop village","description":"Pyrgos is Santorini's most authentic village - hilltop castle, local character, and panoramic views without the caldera crowds.","vibe":"Authentic & Hilltop","bestFor":"Those seeking authentic Santorini beyond tourism","pros":["Authentic village","360 views","Local character","Less crowded"],"cons":["No caldera views","Limited dining","Needs transport"],"lat":36.386,"lng":25.453,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

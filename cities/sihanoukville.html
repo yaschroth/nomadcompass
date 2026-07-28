@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Otres Beach","tagline":"Sihanoukville's last bohemian stretch","description":"Otres is what Sihanoukville used to be - backpacker bungalows, beach bars, and bohemian vibes. It's the only area that escaped Chinese casino development.","vibe":"Bohemian & Beach","bestFor":"Backpackers, beach lovers, and those seeking old Sihanoukville","pros":["Beach vibes","Budget bungalows","Bohemian atmosphere","Escaped development"],"cons":["Declining","Far from port","Limited services"],"lat":10.585,"lng":103.535,"priceLevel":"$"},{"name":"Downtown/City Center","tagline":"Sihanoukville's transformed casino zone","description":"Downtown Sihanoukville has been transformed by Chinese investment - casinos, construction, and a completely different character. Old travelers won't recognize it.","vibe":"Casino & Construction","bestFor":"Casino visitors, business travelers, and those curious about the change","pros":["Casinos","New hotels","Chinese food","Investment buzz"],"cons":["Lost character","Construction chaos","Not backpacker-friendly"],"lat":10.627,"lng":103.522,"priceLevel":"$$"},{"name":"Serendipity/Ochheuteal","tagline":"Sihanoukville's former backpacker beach","description":"Once Sihanoukville's backpacker heart, Serendipity and Ochheuteal have changed dramatically. Some beach bars remain but the vibe has shifted.","vibe":"Changed & Mixed","bestFor":"Beach access, those passing through, and curious visitors","pros":["Beach access","Some bars remain","Central location","Restaurants"],"cons":["Changed character","Casino encroachment","Lost its soul"],"lat":10.615,"lng":103.53,"priceLevel":"$"},{"name":"Sokha Beach","tagline":"Sihanoukville's private resort beach","description":"Sokha Beach is Sihanoukville's best sand - private resort beach with public access possible. It's the only genuinely beautiful beach near town.","vibe":"Resort & Private","bestFor":"Beach quality seekers, resort guests, and those wanting nice sand","pros":["Best beach","Clean sand","Resort facilities","Calm water"],"cons":["Private resort","Expensive","Limited access"],"lat":10.61,"lng":103.508,"priceLevel":"$$$"},{"name":"Ream/Airport Area","tagline":"Sihanoukville's quiet southern escape","description":"South toward Ream National Park, quieter beaches and local fishing villages offer escape from downtown development. It's more authentic Cambodia.","vibe":"Quiet & Natural","bestFor":"Nature lovers, peace seekers, and those escaping development","pros":["National park","Quiet beaches","Fishing villages","Authentic"],"cons":["Far from town","Limited services","Transport needed"],"lat":10.545,"lng":103.61,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

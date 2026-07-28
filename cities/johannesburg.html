@@ -1461,6 +1461,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Maboneng","tagline":"Urban renewal in the inner city","description":"Maboneng is Johannesburg's urban renewal success - converted warehouses, art galleries, rooftop bars. Where young Joburg creates in transformed industrial spaces.","vibe":"Creative & Urban","bestFor":"Creatives, urban explorers, and art lovers","pros":["Creative scene","Great markets","Art galleries","Rooftop bars"],"cons":["Safety concerns","Isolated location","Limited at night"],"lat":-26.2023,"lng":28.0567,"priceLevel":"$$"},{"name":"Sandton","tagline":"Africa's richest square mile","description":"Sandton is Johannesburg's wealth center - corporate headquarters, luxury shopping, upscale hotels. Where South African big business concentrates.","vibe":"Business & Luxury","bestFor":"Business travelers, luxury shoppers, and corporate visitors","pros":["Safe area","Luxury shopping","Business facilities","Good hotels"],"cons":["Very expensive","Soulless","Bubble from reality"],"lat":-26.1076,"lng":28.0567,"priceLevel":"$$$$"},{"name":"Rosebank","tagline":"Upmarket suburb with rooftop scene","description":"Rosebank offers accessible upmarket Johannesburg - Sunday market, restaurants, art galleries. Where suburban meets urban in manageable scale.","vibe":"Upmarket & Accessible","bestFor":"Market lovers, upscale travelers, and art seekers","pros":["Sunday market","Good restaurants","Art galleries","Safe"],"cons":["Expensive","Suburban feel","Requires transport"],"lat":-26.1456,"lng":28.0412,"priceLevel":"$$$"},{"name":"Soweto","tagline":"Township history and vibrant culture","description":"Soweto is South Africa's most famous township - Mandela House, Hector Pieterson Museum, shebeen culture. Where apartheid resistance history meets contemporary township life.","vibe":"Historic & Cultural","bestFor":"History seekers, cultural tourists, and those wanting understanding","pros":["Powerful history","Cultural depth","Authentic experience","Vibrant community"],"cons":["Guided tours recommended","Safety concerns","Requires context"],"lat":-26.2678,"lng":27.8889,"priceLevel":"$"},{"name":"Melville","tagline":"Bohemian village with student energy","description":"Melville is Johannesburg's bohemian quarter - 7th Street restaurants, student vibes, eclectic character. Where university energy meets alternative culture.","vibe":"Bohemian & Student","bestFor":"Students, bohemian seekers, and nightlife lovers","pros":["Character","Student vibes","Good restaurants","Nightlife"],"cons":["Safety at night","Limited parking","Declining reputation"],"lat":-26.1767,"lng":28.0089,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1512,6 +1513,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

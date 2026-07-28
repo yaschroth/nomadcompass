@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Staré Mesto (Old Town)","tagline":"Bratislava's compact historic heart","description":"The Old Town is wonderfully walkable - castle views, medieval gates, baroque palaces, and the famous Main Square create a charming center. It's small enough to know everyone in a week.","vibe":"Historic & Compact","bestFor":"First-time visitors, history lovers, and those wanting walkable charm","pros":["Beautiful architecture","Great cafes","Walkable","Castle access"],"cons":["Touristy","Expensive","Limited accommodation"],"lat":48.144,"lng":17.109,"priceLevel":"$$$"},{"name":"Ružinov","tagline":"Modern residential Bratislava","description":"East of center, Ružinov is a mix of communist blocks and new development - shopping centers, good transport, and reasonable prices make it popular with locals and expats alike.","vibe":"Modern & Practical","bestFor":"Long-term nomads, families, and those wanting modern amenities","pros":["Good shopping","Modern apartments","Reasonable prices","Good transport"],"cons":["Less character","Communist blocks","Far from old town"],"lat":48.149,"lng":17.153,"priceLevel":"$$"},{"name":"Petržalka","tagline":"Communist blocks, modern prices","description":"Across the Danube, Petržalka is Europe's densest communist housing estate - endless concrete blocks house 100,000 people. It's fascinating, affordable, and surprisingly livable.","vibe":"Communist & Budget","bestFor":"Budget seekers, architecture enthusiasts, and urban explorers","pros":["Very affordable","Good transport","Parks","Interesting history"],"cons":["Brutalist architecture","Can feel overwhelming","Far from center"],"lat":48.118,"lng":17.115,"priceLevel":"$"},{"name":"Nové Mesto","tagline":"Bratislava's transitional zone","description":"New Town bridges old and new Bratislava - the main station, business areas, and a mix of architectural styles. It's practical rather than pretty but offers good value.","vibe":"Mixed & Practical","bestFor":"Business travelers, train users, and those seeking central value","pros":["Near station","Good value","Central","Business area"],"cons":["Less charming","Busy roads","Industrial areas"],"lat":48.156,"lng":17.132,"priceLevel":"$$"},{"name":"Karlova Ves","tagline":"Student life and nature","description":"Home to the university campus, Karlova Ves is young and green - the botanical garden, student bars, and forest access create a pleasant academic neighborhood.","vibe":"Student & Green","bestFor":"Students, young nomads, and nature lovers","pros":["University vibe","Green spaces","Affordable","Young energy"],"cons":["Far from center","Quiet summers","Limited dining"],"lat":48.158,"lng":17.053,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

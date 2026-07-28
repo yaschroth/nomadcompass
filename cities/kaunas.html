@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town (Senamiestis)","tagline":"Medieval charm at two rivers' meeting","description":"Lithuania's best-preserved old town sits at the confluence of two rivers. The Gothic and Renaissance architecture, cobblestone streets, and cultural venues create an atmospheric base for exploring.","vibe":"Historic & Cultural","bestFor":"History lovers, culture seekers, and those wanting traditional atmosphere","pros":["Beautiful architecture","Museums and galleries","Great restaurants","Walkable center"],"cons":["Touristy in summer","Limited parking","Can be quiet in winter"],"lat":54.8978,"lng":23.8856,"priceLevel":"$$"},{"name":"Laisvės Alėja","tagline":"Europe's longest pedestrian boulevard","description":"The 1.6km car-free avenue lined with cafes, shops, and lime trees forms Kaunas's social spine. The elegant buildings house the city's best restaurants and cultural institutions.","vibe":"Social & Central","bestFor":"Social butterflies, cafe lovers, and those wanting central location","pros":["Car-free walking","Best cafe selection","Central to everything","Lively atmosphere"],"cons":["Can be crowded","Tourist prices","Noisy on weekends"],"lat":54.8989,"lng":23.9123,"priceLevel":"$$"},{"name":"Žaliakalnis","tagline":"Green hills with modernist gems","description":"The leafy residential district showcases Lithuania's unique interwar modernist architecture, now UNESCO-listed. The funicular railway and panoramic views add to the neighborhood's charm.","vibe":"Residential & Modernist","bestFor":"Architecture enthusiasts, families, and those seeking quiet residential life","pros":["UNESCO architecture","Green spaces","Funicular access","Quiet residential"],"cons":["Fewer restaurants","Uphill walks","Less central"],"lat":54.8923,"lng":23.9234,"priceLevel":"$$"},{"name":"Aleksotas","tagline":"Viewpoint district with emerging scene","description":"Across the Nemunas River, this traditionally working-class area is slowly gentrifying with new cafes and studios. The hilltop funicular viewpoint offers the best panorama of the old town.","vibe":"Emerging & Scenic","bestFor":"Budget travelers, photographers, and early gentrification seekers","pros":["Amazing viewpoints","Cheaper accommodation","Authentic local feel","Funicular access"],"cons":["Less developed","Fewer amenities","Need to cross river"],"lat":54.8834,"lng":23.8845,"priceLevel":"$"},{"name":"Šančiai","tagline":"Student quarter with night energy","description":"Near the universities, this district buzzes with student life, budget eateries, and alternative culture. The young energy and lower prices attract budget-conscious travelers and long-term visitors.","vibe":"Student & Budget","bestFor":"Students, budget nomads, and those wanting young social scene","pros":["Cheap food and drinks","Student atmosphere","Alternative scene","Affordable housing"],"cons":["Less scenic","Basic infrastructure","Can feel rough"],"lat":54.8856,"lng":23.9456,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre","tagline":"Medieval magnificence within ancient walls","description":"York's walled center features the stunning Minster, Shambles medieval street, and centuries of history. Timber-framed buildings, cozy pubs, and cobblestone streets create quintessential England.","vibe":"Medieval charming","bestFor":"History lovers and first-time visitors","pros":["Stunning Minster","Medieval streets","Excellent dining","Walkable center"],"cons":["Very touristy","Expensive","Crowded peak times"],"lat":53.9591,"lng":-1.0815,"priceLevel":"$$"},{"name":"The Shambles","tagline":"Harry Potter inspiration in medieval reality","description":"Europe's best-preserved medieval street features overhanging timber buildings that inspired Diagon Alley. Tourist shops now fill the ancient butchers' quarter but the atmosphere remains magical.","vibe":"Medieval tourist","bestFor":"Photographers and Harry Potter fans","pros":["Iconic street","Historic atmosphere","Unique shops","Photo opportunities"],"cons":["Extremely crowded","Tourist-trap shops","Commercial focus"],"lat":53.9594,"lng":-1.0789,"priceLevel":"$$"},{"name":"Holgate","tagline":"Residential calm near the station","description":"This residential area west of the center offers local atmosphere with quick access to the historic core. Victorian terraces, local pubs, and neighborhood shops serve residents.","vibe":"Residential convenient","bestFor":"Long-term stays and rail travelers","pros":["Station access","Local character","Affordable stays","Quiet nights"],"cons":["Limited attractions","Residential quiet","Walk to center"],"lat":53.9545,"lng":-1.1012,"priceLevel":"$"},{"name":"Fossgate/Walmgate","tagline":"Independent shops and local culture","description":"These neighboring streets east of the center feature independent cafes, vintage shops, and local character. York's creative community gathers here away from tourist routes.","vibe":"Independent creative","bestFor":"Creatives and authenticity seekers","pros":["Independent shops","Local cafes","Creative scene","Less touristy"],"cons":["Limited options","Variable quality","Quiet evenings"],"lat":53.9567,"lng":-1.0723,"priceLevel":"$"},{"name":"Clifford's Tower Area","tagline":"Castle views and riverside walks","description":"The area around the historic castle remains and rivers offers pleasant walks and views. Museums and gardens provide cultural attractions while riverside pubs serve thirsty explorers.","vibe":"Historic riverside","bestFor":"Walkers and history buffs","pros":["Castle remains","River walks","Museums","Scenic views"],"cons":["Flood risk","Limited dining","Tourist groups"],"lat":53.9569,"lng":-1.0789,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

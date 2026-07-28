@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Neubau (7th District)","tagline":"Vienna's hipster heart with coffee house culture","description":"Neubau is Vienna's creative center - independent boutiques, third-wave coffee shops, and the MuseumsQuartier. It's where young Viennese creatives live, blending traditional coffee house culture with contemporary cool.","vibe":"Creative & Hip","bestFor":"Creatives, designers, and nomads seeking Vienna's most contemporary neighborhood","pros":["Best cafes","Creative scene","MuseumsQuartier","Walkable"],"cons":["Getting expensive","Busy streets","Limited parking"],"lat":48.202,"lng":16.35,"priceLevel":"$$"},{"name":"Mariahilf (6th District)","tagline":"Shopping street vibes with local character","description":"Mariahilf centers on Mariahilfer Straße, Vienna's main shopping street. Beyond the retail, quiet side streets hide local restaurants and affordable apartments. Well-connected and practical Vienna living.","vibe":"Shopping & Practical","bestFor":"Shoppers, practical nomads, and those wanting central convenience","pros":["Great shopping","Metro connected","Affordable","Central"],"cons":["Busy main street","Less character","Commercial feel"],"lat":48.197,"lng":16.353,"priceLevel":"$$"},{"name":"Leopoldstadt (2nd District)","tagline":"Vienna's diverse district with Prater park","description":"Leopoldstadt is Vienna's most diverse neighborhood - the famous Prater park, Karmelitermarkt, and growing creative scene. Former Jewish quarter now attracts artists and young families with good value and character.","vibe":"Diverse & Green","bestFor":"Families, park lovers, and nomads seeking diversity with green space","pros":["Prater park","Great market","Diverse food","Good value"],"cons":["Mixed areas","Less polished","Far from center"],"lat":48.216,"lng":16.39,"priceLevel":"$"},{"name":"Innere Stadt (1st District)","tagline":"Imperial grandeur in Vienna's UNESCO center","description":"The 1st District is Vienna's imperial heart - UNESCO World Heritage, opera house, and grand coffee houses. It's where tourists stay and history lives. Expensive and touristy, but quintessentially Vienna.","vibe":"Imperial & Historic","bestFor":"History lovers, tourists, and nomads wanting iconic Vienna","pros":["Historic sites","Grand cafes","Central location","Imperial architecture"],"cons":["Most expensive","Very touristy","Residential limited"],"lat":48.2082,"lng":16.3738,"priceLevel":"$$$"},{"name":"Josefstadt (8th District)","tagline":"Vienna's smallest district with village charm","description":"Josefstadt is Vienna's smallest and most intimate district - village atmosphere, local restaurants, and proximity to the university. It's where established Viennese live, offering calm with central access.","vibe":"Village & Intimate","bestFor":"Long-term residents, academics, and nomads seeking quiet central living","pros":["Village feel","Local restaurants","Near university","Central"],"cons":["Quiet evenings","Less trendy","Limited nightlife"],"lat":48.211,"lng":16.349,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

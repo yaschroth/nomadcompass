@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Tunjungan","tagline":"Historic shopping district reborn","description":"Once the golden mile of the Dutch East Indies, this area now features shopping malls and historic preservation. The iconic Majapahit Hotel and colonial buildings remind of grander times.","vibe":"Commercial historic","bestFor":"Shoppers and history buffs","pros":["Shopping malls","Historic sites","Central location","Good hotels"],"cons":["Traffic congestion","Hot climate","Mixed preservation"],"lat":-7.2656,"lng":112.7412,"priceLevel":"$$"},{"name":"Chinatown (Kembang Jepun)","tagline":"Peranakan heritage and street food","description":"Surabaya's Chinatown features temples, traditional medicine shops, and legendary street food. Early morning wholesale markets give way to afternoon heat while evening brings Kopi Senyum characters.","vibe":"Heritage bustling","bestFor":"Food lovers and culture seekers","pros":["Street food","Temple visits","Cultural heritage","Morning markets"],"cons":["Chaotic traffic","Very hot","Language barrier"],"lat":-7.2534,"lng":112.7378,"priceLevel":"$"},{"name":"Darmo","tagline":"Colonial elegance and leafy streets","description":"This upscale residential area features grand colonial villas along tree-lined boulevards. Diplomatic residences and wealthy families maintain the gracious atmosphere of old Surabaya.","vibe":"Colonial elegant","bestFor":"Architecture lovers and comfort seekers","pros":["Beautiful architecture","Leafy streets","Cooler microclimate","Quality dining"],"cons":["Quiet evenings","Car-dependent","Residential character"],"lat":-7.2789,"lng":112.7312,"priceLevel":"$$"},{"name":"Pakuwon","tagline":"Modern township development","description":"This massive integrated development offers malls, apartments, and all modern amenities. New Surabaya residents and visitors find familiar international brands and air-conditioned comfort.","vibe":"Modern developed","bestFor":"Modern convenience seekers","pros":["Modern facilities","Air conditioning","Shopping options","Entertainment"],"cons":["Generic feel","Far from culture","Traffic access"],"lat":-7.2623,"lng":112.6778,"priceLevel":"$$"},{"name":"Surabaya Selatan","tagline":"Residential calm and local markets","description":"South Surabaya offers traditional residential neighborhoods with local markets and family restaurants. Long-term visitors find community and affordability away from commercial centers.","vibe":"Residential authentic","bestFor":"Long-term stays and budget seekers","pros":["Affordable living","Local atmosphere","Daily markets","Community feel"],"cons":["Basic facilities","Limited English","Far from attractions"],"lat":-7.3123,"lng":112.7389,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

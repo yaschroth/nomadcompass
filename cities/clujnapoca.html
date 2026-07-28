@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centru (Old Town)","tagline":"Gothic spires and Romanian renaissance","description":"Cluj's center is Transylvania's cultural capital - St. Michael's Church, Matthias Corvinus statue, beautiful squares. Where Romanian, Hungarian, and German heritage blend.","vibe":"Historic & Cultural","bestFor":"History lovers, culture seekers, and architecture enthusiasts","pros":["Beautiful architecture","Cultural events","Great restaurants","Walkable"],"cons":["Tourist crowds","Expensive dining","Parking impossible"],"lat":46.7712,"lng":23.5897,"priceLevel":"$$"},{"name":"Mărăști","tagline":"Student quarter with youthful energy","description":"Mărăști serves Cluj's large student population - affordable restaurants, casual bars, young atmosphere. Where Romania's future professionals live and study.","vibe":"Student & Budget","bestFor":"Students, budget travelers, and those wanting young energy","pros":["Affordable","Young atmosphere","Good transport","Near university"],"cons":["Communist-era buildings","Less pretty","Basic area"],"lat":46.7789,"lng":23.6012,"priceLevel":"$"},{"name":"Gheorgheni","tagline":"Residential area with local character","description":"Gheorgheni offers Cluj living - residential blocks, local markets, neighborhood restaurants. Where Clujeans actually live their daily lives.","vibe":"Residential & Local","bestFor":"Long-term visitors, local seekers, and authentic experience","pros":["Affordable","Local atmosphere","Good markets","Real Romania"],"cons":["Not scenic","Limited nightlife","Basic English"],"lat":46.7567,"lng":23.6134,"priceLevel":"$"},{"name":"Bună Ziua","tagline":"Modern development with tech offices","description":"Bună Ziua represents new Cluj - modern offices, IT companies, new apartments. Where Romania's tech boom creates contemporary urban living.","vibe":"Modern & Business","bestFor":"Tech workers, modern seekers, and business travelers","pros":["Modern facilities","Tech offices","New buildings","Good infrastructure"],"cons":["Soulless","Far from center","Traffic congestion"],"lat":46.7434,"lng":23.5789,"priceLevel":"$$"},{"name":"Cetățuia Hill","tagline":"Forested park with city panoramas","description":"Cetățuia rises above Cluj - forested park, historic fortress, panoramic views. Where the city comes for fresh air and perspectives over Transylvania.","vibe":"Natural & Scenic","bestFor":"Hikers, view seekers, and those wanting nature","pros":["Great views","Green space","Peaceful","Near center"],"cons":["Steep climb","Limited amenities","Can feel isolated"],"lat":46.7734,"lng":23.5789,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

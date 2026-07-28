@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Alfama","tagline":"Lisbon's ancient soul with fado and tiles","description":"Alfama is Lisbon's oldest neighborhood - labyrinthine alleys, azulejo tiles, and mournful fado music. It survived the 1755 earthquake and retains medieval character with stunning viewpoints.","vibe":"Historic & Authentic","bestFor":"Culture lovers, photographers, and those seeking traditional Lisbon","pros":["Authentic atmosphere","Amazing viewpoints","Fado houses","Historic charm"],"cons":["Very hilly","Tourist crowds","Limited modern amenities"],"lat":38.712,"lng":-9.13,"priceLevel":"$$"},{"name":"Bairro Alto","tagline":"Lisbon's nightlife epicenter","description":"Bairro Alto transforms after dark - quiet streets become party central with bars spilling onto cobblestones. By day it's bohemian cafes and vintage shops; by night, Lisbon's best nightlife.","vibe":"Nightlife & Bohemian","bestFor":"Night owls, young travelers, and those seeking Lisbon's party scene","pros":["Best nightlife","Central location","Bohemian vibes","Affordable bars"],"cons":["Very noisy at night","Dirty mornings","Party crowds"],"lat":38.713,"lng":-9.145,"priceLevel":"$$"},{"name":"Príncipe Real","tagline":"Lisbon's chic creative quarter","description":"Príncipe Real is Lisbon's trendiest neighborhood - design shops, organic cafes, and shady garden square. LGBTQ+ friendly with the city's best boutiques and sophisticated atmosphere.","vibe":"Trendy & Creative","bestFor":"Design lovers, LGBTQ+ travelers, and creative professionals","pros":["Best boutiques","Beautiful garden","Great cafes","LGBTQ+ friendly"],"cons":["Expensive","Limited nightlife","Hilly access"],"lat":38.717,"lng":-9.149,"priceLevel":"$$$"},{"name":"Santos/Cais do Sodré","tagline":"Riverside cool with creative energy","description":"Santos and Cais do Sodré blend riverside vibes with creative energy - the famous Pink Street, Time Out Market, and waterfront bars. It's Lisbon's most dynamic transformation story.","vibe":"Creative & Riverside","bestFor":"Foodies, creatives, and digital nomads seeking modern Lisbon","pros":["Time Out Market","Riverside walks","Creative scene","Good transport"],"cons":["Tourist heavy","Noisy areas","Gentrifying fast"],"lat":38.706,"lng":-9.145,"priceLevel":"$$"},{"name":"Mouraria","tagline":"Multicultural Lisbon with fado roots","description":"Mouraria is where fado was born - a multicultural neighborhood with African, Asian, and Portuguese communities. Less polished than Alfama but more authentic and affordable.","vibe":"Multicultural & Authentic","bestFor":"Budget travelers, food lovers, and those seeking real local life","pros":["Cheapest central area","Multicultural food","Authentic fado","Local community"],"cons":["Gritty areas","Less maintained","Steep hills"],"lat":38.715,"lng":-9.135,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

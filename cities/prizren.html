@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Shadervan","tagline":"Ottoman heart of Kosovo's cultural capital","description":"The historic center around the famous fountain showcases Ottoman architecture with mosques, hammams, and the iconic Sinan Pasha Mosque. Cobblestone streets lead to traditional craft shops and cafes.","vibe":"Historic charming","bestFor":"Culture lovers and photographers","pros":["Historic architecture","Central location","Traditional crafts","Cafe culture"],"cons":["Very touristy","Limited modern amenities","Crowded festivals"],"lat":42.2142,"lng":20.7414,"priceLevel":"$"},{"name":"Kalaja (Fortress Area)","tagline":"Hilltop views and ancient walls","description":"The area beneath Prizren Fortress offers stunning panoramic views of the city and river below. Winding paths lead through old neighborhoods where traditional houses cling to the hillside.","vibe":"Scenic historic","bestFor":"View seekers and history buffs","pros":["Amazing views","Fortress access","Quiet atmosphere","Authentic feel"],"cons":["Steep walks","Limited services","Far from center"],"lat":42.2189,"lng":20.7432,"priceLevel":"$"},{"name":"Riverside (Lumbardhi)","tagline":"Waterfront charm and evening strolls","description":"The Bistrica River runs through town with cafes and restaurants lining its banks. Evening brings locals and visitors to the riverside promenade for coffee, conversation, and the famous DokuFest atmosphere.","vibe":"Relaxed social","bestFor":"Social butterflies and evening strollers","pros":["Scenic riverside","Great cafes","Evening atmosphere","Festival vibes"],"cons":["Can flood","Noisy in summer","Limited winter options"],"lat":42.2134,"lng":20.7398,"priceLevel":"$"},{"name":"Marash","tagline":"Local life beyond the tourist trail","description":"This residential neighborhood offers a glimpse into everyday Kosovar life. Local markets, neighborhood cafes, and friendly residents welcome those seeking authentic experiences away from the old town.","vibe":"Authentic residential","bestFor":"Long-term stays and cultural immersion","pros":["Very affordable","Local experience","Friendly community","Real Kosovo life"],"cons":["No tourist infrastructure","Basic amenities","Language barrier"],"lat":42.2098,"lng":20.7356,"priceLevel":"$"},{"name":"Tusus","tagline":"New town convenience meets tradition","description":"The newer part of town east of the center offers modern apartments alongside traditional homes. Better infrastructure and parking make this practical while remaining close to historic attractions.","vibe":"Modern practical","bestFor":"Those wanting comfort with old town access","pros":["Modern apartments","Better parking","Near attractions","Good value"],"cons":["Less character","Some construction","Fewer restaurants"],"lat":42.2156,"lng":20.7489,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

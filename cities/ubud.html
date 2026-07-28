@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central Ubud","tagline":"Ubud's cultural temple heart","description":"Central Ubud is the cultural core - Royal Palace, art market, and main streets. It's touristy but essential for Ubud's cultural experiences.","vibe":"Cultural & Central","bestFor":"Culture lovers, first-time visitors, and those seeking central convenience","pros":["Royal Palace","Art market","Restaurants","Dance performances"],"cons":["Very touristy","Traffic","Crowded streets"],"lat":8.5069,"lng":115.2625,"priceLevel":"$$"},{"name":"Penestanan","tagline":"Ubud's artistic hillside retreat","description":"Penestanan is Ubud's original artist colony - peaceful rice terraces, yoga studios, and creative community. It's where Ubud's bohemian spirit lives on.","vibe":"Artistic & Peaceful","bestFor":"Artists, yoga practitioners, and those seeking peaceful Ubud","pros":["Rice terrace views","Yoga studios","Artistic community","Peaceful"],"cons":["Steep access","Far from center","Limited dining"],"lat":8.502,"lng":115.25,"priceLevel":"$$"},{"name":"Nyuh Kuning","tagline":"Ubud's authentic village escape","description":"Nyuh Kuning is a real Balinese village - monkey forest edge, local craftspeople, and authentic atmosphere. It's Ubud without the tourist crowds.","vibe":"Village & Authentic","bestFor":"Long-term stayers, culture seekers, and those seeking real Bali","pros":["Authentic village","Near monkey forest","Local crafts","Peaceful"],"cons":["Limited restaurants","Quiet evenings","Need scooter"],"lat":8.518,"lng":115.259,"priceLevel":"$"},{"name":"Campuhan/Sanggingan","tagline":"Ubud's ridge walk wellness zone","description":"Campuhan is Ubud's wellness hub - the famous ridge walk, luxury spas, and stunning river valley views. It's where Ubud's spiritual tourism began.","vibe":"Wellness & Scenic","bestFor":"Wellness seekers, walkers, and those seeking scenic Ubud","pros":["Famous ridge walk","Luxury spas","Valley views","Peaceful"],"cons":["Expensive stays","Limited budget options","Spread out"],"lat":8.505,"lng":115.255,"priceLevel":"$$$"},{"name":"Tegallalang","tagline":"Ubud's iconic rice terrace region","description":"Tegallalang is home to Ubud's most photographed rice terraces - stunning views, swing attractions, and craft villages. Beautiful but increasingly commercialized.","vibe":"Scenic & Tourist","bestFor":"Photographers, day trippers, and those seeking iconic views","pros":["Iconic terraces","Amazing photos","Craft villages","Cafes with views"],"cons":["Very touristy","Entrance fees everywhere","Far from Ubud center"],"lat":8.434,"lng":115.279,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

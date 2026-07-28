@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Boulevard Area","tagline":"Batumi's spectacular seafront promenade","description":"The Batumi Boulevard is the city's crown jewel - 7km of seafront with parks, sculptures, cafes, and the famous Ali & Nino statue. Apartments here offer some of Georgia's best sea views.","vibe":"Scenic & Central","bestFor":"Sea lovers, sunset chasers, and those wanting the classic Batumi experience","pros":["Stunning seafront","Great for walks","Central location","Modern buildings"],"cons":["Tourist pricing","Can be windy","Crowded in summer"],"lat":41.656,"lng":41.638,"priceLevel":"$$$"},{"name":"Old Town","tagline":"Batumi's charming historic quarter","description":"The Old Town offers narrow streets, Ottoman-era buildings, and the 19th-century Piazza Square. It's more authentic than the glitzy new developments while staying central.","vibe":"Historic & Authentic","bestFor":"History lovers, photographers, and those seeking old Batumi character","pros":["Historic charm","Piazza Square","Central","Good restaurants"],"cons":["Older buildings","Less modern","Can be rundown"],"lat":41.649,"lng":41.643,"priceLevel":"$$"},{"name":"New Boulevard","tagline":"Batumi's modern extension","description":"The New Boulevard extends the seafront north - newer developments, the Alphabet Tower, and modern apartment complexes offer a more contemporary Batumi experience.","vibe":"Modern & Developing","bestFor":"Modern apartment seekers, those wanting new buildings, and families","pros":["Modern buildings","Alphabet Tower","Less crowded","Good value"],"cons":["Still developing","Further from center","Can feel empty"],"lat":41.668,"lng":41.632,"priceLevel":"$$"},{"name":"Gonio","tagline":"Beach town south of Batumi","description":"Gonio is a quiet beach town 12km south - ancient Roman fortress, clearer waters, and a more local Georgian vibe than tourist-heavy central Batumi.","vibe":"Beach & Local","bestFor":"Beach lovers, history buffs, and those seeking quiet seaside living","pros":["Cleaner beaches","Roman fortress","Quieter","Local feel"],"cons":["Far from center","Limited nightlife","Transport needed"],"lat":41.578,"lng":41.572,"priceLevel":"$"},{"name":"Makhinjauri","tagline":"Residential Batumi with botanical beauty","description":"Just south of central Batumi, Makhinjauri offers the famous Botanical Garden and quieter residential living - the beauty of Batumi without the tourist circus.","vibe":"Residential & Green","bestFor":"Nature lovers, long-term stays, and those wanting peaceful living","pros":["Botanical Garden","Peaceful","Good value","Local life"],"cons":["Less action","Transport needed","Limited dining"],"lat":41.632,"lng":41.608,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

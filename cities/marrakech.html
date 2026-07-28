@@ -1438,6 +1438,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Medina","tagline":"UNESCO labyrinth of souks and riads","description":"Marrakech's Medina is Morocco's most famous - UNESCO-listed labyrinthine streets, traditional riads, and Jemaa el-Fnaa square's nightly spectacle. Staying here is immersive but intense. Character over convenience.","vibe":"Traditional & Intense","bestFor":"Culture seekers, photographers, and nomads seeking complete Moroccan immersion","pros":["Incredible atmosphere","Beautiful riads","Cultural immersion","Souks"],"cons":["Maze-like streets","Tourist hassle","Can be overwhelming","Hot"],"lat":31.6295,"lng":-7.9811,"priceLevel":"$$"},{"name":"Guéliz","tagline":"French colonial new town with modern cafes","description":"Guéliz is Marrakech's French-built new town - wide boulevards, modern cafes, and Western amenities. It's where expats and modern Moroccans live, offering escape from Medina intensity with proper infrastructure.","vibe":"Modern & French","bestFor":"Long-term nomads, expats, and those needing modern infrastructure","pros":["Modern cafes","Western amenities","Wide streets","Good transport"],"cons":["Less character","Hot walking","Tourist shops"],"lat":31.6372,"lng":-8.0089,"priceLevel":"$$"},{"name":"Hivernage","tagline":"Marrakech's upscale hotel and casino district","description":"Hivernage is Marrakech's luxury zone - five-star hotels, casinos, and upscale restaurants. Tree-lined avenues and exclusive atmosphere attract affluent visitors. Comfortable but detached from authentic Marrakech.","vibe":"Luxury & Exclusive","bestFor":"Luxury seekers, business travelers, and nomads wanting five-star comfort","pros":["Luxury hotels","Quiet streets","Good restaurants","Safe"],"cons":["Very expensive","Tourist bubble","No character"],"lat":31.62,"lng":-8.01,"priceLevel":"$$$"},{"name":"Kasbah","tagline":"Royal quarter with palace views","description":"The Kasbah area surrounds the royal palace and Saadian Tombs. It's quieter than central Medina with excellent riads and easier navigation. Authentic Medina experience with less chaos.","vibe":"Royal & Calm","bestFor":"History lovers, couples, and nomads seeking calmer Medina experience","pros":["Palace area","Easier navigation","Good riads","Less crowded"],"cons":["Far from Jemaa el-Fnaa","Limited restaurants","Some tourist areas"],"lat":31.617,"lng":-7.993,"priceLevel":"$$"},{"name":"Palmeraie","tagline":"Desert oasis with luxury resort living","description":"The Palmeraie is Marrakech's palm grove oasis - luxury resorts, golf courses, and pool-filled villas 15 minutes from the Medina. It's resort living in the desert, completely different from city experience.","vibe":"Resort & Oasis","bestFor":"Families, golfers, and nomads seeking resort luxury with Marrakech access","pros":["Resort pools","Golf courses","Peaceful","Desert atmosphere"],"cons":["Far from city","Need transport","Isolated bubble"],"lat":31.67,"lng":-8.02,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1489,6 +1490,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

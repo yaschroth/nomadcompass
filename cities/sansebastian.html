@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Parte Vieja (Old Town)","tagline":"Pintxos paradise in narrow medieval lanes","description":"The heart of Donostia - San Sebastián's Old Town is a dense network of narrow streets packed with legendary pintxos bars. Every corner reveals another culinary gem.","vibe":"Culinary & Historic","bestFor":"Foodies, pintxos crawlers, and those wanting authentic Basque culture","pros":["World's best pintxos","Walkable everything","Historic atmosphere","Near La Concha"],"cons":["Crowded evenings","Tourist prices","Noisy at night"],"lat":43.3246,"lng":-1.9842,"priceLevel":"$$$"},{"name":"Centro (Ensanche)","tagline":"Elegant boulevards and Belle Époque architecture","description":"San Sebastián's refined downtown - wide avenues, upscale shopping, and elegant buildings. The area connects the old town to the beaches with sophisticated charm.","vibe":"Elegant & Urban","bestFor":"Professionals, shoppers, and those wanting upscale living","pros":["Central location","Great shopping","Beautiful architecture","Excellent transport"],"cons":["Expensive","Less character","Limited parking"],"lat":43.3183,"lng":-1.9812,"priceLevel":"$$$"},{"name":"Gros","tagline":"Surf culture meets bohemian neighborhood","description":"Gros is San Sebastián's surfer district - Zurriola beach brings waves and board culture, while the streets fill with alternative bars, young locals, and creative energy.","vibe":"Surf & Bohemian","bestFor":"Surfers, younger travelers, and those wanting local vibes","pros":["Surf beach","More affordable","Young atmosphere","Great nightlife"],"cons":["Beach less sheltered","Further from old town","Can be noisy"],"lat":43.3268,"lng":-1.9721,"priceLevel":"$$"},{"name":"Antiguo","tagline":"Residential elegance by Ondarreta beach","description":"Antiguo offers San Sebastián's quieter side - upscale residential area near Ondarreta beach with stunning views toward Monte Igueldo. Peace without sacrificing beauty.","vibe":"Residential & Peaceful","bestFor":"Families, long-term visitors, and those wanting tranquility","pros":["Quiet atmosphere","Beautiful beach","Great views","Safe area"],"cons":["Far from action","Limited nightlife","Expensive"],"lat":43.3137,"lng":-2.0012,"priceLevel":"$$$"},{"name":"Monte Igueldo","tagline":"Panoramic heights above the bay","description":"Monte Igueldo rises above San Sebastián - funicular rides, classic amusement park, and the most spectacular views of La Concha bay. Essential for perspective.","vibe":"Scenic & Peaceful","bestFor":"View seekers, romantics, and those escaping crowds","pros":["Best views","Historic funicular","Peaceful","Classic charm"],"cons":["Hillside access","Limited amenities","Weather dependent"],"lat":43.3092,"lng":-2.0089,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

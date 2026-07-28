@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old French Quarter","tagline":"Colonial charm along the Sangker River","description":"Battambang's most picturesque area features French colonial architecture, art galleries, and riverside cafes. The well-preserved shophouses now host boutique hotels and creative spaces, making it the natural hub for travelers.","vibe":"Artistic & Historic","bestFor":"Artists, photographers, and culture enthusiasts seeking authentic Cambodia","pros":["Beautiful colonial architecture","Best cafes and restaurants","Walkable streets","Art scene hub"],"cons":["Limited apartments for rent","Tourist-oriented prices","Can flood in wet season"],"lat":13.0957,"lng":103.2022,"priceLevel":"$$"},{"name":"Wat Kor Village","tagline":"Traditional Khmer living preserved","description":"Just outside the center, this heritage village showcases traditional wooden houses and Khmer rural life. Some historic homes now offer homestays, giving visitors an intimate look at Cambodian culture.","vibe":"Traditional & Peaceful","bestFor":"Culture immersion seekers, those wanting quiet and authentic experience","pros":["Authentic Khmer culture","Beautiful traditional homes","Very peaceful","Cheap accommodation"],"cons":["Need transport to town","Limited amenities","Very quiet at night"],"lat":13.0789,"lng":103.2156,"priceLevel":"$"},{"name":"Night Market Area","tagline":"Where locals and travelers mingle","description":"The area around Battambang's famous night market offers convenient central living with easy access to food, shopping, and entertainment. Budget guesthouses and local eateries dominate this lively zone.","vibe":"Local & Convenient","bestFor":"Budget travelers, food lovers, and those wanting central convenience","pros":["Walking distance to everything","Best street food","Cheap accommodation","Lively atmosphere"],"cons":["Can be noisy","Basic accommodation","Dusty streets"],"lat":13.0934,"lng":103.2012,"priceLevel":"$"},{"name":"Riverside East Bank","tagline":"Quiet side with sunset views","description":"The eastern bank of the Sangker River offers a quieter alternative with guesthouses and restaurants overlooking the water. Great for those wanting peaceful riverside living while staying close to town.","vibe":"Peaceful & Scenic","bestFor":"Those seeking tranquility, writers, and long-term budget travelers","pros":["River views","Quiet atmosphere","Easy town access","Affordable options"],"cons":["Less developed","Fewer restaurant choices","Need to cross bridge for main area"],"lat":13.0978,"lng":103.2078,"priceLevel":"$"},{"name":"Bamboo Train Area","tagline":"Rural gateway to countryside adventures","description":"Near the famous bamboo train attraction, this semi-rural area offers proximity to Battambang's agricultural surroundings. Perfect for those wanting to explore rice paddies, fruit orchards, and rural temples.","vibe":"Rural & Adventurous","bestFor":"Nature lovers, cyclists, and those seeking countryside immersion","pros":["Rural landscape access","Very cheap living","Authentic farming life","Great cycling"],"cons":["Far from center","Limited amenities","Need own transport"],"lat":13.0623,"lng":103.1789,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

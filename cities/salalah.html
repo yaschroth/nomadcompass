@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Al Haffa","tagline":"Historic souks and Arabian Sea views","description":"Salalah's oldest district features traditional souks selling frankincense, the famous Al Husn Palace area, and beautiful sea views. Historic atmosphere blends with local Dhofari culture.","vibe":"Historic traditional","bestFor":"Culture seekers and history lovers","pros":["Frankincense souks","Historic sites","Sea views","Authentic culture"],"cons":["Basic infrastructure","Limited dining","Hot summers"],"lat":17.0089,"lng":54.1012,"priceLevel":"$"},{"name":"Central Area","tagline":"Modern Salalah with all conveniences","description":"The commercial center offers shopping malls, international restaurants, and modern hotels. Government offices and business facilities serve locals and visitors with contemporary amenities.","vibe":"Modern commercial","bestFor":"Business travelers and convenience seekers","pros":["Modern amenities","Shopping malls","Good hotels","Business facilities"],"cons":["Generic feel","Less character","Hot climate"],"lat":17.0167,"lng":54.0834,"priceLevel":"$$"},{"name":"Mughsail","tagline":"Dramatic cliffs and blowholes","description":"West of the city, this coastal area features dramatic white cliffs, famous blowholes, and pristine beaches. The spectacular Mughsail Beach draws visitors seeking natural beauty.","vibe":"Scenic natural","bestFor":"Nature lovers and photographers","pros":["Stunning scenery","Beautiful beach","Blowholes","Dramatic cliffs"],"cons":["Far from city","No amenities","Strong currents"],"lat":16.8745,"lng":53.7623,"priceLevel":"$"},{"name":"Taqa","tagline":"Castle town with mountain backdrop","description":"This small town east of Salalah offers a historic castle, traditional architecture, and access to the Dhofar Mountains. During khareef season, green landscapes transform the area.","vibe":"Traditional scenic","bestFor":"History buffs and nature explorers","pros":["Historic castle","Mountain access","Khareef greenery","Authentic town"],"cons":["Limited services","Far from city","Seasonal appeal"],"lat":17.0434,"lng":54.3934,"priceLevel":"$"},{"name":"Awqad Beach Area","tagline":"Local beach life and seafood","description":"This stretch of coast offers local beach experiences with fishermen, seafood stalls, and genuine Omani leisure. Less developed than tourist areas but more authentic in character.","vibe":"Local coastal","bestFor":"Authentic experiences and seafood lovers","pros":["Fresh seafood","Local atmosphere","Beach access","Affordable"],"cons":["Basic facilities","Less developed","Limited dining"],"lat":17.0023,"lng":54.0745,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

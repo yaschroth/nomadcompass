@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Koramangala","tagline":"Bangalore's startup heart with rooftop bars","description":"Koramangala is Bangalore's startup epicenter - tech companies, coworking spaces, and rooftop bars fill every block. It's where young tech workers live and play, with excellent restaurants and nightlife. India's Silicon Valley heart.","vibe":"Startup & Social","bestFor":"Tech workers, startup founders, and nomads seeking Bangalore's tech scene","pros":["Startup hub","Great restaurants","Nightlife","Coworking spaces"],"cons":["Traffic nightmare","Expensive","Noisy"],"lat":12.9352,"lng":77.6245,"priceLevel":"$$$"},{"name":"Indiranagar","tagline":"Bangalore's best dining and drinking strip","description":"Indiranagar is Bangalore's trendiest neighborhood - 100 Feet Road and 12th Main lined with the city's best restaurants, bars, and cafes. Tree-lined streets and independent bungalows create village-in-city atmosphere.","vibe":"Trendy & Dining","bestFor":"Foodies, nightlife lovers, and nomads seeking Bangalore's best social scene","pros":["Best restaurants","Trendy bars","Tree-lined streets","Village feel"],"cons":["Very expensive","Weekend crowds","Parking issues"],"lat":12.9784,"lng":77.6408,"priceLevel":"$$$"},{"name":"HSR Layout","tagline":"Residential tech hub with growing cafe scene","description":"HSR Layout has become Bangalore's residential tech hub - wide streets, good cafes, and proximity to tech parks. It's more residential than Koramangala but with excellent infrastructure and growing nomad community.","vibe":"Residential & Tech","bestFor":"Long-term nomads, families, and tech workers seeking residential calm","pros":["Wide streets","Good cafes","Less crowded","Near tech parks"],"cons":["Far from center","Less nightlife","Still developing"],"lat":12.9116,"lng":77.6389,"priceLevel":"$$"},{"name":"Whitefield","tagline":"IT corridor with international everything","description":"Whitefield is Bangalore's IT corridor - massive tech parks, international schools, and gated communities. It's where MNCs and expat families settle. Very modern but completely disconnected from old Bangalore.","vibe":"IT & Expat","bestFor":"Corporate workers, expat families, and nomads working with tech giants","pros":["Tech parks","International schools","Modern malls","Expat community"],"cons":["Far from city","Traffic chaos","No character"],"lat":12.9698,"lng":77.75,"priceLevel":"$$"},{"name":"Jayanagar","tagline":"Old Bangalore charm with local character","description":"Jayanagar is old Bangalore - tree-lined streets, local markets, and genuine South Indian character. The famous 4th Block offers shopping and dining without tourist crowds. Authentic Bangalore living.","vibe":"Traditional & Local","bestFor":"Culture seekers, long-term residents, and nomads seeking authentic Bangalore","pros":["Local character","Great South Indian food","Less expensive","Peaceful"],"cons":["Limited nightlife","Old infrastructure","Far from tech hubs"],"lat":12.9299,"lng":77.5826,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

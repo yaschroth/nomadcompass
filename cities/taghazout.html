@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Village Center","tagline":"Surf soul meets Moroccan tradition","description":"The original fishing village has transformed into a surf destination while maintaining Moroccan character. Whitewashed buildings, rooftop cafes, and the sound of call to prayer blend with surf culture.","vibe":"Surf traditional","bestFor":"Surfers and cultural seekers","pros":["Authentic village","Surf culture","Rooftop cafes","Ocean views"],"cons":["Basic infrastructure","Dusty streets","Limited nightlife"],"lat":30.5456,"lng":-9.7134,"priceLevel":"$"},{"name":"Hash Point Area","tagline":"Prime surf breaks and yoga vibes","description":"The famous surf break gives name to this cluster of surf camps, yoga studios, and health cafes. International nomads gather for morning yoga, afternoon surf, and evening socializing.","vibe":"Wellness surf","bestFor":"Surf-yoga seekers and digital nomads","pros":["Famous surf break","Yoga options","Healthy food","Community vibe"],"cons":["Can be crowded","Expat bubble","Seasonal variation"],"lat":30.5412,"lng":-9.7167,"priceLevel":"$$"},{"name":"Panorama Area","tagline":"Clifftop views and sunset magic","description":"South of the village, clifftop accommodations offer stunning ocean views and dramatic sunsets. Quiet retreat atmosphere attracts those seeking peace above the busy village.","vibe":"Scenic peaceful","bestFor":"View seekers and peace seekers","pros":["Stunning views","Peaceful setting","Dramatic sunsets","Photography heaven"],"cons":["Far from village","Steep walks","Limited services"],"lat":30.5378,"lng":-9.7089,"priceLevel":"$$"},{"name":"Tamraght","tagline":"Quieter alternative to Taghazout","description":"This neighboring village offers similar surf access with a calmer atmosphere. Budget accommodations and fewer tourists create a more authentic Moroccan beach village experience.","vibe":"Quiet authentic","bestFor":"Budget travelers and authenticity seekers","pros":["More authentic","Budget options","Less crowded","Good surf access"],"cons":["Fewer amenities","Basic infrastructure","Language barrier"],"lat":30.5234,"lng":-9.7012,"priceLevel":"$"},{"name":"Anchor Point","tagline":"World-class waves for experts","description":"The legendary right-hand point break draws experienced surfers from around the world. The surrounding area caters to dedicated wave riders with surf-focused accommodation and services.","vibe":"Surf hardcore","bestFor":"Experienced surfers","pros":["World-class waves","Surf community","Dedicated atmosphere","Expert breaks"],"cons":["Expert waves only","Remote location","Basic facilities"],"lat":30.5567,"lng":-9.7234,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

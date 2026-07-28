@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Patershol","tagline":"Medieval labyrinth of cobbled alleys","description":"Patershol is Ghent's oldest quarter - impossibly narrow medieval lanes hiding excellent restaurants, atmospheric bars, and preserved guild houses.","vibe":"Historic & Intimate","bestFor":"Foodies, history lovers, and romantic travelers","pros":["Incredible atmosphere","Best restaurants","Medieval charm","Walkable"],"cons":["Can get crowded","Expensive dining","Hard to navigate"],"lat":51.0578,"lng":3.7198,"priceLevel":"$$$"},{"name":"Graslei & Korenlei","tagline":"Waterfront beauty and café culture","description":"Graslei and Korenlei frame Ghent's most photographed scene - guild houses reflecting in the Leie, waterfront terraces, and evening atmosphere.","vibe":"Scenic & Social","bestFor":"Photographers, café lovers, and first-time visitors","pros":["Stunning views","Great terraces","Historic buildings","Central"],"cons":["Very touristy","Expensive drinks","Crowded summers"],"lat":51.0545,"lng":3.7214,"priceLevel":"$$$"},{"name":"Sint-Pietersnieuwstraat (Student Quarter)","tagline":"University energy and budget eats","description":"The student quarter pulses with University of Ghent life - affordable restaurants, casual bars, bookshops. Young energy at accessible prices.","vibe":"Student & Budget","bestFor":"Students, budget travelers, and those wanting young atmosphere","pros":["Affordable","Young crowd","Good nightlife","University resources"],"cons":["Can be rowdy","Basic quality","Quiet in summer"],"lat":51.0423,"lng":3.7234,"priceLevel":"$"},{"name":"Portus Ganda","tagline":"Converted docks with waterside living","description":"Portus Ganda transformed old port into residential waterfront - modern apartments, marina, waterside dining. Contemporary Ghent between historic quarters.","vibe":"Modern & Waterfront","bestFor":"Modern seekers, boating enthusiasts, and those wanting contemporary","pros":["Waterfront living","Modern amenities","Peaceful","Near center"],"cons":["Less character","Expensive","Limited nightlife"],"lat":51.0489,"lng":3.7312,"priceLevel":"$$$"},{"name":"Dampoort","tagline":"Diverse neighborhood in transition","description":"Dampoort is Ghent's diverse quarter - multicultural communities, affordable rents, emerging creative spaces. Authentic and unpretentious character.","vibe":"Diverse & Emerging","bestFor":"Budget travelers, cultural explorers, and alternative seekers","pros":["Affordable","Diverse food","Authentic vibes","Creative emergence"],"cons":["Some rough areas","Basic amenities","Not scenic"],"lat":51.0578,"lng":3.7389,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

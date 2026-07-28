@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Grand Baie","tagline":"Tourist hub with bay views","description":"The main tourist town offers beach access, shopping, and nightlife concentrated around the picturesque bay. The restaurants, hotels, and tour operators make it the natural base for first-time visitors.","vibe":"Tourist & Beach","bestFor":"First-time visitors, beach lovers, and nightlife seekers","pros":["Beach access","Best nightlife","Shopping options","Tour operators"],"cons":["Very touristy","Higher prices","Traffic congestion"],"lat":-20.0089,"lng":57.5834,"priceLevel":"$$$"},{"name":"Flic en Flac","tagline":"Long beach with sunset magic","description":"The western coast town offers one of Mauritius' best public beaches with stunning sunsets. The mix of tourists and locals, good restaurants, and beach atmosphere attract sun seekers.","vibe":"Beach & Mixed","bestFor":"Beach lovers, sunset enthusiasts, and those seeking good beach with access","pros":["Beautiful long beach","Amazing sunsets","Good restaurants","Mix of tourists and locals"],"cons":["Crowded on weekends","Development increasing","Traffic issues"],"lat":-20.2956,"lng":57.3689,"priceLevel":"$$"},{"name":"Port Louis","tagline":"Capital city with market energy","description":"The capital offers the famous Central Market, Caudan Waterfront, and urban Mauritian life. The authentic atmosphere and cultural diversity provide contrast to resort areas.","vibe":"Urban & Cultural","bestFor":"Culture seekers, market lovers, and those wanting city experience","pros":["Central Market","Cultural diversity","Authentic atmosphere","Good food"],"cons":["Hot and humid","Less beach access","Traffic"],"lat":-20.1609,"lng":57.5012,"priceLevel":"$$"},{"name":"Belle Mare","tagline":"East coast luxury and pristine sands","description":"The eastern coast features some of Mauritius' most beautiful beaches with luxury resorts and tranquil atmosphere. The turquoise waters and white sand define tropical paradise.","vibe":"Luxury & Pristine","bestFor":"Luxury seekers, honeymooners, and beach purists","pros":["Stunning beaches","Luxury resorts","Turquoise waters","Peaceful atmosphere"],"cons":["Expensive","Resort-dominated","Limited independent options"],"lat":-20.1934,"lng":57.7712,"priceLevel":"$$$"},{"name":"Tamarin","tagline":"Surf and dolphin encounters","description":"The western surf town offers excellent waves, dolphin watching, and a more laid-back atmosphere. The surfing community and natural beauty attract active travelers and nature lovers.","vibe":"Surf & Natural","bestFor":"Surfers, dolphin enthusiasts, and nature lovers","pros":["Surfing","Dolphin watching","Laid-back vibe","Natural beauty"],"cons":["Limited nightlife","Smaller town","Can be windy"],"lat":-20.3234,"lng":57.3812,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

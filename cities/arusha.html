@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre","tagline":"Safari capital's bustling heart","description":"Arusha's center is Tanzania's safari gateway - tour operators, markets, hotels. Where northern circuit safaris begin and travelers prepare for wilderness.","vibe":"Transit & Commercial","bestFor":"Safari travelers, practical visitors, and transit stays","pros":["Safari operators","Central location","Markets","Good hotels"],"cons":["Hustlers","Safari touts","Chaotic traffic"],"lat":-3.3869,"lng":36.683,"priceLevel":"$$"},{"name":"Arusha Coffee Lodge Area","tagline":"Coffee plantations and lodge luxury","description":"The coffee lodge area offers Arusha's refined side - coffee estate accommodation, Mount Meru views, pre-safari relaxation in plantation settings.","vibe":"Luxury & Natural","bestFor":"Luxury travelers, coffee lovers, and nature seekers","pros":["Beautiful setting","Coffee tours","Mountain views","Peaceful"],"cons":["Expensive","Outside town","Limited independence"],"lat":-3.3512,"lng":36.7234,"priceLevel":"$$$"},{"name":"Njiro","tagline":"Expat area with international dining","description":"Njiro is where Arusha's expat community lives - international restaurants, supermarkets, residential calm. Where long-term visitors find familiar comforts.","vibe":"Expat & Residential","bestFor":"Long-term visitors, expats, and comfort seekers","pros":["International dining","Safe area","Good shops","Quiet"],"cons":["Expat bubble","Outside center","Transport needed"],"lat":-3.3734,"lng":36.7012,"priceLevel":"$$"},{"name":"Tengeru","tagline":"Local market town on the outskirts","description":"Tengeru offers authentic Tanzania - local market, everyday life, Maasai traders. Where to experience Arusha beyond safari tourism.","vibe":"Local & Authentic","bestFor":"Authentic seekers, market lovers, and adventurous travelers","pros":["Authentic market","Local life","Affordable","Cultural depth"],"cons":["Basic infrastructure","No English","Challenging for tourists"],"lat":-3.3456,"lng":36.7789,"priceLevel":"$"},{"name":"Mount Meru Slopes","tagline":"Forest lodges with volcanic views","description":"Mount Meru's slopes offer nature immersion - forest lodges, birdwatching, acclimatization for Kilimanjaro. Where Tanzania's 'other' mountain provides serene base.","vibe":"Natural & Peaceful","bestFor":"Hikers, nature lovers, and those wanting mountain atmosphere","pros":["Nature immersion","Mountain views","Peaceful","Birdwatching"],"cons":["Isolated","Limited facilities","Cool and damp"],"lat":-3.2512,"lng":36.7534,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

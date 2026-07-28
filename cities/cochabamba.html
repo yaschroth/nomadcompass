@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Colonial plaza and market bustle","description":"Cochabamba's center is Bolivia's relaxed alternative - colonial buildings, Cancha market, temperate climate. Where the 'City of Eternal Spring' shows its character.","vibe":"Colonial & Lively","bestFor":"Culture seekers, market lovers, and travelers seeking real Bolivia","pros":["Pleasant climate","Great markets","Colonial architecture","Authentic"],"cons":["Altitude adjustment","Basic infrastructure","Limited tourism"],"lat":-17.3935,"lng":-66.157,"priceLevel":"$"},{"name":"La Cancha","tagline":"South America's largest open-air market","description":"La Cancha is Cochabamba's commercial heart - massive open-air market selling everything imaginable. Where Bolivian commerce happens at overwhelming scale.","vibe":"Market & Chaotic","bestFor":"Market lovers, adventurous travelers, and bargain hunters","pros":["Incredible market","Authentic Bolivia","Everything available","Affordable"],"cons":["Overwhelming","Pickpockets","Chaotic"],"lat":-17.4012,"lng":-66.1634,"priceLevel":"$"},{"name":"Zona Norte","tagline":"Upscale residential with good dining","description":"Zona Norte is Cochabamba's upscale area - modern restaurants, safe streets, middle-class living. Where to find comfortable Bolivia.","vibe":"Upscale & Residential","bestFor":"Comfort seekers, families, and those wanting safety","pros":["Good restaurants","Safe area","Modern amenities","Pleasant"],"cons":["Expensive by local standards","Limited character","Far from center"],"lat":-17.3678,"lng":-66.1512,"priceLevel":"$$"},{"name":"Cristo de la Concordia","tagline":"Giant Christ statue above the city","description":"Cristo de la Concordia crowns Cochabamba - taller than Rio's Christ, panoramic views, cable car access. Where to survey the valley's eternal spring setting.","vibe":"Scenic & Spiritual","bestFor":"View seekers, pilgrims, and photographers","pros":["Amazing views","Iconic statue","Cable car","Panoramic"],"cons":["Tourist trap","Crowded weekends","Basic facilities"],"lat":-17.3812,"lng":-66.1289,"priceLevel":"$"},{"name":"Tiquipaya","tagline":"Valley escape with Andean backdrop","description":"Tiquipaya offers valley living outside the city - quieter atmosphere, mountain access, weekend escape. Where Cochabambinos breathe fresher air.","vibe":"Suburban & Natural","bestFor":"Nature lovers, quiet seekers, and long-term visitors","pros":["Fresh air","Mountain access","Quieter","Valley views"],"cons":["Need transport","Limited services","Suburban"],"lat":-17.3412,"lng":-66.2134,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

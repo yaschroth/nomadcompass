@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Arena District","tagline":"Ancient Rome meets Adriatic charm","description":"Centered around the magnificent Roman amphitheater, this historic heart features cobblestone streets, outdoor cafes, and layers of history. Evening concerts in the arena create magical summer experiences.","vibe":"Historic majestic","bestFor":"History buffs and culture seekers","pros":["Stunning amphitheater","Historic atmosphere","Central location","Cultural events"],"cons":["Tourist crowds","Higher prices","Limited parking"],"lat":44.8732,"lng":13.8503,"priceLevel":"$$"},{"name":"Verudela","tagline":"Peninsula beaches and resort vibes","description":"This rocky peninsula south of town offers clear Adriatic waters and pine-shaded beaches. Resorts and apartments cater to beach lovers while the aquarium and walking paths provide diversions.","vibe":"Resort coastal","bestFor":"Beach lovers and families","pros":["Beautiful beaches","Clear water","Resort amenities","Nature walks"],"cons":["Far from center","Seasonal crowds","Resort prices"],"lat":44.8456,"lng":13.8367,"priceLevel":"$$"},{"name":"Kaštanjer","tagline":"Local life in the green suburbs","description":"This residential area offers authentic Croatian neighborhood life with local markets, family restaurants, and tree-lined streets. Long-term renters appreciate the affordable prices and community feel.","vibe":"Residential quiet","bestFor":"Long-term stays seeking local life","pros":["Affordable rents","Local markets","Quiet streets","Real Croatia"],"cons":["Far from beaches","Limited nightlife","Croatian helpful"],"lat":44.8678,"lng":13.8234,"priceLevel":"$"},{"name":"Stoja","tagline":"Camp vibes and hidden beaches","description":"This cape west of center features campgrounds, naturist beaches, and rocky coves. Budget travelers and nature lovers find paradise in the pine forests and crystal-clear swimming spots.","vibe":"Natural bohemian","bestFor":"Budget travelers and nature seekers","pros":["Natural beaches","Budget camping","Pine forests","Peaceful atmosphere"],"cons":["Basic facilities","Far from town","Seasonal operation"],"lat":44.8612,"lng":13.8145,"priceLevel":"$"},{"name":"Šijana","tagline":"Modern living near forest trails","description":"A newer residential area bordering the Šijana forest offers modern apartments with nature at the doorstep. Jogging trails, cycling paths, and fresh air attract active residents and families.","vibe":"Modern active","bestFor":"Active lifestyles and families","pros":["Forest access","Modern apartments","Cycling paths","Fresh air"],"cons":["Far from center","Needs car","Limited dining"],"lat":44.8823,"lng":13.8298,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

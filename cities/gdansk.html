@@ -1414,6 +1414,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Główne Miasto (Main Town)","tagline":"Gdańsk's stunning reconstructed heart","description":"Main Town is Gdańsk's showpiece - meticulously reconstructed after WWII with colorful facades, Long Market, and Neptune Fountain. It's remarkably beautiful.","vibe":"Historic & Beautiful","bestFor":"History lovers, photographers, and those seeking Gdańsk's beauty","pros":["Stunning architecture","Long Market","Museums","Walkable"],"cons":["Touristy","Crowded summer","Expensive"],"lat":54.348,"lng":18.653,"priceLevel":"$$"},{"name":"Stare Przedmieście","tagline":"Gdańsk's authentic old suburb","description":"Stare Przedmieście is Gdańsk's less-touristed historic area - genuine character, local restaurants, and amber workshops. More authentic than Main Town.","vibe":"Authentic & Local","bestFor":"Those seeking authentic Gdańsk beyond tourism","pros":["More authentic","Local restaurants","Amber workshops","Less crowded"],"cons":["Less scenic","Basic amenities","Limited nightlife"],"lat":54.35,"lng":18.66,"priceLevel":"$"},{"name":"Wrzeszcz","tagline":"Gdańsk's local university district","description":"Wrzeszcz is where Gdańsk lives - university area, local shopping, and residential character. It's real Gdańsk away from tourists.","vibe":"Local & University","bestFor":"Long-term stayers, those seeking local Gdańsk","pros":["Local atmosphere","University energy","Affordable","Real life"],"cons":["Not scenic","Far from old town","Limited tourism"],"lat":54.381,"lng":18.61,"priceLevel":"$"},{"name":"Oliwa","tagline":"Gdańsk's peaceful cathedral suburb","description":"Oliwa is Gdańsk's green north - beautiful cathedral, park, and peaceful residential atmosphere. Worth the trip for the famous organ concerts.","vibe":"Green & Peaceful","bestFor":"Cathedral visitors, peace seekers, and those wanting green Gdańsk","pros":["Famous cathedral","Beautiful park","Peaceful","Organ concerts"],"cons":["Far from center","Limited dining","Quiet"],"lat":54.413,"lng":18.563,"priceLevel":"$"},{"name":"Długi Targ/Motława Waterfront","tagline":"Gdańsk's iconic riverside promenade","description":"The Motława waterfront is Gdańsk's most photogenic stretch - historic crane, waterside restaurants, and boat tours. Classic Gdańsk views.","vibe":"Waterfront & Scenic","bestFor":"Photographers, diners, and those seeking iconic Gdańsk","pros":["Iconic views","Waterside dining","Historic crane","Boat tours"],"cons":["Very touristy","Expensive restaurants","Crowded"],"lat":54.35,"lng":18.658,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1465,6 +1466,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

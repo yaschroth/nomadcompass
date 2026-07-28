@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Gamla Staden","tagline":"Medieval core with Scandi style","description":"Malmö's old town features cobblestone squares, half-timbered buildings, and the grand Stortorget square. The concentration of restaurants, boutiques, and historic architecture makes it the natural center.","vibe":"Historic & Central","bestFor":"First-time visitors, history lovers, and those wanting old town charm","pros":["Historic architecture","Great restaurants","Walkable streets","Central location"],"cons":["Tourist prices","Crowded in summer","Limited parking"],"lat":55.6056,"lng":13.0012,"priceLevel":"$$$"},{"name":"Västra Hamnen","tagline":"Turning Torso and sustainable future","description":"The former shipyard transformed into Malmö's showcase sustainable district features the iconic Turning Torso tower, waterfront promenades, and innovative architecture. The beach access adds summer appeal.","vibe":"Modern & Sustainable","bestFor":"Architecture enthusiasts, beach lovers, and sustainability admirers","pros":["Iconic architecture","Beach access","Sustainable design","Waterfront living"],"cons":["Expensive","Can feel corporate","Windy"],"lat":55.6134,"lng":12.9734,"priceLevel":"$$$"},{"name":"Möllevången","tagline":"Multicultural markets and creative energy","description":"Malmö's most diverse neighborhood offers bustling markets, international restaurants, and bohemian atmosphere. The multicultural mix and affordable options attract young creatives and budget travelers.","vibe":"Multicultural & Creative","bestFor":"Food lovers, budget travelers, and multicultural experience seekers","pros":["Great market","International food","Affordable","Creative vibe"],"cons":["Grittier feel","Some rougher areas","Less polished"],"lat":55.5912,"lng":13.0134,"priceLevel":"$"},{"name":"Folkets Park Area","tagline":"Green space with nightlife pulse","description":"The area around Sweden's oldest public park offers green spaces, nightlife venues, and a mix of cultures. The summer concerts and diverse restaurants create a lively atmosphere.","vibe":"Park & Social","bestFor":"Night owls, park lovers, and those seeking social atmosphere","pros":["Large park","Nightlife venues","Concert venue","Restaurant variety"],"cons":["Can be noisy","Varies by area","Some rough spots"],"lat":55.5934,"lng":13.0045,"priceLevel":"$$"},{"name":"Limhamn","tagline":"Coastal suburb with village charm","description":"The former limestone quarry town offers harbor charm, waterfront restaurants, and suburban peace. The village atmosphere and beach access attract families and those seeking quiet coastal living.","vibe":"Suburban & Coastal","bestFor":"Families, beach seekers, and those wanting quiet","pros":["Harbor charm","Beach access","Village atmosphere","Good restaurants"],"cons":["Far from center","Suburban feel","Need transport"],"lat":55.5823,"lng":12.9312,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1465,6 +1465,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kaleiçi","tagline":"Antalya's enchanting old town","description":"Kaleiçi is a perfectly preserved Ottoman old town - narrow cobblestone streets, historic houses converted to boutique hotels, and the ancient harbor create a magical atmosphere for digital nomads seeking inspiration.","vibe":"Historic & Charming","bestFor":"History lovers, photographers, and those wanting old-world Turkish atmosphere","pros":["Stunning architecture","Harbor views","Boutique hotels","Central location"],"cons":["Touristy","Limited modern amenities","Cobblestones challenging"],"lat":36.8844,"lng":30.7056,"priceLevel":"$$$"},{"name":"Lara Beach","tagline":"Antalya's premium beach resort zone","description":"Lara Beach is where Antalya goes luxury - mega resorts, golden sand beaches, and all-inclusive everything. It's removed from the city but perfect for those wanting resort-style living.","vibe":"Resort & Beach","bestFor":"Beach lovers, resort seekers, and those wanting all-inclusive convenience","pros":["Beautiful beach","Luxury resorts","Good facilities","Family-friendly"],"cons":["Far from city","Expensive","Touristy bubble"],"lat":36.855,"lng":30.785,"priceLevel":"$$$$"},{"name":"Konyaaltı","tagline":"Antalya's modern beach district","description":"West of the center, Konyaaltı stretches along a 7km pebble beach - modern apartments, waterfront cafes, and the dramatic Taurus Mountains as a backdrop. It's where expats and modern Turks live.","vibe":"Modern & Coastal","bestFor":"Long-term nomads, expats, and those wanting modern comforts with beach access","pros":["Long beach","Modern amenities","Mountain views","Good value"],"cons":["Pebble beach","Spread out","Less character"],"lat":36.868,"lng":30.635,"priceLevel":"$$"},{"name":"Muratpaşa Center","tagline":"Antalya's urban heart","description":"The modern city center offers Turkish urban life - shopping streets, local restaurants, and real city energy. It's less photogenic but more authentic and affordable than the tourist zones.","vibe":"Urban & Local","bestFor":"Budget nomads, Turkish culture seekers, and those wanting local life","pros":["Affordable","Authentic","Good transport","Shopping"],"cons":["Less scenic","No beach access","Busy streets"],"lat":36.89,"lng":30.71,"priceLevel":"$"},{"name":"Kepez","tagline":"Affordable residential Antalya","description":"Kepez is Antalya's affordable sprawl - modern apartments, local neighborhoods, and authentic Turkish daily life. It's where you live like a local and stretch your budget.","vibe":"Local & Affordable","bestFor":"Long-term budget nomads, Turkish language learners, and value seekers","pros":["Very affordable","Authentic","Local markets","Good apartments"],"cons":["Far from beaches","Less English spoken","Basic"],"lat":36.935,"lng":30.725,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1516,6 +1517,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

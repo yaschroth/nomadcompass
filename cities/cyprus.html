@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Paphos Old Town","tagline":"Archaeological treasures and harbor dining","description":"Paphos is Cyprus' cultural capital - UNESCO-listed mosaics, ancient tombs, picturesque harbor. Where Greek mythology meets excellent fish tavernas.","vibe":"Historic & Coastal","bestFor":"History lovers, archaeology enthusiasts, and seafood fans","pros":["UNESCO sites","Great seafood","Historic harbor","Less crowded"],"cons":["Touristy harbor","Hot summers","Scattered attractions"],"lat":34.7555,"lng":32.4084,"priceLevel":"$$"},{"name":"Limassol Marina & Old Town","tagline":"Modern marina meets Ottoman charm","description":"Limassol combines new and old - gleaming marina with superyachts alongside Ottoman quarter, castle, and evolving arts scene. Cyprus' most cosmopolitan city.","vibe":"Modern & Historic","bestFor":"Marina lovers, urban explorers, and cosmopolitan seekers","pros":["Modern marina","Good nightlife","Business hub","Beach access"],"cons":["Expensive","Traffic issues","Can feel commercial"],"lat":34.6729,"lng":33.0443,"priceLevel":"$$$"},{"name":"Larnaca","tagline":"Beach promenade and genuine Cyprus","description":"Larnaca offers accessible Cyprus - airport nearby, palm-lined promenade, Church of Saint Lazarus, salt lake flamingos. Real city life beyond resorts.","vibe":"Authentic & Coastal","bestFor":"Authentic seekers, beach lovers, and practical travelers","pros":["Near airport","Real city","Good beaches","Affordable"],"cons":["Less scenic","Basic tourism","Hot summers"],"lat":34.9171,"lng":33.6365,"priceLevel":"$$"},{"name":"Nicosia (Lefkosia)","tagline":"Divided capital with walled old town","description":"Nicosia is the world's last divided capital - Venetian walls encircle mixed Greek-Turkish heritage. Museums, cafes, and the curious Green Line crossing.","vibe":"Urban & Historic","bestFor":"History buffs, culture seekers, and curious travelers","pros":["Unique history","Good museums","Local atmosphere","Cool cafes"],"cons":["No beach","Very hot","Division can feel strange"],"lat":35.1856,"lng":33.3823,"priceLevel":"$$"},{"name":"Ayia Napa","tagline":"Beach parties and sea caves","description":"Ayia Napa is Cyprus' party capital - legendary clubs, beautiful beaches, and natural sea caves. Where European youth comes to dance until sunrise.","vibe":"Party & Beach","bestFor":"Party seekers, beach lovers, and young travelers","pros":["Great beaches","Famous nightlife","Water sports","Sea caves"],"cons":["Very touristy","Loud nights","Seasonal crowds"],"lat":34.9859,"lng":33.9997,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

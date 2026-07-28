@@ -1410,6 +1410,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Clifton","tagline":"Georgian elegance above the gorge","description":"Clifton is Bristol's most desirable address - Georgian terraces, the iconic Suspension Bridge, and Clifton Village's boutiques create an elegant neighborhood with stunning Avon Gorge views.","vibe":"Elegant & Upscale","bestFor":"Those seeking elegance, families, and architecture lovers","pros":["Beautiful architecture","Suspension Bridge","Village shops","Safe"],"cons":["Expensive","Hilly","Can feel stuffy"],"lat":51.456,"lng":-2.618,"priceLevel":"$$$$"},{"name":"Stokes Croft","tagline":"Bristol's street art creative hub","description":"Stokes Croft is Bristol's edgy creative heart - Banksy territory, street art murals, independent venues, and a proudly alternative community. It's gentrifying but still has edge.","vibe":"Alternative & Creative","bestFor":"Artists, alternative types, and street art enthusiasts","pros":["Street art","Creative scene","Independent venues","Diverse"],"cons":["Can be rough","Noisy","Some safety concerns"],"lat":51.462,"lng":-2.589,"priceLevel":"$$"},{"name":"Harbourside","tagline":"Bristol's regenerated waterfront","description":"The Harbourside is Bristol's showpiece regeneration - former docks now host museums, restaurants, and events. It's where the city comes to play on sunny weekends.","vibe":"Modern & Waterfront","bestFor":"Families, culture seekers, and those wanting waterfront living","pros":["Waterfront walks","Museums","Great restaurants","Events"],"cons":["Can feel empty evenings","Expensive dining","Tourist crowds"],"lat":51.449,"lng":-2.597,"priceLevel":"$$$"},{"name":"Bedminster","tagline":"Bristol's up-and-coming south side","description":"Bedminster is Bristol's emerging neighborhood - North Street's independent shops, street art, and creative businesses attract those priced out of trendier areas. It's edgy but improving.","vibe":"Emerging & Creative","bestFor":"Budget creatives, pioneers, and those seeking up-and-coming areas","pros":["Affordable","Up-and-coming","Independent shops","Community feel"],"cons":["Still rough areas","Less polished","Far from center"],"lat":51.438,"lng":-2.591,"priceLevel":"$"},{"name":"Gloucester Road","tagline":"Europe's longest independent street","description":"Gloucester Road is Bristol's shopping alternative - over a mile of independent shops, cafes, and restaurants create one of the UK's best high streets. It's community retail at its finest.","vibe":"Independent & Community","bestFor":"Independent shopping lovers, foodies, and community seekers","pros":["Independent shops","Great food","Community vibe","Diverse"],"cons":["Long walk","Busy traffic","Residential around"],"lat":51.472,"lng":-2.593,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1461,6 +1462,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

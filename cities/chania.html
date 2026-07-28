@@ -1414,6 +1414,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Venetian Harbor","tagline":"Chania's stunning waterfront jewel","description":"The Venetian harbor is Chania's crown - lighthouse, Venetian shipyards, and waterfront dining. One of Greece's most beautiful harbors.","vibe":"Venetian & Scenic","bestFor":"Photographers, romantics, and everyone visiting Chania","pros":["Stunning harbor","Lighthouse","Waterfront dining","Historic"],"cons":["Very touristy","Expensive dining","Crowded evenings"],"lat":35.518,"lng":24.019,"priceLevel":"$$$"},{"name":"Old Town/Venetian Quarter","tagline":"Chania's atmospheric medieval maze","description":"Chania's old town is a Venetian-Ottoman maze - narrow alleys, hidden squares, and boutique shops. It's wonderfully atmospheric.","vibe":"Historic & Atmospheric","bestFor":"Wanderers, history lovers, and those seeking old Crete","pros":["Atmospheric streets","Boutique shops","Hidden gems","Historic layers"],"cons":["Easy to get lost","Uneven streets","Crowded summer"],"lat":35.517,"lng":24.017,"priceLevel":"$$"},{"name":"Splantzia","tagline":"Chania's local Turkish quarter","description":"Splantzia is Chania's most local old town quarter - Ottoman heritage, neighborhood tavernas, and authentic atmosphere. Less tourist, more local.","vibe":"Local & Ottoman","bestFor":"Those seeking authentic Chania beyond tourism","pros":["Local tavernas","Ottoman heritage","Authentic feel","Less crowded"],"cons":["Limited options","Quiet evenings","Far from harbor"],"lat":35.519,"lng":24.021,"priceLevel":"$"},{"name":"Nea Chora","tagline":"Chania's local beach neighborhood","description":"Nea Chora is Chania's town beach - local fish tavernas, small beach, and authentic Greek atmosphere. Where locals swim.","vibe":"Beach & Local","bestFor":"Beach seekers, seafood lovers, and those wanting local Chania","pros":["Town beach","Fish tavernas","Local atmosphere","Affordable"],"cons":["Small beach","Crowded summer","Basic facilities"],"lat":35.515,"lng":24.008,"priceLevel":"$"},{"name":"Halepa","tagline":"Chania's elegant neoclassical suburb","description":"Halepa is Chania's aristocratic area - neoclassical mansions, diplomatic history, and elegant residential atmosphere. Beautiful but quiet.","vibe":"Elegant & Residential","bestFor":"Architecture lovers, those seeking elegant residential Chania","pros":["Neoclassical architecture","Elegant streets","Quiet","Sea views"],"cons":["Limited dining","Far from old town","Very quiet"],"lat":35.515,"lng":24.035,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1465,6 +1466,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

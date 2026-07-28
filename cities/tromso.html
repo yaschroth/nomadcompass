@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Arctic capital beneath the northern lights","description":"The world's northernmost university city center features colorful wooden houses, the Arctic Cathedral, and lively streets. Northern lights viewing, midnight sun, and Arctic adventures begin here.","vibe":"Arctic urban","bestFor":"Aurora seekers and first-time visitors","pros":["Northern lights access","Walkable center","Polar Museum","Good restaurants"],"cons":["Very expensive","Dark winters","Cold temperatures"],"lat":69.6492,"lng":18.9553,"priceLevel":"$$$"},{"name":"Tromsdalen","tagline":"Cathedral views and aurora hunting grounds","description":"Across the bridge, this area offers the iconic Arctic Cathedral view and access to aurora hunting areas. The cable car and outdoor activities begin from this gateway to the wild.","vibe":"Adventure gateway","bestFor":"Outdoor enthusiasts and photographers","pros":["Cathedral views","Cable car access","Aurora viewing","Nature access"],"cons":["Across bridge","Less services","Residential quiet"],"lat":69.6389,"lng":18.9889,"priceLevel":"$$"},{"name":"Kvaløya","tagline":"Island wilderness with aurora skies","description":"The large island west of the city offers wilderness experiences, traditional fishing villages, and some of the best northern lights viewing. Those seeking nature over city find paradise.","vibe":"Wilderness natural","bestFor":"Nature lovers and aurora hunters","pros":["Dark skies","Beautiful nature","Fishing villages","Wildlife"],"cons":["Needs car","Very remote","Limited services"],"lat":69.6834,"lng":18.7234,"priceLevel":"$$"},{"name":"Studentbyen","tagline":"Arctic university life","description":"The student village offers affordable accommodation and young energy in the Arctic. International students and researchers create diverse community in this extreme location.","vibe":"Student Arctic","bestFor":"Students and budget travelers","pros":["Affordable","Young community","International mix","Good transport"],"cons":["Far from center","Student facilities","Basic amenities"],"lat":69.6523,"lng":18.9312,"priceLevel":"$"},{"name":"Harbor Area","tagline":"Maritime heritage and Arctic expeditions","description":"The harbor preserves Tromsø's role as gateway to Arctic exploration. Polar expedition history, Hurtigruten ships, and fresh seafood restaurants maintain maritime tradition.","vibe":"Maritime historic","bestFor":"History buffs and seafood lovers","pros":["Maritime history","Fresh seafood","Hurtigruten access","Waterfront atmosphere"],"cons":["Industrial areas","Weather exposed","Limited accommodation"],"lat":69.6478,"lng":18.9634,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"White city of Bolivia's heritage","description":"The UNESCO-listed historic center features whitewashed colonial buildings, beautiful churches, and tree-lined plazas. Bolivia's constitutional capital preserves indigenous and Spanish heritage in pristine condition.","vibe":"Colonial preserved","bestFor":"History lovers and cultural travelers","pros":["UNESCO heritage","Beautiful architecture","Cultural sites","Walkable center"],"cons":["Altitude challenges","Limited nightlife","Tourist prices"],"lat":-19.0478,"lng":-65.2596,"priceLevel":"$"},{"name":"Recoleta","tagline":"Hillside views and sunset magic","description":"The Recoleta monastery area offers the best views over Sucre's white rooftops. Cafes, viewpoints, and the peaceful monastery grounds attract sunset seekers and contemplative travelers.","vibe":"Scenic peaceful","bestFor":"View seekers and photographers","pros":["Stunning views","Peaceful atmosphere","Sunset spot","Historic monastery"],"cons":["Uphill walk","Limited services","Far from restaurants"],"lat":-19.0412,"lng":-65.2623,"priceLevel":"$"},{"name":"Mercado Central Area","tagline":"Local flavors and daily rhythms","description":"Around the central market, daily Bolivian life unfolds with fresh produce, local eateries, and neighborhood commerce. Budget travelers find authentic meals and genuine community atmosphere.","vibe":"Market authentic","bestFor":"Foodies and budget travelers","pros":["Authentic food","Lowest prices","Local atmosphere","Daily markets"],"cons":["Basic facilities","Can be chaotic","Spanish essential"],"lat":-19.0512,"lng":-65.2567,"priceLevel":"$"},{"name":"Parque Bolivar","tagline":"Green space and family recreation","description":"This park area provides urban green space with playgrounds, the famous Eiffel-designed kiosk, and weekend family activities. Surrounding streets offer residential calm near the action.","vibe":"Residential green","bestFor":"Families and long-term stays","pros":["Green space","Family-friendly","Central location","Residential feel"],"cons":["Limited dining","Quiet evenings","Basic accommodation"],"lat":-19.0534,"lng":-65.2645,"priceLevel":"$"},{"name":"Florida","tagline":"Student life and budget living","description":"Near the university, this area attracts students with affordable rooms, budget restaurants, and young energy. Spanish schools and volunteer organizations also base here.","vibe":"Student budget","bestFor":"Students and budget travelers","pros":["Very affordable","Student atmosphere","Language schools","Community feel"],"cons":["Basic facilities","Far from attractions","Quiet weekends"],"lat":-19.0389,"lng":-65.2578,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

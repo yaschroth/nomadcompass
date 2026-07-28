@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Marbella Old Town","tagline":"Whitewashed charm in the Costa del Sol","description":"The historic center features flower-filled plazas, whitewashed buildings, and Orange Square's famous orange trees. The pedestrian streets, boutiques, and tapas bars create Marbella's most authentic atmosphere.","vibe":"Historic & Charming","bestFor":"Culture seekers, photographers, and those wanting authentic Andalusian charm","pros":["Beautiful old town","Great restaurants","Walkable streets","Authentic atmosphere"],"cons":["Crowded in summer","Tourist prices","Limited parking"],"lat":36.5089,"lng":-4.8856,"priceLevel":"$$$"},{"name":"Puerto Banús","tagline":"Superyachts and celebrity spotting","description":"The famous marina showcases extreme wealth with superyachts, luxury boutiques, and celebrity sightings. The glamorous atmosphere and nightlife attract those seeking the high life.","vibe":"Luxury & Glamorous","bestFor":"Luxury seekers, yacht enthusiasts, and nightlife lovers","pros":["Glamorous atmosphere","Luxury shopping","Great nightlife","People watching"],"cons":["Extremely expensive","Pretentious vibe","Very crowded"],"lat":36.4856,"lng":-4.9534,"priceLevel":"$$$"},{"name":"Golden Mile","tagline":"Beach clubs and beachfront luxury","description":"The coastal stretch between Marbella and Puerto Banús features luxury hotels, beach clubs, and high-end dining. The combination of beach access and exclusivity defines Costa del Sol luxury.","vibe":"Beach & Luxury","bestFor":"Beach club lovers, luxury seekers, and upscale sun worshippers","pros":["Beach clubs","Luxury hotels","Great beaches","High-end dining"],"cons":["Very expensive","Exclusive feel","Need reservations"],"lat":36.4934,"lng":-4.9234,"priceLevel":"$$$"},{"name":"San Pedro de Alcántara","tagline":"Local town with beach promenade","description":"The neighboring town offers a more local atmosphere with a newly renovated promenade and authentic Spanish life. The affordable alternative to central Marbella attracts longer-term visitors.","vibe":"Local & Relaxed","bestFor":"Long-term visitors, families, and those seeking authentic Spain","pros":["More affordable","Local atmosphere","Nice promenade","Family friendly"],"cons":["Less glamorous","Fewer attractions","Need transport to Marbella"],"lat":36.4889,"lng":-4.9889,"priceLevel":"$$"},{"name":"Nueva Andalucía","tagline":"Golf valleys and residential calm","description":"The residential area behind Puerto Banús features golf courses, villas, and a quieter lifestyle. Popular with expats and families seeking space and sporting facilities.","vibe":"Golf & Residential","bestFor":"Golfers, families, and those wanting residential space","pros":["Golf courses","Residential calm","Good restaurants","Expat community"],"cons":["Car necessary","Less beach access","Suburban feel"],"lat":36.4956,"lng":-4.9678,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1438,6 +1438,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Duong Dong","tagline":"Phu Quoc's main town hub","description":"Duong Dong is Phu Quoc's heart - night market, local restaurants, and main services. It's the island's most developed area with authentic Vietnamese character.","vibe":"Local & Central","bestFor":"Food lovers, night market seekers, and those wanting local Phu Quoc","pros":["Night market","Local food","Services","Central"],"cons":["No beach","Traffic","Development chaos"],"lat":10.217,"lng":103.96,"priceLevel":"$"},{"name":"Long Beach","tagline":"Phu Quoc's main resort strip","description":"Long Beach stretches south of Duong Dong - resorts, beach bars, and the island's main tourist infrastructure. Sunsets here are Phu Quoc's best.","vibe":"Beach & Resort","bestFor":"Beach lovers, sunset seekers, and those wanting resort access","pros":["Beautiful sunsets","Beach resorts","Restaurants","Beach bars"],"cons":["Touristy","Expensive","Crowded beaches"],"lat":10.195,"lng":103.955,"priceLevel":"$$"},{"name":"Ong Lang Beach","tagline":"Phu Quoc's quieter boutique stretch","description":"Ong Lang offers Phu Quoc's best balance - boutique resorts, quieter beaches, and good restaurants without Long Beach crowds.","vibe":"Boutique & Quiet","bestFor":"Couples, boutique hotel lovers, and those seeking quiet beaches","pros":["Quieter","Boutique resorts","Good restaurants","Nice beach"],"cons":["Far from town","Limited services","Transport needed"],"lat":10.255,"lng":103.935,"priceLevel":"$$"},{"name":"Sao Beach Area","tagline":"Phu Quoc's postcard-perfect south","description":"Sao Beach has Phu Quoc's whitest sand and clearest water - postcard perfect but increasingly developed. Worth the trip for the beach quality.","vibe":"Paradise & Popular","bestFor":"Beach quality seekers, photographers, and day trippers","pros":["White sand","Clear water","Beautiful","Instagram perfect"],"cons":["Crowded","Development encroaching","Day trip crowds"],"lat":10.058,"lng":104.028,"priceLevel":"$$"},{"name":"An Thoi/South Island","tagline":"Phu Quoc's cable car and islands","description":"An Thoi is Phu Quoc's southern tip - world's longest cable car to Hon Thom island, port for island hopping, and fishing village character.","vibe":"Adventure & Island","bestFor":"Cable car riders, island hoppers, and those seeking adventure","pros":["Cable car","Island hopping","Fishing village","Less touristy"],"cons":["Far south","Cable car expensive","Limited accommodation"],"lat":10.015,"lng":104.015,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1489,6 +1490,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

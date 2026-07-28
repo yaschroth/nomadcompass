@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centre-Ville","tagline":"Flat city centre with Alpine views","description":"Grenoble's center is remarkably flat for an Alpine city - Place Grenette, shopping streets, mountain views at every turn. Where French Alps meet urban accessibility.","vibe":"Urban & Alpine","bestFor":"Urban explorers, shoppers, and mountain admirers","pros":["Flat terrain","Mountain views","Good shopping","Central"],"cons":["Not pretty","Industrial feel","Hot summers"],"lat":45.1885,"lng":5.7245,"priceLevel":"$$"},{"name":"La Bastille","tagline":"Fortress accessed by iconic bubbles","description":"La Bastille rises above Grenoble - fortress reached by famous téléphérique bubbles. Panoramic Alpine views and hiking trails from the summit.","vibe":"Scenic & Active","bestFor":"View seekers, hikers, and cable car enthusiasts","pros":["Incredible views","Iconic cable car","Hiking access","Restaurant"],"cons":["Cable car queues","Weather dependent","Tourist-focused"],"lat":45.1978,"lng":5.7256,"priceLevel":"$$"},{"name":"Saint-Laurent","tagline":"Bohemian quarter on the right bank","description":"Saint-Laurent is Grenoble's bohemian neighborhood - narrow streets, alternative bars, Musée Dauphinois. Where the city's creative side gathers.","vibe":"Bohemian & Creative","bestFor":"Artists, alternative seekers, and museum lovers","pros":["Artistic vibe","Good bars","Museum","Character"],"cons":["Steep streets","Limited dining","Can feel isolated"],"lat":45.1956,"lng":5.7312,"priceLevel":"$"},{"name":"Europole / Scientific Polygon","tagline":"Research campus with international community","description":"Europole hosts Grenoble's scientific community - ESRF, research institutes, international researchers. Where cutting-edge science meets Alpine setting.","vibe":"Scientific & International","bestFor":"Researchers, scientists, and international visitors","pros":["Research facilities","International community","Modern infrastructure","Near tram"],"cons":["Soulless","Limited dining","Campus atmosphere"],"lat":45.2034,"lng":5.6934,"priceLevel":"$$"},{"name":"Villeneuve","tagline":"Diverse neighborhood with Olympic legacy","description":"Villeneuve was built for 1968 Olympics - diverse community, affordable housing, multicultural energy. Where Grenoble's diversity concentrates.","vibe":"Diverse & Residential","bestFor":"Budget travelers, diversity seekers, and long-term visitors","pros":["Affordable","Diverse food","Tram access","Local atmosphere"],"cons":["Rough reputation","Far from center","Basic infrastructure"],"lat":45.1656,"lng":5.7489,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

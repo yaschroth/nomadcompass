@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Barrio Escalante","tagline":"Gastronomic hotspot of Central America","description":"Once residential, this neighborhood has become Costa Rica's culinary epicenter. Chefs open innovative restaurants in converted houses while craft breweries and specialty coffee shops multiply.","vibe":"Foodie trendy","bestFor":"Foodies and coffee lovers","pros":["Excellent restaurants","Craft beer scene","Coffee culture","Walkable streets"],"cons":["Gentrifying fast","Evening only vibe","Limited parking"],"lat":9.9412,"lng":-84.0612,"priceLevel":"$$"},{"name":"Barrio Amón","tagline":"Victorian mansions meet boutique hotels","description":"This historic neighborhood features restored Victorian mansions now housing boutique hotels, galleries, and cultural centers. Tree-lined streets and historic architecture provide San José's most charming district.","vibe":"Historic charming","bestFor":"History lovers and boutique seekers","pros":["Beautiful architecture","Boutique hotels","Cultural venues","Walkable"],"cons":["Limited dining","Some empty lots","Street safety at night"],"lat":9.9367,"lng":-84.0734,"priceLevel":"$$"},{"name":"Escazú","tagline":"Expat haven with mountain views","description":"This wealthy suburb hosts the largest expatriate community with American-style shopping, international restaurants, and modern amenities. Mountains backdrop the malls and gated communities.","vibe":"Expat suburban","bestFor":"Expats and comfort seekers","pros":["Modern amenities","International dining","Mountain views","Safe area"],"cons":["Car required","Expensive","Less authentic"],"lat":9.9234,"lng":-84.1456,"priceLevel":"$$$"},{"name":"San Pedro","tagline":"University energy and nightlife","description":"Home to the University of Costa Rica, this area pulses with student energy. Affordable restaurants, lively bars, and bookstores create a youthful atmosphere with cultural events.","vibe":"Student lively","bestFor":"Young travelers and students","pros":["Vibrant nightlife","Affordable dining","Young energy","Good transit"],"cons":["Can be loud","Some petty crime","Party atmosphere"],"lat":9.9334,"lng":-84.0512,"priceLevel":"$"},{"name":"Santa Ana","tagline":"Modern living with nature access","description":"This developing suburb offers modern apartments, business parks, and easy access to Pacific beaches. Young professionals and families appreciate the combination of convenience and livability.","vibe":"Modern suburban","bestFor":"Digital nomads and families","pros":["Modern infrastructure","Beach access","Good climate","Growing amenities"],"cons":["Needs car","Sprawling development","Less character"],"lat":9.9323,"lng":-84.1823,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

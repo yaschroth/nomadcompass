@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre","tagline":"Historic colleges and punting paradise","description":"Cambridge's center is university incarnate - King's College Chapel, punts on the Cam, ancient courtyards. 800 years of academic excellence in Gothic and Renaissance splendor.","vibe":"Academic & Historic","bestFor":"History lovers, architecture enthusiasts, and academic visitors","pros":["Stunning colleges","Punting access","Historic atmosphere","Walkable"],"cons":["Very touristy","Expensive","Crowded summer"],"lat":52.2053,"lng":0.1218,"priceLevel":"$$$"},{"name":"Mill Road","tagline":"Multicultural street with indie shops","description":"Mill Road is Cambridge's alternative artery - diverse restaurants, independent shops, student cafés, and community markets. Where town meets gown with diversity.","vibe":"Diverse & Alternative","bestFor":"Foodies, alternative seekers, and budget travelers","pros":["Diverse food","Independent shops","Affordable","Local vibe"],"cons":["Far from colleges","Basic area","Traffic issues"],"lat":52.1978,"lng":0.1389,"priceLevel":"$"},{"name":"Newnham","tagline":"Leafy streets and academic elegance","description":"Newnham offers Cambridge's residential grace - Victorian houses, tree-lined streets, Newnham College nearby. Where dons and families seek peaceful living.","vibe":"Residential & Elegant","bestFor":"Families, academics, and those wanting peace","pros":["Beautiful streets","Peaceful","Near meadows","Safe area"],"cons":["Expensive","Limited dining","Quiet evenings"],"lat":52.1998,"lng":0.1067,"priceLevel":"$$$"},{"name":"Chesterton","tagline":"Riverside living north of center","description":"Chesterton stretches along the Cam's north bank - riverside paths, local pubs, residential character. Cambridge living with water access.","vibe":"Riverside & Local","bestFor":"Walkers, local seekers, and those wanting riverside","pros":["River access","Local pubs","Cycling paths","Affordable-ish"],"cons":["Far from colleges","Basic area","Limited attractions"],"lat":52.2167,"lng":0.1289,"priceLevel":"$$"},{"name":"Grantchester","tagline":"Meadow walks to literary tea gardens","description":"Grantchester is Cambridge's rural escape - meadow walks from the city, famous Orchard Tea Garden, Rupert Brooke's village. Quintessential English pastoral.","vibe":"Rural & Literary","bestFor":"Walkers, literary enthusiasts, and those seeking countryside","pros":["Beautiful walks","Famous tea garden","Literary history","Peaceful"],"cons":["Requires walking","Limited facilities","Weather dependent"],"lat":52.1756,"lng":0.0889,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

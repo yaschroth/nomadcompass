@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Hassan II Mosque Area","tagline":"Architectural wonder on the Atlantic","description":"The Hassan II Mosque dominates Casablanca's waterfront - world's third-largest mosque built over the Atlantic. Stunning architecture that defines the city's modern identity.","vibe":"Iconic & Spiritual","bestFor":"Architecture lovers, spiritual seekers, and photographers","pros":["Stunning mosque","Ocean setting","Cultural significance","Tours available"],"cons":["Tourist-focused","Limited dining","Far from center"],"lat":33.6086,"lng":-7.6328,"priceLevel":"$$"},{"name":"Habous Quarter","tagline":"French-designed 'new medina' with craft shops","description":"Habous is Casablanca's unique medina - French-designed in 1930s combining Moroccan style with urban planning. Calm souks, olive shops, and royal palace views.","vibe":"Traditional & Curated","bestFor":"Shoppers, craft seekers, and those wanting medina without chaos","pros":["Organized souks","Quality crafts","Less chaotic","Authentic goods"],"cons":["Small area","Tourist prices","Limited scope"],"lat":33.5734,"lng":-7.6189,"priceLevel":"$$"},{"name":"Maarif","tagline":"Modern shopping and upscale living","description":"Maarif is Casablanca's fashionable district - Morocco Mall, international brands, upscale restaurants. Where young, wealthy Casablancans shop and socialize.","vibe":"Modern & Upscale","bestFor":"Shoppers, modern seekers, and upscale diners","pros":["Great shopping","Modern amenities","Good restaurants","Safe area"],"cons":["Expensive","Generic feel","Traffic issues"],"lat":33.5789,"lng":-7.6412,"priceLevel":"$$$"},{"name":"Ain Diab","tagline":"Beach clubs and coastal nightlife","description":"Ain Diab stretches along Casablanca's coast - beach clubs, restaurants, nightlife venues. Where Casablancans escape to the ocean for sun and weekend parties.","vibe":"Beach & Nightlife","bestFor":"Beach lovers, party seekers, and those wanting coastal vibes","pros":["Beach access","Good nightlife","Restaurants","Ocean views"],"cons":["Seasonal","Expensive clubs","Traffic weekends"],"lat":33.5934,"lng":-7.6789,"priceLevel":"$$$"},{"name":"Old Medina","tagline":"Original walled city with authentic markets","description":"Casablanca's Old Medina preserves the original walled city - less famous than Fez or Marrakech but genuinely local. Where everyday Casablancans shop and trade.","vibe":"Authentic & Local","bestFor":"Authentic seekers, adventurous travelers, and local culture","pros":["Genuine atmosphere","Local markets","Affordable","Less tourist"],"cons":["Can feel rough","Basic infrastructure","Navigation difficult"],"lat":33.6034,"lng":-7.6134,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

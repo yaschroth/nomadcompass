@@ -1456,6 +1456,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town/Center","tagline":"Ljubljana's charming pedestrian heart","description":"Ljubljana's center is a pedestrian paradise - Triple Bridge, riverside cafes, and Plečnik's masterful urban design. It's one of Europe's most livable centers.","vibe":"Charming & Pedestrian","bestFor":"Everyone seeking Ljubljana's famous livability","pros":["Car-free center","Riverside cafes","Beautiful bridges","Walkable"],"cons":["Small area","Tourist crowds","Expensive cafes"],"lat":46.051,"lng":14.506,"priceLevel":"$$"},{"name":"Metelkova","tagline":"Ljubljana's alternative squat culture","description":"Metelkova is Ljubljana's alternative heart - former military barracks turned art squat with clubs, galleries, and counterculture. It's Ljubljana's wild side.","vibe":"Alternative & Artistic","bestFor":"Alternative travelers, club lovers, and those seeking Ljubljana's edge","pros":["Alternative culture","Street art","Clubs","Unique atmosphere"],"cons":["Can be rough","Not for everyone","Late-night focused"],"lat":46.057,"lng":14.518,"priceLevel":"$"},{"name":"Trnovo","tagline":"Ljubljana's bohemian southern quarter","description":"Trnovo is Ljubljana's artistic neighborhood - Plečnik's house, riverside walks, and bohemian atmosphere. It's peaceful and creative.","vibe":"Bohemian & Peaceful","bestFor":"Artists, architecture lovers, and those seeking quiet Ljubljana","pros":["Plečnik architecture","Riverside","Bohemian feel","Peaceful"],"cons":["Quiet evenings","Limited nightlife","Small area"],"lat":46.042,"lng":14.505,"priceLevel":"$$"},{"name":"Šiška","tagline":"Ljubljana's local residential north","description":"Šiška is Ljubljana's working neighborhood - local markets, ethnic food, and authentic residential life. It's real Ljubljana.","vibe":"Local & Residential","bestFor":"Budget travelers, local food lovers, and those seeking authentic Ljubljana","pros":["Local markets","Affordable","Ethnic food","Real Ljubljana"],"cons":["Less scenic","Far from center","Limited tourism"],"lat":46.065,"lng":14.49,"priceLevel":"$"},{"name":"Castle Hill","tagline":"Ljubljana's hilltop panoramic crown","description":"Castle Hill offers Ljubljana's best views - funicular access, castle complex, and panoramic terrace. It's the city's scenic climax.","vibe":"Scenic & Historic","bestFor":"View seekers, photographers, and those seeking castle experience","pros":["Best views","Castle","Funicular","Restaurants"],"cons":["Tourist attraction","Steep walk","Expensive dining"],"lat":46.049,"lng":14.509,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1507,6 +1508,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

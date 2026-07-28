@@ -1421,6 +1421,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Latinerkvarteret","tagline":"Aarhus's charming historic heart","description":"The Latin Quarter is Aarhus's oldest neighborhood - cobblestone streets, colorful houses, and cozy cafes. This is where 400-year-old buildings house specialty coffee shops and boutiques.","vibe":"Historic & Charming","bestFor":"History lovers, cafe hoppers, and those wanting central walkable living","pros":["Beautiful architecture","Great cafes","Walkable center","Unique shops"],"cons":["Expensive rentals","Crowded weekends","Limited parking"],"lat":56.1575,"lng":10.21,"priceLevel":"$$$"},{"name":"Åboulevarden","tagline":"Aarhus's canal-side social hub","description":"The river boulevard is Aarhus's most vibrant strip - outdoor cafes, bars, and restaurants line the canal. Summer evenings here are magical with locals and visitors enjoying the Scandinavian light.","vibe":"Social & Lively","bestFor":"Social nomads, foodies, and those who love outdoor dining culture","pros":["Vibrant atmosphere","Great restaurants","Social scene","Beautiful canal"],"cons":["Noisy evenings","Touristy","Expensive dining"],"lat":56.1545,"lng":10.202,"priceLevel":"$$$"},{"name":"Trøjborg","tagline":"Aarhus's hipster neighborhood","description":"Trøjborg is where Aarhus gets creative - independent cafes, vintage shops, and a thriving local food scene. It's residential enough to feel authentic but trendy enough to stay interesting.","vibe":"Hipster & Local","bestFor":"Creatives, young professionals, and those seeking authentic local life","pros":["Great local cafes","Less touristy","Good value","Community feel"],"cons":["Quieter nightlife","Further from center","Limited coworking"],"lat":56.168,"lng":10.198,"priceLevel":"$$"},{"name":"Frederiksbjerg","tagline":"Aarhus's diverse urban village","description":"South of the center, Frederiksbjerg is one of Aarhus's most diverse neighborhoods - ethnic food markets, independent shops, and a mix of students and families create a vibrant multicultural atmosphere.","vibe":"Diverse & Urban","bestFor":"Budget-conscious nomads, food explorers, and those seeking diversity","pros":["Affordable options","Great ethnic food","Diverse community","Central location"],"cons":["Less polished","Some rougher areas","Limited nightlife"],"lat":56.147,"lng":10.203,"priceLevel":"$$"},{"name":"Risskov","tagline":"Beach living north of the city","description":"Risskov offers the best of both worlds - a beautiful beach and forest while being just 15 minutes from central Aarhus. The iconic infinity pool and seaside paths make this a wellness paradise.","vibe":"Coastal & Active","bestFor":"Beach lovers, runners, and those prioritizing nature and wellness","pros":["Beautiful beach","Infinity pool","Forest trails","Peaceful"],"cons":["Far from center","Limited nightlife","Expensive housing"],"lat":56.185,"lng":10.223,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1472,6 +1473,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1456,6 +1456,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Market (Psar Chas)","tagline":"Siem Reap's bustling tourist heart","description":"Old Market area is Siem Reap's tourist center - markets, restaurants, and easy temple access. It's convenient and lively but very touristy.","vibe":"Tourist & Central","bestFor":"First-time visitors, shoppers, and those seeking central convenience","pros":["Central location","Markets","Restaurants","Temple tours"],"cons":["Very touristy","Touts everywhere","Overpriced"],"lat":13.354,"lng":103.856,"priceLevel":"$$"},{"name":"Pub Street Area","tagline":"Siem Reap's notorious party zone","description":"Pub Street is Siem Reap's party central - cheap drinks, loud music, and backpacker mayhem. Love it or avoid it, it's unavoidable in Siem Reap.","vibe":"Party & Backpacker","bestFor":"Party seekers, young backpackers, and those seeking nightlife","pros":["Cheap drinks","Party atmosphere","Meeting travelers","Central"],"cons":["Very loud","Seedy elements","Not authentic"],"lat":13.353,"lng":103.855,"priceLevel":"$"},{"name":"Wat Bo","tagline":"Siem Reap's peaceful local quarter","description":"Wat Bo is Siem Reap's residential east side - local temples, quiet streets, and authentic Cambodian life. It's peaceful and more genuine.","vibe":"Local & Peaceful","bestFor":"Long-term stayers, culture seekers, and those seeking quiet","pros":["Peaceful atmosphere","Local temples","Authentic life","Good value"],"cons":["Limited nightlife","Far from center","Basic options"],"lat":13.358,"lng":103.865,"priceLevel":"$"},{"name":"Sala Kamreuk","tagline":"Siem Reap's expat residential zone","description":"Sala Kamreuk is where expats and long-term visitors live - quiet streets, good restaurants, and local atmosphere without tourist chaos.","vibe":"Expat & Residential","bestFor":"Long-term stayers, digital nomads, and those seeking community","pros":["Expat community","Good restaurants","Quiet streets","Affordable rent"],"cons":["Far from temples","Need transport","Limited nightlife"],"lat":13.37,"lng":103.85,"priceLevel":"$"},{"name":"Charles de Gaulle/French Quarter","tagline":"Siem Reap's colonial riverside","description":"The French Quarter along the river has Siem Reap's colonial heritage - beautiful buildings, upscale hotels, and riverside dining.","vibe":"Colonial & Upscale","bestFor":"Luxury travelers, history lovers, and those seeking refined Siem Reap","pros":["Colonial architecture","Riverside dining","Upscale hotels","Beautiful"],"cons":["Expensive","Less local feel","Limited budget options"],"lat":13.362,"lng":103.858,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1507,6 +1508,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

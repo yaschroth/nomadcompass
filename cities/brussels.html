@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Saint-Gilles","tagline":"Brussels' art nouveau gem with creative energy","description":"Saint-Gilles is Brussels' art nouveau treasure - stunning architecture, creative community, and multicultural character. It's where artists and young professionals discover Brussels' best value.","vibe":"Art Nouveau & Creative","bestFor":"Architecture lovers, creatives, and nomads seeking characterful Brussels","pros":["Art nouveau architecture","Creative scene","Good value","Multicultural"],"cons":["Hilly streets","Variable areas","Limited nightlife"],"lat":50.827,"lng":4.347,"priceLevel":"$$"},{"name":"Ixelles / Flagey","tagline":"Brussels' trendy lake district with student energy","description":"Ixelles surrounds the Flagey lake - trendy cafes, African restaurants, and university energy. It's diverse and vibrant, where Brussels' cultural mixing creates unique atmosphere.","vibe":"Trendy & Diverse","bestFor":"Young professionals, foodies, and nomads seeking vibrant Brussels","pros":["Great restaurants","Lake area","Diverse culture","Good cafes"],"cons":["Busy streets","Parking issues","Variable areas"],"lat":50.827,"lng":4.372,"priceLevel":"$$"},{"name":"Grand Place / City Center","tagline":"Brussels' spectacular medieval heart","description":"Grand Place is Brussels' UNESCO masterpiece - one of Europe's most beautiful squares surrounded by guild houses. It's touristy but spectacular, with excellent central access.","vibe":"Historic & Tourist","bestFor":"First-time visitors, history lovers, and nomads wanting central Brussels","pros":["Stunning architecture","Central location","Tourist amenities","Historic"],"cons":["Very touristy","Expensive","Crowded"],"lat":50.8467,"lng":4.3525,"priceLevel":"$$$"},{"name":"Schaerbeek","tagline":"Brussels' emerging creative frontier","description":"Schaerbeek is Brussels' emerging neighborhood - art nouveau buildings, African and Turkish communities, and creative pioneers. It's rough around edges but rapidly improving.","vibe":"Emerging & Multicultural","bestFor":"Early adopters, budget nomads, and those seeking multicultural Brussels","pros":["Best value","Art nouveau","Multicultural food","Emerging scene"],"cons":["Variable areas","Safety concerns","Far from center"],"lat":50.863,"lng":4.379,"priceLevel":"$"},{"name":"EU Quarter (Etterbeek)","tagline":"Brussels' international EU bubble","description":"The EU Quarter surrounds European institutions - international restaurants, expat services, and institutional atmosphere. It's practical for EU workers but lacks Brussels character.","vibe":"EU & International","bestFor":"EU workers, international professionals, and those needing institutional access","pros":["International services","Good restaurants","Professional networking","Parks"],"cons":["No character","Dead weekends","Institutional feel"],"lat":50.841,"lng":4.383,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

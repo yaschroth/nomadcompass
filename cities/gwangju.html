@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Dongmyeong-dong Art District","tagline":"Galleries and democracy heritage","description":"Dongmyeong-dong is Gwangju's artistic core - galleries, cafés, May 18 Memorial. Where South Korea's democracy movement and contemporary art converge.","vibe":"Artistic & Historic","bestFor":"Art lovers, history seekers, and democracy pilgrims","pros":["Art galleries","Historic significance","Creative atmosphere","Cultural depth"],"cons":["Spread out","Limited nightlife","Requires context"],"lat":35.1595,"lng":126.9178,"priceLevel":"$$"},{"name":"Chungjang-ro","tagline":"Main shopping street and youth culture","description":"Chungjang-ro is Gwangju's commercial heart - shopping street, department stores, urban energy. Where Gwangju shops and socializes.","vibe":"Commercial & Young","bestFor":"Shoppers, young travelers, and urban explorers","pros":["Good shopping","Youth culture","Central location","Restaurants"],"cons":["Crowded","Generic","Commercial"],"lat":35.1489,"lng":126.9156,"priceLevel":"$$"},{"name":"Yangnim-dong","tagline":"Historic missionary houses and penguin village","description":"Yangnim-dong preserves Gwangju's history - missionary houses, penguin mural village, peaceful atmosphere. Where early Western influence remains visible.","vibe":"Historic & Quiet","bestFor":"History lovers, photographers, and peaceful walkers","pros":["Historic houses","Mural village","Peaceful","Less touristy"],"cons":["Small area","Limited dining","Day visit only"],"lat":35.1412,"lng":126.9012,"priceLevel":"$"},{"name":"Sangmu District","tagline":"Modern development with new amenities","description":"Sangmu is Gwangju's modern district - new apartments, shopping centers, clean streets. Where the city's growth creates contemporary urban living.","vibe":"Modern & Suburban","bestFor":"Business travelers, families, and modern seekers","pros":["Modern facilities","Clean area","Shopping","Safe"],"cons":["No character","Suburban","Limited attractions"],"lat":35.1278,"lng":126.8689,"priceLevel":"$$"},{"name":"Mudeungsan National Park","tagline":"Mountain temple and hiking trails","description":"Mudeungsan rises east of Gwangju - national park, temples, hiking trails. Where Gwangju residents escape to mountain nature.","vibe":"Natural & Spiritual","bestFor":"Hikers, temple visitors, and nature lovers","pros":["Great hiking","Temple visits","Nature escape","Views"],"cons":["Need transport","Weather dependent","No urban amenities"],"lat":35.1312,"lng":126.9912,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

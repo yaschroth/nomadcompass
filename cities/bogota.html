@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"La Candelaria","tagline":"Bogotá's colorful colonial heart","description":"La Candelaria is Bogotá's historic center - colonial architecture, street art, and bohemian cafes. It's the cultural soul of the city with museums and universities.","vibe":"Historic & Bohemian","bestFor":"Culture lovers, budget travelers, and those seeking Bogotá's soul","pros":["Historic charm","Museums","Street art","Affordable"],"cons":["Safety concerns at night","Petty crime","Limited nightlife"],"lat":4.596,"lng":-74.072,"priceLevel":"$"},{"name":"Chapinero","tagline":"Bogotá's hip creative district","description":"Chapinero is Bogotá's coolest neighborhood - LGBTQ+ friendly, creative scene, and excellent dining. Chapinero Alto offers upscale vibes while Chapinero Central stays gritty.","vibe":"Creative & LGBTQ+","bestFor":"Creatives, LGBTQ+ travelers, and those seeking Bogotá's modern scene","pros":["Best dining","LGBTQ+ friendly","Creative scene","Good nightlife"],"cons":["Variable areas","Some safety issues","Hilly terrain"],"lat":4.647,"lng":-74.063,"priceLevel":"$$"},{"name":"Zona Rosa (Zona T)","tagline":"Bogotá's upscale entertainment zone","description":"Zona Rosa is Bogotá's party and shopping district - upscale clubs, international restaurants, and the T-shaped pedestrian area. It's safe, polished, and tourist-friendly.","vibe":"Upscale & Nightlife","bestFor":"Nightlife seekers, shoppers, and those seeking safe entertainment","pros":["Safest nightlife","Good restaurants","Shopping","Clean streets"],"cons":["Expensive","Less authentic","Can feel sterile"],"lat":4.667,"lng":-74.053,"priceLevel":"$$$"},{"name":"Usaquén","tagline":"Bogotá's charming former village","description":"Usaquén is Bogotá's most charming neighborhood - former village absorbed by the city with colonial streets, Sunday flea market, and excellent restaurants.","vibe":"Charming & Upscale","bestFor":"Families, foodies, and those seeking peaceful upscale living","pros":["Sunday market","Great restaurants","Safe area","Colonial charm"],"cons":["Expensive","Far from center","Less nightlife"],"lat":4.693,"lng":-74.032,"priceLevel":"$$$"},{"name":"Teusaquillo","tagline":"Bogotá's residential hidden gem","description":"Teusaquillo is Bogotá's best-kept secret - beautiful early 20th century houses, leafy streets, and local character. It's where educated Bogotanos live away from tourists.","vibe":"Residential & Local","bestFor":"Long-term stayers, architecture lovers, and those seeking local life","pros":["Beautiful architecture","Local atmosphere","Parks","Affordable"],"cons":["Limited nightlife","Few restaurants","Quiet evenings"],"lat":4.628,"lng":-74.085,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

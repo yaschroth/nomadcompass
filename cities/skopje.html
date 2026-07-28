@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Čaršija (Old Bazaar)","tagline":"Ottoman heritage in the Balkans","description":"One of the largest and oldest bazaars in the Balkans features Ottoman-era mosques, hammams, and traditional craft shops. Narrow streets lead to historic inns while Turkish coffee and burek fuel exploration.","vibe":"Historic Ottoman","bestFor":"History lovers and culture seekers","pros":["Historic atmosphere","Traditional crafts","Great food","Authentic experience"],"cons":["Crowded days","Tourist prices","Aggressive sellers"],"lat":42.0012,"lng":21.4345,"priceLevel":"$"},{"name":"Macedonia Square","tagline":"Controversial monuments and city center","description":"The main square showcases the controversial Skopje 2014 project with neoclassical buildings and monumental statues. Love it or hate it, this is the city's gathering place with cafes and waterfront views.","vibe":"Monumental central","bestFor":"First-time visitors and people watchers","pros":["Central location","Photo opportunities","Riverside access","Many cafes"],"cons":["Controversial aesthetics","Tourist heavy","Loud evenings"],"lat":41.9967,"lng":21.4312,"priceLevel":"$$"},{"name":"Debar Maalo","tagline":"Hip neighborhood with local character","description":"This residential neighborhood has emerged as Skopje's coolest district with craft bars, specialty coffee, and creative spaces. Young Macedonians gather in converted houses turned cultural venues.","vibe":"Hipster emerging","bestFor":"Creatives and nightlife seekers","pros":["Trendy bars","Local vibe","Good coffee","Creative scene"],"cons":["Spread out","Residential quiet","Limited daytime options"],"lat":41.9912,"lng":21.4189,"priceLevel":"$"},{"name":"Vodno","tagline":"Mountain escape above the city","description":"The mountain overlooking Skopje offers hiking, the famous Millennium Cross, and escape from urban heat. Cable cars and forest paths lead to restaurants with panoramic views.","vibe":"Mountain recreation","bestFor":"Hikers and nature lovers","pros":["Mountain views","Fresh air","Hiking trails","Cable car access"],"cons":["Far from center","Needs transport","Limited services"],"lat":41.9623,"lng":21.3956,"priceLevel":"$"},{"name":"Centar","tagline":"City center convenience","description":"The broader city center around the main square offers shopping, restaurants, and urban convenience. Modern apartments and hotels serve visitors wanting central location without bazaar chaos.","vibe":"Urban central","bestFor":"Business travelers and convenience seekers","pros":["Central location","Good shopping","Transport hub","Restaurant variety"],"cons":["Traffic noise","Mixed aesthetics","Generic areas"],"lat":41.9978,"lng":21.4267,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

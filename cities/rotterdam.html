@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centrum","tagline":"Rotterdam's bold modernist heart","description":"Rotterdam's center is Europe's most dramatic reconstruction - cube houses, Markthal, and bold architecture. It's where Rotterdam's phoenix-from-ashes story is told.","vibe":"Modern & Architectural","bestFor":"Architecture lovers, first-time visitors, and those seeking modern design","pros":["Iconic architecture","Markthal","Central location","Good shopping"],"cons":["Can feel cold","Less cozy","Windy"],"lat":51.9225,"lng":4.4792,"priceLevel":"$$$"},{"name":"Katendrecht","tagline":"Rotterdam's reborn harbor peninsula","description":"Katendrecht transformed from red-light district to foodie paradise - Fenix Food Factory, creative studios, and waterfront living. Rotterdam's coolest comeback story.","vibe":"Foodie & Creative","bestFor":"Foodies, creatives, and those seeking emerging Rotterdam","pros":["Fenix Food Factory","Waterfront","Creative scene","Interesting history"],"cons":["Still developing","Limited nightlife","Isolated feeling"],"lat":51.905,"lng":4.488,"priceLevel":"$$"},{"name":"Delfshaven","tagline":"Rotterdam's historic Dutch survivor","description":"Delfshaven is Rotterdam's only area that survived WWII bombing - historic harbor, Pilgrim Fathers history, and traditional Dutch character. It's old Rotterdam.","vibe":"Historic & Dutch","bestFor":"History lovers, those seeking traditional Dutch atmosphere","pros":["Historic character","Pilgrim Fathers site","Canal charm","Authentic"],"cons":["Far from center","Quiet evenings","Limited options"],"lat":51.903,"lng":4.45,"priceLevel":"$$"},{"name":"Kralingen","tagline":"Rotterdam's leafy lake district","description":"Kralingen surrounds Rotterdam's beautiful lake - student energy from Erasmus University, leafy streets, and relaxed atmosphere. It's Rotterdam's most livable area.","vibe":"Leafy & Student","bestFor":"Students, families, and those seeking green Rotterdam","pros":["Beautiful lake","Parks","Student energy","Residential peace"],"cons":["Far from center","Limited nightlife","Expensive areas"],"lat":51.92,"lng":4.51,"priceLevel":"$$$"},{"name":"Witte de Withstraat","tagline":"Rotterdam's cultural nightlife strip","description":"Witte de Withstraat is Rotterdam's cultural artery - galleries, bars, and restaurants in one vibrant street. It's the city's creative and nightlife center.","vibe":"Cultural & Nightlife","bestFor":"Night owls, art lovers, and those seeking Rotterdam's social scene","pros":["Best nightlife","Art galleries","Great restaurants","Central"],"cons":["Noisy weekends","Crowded bars","Can be messy"],"lat":51.917,"lng":4.475,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

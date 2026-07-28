@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"RiNo (River North Art District)","tagline":"Denver's street art creative hub","description":"RiNo is Denver's coolest neighborhood - warehouse murals, craft breweries, and creative energy. It's where Denver's art scene and craft beer culture collide.","vibe":"Artistic & Industrial","bestFor":"Artists, beer lovers, and those seeking creative Denver","pros":["Amazing street art","Craft breweries","Creative scene","Great restaurants"],"cons":["Gentrifying fast","Industrial areas","Parking issues"],"lat":39.77,"lng":-104.98,"priceLevel":"$$$"},{"name":"LoDo (Lower Downtown)","tagline":"Denver's historic entertainment heart","description":"LoDo is Denver's original downtown - Victorian buildings, Union Station, and sports venues. It's the city's entertainment and nightlife center.","vibe":"Historic & Entertainment","bestFor":"Sports fans, nightlife seekers, and those seeking central Denver","pros":["Union Station","Sports venues","Nightlife","Historic buildings"],"cons":["Expensive","Crowded game days","Tourist-heavy"],"lat":39.753,"lng":-105,"priceLevel":"$$$"},{"name":"Capitol Hill","tagline":"Denver's diverse urban village","description":"Capitol Hill is Denver's most diverse neighborhood - LGBTQ+ friendly, historic mansions, and vibrant nightlife. It's eclectic, walkable, and unapologetically urban.","vibe":"Diverse & Urban","bestFor":"LGBTQ+ travelers, young professionals, and those seeking urban Denver","pros":["Diverse community","Walkable","LGBTQ+ friendly","Good nightlife"],"cons":["Parking nightmare","Some safety concerns","Noisy areas"],"lat":39.731,"lng":-104.978,"priceLevel":"$$"},{"name":"Cherry Creek","tagline":"Denver's upscale shopping destination","description":"Cherry Creek is Denver's luxury district - high-end shopping, excellent restaurants, and manicured streets. It's where Denver's money lives and shops.","vibe":"Upscale & Shopping","bestFor":"Shoppers, luxury travelers, and those seeking polished Denver","pros":["Great shopping","Excellent restaurants","Safe","Beautiful streets"],"cons":["Expensive","Less character","Suburban feel"],"lat":39.717,"lng":-104.955,"priceLevel":"$$$$"},{"name":"Highlands (LoHi/Highland)","tagline":"Denver's trendy neighborhood with views","description":"The Highlands is Denver's most desirable neighborhood - mountain views, excellent restaurants, and family-friendly streets. It's where Denver's young families settle.","vibe":"Trendy & Family","bestFor":"Families, foodies, and those seeking Denver's best living","pros":["Mountain views","Great restaurants","Family-friendly","Walkable"],"cons":["Very expensive","Crowded restaurants","Parking issues"],"lat":39.762,"lng":-105.015,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

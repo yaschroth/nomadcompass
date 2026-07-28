@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Malaga's renaissance cultural core","description":"Malaga's centro has transformed - Picasso Museum, pedestrian streets, and excellent dining. The city center that surprised everyone.","vibe":"Cultural & Transformed","bestFor":"Culture lovers, foodies, and those discovering new Malaga","pros":["Picasso Museum","Pedestrian streets","Great restaurants","Cultural venues"],"cons":["Crowded","Tourist prices","Hot summers"],"lat":36.721,"lng":-4.421,"priceLevel":"$$"},{"name":"Soho/CAC","tagline":"Malaga's street art creative district","description":"Soho is Malaga's arts district - street art, CAC contemporary art center, and creative energy. It's the city's most dynamic neighborhood.","vibe":"Creative & Artistic","bestFor":"Art lovers, creatives, and those seeking emerging Malaga","pros":["Street art","CAC museum","Creative scene","Good bars"],"cons":["Still developing","Some rough areas","Variable quality"],"lat":36.715,"lng":-4.428,"priceLevel":"$$"},{"name":"La Malagueta","tagline":"Malaga's urban beach quarter","description":"La Malagueta is Malaga's city beach - seafront promenade, chiringuitos (beach bars), and urban beach life. It's beach culture in a city setting.","vibe":"Beach & Urban","bestFor":"Beach lovers, those seeking sun and city convenience","pros":["City beach","Chiringuitos","Promenade walks","Near center"],"cons":["Urban beach feel","Crowded summer","Limited sand"],"lat":36.716,"lng":-4.409,"priceLevel":"$$"},{"name":"Pedregalejo","tagline":"Malaga's local fishing village beach","description":"Pedregalejo is Malaga's authentic beach - former fishing village with espeto (grilled sardines) culture and local atmosphere. Real Malagueño beach life.","vibe":"Local Beach & Authentic","bestFor":"Foodies, locals-seeking travelers, and authentic beach life","pros":["Espeto culture","Local atmosphere","Great seafood","Real Malaga"],"cons":["Far from center","Needs transport","Limited nightlife"],"lat":36.719,"lng":-4.379,"priceLevel":"$"},{"name":"El Palo","tagline":"Malaga's working-class beach community","description":"El Palo is authentic Malaga - working-class fishing neighborhood, local seafood, and real Spanish beach life. No tourists, just locals.","vibe":"Local & Working-Class","bestFor":"Authentic seekers, budget travelers, and those wanting real Spain","pros":["Most authentic","Cheap seafood","Real community","No tourists"],"cons":["Basic amenities","Far from center","Limited English"],"lat":36.72,"lng":-4.358,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

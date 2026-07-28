@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"North Beach","tagline":"Hotels and lagoon swimming","description":"North Beach is Eilat's tourist center - hotel strip, lagoon beach, promenade nightlife. Where Israeli resort tourism concentrates.","vibe":"Resort & Tourist","bestFor":"Resort seekers, beach lovers, and nightlife enthusiasts","pros":["Beach access","Hotel amenities","Nightlife","Promenade"],"cons":["Very touristy","Expensive","Crowded holidays"],"lat":29.5567,"lng":34.9512,"priceLevel":"$$$"},{"name":"Coral Beach Reserve","tagline":"Protected reefs and snorkeling paradise","description":"Coral Beach is Eilat's natural treasure - protected reef reserve, snorkeling, diving. Where Red Sea marine life survives despite surrounding development.","vibe":"Natural & Marine","bestFor":"Snorkelers, divers, and marine life enthusiasts","pros":["Protected reef","Great snorkeling","Marine life","Natural setting"],"cons":["Entry fee","Crowded","Far from hotels"],"lat":29.5012,"lng":34.9189,"priceLevel":"$$"},{"name":"Industrial Area / Ice Mall","tagline":"Budget stays and local services","description":"Eilat's industrial area offers budget reality - cheaper hotels, local restaurants, practical services. Where to escape resort prices while visiting.","vibe":"Budget & Practical","bestFor":"Budget travelers, long-term visitors, and practical tourists","pros":["Affordable","Local restaurants","Less touristy","Real shops"],"cons":["Not scenic","Far from beach","Industrial feel"],"lat":29.5534,"lng":34.9334,"priceLevel":"$"},{"name":"Dolphin Reef Area","tagline":"Marine attractions and southern beaches","description":"The Dolphin Reef area offers alternative beach - dolphin encounters, underwater observatory, southern Red Sea coast. Marine-focused attractions beyond the hotel strip.","vibe":"Marine & Family","bestFor":"Families, marine enthusiasts, and animal lovers","pros":["Dolphin encounters","Observatory","Less crowded beaches","Family-friendly"],"cons":["Attraction prices","Limited dining","Need transport"],"lat":29.5189,"lng":34.9289,"priceLevel":"$$$"},{"name":"Eilat Mountains (Hinterland)","tagline":"Desert hiking above the Red Sea","description":"Eilat's mountains offer desert escape - hiking trails, geological formations, Red Sea views. Where the Negev desert meets the Gulf of Aqaba.","vibe":"Desert & Adventure","bestFor":"Hikers, nature lovers, and adventure seekers","pros":["Unique landscapes","Hiking trails","Spectacular views","Escape crowds"],"cons":["Very hot","Need transport","No facilities"],"lat":29.5612,"lng":34.8934,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

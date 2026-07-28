@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Mitte (City Center)","tagline":"Shopping and culture in the valley","description":"Stuttgart's center fills the valley with department stores, the famous Königstraße shopping mile, and cultural institutions. Museums and theaters cluster around squares while restaurants serve Swabian specialties.","vibe":"Commercial cultural","bestFor":"Shoppers and culture seekers","pros":["Shopping options","Cultural venues","Good transit","Central location"],"cons":["Busy crowds","Construction work","Generic retail"],"lat":48.7758,"lng":9.1789,"priceLevel":"$$"},{"name":"Stuttgart-West","tagline":"Hillside living with urban energy","description":"This popular residential area climbs the western hills with trendy restaurants, boutiques, and café culture. Young professionals and creatives enjoy the urban village atmosphere.","vibe":"Urban trendy","bestFor":"Foodies and creative types","pros":["Great restaurants","Café scene","Local character","Hillside views"],"cons":["Hilly terrain","Parking difficult","Crowded evenings"],"lat":48.7823,"lng":9.1623,"priceLevel":"$$"},{"name":"Bad Cannstatt","tagline":"Spa heritage and mineral springs","description":"Stuttgart's oldest settlement offers mineral spas, the MineralBad Berg, and a more traditional atmosphere. The annual Cannstatter Volksfest rivals Oktoberfest while local wineries dot surrounding hills.","vibe":"Traditional spa","bestFor":"Wellness seekers and traditionalists","pros":["Mineral spas","Festival atmosphere","Historic character","Local wineries"],"cons":["Far from center","Less trendy","Needs transport"],"lat":48.8045,"lng":9.2167,"priceLevel":"$"},{"name":"Heusteigviertel","tagline":"Alternative arts and multicultural life","description":"This diverse neighborhood east of center offers international restaurants, alternative venues, and artistic energy. Student housing and affordable rents attract creative populations.","vibe":"Alternative diverse","bestFor":"Creatives and budget travelers","pros":["Diverse dining","Alternative scene","Affordable","Cultural mix"],"cons":["Some rough areas","Less polished","Basic amenities"],"lat":48.7698,"lng":9.1878,"priceLevel":"$"},{"name":"Zuffenhausen","tagline":"Porsche museum and automotive history","description":"Home to the Porsche headquarters and museum, this industrial suburb attracts automotive enthusiasts worldwide. Beyond the cars, residential areas offer Stuttgart living at more affordable prices.","vibe":"Automotive industrial","bestFor":"Car enthusiasts and budget seekers","pros":["Porsche Museum","More affordable","Good transit","Local character"],"cons":["Industrial feel","Far from center","Less attractions"],"lat":48.8345,"lng":9.1523,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

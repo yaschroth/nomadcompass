@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kololo","tagline":"Embassy row on the hill","description":"Kampala's most prestigious neighborhood sits atop a leafy hill with embassies, upscale restaurants, and the best infrastructure. The expat hub offers Western amenities while maintaining a distinctly African atmosphere.","vibe":"Upscale & Expat","bestFor":"Business travelers, diplomats, and those wanting comfort and safety","pros":["Best restaurants and bars","Safe and secure","Good infrastructure","Expat community"],"cons":["Most expensive area","Can feel isolated from local life","Traffic congestion"],"lat":0.3289,"lng":32.5856,"priceLevel":"$$$"},{"name":"Nakasero","tagline":"Business district with colonial echoes","description":"The central business district houses banks, hotels, and government offices on tree-lined streets. The mix of colonial-era buildings and modern towers creates Kampala's most formal atmosphere.","vibe":"Business & Central","bestFor":"Business travelers, those wanting central location and convenience","pros":["Central location","Hotels and businesses","Good transport connections","Professional atmosphere"],"cons":["Less residential","Quiet at night","Traffic during business hours"],"lat":0.3178,"lng":32.5823,"priceLevel":"$$$"},{"name":"Bugolobi","tagline":"Artsy suburb with creative energy","description":"This eastern suburb has emerged as Kampala's creative hub with art galleries, design studios, and the famous Bugolobi market. Young professionals and artists favor its creative energy and village feel.","vibe":"Creative & Suburban","bestFor":"Creatives, young professionals, and those seeking artsy atmosphere","pros":["Art scene and galleries","Good cafes and restaurants","Less traffic","Creative community"],"cons":["Further from center","Limited nightlife","Need transport"],"lat":0.3167,"lng":32.6134,"priceLevel":"$$"},{"name":"Ntinda","tagline":"Middle-class buzz and nightlife","description":"A busy commercial area popular with young Ugandans and budget-conscious expats. The nightlife scene, shopping centers, and affordable accommodation make it a social hub.","vibe":"Social & Commercial","bestFor":"Young travelers, budget expats, and those wanting social scene","pros":["Active nightlife","Affordable accommodation","Good restaurants","Young energy"],"cons":["Can be noisy","Traffic issues","Less prestigious"],"lat":0.3534,"lng":32.6145,"priceLevel":"$$"},{"name":"Muyenga","tagline":"Tank Hill views over the city","description":"Perched on a hill with panoramic city views, Muyenga offers a quieter residential option popular with families. The famous Tank Hill sunset spot draws visitors but the neighborhood maintains its calm.","vibe":"Residential & Scenic","bestFor":"Families, long-term residents, and those wanting quiet with views","pros":["Amazing city views","Quiet residential","Family-friendly","Growing restaurant scene"],"cons":["Hilly terrain","Need transport","Limited nightlife"],"lat":0.2978,"lng":32.6023,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1449,6 +1449,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Portas do Mar","tagline":"Waterfront living with Atlantic views","description":"The revitalized harbor area features modern architecture alongside historic charm. Marina promenades, waterfront cafes, and easy access to whale watching tours make this the scenic heart of Ponta Delgada.","vibe":"Maritime modern","bestFor":"Ocean lovers and cruise visitors","pros":["Stunning harbor views","Modern dining scene","Whale watching access","Sunset strolls"],"cons":["Tourist-heavy in summer","Limited late-night options","Cruise ship crowds"],"lat":37.7394,"lng":-25.6687,"priceLevel":"$$"},{"name":"Centro Histórico","tagline":"Cobblestone charm meets Azorean heritage","description":"The historic center showcases traditional black and white Portuguese architecture with ornate churches and charming squares. Narrow streets lead to local shops, bakeries, and authentic tasca restaurants.","vibe":"Traditional Azorean","bestFor":"Culture enthusiasts and history buffs","pros":["Authentic architecture","Local markets","Traditional restaurants","Cultural sites"],"cons":["Limited parking","Some streets steep","Shops close for lunch"],"lat":37.7412,"lng":-25.6697,"priceLevel":"$"},{"name":"São Roque","tagline":"Natural pools and local life","description":"This western neighborhood offers access to natural volcanic swimming pools and a more residential atmosphere. Local cafes serve fresh pastries while the promenade provides Atlantic Ocean access.","vibe":"Relaxed residential","bestFor":"Swimmers and long-term stays","pros":["Natural swimming pools","Affordable housing","Local atmosphere","Ocean access"],"cons":["Farther from center","Limited nightlife","Need transport"],"lat":37.7457,"lng":-25.6812,"priceLevel":"$"},{"name":"Fajã de Baixo","tagline":"Rural tranquility near the city","description":"A quieter parish east of the center offering green spaces and traditional Azorean village life. Pineapple plantations dot the landscape while local restaurants serve fresh seafood.","vibe":"Village peaceful","bestFor":"Nature seekers wanting city access","pros":["Peaceful environment","Pineapple greenhouses","Lower costs","Traditional feel"],"cons":["Requires car","Limited amenities","Far from nightlife"],"lat":37.7521,"lng":-25.6498,"priceLevel":"$"},{"name":"Avenida Infante Dom Henrique","tagline":"The main boulevard lifestyle","description":"Ponta Delgada's primary avenue lined with shops, banks, and cafes connects the old town to newer developments. Tree-lined streets offer convenient access to everything the city has to offer.","vibe":"Urban convenient","bestFor":"Those wanting walkable convenience","pros":["Central location","Shopping options","Good transit","Cafe culture"],"cons":["Traffic noise","More expensive","Less character"],"lat":37.7398,"lng":-25.6645,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1500,6 +1501,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

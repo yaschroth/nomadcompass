@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Wicker Park/Bucktown","tagline":"Chicago's hipster heartland","description":"Wicker Park and Bucktown are Chicago's creative center - indie shops, great restaurants, and vibrant nightlife. The six corners intersection is Chicago's coolest crossroads.","vibe":"Hipster & Creative","bestFor":"Creatives, young professionals, and those seeking trendy Chicago","pros":["Best nightlife","Great restaurants","Indie shops","Creative scene"],"cons":["Gentrified","Expensive","Crowded weekends"],"lat":41.9088,"lng":-87.6796,"priceLevel":"$$$"},{"name":"Lincoln Park","tagline":"Chicago's classic affluent neighborhood","description":"Lincoln Park is Chicago's most desirable neighborhood - beautiful park, zoo, and tree-lined streets. It's where Chicago's young professionals aspire to live.","vibe":"Affluent & Green","bestFor":"Families, professionals, and those seeking classic Chicago living","pros":["Beautiful park","Free zoo","Great dining","Safe"],"cons":["Expensive","Fratty bars","Less diverse"],"lat":41.9214,"lng":-87.6513,"priceLevel":"$$$$"},{"name":"Logan Square","tagline":"Chicago's emerging creative hub","description":"Logan Square is Chicago's current it-neighborhood - historic boulevards, craft cocktail bars, and creative energy. It's more affordable than Wicker Park with similar vibes.","vibe":"Creative & Emerging","bestFor":"Young creatives, foodies, and those seeking emerging Chicago","pros":["Great bars","Historic architecture","Creative scene","More affordable"],"cons":["Gentrifying","Far from Loop","Limited transit"],"lat":41.9234,"lng":-87.7084,"priceLevel":"$$"},{"name":"West Loop","tagline":"Chicago's restaurant row powerhouse","description":"West Loop is Chicago's culinary capital - Randolph Street's restaurant row, Google's office, and industrial-chic vibes. It's where Chicago's food scene happens.","vibe":"Foodie & Industrial","bestFor":"Foodies, professionals, and those seeking Chicago's culinary best","pros":["Best restaurants","Foodie heaven","Industrial cool","Near downtown"],"cons":["Very expensive","Limited residential","Crowded weekends"],"lat":41.8827,"lng":-87.6544,"priceLevel":"$$$$"},{"name":"Pilsen","tagline":"Chicago's Mexican-American cultural heart","description":"Pilsen is Chicago's Mexican soul - murals, taquerias, and cultural institutions. It's authentic, affordable, and home to the National Museum of Mexican Art.","vibe":"Mexican & Artistic","bestFor":"Culture seekers, foodies, and those seeking authentic Chicago","pros":["Amazing murals","Authentic Mexican food","Cultural museums","Affordable"],"cons":["Gentrifying","Limited transit","Some safety concerns"],"lat":41.8565,"lng":-87.6637,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

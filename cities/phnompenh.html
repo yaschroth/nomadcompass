@@ -1438,6 +1438,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Riverside (Sisowath Quay)","tagline":"Phnom Penh's scenic colonial strip","description":"The Riverside promenade stretches along the Tonle Sap - colonial buildings, rooftop bars, and Royal Palace views. It's tourist central but beautifully atmospheric at sunset.","vibe":"Colonial & Scenic","bestFor":"First-time visitors, photographers, and those seeking riverside atmosphere","pros":["River views","Colonial architecture","Good restaurants","Royal Palace"],"cons":["Touristy","Expensive","Tuk-tuk hassle"],"lat":11.57,"lng":104.93,"priceLevel":"$$"},{"name":"BKK1 (Boeung Keng Kang 1)","tagline":"Phnom Penh's expat cafe quarter","description":"BKK1 is Phnom Penh's most livable neighborhood - tree-lined streets, excellent cafes, and expat community. It's where long-term foreigners settle.","vibe":"Expat & Livable","bestFor":"Digital nomads, expats, and those seeking comfortable Phnom Penh","pros":["Great cafes","Walkable","Expat services","Good restaurants"],"cons":["Expensive for PP","Less authentic","Gentrified"],"lat":11.555,"lng":104.925,"priceLevel":"$$"},{"name":"Russian Market Area (Toul Tom Poung)","tagline":"Phnom Penh's market and cafe hub","description":"Russian Market (Psar Toul Tom Poung) anchors this neighborhood - vintage finds, local crafts, and emerging cafe scene. It's authentic shopping meets hipster coffee.","vibe":"Market & Creative","bestFor":"Shoppers, cafe lovers, and those seeking local Phnom Penh","pros":["Russian Market","Good cafes","Affordable","Local character"],"cons":["Hot market","Traffic chaos","Spread out"],"lat":11.543,"lng":104.918,"priceLevel":"$"},{"name":"Kandal Village","tagline":"Phnom Penh's hip emerging strip","description":"Street 240 (Kandal Village) is Phnom Penh's hippest stretch - boutique shops, artisan coffee, and creative energy. It's where the city's future is being built.","vibe":"Hip & Creative","bestFor":"Creatives, coffee lovers, and those seeking trendy Phnom Penh","pros":["Best coffee","Creative shops","Walkable strip","Good food"],"cons":["Small area","Expensive","Can feel exclusive"],"lat":11.568,"lng":104.922,"priceLevel":"$$"},{"name":"Tonle Bassac","tagline":"Phnom Penh's modern development zone","description":"Tonle Bassac is Phnom Penh's newest area - high-rises, malls, and modern apartments. It's where Cambodia's new wealth is visible.","vibe":"Modern & Developing","bestFor":"Modern comfort seekers, families, and those wanting new infrastructure","pros":["Modern buildings","Malls","Clean streets","New apartments"],"cons":["No character","Expensive","Isolated from city"],"lat":11.545,"lng":104.935,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1489,6 +1490,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt (Old Town)","tagline":"Graz's UNESCO Renaissance heart","description":"Graz's Altstadt is Austria's best-preserved old town - UNESCO-listed, Renaissance architecture, and the iconic Schlossberg hill. It's genuinely stunning.","vibe":"Historic & UNESCO","bestFor":"History lovers, architecture buffs, and those seeking Austrian charm","pros":["UNESCO site","Schlossberg","Beautiful architecture","Walkable"],"cons":["Touristy center","Expensive","Hilly"],"lat":47.0707,"lng":15.4395,"priceLevel":"$$$"},{"name":"Lend","tagline":"Graz's hip multicultural quarter","description":"Lend is Graz's emerging cool - multicultural markets, Kunsthaus contemporary art, and creative energy. It's where Graz's future is happening.","vibe":"Hip & Multicultural","bestFor":"Creatives, young travelers, and those seeking alternative Graz","pros":["Kunsthaus","Multicultural food","Creative scene","Affordable"],"cons":["Gritty areas","Variable quality","Less pretty"],"lat":47.075,"lng":15.43,"priceLevel":"$"},{"name":"Gries","tagline":"Graz's local residential quarter","description":"Gries is Graz's working-class neighborhood - authentic local life, diverse community, and real Austrian prices. It's unglamorous but genuine.","vibe":"Local & Diverse","bestFor":"Budget travelers, long-term visitors, and those seeking authenticity","pros":["Affordable","Local markets","Authentic","Good transport"],"cons":["Not scenic","Rough areas","Limited tourism"],"lat":47.065,"lng":15.425,"priceLevel":"$"},{"name":"Jakomini","tagline":"Graz's central transit hub","description":"Jakomini is Graz's transport center - main square, tram connections, and commercial activity. It's practical rather than charming.","vibe":"Central & Practical","bestFor":"Transit connections, shopping, and those wanting central access","pros":["Transport hub","Shopping","Central","Practical"],"cons":["No charm","Busy traffic","Impersonal"],"lat":47.068,"lng":15.445,"priceLevel":"$$"},{"name":"St. Leonhard/University","tagline":"Graz's academic green quarter","description":"St. Leonhard hosts Graz's university - student cafes, green spaces, and intellectual atmosphere. It's leafy, young, and full of energy.","vibe":"Academic & Green","bestFor":"Students, academics, and those seeking university atmosphere","pros":["University campus","Student cafes","Green spaces","Young energy"],"cons":["Student crowds","Term-time focus","Limited evening life"],"lat":47.078,"lng":15.45,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

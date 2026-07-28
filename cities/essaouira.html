@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Medina","tagline":"Windy blue-and-white UNESCO gem","description":"Essaouira's medina is Morocco's coastal jewel - blue boats, white walls, Portuguese ramparts. Where Atlantic winds bring artists and travelers seeking Moroccan calm.","vibe":"Artistic & Coastal","bestFor":"Artists, peaceful travelers, and those wanting alternative Morocco","pros":["Beautiful medina","Artistic vibe","Seafood","Less chaotic"],"cons":["Very windy","Limited nightlife","Cooler weather"],"lat":31.5085,"lng":-9.7595,"priceLevel":"$$"},{"name":"Port Area","tagline":"Working fishing harbor and fresh seafood","description":"Essaouira's port is Morocco's working seafood source - fishing boats, fish auction, grill stalls. Where the freshest catch meets hungry travelers.","vibe":"Authentic & Culinary","bestFor":"Seafood lovers, photographers, and authentic seekers","pros":["Fresh seafood","Authentic atmosphere","Photogenic boats","Affordable food"],"cons":["Fishy smell","Basic facilities","Limited seating"],"lat":31.5134,"lng":-9.7712,"priceLevel":"$"},{"name":"Beach & Surf Zone","tagline":"Atlantic winds and kitesurfing paradise","description":"Essaouira's beach stretches south - constant wind makes it kitesurfing and windsurfing paradise. Where water sports enthusiasts find reliable conditions.","vibe":"Sporty & Beachy","bestFor":"Kitesurfers, windsurfers, and beach lovers","pros":["Reliable wind","Great surfing","Long beach","Camel rides"],"cons":["Too windy for swimming","Sand blasting","Cool water"],"lat":31.4989,"lng":-9.7634,"priceLevel":"$$"},{"name":"Mellah (Jewish Quarter)","tagline":"Historic quarter with cultural layers","description":"The Mellah preserves Essaouira's Jewish heritage - historic quarter, synagogues, cultural memory. Where Morocco's multicultural past remains visible.","vibe":"Historic & Cultural","bestFor":"History lovers, cultural explorers, and heritage seekers","pros":["Cultural depth","Historic atmosphere","Less touristy","Authentic"],"cons":["Basic area","Limited services","Quiet"],"lat":31.5067,"lng":-9.7567,"priceLevel":"$"},{"name":"Diabat","tagline":"Hippie village with Hendrix legend","description":"Diabat is Essaouira's hippie outskirts - village where Jimi Hendrix allegedly stayed, sand dunes, alternative accommodation. Where 1960s spirit lingers.","vibe":"Alternative & Relaxed","bestFor":"Alternative travelers, hippies, and those seeking isolation","pros":["Relaxed vibe","Beach access","Cheaper","Authentic"],"cons":["Basic facilities","Isolated","Limited dining"],"lat":31.4734,"lng":-9.7489,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

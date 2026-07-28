@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bandra","tagline":"Mumbai's coolest suburb where Bollywood lives","description":"Bandra is Mumbai's trendiest neighborhood - Bollywood celebrities, hip cafes, and the famous Bandstand promenade. Carter Road and Linking Road offer endless restaurants and nightlife. It's where young, creative Mumbai lives.","vibe":"Trendy & Celebrity","bestFor":"Creatives, foodies, and nomads seeking Mumbai's hippest neighborhood","pros":["Best cafes","Celebrity spotting","Great nightlife","Sea-facing"],"cons":["Very expensive","Traffic nightmare","Crowded"],"lat":19.0596,"lng":72.8295,"priceLevel":"$$$"},{"name":"Colaba","tagline":"Colonial grandeur at Mumbai's southern tip","description":"Colaba is Mumbai's historic heart - the Gateway of India, Taj Hotel, and Leopold Cafe of Shantaram fame. Colonial architecture and tourist infrastructure make it a popular base, though it's far from suburban conveniences.","vibe":"Historic & Tourist","bestFor":"First-time visitors, history lovers, and nomads seeking iconic Mumbai","pros":["Iconic landmarks","Historic charm","Sea views","Tourist infrastructure"],"cons":["Touristy","Far from suburbs","Old buildings","Traffic"],"lat":18.9067,"lng":72.8147,"priceLevel":"$$$"},{"name":"Lower Parel","tagline":"Mumbai's transformed mill district","description":"Lower Parel is Mumbai's phoenix story - former textile mills transformed into malls, offices, and art galleries. High Street Phoenix and Palladium Mall anchor the area. Corporate Mumbai with excellent dining and entertainment.","vibe":"Corporate & Modern","bestFor":"Business professionals, shoppers, and nomads seeking modern Mumbai","pros":["Great malls","Modern offices","Good restaurants","Entertainment"],"cons":["Corporate feel","Expensive","Less character"],"lat":18.993,"lng":72.826,"priceLevel":"$$"},{"name":"Andheri West","tagline":"Mumbai's practical middle ground","description":"Andheri West offers practical Mumbai living - good transport connections, shopping options, and more affordable than Bandra. Versova beach adds seaside access. Popular with young professionals seeking value.","vibe":"Practical & Accessible","bestFor":"Young professionals, budget nomads, and those seeking practical living","pros":["Good transport","More affordable","Versova beach","Practical"],"cons":["Less glamorous","Crowded","Traffic"],"lat":19.1364,"lng":72.8296,"priceLevel":"$$"},{"name":"Powai","tagline":"Mumbai's tech hub with lake views","description":"Powai is Mumbai's IT center - tech campuses, modern apartments, and Powai Lake create a different Mumbai experience. It's where tech companies and startups cluster, offering space and modernity rare in the city.","vibe":"Tech & Suburban","bestFor":"Tech workers, families, and nomads seeking modern suburban Mumbai","pros":["Tech campuses","Lake views","Modern apartments","Less crowded"],"cons":["Far from south","Corporate feel","Limited nightlife"],"lat":19.1176,"lng":72.906,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

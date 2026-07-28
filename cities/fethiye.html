@@ -1433,6 +1433,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town (Paspatur)","tagline":"Ottoman bazaar with Turkish character","description":"Fethiye's Old Town keeps authentic Turkish atmosphere - covered bazaar, carpet shops, traditional restaurants, rock tombs carved into cliffs above.","vibe":"Traditional & Authentic","bestFor":"Culture seekers, shoppers, and those wanting authentic Turkey","pros":["Authentic bazaar","Good restaurants","Rock tombs","Local atmosphere"],"cons":["Persistent sellers","Can be hot","Tourist trinkets"],"lat":36.6218,"lng":29.1156,"priceLevel":"$$"},{"name":"Marina & Waterfront","tagline":"Yacht charter capital of Turkey","description":"Fethiye Marina serves as Turkey's premier yacht charter base - boats bound for the Turquoise Coast, waterfront restaurants, and sailing culture.","vibe":"Maritime & Upscale","bestFor":"Sailors, yacht enthusiasts, and those wanting waterfront dining","pros":["Boat charter access","Great restaurants","Scenic marina","Sunset views"],"cons":["Touristy prices","Can feel commercial","Crowded summer"],"lat":36.6245,"lng":29.1078,"priceLevel":"$$$"},{"name":"Çalış Beach","tagline":"Sunset strip with local flavor","description":"Çalış stretches along the beach north of Fethiye - long promenade, waterfront bars, famous sunsets. Where residents and tourists share the coastal atmosphere.","vibe":"Beach & Local","bestFor":"Beach lovers, sunset chasers, and relaxed travelers","pros":["Great sunsets","Long beach","Promenade walks","Local mix"],"cons":["Pebble beach","Basic area","Dolmuş ride to center"],"lat":36.6589,"lng":29.0989,"priceLevel":"$$"},{"name":"Ölüdeniz","tagline":"Blue Lagoon and paragliding paradise","description":"Ölüdeniz is Turkey's most photographed beach - the Blue Lagoon's turquoise waters, paragliders descending from Babadağ mountain. Nature's perfection.","vibe":"Natural & Adventure","bestFor":"Paragliders, beach lovers, and nature enthusiasts","pros":["Stunning lagoon","Paragliding","Beautiful nature","Clear water"],"cons":["Very touristy","Crowded beach","Expensive"],"lat":36.5489,"lng":29.1156,"priceLevel":"$$$"},{"name":"Kayaköy","tagline":"Ghost town with haunting beauty","description":"Kayaköy is a Greek ghost village - abandoned after 1923 population exchange, stone houses slowly crumbling. Haunting history and hiking trails to Ölüdeniz.","vibe":"Historic & Atmospheric","bestFor":"History lovers, hikers, and those seeking atmosphere","pros":["Unique atmosphere","Hiking trails","Historical importance","Peaceful"],"cons":["Basic facilities","Hot walks","Isolated location"],"lat":36.5734,"lng":29.0912,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1484,6 +1485,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro/Piazza Castello","tagline":"Turin's royal Baroque heart","description":"Turin's center is Savoy splendor - Piazza Castello, Royal Palace, and elegant porticoes. It's Italy's most underrated major city center.","vibe":"Royal & Elegant","bestFor":"History lovers, architecture buffs, and those seeking elegant Italy","pros":["Royal palaces","Elegant squares","Porticoes","Museums"],"cons":["Can feel formal","Expensive","Tourist crowds"],"lat":45.071,"lng":7.685,"priceLevel":"$$$"},{"name":"Quadrilatero Romano","tagline":"Turin's ancient Roman foodie quarter","description":"The Quadrilatero is Turin's oldest area - Roman street grid, aperitivo bars, and market atmosphere. It's where Turin's food culture thrives.","vibe":"Ancient & Foodie","bestFor":"Foodies, aperitivo lovers, and those seeking historic Turin","pros":["Best aperitivo","Roman history","Market atmosphere","Great food"],"cons":["Crowded evenings","Touristy","Narrow streets"],"lat":45.075,"lng":7.68,"priceLevel":"$$"},{"name":"San Salvario","tagline":"Turin's multicultural nightlife hub","description":"San Salvario is Turin's most diverse neighborhood - ethnic restaurants, nightlife, and creative energy. It's gritty but increasingly cool.","vibe":"Multicultural & Nightlife","bestFor":"Night owls, diverse food seekers, and those wanting alternative Turin","pros":["Best nightlife","Diverse food","Creative scene","Affordable"],"cons":["Gritty areas","Variable safety","Noisy"],"lat":45.06,"lng":7.68,"priceLevel":"$"},{"name":"Lingotto","tagline":"Turin's industrial design icon","description":"Lingotto is Turin's industrial heritage - the converted Fiat factory with rooftop track, Eataly original, and modernist architecture.","vibe":"Industrial & Modern","bestFor":"Architecture lovers, Eataly visitors, and those seeking modern Turin","pros":["Iconic architecture","Eataly original","Rooftop track","Design"],"cons":["Far from center","Sparse area","Industrial feel"],"lat":45.03,"lng":7.665,"priceLevel":"$$"},{"name":"Valentino Park Area","tagline":"Turin's elegant park district","description":"Valentino Park is Turin's green lung - riverside park, botanical gardens, and elegant residential streets.","vibe":"Green & Elegant","bestFor":"Park lovers, families, and those seeking green Turin","pros":["Beautiful park","River walks","Elegant area","Peaceful"],"cons":["Residential quiet","Limited dining","Far from nightlife"],"lat":45.055,"lng":7.69,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt (Old Town)","tagline":"Mozart's baroque UNESCO jewel","description":"Salzburg's Altstadt is a baroque masterpiece - Getreidegasse shopping street, Mozart's birthplace, and fortress views. It's UNESCO-listed and achingly beautiful.","vibe":"Historic & Elegant","bestFor":"Culture lovers, first-time visitors, and those seeking classical beauty","pros":["Stunning architecture","Mozart heritage","Great shopping","Fortress views"],"cons":["Very touristy","Expensive","Crowded in summer"],"lat":47.799,"lng":13.044,"priceLevel":"$$$"},{"name":"Neustadt (Right Bank)","tagline":"Salzburg's elegant garden district","description":"Across the river from the old town, Neustadt offers Mirabell Gardens, local cafes, and more breathing room. It's elegant but more accessible than the tourist-packed left bank.","vibe":"Elegant & Accessible","bestFor":"Garden lovers, those seeking less crowds, and long-term visitors","pros":["Mirabell Gardens","Less crowded","Good cafes","Local atmosphere"],"cons":["Less historic","Further from main sights","Quieter evenings"],"lat":47.805,"lng":13.045,"priceLevel":"$$"},{"name":"Nonntal","tagline":"Salzburg's peaceful monastery quarter","description":"Nonntal sits at the base of the fortress and Nonnberg Abbey (Sound of Music fame). It's peaceful, residential, and offers easy access to hiking trails.","vibe":"Peaceful & Residential","bestFor":"Peace seekers, hikers, and those wanting quiet Salzburg","pros":["Near hiking trails","Peaceful","Historic abbey","Local feel"],"cons":["Hilly","Limited restaurants","Very quiet"],"lat":47.793,"lng":13.055,"priceLevel":"$$"},{"name":"Maxglan","tagline":"Salzburg's affordable local quarter","description":"Maxglan is where Salzburgers actually live - airport-adjacent, more affordable, and with excellent local restaurants. It's practical rather than pretty.","vibe":"Local & Practical","bestFor":"Budget travelers, long-term visitors, and those seeking authenticity","pros":["Affordable","Local restaurants","Near airport","Supermarkets"],"cons":["Less charming","Airport noise","Far from center"],"lat":47.795,"lng":13.015,"priceLevel":"$"},{"name":"Aigen","tagline":"Salzburg's villa-lined southern escape","description":"Aigen is Salzburg's green escape - villa neighborhood at the foot of the Gaisberg mountain. Perfect for those who want nature access with city convenience.","vibe":"Green & Upscale","bestFor":"Nature lovers, families, and those seeking quiet luxury","pros":["Mountain access","Green spaces","Quiet","Beautiful villas"],"cons":["Expensive","Far from center","Limited nightlife"],"lat":47.78,"lng":13.07,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

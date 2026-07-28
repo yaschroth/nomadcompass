@@ -1417,6 +1417,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bryggen","tagline":"Bergen's UNESCO Hanseatic wharf","description":"Bryggen is Bergen's crown jewel - UNESCO-listed wooden Hanseatic buildings, museums, and historic character. It's why people visit Bergen.","vibe":"Historic & UNESCO","bestFor":"History lovers, photographers, and everyone visiting Bergen","pros":["UNESCO site","Historic character","Museums","Iconic"],"cons":["Very touristy","Cruise ship crowds","Expensive"],"lat":60.3975,"lng":5.324,"priceLevel":"$$$"},{"name":"Sentrum/Torgallmenningen","tagline":"Bergen's main square and shopping","description":"Sentrum is Bergen's commercial heart - main square, shopping streets, and transport connections. It's central Bergen's functional core.","vibe":"Commercial & Central","bestFor":"Shoppers, those needing central convenience","pros":["Central location","Shopping","Transport","Fish market"],"cons":["Commercial","Crowded","Tourist prices"],"lat":60.392,"lng":5.325,"priceLevel":"$$"},{"name":"Nordnes","tagline":"Bergen's charming western peninsula","description":"Nordnes is Bergen's charming residential peninsula - wooden houses, aquarium, and local atmosphere. It's Bergen beyond tourism.","vibe":"Residential & Charming","bestFor":"Those seeking residential Bergen charm","pros":["Charming houses","Aquarium","Local feel","Peninsula walks"],"cons":["Quiet evenings","Limited dining","Far from sights"],"lat":60.399,"lng":5.31,"priceLevel":"$$"},{"name":"Sandviken","tagline":"Bergen's northern local harbor","description":"Sandviken stretches north from Bryggen - local harbor life, emerging restaurants, and authentic atmosphere. Less touristy Bergen.","vibe":"Harbor & Local","bestFor":"Those seeking authentic Bergen harbor atmosphere","pros":["Local atmosphere","Harbor walks","Emerging dining","Less crowded"],"cons":["Limited options","Far from center","Industrial areas"],"lat":60.405,"lng":5.32,"priceLevel":"$"},{"name":"Fløyen/Mount Fløyen","tagline":"Bergen's hilltop panoramic escape","description":"Fløyen offers Bergen's best views - funicular access, hiking trails, and panoramic city views. Essential Bergen experience.","vibe":"Scenic & Nature","bestFor":"View seekers, hikers, and everyone visiting Bergen","pros":["Stunning views","Funicular","Hiking trails","City panorama"],"cons":["Tourist attraction","Weather dependent","Crowded funicular"],"lat":60.396,"lng":5.344,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1468,6 +1469,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

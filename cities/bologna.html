@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Medieval towers and endless porticoes","description":"Bologna's heart beats in the Centro Storico - Piazza Maggiore anchors the city beneath the Two Towers. Miles of porticoes shelter Italy's oldest university and finest trattorias.","vibe":"Historic & Academic","bestFor":"History lovers, foodies, and those wanting authentic Italy","pros":["Historic architecture","Best food scene","Walkable","Cultural hub"],"cons":["Tourist crowds","Expensive dining","Limited parking"],"lat":44.4949,"lng":11.3426,"priceLevel":"$$$"},{"name":"Bolognina","tagline":"Multicultural energy north of the station","description":"Bolognina is Bologna's diverse neighborhood - working-class roots mixing with immigrant communities creating unique food scenes. Authentic and unpretentious character.","vibe":"Multicultural & Gritty","bestFor":"Budget travelers, cultural explorers, and those wanting diversity","pros":["Affordable","Diverse food","Authentic vibes","Near station"],"cons":["Grittier feel","Less polished","Some rough areas"],"lat":44.5089,"lng":11.3421,"priceLevel":"$"},{"name":"Santo Stefano","tagline":"Elegant streets and seven churches","description":"Santo Stefano offers Bologna's refined side - the famous Seven Churches complex anchors elegant streets filled with boutiques, wine bars, and sophisticated residents.","vibe":"Elegant & Cultural","bestFor":"Upscale travelers, wine lovers, and architecture enthusiasts","pros":["Beautiful churches","Excellent bars","Safe area","Elegant atmosphere"],"cons":["Expensive","Quieter nightlife","Tourist groups"],"lat":44.4912,"lng":11.3498,"priceLevel":"$$$"},{"name":"Pratello","tagline":"Student parties and alternative culture","description":"Via del Pratello is Bologna's party street - students from Europe's oldest university fill bars and clubs. Alternative venues, street art, and endless nightlife energy.","vibe":"Student & Alternative","bestFor":"Students, night owls, and those wanting young energy","pros":["Great nightlife","Cheap drinks","Young crowd","Alternative scene"],"cons":["Noisy nights","Can feel rough","Not family-friendly"],"lat":44.4946,"lng":11.3352,"priceLevel":"$"},{"name":"San Donato","tagline":"Local life beyond the gates","description":"San Donato is Bologna for Bolognese - residential streets, local markets, neighborhood trattorias. Just outside the historic center but deeply authentic.","vibe":"Residential & Local","bestFor":"Long-term visitors, families, and those wanting local life","pros":["Authentic vibes","Good prices","Local markets","Quiet streets"],"cons":["Less scenic","Further from sights","Limited English"],"lat":44.4986,"lng":11.3621,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

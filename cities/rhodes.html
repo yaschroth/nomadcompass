@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Medieval magnificence within fortress walls","description":"One of Europe's best-preserved medieval towns features cobblestone streets, Ottoman and Gothic architecture, and the Palace of the Grand Master. Boutique hotels and tavernas fill ancient buildings.","vibe":"Medieval magical","bestFor":"History buffs and romantic travelers","pros":["Stunning architecture","UNESCO heritage","Atmospheric dining","Car-free streets"],"cons":["Cruise ship crowds","Summer heat","Expensive dining"],"lat":36.4445,"lng":28.2234,"priceLevel":"$$"},{"name":"New Town","tagline":"Modern Greek island convenience","description":"Outside the walls, modern Rhodes offers shopping, restaurants, and beaches. Local life continues with markets, bakeries, and cafes while tourists find practical amenities and nightlife.","vibe":"Modern practical","bestFor":"Those wanting convenience with old town access","pros":["Modern amenities","Shopping options","Beaches nearby","Good restaurants"],"cons":["Less character","Traffic noise","Generic areas"],"lat":36.4512,"lng":28.2123,"priceLevel":"$"},{"name":"Ixia","tagline":"Resort beach strip with Aegean views","description":"This beach resort area west of town offers hotels, water sports, and stunning sunset views. Windsurfing and kiteboarding draw water sports enthusiasts while families enjoy the organized beaches.","vibe":"Resort active","bestFor":"Water sports enthusiasts and families","pros":["Great beaches","Water sports","Sunset views","Resort amenities"],"cons":["Windy conditions","Resort prices","Far from old town"],"lat":36.4234,"lng":28.1834,"priceLevel":"$$"},{"name":"Lindos","tagline":"Whitewashed village beneath ancient acropolis","description":"This stunning village south of Rhodes town features sugar-cube houses climbing toward a clifftop acropolis. Boutique stays and rooftop restaurants offer some of Greece's most photogenic experiences.","vibe":"Picturesque village","bestFor":"Photographers and romantic getaways","pros":["Stunning beauty","Ancient acropolis","Beach access","Boutique stays"],"cons":["Very crowded","Expensive","Limited to village life"],"lat":36.0912,"lng":28.0856,"priceLevel":"$$"},{"name":"Faliraki","tagline":"Party beach for the young and restless","description":"Once notorious for wild nightlife, Faliraki now offers a mix of family resorts and party venues. Long sandy beaches and water parks attract diverse crowds while nightclubs pulse after dark.","vibe":"Party beach","bestFor":"Young travelers and party seekers","pros":["Sandy beaches","Active nightlife","Water parks","Affordable options"],"cons":["Party reputation","Crowded summer","Package tourism"],"lat":36.3456,"lng":28.2045,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

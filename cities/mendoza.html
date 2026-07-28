@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Plaza-centered Argentine elegance","description":"Mendoza's downtown centers on the beautiful Plaza Independencia surrounded by tree-lined avenues, outdoor cafes, and cultural venues. The walkable streets and European atmosphere define urban Mendoza.","vibe":"Urban & Elegant","bestFor":"First-time visitors, culture seekers, and urban explorers","pros":["Beautiful plazas","Great restaurants","Cultural venues","Walkable center"],"cons":["Hot in summer","Quiet at night","Tourist prices"],"lat":-32.8895,"lng":-68.8458,"priceLevel":"$$"},{"name":"Chacras de Coria","tagline":"Wine country village charm","description":"The charming village outside the city offers wine bodegas, excellent restaurants, and tree-lined streets. The upscale atmosphere and proximity to wineries make it Mendoza's most desirable neighborhood.","vibe":"Wine & Upscale","bestFor":"Wine lovers, foodies, and those wanting upscale village life","pros":["Near wineries","Excellent restaurants","Charming streets","Cooler temperatures"],"cons":["Expensive","Need transport to center","Limited nightlife"],"lat":-32.9812,"lng":-68.8689,"priceLevel":"$$$"},{"name":"Godoy Cruz","tagline":"Local neighborhood with markets","description":"The adjacent city offers more local Argentine life with markets, affordable restaurants, and residential atmosphere. The Feria de Godoy Cruz craft market draws weekend crowds.","vibe":"Local & Authentic","bestFor":"Budget travelers, market lovers, and authentic experience seekers","pros":["Local atmosphere","Weekend markets","Affordable","Authentic Argentine life"],"cons":["Less tourist infrastructure","Need transport","Less scenic"],"lat":-32.9234,"lng":-68.8334,"priceLevel":"$"},{"name":"Maipú Wine Region","tagline":"Bicycle between bodegas","description":"The wine district east of the city offers famous bodegas accessible by bicycle. The flat terrain and wine tasting rooms create the classic Mendoza wine experience.","vibe":"Wine & Active","bestFor":"Wine enthusiasts, cyclists, and active travelers","pros":["Bike-friendly","Famous bodegas","Wine tasting","Olive oil farms"],"cons":["Hot in summer","Need transport to get there","Can get crowded"],"lat":-32.9834,"lng":-68.7834,"priceLevel":"$$"},{"name":"Luján de Cuyo","tagline":"Premium wines and Andes views","description":"The prestigious wine region offers Mendoza's finest Malbec wineries with stunning Andes Mountain backdrops. The upscale bodegas and mountain scenery create memorable wine experiences.","vibe":"Premium Wine & Scenic","bestFor":"Serious wine enthusiasts, luxury seekers, and mountain view lovers","pros":["Premium wineries","Andes views","Luxury experiences","Excellent restaurants"],"cons":["Expensive tastings","Need transport","Reservation required"],"lat":-33.0345,"lng":-68.8723,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

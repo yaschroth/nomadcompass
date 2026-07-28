@@ -1445,6 +1445,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Écusson","tagline":"Medieval heart with student energy","description":"The historic center's oval shape preserves medieval streets, grand plazas, and centuries of history. The concentration of students, cafes, and cultural venues creates France's most youthful old town atmosphere.","vibe":"Historic & Youthful","bestFor":"History lovers, students, and those wanting walkable old town charm","pros":["Beautiful historic center","Great cafes","Student energy","Walkable streets"],"cons":["Can be noisy","Parking impossible","Narrow streets"],"lat":43.6108,"lng":3.8767,"priceLevel":"$$"},{"name":"Antigone","tagline":"Neo-classical grandeur by Bofill","description":"The monumental neighborhood designed by Ricardo Bofill features dramatic neo-classical architecture and grand perspectives. The striking design connects the historic center to the river.","vibe":"Architectural & Grand","bestFor":"Architecture enthusiasts, photographers, and those appreciating bold design","pros":["Striking architecture","Wide boulevards","Modern amenities","Tram access"],"cons":["Can feel impersonal","Less cozy","Commercial feel"],"lat":43.6078,"lng":3.8889,"priceLevel":"$$"},{"name":"Port Marianne","tagline":"Modern waterfront and innovation","description":"The newest district features contemporary architecture, the Bassin Jacques-Cœur waterfront, and modern housing. The emerging restaurant scene and startups create dynamic energy.","vibe":"Modern & Innovative","bestFor":"Young professionals, architecture lovers, and modern comfort seekers","pros":["Contemporary design","Waterfront living","Growing restaurants","Modern infrastructure"],"cons":["Expensive","Still developing","Less character"],"lat":43.6034,"lng":3.9012,"priceLevel":"$$$"},{"name":"Beaux-Arts","tagline":"Elegant neighborhood by the park","description":"The residential neighborhood near the Jardin des Plantes and medical school offers elegant apartments and quiet streets. The leafy atmosphere and cultural venues attract families and professionals.","vibe":"Elegant & Green","bestFor":"Families, professionals, and those wanting quiet elegance","pros":["Near parks","Elegant buildings","Quiet streets","Cultural venues"],"cons":["Fewer restaurants","Residential quiet","Higher prices"],"lat":43.6156,"lng":3.8723,"priceLevel":"$$$"},{"name":"Palavas-les-Flots","tagline":"Beach escape from the city","description":"The beach town just 15 minutes from Montpellier offers Mediterranean beaches, fresh seafood, and summer atmosphere. The easy tram/bus access makes it the natural beach escape.","vibe":"Beach & Summer","bestFor":"Beach lovers, families, and summer sun seekers","pros":["Beach access","Fresh seafood","Summer atmosphere","Easy city access"],"cons":["Crowded in summer","Touristy","Limited off-season"],"lat":43.5312,"lng":3.9278,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1496,6 +1497,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

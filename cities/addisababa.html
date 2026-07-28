@@ -1447,6 +1447,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Bole","tagline":"Airport district with expat energy","description":"Bole centers on the airport road - modern hotels, international restaurants, shopping malls. Where diplomats, expats, and business travelers base themselves.","vibe":"Modern & International","bestFor":"Business travelers, expats, and those wanting modern amenities","pros":["Near airport","International dining","Modern hotels","Safe area"],"cons":["Expensive","Traffic nightmares","Less authentic"],"lat":8.9935,"lng":38.7856,"priceLevel":"$$$"},{"name":"Piazza","tagline":"Historic heart with Italian colonial echoes","description":"Piazza is Addis Ababa's historic center - Italian-era buildings, busy markets, traditional coffee houses. Where the city's commercial heart has beaten for a century.","vibe":"Historic & Commercial","bestFor":"History lovers, market enthusiasts, and coffee seekers","pros":["Historic atmosphere","Traditional coffee","Authentic markets","Central"],"cons":["Chaotic","Hustlers","Basic infrastructure"],"lat":9.0305,"lng":38.7468,"priceLevel":"$"},{"name":"Kazanchis","tagline":"Business district with African Union","description":"Kazanchis hosts Addis Ababa's business and diplomatic core - African Union headquarters, UN compound, embassies. The continent's diplomatic capital in action.","vibe":"Diplomatic & Business","bestFor":"Business travelers, diplomats, and conference attendees","pros":["Near AU","Business facilities","Safe area","Good hotels"],"cons":["Corporate feel","Expensive","Limited nightlife"],"lat":9.0112,"lng":38.7612,"priceLevel":"$$$"},{"name":"Merkato","tagline":"Africa's largest open-air market","description":"Merkato is legendary - Africa's biggest market sprawling across neighborhoods. Everything traded here: spices, livestock, recycled goods. Overwhelming, unforgettable, authentic.","vibe":"Market & Chaotic","bestFor":"Adventurous travelers, market lovers, and experience seekers","pros":["Incredible experience","Everything for sale","Authentic Africa","Cultural depth"],"cons":["Overwhelming","Pickpockets","Difficult to navigate"],"lat":9.0234,"lng":38.7289,"priceLevel":"$"},{"name":"Entoto","tagline":"Highland escape above the city","description":"Entoto rises 3000m above the city - eucalyptus forests, churches, panoramic views. Where emperors once ruled and Addis residents escape for fresh mountain air.","vibe":"Natural & Historic","bestFor":"Nature lovers, hikers, and those wanting escape","pros":["Fresh air","Great views","Historic churches","Peaceful"],"cons":["Cold temperatures","Far from center","Limited transport"],"lat":9.0756,"lng":38.7534,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1498,6 +1499,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1422,6 +1422,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"North Park","tagline":"San Diego's hipster craft beer capital","description":"North Park is San Diego's coolest neighborhood - craft breweries, indie boutiques, and excellent coffee. It's where SD's creative class congregates.","vibe":"Hipster & Creative","bestFor":"Beer lovers, creatives, and those seeking trendy SD","pros":["Best craft beer","Great coffee","Indie shops","Restaurant scene"],"cons":["Parking nightmare","Expensive rent","No beach"],"lat":32.7474,"lng":-117.1295,"priceLevel":"$$"},{"name":"Pacific Beach","tagline":"San Diego's classic beach party zone","description":"PB is San Diego's quintessential beach neighborhood - boardwalk bars, surf culture, and endless summer vibes. It's young, fun, and unapologetically beachy.","vibe":"Beach & Party","bestFor":"Beach lovers, young travelers, and those seeking surf culture","pros":["Great beach","Beach bars","Surf culture","Boardwalk"],"cons":["Noisy","Young crowd only","Parking impossible"],"lat":32.7965,"lng":-117.2408,"priceLevel":"$$"},{"name":"Gaslamp Quarter","tagline":"San Diego's historic downtown entertainment","description":"The Gaslamp is San Diego's entertainment heart - Victorian buildings, rooftop bars, and convention center energy. It's touristy but delivers reliable nightlife.","vibe":"Entertainment & Historic","bestFor":"Nightlife seekers, convention visitors, and first-timers","pros":["Great nightlife","Historic architecture","Walkable","Restaurant variety"],"cons":["Touristy","Expensive","Homeless issues"],"lat":32.712,"lng":-117.16,"priceLevel":"$$$"},{"name":"La Jolla","tagline":"San Diego's upscale coastal jewel","description":"La Jolla is San Diego's most beautiful area - stunning coves, seals, and upscale village. It's expensive but the natural beauty is genuinely special.","vibe":"Upscale & Scenic","bestFor":"Luxury seekers, nature lovers, and those seeking beautiful SD","pros":["Stunning coastline","Great restaurants","Seals and sea lions","Beautiful coves"],"cons":["Very expensive","Traffic","Older crowd"],"lat":32.8328,"lng":-117.2713,"priceLevel":"$$$$"},{"name":"Hillcrest","tagline":"San Diego's diverse LGBTQ+ hub","description":"Hillcrest is San Diego's most diverse neighborhood - LGBTQ+ center, excellent brunch spots, and urban village feel. It's welcoming, walkable, and full of character.","vibe":"Diverse & Welcoming","bestFor":"LGBTQ+ travelers, brunch lovers, and those seeking community","pros":["Very welcoming","Great brunch","Walkable","Community events"],"cons":["Parking issues","Some homeless","Hot summers"],"lat":32.7477,"lng":-117.1635,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1473,6 +1474,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

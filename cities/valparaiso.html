@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Cerro Concepción","tagline":"Pastel houses and bohemian spirit","description":"This hillside neighborhood features colorful houses, street art, and stunning bay views. Boutique hotels, cafes, and galleries fill the winding streets accessible by historic funiculars.","vibe":"Bohemian colorful","bestFor":"Artists and romantic travelers","pros":["Street art","Beautiful views","Boutique stays","Bohemian atmosphere"],"cons":["Steep hills","Safety concerns","Aging infrastructure"],"lat":-33.0434,"lng":-71.6289,"priceLevel":"$$"},{"name":"Cerro Alegre","tagline":"UNESCO heritage on the hillside","description":"Adjacent to Concepción, this UNESCO-listed hill offers equally stunning views and preserved architecture. Restaurants, guesthouses, and galleries create Valparaíso's most visited area.","vibe":"Heritage artistic","bestFor":"Culture seekers and photographers","pros":["UNESCO status","Great restaurants","Historic funiculars","View terraces"],"cons":["Very touristy","Steep climbs","Some neglect"],"lat":-33.0412,"lng":-71.6267,"priceLevel":"$$"},{"name":"El Plan","tagline":"Flat city center with port energy","description":"The flat lower city features markets, port activity, and everyday commerce. Less picturesque than the hills but essential for understanding working Valparaíso.","vibe":"Commercial working","bestFor":"Market lovers and authentic seekers","pros":["Markets","Affordable","Port atmosphere","Local life"],"cons":["Less scenic","Safety concerns","Industrial areas"],"lat":-33.0456,"lng":-71.6167,"priceLevel":"$"},{"name":"Cerro Bellavista","tagline":"Open-air museum with Pablo Neruda","description":"Home to Pablo Neruda's La Sebastiana house, this hill features the famous Open Sky Museum with murals across buildings. Residential atmosphere with cultural significance.","vibe":"Cultural residential","bestFor":"Poetry lovers and culture seekers","pros":["Neruda house","Street art museum","Quieter than Concepción","Cultural depth"],"cons":["Steeper hills","Fewer services","Residential quiet"],"lat":-33.0367,"lng":-71.6334,"priceLevel":"$"},{"name":"Viña del Mar","tagline":"Garden city beach resort","description":"The neighboring city offers beaches, manicured gardens, and more polished infrastructure. Those seeking comfort with Valparaíso access often base here.","vibe":"Resort manicured","bestFor":"Beach lovers and comfort seekers","pros":["Clean beaches","Better infrastructure","Gardens","Resort amenities"],"cons":["Less character","Tourist prices","Generic resort feel"],"lat":-33.0153,"lng":-71.55,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

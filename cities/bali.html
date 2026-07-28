@@ -1421,6 +1421,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Canggu","tagline":"Bali's undisputed digital nomad capital","description":"Canggu is where the digital nomad dream lives. Beach clubs, surf breaks, endless coworking spaces, and more avocado toast than you can handle. It's become so popular it borders on cliché, but the infrastructure for remote work is unmatched anywhere in Southeast Asia.","vibe":"Nomad & Beach","bestFor":"Digital nomads, surfers, and anyone seeking the classic Bali lifestyle","pros":["Best coworking","Beach lifestyle","Huge nomad community","Great cafes"],"cons":["Overcrowded","Traffic nightmare","Losing authenticity"],"lat":-8.6478,"lng":115.1385,"priceLevel":"$$"},{"name":"Ubud","tagline":"Spiritual Bali with rice terraces and yoga","description":"Ubud is Bali's cultural heart - rice terraces, temples, yoga retreats, and a slower pace of life. The wellness industry dominates here, alongside a strong creative community. Perfect for nomads seeking balance, though the isolation can feel limiting for some.","vibe":"Spiritual & Creative","bestFor":"Wellness enthusiasts, artists, and nomads seeking inner peace","pros":["Beautiful nature","Wellness scene","Creative community","Cultural experiences"],"cons":["Far from beach","Limited nightlife","Can feel isolated"],"lat":-8.5069,"lng":115.2625,"priceLevel":"$$"},{"name":"Seminyak","tagline":"Bali's upscale beach scene with boutique everything","description":"Seminyak is Bali's stylish older sibling - beach clubs, boutique hotels, and fine dining define this upscale area. Less nomad-focused than Canggu but more polished, it attracts a slightly older, more affluent crowd who appreciate quality over quantity.","vibe":"Upscale & Polished","bestFor":"Professionals seeking quality, foodies, and those escaping Canggu crowds","pros":["Best restaurants","Boutique shopping","Beach access","More mature crowd"],"cons":["Expensive","Touristy","Limited coworking"],"lat":-8.6913,"lng":115.1678,"priceLevel":"$$$"},{"name":"Sanur","tagline":"Bali's relaxed coastal village for longer stays","description":"Sanur is the antidote to Canggu chaos. This quiet coastal town attracts long-term expats, families, and nomads seeking calm. The beach is swimmable (unlike Canggu), prices are lower, and the pace of life slower. Growing coworking scene emerging.","vibe":"Relaxed & Local","bestFor":"Families, long-term stayers, and nomads who've had enough of the scene","pros":["Peaceful","Swimmable beach","Good value","Family-friendly"],"cons":["Quiet nightlife","Fewer nomads","Can feel sleepy"],"lat":-8.6912,"lng":115.262,"priceLevel":"$"},{"name":"Uluwatu","tagline":"Clifftop temples and world-class surf breaks","description":"Uluwatu sits on Bali's southern tip, famous for dramatic clifftop temples and legendary surf breaks. It's more isolated but rewards visitors with stunning landscapes and a growing cafe scene. Best for surfers and those who don't need to be connected to the scene.","vibe":"Scenic & Adventurous","bestFor":"Surfers, photographers, and nomads seeking dramatic natural beauty","pros":["Stunning views","World-class surf","Less crowded","Growing scene"],"cons":["Isolated","Need a scooter","Limited services"],"lat":-8.8291,"lng":115.0849,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1472,6 +1473,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

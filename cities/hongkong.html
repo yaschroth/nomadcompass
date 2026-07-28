@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central & Sheung Wan","tagline":"Hong Kong's financial heart meets old-world charm","description":"Central is Hong Kong's business core while Sheung Wan offers traditional shops and emerging galleries. Together they blend skyscrapers, antique streets, and excellent dining.","vibe":"Business & Historic","bestFor":"Business travelers, culture lovers, and those seeking urban intensity","pros":["Business hub","Gallery scene","Excellent dining","MTR access"],"cons":["Very expensive","Crowded streets","Limited green space"],"lat":22.285,"lng":114.155,"priceLevel":"$$$$"},{"name":"Wan Chai","tagline":"Hong Kong's evolving entertainment district","description":"Wan Chai has transformed from red-light district to trendy neighborhood - Star Street's boutiques, Convention Centre, and diverse nightlife. It's Hong Kong at its most dynamic.","vibe":"Dynamic & Entertainment","bestFor":"Nightlife seekers, young professionals, and those seeking variety","pros":["Great nightlife","Star Street area","Central location","Diverse dining"],"cons":["Noisy areas","Seedy pockets","Crowded"],"lat":22.278,"lng":114.175,"priceLevel":"$$$"},{"name":"Causeway Bay","tagline":"Hong Kong's shopping paradise","description":"Causeway Bay is retail heaven - massive malls, street markets, and Victoria Park. It's one of the world's most expensive retail districts but also has hidden local gems.","vibe":"Shopping & Urban","bestFor":"Shoppers, foodies, and those seeking Hong Kong's commercial energy","pros":["Shopping paradise","Food variety","Victoria Park","Transport hub"],"cons":["Extremely crowded","Expensive","Overwhelming"],"lat":22.28,"lng":114.185,"priceLevel":"$$$"},{"name":"Tsim Sha Tsui","tagline":"Kowloon's waterfront gateway","description":"TST offers the iconic harbor view, museums, and Nathan Road shopping. It's tourist-heavy but the waterfront promenade and cultural venues make it essential Hong Kong.","vibe":"Tourist & Waterfront","bestFor":"First-time visitors, culture lovers, and photography enthusiasts","pros":["Harbor views","Museums","Shopping","Waterfront promenade"],"cons":["Very touristy","Crowded","Pushy salespeople"],"lat":22.2988,"lng":114.1722,"priceLevel":"$$$"},{"name":"Sai Ying Pun","tagline":"Hong Kong's emerging local gem","description":"Sai Ying Pun is Hong Kong's best-kept secret - traditional shops, new cafes, and authentic character. The MTR extension made it accessible while keeping its local soul.","vibe":"Local & Emerging","bestFor":"Long-term stayers, foodies, and those seeking authentic Hong Kong","pros":["Local character","Great cafes","Affordable eats","Less touristy"],"cons":["Hilly streets","Limited nightlife","Fewer amenities"],"lat":22.286,"lng":114.143,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

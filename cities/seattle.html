@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Capitol Hill","tagline":"Seattle's LGBTQ+ and nightlife hub","description":"Capitol Hill is Seattle's alternative heart - LGBTQ+ culture, live music, and vibrant nightlife. It's the city's most diverse and energetic neighborhood.","vibe":"Alternative & LGBTQ+","bestFor":"LGBTQ+ travelers, night owls, and those seeking Seattle's edge","pros":["Best nightlife","LGBTQ+ culture","Live music","Diverse community"],"cons":["Parking nightmare","Can be loud","Expensive housing"],"lat":47.6253,"lng":-122.3222,"priceLevel":"$$"},{"name":"Pike Place/Downtown","tagline":"Seattle's iconic market and waterfront","description":"Pike Place is Seattle's must-see - the famous market, original Starbucks, and waterfront access. It's touristy but genuinely essential.","vibe":"Tourist & Market","bestFor":"First-time visitors, market lovers, and those seeking iconic Seattle","pros":["Pike Place Market","Waterfront","Fresh seafood","Iconic"],"cons":["Very touristy","Crowded","Expensive"],"lat":47.6097,"lng":-122.3422,"priceLevel":"$$$"},{"name":"Fremont","tagline":"Seattle's quirky self-proclaimed center","description":"Fremont declares itself the 'Center of the Universe' - quirky public art, local breweries, and eccentric character. It's Seattle's most fun neighborhood.","vibe":"Quirky & Fun","bestFor":"Art lovers, quirky seekers, and those seeking unique Seattle","pros":["Quirky art","Great breweries","Sunday market","Character"],"cons":["Far from downtown","Limited transit","Can be touristy"],"lat":47.651,"lng":-122.35,"priceLevel":"$$"},{"name":"Ballard","tagline":"Seattle's Scandinavian brewery district","description":"Ballard is Seattle's beer capital - craft breweries, Scandinavian heritage, and maritime history. It's where Seattle drinks and celebrates its Nordic roots.","vibe":"Brewery & Nordic","bestFor":"Beer lovers, history buffs, and those seeking local Seattle","pros":["Best breweries","Locks","Nordic heritage","Local feel"],"cons":["Far from downtown","Limited transit","Weekend crowds"],"lat":47.668,"lng":-122.385,"priceLevel":"$$"},{"name":"South Lake Union","tagline":"Seattle's Amazon-transformed tech hub","description":"South Lake Union is Seattle's tech center - Amazon headquarters, modern restaurants, and urban transformation. It's Seattle's most dramatically changed neighborhood.","vibe":"Tech & Modern","bestFor":"Tech workers, modern seekers, and those seeking new Seattle","pros":["Modern amenities","Good restaurants","Lake access","Tech energy"],"cons":["Corporate feel","Expensive","Less character"],"lat":47.627,"lng":-122.336,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

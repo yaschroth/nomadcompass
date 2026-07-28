@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Adelaide CBD","tagline":"The compact heart of South Australia","description":"Adelaide's CBD is one of Australia's most walkable city centers - a perfect grid surrounded by parklands. You'll find everything from Central Market's produce to Rundle Mall shopping within easy walking distance.","vibe":"Central & Convenient","bestFor":"First-time visitors, convenience seekers, and those who want everything walkable","pros":["Highly walkable","Central Market","Free trams","All amenities"],"cons":["Quieter weekends","Less character","Higher rents"],"lat":-34.9285,"lng":138.6007,"priceLevel":"$$$"},{"name":"North Adelaide","tagline":"Adelaide's elegant historic quarter","description":"Just north of the parklands, North Adelaide is the city's most prestigious address - heritage buildings, tree-lined streets, and O'Connell Street's cafe scene create an upscale village atmosphere.","vibe":"Upscale & Historic","bestFor":"Those seeking elegance, food lovers, and architecture enthusiasts","pros":["Beautiful architecture","Great dining on O'Connell","Quiet","Near parklands"],"cons":["Expensive","Limited nightlife","Requires car for some errands"],"lat":-34.907,"lng":138.595,"priceLevel":"$$$$"},{"name":"Glenelg","tagline":"Adelaide's beloved beach suburb","description":"Glenelg is Adelaide's original beach resort - a historic tram connects it to the CBD while Jetty Road offers restaurants, bars, and that classic Australian beach town vibe.","vibe":"Beach & Relaxed","bestFor":"Beach lovers, families, and those wanting a holiday-within-a-city feel","pros":["Beautiful beach","Tram to city","Jetty Road dining","Sunset dolphins"],"cons":["Touristy in summer","30 min from CBD","Crowded weekends"],"lat":-34.982,"lng":138.516,"priceLevel":"$$"},{"name":"Norwood","tagline":"Adelaide's trendy eastern hub","description":"The Parade in Norwood is one of Adelaide's best strips - cafes, boutiques, cinemas, and restaurants line this leafy street. It's where hipsters meet families in a perfectly gentrified setting.","vibe":"Trendy & Leafy","bestFor":"Young professionals, cafe culture lovers, and those seeking suburban cool","pros":["The Parade cafes","Leafy streets","Good transport","Village feel"],"cons":["Parking difficult","Crowded Parade","Higher prices"],"lat":-34.922,"lng":138.635,"priceLevel":"$$$"},{"name":"Henley Beach","tagline":"Laid-back coastal Adelaide living","description":"Henley Beach is Glenelg's more relaxed cousin - still beachside but with a more local, less touristy feel. The square offers great cafes and the sunsets over the Gulf are spectacular.","vibe":"Coastal & Relaxed","bestFor":"Beach lovers seeking authenticity, surfers, and sunset chasers","pros":["Great beach","Local feel","Amazing sunsets","Good cafes"],"cons":["Limited transport","Quiet evenings","Far from city"],"lat":-34.925,"lng":138.497,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

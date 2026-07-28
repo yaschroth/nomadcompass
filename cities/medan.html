@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Merdeka Walk","tagline":"Colonial grandeur with food stalls","description":"The area around the grand Maimun Palace and Great Mosque showcases Medan's royal heritage. The evening food stalls along Merdeka Walk offer culinary adventures in a historic setting.","vibe":"Historic & Culinary","bestFor":"History buffs, foodies, and architecture enthusiasts","pros":["Royal palace","Great Mosque","Evening food stalls","Historic atmosphere"],"cons":["Hot during day","Limited night activities","Spread out"],"lat":3.5756,"lng":98.6789,"priceLevel":"$"},{"name":"Kesawan","tagline":"Dutch heritage shophouses","description":"The colonial-era commercial street features Dutch shophouses and Art Deco buildings. The ongoing revival brings cafes and boutiques while preserving heritage atmosphere.","vibe":"Heritage & Emerging","bestFor":"Architecture lovers, photographers, and cafe hoppers","pros":["Colonial architecture","Hip cafes emerging","Heritage walks","Photo opportunities"],"cons":["Still developing","Hot for walking","Limited accommodation"],"lat":3.5889,"lng":98.6812,"priceLevel":"$"},{"name":"Polonia","tagline":"Modern hub near the airport","description":"The commercial area near the old airport offers modern malls, hotels, and urban amenities. The concentration of facilities makes it practical for business travelers and transit visitors.","vibe":"Modern & Commercial","bestFor":"Business travelers, shoppers, and transit visitors","pros":["Modern malls","Hotel variety","Good restaurants","Convenient location"],"cons":["No character","Traffic issues","Generic feel"],"lat":3.5534,"lng":98.6689,"priceLevel":"$$"},{"name":"Kampung Keling","tagline":"Little India with temples galore","description":"Medan's Indian quarter offers colorful Hindu temples, Indian restaurants, and vibrant cultural atmosphere. The community life and religious festivals create unique experiences.","vibe":"Multicultural & Spiritual","bestFor":"Culture seekers, temple enthusiasts, and Indian food lovers","pros":["Hindu temples","Indian food","Cultural festivals","Colorful atmosphere"],"cons":["Crowded streets","Hot and busy","Basic infrastructure"],"lat":3.5845,"lng":98.6756,"priceLevel":"$"},{"name":"Berastagi Access","tagline":"Gateway to highland escapes","description":"The southern outskirts provide access to Berastagi highlands, offering cooler climates and volcano treks. The transition zone between lowland chaos and highland peace.","vibe":"Gateway & Transit","bestFor":"Volcano enthusiasts, highland seekers, and nature lovers","pros":["Highland access","Cooler escape","Volcano trekking","Nature proximity"],"cons":["Transit zone","Traffic to highlands","Limited attractions"],"lat":3.4789,"lng":98.5023,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

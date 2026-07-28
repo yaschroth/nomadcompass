@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Södermalm","tagline":"Stockholm's hip island with views and vintage","description":"Södermalm is Stockholm's creative heart - hilltop views, vintage shops, and the city's best nightlife. SoFo (South of Folkungagatan) rivals Brooklyn for hip credentials. Stockholm's default nomad choice.","vibe":"Hip & Creative","bestFor":"Creatives, nightlife lovers, and nomads seeking Stockholm's most vibrant area","pros":["Best views","Great nightlife","Vintage shopping","Creative scene"],"cons":["Expensive","Crowded","Hilly terrain"],"lat":59.315,"lng":18.074,"priceLevel":"$$$"},{"name":"Gamla Stan","tagline":"Medieval old town on the island","description":"Gamla Stan is Stockholm's medieval heart - narrow cobblestone streets, royal palace, and Instagram-worthy charm. It's touristy but magical, especially off-season. Living here is rare but unforgettable.","vibe":"Medieval & Tourist","bestFor":"History lovers, photographers, and nomads seeking unique Stockholm experience","pros":["Incredible history","Beautiful streets","Central","Unique"],"cons":["Very touristy","Limited housing","Expensive"],"lat":59.3258,"lng":18.0711,"priceLevel":"$$$"},{"name":"Vasastan","tagline":"Stockholm's classic residential elegance","description":"Vasastan is Stockholm's elegant residential area - beautiful architecture, good restaurants, and refined atmosphere. It's where established Stockholmers live, with excellent quality of life.","vibe":"Elegant & Residential","bestFor":"Professionals, families, and nomads seeking elegant Stockholm living","pros":["Beautiful buildings","Good restaurants","Central location","Elegant"],"cons":["Expensive","Quiet evenings","Competitive housing"],"lat":59.345,"lng":18.05,"priceLevel":"$$$"},{"name":"Kungsholmen","tagline":"Island living with city hall views","description":"Kungsholmen is Stockholm's island neighborhood west of center - waterfront walks, good restaurants, and relaxed atmosphere. City Hall offers iconic views. Balance of access and calm.","vibe":"Island & Relaxed","bestFor":"Professionals, couples, and nomads seeking waterfront Stockholm living","pros":["Waterfront access","Good restaurants","Relaxed vibe","City Hall views"],"cons":["Less exciting","Residential quiet","Far from nightlife"],"lat":59.332,"lng":18.031,"priceLevel":"$$"},{"name":"Östermalm","tagline":"Stockholm's most exclusive address","description":"Östermalm is Stockholm's most prestigious neighborhood - luxury shopping, fine dining, and Sweden's wealthiest residents. Strandvägen is Stockholm's most beautiful boulevard. Exclusive everything.","vibe":"Luxury & Exclusive","bestFor":"Luxury seekers, fine diners, and nomads wanting Stockholm's most prestigious area","pros":["Luxury shopping","Fine dining","Beautiful streets","Prestigious"],"cons":["Most expensive","Exclusive feel","Less creative"],"lat":59.337,"lng":18.085,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

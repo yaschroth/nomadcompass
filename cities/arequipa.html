@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"White volcanic stone and colonial grandeur","description":"Arequipa's historic center is Peru's most beautiful - white sillar stone buildings, Santa Catalina monastery, Plaza de Armas with volcano views. UNESCO-listed magnificence.","vibe":"Historic & Grand","bestFor":"History lovers, architecture enthusiasts, and culture seekers","pros":["Stunning architecture","Great museums","Walkable","Volcano views"],"cons":["Tourist prices","Altitude adjustment","Crowds at sights"],"lat":-16.3989,"lng":-71.537,"priceLevel":"$$"},{"name":"Yanahuara","tagline":"Viewpoint neighborhood with local life","description":"Yanahuara offers the classic Arequipa photo - colonial arches framing El Misti volcano. Local neighborhood with excellent restaurants and authentic character.","vibe":"Local & Scenic","bestFor":"Photographers, local seekers, and food lovers","pros":["Iconic viewpoint","Great restaurants","Local atmosphere","Near center"],"cons":["Uphill walk","Crowded viewpoint","Limited nightlife"],"lat":-16.3912,"lng":-71.5456,"priceLevel":"$$"},{"name":"Cayma","tagline":"Residential district with countryside feel","description":"Cayma extends north of the center - residential streets, local markets, increasing gentrification with new restaurants. Where Arequipeños actually live.","vibe":"Residential & Local","bestFor":"Long-term visitors, authentic seekers, and budget travelers","pros":["Affordable","Local markets","Authentic life","Quieter"],"cons":["Far from sights","Limited English","Basic amenities"],"lat":-16.3789,"lng":-71.5534,"priceLevel":"$"},{"name":"San Lázaro","tagline":"Oldest neighborhood with narrow lanes","description":"San Lázaro is Arequipa's oldest quarter - narrow cobbled streets predating the Spanish grid, white walls, intimate scale. The city's hidden historic gem.","vibe":"Historic & Intimate","bestFor":"History lovers, photographers, and atmosphere seekers","pros":["Beautiful streets","Historic atmosphere","Quiet","Photogenic"],"cons":["Small area","Limited services","Can feel empty"],"lat":-16.3956,"lng":-71.5312,"priceLevel":"$$"},{"name":"Selva Alegre","tagline":"Modern district with practical living","description":"Selva Alegre represents modern Arequipa - shopping centers, apartment buildings, middle-class living. Practical base with good connections to the center.","vibe":"Modern & Practical","bestFor":"Practical travelers, shoppers, and those wanting modern amenities","pros":["Modern amenities","Good shopping","Safe area","Affordable"],"cons":["No character","Far from historic center","Generic feel"],"lat":-16.3856,"lng":-71.5234,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town Peninsula","tagline":"Roman ruins meet sea organ magic","description":"The ancient peninsula features Roman ruins, Venetian architecture, and the famous Sea Organ. Sunset viewing at the Greeting to the Sun installation creates magical experiences.","vibe":"Historic magical","bestFor":"History lovers and sunset seekers","pros":["Sea Organ","Roman ruins","Stunning sunsets","Historic atmosphere"],"cons":["Tourist crowds","Expensive dining","Limited accommodation"],"lat":44.115,"lng":15.2242,"priceLevel":"$$"},{"name":"Varoš","tagline":"Local neighborhood with market life","description":"Just outside the old town walls, this traditional neighborhood features the daily market, local tavernas, and authentic Dalmatian life. Affordable options near historic attractions.","vibe":"Local traditional","bestFor":"Budget travelers and market lovers","pros":["Daily market","Local restaurants","Affordable","Near old town"],"cons":["Less scenic","Basic infrastructure","Parking difficult"],"lat":44.1178,"lng":15.2312,"priceLevel":"$"},{"name":"Diklo","tagline":"Beach suburb with sunset views","description":"Northwest of center, this seaside suburb offers beaches, restaurants, and residential calm. Sunset views match the old town while avoiding tourist crowds.","vibe":"Suburban coastal","bestFor":"Beach lovers seeking peace","pros":["Beach access","Sunset views","Residential calm","Good restaurants"],"cons":["Far from old town","Needs transport","Limited nightlife"],"lat":44.1312,"lng":15.2034,"priceLevel":"$$"},{"name":"Brodarica","tagline":"Harbor area with ferry connections","description":"The ferry port area offers practical access to islands while providing affordable accommodations. Those using Zadar as island-hopping base find convenient location.","vibe":"Practical harbor","bestFor":"Island hoppers and ferry travelers","pros":["Ferry access","Affordable stays","Island connections","Practical location"],"cons":["Industrial feel","Port noise","Limited charm"],"lat":44.1089,"lng":15.2423,"priceLevel":"$"},{"name":"Borik","tagline":"Resort area with organized beaches","description":"This hotel and resort area northwest of town offers organized beaches, sports facilities, and family-friendly atmosphere. Package tourists and families enjoy structured vacation experience.","vibe":"Resort organized","bestFor":"Families and resort seekers","pros":["Organized beaches","Family facilities","Sports options","Resort amenities"],"cons":["Generic resort","Tourist bubble","Far from culture"],"lat":44.1267,"lng":15.2089,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

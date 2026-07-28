@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Roma Norte","tagline":"CDMX's coolest neighborhood with art deco charm","description":"Roma Norte is Mexico City's undisputed nomad capital. Tree-lined streets, art deco architecture, world-class restaurants, and vibrant nightlife make it irresistible. Every block has cafes with WiFi, and the community of remote workers is massive and welcoming.","vibe":"Hip & Cultural","bestFor":"Digital nomads, foodies, and anyone seeking Mexico City's most creative neighborhood","pros":["Best food scene","Beautiful architecture","Strong nomad community","Endless cafes"],"cons":["Getting expensive","Touristy","Traffic noise"],"lat":19.4195,"lng":-99.1617,"priceLevel":"$$"},{"name":"Condesa","tagline":"Parks, cafes, and Mexico City's best quality of life","description":"Condesa is Roma's slightly more upscale neighbor, centered around beautiful Parque México. The circular parks, sidewalk cafes, and elegant architecture create arguably the city's most livable area. It's where established professionals and creatives make their home.","vibe":"Upscale & Green","bestFor":"Professionals seeking quality of life, park lovers, and those escaping Roma crowds","pros":["Beautiful parks","Excellent cafes","Safe and walkable","Great restaurants"],"cons":["More expensive","Quieter nightlife","Competitive housing"],"lat":19.4122,"lng":-99.1737,"priceLevel":"$$$"},{"name":"Coyoacán","tagline":"Bohemian village with Frida Kahlo's spirit","description":"Coyoacán is Mexico City's bohemian heart - cobblestoned streets, colonial architecture, and the spirit of Frida Kahlo who lived here. Less central but rich in culture, it attracts artists, academics, and nomads seeking authentic Mexico City character.","vibe":"Bohemian & Historic","bestFor":"Artists, culture seekers, and nomads who value atmosphere over convenience","pros":["Rich culture","Beautiful plazas","Local markets","University energy"],"cons":["Far from center","Metro access limited","Tourist crowds"],"lat":19.35,"lng":-99.1617,"priceLevel":"$$"},{"name":"Polanco","tagline":"Mexico City's luxury district with world-class museums","description":"Polanco is where Mexico City's elite live and shop. Chapultepec Park, world-class museums, and high-end restaurants define this polished neighborhood. Perfect for business travelers and those seeking safety and luxury above all else.","vibe":"Upscale & Cultural","bestFor":"Business professionals, luxury seekers, and museum lovers","pros":["Very safe","World-class museums","Chapultepec access","Luxury amenities"],"cons":["Most expensive","Less local character","Corporate feel"],"lat":19.433,"lng":-99.1954,"priceLevel":"$$$"},{"name":"Santa María la Ribera","tagline":"CDMX's best-kept secret for authentic living","description":"Santa María la Ribera is where locals point when asked for the real Mexico City. This genuine neighborhood offers tree-lined streets, traditional markets, and incredible value. A growing cafe scene is emerging without losing the authentic character.","vibe":"Authentic & Affordable","bestFor":"Budget nomads, culture seekers, and those escaping the expat bubble","pros":["Very affordable","Authentic experience","Local markets","Emerging scene"],"cons":["Less English","Fewer amenities","Further from action"],"lat":19.449,"lng":-99.159,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Stari Grad (Old Town)","tagline":"Austro-Hungarian elegance on the Danube","description":"Novi Sad's historic center features Austro-Hungarian architecture, the main square Trg Slobode, and café-lined streets. The cultural richness and relaxed atmosphere define Serbia's second city.","vibe":"Historic & Relaxed","bestFor":"Culture lovers, café enthusiasts, and historic atmosphere seekers","pros":["Beautiful architecture","Great cafes","Cultural venues","Walkable center"],"cons":["Can be quiet","Limited nightlife midweek","Parking difficult"],"lat":45.255,"lng":19.8431,"priceLevel":"$$"},{"name":"Petrovaradin Fortress","tagline":"Gibraltar of the Danube with EXIT vibes","description":"The massive fortress across the river offers stunning views, underground tunnels, and hosts the famous EXIT festival. The bohemian cafes and artist studios create unique atmosphere.","vibe":"Historic & Bohemian","bestFor":"History buffs, festival goers, and view seekers","pros":["Stunning views","EXIT festival venue","Artist studios","Underground tunnels"],"cons":["Steep climb","Limited accommodation","Far from city life"],"lat":45.2523,"lng":19.8623,"priceLevel":"$"},{"name":"Liman","tagline":"Beach bars and Danube summers","description":"The Danube beach area offers summer relaxation with beach bars, water sports, and local swimming spots. The seasonal energy attracts young locals and summer visitors.","vibe":"Beach & Summer","bestFor":"Beach lovers, summer visitors, and water activities seekers","pros":["River beach","Beach bars","Water sports","Summer atmosphere"],"cons":["Seasonal only","Crowded in summer","Limited off-season"],"lat":45.2412,"lng":19.8534,"priceLevel":"$"},{"name":"Podbara","tagline":"Student quarter with cheap eats","description":"The neighborhood near the university offers budget eateries, student bars, and young energy. The affordable options and local atmosphere attract budget travelers.","vibe":"Student & Budget","bestFor":"Budget travelers, students, and young nomads","pros":["Cheap food","Student atmosphere","Local bars","Affordable accommodation"],"cons":["Less scenic","Can be noisy","Basic amenities"],"lat":45.2478,"lng":19.8389,"priceLevel":"$"},{"name":"Detelinara","tagline":"Residential calm with local life","description":"The residential neighborhood offers authentic Serbian suburban life with local markets and affordable living. Perfect for longer stays wanting everyday immersion.","vibe":"Residential & Local","bestFor":"Long-term visitors, local experience seekers, and budget-conscious travelers","pros":["Authentic life","Local markets","Affordable","Residential calm"],"cons":["Far from center","Less scenic","Limited entertainment"],"lat":45.2634,"lng":19.8278,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

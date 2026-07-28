@@ -1434,6 +1434,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Piața Unirii","tagline":"Baroque beauty and revolution history","description":"The stunning baroque square features the Catholic and Orthodox cathedrals facing each other with pastel Habsburg buildings surrounding. Revolution memorials honor 1989's starting point.","vibe":"Historic monumental","bestFor":"History buffs and architecture lovers","pros":["Stunning architecture","Revolution history","Central location","Great cafes"],"cons":["Tourist prices","Can be quiet","Limited nightlife"],"lat":45.7578,"lng":21.2289,"priceLevel":"$$"},{"name":"Piața Victoriei","tagline":"Opera house elegance and city promenade","description":"The elegant square features the Opera House, Orthodox Cathedral, and tree-lined pedestrian promenade. Evening strolls and cafe culture define Timișoara's social center.","vibe":"Elegant cultural","bestFor":"Culture lovers and people watchers","pros":["Beautiful opera","Evening promenade","Great dining","Cultural events"],"cons":["Expensive dining","Crowded evenings","Tourist-oriented"],"lat":45.7534,"lng":21.2256,"priceLevel":"$$"},{"name":"Fabric","tagline":"Industrial heritage and emerging arts","description":"The former industrial quarter is transforming with artists, creative businesses, and cultural initiatives. Galleries, studios, and hip cafes fill converted factories.","vibe":"Creative industrial","bestFor":"Artists and alternative seekers","pros":["Art scene","Affordable spaces","Creative energy","Emerging neighborhood"],"cons":["Still rough edges","Scattered locations","Limited services"],"lat":45.7489,"lng":21.2412,"priceLevel":"$"},{"name":"Iosefin","tagline":"Multicultural heritage and local life","description":"This historic neighborhood showcases Timișoara's multicultural heritage with Serbian, German, and Hungarian influences. Local markets and neighborhood restaurants serve diverse traditions.","vibe":"Multicultural local","bestFor":"Culture seekers and foodies","pros":["Cultural diversity","Local markets","Authentic restaurants","Historic feel"],"cons":["Less tourist-friendly","Aging buildings","Basic services"],"lat":45.7612,"lng":21.2134,"priceLevel":"$"},{"name":"Complex Studențesc","tagline":"University campus and student energy","description":"The student quarter around the universities offers affordable dining, young energy, and accessible nightlife. International students and budget travelers find community here.","vibe":"Student lively","bestFor":"Students and budget travelers","pros":["Affordable","Student nightlife","Young energy","Good transport"],"cons":["Concrete heavy","Student chaos","Limited culture"],"lat":45.7456,"lng":21.2023,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1485,6 +1486,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kreis 4 (Aussersihl)","tagline":"Zurich's multicultural nightlife district","description":"Kreis 4 is Zurich's most diverse neighborhood - Langstrasse nightlife, multicultural restaurants, and edgy character. It's Zurich's least Swiss feeling area, which for many is exactly the appeal.","vibe":"Multicultural & Nightlife","bestFor":"Nightlife lovers, diversity seekers, and nomads wanting less sterile Zurich","pros":["Best nightlife","Multicultural food","More affordable","Character"],"cons":["Red-light heritage","Noisy","Some rough areas"],"lat":47.376,"lng":8.525,"priceLevel":"$$"},{"name":"Kreis 5 (Industriequartier)","tagline":"Zurich's creative hub in former factories","description":"Kreis 5 is Zurich's creative transformation - industrial spaces turned galleries, restaurants, and tech hubs. It's where Zurich's innovation happens, with growing nomad and startup scene.","vibe":"Creative & Industrial","bestFor":"Creatives, tech workers, and nomads seeking innovative Zurich","pros":["Creative scene","Industrial cool","Good restaurants","Growing tech hub"],"cons":["Expensive","Industrial aesthetic","Developing area"],"lat":47.389,"lng":8.518,"priceLevel":"$$$"},{"name":"Niederdorf (Altstadt)","tagline":"Zurich's medieval old town with character","description":"Niederdorf is Zurich's old town east of the Limmat - medieval streets, traditional restaurants, and historic atmosphere. It's touristy but characterful, with Zurich's most distinctive setting.","vibe":"Historic & Tourist","bestFor":"History lovers, tourists, and nomads wanting old Zurich charm","pros":["Historic streets","Central location","Good restaurants","Character"],"cons":["Touristy","Expensive","Limited modern amenities"],"lat":47.373,"lng":8.544,"priceLevel":"$$$"},{"name":"Seefeld","tagline":"Zurich's lakeside elegance","description":"Seefeld is Zurich's elegant lakeside neighborhood - lake access, upscale dining, and refined atmosphere. It's where wealthy Zurichers live, with opera house and beautiful promenades.","vibe":"Elegant & Lakeside","bestFor":"Lake lovers, the affluent, and nomads seeking refined Zurich living","pros":["Lake access","Elegant dining","Beautiful promenades","Opera house"],"cons":["Very expensive","Quiet evenings","Exclusive feel"],"lat":47.362,"lng":8.552,"priceLevel":"$$$"},{"name":"Wiedikon","tagline":"Zurich's residential value neighborhood","description":"Wiedikon offers Zurich's best residential value - good infrastructure, local character, and proximity to center without premium prices. It's where practical Zurichers live.","vibe":"Residential & Practical","bestFor":"Budget nomads, long-term stayers, and those seeking practical Zurich living","pros":["Better value","Good infrastructure","Local feel","Near center"],"cons":["Less exciting","Residential","Basic character"],"lat":47.366,"lng":8.515,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

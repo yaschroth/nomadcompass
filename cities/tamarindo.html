@@ -1452,6 +1452,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Town Center","tagline":"Surf town hub of Guanacaste","description":"The main strip features surf shops, restaurants, and the lively nightlife that defines Tamarindo. International visitors and local Ticos mix in beach bars while surf culture permeates everything.","vibe":"Surf lively","bestFor":"Social travelers and nightlife seekers","pros":["Central location","Active nightlife","Surf culture","Restaurant variety"],"cons":["Can be loud","Tourist prices","Crowded beach"],"lat":10.2995,"lng":-85.8378,"priceLevel":"$$"},{"name":"Langosta","tagline":"Upscale residential with surfer soul","description":"South of town, this quieter area offers luxury homes, a more mellow beach, and upscale dining. Professional surfers and well-heeled visitors enjoy the calmer atmosphere.","vibe":"Upscale mellow","bestFor":"Families and comfort seekers","pros":["Quieter beach","Upscale dining","Beautiful sunsets","Turtle nesting"],"cons":["Expensive","Far from nightlife","Needs vehicle"],"lat":10.2834,"lng":-85.8456,"priceLevel":"$$$"},{"name":"Diria Area","tagline":"Hotel zone convenience","description":"The area around the major hotels offers resort amenities, tour desks, and organized activities. Families and first-time visitors find comfortable introductions to Costa Rican beach life.","vibe":"Resort convenient","bestFor":"First-time visitors and families","pros":["Resort amenities","Tour access","Beach proximity","Family facilities"],"cons":["Generic feel","Tourist bubble","Higher prices"],"lat":10.3012,"lng":-85.8345,"priceLevel":"$$"},{"name":"Back Roads","tagline":"Local life and budget living","description":"The dirt roads behind the main strip offer affordable accommodations, local sodas, and genuine Costa Rican neighborhood life. Long-term visitors and budget travelers find community here.","vibe":"Local authentic","bestFor":"Budget travelers and long-term stays","pros":["Affordable options","Local restaurants","Community feel","Quieter nights"],"cons":["Dusty roads","Basic amenities","Walk to beach"],"lat":10.2967,"lng":-85.8312,"priceLevel":"$"},{"name":"Playa Grande","tagline":"Pristine beach across the estuary","description":"Accessible by boat, this protected beach offers world-class surf and leatherback turtle nesting. Limited development preserves wild beauty while surf camps serve dedicated wave riders.","vibe":"Wild natural","bestFor":"Serious surfers and nature lovers","pros":["World-class surf","Protected beach","Turtle nesting","Pristine nature"],"cons":["Boat access only","Limited services","No nightlife"],"lat":10.3189,"lng":-85.8523,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1503,6 +1504,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

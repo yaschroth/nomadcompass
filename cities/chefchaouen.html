@@ -1460,6 +1460,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Medina (Blue City)","tagline":"Blue-washed walls and endless photos","description":"Chefchaouen's medina is Morocco's most photogenic - blue-washed buildings, narrow lanes, craft shops. Where every corner reveals another perfect Instagram moment.","vibe":"Photogenic & Traditional","bestFor":"Photographers, Instagram lovers, and visual travelers","pros":["Incredibly photogenic","Walkable","Safe medina","Craft shopping"],"cons":["Very touristy","Photo crowds","Limited dining variety"],"lat":35.1715,"lng":-5.2636,"priceLevel":"$$"},{"name":"Plaza Uta el-Hammam","tagline":"Main square with kasbah views","description":"The main plaza is Chefchaouen's social heart - cafés, restaurants, kasbah backdrop. Where travelers rest and locals gather under the mountain.","vibe":"Social & Central","bestFor":"Café lovers, people watchers, and social travelers","pros":["Central gathering point","Good cafés","Kasbah access","Evening atmosphere"],"cons":["Tourist prices","Persistent sellers","Crowded"],"lat":35.1689,"lng":-5.2634,"priceLevel":"$$"},{"name":"Ras el-Maa","tagline":"River source with local laundry","description":"Ras el-Maa marks the river's source - where local women wash laundry, waterfall pools attract swimmers, and trails lead into the Rif mountains.","vibe":"Natural & Local","bestFor":"Hikers, swimmers, and authentic seekers","pros":["Natural setting","Local life","Hiking access","Swimming pools"],"cons":["Steep walk","Basic facilities","Crowded in summer"],"lat":35.1756,"lng":-5.2589,"priceLevel":"$"},{"name":"Hotel District (Upper Medina)","tagline":"Riads and rooftop views","description":"The upper medina hosts many riads - traditional houses converted to guesthouses with rooftop terraces. Where stunning mountain views accompany morning coffee.","vibe":"Accommodation & Views","bestFor":"View seekers, riad lovers, and peaceful visitors","pros":["Rooftop views","Peaceful mornings","Traditional stays","Mountain backdrop"],"cons":["Steep climbs","Limited restaurants","Distant from plaza"],"lat":35.1734,"lng":-5.2678,"priceLevel":"$$"},{"name":"Spanish Mosque Viewpoint","tagline":"Hilltop panoramas over the blue city","description":"The abandoned Spanish mosque offers Chefchaouen's best views - sunrise and sunset viewpoint above the blue medina. Essential pilgrimage for photographers.","vibe":"Viewpoint & Pilgrimage","bestFor":"Photographers, sunrise seekers, and hikers","pros":["Best views","Sunrise/sunset","Peaceful","Hiking access"],"cons":["30-minute hike","No facilities","Can be crowded at sunset"],"lat":35.1778,"lng":-5.2712,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1511,6 +1512,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

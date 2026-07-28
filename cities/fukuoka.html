@@ -1437,6 +1437,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Tenjin","tagline":"Fukuoka's stylish shopping center","description":"Tenjin is Fukuoka's commercial heart - department stores, underground shopping, and fashionable streets. It's the city's most polished and convenient district.","vibe":"Shopping & Urban","bestFor":"Shoppers, urban explorers, and those seeking central convenience","pros":["Best shopping","Underground city","Central","Good food"],"cons":["Commercial feel","Crowded","Expensive"],"lat":33.5902,"lng":130.3987,"priceLevel":"$$$"},{"name":"Nakasu","tagline":"Fukuoka's neon-lit entertainment island","description":"Nakasu is Fukuoka's entertainment district - an island of neon lights, yatai food stalls, and nightlife. The riverside yatai are iconic Fukuoka experiences.","vibe":"Nightlife & Entertainment","bestFor":"Night owls, food lovers, and those seeking Fukuoka's famous yatai","pros":["Famous yatai","Nightlife","Riverside atmosphere","Unique experience"],"cons":["Red light areas","Can be seedy","Expensive drinks"],"lat":33.593,"lng":130.405,"priceLevel":"$$"},{"name":"Hakata","tagline":"Fukuoka's historic station district","description":"Hakata is Fukuoka's traditional side - the main station, historic temples, and the city's famous ramen. It's where old Fukuoka meets modern transport hub.","vibe":"Historic & Transport","bestFor":"Ramen lovers, temple visitors, and those using JR trains","pros":["JR station","Historic temples","Famous ramen","Good shopping"],"cons":["Business district feel","Crowded station","Less charm"],"lat":33.5897,"lng":130.4207,"priceLevel":"$$"},{"name":"Ohori Park Area","tagline":"Fukuoka's peaceful green escape","description":"Ohori Park surrounds a beautiful lake - jogging paths, art museum, and peaceful atmosphere. It's Fukuoka's most livable area with excellent quality of life.","vibe":"Green & Residential","bestFor":"Long-term stayers, joggers, and those seeking peaceful Fukuoka","pros":["Beautiful park","Art museum","Peaceful","Good cafes"],"cons":["Quiet evenings","Far from nightlife","Limited restaurants"],"lat":33.585,"lng":130.378,"priceLevel":"$$"},{"name":"Daimyo","tagline":"Fukuoka's trendy boutique quarter","description":"Daimyo is Fukuoka's hipster heart - indie boutiques, trendy cafes, and creative energy. It's where Fukuoka's fashion-forward youth congregate.","vibe":"Trendy & Boutique","bestFor":"Fashionistas, cafe hoppers, and those seeking trendy Fukuoka","pros":["Trendy boutiques","Great cafes","Young energy","Walkable"],"cons":["Small area","Crowded weekends","Expensive boutiques"],"lat":33.588,"lng":130.392,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1488,6 +1489,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

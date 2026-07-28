@@ -1444,6 +1444,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vera / Vake","tagline":"Tbilisi's upscale greenery with diplomatic charm","description":"Vera and Vake are Tbilisi's most prestigious neighborhoods, filled with embassies, parks, and elegant Soviet-era architecture. Vake Park offers green escape, while the streets are lined with cafes and restaurants. Popular with professionals and families seeking quality.","vibe":"Upscale & Green","bestFor":"Professionals, families, and nomads seeking Tbilisi's best quality of life","pros":["Beautiful parks","Safe and clean","Quality restaurants","Elegant architecture"],"cons":["Most expensive","Less historic charm","Further from Old Town"],"lat":41.707,"lng":44.765,"priceLevel":"$$$"},{"name":"Old Tbilisi (Kala)","tagline":"Sulfur baths and ancient streets in the historic heart","description":"Old Tbilisi is where centuries of history come alive. Narrow cobblestone streets, traditional balconies, sulfur baths, and ancient churches create magical atmosphere. It's touristy but authentic, perfect for those who prioritize character over modern convenience.","vibe":"Historic & Atmospheric","bestFor":"History lovers, photographers, and nomads seeking atmospheric living","pros":["Incredible character","Historic sites","Sulfur baths","Walkable"],"cons":["Touristy","Old buildings","Limited modern amenities"],"lat":41.69,"lng":44.807,"priceLevel":"$$"},{"name":"Saburtalo","tagline":"Tbilisi's most livable local neighborhood","description":"Saburtalo is where most Tbilisi locals actually live. This Soviet-era residential area offers excellent value, local markets, and a genuine Georgian experience. The Delisi area has good cafes and coworking, with easy metro access to the center.","vibe":"Residential & Local","bestFor":"Long-term nomads, budget-conscious travelers, and those seeking local life","pros":["Great value","Local markets","Metro access","Authentic life"],"cons":["Less charming","Soviet architecture","Limited English"],"lat":41.727,"lng":44.745,"priceLevel":"$"},{"name":"Marjanishvili / Chugureti","tagline":"Bohemian vibes in Tbilisi's emerging creative hub","description":"Marjanishvili and Chugureti are Tbilisi's emerging creative districts. Art galleries, hip cafes, and startup spaces are opening in formerly quiet neighborhoods. It's where young Georgians and creative nomads are discovering excellent value with character.","vibe":"Creative & Emerging","bestFor":"Creatives, artists, and nomads seeking Tbilisi's next trending neighborhood","pros":["Creative energy","Good value","Growing scene","Near center"],"cons":["Still developing","Mixed infrastructure","Fewer established cafes"],"lat":41.71,"lng":44.792,"priceLevel":"$"},{"name":"Mtatsminda","tagline":"Hillside charm with panoramic city views","description":"Mtatsminda rises above Tbilisi, offering stunning views and peaceful streets. This hillside neighborhood includes Rustaveli Avenue's theaters and cafes below, with quiet residential streets climbing up toward the famous funicular. Romantic and atmospheric.","vibe":"Scenic & Cultural","bestFor":"Culture lovers, romantics, and nomads who appreciate dramatic city views","pros":["Stunning views","Cultural venues","Peaceful streets","Historic charm"],"cons":["Steep hills","Limited transport","Fewer amenities"],"lat":41.695,"lng":44.788,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1495,6 +1496,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

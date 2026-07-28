@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Medieval Edinburgh along the Royal Mile","description":"Old Town is Edinburgh's medieval heart - the Royal Mile, Edinburgh Castle, and atmospheric closes. It's dramatic, historic, and quintessentially Edinburgh with stunning architecture.","vibe":"Historic & Dramatic","bestFor":"History lovers, photographers, and those seeking iconic Edinburgh","pros":["Iconic sights","Historic atmosphere","Central location","Cultural venues"],"cons":["Very touristy","Expensive","Crowded festivals"],"lat":55.95,"lng":-3.19,"priceLevel":"$$$"},{"name":"New Town","tagline":"Georgian elegance and upscale shopping","description":"New Town is Edinburgh's Georgian masterpiece - elegant crescents, upscale shops on Princes Street, and refined atmosphere. It's UNESCO-listed and beautiful but formal.","vibe":"Elegant & Georgian","bestFor":"Architecture lovers, shoppers, and those seeking refined Edinburgh","pros":["Beautiful architecture","Good shopping","Central location","Quality dining"],"cons":["Expensive","Formal atmosphere","Less local feel"],"lat":55.956,"lng":-3.195,"priceLevel":"$$$"},{"name":"Leith","tagline":"Edinburgh's creative waterfront","description":"Leith is Edinburgh's regenerated port - hip restaurants, creative businesses, and waterfront living. It's where locals go for serious dining and emerging culture away from tourist crowds.","vibe":"Creative & Waterfront","bestFor":"Foodies, creatives, and digital nomads seeking local Edinburgh","pros":["Best restaurants","Local atmosphere","Creative scene","More affordable"],"cons":["Far from center","Industrial areas","Less picturesque"],"lat":55.976,"lng":-3.168,"priceLevel":"$$"},{"name":"Stockbridge","tagline":"Village vibes in the city","description":"Stockbridge feels like a village within Edinburgh - independent shops, Sunday market, and leafy residential streets. It's charming, community-focused, and beloved by locals.","vibe":"Village & Charming","bestFor":"Families, long-term stayers, and those seeking community feel","pros":["Village atmosphere","Sunday market","Independent shops","Residential peace"],"cons":["Limited nightlife","Far from sights","Expensive"],"lat":55.958,"lng":-3.21,"priceLevel":"$$$"},{"name":"Bruntsfield/Morningside","tagline":"Edinburgh's leafy southern suburbs","description":"Bruntsfield and Morningside are Edinburgh's desirable south - independent cafes, leafy links, and Victorian architecture. Popular with families and professionals seeking quality residential life.","vibe":"Residential & Leafy","bestFor":"Families, professionals, and those seeking quiet quality living","pros":["Beautiful parks","Good cafes","Safe residential","Quality schools"],"cons":["Far from center","Limited nightlife","Expensive"],"lat":55.938,"lng":-3.205,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

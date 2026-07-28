@@ -1457,6 +1457,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Casco Viejo","tagline":"Bilbao's seven-street medieval heart","description":"Casco Viejo is Bilbao's historic core - the original seven streets, pintxos bars, and local atmosphere. It's traditional Bilbao before the Guggenheim.","vibe":"Historic & Local","bestFor":"History lovers, pintxos seekers, and those seeking traditional Bilbao","pros":["Great pintxos","Historic character","Local atmosphere","Shopping"],"cons":["Crowded weekends","Narrow streets","Limited parking"],"lat":43.258,"lng":-2.923,"priceLevel":"$$"},{"name":"Abando/Guggenheim Area","tagline":"Bilbao's transformed cultural corridor","description":"Abando surrounds the Guggenheim - Bilbao's dramatic transformation from industrial to cultural powerhouse. Modern architecture and museum culture.","vibe":"Cultural & Modern","bestFor":"Art lovers, architecture fans, and those seeking modern Bilbao","pros":["Guggenheim","Modern architecture","River walks","Cultural venues"],"cons":["Touristy","Expensive dining","Less authentic"],"lat":43.268,"lng":-2.934,"priceLevel":"$$$"},{"name":"Indautxu","tagline":"Bilbao's upscale residential zone","description":"Indautxu is Bilbao's affluent area - elegant apartments, good restaurants, and quality of life. It's where well-off Bilbaínos live.","vibe":"Upscale & Residential","bestFor":"Long-term stayers, professionals, and those seeking quality living","pros":["Quality restaurants","Safe streets","Good amenities","Parks"],"cons":["Expensive","Less character","Quiet evenings"],"lat":43.262,"lng":-2.942,"priceLevel":"$$$"},{"name":"Deusto","tagline":"Bilbao's university riverside quarter","description":"Deusto surrounds Bilbao's university - student energy, riverfront walks, and emerging creative spaces. Young and dynamic.","vibe":"Student & Riverside","bestFor":"Students, young travelers, and those seeking riverside Bilbao","pros":["Student atmosphere","River views","Affordable","Creative spaces"],"cons":["Far from center","Less historic","Limited tourism"],"lat":43.273,"lng":-2.946,"priceLevel":"$"},{"name":"Zorrozaurre","tagline":"Bilbao's emerging creative island","description":"Zorrozaurre is Bilbao's next transformation - former industrial peninsula becoming creative hub. Early-stage but exciting potential.","vibe":"Emerging & Creative","bestFor":"Urban explorers, creatives, and those seeking emerging Bilbao","pros":["Industrial character","Creative potential","Unique spaces","River views"],"cons":["Still developing","Limited amenities","Far from center"],"lat":43.275,"lng":-2.928,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1508,6 +1509,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

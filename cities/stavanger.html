@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Gamle Stavanger","tagline":"White wooden houses by the harbor","description":"Europe's largest collection of wooden houses creates a picture-perfect neighborhood of white-painted 18th-century homes. Cobblestone streets, flower boxes, and preserved maritime heritage charm all visitors.","vibe":"Historic picturesque","bestFor":"Photographers and history lovers","pros":["Stunning beauty","Well-preserved","Walkable charm","Historic atmosphere"],"cons":["Can feel like museum","Tourist crowds","Expensive area"],"lat":58.9723,"lng":5.7278,"priceLevel":"$$"},{"name":"City Center","tagline":"Modern Norway meets oil wealth","description":"Stavanger's commercial center showcases Norway's oil prosperity with modern architecture, international restaurants, and shopping. The pedestrian zone and harbor front create a vibrant urban atmosphere.","vibe":"Modern prosperous","bestFor":"Shoppers and urban explorers","pros":["Good shopping","Restaurant variety","Harbor access","Modern amenities"],"cons":["Very expensive","Generic development","Tourist shops"],"lat":58.9689,"lng":5.7312,"priceLevel":"$$$"},{"name":"Øvre Holmegate","tagline":"Rainbow street of color","description":"This colorful street features buildings painted in vibrant hues, creating Stavanger's most Instagram-worthy location. Cafes, bars, and creative shops add life to the artistic corridor.","vibe":"Colorful artsy","bestFor":"Art lovers and photographers","pros":["Unique aesthetics","Good cafes","Creative shops","Photo opportunities"],"cons":["Small area","Very tourist-oriented","Can be quiet"],"lat":58.9712,"lng":5.7289,"priceLevel":"$$"},{"name":"Storhaug","tagline":"Student energy and alternative vibes","description":"East of the center, this diverse neighborhood attracts students, immigrants, and creative types. More affordable than central areas with neighborhood restaurants and local character.","vibe":"Diverse emerging","bestFor":"Budget-conscious visitors and locals","pros":["More affordable","Local character","Diverse dining","Alternative scene"],"cons":["Less polished","Far from attractions","Some rough edges"],"lat":58.9756,"lng":5.7423,"priceLevel":"$"},{"name":"Preikestolen Base","tagline":"Gateway to Pulpit Rock","description":"The areas around the Preikestolen trailhead offer accommodation and services for Norway's most famous hike. Those tackling the cliff take base here for early morning starts.","vibe":"Adventure gateway","bestFor":"Hikers and adventure seekers","pros":["Pulpit Rock access","Nature setting","Dramatic scenery","Hiking community"],"cons":["Far from city","Seasonal appeal","Limited services"],"lat":58.9867,"lng":6.1489,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

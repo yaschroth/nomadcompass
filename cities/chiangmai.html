@@ -1457,6 +1457,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Nimman","tagline":"Chiang Mai's trendy heart where nomads gather","description":"Nimman (Nimmanhaemin) is Chiang Mai's most modern and trendy area. Cafes, coworking spaces, boutiques, and restaurants line its sois. It's the default choice for digital nomads - everything you need is within walking distance, and the community is established.","vibe":"Trendy & Convenient","bestFor":"Digital nomads, foodies, and anyone wanting maximum convenience","pros":["Best coworking","Endless cafes","Walking distance to all","Strong community"],"cons":["Getting expensive","Tourist-focused","Less authentic"],"lat":18.7965,"lng":98.9668,"priceLevel":"$$"},{"name":"Old City","tagline":"Ancient temples within historic walls","description":"The Old City is Chiang Mai's historic heart, surrounded by ancient walls and moats. Temples, guesthouses, and local restaurants fill the squares. It's more backpacker than nomad, but the atmosphere is unbeatable for those seeking traditional Thai culture.","vibe":"Historic & Cultural","bestFor":"Culture lovers, photographers, and nomads seeking authentic Lanna atmosphere","pros":["Temple access","Historic charm","Affordable","Walking-friendly"],"cons":["Noisy traffic","Fewer coworking","Basic accommodation"],"lat":18.7883,"lng":98.9853,"priceLevel":"$"},{"name":"Santitham","tagline":"Nimman's quieter neighbor with local soul","description":"Santitham offers the best of both worlds - Nimman's convenience without the crowds. This residential area has great local restaurants, affordable apartments, and is just a short walk to Nimman's amenities. Popular with long-term expats who've discovered the value.","vibe":"Local & Residential","bestFor":"Long-term nomads seeking Nimman proximity at better prices","pros":["Great value","Local restaurants","Near Nimman","Quieter streets"],"cons":["Less trendy","Fewer cafes","More local (less English)"],"lat":18.8021,"lng":98.9726,"priceLevel":"$"},{"name":"Chang Phueak","tagline":"North gate food and emerging nomad scene","description":"Chang Phueak is the area north of the Old City, famous for its night food markets and local eateries. It's emerging as an alternative base with lower rents and a more authentic feel. The nearby Maya mall provides modern amenities when needed.","vibe":"Foodie & Emerging","bestFor":"Food lovers, budget nomads, and those exploring beyond Nimman","pros":["Best night markets","Affordable","Local food scene","Near Maya mall"],"cons":["Less developed","Fewer western options","Traffic"],"lat":18.8032,"lng":98.9888,"priceLevel":"$"},{"name":"Hang Dong / Saraphi","tagline":"Countryside calm with mountain views","description":"Hang Dong and Saraphi are southern suburbs offering space, nature, and genuine Thai life. Popular with long-term expats and families, these areas require a vehicle but reward with affordable villas, greenery, and escape from city chaos.","vibe":"Suburban & Peaceful","bestFor":"Families, nature lovers, and nomads seeking quiet with space","pros":["Affordable housing","Nature access","Peaceful","Thai neighborhood life"],"cons":["Need transport","Limited nightlife","Far from nomad hubs"],"lat":18.7203,"lng":98.9416,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1508,6 +1509,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

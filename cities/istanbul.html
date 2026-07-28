@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Sultanahmet","tagline":"Istanbul's ancient Byzantine heart","description":"Sultanahmet is where empires meet - Hagia Sophia, Blue Mosque, and Topkapi Palace. It's tourist central but absolutely essential for understanding Istanbul's 2000+ year history.","vibe":"Historic & Tourist","bestFor":"History lovers, first-time visitors, and culture seekers","pros":["Major monuments","Historic atmosphere","Central location","Museums"],"cons":["Very touristy","Carpet sellers","Expensive restaurants"],"lat":41.0055,"lng":28.9769,"priceLevel":"$$$"},{"name":"Beyoğlu/Taksim","tagline":"Istanbul's modern European pulse","description":"Beyoğlu is Istanbul's European heart - İstiklal Avenue, rooftop bars, and cultural venues. It's the city's most dynamic district with endless entertainment options.","vibe":"Modern & Entertainment","bestFor":"Nightlife seekers, shoppers, and those seeking modern Istanbul","pros":["Best nightlife","Shopping","Cultural venues","Restaurants"],"cons":["Very crowded","Touristy","Can feel overwhelming"],"lat":41.037,"lng":28.985,"priceLevel":"$$"},{"name":"Karaköy/Galata","tagline":"Istanbul's hip waterfront revival","description":"Karaköy is Istanbul's coolest neighborhood - transformed from gritty port to trendy cafes, galleries, and design shops. The Galata Tower anchors this creative renaissance.","vibe":"Hip & Creative","bestFor":"Creatives, coffee lovers, and those seeking trendy Istanbul","pros":["Best cafes","Galata Tower","Art galleries","Waterfront views"],"cons":["Gentrifying fast","Crowded","Expensive coffee"],"lat":41.025,"lng":28.974,"priceLevel":"$$"},{"name":"Kadıköy","tagline":"Istanbul's Asian local favorite","description":"Kadıköy is where Istanbulites actually live - great food market, bars, and authentic atmosphere. The ferry ride over is part of the experience of this beloved Asian side district.","vibe":"Local & Authentic","bestFor":"Foodies, long-term stayers, and those seeking real Istanbul","pros":["Amazing food market","Local atmosphere","Affordable","Less touristy"],"cons":["Far from sights","Ferry dependent","Less English"],"lat":40.99,"lng":29.024,"priceLevel":"$$"},{"name":"Beşiktaş","tagline":"Istanbul's passionate local hub","description":"Beşiktaş is Istanbul's local soul - passionate football fans, fish market, and university energy. It's authentic, vibrant, and beloved by young Istanbulites.","vibe":"Local & Vibrant","bestFor":"Young travelers, football fans, and those seeking local energy","pros":["Local atmosphere","Fish market","University scene","Football passion"],"cons":["Crowded","Match day chaos","Limited tourist sights"],"lat":41.043,"lng":29.007,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

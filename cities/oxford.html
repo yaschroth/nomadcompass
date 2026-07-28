@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre","tagline":"Dreaming spires and academic grandeur","description":"The historic heart features the famous colleges, Bodleian Library, and centuries of academic heritage. The concentration of stunning architecture and scholarly atmosphere defines one of the world's most beautiful city centers.","vibe":"Academic & Historic","bestFor":"History lovers, academics, and architecture enthusiasts","pros":["Stunning colleges","Historic libraries","Great museums","Walkable center"],"cons":["Very touristy","Expensive","Crowded"],"lat":51.752,"lng":-1.2577,"priceLevel":"$$$"},{"name":"Jericho","tagline":"Bohemian quarter with bookish charm","description":"The charming neighborhood north of the center offers independent bookshops, cafes, and a more bohemian atmosphere. The mix of students, academics, and creative types creates Oxford's most livable quarter.","vibe":"Bohemian & Literary","bestFor":"Bookworms, creatives, and those seeking neighborhood charm","pros":["Great bookshops","Independent cafes","Bohemian vibe","Less touristy"],"cons":["Expensive housing","Limited parking","Quiet nightlife"],"lat":51.7589,"lng":-1.2678,"priceLevel":"$$$"},{"name":"Cowley Road","tagline":"Multicultural hub with student energy","description":"The diverse neighborhood east of center offers international restaurants, independent shops, and student-focused bars. The multicultural energy and affordable options attract younger residents.","vibe":"Multicultural & Student","bestFor":"Students, budget travelers, and diverse food lovers","pros":["International food","Student bars","More affordable","Diverse culture"],"cons":["Further from colleges","Can feel gritty","Busy traffic"],"lat":51.7489,"lng":-1.2312,"priceLevel":"$$"},{"name":"Summertown","tagline":"Leafy suburb with village shopping","description":"The affluent northern suburb offers village-style shopping, good schools, and family-friendly atmosphere. The quieter residential feel attracts families and those seeking escape from tourist crowds.","vibe":"Suburban & Family","bestFor":"Families, long-term residents, and quiet seekers","pros":["Village shopping","Good schools","Quiet streets","Family friendly"],"cons":["Far from center","Expensive","Limited nightlife"],"lat":51.7756,"lng":-1.2634,"priceLevel":"$$$"},{"name":"Port Meadow Area","tagline":"Ancient meadow with wild ponies","description":"The area near the historic common offers walking, wild horses, and connection to nature within the city. The riverside paths and open spaces provide escape from academic intensity.","vibe":"Natural & Peaceful","bestFor":"Nature lovers, walkers, and peace seekers","pros":["Ancient meadow","Wild ponies","River walks","Natural escape"],"cons":["Can flood","Far from amenities","Limited dining"],"lat":51.7678,"lng":-1.2812,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1459,6 +1459,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Hua Hin Town Center","tagline":"Royal resort heritage meets beach town charm","description":"The historic center features the iconic railway station, night market, and main beach. The area around Naresdamri Road offers the best balance of Thai authenticity and tourist convenience.","vibe":"Traditional & Convenient","bestFor":"First-time visitors, those wanting walkability and authentic Thai experience","pros":["Walking distance to beach and market","Historic charm","Best food variety","Royal heritage sites"],"cons":["More touristy","Traffic congestion","Beach can be crowded"],"lat":12.5674,"lng":99.9576,"priceLevel":"$$"},{"name":"Khao Takiab","tagline":"Buddha-topped mountain and prawn BBQs","description":"The southern end of Hua Hin features the Chopstick Mountain temple, less crowded beaches, and famous seafood restaurants. More residential and Thai-focused than the center.","vibe":"Local & Beachy","bestFor":"Seafood lovers, those wanting local atmosphere, and temple enthusiasts","pros":["Less crowded beaches","Amazing seafood","Temple on the hill","More local feel"],"cons":["Further from main attractions","Need transport","Less nightlife"],"lat":12.5278,"lng":99.9567,"priceLevel":"$$"},{"name":"Hua Hin Soi 80-112","tagline":"Expat comfort zone with condo towers","description":"The southern stretch of condominiums caters to long-stay expats with modern buildings, fitness centers, and international restaurants. Many buildings offer monthly rentals with sea views.","vibe":"Expat & Modern","bestFor":"Long-term digital nomads, retirees, and those wanting modern comforts","pros":["Modern condos available","Sea view options","Fitness facilities","International restaurants"],"cons":["Less Thai character","Need transport for everything","Can feel isolated"],"lat":12.5412,"lng":99.9623,"priceLevel":"$$"},{"name":"Cicada Market Area","tagline":"Artsy weekend vibes and boutique living","description":"The area around the famous Cicada night market has developed into a creative hub with boutique hotels, art galleries, and hip cafes. Weekend nights come alive with artisan vendors.","vibe":"Artsy & Boutique","bestFor":"Creatives, art lovers, and those seeking boutique atmosphere","pros":["Amazing weekend market","Art galleries and studios","Boutique accommodation","Creative community"],"cons":["Only lively on weekends","Higher end prices","Limited during weekdays"],"lat":12.5534,"lng":99.9678,"priceLevel":"$$$"},{"name":"Pranburi","tagline":"Quiet beach escape just south of town","description":"This laid-back beach area south of Hua Hin offers kitesurfing, boutique resorts, and a quieter atmosphere. Perfect for those wanting beach life without the bustle.","vibe":"Quiet & Beachy","bestFor":"Kitesurfers, peace seekers, and couples wanting quiet beaches","pros":["Uncrowded beaches","Kitesurfing conditions","Boutique resorts","Peaceful atmosphere"],"cons":["Far from main town","Limited dining options","Need own transport"],"lat":12.4089,"lng":99.9789,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1510,6 +1511,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

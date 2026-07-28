@@ -1418,6 +1418,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Dorćol","tagline":"Belgrade's oldest quarter with Danube views","description":"Dorćol is Belgrade's most charming neighborhood - cobblestone streets, historic buildings, and proximity to the Danube riverfront. Cafes, galleries, and the famous Strahinjića Bana street attract creatives and professionals.","vibe":"Historic & Creative","bestFor":"Creatives, history lovers, and nomads seeking Belgrade's most atmospheric neighborhood","pros":["Historic charm","River nearby","Great cafes","Walkable"],"cons":["Getting expensive","Limited parking","Tourist spillover"],"lat":44.823,"lng":20.462,"priceLevel":"$$"},{"name":"Vračar","tagline":"Belgrade's most livable neighborhood","description":"Vračar is where Belgrade's young professionals live - tree-lined streets, good restaurants, and the iconic St. Sava Temple. It's central, safe, and offers excellent quality of life. Belgrade's most desirable residential area.","vibe":"Residential & Quality","bestFor":"Young professionals, families, and nomads seeking Belgrade's best quality of life","pros":["Best restaurants","Safe and clean","Central location","St. Sava Temple"],"cons":["More expensive","Less nightlife","Competitive housing"],"lat":44.798,"lng":20.47,"priceLevel":"$$"},{"name":"Stari Grad (Old Town)","tagline":"Pedestrian streets and nightlife central","description":"Stari Grad is Belgrade's historic center - Knez Mihailova pedestrian street, Kalemegdan Fortress, and the city's best nightlife. It's tourist-central but undeniably convenient, with everything walkable.","vibe":"Central & Nightlife","bestFor":"Nightlife lovers, tourists, and nomads wanting maximum convenience","pros":["Best nightlife","Walking street","Fortress views","Central"],"cons":["Touristy","Expensive","Noisy weekends"],"lat":44.8176,"lng":20.4569,"priceLevel":"$$$"},{"name":"Novi Beograd","tagline":"Modern high-rises across the Sava River","description":"Novi Beograd is Belgrade's modern face - socialist-era blocks now house shopping malls, modern offices, and affordable apartments. It lacks charm but offers value, space, and easy transport to the center.","vibe":"Modern & Practical","bestFor":"Budget nomads, business travelers, and those preferring modern apartments","pros":["Affordable","Modern malls","Spacious apartments","Good transport"],"cons":["No character","Socialist blocks","Far from Old Town"],"lat":44.815,"lng":20.41,"priceLevel":"$"},{"name":"Savamala","tagline":"Belgrade's creative revival district","description":"Savamala is Belgrade's cultural revival story - waterfront warehouses turned clubs, galleries, and creative spaces. The famous floating river clubs (splavovi) line the Sava. It's gritty but exciting, attracting artists and night owls.","vibe":"Creative & Nightlife","bestFor":"Creatives, party people, and nomads seeking Belgrade's edgiest neighborhood","pros":["River clubs","Creative scene","Galleries","Unique atmosphere"],"cons":["Gritty area","Noisy nights","Development chaos"],"lat":44.81,"lng":20.45,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1469,6 +1470,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1473,6 +1473,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Silom / Sathorn","tagline":"Bangkok's business district with rooftop views","description":"Silom and Sathorn form Bangkok's financial heart. Gleaming towers, upscale malls, and some of the city's best rooftop bars define this area. It's where corporate expats and serious professionals base themselves, with excellent BTS connectivity to the rest of the city.","vibe":"Professional & Upscale","bestFor":"Business professionals, corporate remote workers, and those seeking modern amenities","pros":["Modern infrastructure","Great rooftop bars","Excellent transport","Business networking"],"cons":["Expensive","Corporate feel","Traffic chaos"],"lat":13.725,"lng":100.53,"priceLevel":"$$$"},{"name":"Sukhumvit","tagline":"Expat central with endless restaurants and nightlife","description":"Sukhumvit is Bangkok's expat heartland - a sprawling corridor of malls, restaurants, and nightlife stretching for kilometers. Different sois (side streets) have distinct vibes, from Japanese Thonglor to Korean Sukhumvit 12. The BTS Skytrain makes it Bangkok's most connected area.","vibe":"International & Vibrant","bestFor":"Expats, social nomads, and anyone who wants variety and convenience","pros":["Endless dining","Great transport","International community","24/7 lifestyle"],"cons":["Touristy","Crowded","Can feel un-Thai"],"lat":13.74,"lng":100.56,"priceLevel":"$$"},{"name":"Thonglor / Ekkamai","tagline":"Bangkok's trendiest spots for food and nightlife","description":"Thonglor and Ekkamai are where Bangkok's young professionals and creatives gather. World-class restaurants, speakeasy bars, and stylish cafes line these hipster-central streets. It's expensive but offers Bangkok's best work-play balance for those who can afford it.","vibe":"Hip & Affluent","bestFor":"Foodies, young professionals, and nomads seeking Bangkok's trendiest scene","pros":["Best restaurants","Trendy bars","Young energy","Great cafes"],"cons":["Very expensive","Busy traffic","Can feel pretentious"],"lat":13.732,"lng":100.585,"priceLevel":"$$$"},{"name":"Ari","tagline":"Local Bangkok living with hipster coffee","description":"Ari is where young Thais and in-the-know expats escape the tourist hordes. This emerging neighborhood offers fantastic coffee shops, local restaurants, and a more authentic Bangkok experience. Great value and growing coworking options make it perfect for longer stays.","vibe":"Local & Hip","bestFor":"Long-term nomads, coffee lovers, and those seeking authentic Thai neighborhood life","pros":["Great cafes","Local vibe","Affordable","BTS access"],"cons":["Less international","Fewer facilities","Limited nightlife"],"lat":13.7851,"lng":100.545,"priceLevel":"$"},{"name":"On Nut / Bang Na","tagline":"Budget-friendly base with BTS convenience","description":"On Nut and Bang Na offer Bangkok living at a fraction of central prices. These outer Sukhumvit areas have everything you need - malls, restaurants, gyms - while staying connected via BTS. Popular with long-term expats and budget-conscious nomads.","vibe":"Affordable & Practical","bestFor":"Budget nomads, long-term stayers, and those who value space over location","pros":["Best value","Modern condos","BTS access","Local amenities"],"cons":["Far from center","Less exciting","Traffic to CBD"],"lat":13.7059,"lng":100.5982,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1524,6 +1525,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

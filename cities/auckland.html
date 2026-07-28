@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Ponsonby","tagline":"Auckland's trendiest strip with brunch culture","description":"Ponsonby Road is Auckland's trendiest address - boutiques, brunch spots, and cocktail bars line this vibrant strip. Victorian villas house young professionals and creatives. It's expensive but delivers Auckland's best urban village life.","vibe":"Trendy & Village","bestFor":"Young professionals, foodies, and nomads seeking Auckland's most walkable neighborhood","pros":["Best restaurants","Walkable strip","Great cafes","Village feel"],"cons":["Very expensive","Parking issues","Crowded weekends"],"lat":-36.855,"lng":174.746,"priceLevel":"$$$"},{"name":"Grey Lynn","tagline":"Ponsonby's quieter neighbor with family charm","description":"Grey Lynn offers Ponsonby lifestyle at slightly better prices. Tree-lined streets, excellent schools, and proximity to Ponsonby Road attract families and professionals seeking neighborhood life with urban access.","vibe":"Residential & Family","bestFor":"Families, couples, and nomads seeking quieter alternative to Ponsonby","pros":["Good value","Quiet streets","Near Ponsonby","Parks"],"cons":["Less exciting","Limited cafes","Need transport"],"lat":-36.864,"lng":174.736,"priceLevel":"$$"},{"name":"CBD / Britomart","tagline":"Auckland's urban heart with waterfront access","description":"Auckland's CBD centers around Britomart - the restored heritage precinct with Auckland's best bars and restaurants. Viaduct Harbour adds waterfront dining, while Queen Street offers urban convenience. Auckland at its most cosmopolitan.","vibe":"Urban & Waterfront","bestFor":"Business travelers, urban enthusiasts, and nomads wanting central convenience","pros":["Waterfront access","Great restaurants","Transport hub","Walking friendly"],"cons":["Expensive","Corporate feel","Quiet weekends"],"lat":-36.8445,"lng":174.768,"priceLevel":"$$$"},{"name":"Kingsland","tagline":"Auckland's alternative hub with craft beer","description":"Kingsland is Auckland's alternative neighborhood - craft breweries, vintage shops, and proximity to Eden Park create a distinctly local vibe. More affordable than Ponsonby with growing creative energy and excellent transport links.","vibe":"Alternative & Local","bestFor":"Creatives, beer lovers, and nomads seeking affordable alternative to Ponsonby","pros":["Craft beer scene","More affordable","Good transport","Local vibe"],"cons":["Match day chaos","Limited dining","Smaller area"],"lat":-36.872,"lng":174.746,"priceLevel":"$$"},{"name":"Devonport","tagline":"Village life with ferry commute and volcano views","description":"Devonport is Auckland's charming seaside village - just a ferry ride from the CBD. Victorian architecture, volcano walks, and beach access create small-town appeal with city proximity. Perfect for those seeking space and character.","vibe":"Village & Seaside","bestFor":"Families, nature lovers, and nomads seeking village life with city access","pros":["Ferry commute","Beach access","Village charm","Volcano walks"],"cons":["Ferry dependent","Quiet evenings","Limited nightlife"],"lat":-36.827,"lng":174.795,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1425,6 +1425,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt (Old Town)","tagline":"Baroque phoenix risen from ashes","description":"Dresden's Old Town is a resurrection miracle - Frauenkirche, Zwinger Palace, and Semperoper rebuilt from WWII rubble. Baroque splendor reclaimed from history.","vibe":"Historic & Monumental","bestFor":"History lovers, architecture enthusiasts, and culture seekers","pros":["Stunning reconstruction","World-class museums","Cultural events","Walkable"],"cons":["Very touristy","Expensive","Can feel museum-like"],"lat":51.0504,"lng":13.7373,"priceLevel":"$$$"},{"name":"Neustadt","tagline":"Bohemian quarter with bar-lined streets","description":"Neustadt is Dresden's alternative soul - art galleries, independent bars, street art, and Germany's densest pub concentration. Where young Dresden creates and parties.","vibe":"Bohemian & Alternative","bestFor":"Nightlife seekers, artists, and young travelers","pros":["Amazing nightlife","Creative scene","Affordable","Character"],"cons":["Can be grungy","Noisy at night","Not family-oriented"],"lat":51.0623,"lng":13.7456,"priceLevel":"$"},{"name":"Loschwitz","tagline":"Hillside villas and funicular charm","description":"Loschwitz rises above the Elbe - historic funiculars, elegant villas, and the famous Blue Wonder bridge. Dresden's prestigious residential address with river views.","vibe":"Elegant & Scenic","bestFor":"View seekers, affluent visitors, and those wanting tranquility","pros":["Beautiful views","Historic funiculars","Elegant atmosphere","Safe"],"cons":["Expensive","Limited nightlife","Car helpful"],"lat":51.0534,"lng":13.8089,"priceLevel":"$$$"},{"name":"Striesen","tagline":"Family neighborhood with garden charm","description":"Striesen offers Dresden living - tree-lined streets, family apartments, local shops. Well-connected to center but peacefully residential in character.","vibe":"Residential & Family","bestFor":"Families, long-term visitors, and those wanting local life","pros":["Family-friendly","Good connections","Affordable","Parks nearby"],"cons":["Not exciting","Basic dining","Few attractions"],"lat":51.0378,"lng":13.7812,"priceLevel":"$$"},{"name":"Blasewitz","tagline":"Elegant suburb by the river","description":"Blasewitz combines Elbe riverside with elegant housing - villas, tree-lined avenues, Schillerplatz charm. One of Dresden's most desirable residential areas.","vibe":"Residential & Elegant","bestFor":"Long-term stays, families, and those wanting quiet elegance","pros":["Beautiful area","River access","Safe neighborhood","Good transport"],"cons":["Quiet evenings","Expensive","Far from center"],"lat":51.0467,"lng":13.7934,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1476,6 +1477,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

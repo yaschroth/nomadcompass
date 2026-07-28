@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Osu","tagline":"Oxford Street energy and nightlife hub","description":"Osu is Accra's entertainment center - Oxford Street shops, restaurants, bars, and clubs. Where Accra comes to eat, drink, and party with West African energy.","vibe":"Lively & Commercial","bestFor":"Nightlife seekers, shoppers, and social travelers","pros":["Great nightlife","Good restaurants","Shopping","Central"],"cons":["Traffic chaos","Can feel chaotic","Tourist prices"],"lat":5.556,"lng":-0.1789,"priceLevel":"$$"},{"name":"Labadi / La","tagline":"Beach culture and local rhythm","description":"Labadi is Accra's beach scene - famous Labadi Beach, weekend parties, reggae bars. Where Accra meets the Atlantic with music and movement.","vibe":"Beach & Cultural","bestFor":"Beach lovers, music enthusiasts, and experience seekers","pros":["Beach access","Live music","Local culture","Affordable"],"cons":["Beach can be crowded","Hustlers","Basic facilities"],"lat":5.5623,"lng":-0.1456,"priceLevel":"$"},{"name":"Airport Residential Area","tagline":"Diplomatic enclave with international dining","description":"Airport Residential serves Accra's elite and expats - embassies, international restaurants, quiet tree-lined streets. Where diplomats and executives reside.","vibe":"Upscale & International","bestFor":"Business travelers, expats, and luxury seekers","pros":["International cuisine","Safe area","Quality hotels","Quiet streets"],"cons":["Expensive","Removed from culture","Car essential"],"lat":5.6012,"lng":-0.1734,"priceLevel":"$$$"},{"name":"Jamestown","tagline":"Historic fishing community and cultural roots","description":"Jamestown is Accra's soul - colonial forts, fishing harbor, boxing gyms, Chale Wote festival. Where Accra's history and contemporary arts scene converge.","vibe":"Historic & Creative","bestFor":"Culture seekers, photographers, and those wanting authenticity","pros":["Rich history","Art scene","Authentic vibes","Chale Wote festival"],"cons":["Poverty visible","Basic infrastructure","Can feel challenging"],"lat":5.5312,"lng":-0.2067,"priceLevel":"$"},{"name":"East Legon","tagline":"New money suburb with modern amenities","description":"East Legon represents new Accra - gated communities, new malls, expanding restaurants. Where Ghana's growing middle class builds modern lifestyles.","vibe":"Modern & Suburban","bestFor":"Families, long-term residents, and those wanting modern amenities","pros":["Modern facilities","New restaurants","Safe area","Shopping malls"],"cons":["Traffic nightmares","Suburban sprawl","Far from center"],"lat":5.6234,"lng":-0.1489,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

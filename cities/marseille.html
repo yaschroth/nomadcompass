@@ -1439,6 +1439,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vieux Port","tagline":"Marseille's iconic harbor heart","description":"Vieux Port is Marseille's soul - the ancient harbor, morning fish market, and stunning views. It's the city's geographic and emotional center with excellent dining.","vibe":"Harbor & Central","bestFor":"First-time visitors, seafood lovers, and those seeking iconic Marseille","pros":["Iconic views","Fish market","Central location","Great restaurants"],"cons":["Touristy","Expensive","Crowded"],"lat":43.295,"lng":5.374,"priceLevel":"$$$"},{"name":"Le Panier","tagline":"Marseille's colorful oldest quarter","description":"Le Panier is Marseille's historic heart - the oldest neighborhood with colorful streets, artisan shops, and Mediterranean character. It's been gentrified but retains charm.","vibe":"Historic & Colorful","bestFor":"Culture lovers, photographers, and those seeking old Marseille","pros":["Colorful streets","Artisan shops","Historic character","Great views"],"cons":["Steep hills","Touristy areas","Variable quality"],"lat":43.299,"lng":5.368,"priceLevel":"$$"},{"name":"Cours Julien","tagline":"Marseille's bohemian creative hub","description":"Cours Julien is Marseille's alternative heart - street art, indie bars, and creative energy. It's the city's LGBTQ+ and artistic center with excellent nightlife.","vibe":"Bohemian & Creative","bestFor":"Creatives, LGBTQ+ travelers, and those seeking alternative Marseille","pros":["Street art","Creative scene","Good nightlife","LGBTQ+ friendly"],"cons":["Gritty areas","Some safety concerns","Can be loud"],"lat":43.292,"lng":5.385,"priceLevel":"$$"},{"name":"Endoume/Vallon des Auffes","tagline":"Marseille's picturesque fishing village","description":"Vallon des Auffes is a tiny fishing port preserved in time - traditional boats, seafood restaurants, and incredible charm. It's Marseille's most photogenic corner.","vibe":"Fishing Village & Scenic","bestFor":"Photographers, seafood lovers, and those seeking picturesque Marseille","pros":["Incredibly picturesque","Great seafood","Authentic atmosphere","Peaceful"],"cons":["Limited options","Expensive restaurants","Far from center"],"lat":43.285,"lng":5.352,"priceLevel":"$$$"},{"name":"Noailles","tagline":"Marseille's multicultural market soul","description":"Noailles is Marseille's Belly - the chaotic market streets where Africa, Middle East, and Mediterranean meet. It's authentic, affordable, and quintessentially Marseillais.","vibe":"Multicultural & Market","bestFor":"Food lovers, budget travelers, and those seeking authentic Marseille","pros":["Amazing markets","Multicultural food","Affordable","Authentic"],"cons":["Chaotic","Safety concerns","Can be overwhelming"],"lat":43.296,"lng":5.38,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1490,6 +1491,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1446,6 +1446,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Altstadt","tagline":"Medieval walls and Christmas magic","description":"Nuremberg's walled Old Town features the Imperial Castle, half-timbered houses, and the world-famous Christmas Market. The medieval atmosphere and well-preserved architecture create Bavaria's most atmospheric city center.","vibe":"Medieval & Charming","bestFor":"History lovers, Christmas market visitors, and medieval atmosphere seekers","pros":["Imperial Castle","Medieval architecture","Famous Christmas Market","Great restaurants"],"cons":["Very touristy in December","Crowded","Expensive during markets"],"lat":49.4521,"lng":11.0767,"priceLevel":"$$"},{"name":"Gostenhof","tagline":"Alternative scene and street art","description":"The multicultural neighborhood west of the center offers street art, alternative cafes, and diverse restaurants. The young energy and creative scene attract artists and students.","vibe":"Alternative & Creative","bestFor":"Creatives, alternative culture seekers, and multicultural food lovers","pros":["Street art","Diverse food","Creative cafes","Young energy"],"cons":["Grittier feel","Some rough areas","Less polished"],"lat":49.4512,"lng":11.0512,"priceLevel":"$"},{"name":"Documentation Center Area","tagline":"Nazi history confronted and preserved","description":"The area around the Nazi rally grounds and Documentation Center offers sobering historical education. The massive scale and excellent museum provide essential historical understanding.","vibe":"Historical & Educational","bestFor":"History seekers, WWII researchers, and educational travelers","pros":["Important history","Excellent museum","Well-preserved site","Educational"],"cons":["Heavy subject matter","Far from center","Limited other attractions"],"lat":49.4312,"lng":11.1234,"priceLevel":"$"},{"name":"St. Johannis","tagline":"Historic cemetery and residential charm","description":"The residential area features the famous St. Johannis Cemetery where Albrecht Dürer rests, plus charming streets and local atmosphere. Quieter than the center but historically rich.","vibe":"Residential & Historic","bestFor":"Art history lovers, peace seekers, and residential atmosphere fans","pros":["Historic cemetery","Quiet streets","Local atmosphere","Dürer connection"],"cons":["Limited nightlife","Need transport","Quiet evenings"],"lat":49.4623,"lng":11.0534,"priceLevel":"$$"},{"name":"Lorenz Area","tagline":"Shopping streets and gothic church","description":"The southern part of the old town around St. Lorenz Church offers excellent shopping and the famous Handwerkerhof craftsmen's courtyard. The commercial heart with historic touches.","vibe":"Shopping & Gothic","bestFor":"Shoppers, church architecture lovers, and craft seekers","pros":["Great shopping","Gothic church","Craftsmen's courtyard","Central location"],"cons":["Commercial focus","Crowded","Tourist prices"],"lat":49.4489,"lng":11.0778,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1497,6 +1498,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

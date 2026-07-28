@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"IT Park","tagline":"Cebu's modern business hub with 24/7 energy","description":"IT Park is Cebu's tech and BPO center - modern towers, international restaurants, and 24/7 energy serving the night-shift call center crowd. It's where most expats and digital nomads base themselves, with excellent infrastructure.","vibe":"Modern & Business","bestFor":"Tech workers, night owls, and nomads seeking modern infrastructure","pros":["Modern infrastructure","Great restaurants","24/7 services","Expat community"],"cons":["No character","Corporate feel","Traffic to beaches"],"lat":10.328,"lng":123.906,"priceLevel":"$$"},{"name":"Lahug / Banilad","tagline":"Residential calm near the tech hub","description":"Lahug and Banilad surround IT Park with more residential character. Universities, malls, and quieter streets offer better quality of life while staying connected to the tech hub. Popular with expat families.","vibe":"Residential & Convenient","bestFor":"Families, professionals, and nomads seeking IT Park proximity with calm","pros":["Near IT Park","University area","Good malls","Quieter"],"cons":["Traffic","Spread out","Need transport"],"lat":10.335,"lng":123.895,"priceLevel":"$$"},{"name":"Ayala Business Park","tagline":"Upscale development with premium everything","description":"Ayala Business Park is Cebu's upscale development - premium offices, Ayala Center mall, and high-end condos. It's corporate and polished, attracting business travelers and professionals seeking premium amenities.","vibe":"Upscale & Corporate","bestFor":"Business professionals, luxury seekers, and nomads wanting premium facilities","pros":["Premium mall","Modern offices","High-end dining","Safe and clean"],"cons":["Expensive","Corporate feel","Limited character"],"lat":10.318,"lng":123.905,"priceLevel":"$$$"},{"name":"Mandaue / Mactan Bridge","tagline":"Industrial area with island access","description":"Mandaue connects Cebu City to Mactan Island and its beaches. Industrial but practical, it offers more affordable living with easy access to both city amenities and beach resorts. Growing expat presence.","vibe":"Industrial & Practical","bestFor":"Budget nomads, beach lovers, and those wanting easy island access","pros":["Near beaches","Affordable","Good malls","Strategic location"],"cons":["Industrial feel","Traffic","Less character"],"lat":10.34,"lng":123.935,"priceLevel":"$"},{"name":"Mactan Island","tagline":"Beach resorts and island living","description":"Mactan Island is where Cebu's beaches and resorts live - from luxury hotels to dive shops and seafood restaurants. It's more resort than city, perfect for those prioritizing beach and ocean over urban conveniences.","vibe":"Resort & Beach","bestFor":"Divers, beach lovers, and nomads seeking island lifestyle","pros":["Beach access","Diving","Resort amenities","Island vibe"],"cons":["Far from city","Tourist prices","Limited urban amenities"],"lat":10.3,"lng":123.98,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

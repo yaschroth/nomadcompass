@@ -1418,6 +1418,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Surfers Paradise","tagline":"High-rises, beaches, and nightclub energy","description":"Surfers Paradise is Gold Coast central - iconic beach, towering apartments, non-stop nightlife. Australia's most famous beach resort destination.","vibe":"Party & Beach","bestFor":"Party seekers, beach lovers, and social travelers","pros":["Famous beach","Great nightlife","Central location","Shopping"],"cons":["Very touristy","Loud","Can feel tacky"],"lat":-28.0067,"lng":153.4305,"priceLevel":"$$$"},{"name":"Burleigh Heads","tagline":"Surf culture meets café sophistication","description":"Burleigh Heads is Gold Coast's cool quarter - excellent surf break, boutique cafes, James Street shopping, national park headland. Where locals escape Surfers Paradise.","vibe":"Hip & Surf","bestFor":"Surfers, foodies, and those wanting local vibes","pros":["Great surf","Excellent cafes","National park","Local feel"],"cons":["Parking difficult","Crowded weekends","Limited nightlife"],"lat":-28.0889,"lng":153.4502,"priceLevel":"$$"},{"name":"Broadbeach","tagline":"Dining precinct with family beaches","description":"Broadbeach offers sophisticated Gold Coast - excellent restaurants, casino complex, family-friendly beaches. All the fun with more refinement than Surfers.","vibe":"Refined & Family","bestFor":"Foodies, families, and those wanting quality","pros":["Great dining","Family beaches","Casino","Less tacky"],"cons":["Expensive","Still touristy","Traffic issues"],"lat":-28.0331,"lng":153.4312,"priceLevel":"$$$"},{"name":"Coolangatta","tagline":"Border town with world-class breaks","description":"Coolangatta sits on the NSW border - famous Snapper Rocks, Kirra, and Greenmount surf breaks. Less developed, more authentic, serious surfer territory.","vibe":"Surf & Authentic","bestFor":"Serious surfers, authentic seekers, and outdoor lovers","pros":["World-class surf","Less commercial","Great beaches","Authentic vibes"],"cons":["Far from main attractions","Limited nightlife","Basic amenities"],"lat":-28.1645,"lng":153.5356,"priceLevel":"$$"},{"name":"Hinterland (Mount Tamborine)","tagline":"Rainforest retreat above the coast","description":"The Gold Coast Hinterland rises behind the beaches - rainforest walks, wineries, boutique stays. Where the coast escapes to nature and cooler temperatures.","vibe":"Natural & Peaceful","bestFor":"Nature lovers, wine enthusiasts, and those escaping crowds","pros":["Beautiful nature","Cooler climate","Great wineries","Peaceful"],"cons":["Car essential","Limited dining","Rainy days common"],"lat":-27.9412,"lng":153.1967,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1469,6 +1470,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1444,6 +1444,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"La Perla","tagline":"Classic beach with promenade charm","description":"The iconic beach area features the famous casino, grand hotels, and the rocky coastline walks. The traditional resort atmosphere and art deco architecture define classic Mar del Plata.","vibe":"Classic & Resort","bestFor":"First-time visitors, architecture lovers, and classic resort seekers","pros":["Iconic beach","Casino and culture","Promenade walks","Classic architecture"],"cons":["Very crowded in summer","Expensive in season","Cold water"],"lat":-38.0034,"lng":-57.5289,"priceLevel":"$$"},{"name":"Puerto","tagline":"Fishing port with sea lion spectacle","description":"The working fishing port offers authentic Mar del Plata with sea lions lounging by the boats, fresh seafood restaurants, and maritime atmosphere. The genuine port life contrasts with beach tourism.","vibe":"Port & Authentic","bestFor":"Seafood lovers, photographers, and authentic experience seekers","pros":["Sea lions","Fresh seafood","Authentic atmosphere","Fishing boats"],"cons":["Smell can be strong","Far from beaches","Industrial feel"],"lat":-38.0278,"lng":-57.5378,"priceLevel":"$$"},{"name":"Güemes","tagline":"Bohemian quarter with nightlife buzz","description":"The artsy neighborhood offers Mar del Plata's alternative scene with bohemian bars, live music, and vintage shops. The young energy and creative atmosphere attract night owls and creatives.","vibe":"Bohemian & Nightlife","bestFor":"Night owls, young travelers, and alternative scene seekers","pros":["Best nightlife","Bohemian vibe","Live music","Young crowd"],"cons":["Can be noisy","Late-night focus","Less family-oriented"],"lat":-38.0012,"lng":-57.5445,"priceLevel":"$$"},{"name":"Punta Mogotes","tagline":"Family beaches and lighthouse views","description":"The southern beach area offers calmer family atmosphere, the famous lighthouse, and beachfront apartments. The less crowded beaches attract families and those seeking quieter seaside living.","vibe":"Family & Relaxed","bestFor":"Families, beach seekers wanting calm, and lighthouse enthusiasts","pros":["Less crowded","Family friendly","Lighthouse views","Residential feel"],"cons":["Far from center","Fewer restaurants","Need transport"],"lat":-38.0789,"lng":-57.5423,"priceLevel":"$$"},{"name":"Centro","tagline":"Shopping streets and urban energy","description":"The commercial center offers year-round activity with shopping streets, traditional cafes, and urban Argentine life. The everyday city atmosphere provides contrast to beach resort areas.","vibe":"Urban & Commercial","bestFor":"Shoppers, urban explorers, and those wanting city experience","pros":["Shopping","Year-round activity","Traditional cafes","Argentine life"],"cons":["No beach access","Commercial focus","Traffic"],"lat":-38.0023,"lng":-57.5512,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1495,6 +1496,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

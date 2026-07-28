@@ -1455,6 +1455,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"West Bay","tagline":"Skyline of Gulf ambition","description":"West Bay is Doha's Manhattan - skyscraper cluster, luxury hotels, waterfront promenade. Where Qatar's wealth creates an instantly recognizable skyline.","vibe":"Business & Luxury","bestFor":"Business travelers, luxury seekers, and skyline photographers","pros":["Iconic skyline","Luxury hotels","Waterfront","Modern facilities"],"cons":["Sterile feel","Very expensive","Limited character"],"lat":25.3234,"lng":51.5267,"priceLevel":"$$$$"},{"name":"Souq Waqif","tagline":"Restored traditional market with character","description":"Souq Waqif is Doha's cultural heart - restored traditional market with spices, restaurants, falcon souq. Where Qatar shows its Arabian heritage.","vibe":"Traditional & Lively","bestFor":"Culture seekers, foodies, and those wanting atmosphere","pros":["Great atmosphere","Good restaurants","Shopping","Evening activity"],"cons":["Tourist-oriented","Can be crowded","Hot summers"],"lat":25.2867,"lng":51.5334,"priceLevel":"$$"},{"name":"The Pearl-Qatar","tagline":"Artificial island of Mediterranean dreams","description":"The Pearl is Qatar's island development - marinas, luxury apartments, international dining. Mediterranean-style living in the Arabian Gulf.","vibe":"Luxury & Residential","bestFor":"Expats, luxury seekers, and those wanting waterfront living","pros":["Marina lifestyle","International dining","Beach access","Quality housing"],"cons":["Artificial feel","Expensive","Isolated"],"lat":25.3678,"lng":51.5512,"priceLevel":"$$$$"},{"name":"Katara Cultural Village","tagline":"Arts and culture complex by the sea","description":"Katara is Doha's cultural showcase - amphitheater, galleries, beach, international restaurants. Where Qatar presents itself as a cultural destination.","vibe":"Cultural & Modern","bestFor":"Culture seekers, art lovers, and beach visitors","pros":["Cultural events","Beach access","Good restaurants","Family-friendly"],"cons":["Can feel curated","Limited nightlife","Requires transport"],"lat":25.3589,"lng":51.5289,"priceLevel":"$$$"},{"name":"Museum of Islamic Art Area","tagline":"I.M. Pei masterpiece on the waterfront","description":"The MIA area centers on Pei's stunning museum - waterfront park, skyline views, cultural landmark. Where Doha's most beautiful architecture meets the sea.","vibe":"Cultural & Scenic","bestFor":"Art lovers, architecture enthusiasts, and photographers","pros":["Stunning museum","Skyline views","Waterfront park","World-class art"],"cons":["Limited dining","Hot outdoors","Museum-focused"],"lat":25.2956,"lng":51.5389,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1506,6 +1507,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

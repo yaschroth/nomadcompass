@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Adobe labyrinth under the wind towers","description":"The UNESCO-listed old city features an incredible maze of mud-brick alleys, wind towers, and historic mosques. One of the world's oldest continuously inhabited cities offers profound cultural depth.","vibe":"Ancient labyrinthine","bestFor":"History buffs and architecture lovers","pros":["UNESCO heritage","Wind towers","Incredible history","Unique architecture"],"cons":["Navigation challenging","Hot climate","Basic infrastructure"],"lat":31.8974,"lng":54.3569,"priceLevel":"$"},{"name":"Zoroastrian Area","tagline":"Fire temple and ancient faith","description":"Yazd's Zoroastrian heritage centers around the Ateshkadeh fire temple with its eternal flame. This community has maintained their faith here for millennia.","vibe":"Spiritual historic","bestFor":"Spiritual seekers and history enthusiasts","pros":["Fire temple","Religious history","Cultural depth","Peaceful atmosphere"],"cons":["Limited services","Specific interest","Spread out sites"],"lat":31.8912,"lng":54.3623,"priceLevel":"$"},{"name":"Dowlatabad Garden","tagline":"Persian paradise garden perfection","description":"Near this magnificent Persian garden with its 33-meter wind tower, accommodations offer escape from the dense old city. UNESCO-recognized beauty demonstrates Persian garden tradition.","vibe":"Garden historic","bestFor":"Garden lovers and photographers","pros":["Beautiful gardens","Famous wind tower","Peaceful setting","UNESCO site"],"cons":["Outside old town","Limited dining","Tourist groups"],"lat":31.8867,"lng":54.3234,"priceLevel":"$"},{"name":"Towers of Silence Area","tagline":"Zoroastrian burial grounds in desert","description":"The dramatic dakhmas (burial towers) on the desert outskirts offer profound Zoroastrian heritage. Sunset visits and desert views create unforgettable experiences.","vibe":"Desert spiritual","bestFor":"History seekers and sunset lovers","pros":["Dramatic setting","Zoroastrian heritage","Desert views","Sunset spot"],"cons":["Far from center","No services","Heat exposure"],"lat":31.8523,"lng":54.3089,"priceLevel":"$"},{"name":"Modern Yazd","tagline":"New city practical services","description":"Beyond the old city, modern Yazd offers practical services, supermarkets, and everyday Iranian life. Those needing modern conveniences find them here.","vibe":"Modern practical","bestFor":"Long-term stays and practical needs","pros":["Modern services","Supermarkets","Local life","Affordable"],"cons":["No historic charm","Generic Iranian city","Less interesting"],"lat":31.9023,"lng":54.3712,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

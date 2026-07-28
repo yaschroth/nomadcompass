@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vieille Ville (Old Town)","tagline":"Geneva's historic hilltop heart","description":"Vieille Ville is Geneva's historic center - St. Pierre Cathedral, cobblestone streets, and charming squares. It's beautifully preserved with excellent restaurants and antique shops.","vibe":"Historic & Elegant","bestFor":"History lovers, culture seekers, and those seeking traditional Geneva","pros":["Historic charm","Cathedral views","Excellent dining","Central location"],"cons":["Very expensive","Tourist crowds","Limited nightlife"],"lat":46.201,"lng":6.148,"priceLevel":"$$$$"},{"name":"Eaux-Vives","tagline":"Geneva's lakeside local quarter","description":"Eaux-Vives is where Genevois live - lakeside promenades, local shops, and the new Plage des Eaux-Vives. It's residential but vibrant with good restaurants and parks.","vibe":"Local & Lakeside","bestFor":"Long-term stayers, families, and those seeking local Geneva","pros":["Lake access","Local atmosphere","Good restaurants","Parks"],"cons":["Expensive","Limited nightlife","Residential"],"lat":46.202,"lng":6.162,"priceLevel":"$$$"},{"name":"Carouge","tagline":"Geneva's bohemian Italian village","description":"Carouge is Geneva's artistic quarter - built by Sardinian kings with Italian flair. It's the city's most bohemian neighborhood with artisan shops, galleries, and charming squares.","vibe":"Bohemian & Italian","bestFor":"Artists, creatives, and those seeking Geneva's alternative side","pros":["Artistic atmosphere","Italian charm","Best nightlife","Artisan shops"],"cons":["Far from lake","Limited views","Can be quiet"],"lat":46.185,"lng":6.14,"priceLevel":"$$$"},{"name":"Plainpalais","tagline":"Geneva's student and cultural hub","description":"Plainpalais surrounds the large open plain - university area, contemporary art museum, and the famous flea market. It's young, cultural, and Geneva's most dynamic neighborhood.","vibe":"Cultural & Young","bestFor":"Students, culture lovers, and those seeking vibrant Geneva","pros":["Cultural venues","Flea market","Student energy","MAMCO museum"],"cons":["Can be scrappy","Less scenic","Variable areas"],"lat":46.198,"lng":6.14,"priceLevel":"$$"},{"name":"Pâquis","tagline":"Geneva's diverse urban core","description":"Pâquis is Geneva's melting pot - diverse restaurants, international community, and urban energy near the train station. It's the most affordable central area with excellent ethnic food.","vibe":"Diverse & Urban","bestFor":"Budget travelers, food lovers, and those seeking diversity","pros":["Most affordable","Ethnic restaurants","Central location","Train station access"],"cons":["Red light areas","Less polished","Safety concerns at night"],"lat":46.21,"lng":6.145,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1430,6 +1430,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial grandeur of Mexico's second city","description":"Guadalajara's center is colonial magnificence - Cathedral, Hospicio Cabañas, Teatro Degollado. Where mariachi was born and Mexican tradition thrives.","vibe":"Historic & Cultural","bestFor":"Culture lovers, architecture enthusiasts, and mariachi seekers","pros":["Stunning architecture","Cultural depth","Mariachi tradition","Museums"],"cons":["Can feel chaotic","Safety concerns","Hot"],"lat":20.6767,"lng":-103.3475,"priceLevel":"$$"},{"name":"Chapultepec / Americana","tagline":"Trendy district with craft beer scene","description":"Chapultepec is Guadalajara's hip corridor - craft breweries, restaurants, young professionals. Where Mexico's Silicon Valley shows its cosmopolitan side.","vibe":"Trendy & Young","bestFor":"Foodies, craft beer lovers, and young travelers","pros":["Great food scene","Craft beer","Nightlife","Safe area"],"cons":["Expensive","Hipster prices","Traffic"],"lat":20.6734,"lng":-103.3689,"priceLevel":"$$$"},{"name":"Tlaquepaque","tagline":"Artisan village within the city","description":"Tlaquepaque is Guadalajara's artisan heart - colonial streets, galleries, blown glass, ceramics. Where Mexican crafts reach their finest expression.","vibe":"Artisan & Colonial","bestFor":"Craft lovers, shoppers, and art enthusiasts","pros":["Incredible crafts","Beautiful streets","Galleries","Restaurants"],"cons":["Tourist prices","Weekend crowds","Taxi needed"],"lat":20.6412,"lng":-103.3089,"priceLevel":"$$"},{"name":"Zapopan","tagline":"Modern suburb with tech industry","description":"Zapopan represents modern Guadalajara - shopping malls, tech offices, safe suburbs. Where the metropolitan area's economic engine hums.","vibe":"Modern & Suburban","bestFor":"Tech workers, families, and those wanting modern amenities","pros":["Safe","Modern facilities","Shopping","Tech scene"],"cons":["Generic feel","Car needed","Far from culture"],"lat":20.7214,"lng":-103.3856,"priceLevel":"$$"},{"name":"Providencia","tagline":"Upscale residential with excellent dining","description":"Providencia is Guadalajara's upscale address - tree-lined streets, restaurants, boutiques. Where the tapatío elite lives and dines.","vibe":"Upscale & Residential","bestFor":"Upscale travelers, foodies, and those wanting refinement","pros":["Excellent restaurants","Safe area","Beautiful streets","Quality shops"],"cons":["Expensive","Residential feel","Car helpful"],"lat":20.6889,"lng":-103.3834,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1481,6 +1482,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

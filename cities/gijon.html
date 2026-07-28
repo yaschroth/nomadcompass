@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Cimavilla (Old Town)","tagline":"Fishermen's quarter on the headland","description":"Cimavilla is Gijón's historic heart - fishermen's quarter on the headland, cider houses, Roman baths. Where Asturian tradition meets Atlantic views.","vibe":"Historic & Authentic","bestFor":"History lovers, cider enthusiasts, and authentic seekers","pros":["Historic atmosphere","Cider houses","Sea views","Walkable"],"cons":["Steep streets","Basic accommodation","Limited dining variety"],"lat":43.5456,"lng":-5.6612,"priceLevel":"$$"},{"name":"Centro","tagline":"Shopping streets and urban energy","description":"Gijón's center offers urban Asturias - pedestrian shopping, restaurants, connection between beach and old town. The city's commercial heart.","vibe":"Commercial & Urban","bestFor":"Shoppers, practical visitors, and urban seekers","pros":["Good shopping","Central location","Restaurants","Well-connected"],"cons":["Generic feel","Crowded shopping days","Less character"],"lat":43.5412,"lng":-5.6689,"priceLevel":"$$"},{"name":"Playa de San Lorenzo","tagline":"Urban beach with Atlantic surf","description":"San Lorenzo is Gijón's city beach - long sandy stretch with Atlantic waves, promenade, and surfers. Where urban Asturias meets the sea.","vibe":"Beach & Urban","bestFor":"Beach lovers, surfers, and urban beach seekers","pros":["Urban beach","Surfing","Promenade","Facilities"],"cons":["Cold water","Crowded summer","Atlantic weather"],"lat":43.5434,"lng":-5.6534,"priceLevel":"$$"},{"name":"La Laboral","tagline":"Cultural complex in Franco-era monument","description":"La Laboral transformed Franco's workers' university into cultural center - theaters, exhibitions, creative spaces. Spain's largest building repurposed for culture.","vibe":"Cultural & Modern","bestFor":"Culture seekers, architecture enthusiasts, and art lovers","pros":["Impressive architecture","Cultural events","Creative spaces","Unique"],"cons":["Outside center","Need transport","Event-dependent"],"lat":43.5234,"lng":-5.6189,"priceLevel":"$$"},{"name":"El Natahoyo","tagline":"Industrial heritage and local life","description":"El Natahoyo is working-class Gijón - industrial heritage, local bars, authentic Asturian life. Where cider flows freely and tourists are rare.","vibe":"Authentic & Working-class","bestFor":"Authentic seekers, cider lovers, and budget travelers","pros":["Authentic vibes","Cheap cider","Local atmosphere","Affordable"],"cons":["Basic area","Industrial feel","Limited attractions"],"lat":43.5389,"lng":-5.6889,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

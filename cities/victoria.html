@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Downtown","tagline":"Garden City charm with British heritage","description":"Victoria's downtown features the stunning Inner Harbour, Empress Hotel, and provincial parliament. Flower baskets, afternoon tea, and mild climate create Canada's most English city.","vibe":"Heritage charming","bestFor":"First-time visitors and charm seekers","pros":["Beautiful harbor","Historic buildings","Walkable center","Mild climate"],"cons":["Tourist prices","Older visitor base","Limited nightlife"],"lat":48.4284,"lng":-123.3656,"priceLevel":"$$"},{"name":"James Bay","tagline":"Residential harbor views and local life","description":"South of downtown, this residential neighborhood offers harbor views, local cafes, and community atmosphere. Fisherman's Wharf provides floating homes and fresh seafood.","vibe":"Residential harbor","bestFor":"Local life seekers and foodies","pros":["Fisherman's Wharf","Local character","Harbor walks","Community feel"],"cons":["Quiet evenings","Far from nightlife","Residential pace"],"lat":48.4178,"lng":-123.3734,"priceLevel":"$$"},{"name":"Fernwood","tagline":"Hip neighborhood with artistic energy","description":"This eclectic neighborhood features independent cafes, vintage shops, and creative businesses. Victoria's most bohemian area attracts artists and young professionals.","vibe":"Bohemian artsy","bestFor":"Creatives and alternative seekers","pros":["Independent businesses","Artistic energy","Local character","Coffee culture"],"cons":["Some rough edges","Far from harbor","Limited services"],"lat":48.4367,"lng":-123.3512,"priceLevel":"$"},{"name":"Oak Bay","tagline":"Upscale village within the city","description":"This affluent municipality within Victoria offers village charm, waterfront walks, and refined living. Tea rooms, bookshops, and gardens maintain English village atmosphere.","vibe":"Village upscale","bestFor":"Comfort seekers and retirees","pros":["Village atmosphere","Waterfront walks","Safe area","Refined dining"],"cons":["Very quiet","Expensive","Older demographic"],"lat":48.4289,"lng":-123.3189,"priceLevel":"$$$"},{"name":"Vic West","tagline":"Industrial heritage turned trendy","description":"Across the harbor, this former industrial area has transformed with modern apartments, craft breweries, and waterfront paths. Young professionals enjoy urban living with harbor access.","vibe":"Urban emerging","bestFor":"Young professionals and craft beer lovers","pros":["Craft breweries","Waterfront access","Modern living","Growing scene"],"cons":["Still developing","Traffic bridge","Mixed areas"],"lat":48.4312,"lng":-123.3845,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

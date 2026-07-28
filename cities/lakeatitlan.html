@@ -1443,6 +1443,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Panajachel","tagline":"Tourist hub with volcano views","description":"The main gateway town offers the best infrastructure, boat connections, and services. The famous Calle Santander strip provides tourist essentials while the waterfront showcases stunning volcano panoramas.","vibe":"Tourist & Convenient","bestFor":"First-time visitors, those wanting convenience, and short stays","pros":["Best infrastructure","Boat connections","ATMs and services","Volcano views"],"cons":["Most touristy","Vendors can be pushy","Less authentic"],"lat":14.7394,"lng":-91.1567,"priceLevel":"$$"},{"name":"San Marcos La Laguna","tagline":"Spiritual retreat and yoga haven","description":"The wellness capital of the lake attracts yogis, healers, and spiritual seekers. The concentration of yoga studios, vegetarian restaurants, and meditation centers creates a unique holistic community.","vibe":"Spiritual & Wellness","bestFor":"Yoga practitioners, spiritual seekers, and wellness enthusiasts","pros":["Yoga and meditation","Vegetarian food","Spiritual community","Peaceful atmosphere"],"cons":["Can feel New Age-y","Limited nightlife","Expensive wellness services"],"lat":14.7234,"lng":-91.2534,"priceLevel":"$$"},{"name":"San Pedro La Laguna","tagline":"Backpacker party meets Mayan culture","description":"The budget traveler hub mixes indigenous Tz'utujil Mayan life with hostels, bars, and Spanish schools. The dichotomy of traditional culture and party scene creates Lake Atitlán's most dynamic village.","vibe":"Backpacker & Cultural","bestFor":"Budget travelers, party seekers, and Spanish learners","pros":["Budget accommodation","Nightlife","Spanish schools","Indigenous culture"],"cons":["Can be noisy","Tourist-local tension","Party atmosphere"],"lat":14.6912,"lng":-91.2723,"priceLevel":"$"},{"name":"Santa Cruz La Laguna","tagline":"Cliffside tranquility and diving","description":"Accessible only by boat, this small village offers rustic charm and altitude diving in the lake. The limited development and stunning cliff-top views attract those seeking isolation.","vibe":"Remote & Natural","bestFor":"Peace seekers, divers, and those wanting true isolation","pros":["Boat-access only seclusion","Lake diving","Stunning views","Peaceful atmosphere"],"cons":["Very limited services","Boat dependent","Can feel too remote"],"lat":14.7456,"lng":-91.2134,"priceLevel":"$"},{"name":"Jaibalito","tagline":"Off-grid luxury and artistic retreats","description":"The tiny, boat-only village hosts upscale eco-lodges and artist retreats. The combination of seclusion and comfort attracts creative types and those seeking quiet luxury.","vibe":"Boutique & Secluded","bestFor":"Artists, writers, and those seeking quiet luxury","pros":["Boutique lodges","Total peace","Artistic community","Stunning setting"],"cons":["Boat only access","Expensive options","Very small"],"lat":14.7367,"lng":-91.2289,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1494,6 +1495,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

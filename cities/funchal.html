@@ -1458,6 +1458,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Zona Velha (Old Town)","tagline":"Painted doors and cobbled character","description":"Funchal's Old Town is an art gallery on doors - the famous painted doors of Rua Santa Maria line cobbled streets. Historic charm, waterfront dining, and Madeiran soul.","vibe":"Historic & Artistic","bestFor":"Art lovers, photographers, and those wanting character","pros":["Famous painted doors","Historic atmosphere","Great restaurants","Waterfront"],"cons":["Tourist crowds","Steep streets","Limited parking"],"lat":32.6478,"lng":-16.9012,"priceLevel":"$$"},{"name":"Centro (Sé Cathedral Area)","tagline":"Commercial heart with historic anchors","description":"Funchal's center buzzes around Sé Cathedral and main shopping streets - Mercado dos Lavradores, traditional shops, and practical amenities in a historic setting.","vibe":"Commercial & Historic","bestFor":"Shoppers, practical visitors, and market lovers","pros":["Famous market","Good shopping","Central location","Historic sites"],"cons":["Crowded","Commercial feel","Steep hills"],"lat":32.6501,"lng":-16.9078,"priceLevel":"$$"},{"name":"Lido","tagline":"Resort area with ocean pools","description":"Lido is Funchal's resort zone - hotel promenades, ocean swimming pools, and tourist infrastructure. Where package tourists and sun-seekers concentrate.","vibe":"Resort & Coastal","bestFor":"Resort seekers, swimmers, and sun worshippers","pros":["Ocean pools","Resort amenities","Promenade walks","Sea access"],"cons":["Very touristy","Expensive","Generic feel"],"lat":32.6389,"lng":-16.9256,"priceLevel":"$$$"},{"name":"Monte","tagline":"Hillside gardens and toboggan rides","description":"Monte rises above Funchal - famous tropical gardens, Nossa Senhora church, and the legendary wicker toboggan rides. Cable car connects to city, views are extraordinary.","vibe":"Green & Scenic","bestFor":"Garden lovers, view seekers, and adventure tourists","pros":["Stunning gardens","Amazing views","Toboggan experience","Cable car"],"cons":["Tourist attraction","Day visitors only","Expensive entry"],"lat":32.6712,"lng":-16.9034,"priceLevel":"$$"},{"name":"São Martinho","tagline":"Residential hillside with local flavor","description":"São Martinho spreads across Funchal's hillsides - residential area where locals live, shop, and eat. Views, authenticity, and distance from tourist crowds.","vibe":"Residential & Authentic","bestFor":"Long-term visitors, local seekers, and budget travelers","pros":["Authentic vibes","Good prices","Great views","Local restaurants"],"cons":["Steep hills","Limited transport","Basic amenities"],"lat":32.6578,"lng":-16.9234,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1509,6 +1510,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

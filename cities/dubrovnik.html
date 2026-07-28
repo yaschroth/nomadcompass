@@ -1413,6 +1413,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town (Stari Grad)","tagline":"Dubrovnik's UNESCO walled wonder","description":"Old Town is Dubrovnik's crown jewel - UNESCO-listed walls, marble streets, and Game of Thrones fame. It's magnificent but overwhelmed by cruise ship crowds.","vibe":"Historic & Tourist","bestFor":"History lovers, photographers, and those seeking iconic Dubrovnik","pros":["UNESCO walls","Stunning architecture","Historic atmosphere","Walkable"],"cons":["Extremely crowded","Very expensive","Cruise ship chaos"],"lat":42.641,"lng":18.108,"priceLevel":"$$$$"},{"name":"Pile","tagline":"Dubrovnik's western gateway","description":"Pile sits at the main entrance to Old Town - the iconic Pile Gate, Lovrijenac Fortress, and beach access. It's where Dubrovnik's drama begins.","vibe":"Gateway & Scenic","bestFor":"First-time visitors, sunset seekers, and beach lovers","pros":["Pile Gate","Lovrijenac views","Beach access","Sunset spot"],"cons":["Tourist central","Expensive","Crowded entrance"],"lat":42.642,"lng":18.104,"priceLevel":"$$$"},{"name":"Ploče","tagline":"Dubrovnik's eastern beach quarter","description":"Ploče extends east from Old Town - Banje Beach, luxury hotels, and cable car access. It's Dubrovnik's upscale beach zone.","vibe":"Beach & Upscale","bestFor":"Beach lovers, luxury travelers, and cable car riders","pros":["Banje Beach","Cable car","Luxury hotels","Old Town access"],"cons":["Expensive","Limited local feel","Crowded beach"],"lat":42.643,"lng":18.115,"priceLevel":"$$$$"},{"name":"Lapad","tagline":"Dubrovnik's relaxed resort peninsula","description":"Lapad is Dubrovnik's resort area - beaches, promenade, and more affordable accommodation. It's where you escape Old Town crowds.","vibe":"Resort & Relaxed","bestFor":"Beach lovers, families, and those seeking affordable Dubrovnik","pros":["Good beaches","More affordable","Local restaurants","Relaxed vibe"],"cons":["Far from Old Town","Resort atmosphere","Less historic"],"lat":42.656,"lng":18.068,"priceLevel":"$$"},{"name":"Gruž","tagline":"Dubrovnik's working harbor and market","description":"Gruž is Dubrovnik's functional side - ferry port, main market, and local life. It's where Dubrovnik actually works away from tourism.","vibe":"Local & Working","bestFor":"Budget travelers, market lovers, and those seeking real Dubrovnik","pros":["Local market","Ferry connections","Affordable","Real life"],"cons":["Industrial feel","Less scenic","Far from sights"],"lat":42.659,"lng":18.085,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1464,6 +1465,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

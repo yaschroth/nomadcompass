@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"101 Downtown","tagline":"Reykjavik's compact colorful center","description":"101 is Reykjavik's heart - Hallgrímskirkja, Laugavegur shopping street, and colorful houses. Everything is walkable in this compact, charming downtown.","vibe":"Central & Colorful","bestFor":"First-time visitors, shoppers, and those seeking central Reykjavik","pros":["Walkable","All amenities","Colorful houses","Great restaurants"],"cons":["Very expensive","Tourist crowds","Limited parking"],"lat":64.1466,"lng":-21.9426,"priceLevel":"$$$$"},{"name":"Grandi Harbor District","tagline":"Reykjavik's creative waterfront revival","description":"Grandi is Reykjavik's transformed harbor - Whales of Iceland, Marshall House arts center, and emerging restaurants. It's where Reykjavik's creative future is being built.","vibe":"Creative & Waterfront","bestFor":"Art lovers, foodies, and those seeking emerging Reykjavik","pros":["Marshall House","Waterfront walks","Less crowded","Creative scene"],"cons":["Still developing","Windy","Limited evening options"],"lat":64.153,"lng":-21.955,"priceLevel":"$$$"},{"name":"Laugardalur","tagline":"Reykjavik's family recreation valley","description":"Laugardalur is Reykjavik's recreation hub - geothermal pool, botanical garden, and family attractions. It's where locals go for outdoor activities.","vibe":"Family & Recreation","bestFor":"Families, sports lovers, and those seeking local Reykjavik","pros":["Geothermal pool","Botanical garden","Sports facilities","Local atmosphere"],"cons":["Far from downtown","Limited dining","Residential"],"lat":64.144,"lng":-21.887,"priceLevel":"$$"},{"name":"Vesturbær","tagline":"Reykjavik's quiet western residential","description":"Vesturbær is Reykjavik's peaceful west - residential streets, ocean views, and local cafes. It's where Reykjavik feels like a small town.","vibe":"Residential & Peaceful","bestFor":"Long-term stayers, those seeking quiet Reykjavik living","pros":["Ocean views","Quiet streets","Local feel","Near downtown"],"cons":["Limited options","Quiet evenings","Residential only"],"lat":64.15,"lng":-21.96,"priceLevel":"$$$"},{"name":"Hlemmur/East Downtown","tagline":"Reykjavik's emerging foodie corner","description":"Hlemmur is Reykjavik's foodie frontier - Hlemmur Mathöll food hall, emerging restaurants, and younger energy. It's the city's most exciting culinary area.","vibe":"Foodie & Emerging","bestFor":"Foodies, young travelers, and those seeking new Reykjavik","pros":["Hlemmur food hall","Great restaurants","Local scene","Less touristy"],"cons":["Still developing","Limited nightlife","Variable quality"],"lat":64.143,"lng":-21.92,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

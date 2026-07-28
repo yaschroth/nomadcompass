@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vieux Lyon","tagline":"Renaissance treasures and hidden passages","description":"Vieux Lyon is France's largest Renaissance quarter - stunning architecture, secret traboules (passageways), and traditional bouchons. It's UNESCO-listed and beautifully preserved.","vibe":"Historic & Charming","bestFor":"History lovers, food enthusiasts, and those seeking classic Lyon","pros":["Renaissance architecture","Traditional food","Secret traboules","Riverside charm"],"cons":["Very touristy","Expensive dining","Crowded streets"],"lat":45.762,"lng":4.827,"priceLevel":"$$$"},{"name":"Croix-Rousse","tagline":"Lyon's bohemian silk-worker hill","description":"Croix-Rousse is Lyon's artistic hill - former silk workers' neighborhood now home to artists, craftspeople, and bohemian cafes. Amazing views and strong community character.","vibe":"Bohemian & Artsy","bestFor":"Artists, creatives, and those seeking authentic local life","pros":["Amazing views","Artistic community","Local markets","Village feel"],"cons":["Very hilly","Far from center","Limited transport"],"lat":45.775,"lng":4.833,"priceLevel":"$$"},{"name":"Presqu'île","tagline":"Lyon's elegant central peninsula","description":"Presqu'île is Lyon's central peninsula between two rivers - grand squares, designer shopping, and cultural venues. It's Lyon's commercial heart with beautiful Haussmann architecture.","vibe":"Elegant & Central","bestFor":"Shoppers, culture lovers, and those seeking central convenience","pros":["Central location","Grand architecture","Shopping","Cultural venues"],"cons":["Expensive","Commercial feel","Crowded"],"lat":45.76,"lng":4.835,"priceLevel":"$$$"},{"name":"Confluence","tagline":"Lyon's bold modern development","description":"Confluence is Lyon's newest neighborhood - where rivers meet, with bold contemporary architecture, museums, and sustainable design. It's Lyon's vision of the future.","vibe":"Modern & Sustainable","bestFor":"Architecture lovers, young professionals, and those seeking modern Lyon","pros":["Modern architecture","Confluence Museum","Waterfront parks","Sustainable design"],"cons":["Still developing","Less character","Far from old Lyon"],"lat":45.735,"lng":4.82,"priceLevel":"$$$"},{"name":"Guillotière","tagline":"Lyon's multicultural crossroads","description":"Guillotière is Lyon's diversity - African, Asian, and Middle Eastern communities create a vibrant multicultural hub. It's the city's most affordable and authentic neighborhood.","vibe":"Multicultural & Authentic","bestFor":"Budget travelers, food lovers, and those seeking diverse community","pros":["Cheapest central area","Ethnic food","Authentic feel","Near universities"],"cons":["Gritty areas","Less polished","Some safety concerns"],"lat":45.753,"lng":4.845,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

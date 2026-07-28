@@ -1419,6 +1419,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Vieille Ville (Old Town)","tagline":"Lausanne's hilltop medieval heart","description":"Lausanne's Old Town climbs the hill - Gothic cathedral, cobbled streets, and commanding lake views. It's medieval charm with Olympic city energy.","vibe":"Medieval & Hilly","bestFor":"History lovers, cathedral visitors, and those seeking old Lausanne","pros":["Gothic cathedral","Lake views","Historic charm","Character"],"cons":["Very hilly","Limited parking","Exhausting walks"],"lat":46.523,"lng":6.635,"priceLevel":"$$$"},{"name":"Ouchy","tagline":"Lausanne's lakefront Olympic quarter","description":"Ouchy is Lausanne's lakefront - Olympic Museum, promenades, and Belle Époque hotels. It's where Lausanne meets Lake Geneva in style.","vibe":"Lakefront & Olympic","bestFor":"Olympic enthusiasts, lake lovers, and those wanting waterfront","pros":["Olympic Museum","Lake promenade","Ferry access","Belle Époque charm"],"cons":["Tourist prices","Far from center","Seasonal crowds"],"lat":46.508,"lng":6.628,"priceLevel":"$$$$"},{"name":"Flon","tagline":"Lausanne's hip industrial revival","description":"Flon is Lausanne's transformed industrial district - clubs, restaurants, and creative spaces in former warehouses. It's the city's nightlife hub.","vibe":"Hip & Nightlife","bestFor":"Night owls, young travelers, and those seeking trendy Lausanne","pros":["Best nightlife","Restaurants","Creative spaces","Central"],"cons":["Noisy weekends","Industrial feel","Expensive drinks"],"lat":46.52,"lng":6.63,"priceLevel":"$$$"},{"name":"EPFL/University Area","tagline":"Lausanne's academic innovation hub","description":"Near EPFL and University of Lausanne, this area pulses with student and researcher energy. It's Switzerland's innovation corridor.","vibe":"Academic & Innovation","bestFor":"Students, researchers, and those seeking university atmosphere","pros":["University access","Innovation hub","Student life","Modern campus"],"cons":["Far from center","Academic calendar","Suburban feel"],"lat":46.518,"lng":6.565,"priceLevel":"$$"},{"name":"Lavaux Direction","tagline":"Lausanne's vineyard gateway","description":"East of Lausanne toward UNESCO Lavaux vineyards - wine terraces, lake views, and Swiss wine culture at its finest.","vibe":"Wine & Scenic","bestFor":"Wine lovers, scenic seekers, and those wanting vineyard access","pros":["Lavaux access","Wine terraces","Lake views","UNESCO scenery"],"cons":["Far from center","Transport needed","Expensive wine"],"lat":46.51,"lng":6.665,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1470,6 +1471,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

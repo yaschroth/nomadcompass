@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Medieval canals and Dom Tower majesty","description":"Utrecht's historic center features unique wharf-level cellars along canals with the iconic Dom Tower rising above. Cafes fill the waterside basements while medieval charm persists.","vibe":"Historic charming","bestFor":"History lovers and canal enthusiasts","pros":["Unique canal cellars","Dom Tower","Historic atmosphere","Great cafes"],"cons":["Crowded weekends","Limited parking","Tourist-oriented"],"lat":52.0907,"lng":5.1214,"priceLevel":"$$"},{"name":"Lombok","tagline":"Multicultural energy and urban cool","description":"This diverse neighborhood west of center offers international restaurants, creative businesses, and genuine multiculturalism. Young Dutch and immigrant communities create vibrant street life.","vibe":"Multicultural urban","bestFor":"Foodies and culture seekers","pros":["Great food","Diverse community","Local atmosphere","Affordable eats"],"cons":["Some rough edges","Less polished","Variable quality"],"lat":52.0912,"lng":5.1023,"priceLevel":"$"},{"name":"Rijnsweerd","tagline":"University campus and student life","description":"The university area hosts students, researchers, and the De Uithof campus with its distinctive modern architecture. Affordable living and young energy define the area.","vibe":"Academic modern","bestFor":"Students and academics","pros":["University access","Modern architecture","Affordable","Young energy"],"cons":["Far from center","Campus feel","Limited nightlife"],"lat":52.0856,"lng":5.1689,"priceLevel":"$"},{"name":"Wittevrouwen","tagline":"Neighborhood charm with local boutiques","description":"This charming residential area features independent boutiques, neighborhood cafes, and local character. Tree-lined streets and community atmosphere attract young families and professionals.","vibe":"Neighborhood charming","bestFor":"Long-term stays and families","pros":["Local boutiques","Community feel","Quiet streets","Near center"],"cons":["Residential quiet","Limited nightlife","Higher rents"],"lat":52.0967,"lng":5.1312,"priceLevel":"$$"},{"name":"Hoog Catharijne","tagline":"Modern mall meets central station","description":"The massive shopping and transport hub connects Utrecht's station to the city center. Modern architecture, national retailers, and transit convenience make it a practical destination.","vibe":"Modern commercial","bestFor":"Shoppers and transit users","pros":["Transport hub","Shopping options","Modern facilities","Weather protection"],"cons":["Generic mall","Busy crowds","No character"],"lat":52.0889,"lng":5.1134,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

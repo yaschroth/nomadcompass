@@ -1450,6 +1450,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Hamra","tagline":"Beirut's intellectual bohemian heart","description":"Hamra is Beirut's historic commercial and intellectual center - the American University of Beirut anchors this neighborhood of bookshops, cafes, and the city's most diverse street life.","vibe":"Intellectual & Bohemian","bestFor":"Intellectuals, students, and those seeking authentic Beirut culture","pros":["AUB campus","Great cafes","Bookshops","Central location"],"cons":["Can be chaotic","Older buildings","Traffic"],"lat":33.896,"lng":35.48,"priceLevel":"$$"},{"name":"Gemmayzeh/Mar Mikhael","tagline":"Beirut's coolest creative hub","description":"These adjacent neighborhoods are Beirut's hipster heartland - renovated Ottoman houses host bars, galleries, and restaurants. The nightlife here rivals anywhere in the Mediterranean.","vibe":"Hip & Nightlife","bestFor":"Nightlife lovers, creatives, and young professionals","pros":["Amazing nightlife","Great restaurants","Art galleries","Creative energy"],"cons":["Very noisy nights","Gentrified prices","Crowded"],"lat":33.892,"lng":35.512,"priceLevel":"$$$"},{"name":"Achrafieh","tagline":"Beirut's elegant Christian quarter","description":"Achrafieh is East Beirut's upscale heart - elegant old buildings, tree-lined streets, and a more European feel. ABC Mall and Sassine Square anchor this sophisticated neighborhood.","vibe":"Upscale & Elegant","bestFor":"Those seeking elegance, families, and European-style living","pros":["Beautiful architecture","Safe","Good shopping","Family-friendly"],"cons":["Expensive","Hills everywhere","Traffic"],"lat":33.888,"lng":35.52,"priceLevel":"$$$$"},{"name":"Downtown (BCD)","tagline":"Beirut's rebuilt central district","description":"The Beirut Central District was rebuilt after the civil war - Place de l'Étoile, Souks, and Ottoman-era buildings create a showcase district. Beautiful but sometimes controversially sterile.","vibe":"Modern & Showcase","bestFor":"Architecture lovers, shoppers, and those wanting clean modern living","pros":["Beautiful reconstruction","Safe","Souks shopping","Central"],"cons":["Can feel empty","Expensive","Lacking soul"],"lat":33.897,"lng":35.506,"priceLevel":"$$$$"},{"name":"Badaro","tagline":"Beirut's emerging hip neighborhood","description":"Badaro is Beirut's rising star - a former quiet residential area now hosting cool bars, cafes, and a younger crowd. It's Gemmayzeh before it got too popular.","vibe":"Emerging & Hip","bestFor":"Trendsetters, young professionals, and those seeking up-and-coming areas","pros":["Up-and-coming","Great bars","Less crowded","Good value"],"cons":["Still developing","Pine forest nearby","Limited transport"],"lat":33.875,"lng":35.518,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1501,6 +1502,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

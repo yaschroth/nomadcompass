@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Murals, cafes, and white coffee heritage","description":"Ipoh's historic core has transformed into a creative hub with street art, heritage shophouses converted to cafes, and the famous Concubine Lane. The birthplace of white coffee maintains its authentic charm.","vibe":"Artistic & Heritage","bestFor":"Foodies, art lovers, and those seeking authentic Malaysian heritage","pros":["Amazing street art","Best white coffee spots","Heritage architecture","Vibrant cafe scene"],"cons":["Limited accommodation options","Shops close early","Can be hot walking around"],"lat":4.5944,"lng":101.0767,"priceLevel":"$$"},{"name":"New Town","tagline":"Colonial charm with British echoes","description":"Across the Kinta River, New Town features grand colonial buildings including the railway station and town hall. More administrative but with excellent food courts and local eateries.","vibe":"Colonial & Local","bestFor":"Architecture enthusiasts, local food lovers, and train travelers","pros":["Stunning colonial architecture","Great hawker food","Railway station hub","More spacious streets"],"cons":["Less trendy than Old Town","Fewer cafes","More commercial"],"lat":4.5889,"lng":101.0823,"priceLevel":"$"},{"name":"Lost World Area","tagline":"Cave temples and limestone wonders","description":"The area near Tambun and the Lost World features stunning limestone caves, temples, and hot springs. More suburban but offers unique natural attractions.","vibe":"Nature & Spiritual","bestFor":"Nature lovers, temple explorers, and families","pros":["Cave temples","Hot springs","Natural scenery","Less crowded"],"cons":["Far from city center","Need own transport","Limited nightlife"],"lat":4.5756,"lng":101.1234,"priceLevel":"$$"},{"name":"Pasir Puteh","tagline":"Modern suburb with local flavor","description":"A middle-class residential area with good cafes, shopping centers, and easy access to attractions. Popular with young professionals and families.","vibe":"Suburban & Modern","bestFor":"Long-term stays, families, and those wanting residential comfort","pros":["Modern amenities","Good supermarkets","Residential calm","Easy parking"],"cons":["Less character","Need transport","Suburban feel"],"lat":4.5678,"lng":101.0912,"priceLevel":"$$"},{"name":"Gunung Rapat","tagline":"Limestone caves and pomelo orchards","description":"This semi-rural area at the base of limestone hills features famous pomelo farms, cave temples, and authentic Hakka food. Perfect for those wanting nature immersion near the city.","vibe":"Rural & Natural","bestFor":"Nature enthusiasts, cave explorers, and authentic food seekers","pros":["Cave temple access","Famous pomelos","Authentic Hakka food","Scenic limestone hills"],"cons":["Very rural feel","Need transport","Limited accommodation"],"lat":4.5467,"lng":101.1023,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

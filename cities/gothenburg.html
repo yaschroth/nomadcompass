@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Haga","tagline":"Gothenburg's cozy wooden house charm","description":"Haga is Gothenburg's most charming neighborhood - 19th-century wooden houses, cozy cafes, and famous cinnamon buns. It's quintessential Swedish hygge.","vibe":"Charming & Cozy","bestFor":"Cafe lovers, fika seekers, and those wanting charming Gothenburg","pros":["Beautiful wooden houses","Famous cafes","Cozy atmosphere","Walkable"],"cons":["Small area","Touristy","Crowded weekends"],"lat":57.698,"lng":11.953,"priceLevel":"$$"},{"name":"Linné","tagline":"Gothenburg's hip foodie strip","description":"Linnégatan is Gothenburg's trendiest street - restaurants, bars, and boutiques. It's where young Gothenburgers go out.","vibe":"Trendy & Foodie","bestFor":"Foodies, night owls, and those seeking trendy Gothenburg","pros":["Best restaurants","Good bars","Trendy boutiques","Young vibe"],"cons":["Can be crowded","Expensive dining","Noisy weekends"],"lat":57.693,"lng":11.95,"priceLevel":"$$$"},{"name":"Majorna","tagline":"Gothenburg's local working-class heart","description":"Majorna is authentic Gothenburg - former working-class area with local character, vintage shops, and community feel. It's where real Gothenburgers live.","vibe":"Local & Authentic","bestFor":"Those seeking authentic local Gothenburg life","pros":["Local character","Affordable","Vintage shops","Community feel"],"cons":["Less scenic","Far from center","Limited tourism"],"lat":57.688,"lng":11.925,"priceLevel":"$"},{"name":"Centrum/Nordstan","tagline":"Gothenburg's commercial shopping heart","description":"Central Gothenburg includes Nordstan mall and the main avenues - shopping, transport hub, and urban energy. It's functional Gothenburg.","vibe":"Commercial & Central","bestFor":"Shoppers, those needing central convenience","pros":["Shopping","Transport hub","Central","All amenities"],"cons":["Commercial feel","Crowded","Less character"],"lat":57.707,"lng":11.969,"priceLevel":"$$"},{"name":"Archipelago/Saltholmen","tagline":"Gothenburg's island escape gateway","description":"Saltholmen is the gateway to Gothenburg's archipelago - ferry terminal, bathing spots, and island-hopping access. Summer paradise.","vibe":"Island & Nature","bestFor":"Nature lovers, island hoppers, and summer visitors","pros":["Archipelago access","Bathing spots","Island ferries","Nature escape"],"cons":["Seasonal","Far from center","Weather dependent"],"lat":57.659,"lng":11.843,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

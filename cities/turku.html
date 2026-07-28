@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Center","tagline":"Finland's oldest city reinvented","description":"Finland's former capital features the Aura River, castle, and cathedral alongside modern architecture and design shops. Summer riverboats and winter markets create year-round activity.","vibe":"Historic modern","bestFor":"Culture seekers and history lovers","pros":["Historic sites","River atmosphere","Good museums","Design shops"],"cons":["Cold winters","Expensive","Can feel quiet"],"lat":60.4518,"lng":22.2666,"priceLevel":"$$"},{"name":"Portsa","tagline":"Port area turned creative district","description":"The former port and industrial area has transformed into a creative neighborhood with galleries, restaurants, and cultural venues. Turku's hippest addresses cluster here.","vibe":"Creative industrial","bestFor":"Creatives and nightlife seekers","pros":["Creative scene","Good restaurants","Industrial charm","Emerging energy"],"cons":["Still developing","Spread out","Limited services"],"lat":60.4467,"lng":22.2534,"priceLevel":"$$"},{"name":"Ruissalo Island","tagline":"Nature escape and summer festivals","description":"This island nature reserve offers beaches, forests, and the famous Ruisrock festival. Botanical gardens and oak forests provide escape from the city.","vibe":"Natural recreational","bestFor":"Nature lovers and festival goers","pros":["Beautiful nature","Festival venue","Beaches","Botanical gardens"],"cons":["Seasonal appeal","Far from center","Limited services"],"lat":60.4312,"lng":22.1234,"priceLevel":"$"},{"name":"Kupittaa","tagline":"University hub and tech scene","description":"Home to university campuses and science parks, this area attracts students and tech workers. Modern facilities, sports options, and affordable dining serve the young population.","vibe":"Academic modern","bestFor":"Students and tech workers","pros":["University facilities","Tech scene","Sports options","Affordable"],"cons":["Suburban feel","Less character","Far from center"],"lat":60.4445,"lng":22.2856,"priceLevel":"$"},{"name":"Aurajoki Riverbank","tagline":"Summer terraces and boat restaurants","description":"The Aura River banks come alive in summer with converted boats serving as restaurants and bars. Winter ice and summer promenades create seasonal transformations.","vibe":"Riverside social","bestFor":"Social butterflies and summer visitors","pros":["Boat restaurants","Summer terraces","Social atmosphere","Central location"],"cons":["Seasonal only","Weather dependent","Limited winter appeal"],"lat":60.4512,"lng":22.2712,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

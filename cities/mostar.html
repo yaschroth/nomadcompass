@@ -1441,6 +1441,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Stari Grad (Old Town)","tagline":"Ottoman beauty risen from war ruins","description":"The UNESCO-listed Old Town features the reconstructed Stari Most bridge, Ottoman bazaar, and haunting war remnants. The cobblestone streets and riverside cafes create Bosnia's most photogenic setting.","vibe":"Historic & Resilient","bestFor":"History lovers, photographers, and bridge divers","pros":["Iconic bridge","Ottoman architecture","Great cafes","War history"],"cons":["Very touristy","Crowded in summer","Tourist prices"],"lat":43.337,"lng":17.815,"priceLevel":"$$"},{"name":"Bulevar","tagline":"The former front line remembered","description":"The main boulevard that divided the city during the war now reconnects communities. The bullet-scarred buildings and ongoing reconstruction tell Mostar's complex modern history.","vibe":"Urban & Reflective","bestFor":"War history seekers, urban explorers, and those wanting to understand conflict","pros":["War history visible","More local","Central location","Reconstruction hope"],"cons":["Still damaged buildings","Can feel somber","Less scenic"],"lat":43.3412,"lng":17.8078,"priceLevel":"$"},{"name":"West Mostar","tagline":"Croat side with modern life","description":"The western part of the city offers modern cafes, shopping, and predominantly Croatian Catholic atmosphere. The contrast with the Ottoman east reveals the city's complex division.","vibe":"Modern & Croatian","bestFor":"Those wanting to understand the city's divisions, modern amenities seekers","pros":["Modern cafes","Shopping options","Catholic heritage","Less touristy"],"cons":["Less historic charm","Divided atmosphere","Far from bridge"],"lat":43.3423,"lng":17.7989,"priceLevel":"$$"},{"name":"Blagaj","tagline":"Dervish monastery at the spring","description":"Just outside Mostar, this village features a stunning tekke (dervish monastery) at the source of the Buna River. The mystical setting and riverside restaurants offer escape from city crowds.","vibe":"Spiritual & Natural","bestFor":"Nature lovers, spiritual seekers, and those escaping crowds","pros":["Stunning tekke","River source","Peaceful atmosphere","Good restaurants"],"cons":["Need transport","Can be crowded","Limited accommodation"],"lat":43.2567,"lng":17.8834,"priceLevel":"$"},{"name":"Donja Mahala","tagline":"Riverside neighborhood beneath the bridge","description":"The neighborhood directly below the famous bridge offers intimate Ottoman atmosphere with riverside terraces and traditional crafts. The closest you can stay to the iconic bridge views.","vibe":"Riverside & Traditional","bestFor":"Bridge view seekers, traditional atmosphere lovers, and photographers","pros":["Bridge views","Riverside terraces","Ottoman crafts","Intimate atmosphere"],"cons":["Noisy from tourists","Steep streets","Crowded daytime"],"lat":43.3356,"lng":17.8145,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1492,6 +1493,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

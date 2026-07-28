@@ -1435,6 +1435,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"South Bank","tagline":"Brisbane's cultural riverfront playground","description":"South Bank is Brisbane's cultural heart - riverside parklands, artificial beach, and cultural precinct. It's the city's most loved public space.","vibe":"Cultural & Riverside","bestFor":"Culture lovers, families, and those seeking Brisbane's best public space","pros":["Cultural venues","Artificial beach","Riverside walks","Markets"],"cons":["Crowded weekends","Tourist area","Limited nightlife"],"lat":-27.4804,"lng":153.0224,"priceLevel":"$$"},{"name":"Fortitude Valley","tagline":"Brisbane's nightlife and creative hub","description":"The Valley is Brisbane's party district - clubs, live music, and Chinatown. It's gritty, creative, and the center of Brisbane's nightlife.","vibe":"Nightlife & Creative","bestFor":"Night owls, music lovers, and those seeking Brisbane's edge","pros":["Best nightlife","Live music","Chinatown","Creative scene"],"cons":["Can be rough","Noisy","Gritty areas"],"lat":-27.4568,"lng":153.036,"priceLevel":"$$"},{"name":"West End","tagline":"Brisbane's bohemian multicultural village","description":"West End is Brisbane's alternative heart - multicultural community, farmers markets, and bohemian character. It's the city's most diverse neighborhood.","vibe":"Bohemian & Multicultural","bestFor":"Creatives, foodies, and those seeking alternative Brisbane","pros":["Great markets","Diverse food","Bohemian vibe","Cafes"],"cons":["Gentrifying","Parking issues","Crowded markets"],"lat":-27.485,"lng":153.007,"priceLevel":"$$"},{"name":"New Farm","tagline":"Brisbane's leafy inner-city gem","description":"New Farm is Brisbane's most desirable inner suburb - beautiful parks, trendy cafes, and riverside walks. It's where Brisbane's young professionals live.","vibe":"Leafy & Trendy","bestFor":"Young professionals, families, and those seeking quality living","pros":["Beautiful park","Great cafes","Riverside","Walkable"],"cons":["Expensive","Competitive housing","Can feel smug"],"lat":-27.468,"lng":153.047,"priceLevel":"$$$"},{"name":"Paddington","tagline":"Brisbane's antique and heritage quarter","description":"Paddington is Brisbane's character suburb - Queenslander houses, antique shops, and leafy hills. It's charming, hilly, and quintessentially Brisbane.","vibe":"Heritage & Village","bestFor":"Antique lovers, architecture fans, and those seeking village feel","pros":["Queenslander houses","Antique shops","Village feel","Character"],"cons":["Very hilly","Limited parking","Quiet evenings"],"lat":-27.46,"lng":152.999,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1486,6 +1487,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

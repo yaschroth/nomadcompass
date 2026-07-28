@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Northbridge","tagline":"Perth's multicultural entertainment hub","description":"Northbridge is Perth's vibrant heart - Asian restaurants, nightclubs, and cultural precinct. It's where Perth comes alive after dark with the state's best dining diversity.","vibe":"Entertainment & Multicultural","bestFor":"Night owls, foodies, and those seeking Perth's energy","pros":["Best Asian food","Nightlife","Cultural Centre","Central location"],"cons":["Can be rowdy","Safety concerns late night","Noisy"],"lat":-31.947,"lng":115.857,"priceLevel":"$$"},{"name":"Fremantle","tagline":"Perth's historic port town charm","description":"Freo is Perth's most characterful suburb - colonial architecture, cappuccino strip, and maritime heritage. Technically separate but feels like Perth's bohemian soul.","vibe":"Bohemian & Historic","bestFor":"Artists, history lovers, and those seeking character","pros":["Historic architecture","Great markets","Coffee culture","Maritime museum"],"cons":["Far from CBD","Weekend crowds","Hot summers"],"lat":-32.0569,"lng":115.7439,"priceLevel":"$$"},{"name":"Subiaco","tagline":"Perth's leafy professional village","description":"Subi is Perth's upmarket village - boutique shopping, excellent restaurants, and leafy streets. It's where Perth's professionals settle for a relaxed urban lifestyle.","vibe":"Upmarket & Village","bestFor":"Professionals, shoppers, and those seeking quality living","pros":["Great restaurants","Boutique shopping","Leafy streets","Good transport"],"cons":["Expensive","Quiet nightlife","Older demographic"],"lat":-31.949,"lng":115.827,"priceLevel":"$$$"},{"name":"Leederville","tagline":"Perth's quirky cafe strip","description":"Leederville is Perth's quirky cousin - Oxford Street cafes, vintage shops, and relaxed vibes. It's young, creative, and more affordable than Subiaco.","vibe":"Quirky & Creative","bestFor":"Young creatives, cafe lovers, and those seeking relaxed vibes","pros":["Great cafes","Vintage shops","Luna Cinema","Relaxed atmosphere"],"cons":["Limited nightlife","Small area","Street parking only"],"lat":-31.937,"lng":115.84,"priceLevel":"$$"},{"name":"Cottesloe/Scarborough","tagline":"Perth's iconic beach lifestyle","description":"Perth's beach suburbs offer the quintessential Australian coastal lifestyle - sunset drinks at Cottesloe, surf at Scarborough, and endless summer vibes.","vibe":"Beach & Lifestyle","bestFor":"Beach lovers, surfers, and those seeking coastal living","pros":["Amazing beaches","Sunset views","Beach cafes","Healthy lifestyle"],"cons":["Far from CBD","Expensive beachside","Seasonal crowds"],"lat":-31.993,"lng":115.754,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

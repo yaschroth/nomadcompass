@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Colonial revival on the Pacific","description":"Mazatlán's beautifully restored historic center features colorful colonial buildings, the stunning Cathedral, and Plaza Machado's buzzing cafe scene. The cultural renaissance has transformed this into Mexico's most impressive coastal old town.","vibe":"Historic & Cultural","bestFor":"Culture lovers, architecture enthusiasts, and authentic Mexico seekers","pros":["Beautiful restoration","Great restaurants","Cultural venues","Walkable streets"],"cons":["Far from main beaches","Hot for walking","Some areas still rough"],"lat":23.1934,"lng":-106.4278,"priceLevel":"$$"},{"name":"Zona Dorada","tagline":"Golden Zone tourist beach strip","description":"The main tourist zone offers beach hotels, restaurants, and the infrastructure visitors expect. The convenient beach access and tourist services make it the default for most visitors.","vibe":"Tourist & Beach","bestFor":"Beach lovers, resort seekers, and convenience-focused travelers","pros":["Beach access","Tourist infrastructure","Hotels variety","Familiar amenities"],"cons":["Generic resort feel","Tourist prices","Less authentic"],"lat":23.2278,"lng":-106.4489,"priceLevel":"$$$"},{"name":"Olas Altas","tagline":"Original beach with sunset charm","description":"The original tourist beach connects to the historic center with a seaside promenade. The dramatic sunset views and traditional atmosphere offer a more authentic coastal experience.","vibe":"Traditional & Sunset","bestFor":"Sunset lovers, photographers, and those wanting traditional beach atmosphere","pros":["Amazing sunsets","Historic promenade","Cliff diving tradition","Near old town"],"cons":["Smaller beach","Less infrastructure","Rocky areas"],"lat":23.1889,"lng":-106.4312,"priceLevel":"$$"},{"name":"Cerritos","tagline":"North end surf and local life","description":"The northern beach area offers surf breaks, a more local atmosphere, and newer development. The authentic Mexican beach town vibe attracts surfers and those escaping tourist zones.","vibe":"Surf & Local","bestFor":"Surfers, local experience seekers, and budget-conscious travelers","pros":["Surf breaks","Local atmosphere","More affordable","Less touristy"],"cons":["Far from center","Limited nightlife","Need transport"],"lat":23.3534,"lng":-106.4878,"priceLevel":"$$"},{"name":"Malecón","tagline":"World's longest coastal boardwalk","description":"The 21km seaside promenade connects all of Mazatlán's coastal neighborhoods. Perfect for running, cycling, and sunset walks while connecting historic center to beach areas.","vibe":"Promenade & Active","bestFor":"Runners, cyclists, and sunset walk enthusiasts","pros":["Amazing promenade","Ocean views","Exercise opportunities","Connects all areas"],"cons":["Can be hot","Very long","Busy on weekends"],"lat":23.2089,"lng":-106.4378,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

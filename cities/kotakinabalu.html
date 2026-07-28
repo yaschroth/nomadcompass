@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"City Centre","tagline":"Waterfront sunsets and island hopping base","description":"KK's compact center offers the iconic waterfront esplanade with stunning sunsets over the South China Sea. The concentration of hotels, restaurants, and tour operators makes it the natural base for exploring Sabah.","vibe":"Central & Scenic","bestFor":"First-time visitors, island hoppers, and sunset lovers","pros":["Amazing sunset views","Tour operator access","Central location","Good restaurants"],"cons":["Touristy","Traffic during peak hours","Limited parking"],"lat":5.9788,"lng":116.0753,"priceLevel":"$$"},{"name":"Gaya Street","tagline":"Heritage shophouses and Sunday market","description":"The historic heart of KK features pre-war shophouses, the famous Sunday market, and the best local food. The Chinese heritage atmosphere and traditional coffee shops offer authentic Sabahan culture.","vibe":"Heritage & Culinary","bestFor":"Food lovers, market enthusiasts, and heritage seekers","pros":["Famous Sunday market","Best local food","Heritage architecture","Traditional coffee shops"],"cons":["Shops close early","Parking challenges","Less modern amenities"],"lat":5.9812,"lng":116.0789,"priceLevel":"$"},{"name":"Damai / Likas Bay","tagline":"Beach resort vibes in the city","description":"The coastal area north of the center offers beach resorts, Likas Bay mosque, and a more relaxed atmosphere. Popular with families and those wanting beach access without leaving the city.","vibe":"Beach & Relaxed","bestFor":"Beach lovers, families, and those wanting resort amenities","pros":["Beach access","Resort facilities","Less crowded","Scenic mosque"],"cons":["Further from center","Need transport","Higher accommodation prices"],"lat":5.9989,"lng":116.0912,"priceLevel":"$$$"},{"name":"Tanjung Aru","tagline":"Beach sunsets and airport convenience","description":"The beach suburb near the airport offers the famous Tanjung Aru beach, First Beach vendors, and excellent seafood. The sunset views rival the waterfront but with a more local atmosphere.","vibe":"Beach & Local","bestFor":"Beach lovers, seafood enthusiasts, and those near airport","pros":["Famous beach","Great seafood","Sunset views","Airport proximity"],"cons":["Airport noise","Limited nightlife","Need transport to center"],"lat":5.9456,"lng":116.0534,"priceLevel":"$$"},{"name":"Imago / KK Times Square","tagline":"Modern malls and urban convenience","description":"The commercial district features major shopping malls, modern hotels, and urban amenities. Popular with shoppers and those wanting familiar chain stores and restaurants.","vibe":"Modern & Commercial","bestFor":"Shoppers, urban lifestyle seekers, and those wanting modern amenities","pros":["Major shopping malls","Modern facilities","Air-conditioned comfort","Restaurant variety"],"cons":["Less character","Commercial atmosphere","Generic feel"],"lat":5.9634,"lng":116.0856,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

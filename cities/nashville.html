@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"East Nashville","tagline":"Nashville's hipster music scene heart","description":"East Nashville is where the city's cool kids live - dive bars, indie music venues, and excellent coffee. It's grittier than downtown but more authentically Nashville.","vibe":"Hipster & Musical","bestFor":"Musicians, creatives, and those seeking authentic Nashville","pros":["Best music venues","Great coffee","Creative energy","Affordable (relatively)"],"cons":["Gentrifying","Variable areas","Far from downtown"],"lat":36.175,"lng":-86.75,"priceLevel":"$$"},{"name":"The Gulch","tagline":"Nashville's trendy urban village","description":"The Gulch is Nashville's shiniest neighborhood - new restaurants, boutique hotels, and Instagram-ready murals. It's polished, walkable, and very Instagram.","vibe":"Trendy & Polished","bestFor":"Young professionals, foodies, and those seeking trendy Nashville","pros":["Great restaurants","Walkable","Instagram murals","New hotels"],"cons":["Expensive","Feels artificial","Limited parking"],"lat":36.152,"lng":-86.788,"priceLevel":"$$$"},{"name":"Downtown/Broadway","tagline":"Nashville's honky-tonk tourist heart","description":"Broadway is Nashville's famous strip - honky-tonks, bachelorette parties, and live country music. It's touristy chaos but undeniably fun for a night out.","vibe":"Tourist & Party","bestFor":"First-time visitors, country music fans, and party seekers","pros":["Iconic honky-tonks","Live music everywhere","Electric atmosphere","People watching"],"cons":["Very touristy","Expensive drinks","Crowded chaos"],"lat":36.1627,"lng":-86.778,"priceLevel":"$$"},{"name":"12 South","tagline":"Nashville's boutique shopping strip","description":"12 South is Nashville's cutest neighborhood - boutique shops, brunch spots, and the 'I Believe in Nashville' mural. It's the city's favorite Instagram backdrop.","vibe":"Boutique & Cute","bestFor":"Shoppers, brunch lovers, and Instagram enthusiasts","pros":["Great boutiques","Famous murals","Excellent brunch","Walkable strip"],"cons":["Crowded weekends","Expensive","Limited parking"],"lat":36.125,"lng":-86.792,"priceLevel":"$$$"},{"name":"Germantown","tagline":"Nashville's historic food destination","description":"Germantown is Nashville's oldest neighborhood - historic architecture, top restaurants, and the Farmers' Market. It's where serious foodies eat when avoiding tourists.","vibe":"Historic & Foodie","bestFor":"Foodies, history lovers, and those seeking refined Nashville","pros":["Best restaurants","Historic charm","Farmers Market","Less touristy"],"cons":["Expensive dining","Limited nightlife","Small area"],"lat":36.175,"lng":-86.793,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

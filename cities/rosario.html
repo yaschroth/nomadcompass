@@ -1436,6 +1436,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Historic heart on the Paraná","description":"Downtown Rosario features neoclassical architecture, pedestrian shopping streets, and the iconic Monumento a la Bandera. Cafes and cultural venues surround plazas where locals gather for mate.","vibe":"Historic urban","bestFor":"Culture lovers and first-time visitors","pros":["Historic architecture","Cultural venues","Shopping options","Central location"],"cons":["Can feel empty nights","Busy weekdays","Limited parking"],"lat":-32.9452,"lng":-60.6512,"priceLevel":"$"},{"name":"Pichincha","tagline":"Warehouse district turned creative hub","description":"Former industrial buildings now host art galleries, craft breweries, and design studios. Street art covers walls while weekend markets and food festivals draw creative crowds.","vibe":"Creative industrial","bestFor":"Creatives and nightlife seekers","pros":["Art scene","Craft beer culture","Weekend events","Creative energy"],"cons":["Some rough edges","Quiet weeknights","Limited services"],"lat":-32.9567,"lng":-60.6423,"priceLevel":"$"},{"name":"Fisherton","tagline":"Upscale suburb with green spaces","description":"This leafy residential area offers tree-lined streets, parks, and quality restaurants. Upper-middle-class families and professionals enjoy the peaceful atmosphere near the airport.","vibe":"Suburban upscale","bestFor":"Families and long-term stays","pros":["Green spaces","Quality dining","Near airport","Safe area"],"cons":["Far from center","Needs car","Quiet evenings"],"lat":-32.9234,"lng":-60.7234,"priceLevel":"$$"},{"name":"Barrio Martín","tagline":"Traditional neighborhood with local soul","description":"This authentic barrio maintains traditional Rosario character with local markets, family restaurants, and friendly neighbors. Long-term visitors find community and affordable living.","vibe":"Traditional neighborhood","bestFor":"Budget travelers seeking authenticity","pros":["Authentic feel","Affordable","Local community","Traditional markets"],"cons":["Basic amenities","Spanish needed","Limited nightlife"],"lat":-32.9312,"lng":-60.6345,"priceLevel":"$"},{"name":"Costanera Norte","tagline":"Riverside parks and sunset promenades","description":"The northern riverfront offers parks, beaches, and recreational spaces along the Paraná River. Running paths, beach bars, and riverside restaurants create Rosario's leisure destination.","vibe":"Riverside leisure","bestFor":"Active lifestyles and nature lovers","pros":["River views","Parks and beaches","Running paths","Sunset spots"],"cons":["Far from center","Seasonal activity","Limited transport"],"lat":-32.9123,"lng":-60.6612,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1487,6 +1488,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

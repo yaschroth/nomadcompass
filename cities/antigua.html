@@ -1451,6 +1451,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro (Parque Central)","tagline":"Colonial jewel beneath three volcanoes","description":"Antigua's center is Central America's most beautiful - cobblestone streets, pastel colonial buildings, ruined churches, volcano views. UNESCO World Heritage perfection.","vibe":"Colonial & Charming","bestFor":"History lovers, photographers, and romantic travelers","pros":["Stunning architecture","Great restaurants","Walkable","Volcano views"],"cons":["Very touristy","Expensive for Guatemala","Cobblestone challenges"],"lat":14.5586,"lng":-90.7295,"priceLevel":"$$"},{"name":"La Merced Area","tagline":"Baroque church and local markets","description":"La Merced surrounds one of Antigua's most beautiful churches - yellow baroque facade, local markets, artisan workshops. Where colonial beauty meets daily life.","vibe":"Historic & Local","bestFor":"Church lovers, market enthusiasts, and culture seekers","pros":["Beautiful church","Local markets","Artisan workshops","Less touristy"],"cons":["Limited dining","Basic area","Hilly streets"],"lat":14.5623,"lng":-90.7312,"priceLevel":"$"},{"name":"Santa Ana","tagline":"Quiet residential with authentic vibes","description":"Santa Ana offers residential Antigua - quiet streets away from tourist center, local families, traditional atmosphere. Where to experience daily Antiguan life.","vibe":"Residential & Authentic","bestFor":"Long-term visitors, Spanish students, and authentic seekers","pros":["Affordable","Local atmosphere","Quiet streets","Near language schools"],"cons":["Far from restaurants","Basic amenities","Limited nightlife"],"lat":14.5534,"lng":-90.7367,"priceLevel":"$"},{"name":"San Pedro las Huertas","tagline":"Village outskirts with volcano proximity","description":"San Pedro las Huertas sits at Antigua's edge - closer to Agua volcano, quieter living, local village feel. Where countryside meets colonial town.","vibe":"Village & Quiet","bestFor":"Hikers, volcano enthusiasts, and peace seekers","pros":["Near volcano","Village feel","Peaceful","Affordable"],"cons":["Far from center","Limited services","Transportation needed"],"lat":14.5389,"lng":-90.7267,"priceLevel":"$"},{"name":"Calle del Arco Area","tagline":"Iconic arch and upmarket dining","description":"The Arco de Santa Catalina area is Antigua's most photographed - the iconic yellow arch, upscale restaurants, boutique hotels. Where colonial charm meets sophistication.","vibe":"Iconic & Upscale","bestFor":"Photographers, fine diners, and boutique hotel seekers","pros":["Iconic views","Great restaurants","Boutique hotels","Central location"],"cons":["Most expensive","Very touristy","Crowded photo spot"],"lat":14.5612,"lng":-90.7301,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1502,6 +1503,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

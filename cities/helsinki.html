@@ -1465,6 +1465,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Kallio","tagline":"Helsinki's alternative working-class heart","description":"Kallio is Helsinki's coolest neighborhood - former working-class area now packed with bars, vintage shops, and creative studios. It's gritty, authentic, and the center of Helsinki's alternative scene.","vibe":"Alternative & Gritty","bestFor":"Young creatives, night owls, and digital nomads seeking authentic Helsinki","pros":["Best nightlife","Affordable for Helsinki","Local character","Creative scene"],"cons":["Gritty areas","Noisy weekends","Less polished"],"lat":60.184,"lng":24.95,"priceLevel":"$$"},{"name":"Punavuori (Design District)","tagline":"Helsinki's design and gallery quarter","description":"Punavuori is Helsinki's Design District - boutiques, galleries, and creative agencies in beautiful art nouveau buildings. It's the heart of Finnish design culture with excellent cafes.","vibe":"Design & Creative","bestFor":"Design lovers, creatives, and those seeking sophisticated Helsinki","pros":["Design boutiques","Art galleries","Beautiful architecture","Great cafes"],"cons":["Expensive","Quiet evenings","Limited nightlife"],"lat":60.162,"lng":24.935,"priceLevel":"$$$"},{"name":"Kamppi","tagline":"Helsinki's central commercial hub","description":"Kamppi is Helsinki's commercial center - major shopping mall, excellent transport connections, and central location. It's practical and convenient but lacks neighborhood character.","vibe":"Central & Commercial","bestFor":"Business travelers, shoppers, and those prioritizing convenience","pros":["Central location","Best transport","Major shopping","All amenities"],"cons":["No character","Commercial feel","Expensive"],"lat":60.169,"lng":24.932,"priceLevel":"$$$"},{"name":"Töölö","tagline":"Helsinki's elegant cultural district","description":"Töölö surrounds Helsinki's cultural institutions - opera, Finlandia Hall, and beautiful bay views. It's quiet, residential, and favored by families and professionals seeking green spaces.","vibe":"Cultural & Residential","bestFor":"Culture lovers, families, and those seeking peaceful Helsinki living","pros":["Cultural venues","Bay views","Green spaces","Quiet residential"],"cons":["Limited nightlife","Expensive","Less social"],"lat":60.178,"lng":24.915,"priceLevel":"$$$"},{"name":"Kruununhaka","tagline":"Helsinki's historic imperial quarter","description":"Kruununhaka is Helsinki's oldest district - neoclassical architecture, Senate Square, and historic ambiance. Beautiful but quiet, it's where Helsinki's imperial past lives on.","vibe":"Historic & Elegant","bestFor":"History lovers, architecture buffs, and those seeking classic Helsinki","pros":["Historic architecture","Senate Square","Waterfront access","Cultural sites"],"cons":["Very quiet","Few restaurants","Tourist area by day"],"lat":60.172,"lng":24.958,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1516,6 +1517,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

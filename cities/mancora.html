@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Central Máncora","tagline":"Surf town main strip","description":"The main beachfront area concentrates Máncora's hostels, restaurants, and surf shops. The sandy streets, beach access, and backpacker energy define Peru's premier beach party destination.","vibe":"Beach & Party","bestFor":"Surfers, backpackers, and beach party seekers","pros":["Beach access","Best nightlife","Surf shop concentration","Social atmosphere"],"cons":["Can be noisy","Party crowd","Sandy everywhere"],"lat":-4.1034,"lng":-81.0489,"priceLevel":"$$"},{"name":"Las Pocitas","tagline":"Natural pools and upscale escape","description":"South of town, this quieter area features natural rock pools at low tide and boutique hotels. The more sophisticated atmosphere attracts couples and those seeking beach beauty without party chaos.","vibe":"Upscale & Natural","bestFor":"Couples, luxury seekers, and those wanting quiet beaches","pros":["Natural tidal pools","Boutique hotels","Quieter atmosphere","Beautiful beach"],"cons":["Expensive","Far from nightlife","Need taxi to town"],"lat":-4.1145,"lng":-81.0545,"priceLevel":"$$$"},{"name":"Vichayito","tagline":"Kitesurfing haven south of town","description":"The beach area further south offers kitesurfing conditions and an even more relaxed atmosphere. The open beaches and wind conditions attract kitesurfers and those seeking seclusion.","vibe":"Kitesurf & Secluded","bestFor":"Kitesurfers, peace seekers, and those wanting isolation","pros":["Excellent kitesurfing","Empty beaches","Peaceful","Natural beauty"],"cons":["Very isolated","Limited services","Need transport for everything"],"lat":-4.1289,"lng":-81.0612,"priceLevel":"$$"},{"name":"Los Organos","tagline":"Fishing village with whale watching","description":"The fishing village north of Máncora offers whale watching (July-October) and a more authentic Peruvian coastal atmosphere. The working pier and seafood restaurants provide local flavor.","vibe":"Fishing & Nature","bestFor":"Whale watchers, seafood lovers, and authentic Peru seekers","pros":["Whale watching season","Fresh seafood","Authentic village","Less touristy"],"cons":["Basic infrastructure","Limited nightlife","Seasonal whale activity"],"lat":-4.1734,"lng":-81.1234,"priceLevel":"$"},{"name":"Punta Sal","tagline":"Calm waters and resort exclusivity","description":"The bay north of Máncora offers calmer swimming waters and resort-style accommodation. The protected beach and upscale vibe attract families and those seeking tranquil luxury.","vibe":"Resort & Calm","bestFor":"Families, swimmers, and luxury resort seekers","pros":["Calm swimming","Resort amenities","Family friendly","Beautiful bay"],"cons":["Expensive","Isolated","Limited independence"],"lat":-3.9889,"lng":-80.9712,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

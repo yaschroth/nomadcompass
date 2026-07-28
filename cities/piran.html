@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town","tagline":"Venetian gem on Adriatic waters","description":"Piran's stunning old town features Venetian architecture, Tartini Square, and narrow medieval streets. The compact beauty and car-free center create Slovenia's most romantic coastal destination.","vibe":"Romantic & Historic","bestFor":"Romantics, architecture lovers, and photographers","pros":["Stunning Venetian architecture","Car-free center","Seaside atmosphere","Tartini Square"],"cons":["Very small","Limited accommodation","Crowded in summer"],"lat":45.5283,"lng":13.5683,"priceLevel":"$$$"},{"name":"Town Walls Area","tagline":"Medieval walls with panoramic views","description":"The area near the preserved town walls offers panoramic views over the old town and Adriatic. The hilltop position and fortress remnants provide perspective on Piran's strategic history.","vibe":"Scenic & Historic","bestFor":"View seekers, history buffs, and photographers","pros":["Panoramic views","Medieval walls","Photo opportunities","Less crowded"],"cons":["Steep climb","Limited services","Sun exposure"],"lat":45.5312,"lng":13.5712,"priceLevel":"$$"},{"name":"Punta","tagline":"Sea swimming and lighthouse views","description":"The tip of the peninsula offers sea access, small beaches, and the lighthouse. The swimming spots and sunset views attract those seeking water activities.","vibe":"Seaside & Active","bestFor":"Swimmers, sunset lovers, and active travelers","pros":["Sea swimming","Sunset views","Lighthouse","Less crowded"],"cons":["Rocky shores","Limited beaches","Far from restaurants"],"lat":45.5267,"lng":13.5623,"priceLevel":"$$"},{"name":"Fiesa Bay","tagline":"Tiny bay with local character","description":"The small bay just south of Piran offers beach access and quieter atmosphere. The local swimming spot and waterfront restaurants provide escape from the main town's crowds.","vibe":"Beach & Local","bestFor":"Beach seekers, families, and local atmosphere lovers","pros":["Beach access","Quieter than Piran","Waterfront restaurants","Local feel"],"cons":["Very small","Limited services","Walk to old town"],"lat":45.5189,"lng":13.5734,"priceLevel":"$$"},{"name":"Portorož","tagline":"Resort neighbor with spa heritage","description":"The neighboring resort town offers larger beaches, hotels, and spa traditions. The more developed tourism infrastructure provides alternative to Piran's limited capacity.","vibe":"Resort & Spa","bestFor":"Resort seekers, spa lovers, and those wanting more amenities","pros":["Larger beaches","Hotel variety","Spa facilities","Casino"],"cons":["Less charming","More commercial","Resort atmosphere"],"lat":45.5134,"lng":13.5934,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

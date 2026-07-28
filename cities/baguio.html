@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Session Road/City Center","tagline":"Baguio's historic main street","description":"Session Road is Baguio's spine - historic shops, cafes, and weekend pedestrian mall. It's the heart of the city that defined Philippine highland tourism.","vibe":"Historic & Central","bestFor":"First-time visitors, shoppers, and those wanting central Baguio","pros":["Central location","Shopping","Cafes","Historic character"],"cons":["Traffic congestion","Weekend crowds","Touristy"],"lat":16.412,"lng":120.595,"priceLevel":"$$"},{"name":"Camp John Hay","tagline":"Baguio's pine-covered former US base","description":"Camp John Hay is Baguio's green lung - former American military base now a forest reserve with hotels, golf course, and nature trails.","vibe":"Forest & Recreation","bestFor":"Nature lovers, golfers, and those seeking pine forests","pros":["Pine forests","Cool air","Walking trails","Golf course"],"cons":["Far from center","Expensive hotels","Car needed"],"lat":16.392,"lng":120.608,"priceLevel":"$$$"},{"name":"Burnham Park Area","tagline":"Baguio's family recreation hub","description":"Burnham Park is Baguio's central park - boating lake, skating rinks, and family fun. It's the city's recreation heart surrounded by hotels.","vibe":"Park & Family","bestFor":"Families, park lovers, and those wanting central recreation","pros":["Central park","Boating","Family activities","Near center"],"cons":["Weekend crowds","Dated facilities","Cold evenings"],"lat":16.41,"lng":120.592,"priceLevel":"$"},{"name":"Mines View/Outlook","tagline":"Baguio's panoramic viewpoint area","description":"Mines View offers Baguio's best panoramas - views to the mining mountains and tourist shops. It's touristy but the views are genuinely impressive.","vibe":"Viewpoint & Tourist","bestFor":"View seekers, tourists, and those wanting panoramas","pros":["Great views","Photo opportunities","Souvenir shopping","Tourist facilities"],"cons":["Very touristy","Crowded","Souvenir touts"],"lat":16.418,"lng":120.615,"priceLevel":"$"},{"name":"La Trinidad Valley","tagline":"Baguio's strawberry farming neighbor","description":"La Trinidad is technically separate but feels like Baguio - strawberry farms, vegetable terraces, and cooler atmosphere than the city center.","vibe":"Agricultural & Cool","bestFor":"Farm visitors, strawberry lovers, and those seeking local agriculture","pros":["Strawberry farms","Cooler","Local produce","Less crowded"],"cons":["Traffic to Baguio","Spread out","Limited dining"],"lat":16.46,"lng":120.587,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

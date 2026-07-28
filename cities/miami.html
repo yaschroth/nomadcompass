@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"South Beach","tagline":"Art deco glamour on the world's most famous beach","description":"South Beach is Miami's iconic face - art deco buildings, white sand beaches, and endless nightlife. Ocean Drive and Lincoln Road attract tourists and celebrities alike. It's expensive and touristy, but quintessential Miami.","vibe":"Glamorous & Beach","bestFor":"Beach lovers, nightlife seekers, and nomads wanting Miami's most famous neighborhood","pros":["Iconic beach","Art deco architecture","Great nightlife","Walkable"],"cons":["Very expensive","Extremely touristy","Party noise"],"lat":25.7825,"lng":-80.134,"priceLevel":"$$$"},{"name":"Wynwood","tagline":"Street art and galleries in Miami's creative heart","description":"Wynwood is Miami's creative explosion - murals cover every surface, galleries fill warehouses, and breweries and restaurants create buzzing nightlife. It's become THE neighborhood for Miami's young creative class and tech scene.","vibe":"Creative & Hip","bestFor":"Creatives, artists, and nomads seeking Miami's trendiest neighborhood","pros":["Street art everywhere","Great restaurants","Creative energy","Tech scene"],"cons":["Getting expensive","Industrial feel","Hot summers"],"lat":25.801,"lng":-80.1994,"priceLevel":"$$"},{"name":"Brickell","tagline":"Manhattan of the South with Latin energy","description":"Brickell is Miami's financial district - glass towers, international banks, and Latin American business hub. High-rise living, excellent restaurants, and growing nightlife attract young professionals. It's Miami's most urban neighborhood.","vibe":"Urban & Professional","bestFor":"Business professionals, finance workers, and nomads seeking high-rise city living","pros":["Modern high-rises","Metro connected","Great restaurants","Professional networking"],"cons":["Corporate feel","Expensive","Less beach access"],"lat":25.758,"lng":-80.1936,"priceLevel":"$$$"},{"name":"Little Havana","tagline":"Cuban soul with domino parks and ventanitas","description":"Little Havana is Miami's Cuban heart - Calle Ocho, domino parks, cigar shops, and the best Cuban coffee in America. It's where Miami's Latin soul lives, offering authentic cultural experience at more affordable prices.","vibe":"Cuban & Authentic","bestFor":"Culture seekers, Spanish speakers, and nomads seeking authentic Latin American experience","pros":["Authentic Cuban culture","Affordable","Great food","Local character"],"cons":["Limited English","Less polished","Far from beach"],"lat":25.7653,"lng":-80.2195,"priceLevel":"$"},{"name":"Coconut Grove","tagline":"Bohemian village with waterfront living","description":"Coconut Grove is Miami's original bohemian neighborhood - mature trees, waterfront parks, and village atmosphere. Settled by artists and hippies, it's now upscale but retains charm. Perfect for those seeking Miami without the chaos.","vibe":"Bohemian & Upscale","bestFor":"Families, boaters, and nomads seeking peaceful waterfront living","pros":["Waterfront parks","Village feel","Good restaurants","Less chaotic"],"cons":["Expensive","Limited nightlife","Need a car"],"lat":25.7289,"lng":-80.2422,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

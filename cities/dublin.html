@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Temple Bar","tagline":"Dublin's famous cultural quarter","description":"Temple Bar is Dublin's cultural heart - cobblestone streets, pubs, galleries, and the famous Temple Bar pub. It's extremely touristy but atmospheric, with Dublin's best nightlife concentration.","vibe":"Tourist & Nightlife","bestFor":"First-time visitors, nightlife seekers, and those wanting iconic Dublin","pros":["Best pubs","Central location","Cultural venues","Atmospheric"],"cons":["Very touristy","Expensive drinks","Noisy nights"],"lat":53.3457,"lng":-6.2643,"priceLevel":"$$$"},{"name":"Portobello / South Circular","tagline":"Dublin's hipster neighborhood with canal charm","description":"Portobello is Dublin's emerging hipster area - canal walks, independent cafes, and local character. It's where young Dublin professionals live, with great food scene and village atmosphere.","vibe":"Hipster & Local","bestFor":"Young professionals, foodies, and nomads seeking trendy local Dublin","pros":["Canal walks","Great cafes","Local vibe","Village feel"],"cons":["Limited nightlife","Residential quiet","Parking issues"],"lat":53.333,"lng":-6.272,"priceLevel":"$$"},{"name":"Ranelagh","tagline":"Dublin's village in the city with great dining","description":"Ranelagh is Dublin's most desirable village neighborhood - tree-lined streets, excellent restaurants, and professional residents. It's where successful Dubliners settle, with village character and city access.","vibe":"Village & Upscale","bestFor":"Professionals, foodies, and nomads seeking quality Dublin living","pros":["Best restaurants","Village atmosphere","Safe and clean","Good transport"],"cons":["Expensive","Quiet evenings","Competitive housing"],"lat":53.326,"lng":-6.259,"priceLevel":"$$$"},{"name":"Rathmines","tagline":"Student energy meets Georgian elegance","description":"Rathmines blends Georgian elegance with student energy - the famous clock tower, affordable restaurants, and young population. It's Dublin's best value for quality living near the center.","vibe":"Student & Georgian","bestFor":"Students, budget nomads, and those seeking affordable quality","pros":["Good value","Georgian architecture","Young energy","Near center"],"cons":["Student chaos","Variable quality","Busy streets"],"lat":53.321,"lng":-6.266,"priceLevel":"$"},{"name":"Smithfield / Stoneybatter","tagline":"Dublin's emerging creative quarter","description":"Smithfield and Stoneybatter are Dublin's emerging creative areas - old Dublin character, craft bars, and growing arts scene. It's where Dublin's creative future is developing.","vibe":"Creative & Emerging","bestFor":"Creatives, early adopters, and nomads seeking Dublin's next neighborhoods","pros":["Growing scene","Character","Good bars","Better value"],"cons":["Still developing","Mixed areas","Limited cafes"],"lat":53.348,"lng":-6.278,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1428,6 +1428,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Casco Viejo","tagline":"UNESCO colonial charm reborn","description":"The beautifully restored colonial district features colorful buildings, rooftop bars, and the UNESCO World Heritage designation. The transformation from decay to desirable has created Latin America's most dynamic historic quarter.","vibe":"Historic & Hip","bestFor":"History lovers, nightlife seekers, and boutique hotel guests","pros":["Stunning restoration","Great rooftop bars","Colonial architecture","Walkable streets"],"cons":["Can feel touristy","Some areas still rough","Expensive dining"],"lat":8.9512,"lng":-79.5345,"priceLevel":"$$$"},{"name":"Panama Viejo","tagline":"Original ruins with ocean views","description":"The ruins of the original Panama City offer archaeological significance and ocean-side setting. The UNESCO site provides historical context for understanding Panama's importance.","vibe":"Archaeological & Historic","bestFor":"History buffs, archaeologists, and photography enthusiasts","pros":["UNESCO ruins","Ocean views","Historical significance","Less crowded"],"cons":["Just ruins","Far from center","Limited services"],"lat":9.0089,"lng":-79.4789,"priceLevel":"$"},{"name":"Obarrio / Marbella","tagline":"Skyscrapers and business buzz","description":"The financial district features gleaming towers, international restaurants, and business infrastructure. The concentration of corporate offices and upscale dining creates Panama City's professional hub.","vibe":"Business & Modern","bestFor":"Business travelers, professionals, and modern comfort seekers","pros":["Modern infrastructure","Great restaurants","Business facilities","Safe area"],"cons":["Expensive","Less character","Corporate feel"],"lat":8.9889,"lng":-79.5212,"priceLevel":"$$$"},{"name":"El Cangrejo","tagline":"Restaurant row and urban convenience","description":"The commercial neighborhood offers excellent restaurants, mid-range hotels, and convenient location. The cosmopolitan mix and Vía Argentina shopping attract diverse visitors.","vibe":"Commercial & Cosmopolitan","bestFor":"Foodies, mid-range travelers, and urban convenience seekers","pros":["Restaurant variety","Good hotels","Central location","Shopping options"],"cons":["Less scenic","Traffic","Can feel commercial"],"lat":8.9834,"lng":-79.5312,"priceLevel":"$$"},{"name":"Amador Causeway","tagline":"Island chain with canal views","description":"The causeway connecting three islands offers canal views, restaurants, and waterfront recreation. The Sunday cycling scene and sunset views make it Panama City's favorite escape.","vibe":"Waterfront & Recreation","bestFor":"Cyclists, sunset lovers, and families","pros":["Canal views","Waterfront restaurants","Cycling paths","Great sunsets"],"cons":["Far from hotels","Limited shade","Crowded weekends"],"lat":8.9234,"lng":-79.5456,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1479,6 +1480,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

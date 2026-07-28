@@ -1424,6 +1424,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Haeundae","tagline":"Busan's iconic beach playground","description":"Haeundae is Busan's most famous beach - high-rise hotels, seafood restaurants, and summer crowds. It's touristy but essential for the Korean beach experience.","vibe":"Beach & Tourist","bestFor":"Beach lovers, first-time visitors, and those seeking iconic Busan","pros":["Famous beach","Great seafood","Nightlife","Film festival venue"],"cons":["Very crowded","Touristy","Expensive"],"lat":35.1587,"lng":129.1604,"priceLevel":"$$$"},{"name":"Seomyeon","tagline":"Busan's urban commercial heart","description":"Seomyeon is Busan's downtown - shopping, nightlife, and transport hub. It's less scenic but the city's most convenient and energetic district.","vibe":"Urban & Commercial","bestFor":"Shoppers, night owls, and those seeking central convenience","pros":["Best shopping","Nightlife","Transport hub","Food variety"],"cons":["No beaches","Crowded","Less character"],"lat":35.1578,"lng":129.0595,"priceLevel":"$$"},{"name":"Gamcheon Culture Village","tagline":"Busan's colorful hillside art village","description":"Gamcheon is Busan's most photogenic neighborhood - pastel houses climbing hillsides, street art, and artistic installations. It's touristy but genuinely charming.","vibe":"Artistic & Colorful","bestFor":"Photographers, art lovers, and those seeking unique Busan","pros":["Incredibly photogenic","Art installations","Unique character","Cafes"],"cons":["Very touristy","Steep hills","Crowded paths"],"lat":35.0975,"lng":129.0104,"priceLevel":"$"},{"name":"Nampo-dong/BIFF Square","tagline":"Busan's traditional market district","description":"Nampo-dong is old Busan - Jagalchi fish market, BIFF Square, and traditional shopping streets. It's authentic, bustling, and the city's cultural heart.","vibe":"Traditional & Market","bestFor":"Foodies, culture seekers, and those seeking authentic Busan","pros":["Jagalchi market","Street food","Shopping","Cultural sites"],"cons":["Crowded","Chaotic","Less English"],"lat":35.0983,"lng":129.0284,"priceLevel":"$"},{"name":"Gwangalli","tagline":"Busan's local beach with bridge views","description":"Gwangalli is Busan's hip beach - the stunning Gwangan Bridge, beach cafes, and younger crowd. It's less touristy than Haeundae with better nightlife.","vibe":"Beach & Trendy","bestFor":"Young travelers, photographers, and those seeking local beach vibes","pros":["Bridge views","Beach cafes","Less crowded","Good nightlife"],"cons":["Smaller beach","Windy","Far from center"],"lat":35.1531,"lng":129.1185,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1475,6 +1476,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1442,6 +1442,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Zona Romántica","tagline":"Vibrant heart of old Vallarta","description":"South of the Cuale River, this walkable neighborhood pulses with life. Cobblestone streets, rainbow flags, excellent restaurants, and the famous Los Muertos Beach create Mexico's most inclusive beach destination.","vibe":"Lively inclusive","bestFor":"LGBTQ+ travelers and social butterflies","pros":["Walkable everything","Amazing food scene","Inclusive community","Beach access"],"cons":["Can be crowded","Tourist prices","Noisy at night"],"lat":20.5978,"lng":-105.2334,"priceLevel":"$$"},{"name":"Centro Histórico","tagline":"Classic Mexican charm on the Malecón","description":"The historic downtown features the iconic church, seaside Malecón promenade, and traditional Mexican architecture. Street performers, art galleries, and sunset views make this the quintessential Vallarta experience.","vibe":"Traditional festive","bestFor":"Culture lovers and photography enthusiasts","pros":["Malecón access","Cultural attractions","Sunset views","Gallery scene"],"cons":["Cruise ship crowds","Daytime heat","Limited parking"],"lat":20.6098,"lng":-105.2287,"priceLevel":"$$"},{"name":"5 de Diciembre","tagline":"Local neighborhood with growing appeal","description":"North of downtown, this authentic Mexican neighborhood attracts those seeking local life. Traditional taquerias, local markets, and affordable rents appeal to long-term visitors wanting community.","vibe":"Authentic emerging","bestFor":"Long-term nomads seeking authenticity","pros":["Affordable rents","Local restaurants","Authentic feel","Near center"],"cons":["Basic amenities","Less polished","Spanish helpful"],"lat":20.6198,"lng":-105.2267,"priceLevel":"$"},{"name":"Versalles","tagline":"Modern Mexican middle-class living","description":"This residential neighborhood offers modern apartments, shopping centers, and everyday Mexican life away from tourism. Supermarkets, gyms, and practical amenities serve long-term residents well.","vibe":"Modern practical","bestFor":"Digital nomads wanting normalcy","pros":["Modern amenities","Supermarkets","Affordable","Real Mexico"],"cons":["No beach","Needs transport","Less scenic"],"lat":20.6298,"lng":-105.2189,"priceLevel":"$"},{"name":"Marina Vallarta","tagline":"Upscale resort living with yacht views","description":"The marina district offers manicured grounds, golf courses, and yacht-lined waterways. International restaurants and luxury condos attract those seeking comfort and North American amenities.","vibe":"Upscale resort","bestFor":"Those wanting luxury and convenience","pros":["Resort amenities","Safe area","Good restaurants","Marina views"],"cons":["Expensive","Feels isolated","Less authentic"],"lat":20.6534,"lng":-105.2445,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1493,6 +1494,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

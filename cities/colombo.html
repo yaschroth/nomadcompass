@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Colombo 03 (Kollupitiya / Colpetty)","tagline":"Sri Lanka's most cosmopolitan strip","description":"Colombo 03 is the city's most cosmopolitan area - Galle Road's cafes, restaurants, and shops create urban energy. International schools, embassies, and modern apartments attract expats and professionals. Colombo at its most developed.","vibe":"Cosmopolitan & Urban","bestFor":"Expats, professionals, and nomads seeking Colombo's most developed infrastructure","pros":["Best cafes","International schools","Good transport","Walkable strip"],"cons":["Traffic chaos","Expensive","Noisy main road"],"lat":6.904,"lng":79.853,"priceLevel":"$$$"},{"name":"Colombo 07 (Cinnamon Gardens)","tagline":"Colombo's elegant embassy district","description":"Colombo 07 is the city's most prestigious address - tree-lined streets, colonial bungalows, embassies, and cultural institutions. Independence Square anchors the area. It's Colombo's most beautiful and expensive neighborhood.","vibe":"Elegant & Prestigious","bestFor":"Diplomats, luxury seekers, and nomads wanting Colombo's most elegant living","pros":["Beautiful streets","Very safe","Cultural venues","Green spaces"],"cons":["Most expensive","Quiet evenings","Limited nightlife"],"lat":6.902,"lng":79.861,"priceLevel":"$$$"},{"name":"Colombo 05 (Havelock Town)","tagline":"Central location with growing cafe scene","description":"Colombo 05 offers central location at better prices than 03 or 07. The area around Havelock Road has growing cafe scene and good restaurants. Popular with young professionals seeking value with access.","vibe":"Residential & Emerging","bestFor":"Young professionals, budget nomads, and those seeking central value","pros":["Good value","Central location","Growing cafes","Near everything"],"cons":["Less polished","Traffic","Mixed areas"],"lat":6.891,"lng":79.865,"priceLevel":"$$"},{"name":"Mount Lavinia","tagline":"Beach town feel just south of the city","description":"Mount Lavinia is Colombo's beach escape - a small town feel with golden beach access just 30 minutes from the city. Colonial Mount Lavinia Hotel anchors the area. Beach lifestyle without leaving metro Colombo.","vibe":"Beach & Colonial","bestFor":"Beach lovers, romantics, and nomads seeking seaside living near the city","pros":["Beach access","Colonial charm","Quieter pace","Good restaurants"],"cons":["Far from center","Limited transport","Tourist crowds"],"lat":6.831,"lng":79.864,"priceLevel":"$$"},{"name":"Colombo 02 (Slave Island / Union Place)","tagline":"Central hub with budget options","description":"Colombo 02 is the city's transport and commercial hub - Colombo Fort, train stations, and Beira Lake. It's gritty but central, with the most affordable options in central Colombo. Redevelopment is slowly changing the area.","vibe":"Central & Budget","bestFor":"Budget travelers, backpackers, and nomads wanting maximum central access","pros":["Most central","Transport hub","Affordable","Lake access"],"cons":["Gritty areas","Less safe","Basic infrastructure"],"lat":6.924,"lng":79.851,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

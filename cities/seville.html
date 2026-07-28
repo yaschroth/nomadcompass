@@ -1427,6 +1427,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Santa Cruz","tagline":"Seville's magical Jewish quarter maze","description":"Santa Cruz is Seville's most romantic neighborhood - whitewashed walls, orange trees, and narrow lanes of the former Jewish quarter. It's touristy but magical, especially at night when day-trippers leave.","vibe":"Romantic & Historic","bestFor":"Romantics, history lovers, and nomads seeking iconic Seville","pros":["Magical atmosphere","Historic charm","Near cathedral","Beautiful"],"cons":["Very touristy","Expensive","Maze navigation"],"lat":37.385,"lng":-5.99,"priceLevel":"$$$"},{"name":"Triana","tagline":"Flamenco soul across the river","description":"Triana is Seville's flamenco heart - across the Guadalquivir, ceramic workshops and authentic bars preserve traditional character. It's where Seville's soul lives, more local than Santa Cruz.","vibe":"Flamenco & Authentic","bestFor":"Flamenco lovers, authenticity seekers, and nomads wanting real Seville","pros":["Authentic character","Flamenco scene","Local tapas","River views"],"cons":["Across river","Limited coworking","Hot summers"],"lat":37.383,"lng":-6.006,"priceLevel":"$$"},{"name":"Alameda de Hércules","tagline":"Seville's nightlife and alternative scene","description":"Alameda is Seville's alternative heart - LGBTQ+ bars, creative spaces, and the city's best nightlife around the historic promenade. It's where young Sevillanos party and live.","vibe":"Alternative & Nightlife","bestFor":"Nightlife lovers, LGBTQ+ travelers, and nomads seeking alternative Seville","pros":["Best nightlife","Alternative scene","Good restaurants","Central"],"cons":["Noisy nights","Variable areas","Party-focused"],"lat":37.398,"lng":-5.997,"priceLevel":"$$"},{"name":"El Arenal","tagline":"Bullring quarter with tapas culture","description":"El Arenal surrounds the famous bullring - traditional tapas bars, flamenco tablaos, and Sevillano atmosphere. It's central and authentic, where bullfighting culture meets daily life.","vibe":"Traditional & Central","bestFor":"Culture seekers, tapas lovers, and nomads wanting central traditional Seville","pros":["Traditional tapas","Central location","Bullring area","Flamenco"],"cons":["Touristy","Bullfighting proximity","Expensive"],"lat":37.386,"lng":-5.997,"priceLevel":"$$"},{"name":"Nervión","tagline":"Modern Seville with shopping and stadium","description":"Nervión is modern Seville - shopping centers, football stadium, and contemporary life. It's where Sevillanos shop, with good transport and practical infrastructure. Local rather than tourist.","vibe":"Modern & Local","bestFor":"Shoppers, football fans, and nomads wanting modern practical Seville","pros":["Good shopping","Modern amenities","Local life","Good transport"],"cons":["No character","Far from sights","No atmosphere"],"lat":37.389,"lng":-5.97,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1478,6 +1479,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1431,6 +1431,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Old Town Peninsula","tagline":"Luang Prabang's UNESCO temple heart","description":"The peninsula is Luang Prabang's UNESCO core - ancient temples, French colonial buildings, and the sacred alms giving ceremony. It's magical and well-preserved.","vibe":"Historic & Sacred","bestFor":"Culture lovers, photographers, and those seeking spiritual Laos","pros":["UNESCO site","Temples","Alms ceremony","French architecture"],"cons":["Touristy","Early mornings for alms","Limited budget options"],"lat":19.885,"lng":102.135,"priceLevel":"$$$"},{"name":"Night Market Area","tagline":"Luang Prabang's evening social hub","description":"The Night Market stretches along the main street - handicrafts, local food, and evening atmosphere. It's the social heart of tourist Luang Prabang.","vibe":"Market & Social","bestFor":"Shoppers, evening strollers, and those seeking local crafts","pros":["Great handicrafts","Food stalls","Evening atmosphere","Central"],"cons":["Crowded evenings","Similar goods","Touristy"],"lat":19.887,"lng":102.134,"priceLevel":"$$"},{"name":"Ban Xieng Maen","tagline":"Luang Prabang's quiet across-river escape","description":"Across the Nam Khan river lies peaceful Ban Xieng Maen - local villages, bamboo bridges, and authentic Lao life away from tourists.","vibe":"Local & Peaceful","bestFor":"Adventurous travelers, cyclists, and those seeking quiet","pros":["Authentic villages","Peaceful","Bamboo bridge","Local life"],"cons":["Limited amenities","Seasonal access","Need to cross river"],"lat":19.892,"lng":102.142,"priceLevel":"$"},{"name":"Ban Pakham","tagline":"Luang Prabang's southern local quarter","description":"South of the old town, Ban Pakham offers local markets, authentic restaurants, and real Lao atmosphere. It's where locals actually live.","vibe":"Local & Authentic","bestFor":"Budget travelers, food lovers, and those seeking real Laos","pros":["Morning market","Local food","Authentic","Affordable"],"cons":["Less scenic","Limited English","Basic amenities"],"lat":19.878,"lng":102.133,"priceLevel":"$"},{"name":"Mekong Riverfront","tagline":"Luang Prabang's sunset boulevard","description":"The Mekong riverfront offers stunning sunset views - riverside restaurants, slow boat piers, and peaceful atmosphere watching life on the river.","vibe":"Scenic & Relaxed","bestFor":"Sunset lovers, romantic travelers, and those seeking river views","pros":["Stunning sunsets","River views","Good restaurants","Relaxed"],"cons":["Limited nightlife","Can flood","Mosquitoes"],"lat":19.886,"lng":102.13,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1482,6 +1483,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1453,6 +1453,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Cívico","tagline":"Alpine architecture on the lakeshore","description":"Bariloche's center channels Switzerland - alpine architecture, chocolate shops, lakefront promenade. The gateway to Patagonian adventures with Central European charm.","vibe":"Alpine & Touristy","bestFor":"First-time visitors, chocolate lovers, and tour seekers","pros":["Lake views","Chocolate shops","Good restaurants","Tour access"],"cons":["Very touristy","Expensive","Crowded peak season"],"lat":-41.1335,"lng":-71.3103,"priceLevel":"$$$"},{"name":"Circuito Chico","tagline":"Scenic route with boutique hotels","description":"Circuito Chico follows the lakes - boutique hotels, mountain viewpoints, Llao Llao Hotel. Where Bariloche's most spectacular scenery meets luxury accommodation.","vibe":"Scenic & Luxury","bestFor":"Nature lovers, honeymooners, and luxury seekers","pros":["Stunning views","Luxury hotels","Nature access","Peaceful"],"cons":["Very expensive","Car essential","Far from town"],"lat":-41.0612,"lng":-71.5234,"priceLevel":"$$$$"},{"name":"Cerro Catedral","tagline":"South America's premier ski resort","description":"Cerro Catedral is Argentina's top ski destination - extensive terrain, mountain village, winter sports infrastructure. Where South Americans come to ski.","vibe":"Ski & Adventure","bestFor":"Skiers, snowboarders, and winter sports enthusiasts","pros":["Great skiing","Mountain atmosphere","Good facilities","Stunning views"],"cons":["Seasonal","Expensive","Isolated"],"lat":-41.1689,"lng":-71.4412,"priceLevel":"$$$"},{"name":"Colonia Suiza","tagline":"Swiss settlement with curanto tradition","description":"Colonia Suiza preserves Swiss immigration heritage - traditional curanto feasts, craft markets, mountain backdrop. Where Patagonian and European traditions blend.","vibe":"Traditional & Rustic","bestFor":"Food lovers, culture seekers, and those wanting traditions","pros":["Traditional curanto","Craft markets","Mountain setting","Authentic"],"cons":["Limited to markets/meals","Car needed","Seasonal"],"lat":-41.0734,"lng":-71.5389,"priceLevel":"$$"},{"name":"Lago Gutiérrez","tagline":"Peaceful lake away from crowds","description":"Lago Gutiérrez offers quieter Bariloche - less touristy lake, camping, hiking trails, and local lodges. Where outdoor enthusiasts escape the chocolate shop crowds.","vibe":"Natural & Peaceful","bestFor":"Hikers, campers, and those wanting peace","pros":["Quieter","Great hiking","Camping options","Affordable"],"cons":["Limited services","Car essential","Basic accommodation"],"lat":-41.1967,"lng":-71.4012,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1504,6 +1505,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

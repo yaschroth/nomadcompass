@@ -1423,6 +1423,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Florentin","tagline":"Tel Aviv's gritty creative hub","description":"Florentin is Tel Aviv's Brooklyn - street art, independent galleries, and underground bars in a formerly industrial area. Young artists, musicians, and digital nomads fill the graffiti-covered streets. Creative, gritty, and authentic.","vibe":"Creative & Gritty","bestFor":"Artists, creatives, and nomads seeking Tel Aviv's edgiest neighborhood","pros":["Street art scene","Creative energy","Great bars","More affordable"],"cons":["Gritty areas","Limited parking","Can be loud"],"lat":32.059,"lng":34.77,"priceLevel":"$$"},{"name":"Neve Tzedek","tagline":"Tel Aviv's oldest neighborhood turned trendiest","description":"Neve Tzedek is Tel Aviv's first neighborhood, now its most desirable. Restored Ottoman-era buildings house boutiques, galleries, and expensive restaurants. Beautiful, charming, and very expensive.","vibe":"Upscale & Historic","bestFor":"Design lovers, the affluent, and nomads seeking Tel Aviv's most beautiful streets","pros":["Beautiful architecture","Best boutiques","Charming streets","Near beach"],"cons":["Very expensive","Touristy","Limited parking"],"lat":32.0611,"lng":34.7658,"priceLevel":"$$$"},{"name":"Rothschild Boulevard","tagline":"Bauhaus grandeur on Tel Aviv's iconic strip","description":"Rothschild Boulevard is Tel Aviv's showcase - UNESCO Bauhaus architecture, startup offices, and the best cafes. It's where protests happen, tech deals close, and Tel Aviv struts. Central, iconic, and expensive.","vibe":"Iconic & Central","bestFor":"Professionals, architecture lovers, and nomads wanting Tel Aviv's most central address","pros":["Iconic boulevard","Great cafes","Bauhaus architecture","Central location"],"cons":["Most expensive","Protests/events","Noisy"],"lat":32.0631,"lng":34.7739,"priceLevel":"$$$"},{"name":"Tel Aviv Port (Namal)","tagline":"Beachfront entertainment with Mediterranean views","description":"The Tel Aviv Port area offers beachfront living with Mediterranean views. The renovated port has restaurants and entertainment, while Gordon Beach is steps away. Perfect for beach-focused lifestyle.","vibe":"Beach & Entertainment","bestFor":"Beach lovers, fitness enthusiasts, and nomads prioritizing Mediterranean lifestyle","pros":["Beach access","Port restaurants","Great promenade","Fitness scene"],"cons":["Expensive","Tourist crowds","Weekend chaos"],"lat":32.097,"lng":34.774,"priceLevel":"$$$"},{"name":"Jaffa","tagline":"Ancient port city with Arab-Jewish fusion","description":"Jaffa is Tel Aviv's ancient counterpart - 4,000-year-old port city now artistically reborn. Arab heritage, flea markets, and art galleries create unique atmosphere. More diverse and affordable than central Tel Aviv.","vibe":"Historic & Diverse","bestFor":"History buffs, artists, and nomads seeking diverse, authentic atmosphere","pros":["Ancient history","Flea market","Art galleries","More affordable"],"cons":["Far from center","Some rough areas","Less infrastructure"],"lat":32.0525,"lng":34.752,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1474,6 +1475,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

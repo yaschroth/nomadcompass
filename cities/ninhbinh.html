@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Tam Coc","tagline":"Ninh Binh's iconic river valley","description":"Tam Coc is Ninh Binh's star attraction - boat rides through limestone karsts, rice paddies, and stunning scenery. Most visitors base here for the classic experience.","vibe":"Scenic & Tourist","bestFor":"First-time visitors, photographers, and those seeking iconic Vietnam","pros":["Stunning scenery","Boat rides","Rice paddies","Iconic views"],"cons":["Very touristy","Boat touts","Crowded peak times"],"lat":20.215,"lng":105.937,"priceLevel":"$"},{"name":"Trang An","tagline":"Ninh Binh's UNESCO boat maze","description":"Trang An offers boat rides through cave systems and karsts - UNESCO-listed and more organized than Tam Coc. It's the polished alternative.","vibe":"UNESCO & Organized","bestFor":"Cave enthusiasts, organized tour seekers, and families","pros":["UNESCO site","Cave passages","Organized boats","Less haggling"],"cons":["More commercial","Fixed route","Expensive"],"lat":20.25,"lng":105.91,"priceLevel":"$$"},{"name":"Ninh Binh City","tagline":"Ninh Binh's practical base town","description":"Ninh Binh city is the practical base - train station, hotels, and services. It's not scenic but convenient for reaching the attractions.","vibe":"Practical & Local","bestFor":"Budget travelers, train arrivals, and those wanting city services","pros":["Train station","Affordable","Local food","Services"],"cons":["Not scenic","Far from attractions","Generic town"],"lat":20.258,"lng":105.975,"priceLevel":"$"},{"name":"Hang Mua/Mua Cave","tagline":"Ninh Binh's panoramic viewpoint","description":"Hang Mua offers Ninh Binh's best views - 500 steps to a dragon-topped peak overlooking rice fields and karsts. It's the essential sunrise/sunset spot.","vibe":"Viewpoint & Active","bestFor":"View seekers, sunrise/sunset chasers, and those wanting panoramas","pros":["Best views","Sunrise spot","Iconic photos","Worth the climb"],"cons":["500 steps","Crowded sunset","Entrance fee"],"lat":20.21,"lng":105.928,"priceLevel":"$"},{"name":"Bai Dinh Pagoda Area","tagline":"Ninh Binh's massive temple complex","description":"Bai Dinh is Southeast Asia's largest pagoda complex - vast, modern, and impressive. It's different from ancient temples but architecturally significant.","vibe":"Temple & Modern","bestFor":"Temple enthusiasts, architecture lovers, and those seeking scale","pros":["Largest pagoda","Impressive scale","Less crowded","Electric carts"],"cons":["Modern construction","Far from town","Commercial"],"lat":20.275,"lng":105.855,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

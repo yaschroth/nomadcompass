@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Xinyi","tagline":"Taipei 101 and neon nights in the modern heart","description":"Xinyi is Taipei's modern heart - if you want a neighborhood alive at night with skyscrapers, lights, and crowds, this is it. Home to Taipei 101, expat bars, clubs, and networking events around ATT 4 FUN. The financial district by day, entertainment hub by night.","vibe":"Modern & Vibrant","bestFor":"Professionals, nightlife lovers, and nomads who want Taipei's most dynamic energy","pros":["Iconic location","Great nightlife","Modern amenities","Business networking"],"cons":["Most expensive","Can feel corporate","Crowded"],"lat":25.033,"lng":121.5654,"priceLevel":"$$$"},{"name":"Da'an","tagline":"Parks, night markets, and Taipei's most livable district","description":"Da'an District blends local charm with modern conveniences - traditional markets like Tonghua Night Market, green spaces like Da'an Forest Park, and plenty of coworking options including FutureWard. It's Taipei's most livable neighborhood for good reason.","vibe":"Livable & Balanced","bestFor":"Long-term nomads, families, and anyone seeking Taipei's best quality of life","pros":["Great parks","Night markets","Livable","Central location"],"cons":["Higher rents","Can feel residential","Less exciting nightlife"],"lat":25.0265,"lng":121.5436,"priceLevel":"$$"},{"name":"Zhongshan","tagline":"Taipei's trendiest district for cafe-hopping nomads","description":"Zhongshan strikes a perfect balance between business and leisure. It's Taipei's trendiest district with cool cafes, boutique shops, and second-hand stores hidden in charming side-streets. The Japanese colonial-era architecture adds character, and it's more affordable than neighbors.","vibe":"Trendy & Hip","bestFor":"Creatives, cafe lovers, and nomads seeking trendy vibes at reasonable prices","pros":["Trendy cafes","Great shopping","Affordable","Good transport"],"cons":["Can be crowded","Tourist areas","Smaller apartments"],"lat":25.0527,"lng":121.5206,"priceLevel":"$$"},{"name":"Shilin","tagline":"Night market fame and National Palace Museum culture","description":"Shilin is best known for Taiwan's biggest night market, but beyond the crowds, it's a solid residential neighborhood. The National Palace Museum, upscale dining options, and MRT access make it worth considering for nomads who prefer something away from downtown.","vibe":"Local & Cultural","bestFor":"Budget nomads, culture lovers, and those who want famous night market access","pros":["Famous night market","Cultural attractions","More affordable","Local vibe"],"cons":["Further from center","Busy nights","Less coworking"],"lat":25.0879,"lng":121.5249,"priceLevel":"$"},{"name":"Songshan","tagline":"Raohe Night Market and the creative Songshan district","description":"Songshan combines one of Taipei's best night markets (Raohe) with the creative Songshan Cultural Park. It's emerging as a favorite for nomads seeking authenticity - local neighborhoods, good transport, and that perfect balance of convenience and character.","vibe":"Authentic & Emerging","bestFor":"Nomads seeking authentic Taipei with good infrastructure and night market access","pros":["Great night market","Creative spaces","Good value","Authentic feel"],"cons":["Less trendy","Fewer cafes","Developing area"],"lat":25.0499,"lng":121.5569,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

@@ -1417,6 +1417,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Fort Kochi","tagline":"Colonial layers from Portuguese to British","description":"Kerala's most charming neighborhood layers Portuguese, Dutch, and British colonial architecture with Chinese fishing nets and Keralan culture. The art galleries, heritage hotels, and cafe scene make it a traveler's paradise.","vibe":"Historic & Artistic","bestFor":"Culture lovers, art enthusiasts, and those seeking colonial heritage","pros":["Rich colonial history","Amazing art scene","Best cafes and restaurants","Biennale venue"],"cons":["Touristy and pricey","Hot and humid","Limited local feel"],"lat":9.9639,"lng":76.2434,"priceLevel":"$$"},{"name":"Mattancherry","tagline":"Spice markets and Jewish heritage","description":"The historic spice trading area features the Paradesi Synagogue, Dutch Palace, and bustling spice markets. The mix of Jewish, Portuguese, and Indian heritage creates a unique atmosphere.","vibe":"Trading & Heritage","bestFor":"History buffs, spice enthusiasts, and heritage seekers","pros":["Famous spice markets","Jewish heritage sites","Authentic trading atmosphere","Antique shops"],"cons":["Very touristy","Aggressive vendors","Hot and crowded"],"lat":9.9578,"lng":76.2589,"priceLevel":"$$"},{"name":"Ernakulam","tagline":"Modern Kerala's commercial heart","description":"The mainland city offers shopping malls, restaurants, and urban Indian life. The ferry connection to Fort Kochi and better accommodation options make it a practical base.","vibe":"Urban & Commercial","bestFor":"Business travelers, shoppers, and those wanting modern amenities","pros":["Modern shopping","More accommodation options","Better transport links","Indian urban life"],"cons":["Less charming than Fort Kochi","Traffic congestion","Less tourist-oriented"],"lat":9.9816,"lng":76.2999,"priceLevel":"$$"},{"name":"Jew Town","tagline":"Antiques and Kochi's oldest streets","description":"Adjacent to the synagogue, this narrow street overflows with antique shops, curio stores, and colonial remnants. The treasure hunting atmosphere attracts collectors and curious visitors alike.","vibe":"Antique & Quirky","bestFor":"Antique hunters, collectors, and history enthusiasts","pros":["Antique treasures","Historic atmosphere","Unique finds","Synagogue access"],"cons":["Very touristy","Aggressive salespeople","Inflated prices"],"lat":9.9567,"lng":76.2612,"priceLevel":"$$"},{"name":"Vypeen Island","tagline":"Beaches and backwaters less traveled","description":"The long island north of Fort Kochi offers beaches, coconut groves, and a glimpse of less-touristed Kerala. The ferry connections and empty beaches attract those seeking escape.","vibe":"Beach & Quiet","bestFor":"Beach seekers, long-term visitors, and those wanting quiet","pros":["Empty beaches","Coconut groves","Local Kerala life","Cheaper accommodation"],"cons":["Ferry dependent","Limited restaurants","Can feel isolated"],"lat":9.9978,"lng":76.2234,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1468,6 +1469,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

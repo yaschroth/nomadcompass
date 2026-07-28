@@ -1429,6 +1429,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Albaicín","tagline":"Granada's Moorish UNESCO labyrinth","description":"Albaicín is Granada's ancient Moorish quarter - whitewashed houses, carmen gardens, and stunning Alhambra views. UNESCO-listed and magical.","vibe":"Moorish & Romantic","bestFor":"History lovers, romantics, and those seeking atmospheric Granada","pros":["UNESCO site","Alhambra views","Moorish heritage","Atmospheric streets"],"cons":["Very hilly","Easy to get lost","Touristy spots"],"lat":37.181,"lng":-3.592,"priceLevel":"$$"},{"name":"Sacromonte","tagline":"Granada's cave-dwelling flamenco soul","description":"Sacromonte is Granada's Roma quarter - cave houses, flamenco shows, and bohemian atmosphere. It's where Granada's flamenco tradition lives.","vibe":"Bohemian & Flamenco","bestFor":"Flamenco lovers, bohemians, and those seeking unique Granada","pros":["Authentic flamenco","Cave houses","Unique atmosphere","Views"],"cons":["Very touristy shows","Steep walks","Can feel like attraction"],"lat":37.185,"lng":-3.583,"priceLevel":"$$"},{"name":"Centro/Cathedral Area","tagline":"Granada's commercial and religious heart","description":"Granada's center surrounds the cathedral and main streets - shopping, tapas bars, and commercial life. It's the city's practical heart.","vibe":"Commercial & Central","bestFor":"Shoppers, first-time visitors, and those seeking central convenience","pros":["Cathedral","Shopping","Free tapas bars","Central"],"cons":["Crowded","Less atmospheric","Touristy restaurants"],"lat":37.176,"lng":-3.599,"priceLevel":"$$"},{"name":"Realejo","tagline":"Granada's former Jewish quarter","description":"Realejo was Granada's Jewish neighborhood - now a mix of local life, street art, and authentic tapas bars. Less touristy than Albaicín.","vibe":"Local & Artistic","bestFor":"Budget travelers, tapas lovers, and those seeking local Granada","pros":["Great tapas","Street art","Less touristy","Local feel"],"cons":["Less scenic","Fewer sights","Steep streets"],"lat":37.173,"lng":-3.592,"priceLevel":"$"},{"name":"Alhambra Area","tagline":"Granada's palace-garden crown","description":"The Alhambra area includes the palace complex and Generalife gardens - Spain's most visited monument and Granada's reason for fame.","vibe":"Palace & Tourist","bestFor":"History lovers, garden enthusiasts, and every Granada visitor","pros":["Alhambra palace","Generalife gardens","Stunning views","UNESCO site"],"cons":["Requires tickets","Very crowded","Tourist prices"],"lat":37.176,"lng":-3.588,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1480,6 +1481,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

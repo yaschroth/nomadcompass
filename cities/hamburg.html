@@ -1448,6 +1448,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"St. Pauli","tagline":"Hamburg's legendary alternative quarter","description":"St. Pauli is Hamburg's rebellious heart - the famous Reeperbahn, FC St. Pauli football club, and leftist politics. It's gritty, authentic, and the center of Hamburg's alternative culture.","vibe":"Alternative & Gritty","bestFor":"Night owls, alternative culture lovers, and those seeking authentic Hamburg","pros":["Legendary nightlife","Alternative culture","Strong community","Affordable"],"cons":["Red light district","Can be rough","Noisy nights"],"lat":53.55,"lng":9.965,"priceLevel":"$$"},{"name":"Schanzenviertel (Sternschanze)","tagline":"Hamburg's creative hipster hub","description":"Sternschanze is Hamburg's hipster central - cafes, vintage shops, and street art around the Rote Flora cultural center. It's where creatives and young professionals gather.","vibe":"Hipster & Creative","bestFor":"Creatives, young professionals, and digital nomads","pros":["Best cafe culture","Creative scene","Street art","Good nightlife"],"cons":["Gentrifying fast","Crowded weekends","Rising prices"],"lat":53.563,"lng":9.962,"priceLevel":"$$"},{"name":"Ottensen","tagline":"Hamburg's family-friendly village","description":"Ottensen is Hamburg's beloved village - former industrial area now home to families, organic shops, and cozy cafes. It's community-focused with strong local identity.","vibe":"Village & Family","bestFor":"Families, long-term stayers, and those seeking community","pros":["Village atmosphere","Family-friendly","Organic shops","Strong community"],"cons":["Expensive","Far from center","Can feel suburban"],"lat":53.553,"lng":9.92,"priceLevel":"$$$"},{"name":"HafenCity","tagline":"Hamburg's bold waterfront future","description":"HafenCity is Europe's largest inner-city development - the stunning Elbphilharmonie, modern architecture, and waterfront living. It's Hamburg's vision of urban future.","vibe":"Modern & Waterfront","bestFor":"Architecture lovers, professionals, and those seeking modern luxury","pros":["Elbphilharmonie","Modern architecture","Waterfront living","New facilities"],"cons":["No character yet","Expensive","Wind exposed"],"lat":53.541,"lng":9.995,"priceLevel":"$$$$"},{"name":"Eimsbüttel","tagline":"Hamburg's livable middle-class gem","description":"Eimsbüttel is Hamburg's sweet spot - beautiful Wilhelmine architecture, good restaurants, and excellent quality of life. It's where locals want to live.","vibe":"Residential & Quality","bestFor":"Long-term stayers, families, and those seeking quality living","pros":["Beautiful buildings","Good restaurants","Parks","Quality of life"],"cons":["Quiet evenings","Limited nightlife","Expensive"],"lat":53.574,"lng":9.955,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1499,6 +1500,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

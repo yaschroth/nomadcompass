@@ -1454,6 +1454,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Storico","tagline":"Genoa's medieval maritime labyrinth","description":"Genoa's historic center is Europe's largest medieval quarter - dark caruggi alleys, Renaissance palaces, and maritime history. It's gloriously gritty.","vibe":"Medieval & Gritty","bestFor":"History lovers, adventurous travelers, and those seeking authentic Italy","pros":["Largest medieval center","UNESCO palaces","Authentic","Fascinating"],"cons":["Gritty areas","Can feel unsafe","Confusing layout"],"lat":44.407,"lng":8.934,"priceLevel":"$"},{"name":"Porto Antico","tagline":"Genoa's revitalized waterfront","description":"Porto Antico is Genoa's transformed old port - Renzo Piano's aquarium, Bigo lift, and waterfront restaurants. It's where Genoa meets modernity.","vibe":"Waterfront & Modern","bestFor":"Families, aquarium visitors, and those wanting accessible Genoa","pros":["Aquarium","Waterfront","Family-friendly","Accessible"],"cons":["Touristy","Expensive","Generic feel"],"lat":44.41,"lng":8.925,"priceLevel":"$$$"},{"name":"Via Garibaldi/Strade Nuove","tagline":"Genoa's Renaissance palace row","description":"Via Garibaldi is UNESCO-listed magnificence - Renaissance palaces now housing museums. It's Genoa's golden age frozen in stone.","vibe":"Palace & Museum","bestFor":"Art lovers, palace enthusiasts, and those seeking grand Genoa","pros":["UNESCO palaces","Museums","Stunning architecture","Cultural"],"cons":["Museum hours","Expensive entry","Can be overwhelming"],"lat":44.412,"lng":8.935,"priceLevel":"$$$"},{"name":"Boccadasse","tagline":"Genoa's postcard fishing village","description":"Boccadasse is Genoa's perfect escape - a tiny fishing village absorbed by the city with colorful houses and gelato. It's irresistibly charming.","vibe":"Fishing Village & Charming","bestFor":"Photographers, romantics, and those seeking picturesque Genoa","pros":["Incredibly charming","Gelato tradition","Beach","Colorful houses"],"cons":["Small","Crowded","Limited facilities"],"lat":44.392,"lng":8.972,"priceLevel":"$$"},{"name":"Nervi","tagline":"Genoa's elegant eastern riviera","description":"Nervi is Genoa's elegant escape - cliff walks, rose gardens, and belle époque atmosphere. It's the gateway to the Italian Riviera.","vibe":"Elegant & Seaside","bestFor":"Walkers, garden lovers, and those seeking elegant Genoa","pros":["Cliff walks","Rose gardens","Elegant villas","Riviera gateway"],"cons":["Far from center","Quiet evenings","Expensive"],"lat":44.38,"lng":9.035,"priceLevel":"$$$"}];
       if (neighborhoods.length === 0) return;
@@ -1505,6 +1506,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

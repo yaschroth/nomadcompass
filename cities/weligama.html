@@ -1440,6 +1440,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Main Beach","tagline":"Beginner surf paradise","description":"The wide, sheltered bay offers perfect conditions for learning to surf. Schools, board rentals, and beachfront cafes line the gentle curve while fishing boats add local character.","vibe":"Surf beginner","bestFor":"Beginner surfers and beach lovers","pros":["Perfect for learning","Wide beach","Surf schools","Affordable lessons"],"cons":["Crowded peak times","Beginner waves only","Tourist-oriented"],"lat":5.9734,"lng":80.4289,"priceLevel":"$"},{"name":"Mirissa Road","tagline":"Between two beach towns","description":"The road to Mirissa offers accommodations with access to both Weligama's learning waves and Mirissa's whale watching. Budget guesthouses and local restaurants serve travelers.","vibe":"Backpacker convenient","bestFor":"Budget travelers wanting both beaches","pros":["Good value","Access both towns","Local restaurants","Flexibility"],"cons":["Road location","Needs transport","No direct beach"],"lat":5.9612,"lng":80.4412,"priceLevel":"$"},{"name":"Stilt Fishermen Area","tagline":"Iconic fishing tradition preserved","description":"The western end of the bay preserves Sri Lanka's iconic stilt fishermen. While now tourist-oriented, the tradition continues and the area offers quieter beach access.","vibe":"Traditional coastal","bestFor":"Photographers and culture seekers","pros":["Iconic photos","Quieter beach","Local character","Cultural experience"],"cons":["Fishermen expect payment","Rocky areas","Limited services"],"lat":5.9756,"lng":80.4156,"priceLevel":"$"},{"name":"Weligama Town","tagline":"Local life and everyday services","description":"The actual town center offers markets, banks, and authentic Sri Lankan life. Budget travelers find the cheapest accommodations and food away from the tourist beach.","vibe":"Local practical","bestFor":"Budget travelers and authenticity seekers","pros":["Lowest prices","Local markets","Authentic food","Real Sri Lanka"],"cons":["No beach","Basic facilities","Hot and busy"],"lat":5.9678,"lng":80.4234,"priceLevel":"$"},{"name":"Kapparatota Temple Area","tagline":"Cultural site with bay views","description":"Near the small island temple, this area offers cultural significance alongside beach access. The temple and Buddha statue provide peaceful diversion from surf culture.","vibe":"Cultural beach","bestFor":"Culture-curious beach lovers","pros":["Temple visits","Bay views","Less crowded","Cultural depth"],"cons":["Limited services","Rocky areas","Far from center"],"lat":5.9723,"lng":80.4312,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1491,6 +1492,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

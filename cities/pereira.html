@@ -1447,6 +1447,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro","tagline":"Coffee capital commercial heart","description":"Pereira's downtown offers the bustle of Colombia's coffee region capital with markets, traditional commerce, and urban energy. The authentic Paisa atmosphere provides genuine Colombian experience.","vibe":"Urban & Traditional","bestFor":"Culture seekers, market lovers, and authentic Colombia experience","pros":["Authentic atmosphere","Markets and commerce","Central location","Local food"],"cons":["Can feel chaotic","Safety awareness needed","Traffic congestion"],"lat":4.8089,"lng":-75.6889,"priceLevel":"$"},{"name":"Circunvalar","tagline":"Upscale dining and city views","description":"The avenue circling the city offers restaurants, cafes, and city views. The concentration of upscale dining and nightlife creates Pereira's most sophisticated zone.","vibe":"Upscale & Scenic","bestFor":"Foodies, nightlife seekers, and upscale atmosphere lovers","pros":["Best restaurants","City views","Nightlife options","Safe area"],"cons":["Expensive for Colombia","Need transport","Spread out"],"lat":4.8134,"lng":-75.6978,"priceLevel":"$$"},{"name":"Pinares","tagline":"Residential calm and shopping malls","description":"The upscale residential area offers modern shopping centers, quiet streets, and family-friendly atmosphere. The suburban comfort attracts families and professionals.","vibe":"Suburban & Modern","bestFor":"Families, long-term visitors, and comfort seekers","pros":["Modern malls","Safe area","Good schools","Residential calm"],"cons":["Less character","Need transport","Suburban feel"],"lat":4.8234,"lng":-75.7056,"priceLevel":"$$"},{"name":"Victoria","tagline":"Gateway to coffee plantation tours","description":"The area provides access to coffee finca tours and the famous Otún Quimbaya nature reserve. The proximity to coffee tourism makes it the natural base for plantation visits.","vibe":"Coffee & Nature","bestFor":"Coffee enthusiasts, nature lovers, and eco-tourists","pros":["Coffee tour access","Nature reserve nearby","Coffee culture","Scenic drives"],"cons":["Need transport","Limited urban amenities","Weather dependent"],"lat":4.7889,"lng":-75.6612,"priceLevel":"$"},{"name":"Zona Rosa (Álamos)","tagline":"Local nightlife and student energy","description":"The entertainment zone offers bars, clubs, and student nightlife. The young energy and affordable prices attract locals and budget-conscious visitors.","vibe":"Nightlife & Young","bestFor":"Night owls, students, and budget nightlife seekers","pros":["Nightlife options","Young energy","Affordable","Local scene"],"cons":["Can be rowdy","Less refined","Safety awareness needed"],"lat":4.8167,"lng":-75.6834,"priceLevel":"$"}];
       if (neighborhoods.length === 0) return;
@@ -1498,6 +1499,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

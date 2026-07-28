@@ -1426,6 +1426,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro Histórico","tagline":"Fishing village charm meets coastal elegance","description":"Cascais center retains its fishing village soul despite becoming a resort - cobbled streets, fish restaurants, and the marina blend tradition with sophistication.","vibe":"Charming & Coastal","bestFor":"Coastal lovers, day-trippers, and those wanting walkable charm","pros":["Beautiful setting","Great restaurants","Near beach","Walkable"],"cons":["Tourist crowds","Expensive","Packed weekends"],"lat":38.6971,"lng":-9.4216,"priceLevel":"$$$"},{"name":"Bairro dos Museus","tagline":"Culture and gardens by the sea","description":"Cascais' museum quarter features Casa das Histórias Paula Rego, Condes de Castro Guimarães palace, and beautiful gardens. Cultural sophistication by the coast.","vibe":"Cultural & Scenic","bestFor":"Art lovers, garden enthusiasts, and culture seekers","pros":["Excellent museums","Beautiful gardens","Coastal walks","Peaceful"],"cons":["Limited dining","Quiet evenings","Museum hours"],"lat":38.6912,"lng":-9.4189,"priceLevel":"$$"},{"name":"Guincho","tagline":"Wild Atlantic waves and wind","description":"Guincho is Cascais' wild side - dramatic Atlantic beach, world-class windsurfing and kitesurfing, and Sintra hills as backdrop. Raw nature minutes from town.","vibe":"Wild & Sporty","bestFor":"Surfers, wind sports enthusiasts, and nature lovers","pros":["Amazing beach","World-class waves","Natural beauty","Less crowded"],"cons":["Very windy","Cold water","Car needed"],"lat":38.7289,"lng":-9.4734,"priceLevel":"$$"},{"name":"Estoril","tagline":"Casino glamour and Belle Époque elegance","description":"Estoril neighbors Cascais with its own identity - famous casino, Formula 1 heritage, and Belle Époque hotels. Old-school European resort elegance persists.","vibe":"Elegant & Classic","bestFor":"Casino enthusiasts, history buffs, and those wanting elegance","pros":["Famous casino","Grand hotels","Beach access","Good restaurants"],"cons":["Past its prime","Expensive","Less vibrant"],"lat":38.7056,"lng":-9.3974,"priceLevel":"$$$"},{"name":"São João do Estoril","tagline":"Local living between Cascais and Estoril","description":"São João do Estoril offers practical coastal living - train connection to Lisbon, local shops, beach access. Where residents balance coast life with city commutes.","vibe":"Residential & Practical","bestFor":"Long-term visitors, commuters, and those wanting local life","pros":["Train to Lisbon","More affordable","Beach access","Local feel"],"cons":["Less charming","Basic amenities","Commuter area"],"lat":38.7012,"lng":-9.3856,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1477,6 +1478,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

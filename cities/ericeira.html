@@ -1432,6 +1432,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Centro/Old Town","tagline":"Ericeira's whitewashed fishing heart","description":"Ericeira's center is a charming fishing village - whitewashed houses, cobblestone streets, and Atlantic views. It's authentic Portuguese coast.","vibe":"Traditional & Charming","bestFor":"Those seeking authentic Portugal with surf access","pros":["Charming village","Good restaurants","Atlantic views","Walkable"],"cons":["Small center","Limited nightlife","Can be windy"],"lat":38.962,"lng":-9.418,"priceLevel":"$$"},{"name":"Ribeira d'Ilhas Area","tagline":"Ericeira's world-class surf zone","description":"Ribeira d'Ilhas is Ericeira's surf mecca - World Surf Reserve beach, surf schools, and wave-focused community. It's why surfers come to Portugal.","vibe":"Surf & Active","bestFor":"Surfers, surf learners, and those seeking wave culture","pros":["World-class waves","Surf schools","Surf community","Beautiful beach"],"cons":["Crowded lineups","Surf-focused only","Needs transport"],"lat":38.98,"lng":-9.42,"priceLevel":"$$"},{"name":"Foz do Lizandro","tagline":"Ericeira's family beach south","description":"Foz do Lizandro is Ericeira's southern beach - river mouth, beginner waves, and family atmosphere. Mellower than the main surf breaks.","vibe":"Family & Beginner Surf","bestFor":"Families, beginner surfers, and those seeking mellow beaches","pros":["Beginner waves","Family-friendly","River beach","Surf schools"],"cons":["Far from center","Limited dining","Seasonal crowd"],"lat":38.94,"lng":-9.415,"priceLevel":"$"},{"name":"São Sebastião","tagline":"Ericeira's local residential hills","description":"São Sebastião is where Ericeira's long-term visitors live - quieter streets, local markets, and residential atmosphere above the town.","vibe":"Residential & Local","bestFor":"Long-term stayers, digital nomads seeking quiet","pros":["Quieter","Local markets","Affordable rent","Residential peace"],"cons":["Uphill walk","Limited dining","Need transport for surf"],"lat":38.966,"lng":-9.412,"priceLevel":"$"},{"name":"Praia dos Pescadores","tagline":"Ericeira's central fisherman beach","description":"Praia dos Pescadores is Ericeira's town beach - small cove below the village with fishing boats and beach bars. Central and atmospheric.","vibe":"Town Beach & Traditional","bestFor":"Those wanting beach access from village center","pros":["Central location","Fishing boats","Beach bars","Village access"],"cons":["Small beach","Crowded summer","Rocky areas"],"lat":38.961,"lng":-9.42,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1483,6 +1484,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

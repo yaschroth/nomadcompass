@@ -1463,6 +1463,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Zamalek","tagline":"Cairo's island oasis for expats and artists","description":"Zamalek is Cairo's most desirable neighborhood - an island in the Nile with tree-lined streets, art galleries, and embassies. It's where expats, artists, and wealthy Egyptians live. The most livable Cairo experience.","vibe":"Upscale & Expat","bestFor":"Expats, artists, and nomads seeking Cairo's most livable neighborhood","pros":["Tree-lined streets","Great cafes","Art galleries","Safe"],"cons":["Expensive","Island traffic","Limited parking"],"lat":30.06,"lng":31.22,"priceLevel":"$$$"},{"name":"Maadi","tagline":"Cairo's leafy suburb with international schools","description":"Maadi is Cairo's established expat suburb - leafy streets, international schools, and Western amenities. It's where diplomatic families settle, offering space and calm rare in Cairo. Suburban comfort.","vibe":"Suburban & Expat","bestFor":"Families, long-term expats, and nomads seeking suburban Cairo","pros":["Leafy streets","International schools","Good restaurants","Community"],"cons":["Far from center","Traffic to city","Suburban feel"],"lat":29.9602,"lng":31.2569,"priceLevel":"$$"},{"name":"Downtown (Wust El-Balad)","tagline":"Faded grandeur in Cairo's beating heart","description":"Downtown Cairo is the city's chaotic heart - Belle Époque architecture, legendary cafes, and political energy. It's gritty and overwhelming but authentic, where you feel Cairo's pulse. Not for the faint-hearted.","vibe":"Chaotic & Historic","bestFor":"Urban adventurers, history buffs, and nomads seeking authentic Cairo chaos","pros":["Historic architecture","Legendary cafes","Central location","Affordable"],"cons":["Chaotic","Polluted","Overwhelming","Safety concerns"],"lat":30.0459,"lng":31.2388,"priceLevel":"$"},{"name":"New Cairo","tagline":"Modern development in Cairo's desert expansion","description":"New Cairo is Egypt's modern answer to old Cairo's chaos - planned streets, shopping malls, and new apartments in the desert east of the city. It's where young Egyptian families escape, though it lacks soul.","vibe":"Modern & Planned","bestFor":"Families, comfort seekers, and nomads wanting modern infrastructure","pros":["Modern infrastructure","Clean streets","Good malls","Less traffic"],"cons":["Far from everything","No character","Car dependent","Desert heat"],"lat":30.03,"lng":31.47,"priceLevel":"$$"},{"name":"Giza (Pyramids Area)","tagline":"Living in the shadow of ancient wonders","description":"The Giza area puts you near the Pyramids - unique for novelty but not practicality. Tourist infrastructure serves visitors, not residents. Worth considering for pyramid-obsessed nomads only.","vibe":"Tourist & Historic","bestFor":"History obsessives, photographers, and nomads wanting pyramid views","pros":["Pyramid views","Historical setting","Tourist infrastructure","Unique experience"],"cons":["Tourist hassle","Far from city","Limited amenities","Hot"],"lat":29.9765,"lng":31.1313,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1514,6 +1515,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 

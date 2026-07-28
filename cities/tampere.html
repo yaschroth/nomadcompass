@@ -1438,6 +1438,7 @@
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl) return;
+      function __nhInitMap() {
 
       const neighborhoods = [{"name":"Keskusta (City Center)","tagline":"Lakes, saunas, and Nordic design","description":"Finland's second city center sits on an isthmus between two lakes with world-class saunas, museums, and Nordic design shops. The famous Pispala sauna and Rajaportti experiences draw wellness seekers.","vibe":"Nordic urban","bestFor":"Sauna lovers and design enthusiasts","pros":["Lake access","Famous saunas","Great museums","Nordic design"],"cons":["Cold winters","Expensive","Limited nightlife"],"lat":61.4978,"lng":23.7589,"priceLevel":"$$"},{"name":"Finlayson","tagline":"Industrial heritage turned creative hub","description":"The former textile factory has transformed into a cultural quarter with cinemas, restaurants, and creative businesses. Red brick buildings house Tampere's evolving arts scene.","vibe":"Industrial creative","bestFor":"Culture lovers and creatives","pros":["Cultural venues","Historic setting","Creative energy","Good restaurants"],"cons":["Limited residential","Can feel quiet","Spread out events"],"lat":61.4989,"lng":23.7612,"priceLevel":"$$"},{"name":"Pispala","tagline":"Bohemian hillside with artist soul","description":"This colorful wooden house neighborhood on the ridge between lakes has attracted artists and bohemians for a century. The famous Pispala public sauna and stunning views maintain alternative character.","vibe":"Bohemian artistic","bestFor":"Artists and sauna enthusiasts","pros":["Artist community","Famous sauna","Lake views","Unique character"],"cons":["Hilly terrain","Limited services","Far from center"],"lat":61.5023,"lng":23.7234,"priceLevel":"$"},{"name":"Hervanta","tagline":"University life and tech innovation","description":"Home to Tampere University's technology campus, this modern district houses students, researchers, and tech startups. Affordable living and international community attract long-term visitors.","vibe":"Academic modern","bestFor":"Students and tech workers","pros":["Affordable housing","International community","Tech scene","Good facilities"],"cons":["Far from center","Less charming","Suburban feel"],"lat":61.4489,"lng":23.8512,"priceLevel":"$"},{"name":"Särkänniemi","tagline":"Amusement park and summer fun","description":"The amusement park area on the lake peninsula offers summer entertainment, aquarium, and the iconic Näsinneula observation tower. Family-friendly attractions draw seasonal visitors.","vibe":"Entertainment seasonal","bestFor":"Families and summer visitors","pros":["Amusement park","Observation tower","Lake setting","Family activities"],"cons":["Seasonal operation","Tourist-focused","Limited off-season"],"lat":61.5034,"lng":23.7423,"priceLevel":"$$"}];
       if (neighborhoods.length === 0) return;
@@ -1489,6 +1490,11 @@
       });
 
       setTimeout(() => highlightNeighborhood(0), 500);
+      }
+      if ('IntersectionObserver' in window) {
+        const __nhIO = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { __nhIO.disconnect(); __nhInitMap(); } }, { rootMargin: '300px' });
+        __nhIO.observe(mapEl);
+      } else { __nhInitMap(); }
     })();
   </script>
 
