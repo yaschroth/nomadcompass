@@ -654,9 +654,20 @@ textarea::placeholder {
 }
 
 /* Seamless ornamental floral pattern behind otherwise plain section bands, so they read as a
-   soft decorative surface rather than flat fills. Tiled so the light grey linework stays
-   subtle and keeps headings + text fully legible. */
+   soft decorative surface rather than flat fills. The pattern lives on a masked ::before layer
+   that fades to transparent at the top and bottom edges, so it blends into the neighbouring
+   plain sections instead of stopping abruptly. Content stays fully opaque above it. */
 .section-texture {
   position: relative;
+  isolation: isolate;
+}
+.section-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: url("/assets/textures/bloom-pattern.webp") center / 360px 360px repeat;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 15%, #000 85%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0%, #000 15%, #000 85%, transparent 100%);
+  pointer-events: none;
 }
