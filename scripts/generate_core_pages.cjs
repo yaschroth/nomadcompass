@@ -215,7 +215,7 @@ function contactPage() {
     .contact-card-label { font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--color-stone,#8a8175); font-weight:700; }
     .contact-card-value { font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--color-ink,#0f172a); word-break:break-word; }
     .contact-card-note { font-size:.85rem; color:var(--color-stone,#8a8175); }
-    .contact-note-card { margin-top:1.6rem; padding:1.75rem 1.9rem; background:#F0F7FF; border:1px solid #DBEAFE; border-radius:16px; }
+    .contact-note-card { margin-top:1.6rem; padding:1.75rem 1.9rem; background:#F6F1E7; border:1px solid #E3D9C6; border-radius:16px; }
     .contact-note-card h2 { font-family:'DM Serif Display',serif; color:var(--color-ink,#0f172a); font-size:1.4rem; margin:0 0 .6rem; }
     .contact-note-card p { color:var(--color-charcoal,#3a3a3a); line-height:1.7; margin:0 0 .8rem; }
     .contact-reply { color:var(--color-stone,#8a8175) !important; font-size:.92rem; }
