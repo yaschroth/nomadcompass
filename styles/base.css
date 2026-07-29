@@ -660,6 +660,7 @@ textarea::placeholder {
 .section-texture {
   position: relative;
   isolation: isolate;
+  background-color: var(--color-cream);
 }
 .section-texture::before {
   content: "";
@@ -667,7 +668,15 @@ textarea::placeholder {
   inset: 0;
   z-index: -1;
   background: url("/assets/textures/bloom-pattern.webp") center / 360px 360px repeat;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 15%, #000 85%, transparent 100%);
-          mask-image: linear-gradient(to bottom, transparent 0%, #000 15%, #000 85%, transparent 100%);
+  /* Two gradient masks intersected: the texture fades out toward all four edges (deep top/bottom
+     fade + a softer left/right fade), so it vignettes into the neighbouring plain areas. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 28%, #000 72%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+          mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 28%, #000 72%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
   pointer-events: none;
 }
