@@ -26,7 +26,8 @@
   /* Slate: Cool, modern tones for headlines, nav, and footer */
   --color-forest: #1A1F36;
   --color-forest-light: #334155;
-  --color-forest-muted: #FF6B4A;
+  --color-accent-coral: #FF6B4A;
+  --color-forest-muted: var(--color-accent-coral); /* deprecated alias, use --color-accent-coral */
 
   /* --- NEUTRAL COLORS --- */
   /* Warm, soft neutrals (sand/off-white) */
@@ -42,6 +43,11 @@
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
+
+  /* Semantic score-tier ramp (shared by tiles, radar, gauge, score badges) */
+  --score-high: #10b981;   /* 8-10, green  */
+  --score-mid:  #f59e0b;   /* 5-7,  amber  */
+  --score-low:  #ef4444;   /* 1-4,  red    */
 
   /* --- TYPOGRAPHY --- */
   /* Font families */
@@ -59,6 +65,11 @@
   --text-4xl: 2.25rem;    /* 36px */
   --text-5xl: 3rem;       /* 48px */
   --text-6xl: 3.75rem;    /* 60px */
+
+  /* Fluid heading sizes (one shared scale for hero/section headings) */
+  --text-hero: clamp(2.5rem, 8vw, 4.5rem);
+  --text-h1:   clamp(2.1rem, 5.5vw, 3.4rem);
+  --text-h2:   clamp(1.9rem, 4.5vw, 2.7rem);
 
   /* Line heights */
   --leading-tight: 1.1;
@@ -230,6 +241,10 @@ h1, h2, h3, h4, h5, h6 {
   line-height: var(--leading-snug);
 }
 
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
 h1 {
   font-size: var(--text-5xl);
   line-height: var(--leading-tight);
@@ -269,6 +284,24 @@ p:last-child {
   font-size: var(--text-lg);
   line-height: var(--leading-relaxed);
   color: var(--color-stone);
+}
+
+/* Eyebrow / kicker label (one shared treatment for the uppercase mini-labels above headings) */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-terracotta);
+}
+
+/* Visible keyboard focus for interactive controls (accessibility). Pointer clicks are unaffected. */
+:where(a, button, .btn, [role="button"], summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 /* Small text */
