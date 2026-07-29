@@ -653,28 +653,37 @@ textarea::placeholder {
   flex-shrink: 0;
 }
 
-/* Seamless ornamental floral pattern behind otherwise plain section bands, so they read as a
-   soft decorative surface rather than flat fills. The pattern lives on a masked ::before layer
-   that fades to transparent at the top and bottom edges, so it blends into the neighbouring
-   plain sections instead of stopping abruptly. Content stays fully opaque above it. */
-.section-texture {
+/* Seamless ornamental floral pattern behind otherwise plain section bands (homepage sand bands
+   plus the sand bands on city pages), so they read as a soft decorative surface rather than flat
+   fills. The pattern lives on a masked ::before layer that fades out toward all four edges, so it
+   vignettes into the neighbouring plain areas instead of stopping abruptly. mix-blend-mode
+   multiply lets it sit on any light background (white, sand, the watercolor) without a hard tile
+   edge. Content stays fully opaque above it. */
+.section-texture,
+.affiliate-section,
+.blog-rec-section,
+.tool-content,
+.cmp-pickerbar {
   position: relative;
   isolation: isolate;
 }
-.section-texture::before {
+.section-texture::before,
+.affiliate-section::before,
+.blog-rec-section::before,
+.tool-content::before,
+.cmp-pickerbar::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   background: url("/assets/textures/bloom-pattern.webp") center / 360px 360px repeat;
-  /* Two gradient masks intersected: the texture fades out toward all four edges (deep top/bottom
-     fade + a softer left/right fade), so it vignettes into the neighbouring plain areas. */
+  mix-blend-mode: multiply;
   -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%),
-    linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
           mask-image:
-    linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%),
-    linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
   -webkit-mask-composite: source-in;
           mask-composite: intersect;
   pointer-events: none;
