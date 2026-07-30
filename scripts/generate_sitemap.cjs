@@ -54,6 +54,11 @@ if (fs.existsSync(path.join(ROOT, 'tier-list'))) {
     add('/tier-list/' + f.replace(/\.html$/, ''), '0.6', 'monthly');
   }
 }
+if (fs.existsSync(path.join(ROOT, 'vs'))) {
+  for (const f of fs.readdirSync(path.join(ROOT, 'vs')).filter((x) => x.endsWith('.html')).sort()) {
+    add('/vs/' + f.replace(/\.html$/, ''), '0.7', 'monthly');
+  }
+}
 if (fs.existsSync(path.join(ROOT, 'activities.html'))) add('/activities', '0.6', 'monthly');
 if (fs.existsSync(path.join(ROOT, 'activities'))) {
   for (const f of fs.readdirSync(path.join(ROOT, 'activities')).filter((x) => x.endsWith('.html')).sort()) {
