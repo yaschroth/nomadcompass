@@ -153,35 +153,52 @@ function build(a, b) {
         <span class="vs-verdict-badge">Overall: <b>${verdictLine(a, b, sa, sb)}</b></span>
       </div></div>
     </header>
-    <div class="vs-body">
-      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/compare">Compare</a><span>/</span><span aria-current="page">${a.name} vs ${b.name}</span></nav>
-      <section>
-        <p>Deciding between <a href="/cities/${a.id}">${a.name}</a> and <a href="/cities/${b.id}">${b.name}</a> for your next remote-work base? On the overall Nomad Score, ${verdictLine(a, b, sa, sb)}. On budget, ${cheaper.name} is the more affordable of the two at roughly ${money(cheaper.costPerMonth)} a month versus ${money(pricier.costPerMonth)} in ${pricier.name}. Below is the full side-by-side across all 13 factors we rate, plus where each city pulls ahead.</p>
-      </section>
-      <section>
+    <section class="vs-section">
+      <div class="container">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/compare">Compare</a><span>/</span><span aria-current="page">${a.name} vs ${b.name}</span></nav>
+        <div class="vs-board">
+          <div class="vs-board-city${sa > sb ? ' win' : ''}">${sa > sb ? '<span class="vs-board-win">Winner</span>' : ''}<span class="vs-board-flag">${flagImg(a)}</span><h3>${esc(a.name)}</h3><span class="vs-board-country">${esc(a.country)}</span><div class="vs-board-score">${sa}</div><span class="vs-board-slabel">Nomad Score</span><div class="vs-board-cost">${money(a.costPerMonth)}<span>per month</span></div></div>
+          <div class="vs-board-vs">VS</div>
+          <div class="vs-board-city${sb > sa ? ' win' : ''}">${sb > sa ? '<span class="vs-board-win">Winner</span>' : ''}<span class="vs-board-flag">${flagImg(b)}</span><h3>${esc(b.name)}</h3><span class="vs-board-country">${esc(b.country)}</span><div class="vs-board-score">${sb}</div><span class="vs-board-slabel">Nomad Score</span><div class="vs-board-cost">${money(b.costPerMonth)}<span>per month</span></div></div>
+        </div>
+        <p class="vs-lead">Deciding between <a href="/cities/${a.id}">${a.name}</a> and <a href="/cities/${b.id}">${b.name}</a> for your next remote-work base? On the overall Nomad Score, ${verdictLine(a, b, sa, sb)}. On budget, ${cheaper.name} is the more affordable of the two at roughly ${money(cheaper.costPerMonth)} a month versus ${money(pricier.costPerMonth)} in ${pricier.name}. Below is the full side-by-side across all 13 factors we rate, plus where each city pulls ahead.</p>
+      </div>
+    </section>
+
+    <section class="vs-section alt section-texture">
+      <div class="container">
         <h2>${a.name} vs ${b.name}: side by side</h2>
         <div class="vs-table-wrap"><table class="vs-table">
           <thead><tr><th scope="col">Factor</th><th scope="col">${flagImg(a)} ${esc(a.name)}</th><th scope="col">${flagImg(b)} ${esc(b.name)}</th></tr></thead>
           <tbody>${rows.join('')}</tbody>
         </table></div>
-      </section>
-      <section>
+      </div>
+    </section>
+
+    <section class="vs-section">
+      <div class="container">
         <h2>Where each city wins</h2>
         <div class="vs-cols">
           <div class="vs-col"><h3>${flagImg(a)} ${esc(a.name)} is stronger on</h3><ul>${leadsA.length ? leadsA.sort((x, y) => y.d - x.d).map((x) => `<li>${x.label}</li>`).join('') : '<li>Evenly matched or behind across the board</li>'}</ul></div>
           <div class="vs-col"><h3>${flagImg(b)} ${esc(b.name)} is stronger on</h3><ul>${leadsB.length ? leadsB.sort((x, y) => y.d - x.d).map((x) => `<li>${x.label}</li>`).join('') : '<li>Evenly matched or behind across the board</li>'}</ul></div>
         </div>
-      </section>
-      <section>
+      </div>
+    </section>
+
+    <section class="vs-section alt section-texture">
+      <div class="container">
         <h2>The verdict</h2>
         <p>${chooseA} ${chooseB} For an interactive breakdown with a third city, open the <a href="/compare?a=${a.id}&amp;b=${b.id}">full comparison tool</a>.</p>
         <p class="vs-cta"><a class="btn btn-primary" href="/cities/${a.id}">${a.name} guide &rarr;</a><a class="btn btn-secondary" href="/cities/${b.id}">${b.name} guide &rarr;</a><a class="btn btn-ghost" href="/compare?a=${a.id}&amp;b=${b.id}">Compare in the tool &rarr;</a></p>
-      </section>
-      <section>
+      </div>
+    </section>
+
+    <section class="vs-section">
+      <div class="container">
         <h2>Frequently asked questions</h2>
         ${faqs.map(([q, ans]) => `<h3 class="vs-faq-q">${q}</h3><p class="vs-faq-a">${esc(ans)}</p>`).join('\n        ')}
-      </section>
-    </div>
+      </div>
+    </section>
   </main>
   ${FOOTER}
   <script src="/cities-data.js"></script>
