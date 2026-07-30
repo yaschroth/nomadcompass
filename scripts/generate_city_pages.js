@@ -27153,8 +27153,8 @@ function generateCityPage(city) {
             <div class="quick-stat-label">Active Nomads</div>
           </div>
           <div class="quick-stat">
-            <div class="quick-stat-value" id="timeDifference" data-timezone="${city.timezone || ''}">--</div>
-            <div class="quick-stat-label">Time Difference</div>
+            <div class="quick-stat-value">${(o=>{const s=o<0?'-':'+';const a=Math.abs(o);const h=Math.floor(a);const mm=Math.round((a-h)*60);return 'UTC'+s+h+(mm?':'+String(mm).padStart(2,'0'):'');})(city.timezone||0)}</div>
+            <div class="quick-stat-label">Timezone</div>
           </div>
         </div>
       </div>
