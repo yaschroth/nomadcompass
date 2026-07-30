@@ -26984,6 +26984,7 @@ function generateCityPage(city) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" as="image" href="${content.hero_image}" fetchpriority="high">
   <meta name="description" content="${escapeHtml(city.name)} digital nomad guide: cost of living, WiFi speeds, coworking spaces, visa info, and where to stay in ${escapeHtml(city.country)}.">
 
   <title>${escapeHtml(city.name)}, ${escapeHtml(city.country)}, The Nomad HQ City Guide</title>
