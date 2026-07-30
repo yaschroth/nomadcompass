@@ -113,6 +113,7 @@ function build(a, b) {
   <!-- /ga4 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" as="image" href="/images/cities/${a.id}.webp" fetchpriority="high">
   <title>${title} | The Nomad HQ</title>
   <meta name="description" content="${esc(desc)}">
   <link rel="canonical" href="${url}">
@@ -137,14 +138,20 @@ function build(a, b) {
   ${NAV}
   <main id="main-content" tabindex="-1">
     <header class="vs-hero">
-      <span class="eyebrow">Head to head</span>
-      <div class="vs-hero-cities">
-        <span class="vs-hero-city">${flagImg(a)} ${esc(a.name)}</span>
-        <span class="vs-hero-vs">vs</span>
-        <span class="vs-hero-city">${flagImg(b)} ${esc(b.name)}</span>
+      <div class="vs-hero-media">
+        <img src="/images/cities/${a.id}.webp" alt="${esc(a.name)}" onerror="this.src='${a.image}'">
+        <img src="/images/cities/${b.id}.webp" alt="${esc(b.name)}" onerror="this.src='${b.image}'">
       </div>
-      <h1>${a.name} vs ${b.name}: Which Is Better for Digital Nomads?</h1>
-      <span class="vs-verdict-badge">Overall: <b>${verdictLine(a, b, sa, sb)}</b></span>
+      <div class="vs-hero-overlay"><div class="container">
+        <span class="eyebrow">Head to head</span>
+        <div class="vs-hero-cities">
+          <span class="vs-hero-city">${flagImg(a)} ${esc(a.name)}</span>
+          <span class="vs-hero-vs">vs</span>
+          <span class="vs-hero-city">${flagImg(b)} ${esc(b.name)}</span>
+        </div>
+        <h1>${a.name} vs ${b.name}: Which Is Better for Digital Nomads?</h1>
+        <span class="vs-verdict-badge">Overall: <b>${verdictLine(a, b, sa, sb)}</b></span>
+      </div></div>
     </header>
     <div class="vs-body">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/compare">Compare</a><span>/</span><span aria-current="page">${a.name} vs ${b.name}</span></nav>
