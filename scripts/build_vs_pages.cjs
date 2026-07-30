@@ -11,7 +11,9 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 
 const code = fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8');
-const byId = new Map((new Function(code + ';return CITIES;'))().map((c) => [c.id, c]));
+const data = (new Function(code + ';return {CITIES, CATEGORIES};'))();
+const byId = new Map(data.CITIES.map((c) => [c.id, c]));
+const CATDESC = data.CATEGORIES; // { climate: { name, icon, description }, ... }
 
 // shell pieces from compare.html
 const cmp = fs.readFileSync(path.join(ROOT, 'compare.html'), 'utf8');
@@ -35,6 +37,11 @@ function iso(flag) { const p = [...(flag || '')]; if (p.length !== 2) return nul
 function flagImg(c) { const i = iso(c.flag); return i ? `<img class="flag-img" src="/assets/flags/${i}.svg" alt="" loading="lazy">` : ''; }
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function money(n) { return '$' + Number(n).toLocaleString('en-US'); }
+// category label + accessible info tooltip revealing its definition
+function catInfo(label, desc) {
+  if (!desc) return esc(label);
+  return `<span class="cat-info">${esc(label)}<button type="button" class="cat-info-btn" aria-label="${esc(label)}: ${esc(desc)}">i</button><span class="cat-info-pop" aria-hidden="true">${esc(desc)}</span></span>`;
+}
 
 // curated, high-demand pairs (validated against data below)
 const PAIRS = [
@@ -69,12 +76,12 @@ function build(a, b) {
   const diff = Math.abs(a.costPerMonth - b.costPerMonth);
 
   const rows = [
-    `<tr><th scope="row">Nomad Score</th><td class="${sa >= sb ? 'vs-win' : ''}">${sa}</td><td class="${sb >= sa ? 'vs-win' : ''}">${sb}</td></tr>`,
-    `<tr><th scope="row">Monthly budget</th><td class="${a.costPerMonth <= b.costPerMonth ? 'vs-win' : ''}">${money(a.costPerMonth)}</td><td class="${b.costPerMonth <= a.costPerMonth ? 'vs-win' : ''}">${money(b.costPerMonth)}</td></tr>`,
+    `<tr><th scope="row">${catInfo('Nomad Score', 'Our overall 0 to 10 rating for a city, a rescaled average of all 13 category scores.')}</th><td class="${sa >= sb ? 'vs-win' : ''}">${sa}</td><td class="${sb >= sa ? 'vs-win' : ''}">${sb}</td></tr>`,
+    `<tr><th scope="row">${catInfo('Monthly budget', 'Estimated monthly cost of living for one person in USD, covering rent, food and day-to-day spending.')}</th><td class="${a.costPerMonth <= b.costPerMonth ? 'vs-win' : ''}">${money(a.costPerMonth)}</td><td class="${b.costPerMonth <= a.costPerMonth ? 'vs-win' : ''}">${money(b.costPerMonth)}</td></tr>`,
   ];
   for (const [k, label] of CATS) {
     const av = a.scores[k], bv = b.scores[k];
-    rows.push(`<tr><th scope="row">${label}</th><td class="${av >= bv ? 'vs-win' : ''}">${av}/10</td><td class="${bv >= av ? 'vs-win' : ''}">${bv}/10</td></tr>`);
+    rows.push(`<tr><th scope="row">${catInfo(label, (CATDESC[k] || {}).description)}</th><td class="${av >= bv ? 'vs-win' : ''}">${av}/10</td><td class="${bv >= av ? 'vs-win' : ''}">${bv}/10</td></tr>`);
   }
 
   const listOr = (arr, fallback) => arr.length ? arr.join(', ') : fallback;

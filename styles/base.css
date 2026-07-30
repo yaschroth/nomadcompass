@@ -286,6 +286,16 @@ p:last-child {
   color: var(--color-stone);
 }
 
+/* Reusable category info tooltip: a small "i" next to a category label that reveals its
+   definition on hover, keyboard focus, or tap (CSS-only via :focus-within; the button's
+   aria-label carries the text for screen readers, so the visual popover is decorative). */
+.cat-info { position: relative; display: inline-flex; align-items: center; gap: .35em; }
+.cat-info-btn { width: 1.1em; height: 1.1em; padding: 0; border-radius: 50%; border: 1px solid var(--color-sand-dark); background: var(--color-sand); color: var(--color-stone); font: 700 .68em/1 var(--font-body); cursor: help; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cat-info-btn:hover, .cat-info-btn:focus-visible { border-color: var(--color-terracotta); color: var(--color-terracotta); }
+.cat-info-pop { position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 230px; background: var(--color-ink); color: #fff; font: 400 .8rem/1.45 var(--font-body); text-transform: none; letter-spacing: normal; text-align: left; padding: .5rem .7rem; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); opacity: 0; visibility: hidden; transition: opacity .15s; z-index: 30; pointer-events: none; }
+.cat-info-pop::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--color-ink); }
+.cat-info:hover .cat-info-pop, .cat-info:focus-within .cat-info-pop { opacity: 1; visibility: visible; }
+
 /* City-vs-city comparison pages (/vs/*). Data-driven head-to-head with a split-photo hero. */
 .vs-hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; color: #fff; text-align: center; }
 .vs-hero-media { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
@@ -328,7 +338,8 @@ p:last-child {
 .vs-board-vs { display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-terracotta); }
 @media (max-width: 620px) { .vs-board { grid-template-columns: 1fr; } .vs-board-vs { padding: var(--space-2) 0; } }
 
-.vs-table-wrap { overflow-x: auto; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-lg); background: #fff; }
+.vs-table-wrap { border: 1px solid var(--color-sand-dark); border-radius: var(--radius-lg); background: #fff; }
+.vs-table th:first-child { min-width: 0; }
 .vs-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); background: #fff; }
 .vs-table th, .vs-table td { padding: var(--space-3) var(--space-4); text-align: left; border-top: 1px solid var(--color-sand-dark); }
 .vs-table thead th { background: var(--color-sand); color: var(--color-ink); font-weight: 700; border-top: none; }

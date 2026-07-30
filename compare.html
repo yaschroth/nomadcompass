@@ -367,6 +367,12 @@
         { k: 'airquality', name: 'Air Quality', ic: 'wind' }
       ];
       var CATKEYS = CATS.map(function (c) { return c.k; });
+      // category label + accessible info tooltip revealing its definition (shared .cat-info component)
+      function catInfo(name, k) {
+        var d = (typeof CATEGORIES !== 'undefined' && CATEGORIES[k]) ? CATEGORIES[k].description : '';
+        if (!d) return name;
+        return '<span class="cat-info">' + name + '<button type="button" class="cat-info-btn" aria-label="' + name + ': ' + d + '">i</button><span class="cat-info-pop" aria-hidden="true">' + d + '</span></span>';
+      }
       var SHORT = { climate: 'Climate', cost: 'Value', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
       var COLORS = ['#c0392b', '#1b6ca8', '#d19a2f']; // slot A / B / C
 
@@ -557,7 +563,7 @@
           var pres = vals.filter(function (v) { return typeof v === 'number'; });
           var best = pres.length ? Math.max.apply(null, pres) : null;
           html += '<div class="cmp-row' + (ri % 2 ? ' zebra' : '') + '" style="display:contents">';
-          html += '<div class="cmp-rowlabel"><span class="ic">' + icon(cat.ic) + '</span>' + cat.name + '</div>';
+          html += '<div class="cmp-rowlabel"><span class="ic">' + icon(cat.ic) + '</span>' + catInfo(cat.name, cat.k) + '</div>';
           for (var j = 0; j < 3; j++) {
             var v = vals[j];
             if (v == null) { html += '<div class="cmp-cell"></div>'; continue; }
