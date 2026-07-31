@@ -54,6 +54,22 @@ const PAIRS = [
   ['hanoi', 'hochiminhcity'], ['danang', 'hoian'], ['hanoi', 'danang'],
   ['split', 'dubrovnik'], ['tallinn', 'riga'], ['tokyo', 'osaka'], ['tokyo', 'seoul'], ['seoul', 'taipei'], ['osaka', 'seoul'],
   ['sofia', 'tbilisi'], ['istanbul', 'athens'], ['dubai', 'istanbul'], ['athens', 'lisbon'], ['taipei', 'bangkok'],
+  // --- expanded set (mostly intra-region comparisons people actually search) ---
+  ['lisbon', 'seville'], ['lisbon', 'malaga'], ['porto', 'madrid'], ['madrid', 'seville'], ['seville', 'granada'],
+  ['seville', 'malaga'], ['malaga', 'granada'], ['malaga', 'alicante'], ['tenerife', 'palma'], ['palma', 'ibiza'],
+  ['barcelona', 'seville'], ['valencia', 'malaga'],
+  ['chiangmai', 'pai'], ['bangkok', 'phuket'], ['phuket', 'krabi'], ['bali', 'ubud'], ['kualalumpur', 'singapore'],
+  ['penang', 'kualalumpur'], ['singapore', 'bangkok'], ['hochiminhcity', 'danang'], ['chiangmai', 'canggu'],
+  ['medellin', 'bogota'], ['medellin', 'cartagena'], ['mexicocity', 'oaxaca'], ['mexicocity', 'guadalajara'],
+  ['playadelcarmen', 'tulum'], ['buenosaires', 'santiago'], ['buenosaires', 'montevideo'], ['lima', 'cusco'],
+  ['saopaulo', 'rio'], ['florianopolis', 'saopaulo'], ['mexicocity', 'playadelcarmen'], ['medellin', 'lima'],
+  ['belgrade', 'sofia'], ['budapest', 'belgrade'], ['riga', 'vilnius'], ['tallinn', 'vilnius'], ['ljubljana', 'zagreb'],
+  ['zagreb', 'split'], ['kotor', 'dubrovnik'], ['sarajevo', 'belgrade'], ['bucharest', 'sofia'],
+  ['berlin', 'munich'], ['berlin', 'amsterdam'], ['munich', 'vienna'], ['vienna', 'budapest'], ['paris', 'london'],
+  ['rome', 'florence'], ['rome', 'milan'], ['florence', 'milan'], ['rome', 'naples'], ['london', 'berlin'],
+  ['tokyo', 'kyoto'], ['osaka', 'kyoto'], ['seoul', 'busan'], ['tokyo', 'taipei'], ['hongkong', 'singapore'], ['taipei', 'hongkong'],
+  ['capetown', 'marrakech'], ['dubai', 'abudhabi'], ['cairo', 'marrakech'], ['capetown', 'nairobi'],
+  ['sydney', 'melbourne'], ['melbourne', 'brisbane'], ['sydney', 'brisbane'], ['wellington', 'queenstown'], ['sydney', 'wellington'],
 ];
 
 function verdictLine(a, b, sa, sb) {
@@ -222,10 +238,10 @@ let done = 0, missing = [];
 for (const [x, y] of PAIRS) {
   const a = byId.get(x), b = byId.get(y);
   if (!a || !b) { missing.push(`${x}/${y}`); continue; }
-  const [id1, id2] = [a.id, b.id];
-  const slug = `${id1}-vs-${id2}`;
-  if (seen.has(slug)) continue;
-  seen.add(slug);
+  const key = [a.id, b.id].slice().sort().join('|'); // canonical: reverses dedupe to the first listing
+  if (seen.has(key)) continue;
+  seen.add(key);
+  const slug = `${a.id}-vs-${b.id}`;
   fs.writeFileSync(path.join(OUT, slug + '.html'), build(a, b));
   done++;
 }
