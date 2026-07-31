@@ -14,7 +14,9 @@ const LINKS = [
   ['/route', 'Route Planner'],
   ['/best-weather', 'Best Weather by Month'],
   ['/visa', 'Visa Finder'],
+  ['/nomad-visas', 'Nomad Visa Finder'],
   ['/geoarbitrage', 'Geoarbitrage Calculator'],
+  ['/salary', 'Salary Calculator'],
   ['/tier-list/maker', 'Tier List Maker'],
 ];
 
