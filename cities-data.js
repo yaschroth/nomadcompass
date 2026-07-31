@@ -11345,19 +11345,19 @@ const CITIES = [
  * Each category has a display name and an icon (line-icon name, see /assets/icons.svg + icon())
  */
 const CATEGORIES = {
-  climate:     { name: "Climate", icon: "sun", description: "Weather conditions year-round" },
-  cost:        { name: "Cost", icon: "wallet", description: "Cost of living and affordability" },
-  wifi:        { name: "WiFi", icon: "wifi", description: "Internet speed and reliability" },
-  nightlife:   { name: "Nightlife", icon: "moon", description: "Bars, clubs, and social scene" },
-  nature:      { name: "Nature", icon: "trees", description: "Access to parks, beaches, mountains" },
-  safety:      { name: "Safety", icon: "shield", description: "Personal safety and low crime" },
-  food:        { name: "Food", icon: "utensils", description: "Quality and variety of cuisine" },
-  community:   { name: "Community", icon: "users", description: "Digital nomad community size" },
-  english:     { name: "English", icon: "messages-square", description: "How widely English is spoken" },
-  visa:        { name: "Visa", icon: "stamp", description: "Ease of getting/extending visas" },
-  culture:     { name: "Culture", icon: "drama", description: "Museums, arts, history, and cultural experiences" },
-  cleanliness: { name: "Cleanliness", icon: "sparkles", description: "Street cleanliness and general tidiness" },
-  airquality:  { name: "Air Quality", icon: "wind", description: "Average air quality throughout the year" }
+  climate:     { name: "Climate", icon: "sun", description: "How comfortable the weather is for living and working across the whole year. A high score means mild, mostly sunny conditions with few extremes, so no brutal summer heat, harsh winters or long rainy seasons." },
+  cost:        { name: "Cost", icon: "wallet", description: "How affordable the city is for a remote worker. A high score means a low overall cost of living, so rent, food and daily spending stretch a normal income much further." },
+  wifi:        { name: "WiFi", icon: "wifi", description: "Internet quality for remote work. A high score means fast, reliable connections (home fibre plus solid mobile data and coworking) that handle video calls and large uploads without dropping." },
+  nightlife:   { name: "Nightlife", icon: "moon", description: "The after-dark and going-out scene. A high score means plenty of bars, clubs, live music and late venues, and an easy, lively scene to be social in." },
+  nature:      { name: "Nature", icon: "trees", description: "Access to the outdoors. A high score means beaches, mountains, parks or hiking are close by and easy to reach for weekends and breaks from the desk." },
+  safety:      { name: "Safety", icon: "shield", description: "How safe the city feels day to day. A high score means low crime, comfortable walking at night and few scams, including for solo and female travellers." },
+  food:        { name: "Food", icon: "utensils", description: "The eating-out scene. A high score means excellent, varied and affordable food, from street eats to restaurants, with good options for most diets." },
+  community:   { name: "Community", icon: "users", description: "How big and active the digital-nomad and remote-work scene is. A high score means lots of other nomads, coworking spaces and regular meetups, so it is easy to make connections." },
+  english:     { name: "English", icon: "messages-square", description: "How far you can get in English. A high score means English is widely spoken in daily life, work and services, so a language barrier rarely gets in the way." },
+  visa:        { name: "Visa", icon: "stamp", description: "How easy it is to stay legally as a remote worker. A high score means generous visa-free stays, straightforward extensions, or a dedicated digital-nomad visa." },
+  culture:     { name: "Culture", icon: "drama", description: "The depth of arts, history and things to do. A high score means rich museums, architecture, festivals and a strong local identity worth exploring long-term." },
+  cleanliness: { name: "Cleanliness", icon: "sparkles", description: "How clean and well-kept the city is. A high score means tidy streets, little litter, and well-maintained public spaces and infrastructure." },
+  airquality:  { name: "Air Quality", icon: "wind", description: "The air you breathe day to day. A high score means clean air with low pollution for most of the year, which matters if you are sensitive or exercise outdoors." }
 };
 
 /**
