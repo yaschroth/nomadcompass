@@ -41,7 +41,7 @@ const CITY_REGIONS = {
         leeds: 'europe', birmingham: 'europe', newcastle: 'europe', nottingham: 'europe',
         sheffield: 'europe', naples: 'europe', bologna: 'europe', turin: 'europe',
         verona: 'europe', bari: 'europe', catania: 'europe', bilbao: 'europe',
-        granada: 'europe', cordoba: 'europe', cadiz: 'europe', tarifa: 'europe',
+        granada: 'latam', cordoba: 'europe', cadiz: 'europe', tarifa: 'europe',
         girona: 'europe', palma: 'europe', ibiza: 'europe', fuerteventura: 'europe',
         rhodes: 'europe', santorini: 'europe', chania: 'europe', zakynthos: 'europe',
         kotor: 'europe', dubrovnik: 'europe', zadar: 'europe', pula: 'europe',
@@ -139,7 +139,85 @@ const CITY_REGIONS = {
         darwin: 'oceania', canberra: 'oceania', wellington: 'oceania', suva: 'oceania',
         noumea: 'oceania', brisbane: 'oceania', perth: 'oceania', adelaide: 'oceania',
         goldcoast: 'oceania', cairns: 'oceania', hobart: 'oceania', byronbay: 'oceania',
-        christchurch: 'oceania', queenstown: 'oceania', mauritius: 'oceania'
+        christchurch: 'oceania', queenstown: 'oceania', mauritius: 'oceania',
+
+        // --- Auto-filled from country (regions previously missing) ---
+        // Europe
+        albarracin: 'europe', alberobello: 'europe', assisi: 'europe', aveiro: 'europe',
+        avignon: 'europe', bamberg: 'europe', berat: 'europe', bergamo: 'europe',
+        besalu: 'europe', bitola: 'europe', braga: 'europe', budva: 'europe',
+        caceres: 'europe', ceskykrumlov: 'europe', chamonix: 'europe', civitadibagnoregio: 'europe',
+        colmar: 'europe', corfu: 'europe', cudillero: 'europe', delft: 'europe',
+        eze: 'europe', geiranger: 'europe', giethoorn: 'europe', gjirokaster: 'europe',
+        gordes: 'europe', guimaraes: 'europe', hallstatt: 'europe', hvar: 'europe',
+        kruja: 'europe', ksamil: 'europe', lauterbrunnen: 'europe', lucca: 'europe',
+        luzern: 'europe', manarola: 'europe', marvao: 'europe', matera: 'europe',
+        meteora: 'europe', monemvasia: 'europe', monsaraz: 'europe', nafplio: 'europe',
+        nazare: 'europe', obidos: 'europe', perast: 'europe', perugia: 'europe',
+        pitigliano: 'europe', plitvice: 'europe', positano: 'europe', regensburg: 'europe',
+        reine: 'europe', riquewihr: 'europe', rocamadour: 'europe', ronda: 'europe',
+        rothenburg: 'europe', rovinj: 'europe', salamanca: 'europe', santiagodecompostela: 'europe',
+        segovia: 'europe', shkoder: 'europe', sibenik: 'europe', siena: 'europe',
+        sighisoara: 'europe', sintra: 'europe', taormina: 'europe', telc: 'europe',
+        toledo: 'europe', torun: 'europe', trakai: 'europe', trogir: 'europe',
+        tropea: 'europe', velikotarnovo: 'europe', vernazza: 'europe', zermatt: 'europe',
+
+        // Asia
+        alappuzha: 'asia', almaty: 'asia', amritsar: 'asia', andong: 'asia',
+        ayutthaya: 'asia', bagan: 'asia', banaue: 'asia', bandipur: 'asia',
+        batad: 'asia', bhaktapur: 'asia', bishkek: 'asia', bukhara: 'asia',
+        bukittinggi: 'asia', coron: 'asia', dali: 'asia', dharamshala: 'asia',
+        ella: 'asia', fenghuang: 'asia', galle: 'asia', gokarna: 'asia',
+        gorkha: 'asia', gyeongju: 'asia', hagiang: 'asia', hakone: 'asia',
+        halong: 'asia', hampi: 'asia', "hpa-an": 'asia', hsipaw: 'asia',
+        jaisalmer: 'asia', jakarta: 'asia', jeonju: 'asia', jodhpur: 'asia',
+        kamakura: 'asia', kandy: 'asia', kep: 'asia', khiva: 'asia',
+        kobe: 'asia', koyasan: 'asia', kurashiki: 'asia', kutalombok: 'asia',
+        labuanbajo: 'asia', leh: 'asia', lijiang: 'asia', mahabalipuram: 'asia',
+        matsue: 'asia', matsumoto: 'asia', mestia: 'asia', mirissa: 'asia',
+        munnar: 'asia', mysore: 'asia', naha: 'asia', nara: 'asia',
+        nikko: 'asia', nongkhiaw: 'asia', nuwaraeliya: 'asia', orchha: 'asia',
+        phongnha: 'asia', pingyao: 'asia', pondicherry: 'asia', pushkar: 'asia',
+        rishikesh: 'asia', sagada: 'asia', samarkand: 'asia', shakhrisabz: 'asia',
+        shirakawago: 'asia', sighnaghi: 'asia', sigiriya: 'asia', stepantsminda: 'asia',
+        takayama: 'asia', tanatoraja: 'asia', varanasi: 'asia', vigan: 'asia',
+        wuzhen: 'asia', yangshuo: 'asia', zhangjiajie: 'asia',
+
+        // Middle East
+        amasya: 'middleeast', byblos: 'middleeast', goreme: 'middleeast', kas: 'middleeast',
+        mardin: 'middleeast', nizwa: 'middleeast', oludeniz: 'middleeast', pamukkale: 'middleeast',
+        petra: 'middleeast', safranbolu: 'middleeast', wadimusa: 'middleeast', wadirum: 'middleeast',
+
+        // Africa
+        aitbenhaddou: 'africa', aswan: 'africa', dahab: 'africa', fez: 'africa',
+        gondar: 'africa', harar: 'africa', kairouan: 'africa', lalibela: 'africa',
+        lamu: 'africa', livingstone: 'africa', meknes: 'africa', merzouga: 'africa',
+        moshi: 'africa', musanze: 'africa', ouarzazate: 'africa', sidibousaid: 'africa',
+        stellenbosch: 'africa', stonetown: 'africa', swakopmund: 'africa', tangier: 'africa',
+        tetouan: 'africa', tozeur: 'africa',
+
+        // North America
+        bacalar: 'northamerica', campeche: 'northamerica', holbox: 'northamerica', izamal: 'northamerica',
+        patzcuaro: 'northamerica', puebla: 'northamerica', sancristobal: 'northamerica', taxco: 'northamerica',
+        tepoztlan: 'northamerica', trinidad: 'northamerica', vinales: 'northamerica', zacatecas: 'northamerica',
+
+        // Latin America
+        banos: 'latam', barichara: 'latam', bocasdeltoro: 'latam', chachapoyas: 'latam',
+        colonia: 'latam', copacabana: 'latam', coroico: 'latam', cuencaec: 'latam',
+        diamantina: 'latam', elcalafate: 'latam', elchalten: 'latam', elzonte: 'latam',
+        filandia: 'latam', flores: 'latam', gramado: 'latam', granadanicaragua: 'latam',
+        guatape: 'latam', huacachina: 'latam', huaraz: 'latam', jardin: 'latam',
+        jericoacoara: 'latam', lencois: 'latam', mompox: 'latam', monteverde: 'latam',
+        olinda: 'latam', ometepe: 'latam', otavalo: 'latam', ouropreto: 'latam',
+        paraty: 'latam', pisac: 'latam', popayan: 'latam', potosi: 'latam',
+        pucon: 'latam', puno: 'latam', puntadeleste: 'latam', purmamarca: 'latam',
+        rio: 'latam', salento: 'latam', salta: 'latam', samaipata: 'latam',
+        sanpedrodeatacama: 'latam', santateresa: 'latam', suchitoto: 'latam', tarapoto: 'latam',
+        tiradentes: 'latam', uyuni: 'latam', villadeleyva: 'latam',
+
+        // Oceania
+        wanaka: 'oceania'
+
       };
 
 if (typeof module !== 'undefined' && module.exports) module.exports = CITY_REGIONS;
