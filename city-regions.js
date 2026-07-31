@@ -150,8 +150,7 @@ const CITY_REGIONS = {
         colmar: 'europe', corfu: 'europe', cudillero: 'europe', delft: 'europe',
         eze: 'europe', geiranger: 'europe', giethoorn: 'europe', gjirokaster: 'europe',
         gordes: 'europe', guimaraes: 'europe', hallstatt: 'europe', hvar: 'europe',
-        kruja: 'europe', ksamil: 'europe', lauterbrunnen: 'europe', lucca: 'europe',
-        luzern: 'europe', manarola: 'europe', marvao: 'europe', matera: 'europe',
+        kruja: 'europe', ksamil: 'europe', lauterbrunnen: 'europe', lucca: 'europe', manarola: 'europe', marvao: 'europe', matera: 'europe',
         meteora: 'europe', monemvasia: 'europe', monsaraz: 'europe', nafplio: 'europe',
         nazare: 'europe', obidos: 'europe', perast: 'europe', perugia: 'europe',
         pitigliano: 'europe', plitvice: 'europe', positano: 'europe', regensburg: 'europe',
@@ -203,9 +202,9 @@ const CITY_REGIONS = {
 
         // Latin America
         banos: 'latam', barichara: 'latam', bocasdeltoro: 'latam', chachapoyas: 'latam',
-        colonia: 'latam', copacabana: 'latam', coroico: 'latam', cuencaec: 'latam',
+        colonia: 'latam', copacabana: 'latam', coroico: 'latam',
         diamantina: 'latam', elcalafate: 'latam', elchalten: 'latam', elzonte: 'latam',
-        filandia: 'latam', flores: 'latam', gramado: 'latam', granadanicaragua: 'latam',
+        filandia: 'latam', flores: 'latam', gramado: 'latam',
         guatape: 'latam', huacachina: 'latam', huaraz: 'latam', jardin: 'latam',
         jericoacoara: 'latam', lencois: 'latam', mompox: 'latam', monteverde: 'latam',
         olinda: 'latam', ometepe: 'latam', otavalo: 'latam', ouropreto: 'latam',
