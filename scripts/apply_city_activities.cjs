@@ -36,7 +36,7 @@ for (const [id, list] of Object.entries(rev)) {
   html = html.replace(/\s*<!-- ca-start -->[\s\S]*?<!-- ca-end -->/, '');
   const name = NAME[id] || id;
   const block = '<!-- ca-start -->\n' +
-    `    <div class="container" style="max-width:1100px;margin:1.4rem auto 0;padding:0 var(--space-4,1rem);">
+    `    <div class="container" style="max-width:1100px;margin:2rem auto;padding:0 var(--space-4,1rem);">
       <p style="font-size:.98rem;line-height:1.65;color:var(--color-charcoal,#334155);background:var(--color-sand,#f6f1e7);border:1px solid var(--color-sand-dark,#e3d9c6);border-radius:12px;padding:.85rem 1.1rem;margin:0;"><strong>Things to do in ${name}:</strong> it is one of our top nomad spots for ${humanList(list)}. See more <a href="/activities">things to do off the clock</a>.</p>
     </div>\n    <!-- ca-end -->`;
   let idx = html.indexOf('<!-- cw-end -->');
