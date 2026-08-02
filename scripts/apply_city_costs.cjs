@@ -88,7 +88,7 @@ ${personas}
         <ul class="cost-lines">
 ${lines}
         </ul>
-        <p class="cost-src">Converted to USD at ${esc(rateStr)} (${esc(fxDate)}). Solo is centre rent plus Numbeo's single-person monthly costs; couple and lean are our estimates from the same figures.</p>
+        <p class="cost-src">Prices are from Numbeo (${esc(d.date)}), converted to USD at ${esc(rateStr)} (${esc(fxDate)}). The monthly living-costs figure is our transparent one-person basket, groceries, a few meals out, utilities, phone, internet, transport and essentials, priced from those figures. Solo adds central rent; couple and lean are estimates from the same numbers.</p>
       </div>
       <!-- cost-end -->`;
 }

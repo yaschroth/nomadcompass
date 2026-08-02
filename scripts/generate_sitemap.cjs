@@ -23,6 +23,7 @@ add('/visa', '0.7', 'monthly');
 add('/nomad-visas', '0.7', 'monthly');
 add('/geoarbitrage', '0.7', 'monthly');
 add('/salary', '0.7', 'monthly');
+add('/cost-of-living-index', '0.8', 'weekly');
 add('/compare', '0.7', 'monthly');
 add('/best', '0.8', 'weekly');
 add('/tier-list', '0.7', 'monthly');

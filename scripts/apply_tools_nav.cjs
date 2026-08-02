@@ -18,6 +18,7 @@ const TOOLS = [
   ['/nomad-visas', 'Nomad Visa Finder'],
   ['/geoarbitrage', 'Geoarbitrage Calculator'],
   ['/salary', 'Salary Calculator'],
+  ['/cost-of-living-index', 'Cost of Living Index'],
   ['/timezones', 'Time Zone Finder'],
   ['/compare', 'Compare Cities'],
   ['/wheel', 'Decision Wheel'],
