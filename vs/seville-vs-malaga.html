@@ -220,5 +220,24 @@
       window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
     })();
   </script>
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
 </body>
 </html>

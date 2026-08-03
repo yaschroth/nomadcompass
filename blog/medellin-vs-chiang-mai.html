@@ -845,5 +845,24 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
 </body>
 </html>

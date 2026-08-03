@@ -293,5 +293,24 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
 </body>
 </html>
