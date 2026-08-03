@@ -93,8 +93,8 @@ const ICONS = {
 };
 const svg = (k) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
 
-function fact(icon, label, value) {
-  return `          <div class="fact"><span class="fact-ico">${svg(icon)}</span><span class="fact-text"><span class="fact-label">${label}</span><span class="fact-value">${esc(value)}</span></span></div>`;
+function fact(icon, label, value, raw) {
+  return `          <div class="fact"><span class="fact-ico">${svg(icon)}</span><span class="fact-text"><span class="fact-label">${label}</span><span class="fact-value">${raw ? value : esc(value)}</span></span></div>`;
 }
 
 function panel(city) {
@@ -112,7 +112,7 @@ function panel(city) {
     fact('tipping', 'Tipping', f.tip),
     fact('ride', 'Ride-hailing', f.ride),
     fact('emergency', 'Emergency', f.emg),
-    fact('data', 'Mobile data', 'eSIM: Airalo / Holafly'),
+    fact('data', 'Mobile data', 'eSIM: <a href="https://airalo.tpx.li/THf7i0S1" target="_blank" rel="sponsored nofollow">Airalo</a> / Holafly', true),
     fact('drive', 'Driving side', LEFT.has(city.country) ? 'Left' : 'Right'),
     fact('dial', 'Dialling code', DIAL[city.country] || 'n/a'),
     fact('clock', 'Time zone', utc || 'n/a'),
