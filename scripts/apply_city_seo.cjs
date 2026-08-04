@@ -71,10 +71,14 @@ function faqFor(c) {
   ];
 }
 
-function adaptiveTitle(name) {
-  const base = `${name} Digital Nomad Guide`;
-  const full = `${base}: Cost of Living, WiFi & Visa`;
-  return full.length <= 60 ? full : base;
+function adaptiveTitle(name, country) {
+  const opts = [
+    `${name}, ${country} Digital Nomad Guide: Cost, WiFi & Visa`,
+    `${name} Digital Nomad Guide: Cost of Living, WiFi & Visa`,
+    `${name}, ${country} Digital Nomad Guide`,
+    `${name} Digital Nomad Guide`,
+  ];
+  return opts.find((t) => t.length <= 60) || opts[opts.length - 1];
 }
 
 const only = process.argv[2];
@@ -93,7 +97,7 @@ for (const file of files) {
   const metaDesc = (html.match(/<meta name="description" content="([^"]+)"/) || [, ''])[1];
 
   // title
-  html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(adaptiveTitle(c.name))}</title>`);
+  html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(adaptiveTitle(c.name, c.country))}</title>`);
   // og:type article -> website
   html = html.replace(/<meta property="og:type" content="article">/, '<meta property="og:type" content="website">');
   // robots
