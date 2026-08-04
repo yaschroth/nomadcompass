@@ -1452,7 +1452,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 1800,
+    costPerMonth: 1220,
     lat: 5.6037,
     lng: -0.187,
     timezone: 0
@@ -1533,7 +1533,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 3,
       airquality: 3},
-    costPerMonth: 2000,
+    costPerMonth: 1070,
     lat: 6.5244,
     lng: 3.3792,
     timezone: 1
@@ -1560,7 +1560,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 5},
-    costPerMonth: 1800,
+    costPerMonth: 1130,
     lat: -12.0464,
     lng: -77.0428,
     timezone: -5
@@ -1614,7 +1614,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 5},
-    costPerMonth: 1700,
+    costPerMonth: 1240,
     lat: 4.711,
     lng: -74.0721,
     timezone: -5
@@ -1695,7 +1695,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1800,
+    costPerMonth: 990,
     lat: -33.0472,
     lng: -71.6127,
     timezone: -4
@@ -1776,7 +1776,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1200,
+    costPerMonth: 370,
     lat: -17.7833,
     lng: -63.1822,
     timezone: -4
@@ -1803,7 +1803,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 1000,
+    costPerMonth: 460,
     lat: -16.4897,
     lng: -68.1193,
     timezone: -4
@@ -2154,7 +2154,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 6},
-    costPerMonth: 3200,
+    costPerMonth: 2820,
     lat: 53.4808,
     lng: -2.2426,
     timezone: 0
@@ -2478,7 +2478,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 2600,
+    costPerMonth: 2140,
     lat: 36.7213,
     lng: -4.4214,
     timezone: 1
@@ -2559,7 +2559,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 2000,
+    costPerMonth: 1400,
     lat: 40.6401,
     lng: 22.9444,
     timezone: 2
@@ -2640,7 +2640,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 5},
-    costPerMonth: 2200,
+    costPerMonth: 2030,
     lat: 52.2297,
     lng: 21.0122,
     timezone: 1
@@ -2829,7 +2829,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1500,
+    costPerMonth: 1220,
     lat: 42.4304,
     lng: 19.2594,
     timezone: 1
@@ -3153,7 +3153,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2200,
+    costPerMonth: 1670,
     lat: 20.9144,
     lng: -100.7452,
     timezone: -6
@@ -3207,7 +3207,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 5},
-    costPerMonth: 4500,
+    costPerMonth: 3550,
     lat: 22.3193,
     lng: 114.1694,
     timezone: 8
@@ -3260,7 +3260,7 @@ const CITIES = [
       visa: 5,
       culture: 9,
       cleanliness: 9,
-      airquality: 8},    costPerMonth: 4200,
+      airquality: 8},    costPerMonth: 2820,
     lat: 59.3293,
     lng: 18.0686,
 
@@ -3341,7 +3341,7 @@ const CITIES = [
       visa: 5,
       culture: 7,
       cleanliness: 9,
-      airquality: 10},    costPerMonth: 5000,
+      airquality: 10},    costPerMonth: 3570,
     lat: 64.1466,
     lng: -21.9426,
 
@@ -3449,7 +3449,7 @@ const CITIES = [
       visa: 8,
       culture: 9,
       cleanliness: 8,
-      airquality: 8},    costPerMonth: 2800,
+      airquality: 8},    costPerMonth: 2250,
     lat: 42.6507,
     lng: 18.0944,
 
@@ -3476,7 +3476,7 @@ const CITIES = [
       visa: 6,
       culture: 8,
       cleanliness: 7,
-      airquality: 6},    costPerMonth: 1900,
+      airquality: 6},    costPerMonth: 1750,
     lat: 54.352,
     lng: 18.6466,
 
@@ -3503,7 +3503,7 @@ const CITIES = [
       visa: 6,
       culture: 8,
       cleanliness: 7,
-      airquality: 5},    costPerMonth: 1800,
+      airquality: 5},    costPerMonth: 1610,
     lat: 51.1079,
     lng: 17.0385,
 
@@ -3530,7 +3530,7 @@ const CITIES = [
       visa: 6,
       culture: 7,
       cleanliness: 7,
-      airquality: 6},    costPerMonth: 2000,
+      airquality: 6},    costPerMonth: 1760,
     lat: 49.1951,
     lng: 16.6068,
 
@@ -3557,7 +3557,7 @@ const CITIES = [
       visa: 4,
       culture: 7,
       cleanliness: 8,
-      airquality: 7},    costPerMonth: 3000,
+      airquality: 7},    costPerMonth: 2970,
     lat: 51.9244,
     lng: 4.4777,
 
@@ -3584,7 +3584,7 @@ const CITIES = [
       visa: 4,
       culture: 7,
       cleanliness: 8,
-      airquality: 7},    costPerMonth: 3200,
+      airquality: 7},    costPerMonth: 2950,
     lat: 52.0907,
     lng: 5.1214,
 
@@ -3611,7 +3611,7 @@ const CITIES = [
       visa: 7,
       culture: 6,
       cleanliness: 7,
-      airquality: 9},    costPerMonth: 2200,
+      airquality: 9},    costPerMonth: 1670,
     lat: 37.0194,
     lng: -7.9322,
 
@@ -3665,7 +3665,7 @@ const CITIES = [
       visa: 5,
       culture: 6,
       cleanliness: 6,
-      airquality: 8},    costPerMonth: 3000,
+      airquality: 8},    costPerMonth: 3200,
     lat: 51.8985,
     lng: -8.4756,
 
@@ -3692,7 +3692,7 @@ const CITIES = [
       visa: 5,
       culture: 8,
       cleanliness: 7,
-      airquality: 6},    costPerMonth: 2800,
+      airquality: 6},    costPerMonth: 1950,
     lat: 51.2194,
     lng: 4.4025,
 
@@ -3773,7 +3773,7 @@ const CITIES = [
       visa: 5,
       culture: 10,
       cleanliness: 9,
-      airquality: 7},    costPerMonth: 3000,
+      airquality: 7},    costPerMonth: 1140,
     lat: 35.0116,
     lng: 135.7681,
 
@@ -3800,7 +3800,7 @@ const CITIES = [
       visa: 6,
       culture: 7,
       cleanliness: 8,
-      airquality: 5},    costPerMonth: 2400,
+      airquality: 5},    costPerMonth: 1400,
     lat: 35.1796,
     lng: 129.0756,
 
@@ -3827,7 +3827,7 @@ const CITIES = [
       visa: 5,
       culture: 7,
       cleanliness: 9,
-      airquality: 7},    costPerMonth: 2800,
+      airquality: 7},    costPerMonth: 1100,
     lat: 33.5904,
     lng: 130.4017,
 
@@ -3855,7 +3855,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1000,
+    costPerMonth: 360,
     lat: 9.9312,
     lng: 76.2673,
     timezone: 5.5
@@ -3881,7 +3881,7 @@ const CITIES = [
       visa: 7,
       culture: 9,
       cleanliness: 5,
-      airquality: 5},    costPerMonth: 1300,
+      airquality: 5},    costPerMonth: 490,
     lat: -7.8014,
     lng: 110.3647,
 
@@ -3909,7 +3909,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 4,
       airquality: 4},
-    costPerMonth: 1200,
+    costPerMonth: 480,
     lat: 18.5204,
     lng: 73.8567,
     timezone: 5.5
@@ -3962,7 +3962,7 @@ const CITIES = [
       visa: 8,
       culture: 6,
       cleanliness: 4,
-      airquality: 5},    costPerMonth: 1200,
+      airquality: 5},    costPerMonth: 1050,
     lat: 17.9757,
     lng: 102.6331,
 
@@ -4016,7 +4016,7 @@ const CITIES = [
       visa: 4,
       culture: 5,
       cleanliness: 7,
-      airquality: 4},    costPerMonth: 2800,
+      airquality: 4},    costPerMonth: 1010,
     lat: 22.5431,
     lng: 114.0579,
 
@@ -4044,7 +4044,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 4,
       airquality: 3},
-    costPerMonth: 900,
+    costPerMonth: 370,
     lat: 26.9124,
     lng: 75.7873,
     timezone: 5.5
@@ -4070,7 +4070,7 @@ const CITIES = [
       visa: 8,
       culture: 4,
       cleanliness: 5,
-      airquality: 6},    costPerMonth: 1200,
+      airquality: 6},    costPerMonth: 910,
     lat: 12.5707,
     lng: 99.9588,
 
@@ -4097,7 +4097,7 @@ const CITIES = [
       visa: 8,
       culture: 5,
       cleanliness: 5,
-      airquality: 7},    costPerMonth: 2200,
+      airquality: 7},    costPerMonth: 1230,
     lat: 9.512,
     lng: 100.0136,
 
@@ -4124,7 +4124,7 @@ const CITIES = [
       visa: 8,
       culture: 5,
       cleanliness: 4,
-      airquality: 6},    costPerMonth: 1400,
+      airquality: 6},    costPerMonth: 650,
     lat: 12.2388,
     lng: 109.1967,
 
@@ -4178,7 +4178,7 @@ const CITIES = [
       visa: 5,
       culture: 7,
       cleanliness: 9,
-      airquality: 8},    costPerMonth: 2600,
+      airquality: 8},    costPerMonth: 1230,
     lat: 43.0618,
     lng: 141.3545,
 
@@ -4205,7 +4205,7 @@ const CITIES = [
       visa: 5,
       culture: 7,
       cleanliness: 9,
-      airquality: 7},    costPerMonth: 2800,
+      airquality: 7},    costPerMonth: 1080,
     lat: 35.1815,
     lng: 136.9066,
 
@@ -4259,7 +4259,7 @@ const CITIES = [
       visa: 8,
       culture: 6,
       cleanliness: 6,
-      airquality: 6},    costPerMonth: 1200,
+      airquality: 6},    costPerMonth: 700,
     lat: 4.5841,
     lng: 101.0829,
 
@@ -4286,7 +4286,7 @@ const CITIES = [
       visa: 6,
       culture: 7,
       cleanliness: 8,
-      airquality: 6},    costPerMonth: 4200,
+      airquality: 6},    costPerMonth: 3050,
     lat: 39.7392,
     lng: -104.9903,
 
@@ -4313,7 +4313,7 @@ const CITIES = [
       visa: 7,
       culture: 8,
       cleanliness: 8,
-      airquality: 6},    costPerMonth: 4200,
+      airquality: 6},    costPerMonth: 2470,
     lat: 43.6532,
     lng: -79.3832,
 
@@ -4340,7 +4340,7 @@ const CITIES = [
       visa: 7,
       culture: 9,
       cleanliness: 7,
-      airquality: 6},    costPerMonth: 3200,
+      airquality: 6},    costPerMonth: 1990,
     lat: 45.5017,
     lng: -73.5673,
 
@@ -4367,7 +4367,7 @@ const CITIES = [
       visa: 7,
       culture: 6,
       cleanliness: 6,
-      airquality: 7},    costPerMonth: 2000,
+      airquality: 7},    costPerMonth: 1140,
     lat: -27.5954,
     lng: -48.548,
 
@@ -4394,7 +4394,7 @@ const CITIES = [
       visa: 7,
       culture: 9,
       cleanliness: 5,
-      airquality: 5},    costPerMonth: 2200,
+      airquality: 5},    costPerMonth: 1180,
     lat: -23.5505,
     lng: -46.6333,
 
@@ -4475,7 +4475,7 @@ const CITIES = [
       visa: 6,
       culture: 8,
       cleanliness: 7,
-      airquality: 6},    costPerMonth: 4000,
+      airquality: 6},    costPerMonth: 3310,
     lat: 45.5152,
     lng: -122.6784,
 
@@ -4502,7 +4502,7 @@ const CITIES = [
       visa: 6,
       culture: 8,
       cleanliness: 7,
-      airquality: 6},    costPerMonth: 4500,
+      airquality: 6},    costPerMonth: 3740,
     lat: 47.6062,
     lng: -122.3321,
 
@@ -4556,7 +4556,7 @@ const CITIES = [
       visa: 7,
       culture: 7,
       cleanliness: 6,
-      airquality: 7},    costPerMonth: 1300,
+      airquality: 7},    costPerMonth: 1130,
     lat: -31.4201,
     lng: -64.1888,
 
@@ -4583,7 +4583,7 @@ const CITIES = [
       visa: 7,
       culture: 9,
       cleanliness: 4,
-      airquality: 6},    costPerMonth: 1600,
+      airquality: 6},    costPerMonth: 940,
     lat: -12.9714,
     lng: -38.5014,
 
@@ -4637,7 +4637,7 @@ const CITIES = [
       visa: 9,
       culture: 9,
       cleanliness: 6,
-      airquality: 7},    costPerMonth: 1500,
+      airquality: 7},    costPerMonth: 1060,
     lat: 21.019,
     lng: -101.2574,
 
@@ -4691,7 +4691,7 @@ const CITIES = [
       visa: 8,
       culture: 8,
       cleanliness: 6,
-      airquality: 7},    costPerMonth: 1400,
+      airquality: 7},    costPerMonth: 790,
     lat: -2.9001,
     lng: -79.0059,
 
@@ -4718,7 +4718,7 @@ const CITIES = [
       visa: 8,
       culture: 4,
       cleanliness: 6,
-      airquality: 8},    costPerMonth: 2800,
+      airquality: 8},    costPerMonth: 1490,
     lat: 18.5601,
     lng: -68.3725,
 
@@ -4745,7 +4745,7 @@ const CITIES = [
       visa: 8,
       culture: 7,
       cleanliness: 5,
-      airquality: 6},    costPerMonth: 1500,
+      airquality: 6},    costPerMonth: 1090,
     lat: 3.4516,
     lng: -76.532,
 
@@ -4799,7 +4799,7 @@ const CITIES = [
       visa: 8,
       culture: 7,
       cleanliness: 5,
-      airquality: 6},    costPerMonth: 1800,
+      airquality: 6},    costPerMonth: 1250,
     lat: 18.4861,
     lng: -69.9312,
 
@@ -4907,7 +4907,7 @@ const CITIES = [
       visa: 8,
       culture: 4,
       cleanliness: 6,
-      airquality: 9},    costPerMonth: 1800,
+      airquality: 9},    costPerMonth: 1320,
     lat: 8.7795,
     lng: -82.4411,
 
@@ -4935,7 +4935,7 @@ const CITIES = [
       visa: 7,
       culture: 6,
       cleanliness: 5,
-      airquality: 5},    costPerMonth: 1800,
+      airquality: 5},    costPerMonth: 1240,
     lat: -26.2041,
     lng: 28.0473,
 
@@ -4962,7 +4962,7 @@ const CITIES = [
       visa: 6,
       culture: 6,
       cleanliness: 4,
-      airquality: 5},    costPerMonth: 1600,
+      airquality: 5},    costPerMonth: 1490,
     lat: 14.7167,
     lng: -17.4677,
 
@@ -5016,7 +5016,7 @@ const CITIES = [
       visa: 6,
       culture: 7,
       cleanliness: 4,
-      airquality: 8},    costPerMonth: 1500,
+      airquality: 8},    costPerMonth: 500,
     lat: -6.1659,
     lng: 39.2026,
 
@@ -5043,7 +5043,7 @@ const CITIES = [
       visa: 6,
       culture: 8,
       cleanliness: 4,
-      airquality: 5},    costPerMonth: 1200,
+      airquality: 5},    costPerMonth: 700,
     lat: 36.8065,
     lng: 10.1815,
 
@@ -5151,7 +5151,7 @@ const CITIES = [
       visa: 5,
       culture: 7,
       cleanliness: 4,
-      airquality: 5},    costPerMonth: 1300,
+      airquality: 5},    costPerMonth: 1410,
     lat: 8.9806,
     lng: 38.7578,
 
@@ -5206,7 +5206,7 @@ const CITIES = [
       visa: 7,
       culture: 8,
       cleanliness: 5,
-      airquality: 5},    costPerMonth: 1800,
+      airquality: 5},    costPerMonth: 990,
     lat: 31.9454,
     lng: 35.9284,
 
@@ -5233,7 +5233,7 @@ const CITIES = [
       visa: 6,
       culture: 8,
       cleanliness: 4,
-      airquality: 5},    costPerMonth: 1600,
+      airquality: 5},    costPerMonth: 1690,
     lat: 33.8938,
     lng: 35.5018,
 
@@ -5260,7 +5260,7 @@ const CITIES = [
       visa: 5,
       culture: 6,
       cleanliness: 8,
-      airquality: 6},    costPerMonth: 2200,
+      airquality: 6},    costPerMonth: 1360,
     lat: 23.588,
     lng: 58.3829,
 
@@ -5287,7 +5287,7 @@ const CITIES = [
       visa: 6,
       culture: 7,
       cleanliness: 9,
-      airquality: 5},    costPerMonth: 4200,
+      airquality: 5},    costPerMonth: 2700,
     lat: 24.4539,
     lng: 54.3773,
 
@@ -5314,7 +5314,7 @@ const CITIES = [
       visa: 5,
       culture: 6,
       cleanliness: 9,
-      airquality: 5},    costPerMonth: 4000,
+      airquality: 5},    costPerMonth: 2640,
     lat: 25.2854,
     lng: 51.531,
 
@@ -5342,7 +5342,7 @@ const CITIES = [
       visa: 5,
       culture: 7,
       cleanliness: 8,
-      airquality: 7},    costPerMonth: 3500,
+      airquality: 7},    costPerMonth: 2800,
     lat: -27.4698,
     lng: 153.0251,
 
@@ -5369,7 +5369,7 @@ const CITIES = [
       visa: 5,
       culture: 6,
       cleanliness: 8,
-      airquality: 8},    costPerMonth: 3500,
+      airquality: 8},    costPerMonth: 2870,
     lat: -31.9505,
     lng: 115.8605,
 
@@ -5397,7 +5397,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 3400,
+    costPerMonth: 2690,
     lat: -34.9285,
     lng: 138.6007,
     timezone: 9.5
@@ -5423,7 +5423,7 @@ const CITIES = [
       visa: 5,
       culture: 8,
       cleanliness: 8,
-      airquality: 9},    costPerMonth: 3200,
+      airquality: 9},    costPerMonth: 2140,
     lat: -41.2866,
     lng: 174.7756,
 
@@ -5450,7 +5450,7 @@ const CITIES = [
       visa: 5,
       culture: 5,
       cleanliness: 9,
-      airquality: 10},    costPerMonth: 4000,
+      airquality: 10},    costPerMonth: 2390,
     lat: -45.0312,
     lng: 168.6626,
 
@@ -5477,7 +5477,7 @@ const CITIES = [
       visa: 5,
       culture: 5,
       cleanliness: 8,
-      airquality: 8},    costPerMonth: 3500,
+      airquality: 8},    costPerMonth: 3360,
     lat: -28.0167,
     lng: 153.4,
 
@@ -5504,7 +5504,7 @@ const CITIES = [
       visa: 5,
       culture: 6,
       cleanliness: 8,
-      airquality: 8},    costPerMonth: 3200,
+      airquality: 8},    costPerMonth: 2030,
     lat: -43.5321,
     lng: 172.6362,
 
@@ -5558,7 +5558,7 @@ const CITIES = [
       visa: 5,
       culture: 5,
       cleanliness: 7,
-      airquality: 8},    costPerMonth: 3000,
+      airquality: 8},    costPerMonth: 2280,
     lat: -16.9186,
     lng: 145.7781,
 
@@ -5585,7 +5585,7 @@ const CITIES = [
       visa: 5,
       culture: 6,
       cleanliness: 8,
-      airquality: 9},    costPerMonth: 3000,
+      airquality: 9},    costPerMonth: 2780,
     lat: -42.8821,
     lng: 147.3272,
 
@@ -5667,7 +5667,7 @@ const CITIES = [
       visa: 7,
       culture: 9,
       cleanliness: 7,
-      airquality: 7},    costPerMonth: 2400,
+      airquality: 7},    costPerMonth: 2240,
     lat: 35.8989,
     lng: 14.5146,
 
@@ -5694,7 +5694,7 @@ const CITIES = [
       visa: 7,
       culture: 8,
       cleanliness: 6,
-      airquality: 6},    costPerMonth: 1400,
+      airquality: 6},    costPerMonth: 1060,
     lat: 42.1354,
     lng: 24.7453,
 
@@ -5802,7 +5802,7 @@ const CITIES = [
       visa: 8,
       culture: 7,
       cleanliness: 6,
-      airquality: 6},    costPerMonth: 1400,
+      airquality: 6},    costPerMonth: 830,
     lat: 34.0209,
     lng: -6.8416,
 
@@ -5829,7 +5829,7 @@ const CITIES = [
       visa: 7,
       culture: 8,
       cleanliness: 8,
-      airquality: 7},    costPerMonth: 2800,
+      airquality: 7},    costPerMonth: 2030,
     lat: 43.263,
     lng: -2.935,
 
@@ -5856,7 +5856,7 @@ const CITIES = [
       visa: 4,
       culture: 6,
       cleanliness: 9,
-      airquality: 9},    costPerMonth: 4200,
+      airquality: 9},    costPerMonth: 2850,
     lat: 58.97,
     lng: 5.7331,
 
@@ -5883,7 +5883,7 @@ const CITIES = [
       visa: 7,
       culture: 6,
       cleanliness: 7,
-      airquality: 8},    costPerMonth: 1700,
+      airquality: 8},    costPerMonth: 1580,
     lat: 43.5322,
     lng: -5.6611,
 
@@ -5910,7 +5910,7 @@ const CITIES = [
       visa: 7,
       culture: 7,
       cleanliness: 7,
-      airquality: 5},    costPerMonth: 1700,
+      airquality: 5},    costPerMonth: 1530,
     lat: 52.4064,
     lng: 16.9252,
 
@@ -5938,7 +5938,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2800,
+    costPerMonth: 1800,
     lat: 44.8378,
     lng: -0.5792,
     timezone: 1
@@ -5965,7 +5965,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2600,
+    costPerMonth: 1740,
     lat: 43.6047,
     lng: 1.4442,
     timezone: 1
@@ -5992,7 +5992,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2500,
+    costPerMonth: 1690,
     lat: 43.6108,
     lng: 3.8767,
     timezone: 1
@@ -6019,7 +6019,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 2700,
+    costPerMonth: 1780,
     lat: 43.2965,
     lng: 5.3698,
     timezone: 1
@@ -6046,7 +6046,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2600,
+    costPerMonth: 1560,
     lat: 47.2184,
     lng: -1.5536,
     timezone: 1
@@ -6154,7 +6154,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 6},
-    costPerMonth: 3500,
+    costPerMonth: 2410,
     lat: 50.1109,
     lng: 8.6821,
     timezone: 1
@@ -6181,7 +6181,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2400,
+    costPerMonth: 1760,
     lat: 51.0504,
     lng: 13.7373,
     timezone: 1
@@ -6208,7 +6208,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 2300,
+    costPerMonth: 1730,
     lat: 51.3397,
     lng: 12.3731,
     timezone: 1
@@ -6235,7 +6235,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2900,
+    costPerMonth: 2300,
     lat: 49.3988,
     lng: 8.6724,
     timezone: 1
@@ -6262,7 +6262,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3000,
+    costPerMonth: 2540,
     lat: 47.8095,
     lng: 13.055,
     timezone: 1
@@ -6289,7 +6289,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3200,
+    costPerMonth: 2440,
     lat: 47.2692,
     lng: 11.4041,
     timezone: 1
@@ -6316,7 +6316,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 7},
-    costPerMonth: 2600,
+    costPerMonth: 1850,
     lat: 47.0707,
     lng: 15.4395,
     timezone: 1
@@ -6424,7 +6424,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 6},
-    costPerMonth: 2600,
+    costPerMonth: 2060,
     lat: 44.4949,
     lng: 11.3426,
     timezone: 1
@@ -6451,7 +6451,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 5},
-    costPerMonth: 2500,
+    costPerMonth: 1710,
     lat: 45.0703,
     lng: 7.6869,
     timezone: 1
@@ -6478,7 +6478,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 2600,
+    costPerMonth: 1820,
     lat: 45.4384,
     lng: 10.9916,
     timezone: 1
@@ -6505,7 +6505,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 4,
       airquality: 6},
-    costPerMonth: 2300,
+    costPerMonth: 1850,
     lat: 40.8518,
     lng: 14.2681,
     timezone: 1
@@ -6532,7 +6532,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1800,
+    costPerMonth: 1700,
     lat: 41.1171,
     lng: 16.8719,
     timezone: 1
@@ -6559,7 +6559,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1700,
+    costPerMonth: 1420,
     lat: 37.5079,
     lng: 15.083,
     timezone: 1
@@ -6640,7 +6640,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 3300,
+    costPerMonth: 2420,
     lat: 36.5099,
     lng: -4.8862,
     timezone: 1
@@ -6721,7 +6721,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2400,
+    costPerMonth: 2150,
     lat: 41.9794,
     lng: 2.8214,
     timezone: 1
@@ -6748,7 +6748,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 8,
       airquality: 8},
-    costPerMonth: 3000,
+    costPerMonth: 2500,
     lat: 38.6979,
     lng: -9.4215,
     timezone: 0
@@ -6775,7 +6775,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 1700,
+    costPerMonth: 1500,
     lat: 40.2033,
     lng: -8.4103,
     timezone: 0
@@ -6802,7 +6802,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 9},
-    costPerMonth: 2400,
+    costPerMonth: 2160,
     lat: 32.6669,
     lng: -16.9241,
     timezone: 0
@@ -6856,7 +6856,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 3200,
+    costPerMonth: 2980,
     lat: 50.8225,
     lng: -0.1372,
     timezone: 0
@@ -6883,7 +6883,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 3000,
+    costPerMonth: 3030,
     lat: 51.4545,
     lng: -2.5879,
     timezone: 0
@@ -6910,7 +6910,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 2600,
+    costPerMonth: 2370,
     lat: 55.8642,
     lng: -4.2518,
     timezone: 0
@@ -6937,7 +6937,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 6,
       airquality: 8},
-    costPerMonth: 2800,
+    costPerMonth: 3330,
     lat: 53.2707,
     lng: -9.0568,
     timezone: 0
@@ -6991,7 +6991,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2600,
+    costPerMonth: 2300,
     lat: 50.8514,
     lng: 5.691,
     timezone: 1
@@ -7018,7 +7018,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2700,
+    costPerMonth: 2650,
     lat: 51.4416,
     lng: 5.4697,
     timezone: 1
@@ -7045,7 +7045,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 9},
-    costPerMonth: 4500,
+    costPerMonth: 2580,
     lat: 60.3913,
     lng: 5.3221,
     timezone: 1
@@ -7072,7 +7072,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3800,
+    costPerMonth: 1850,
     lat: 57.7089,
     lng: 11.9746,
     timezone: 1
@@ -7099,7 +7099,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3500,
+    costPerMonth: 1830,
     lat: 55.605,
     lng: 13.0038,
     timezone: 1
@@ -7153,7 +7153,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 9,
       airquality: 9},
-    costPerMonth: 2700,
+    costPerMonth: 1780,
     lat: 61.4978,
     lng: 23.761,
     timezone: 2
@@ -7180,7 +7180,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 8,
       airquality: 9},
-    costPerMonth: 1900,
+    costPerMonth: 1480,
     lat: 58.378,
     lng: 26.729,
     timezone: 2
@@ -7207,7 +7207,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 1600,
+    costPerMonth: 1330,
     lat: 54.8985,
     lng: 23.9036,
     timezone: 2
@@ -7234,7 +7234,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 1400,
+    costPerMonth: 1220,
     lat: 55.7033,
     lng: 21.1443,
     timezone: 2
@@ -7261,7 +7261,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 1600,
+    costPerMonth: 1730,
     lat: 48.7164,
     lng: 21.2611,
     timezone: 1
@@ -7288,7 +7288,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 2200,
+    costPerMonth: 1870,
     lat: 48.1486,
     lng: 17.1077,
     timezone: 1
@@ -7315,7 +7315,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 1300,
+    costPerMonth: 900,
     lat: 45.7983,
     lng: 24.1256,
     timezone: 2
@@ -7342,7 +7342,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 1400,
+    costPerMonth: 1300,
     lat: 45.6427,
     lng: 25.5887,
     timezone: 2
@@ -7369,7 +7369,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 6,
       airquality: 6},
-    costPerMonth: 1300,
+    costPerMonth: 1100,
     lat: 45.7489,
     lng: 21.2087,
     timezone: 2
@@ -7396,7 +7396,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 1500,
+    costPerMonth: 1250,
     lat: 43.2141,
     lng: 27.9147,
     timezone: 2
@@ -7423,7 +7423,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 6,
       airquality: 6},
-    costPerMonth: 1500,
+    costPerMonth: 1160,
     lat: 45.2671,
     lng: 19.8335,
     timezone: 1
@@ -7450,7 +7450,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1100,
+    costPerMonth: 880,
     lat: 43.3438,
     lng: 17.8078,
     timezone: 1
@@ -7504,7 +7504,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1000,
+    costPerMonth: 750,
     lat: 41.1231,
     lng: 20.8016,
     timezone: 1
@@ -7585,7 +7585,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 1800,
+    costPerMonth: 1440,
     lat: 44.8666,
     lng: 13.8496,
     timezone: 1
@@ -7612,7 +7612,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 2000,
+    costPerMonth: 1660,
     lat: 44.1194,
     lng: 15.2314,
     timezone: 1
@@ -7693,7 +7693,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2400,
+    costPerMonth: 1870,
     lat: 34.7754,
     lng: 32.4245,
     timezone: 2
@@ -7720,7 +7720,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 8},
-    costPerMonth: 2000,
+    costPerMonth: 1380,
     lat: 35.5138,
     lng: 24.018,
     timezone: 2
@@ -7747,7 +7747,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 8},
-    costPerMonth: 1800,
+    costPerMonth: 1460,
     lat: 36.4341,
     lng: 28.2176,
     timezone: 2
@@ -7963,7 +7963,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 3000,
+    costPerMonth: 2160,
     lat: 32.794,
     lng: 34.9896,
     timezone: 2
@@ -8044,7 +8044,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 7,
       airquality: 5},
-    costPerMonth: 2700,
+    costPerMonth: 1580,
     lat: 26.2285,
     lng: 50.586,
     timezone: 3
@@ -8179,7 +8179,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1200,
+    costPerMonth: 490,
     lat: 11.9404,
     lng: 108.4583,
     timezone: 7
@@ -8287,7 +8287,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 1300,
+    costPerMonth: 850,
     lat: 5.9804,
     lng: 116.0735,
     timezone: 8
@@ -8395,7 +8395,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1300,
+    costPerMonth: 570,
     lat: 9.3068,
     lng: 123.3054,
     timezone: 8
@@ -8476,7 +8476,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 4},
-    costPerMonth: 1300,
+    costPerMonth: 450,
     lat: -6.9175,
     lng: 107.6191,
     timezone: 7
@@ -8503,7 +8503,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 1400,
+    costPerMonth: 570,
     lat: -7.2575,
     lng: 112.7521,
     timezone: 7
@@ -8530,7 +8530,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 5,
       airquality: 5},
-    costPerMonth: 800,
+    costPerMonth: 330,
     lat: -7.9666,
     lng: 112.6326,
     timezone: 7
@@ -8557,7 +8557,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 800,
+    costPerMonth: 490,
     lat: -6.9666,
     lng: 110.4196,
     timezone: 7
@@ -8638,7 +8638,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 800,
+    costPerMonth: 360,
     lat: -17.3935,
     lng: -66.157,
     timezone: -4
@@ -8746,7 +8746,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 2000,
+    costPerMonth: 1300,
     lat: 40.3516,
     lng: 18.1718,
     timezone: 1
@@ -8773,7 +8773,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 8},
-    costPerMonth: 2200,
+    costPerMonth: 1730,
     lat: 45.6495,
     lng: 13.7768,
     timezone: 1
@@ -8800,7 +8800,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 2400,
+    costPerMonth: 1720,
     lat: 44.4056,
     lng: 8.9463,
     timezone: 1
@@ -8827,7 +8827,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 9,
       airquality: 9},
-    costPerMonth: 3300,
+    costPerMonth: 2160,
     lat: 43.3183,
     lng: -1.9812,
     timezone: 1
@@ -8854,7 +8854,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 2200,
+    costPerMonth: 1660,
     lat: 38.3452,
     lng: -0.481,
     timezone: 1
@@ -8908,7 +8908,7 @@ const CITIES = [
       culture: 10,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 4000,
+    costPerMonth: 3420,
     lat: 51.752,
     lng: -1.2577,
     timezone: 0
@@ -8935,7 +8935,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 3600,
+    costPerMonth: 3160,
     lat: 52.2053,
     lng: 0.1218,
     timezone: 0
@@ -8962,7 +8962,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2700,
+    costPerMonth: 2220,
     lat: 53.9591,
     lng: -1.0815,
     timezone: 0
@@ -8989,7 +8989,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3000,
+    costPerMonth: 2860,
     lat: 51.3758,
     lng: -2.3599,
     timezone: 0
@@ -9016,7 +9016,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 10},
-    costPerMonth: 4800,
+    costPerMonth: 2610,
     lat: 63.4305,
     lng: 10.3951,
     timezone: 1
@@ -9043,7 +9043,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 9,
       airquality: 10},
-    costPerMonth: 5100,
+    costPerMonth: 2800,
     lat: 69.6492,
     lng: 18.9553,
     timezone: 1
@@ -9070,7 +9070,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 10},
-    costPerMonth: 2700,
+    costPerMonth: 1660,
     lat: 60.4518,
     lng: 22.2666,
     timezone: 2
@@ -9097,7 +9097,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 9,
       airquality: 10},
-    costPerMonth: 2600,
+    costPerMonth: 1550,
     lat: 65.0121,
     lng: 25.4651,
     timezone: 2
@@ -9124,7 +9124,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2400,
+    costPerMonth: 2280,
     lat: 53.2194,
     lng: 6.5665,
     timezone: 1
@@ -9151,7 +9151,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 3000,
+    costPerMonth: 2670,
     lat: 52.0705,
     lng: 4.3007,
     timezone: 1
@@ -9178,7 +9178,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2200,
+    costPerMonth: 1960,
     lat: 50.8798,
     lng: 4.7005,
     timezone: 1
@@ -9232,7 +9232,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 2700,
+    costPerMonth: 1840,
     lat: 49.4521,
     lng: 11.0767,
     timezone: 1
@@ -9259,7 +9259,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 3200,
+    costPerMonth: 2190,
     lat: 48.7758,
     lng: 9.1829,
     timezone: 1
@@ -9286,7 +9286,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 7},
-    costPerMonth: 3000,
+    costPerMonth: 2120,
     lat: 51.2277,
     lng: 6.7735,
     timezone: 1
@@ -9340,7 +9340,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2800,
+    costPerMonth: 1970,
     lat: 48.5734,
     lng: 7.7521,
     timezone: 1
@@ -9367,7 +9367,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 2200,
+    costPerMonth: 1760,
     lat: 45.1885,
     lng: 5.7245,
     timezone: 1
@@ -9448,7 +9448,7 @@ const CITIES = [
       culture: 4,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1500,
+    costPerMonth: 920,
     lat: 12.9236,
     lng: 100.8825,
     timezone: 7
@@ -9583,7 +9583,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 800,
+    costPerMonth: 450,
     lat: 3.5952,
     lng: 98.6722,
     timezone: 7
@@ -9637,7 +9637,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 1300,
+    costPerMonth: 690,
     lat: 1.5535,
     lng: 110.3593,
     timezone: 8
@@ -9664,7 +9664,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 6,
       airquality: 5},
-    costPerMonth: 1400,
+    costPerMonth: 870,
     lat: 1.4927,
     lng: 103.7414,
     timezone: 8
@@ -9691,7 +9691,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1000,
+    costPerMonth: 810,
     lat: 16.4023,
     lng: 120.596,
     timezone: 8
@@ -9718,7 +9718,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 1000,
+    costPerMonth: 690,
     lat: 7.1907,
     lng: 125.4553,
     timezone: 8
@@ -9745,7 +9745,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 900,
+    costPerMonth: 550,
     lat: 10.7202,
     lng: 122.5621,
     timezone: 8
@@ -9880,7 +9880,7 @@ const CITIES = [
       culture: 4,
       cleanliness: 4,
       airquality: 7},
-    costPerMonth: 1100,
+    costPerMonth: 800,
     lat: 10.6093,
     lng: 103.5296,
     timezone: 7
@@ -9988,7 +9988,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 6},
-    costPerMonth: 2000,
+    costPerMonth: 860,
     lat: 22.6273,
     lng: 120.3014,
     timezone: 8
@@ -10015,7 +10015,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 7,
       airquality: 6},
-    costPerMonth: 1900,
+    costPerMonth: 830,
     lat: 22.9998,
     lng: 120.2269,
     timezone: 8
@@ -10069,7 +10069,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 8,
       airquality: 5},
-    costPerMonth: 1700,
+    costPerMonth: 1210,
     lat: 35.8714,
     lng: 128.6014,
     timezone: 9
@@ -10096,7 +10096,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 8},
-    costPerMonth: 4500,
+    costPerMonth: 4400,
     lat: 32.7157,
     lng: -117.1611,
     timezone: -8
@@ -10123,7 +10123,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 5,
       airquality: 4},
-    costPerMonth: 5000,
+    costPerMonth: 3880,
     lat: 34.0522,
     lng: -118.2437,
     timezone: -8
@@ -10150,7 +10150,7 @@ const CITIES = [
       culture: 10,
       cleanliness: 4,
       airquality: 5},
-    costPerMonth: 6500,
+    costPerMonth: 5720,
     lat: 40.7128,
     lng: -74.006,
     timezone: -5
@@ -10204,7 +10204,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 5000,
+    costPerMonth: 4630,
     lat: 42.3601,
     lng: -71.0589,
     timezone: -5
@@ -10231,7 +10231,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 3800,
+    costPerMonth: 2970,
     lat: 36.1627,
     lng: -86.7816,
     timezone: -6
@@ -10258,7 +10258,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3500,
+    costPerMonth: 2250,
     lat: 51.0447,
     lng: -114.0719,
     timezone: -7
@@ -10285,7 +10285,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 9,
       airquality: 9},
-    costPerMonth: 3800,
+    costPerMonth: 2430,
     lat: 48.4284,
     lng: -123.3656,
     timezone: -8
@@ -10312,7 +10312,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3400,
+    costPerMonth: 2340,
     lat: 45.4215,
     lng: -75.6972,
     timezone: -5
@@ -10339,7 +10339,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 2200,
+    costPerMonth: 1340,
     lat: 21.1619,
     lng: -86.8515,
     timezone: -5
@@ -10366,7 +10366,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 7,
       airquality: 7},
-    costPerMonth: 1700,
+    costPerMonth: 1440,
     lat: 20.5888,
     lng: -100.3899,
     timezone: -6
@@ -10393,7 +10393,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 6,
       airquality: 8},
-    costPerMonth: 1400,
+    costPerMonth: 1380,
     lat: 23.2494,
     lng: -106.4111,
     timezone: -7
@@ -10420,7 +10420,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 6,
       airquality: 6},
-    costPerMonth: 1300,
+    costPerMonth: 880,
     lat: 21.125,
     lng: -101.686,
     timezone: -6
@@ -10474,7 +10474,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 6,
       airquality: 8},
-    costPerMonth: 1200,
+    costPerMonth: 1130,
     lat: 4.8087,
     lng: -75.6906,
     timezone: -5
@@ -10501,7 +10501,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1300,
+    costPerMonth: 1270,
     lat: 10.9685,
     lng: -74.7813,
     timezone: -5
@@ -10528,7 +10528,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 5,
       airquality: 6},
-    costPerMonth: 1300,
+    costPerMonth: 900,
     lat: -2.1894,
     lng: -79.8891,
     timezone: -5
@@ -10582,7 +10582,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 6,
       airquality: 7},
-    costPerMonth: 1300,
+    costPerMonth: 640,
     lat: -32.9442,
     lng: -60.6505,
     timezone: -3
@@ -10636,7 +10636,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 5,
       airquality: 7},
-    costPerMonth: 1400,
+    costPerMonth: 900,
     lat: -8.0476,
     lng: -34.877,
     timezone: -3
@@ -10690,7 +10690,7 @@ const CITIES = [
       culture: 9,
       cleanliness: 4,
       airquality: 6},
-    costPerMonth: 1100,
+    costPerMonth: 320,
     lat: 31.2001,
     lng: 29.9187,
     timezone: 2
@@ -10744,7 +10744,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 8,
       airquality: 9},
-    costPerMonth: 1500,
+    costPerMonth: 1130,
     lat: -22.5609,
     lng: 17.0658,
     timezone: 2
@@ -10771,7 +10771,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 6},
-    costPerMonth: 1200,
+    costPerMonth: 920,
     lat: 0.3476,
     lng: 32.5825,
     timezone: 3
@@ -10798,7 +10798,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 4,
       airquality: 7},
-    costPerMonth: 1400,
+    costPerMonth: 1050,
     lat: -25.9692,
     lng: 32.5732,
     timezone: 2
@@ -10879,7 +10879,7 @@ const CITIES = [
       culture: 7,
       cleanliness: 8,
       airquality: 5},
-    costPerMonth: 3300,
+    costPerMonth: 1780,
     lat: 24.7136,
     lng: 46.6753,
     timezone: 3
@@ -10933,7 +10933,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 7,
       airquality: 5},
-    costPerMonth: 4000,
+    costPerMonth: 1490,
     lat: 29.3759,
     lng: 47.9774,
     timezone: 3
@@ -11014,7 +11014,7 @@ const CITIES = [
       culture: 5,
       cleanliness: 7,
       airquality: 8},
-    costPerMonth: 3800,
+    costPerMonth: 2750,
     lat: -12.4634,
     lng: 130.8456,
     timezone: 9.5
@@ -11041,7 +11041,7 @@ const CITIES = [
       culture: 8,
       cleanliness: 9,
       airquality: 8},
-    costPerMonth: 3500,
+    costPerMonth: 2740,
     lat: -35.2809,
     lng: 149.13,
     timezone: 10
@@ -11068,7 +11068,7 @@ const CITIES = [
       culture: 6,
       cleanliness: 5,
       airquality: 9},
-    costPerMonth: 2000,
+    costPerMonth: 1250,
     lat: -18.1416,
     lng: 178.4419,
     timezone: 12
@@ -11095,42 +11095,42 @@ const CITIES = [
       culture: 6,
       cleanliness: 7,
       airquality: 9},
-    costPerMonth: 4000,
+    costPerMonth: 1780,
     lat: -22.2758,
     lng: 166.458,
     timezone: 11
   },
   {id:"galle",climateType:"Tropical",name:"Galle",country:"Sri Lanka",flag:"🇱🇰",tagline:"A Dutch-colonial fort town on Sri Lanka's south coast, where ramparts meet surf and slow living.",image:"/images/cities/galle-card.webp",scores:{climate:8,cost:7,wifi:6,nightlife:4,nature:8,safety:7,food:7,community:5,english:7,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:1200,lat:6.0535,lng:80.221,timezone:5.5},
-  {id:"almaty",climateType:"Continental",name:"Almaty",country:"Kazakhstan",flag:"🇰🇿",tagline:"Kazakhstan's leafy former capital, where snow-capped mountains rise straight out of a fast-modernising city.",image:"/images/cities/almaty-card.webp",scores:{climate:5,cost:6,wifi:8,nightlife:6,nature:9,safety:7,food:7,community:5,english:4,visa:6,culture:7,cleanliness:6,airquality:4},costPerMonth:1400,lat:43.222,lng:76.8512,timezone:5},
+  {id:"almaty",climateType:"Continental",name:"Almaty",country:"Kazakhstan",flag:"🇰🇿",tagline:"Kazakhstan's leafy former capital, where snow-capped mountains rise straight out of a fast-modernising city.",image:"/images/cities/almaty-card.webp",scores:{climate:5,cost:6,wifi:8,nightlife:6,nature:9,safety:7,food:7,community:5,english:4,visa:6,culture:7,cleanliness:6,airquality:4},costPerMonth:1290,lat:43.222,lng:76.8512,timezone:5},
   {id:"rishikesh",climateType:"Subtropical",name:"Rishikesh",country:"India",flag:"🇮🇳",tagline:"The Himalayan foothills' yoga capital on the Ganges, all ashrams, rapids, and mountain calm.",image:"/images/cities/rishikesh-card.webp",scores:{climate:7,cost:8,wifi:5,nightlife:2,nature:9,safety:7,food:6,community:6,english:6,visa:5,culture:9,cleanliness:5,airquality:6},costPerMonth:900,lat:30.0869,lng:78.2676,timezone:5.5},
   {id:"rio",climateType:"Tropical Savanna",name:"Rio de Janeiro",country:"Brazil",flag:"🇧🇷",tagline:"Brazil's beach-and-mountain metropolis of Copacabana sands, samba nights, and Sugarloaf views.",image:"/images/cities/rio-card.webp",scores:{climate:8,cost:6,wifi:6,nightlife:9,nature:8,safety:4,food:7,community:6,english:4,visa:6,culture:9,cleanliness:5,airquality:6},costPerMonth:1600,lat:-22.9068,lng:-43.1729,timezone:-3},
   {id:"samarkand",climateType:"Continental",name:"Samarkand",country:"Uzbekistan",flag:"🇺🇿",tagline:"A Silk Road legend of turquoise domes and Registan grandeur in the heart of Uzbekistan.",image:"/images/cities/samarkand-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:3,nature:5,safety:8,food:6,community:3,english:3,visa:7,culture:9,cleanliness:6,airquality:5},costPerMonth:1000,lat:39.627,lng:66.975,timezone:5},
   {id:"bishkek",climateType:"Continental",name:"Bishkek",country:"Kyrgyzstan",flag:"🇰🇬",tagline:"A leafy Soviet-planned capital at the foot of the Tian Shan, gateway to Kyrgyzstan's mountains.",image:"/images/cities/bishkek-card.webp",scores:{climate:5,cost:8,wifi:6,nightlife:5,nature:9,safety:7,food:6,community:4,english:4,visa:8,culture:6,cleanliness:5,airquality:4},costPerMonth:900,lat:42.8746,lng:74.5698,timezone:6},
-  {id:"puebla",climateType:"Subtropical Highland",name:"Puebla",country:"Mexico",flag:"🇲🇽",tagline:"A colonial Mexican city of Talavera tiles and mole, under the gaze of the Popocatepetl volcano.",image:"/images/cities/puebla-card.webp",scores:{climate:7,cost:7,wifi:6,nightlife:6,nature:7,safety:6,food:9,community:5,english:4,visa:7,culture:9,cleanliness:6,airquality:5},costPerMonth:1100,lat:19.0414,lng:-98.2063,timezone:-6},
-  {id:"corfu",climateType:"Mediterranean",name:"Corfu",country:"Greece",flag:"🇬🇷",tagline:"A green Ionian island where Venetian old-town lanes meet turquoise coves.",image:"/images/cities/corfu-card.webp",scores:{climate:8,cost:6,wifi:6,nightlife:6,nature:8,safety:8,food:7,community:4,english:7,visa:6,culture:8,cleanliness:7,airquality:8},costPerMonth:1400,lat:39.6243,lng:19.9217,timezone:2},
-  {id:"udaipur",climateType:"Semi-Arid",name:"Udaipur",country:"India",flag:"🇮🇳",tagline:"Rajasthan's City of Lakes, a romance of palaces, ghats, and Aravalli hills.",image:"/images/cities/udaipur-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:4,nature:6,safety:7,food:7,community:4,english:6,visa:5,culture:9,cleanliness:5,airquality:5},costPerMonth:850,lat:24.5854,lng:73.7125,timezone:5.5},
-  {id:"jakarta",climateType:"Tropical Monsoon",name:"Jakarta",country:"Indonesia",flag:"🇮🇩",tagline:"Indonesia's sprawling, high-energy capital: skyscrapers, street food, and endless traffic.",image:"/images/cities/jakarta-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:7,nature:4,safety:6,food:8,community:5,english:5,visa:6,culture:7,cleanliness:4,airquality:3},costPerMonth:1300,lat:-6.2088,lng:106.8456,timezone:7},
+  {id:"puebla",climateType:"Subtropical Highland",name:"Puebla",country:"Mexico",flag:"🇲🇽",tagline:"A colonial Mexican city of Talavera tiles and mole, under the gaze of the Popocatepetl volcano.",image:"/images/cities/puebla-card.webp",scores:{climate:7,cost:7,wifi:6,nightlife:6,nature:7,safety:6,food:9,community:5,english:4,visa:7,culture:9,cleanliness:6,airquality:5},costPerMonth:1150,lat:19.0414,lng:-98.2063,timezone:-6},
+  {id:"corfu",climateType:"Mediterranean",name:"Corfu",country:"Greece",flag:"🇬🇷",tagline:"A green Ionian island where Venetian old-town lanes meet turquoise coves.",image:"/images/cities/corfu-card.webp",scores:{climate:8,cost:6,wifi:6,nightlife:6,nature:8,safety:8,food:7,community:4,english:7,visa:6,culture:8,cleanliness:7,airquality:8},costPerMonth:1350,lat:39.6243,lng:19.9217,timezone:2},
+  {id:"udaipur",climateType:"Semi-Arid",name:"Udaipur",country:"India",flag:"🇮🇳",tagline:"Rajasthan's City of Lakes, a romance of palaces, ghats, and Aravalli hills.",image:"/images/cities/udaipur-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:4,nature:6,safety:7,food:7,community:4,english:6,visa:5,culture:9,cleanliness:5,airquality:5},costPerMonth:310,lat:24.5854,lng:73.7125,timezone:5.5},
+  {id:"jakarta",climateType:"Tropical Monsoon",name:"Jakarta",country:"Indonesia",flag:"🇮🇩",tagline:"Indonesia's sprawling, high-energy capital: skyscrapers, street food, and endless traffic.",image:"/images/cities/jakarta-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:7,nature:4,safety:6,food:8,community:5,english:5,visa:6,culture:7,cleanliness:4,airquality:3},costPerMonth:690,lat:-6.2088,lng:106.8456,timezone:7},
   {id:"kandy",climateType:"Tropical Highland",name:"Kandy",country:"Sri Lanka",flag:"🇱🇰",tagline:"Sri Lanka's hill-country cultural capital, wrapped around a lake and the sacred Temple of the Tooth.",image:"/images/cities/kandy-card.webp",scores:{climate:7,cost:7,wifi:5,nightlife:3,nature:8,safety:7,food:7,community:4,english:7,visa:6,culture:9,cleanliness:6,airquality:7},costPerMonth:1000,lat:7.2906,lng:80.6337,timezone:5.5},
   {id:"varanasi",climateType:"Humid Subtropical",name:"Varanasi",country:"India",flag:"🇮🇳",tagline:"India's spiritual heart on the Ganges, all ancient ghats, dawn prayers, and sacred fires.",image:"/images/cities/varanasi-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:2,nature:5,safety:6,food:7,community:3,english:5,visa:5,culture:9,cleanliness:3,airquality:3},costPerMonth:800,lat:25.3176,lng:82.9739,timezone:5.5},
   {id:"salta",climateType:"Subtropical Highland",name:"Salta",country:"Argentina",flag:"🇦🇷",tagline:"A colonial gem in Argentina's northwest, gateway to red-rock canyons, vineyards, and the Andes.",image:"/images/cities/salta-card.webp",scores:{climate:7,cost:7,wifi:6,nightlife:5,nature:8,safety:7,food:7,community:4,english:4,visa:7,culture:8,cleanliness:6,airquality:7},costPerMonth:1000,lat:-24.7859,lng:-65.4117,timezone:-3},
   {id:"bacalar",climateType:"Tropical Savanna",name:"Bacalar",country:"Mexico",flag:"🇲🇽",tagline:"A laid-back lakeside town on Mexico's Caribbean side, famed for its Lagoon of Seven Colors.",image:"/images/cities/bacalar-card.webp",scores:{climate:8,cost:6,wifi:5,nightlife:3,nature:9,safety:7,food:6,community:4,english:5,visa:7,culture:5,cleanliness:6,airquality:8},costPerMonth:1200,lat:18.6764,lng:-88.3956,timezone:-5},
   {id:"fez",climateType:"Mediterranean",name:"Fes",country:"Morocco",flag:"🇲🇦",tagline:"Morocco's ancient imperial city, a labyrinthine medieval medina and the world's oldest university.",image:"/images/cities/fez-card.webp",scores:{climate:6,cost:7,wifi:5,nightlife:3,nature:5,safety:6,food:8,community:3,english:4,visa:7,culture:9,cleanliness:5,airquality:6},costPerMonth:950,lat:34.0181,lng:-5.0078,timezone:1},
   {id:"amritsar",climateType:"Humid Subtropical",name:"Amritsar",country:"India",flag:"🇮🇳",tagline:"The spiritual heart of Sikhism, home to the golden, mirror-still Harmandir Sahib and Punjab's warm hospitality.",image:"/images/cities/amritsar-card.webp",scores:{climate:5,cost:8,wifi:5,nightlife:3,nature:4,safety:7,food:8,community:3,english:5,visa:5,culture:9,cleanliness:4,airquality:3},costPerMonth:750,lat:31.634,lng:74.8723,timezone:5.5},
-  {id:"jodhpur",climateType:"Semi-Arid",name:"Jodhpur",country:"India",flag:"🇮🇳",tagline:"Rajasthan's Blue City, a maze of indigo houses beneath the mighty Mehrangarh Fort on the edge of the Thar Desert.",image:"/images/cities/jodhpur-card.webp",scores:{climate:5,cost:8,wifi:5,nightlife:3,nature:5,safety:7,food:7,community:3,english:6,visa:5,culture:9,cleanliness:4,airquality:4},costPerMonth:800,lat:26.2389,lng:73.0243,timezone:5.5},
+  {id:"jodhpur",climateType:"Semi-Arid",name:"Jodhpur",country:"India",flag:"🇮🇳",tagline:"Rajasthan's Blue City, a maze of indigo houses beneath the mighty Mehrangarh Fort on the edge of the Thar Desert.",image:"/images/cities/jodhpur-card.webp",scores:{climate:5,cost:8,wifi:5,nightlife:3,nature:5,safety:7,food:7,community:3,english:6,visa:5,culture:9,cleanliness:4,airquality:4},costPerMonth:280,lat:26.2389,lng:73.0243,timezone:5.5},
   {id:"bukhara",climateType:"Arid",name:"Bukhara",country:"Uzbekistan",flag:"🇺🇿",tagline:"A living Silk Road museum of madrasas, minarets, and trading domes, one of Central Asia's best-preserved holy cities.",image:"/images/cities/bukhara-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:3,nature:4,safety:8,food:6,community:3,english:3,visa:7,culture:9,cleanliness:6,airquality:6},costPerMonth:900,lat:39.7747,lng:64.4286,timezone:5},
   {id:"sancristobal",climateType:"Subtropical Highland",name:"San Cristobal de las Casas",country:"Mexico",flag:"🇲🇽",tagline:"A cool, colonial highland town in Chiapas, rich in indigenous culture, cobbled lanes, and mountain mist.",image:"/images/cities/sancristobal-card.webp",scores:{climate:6,cost:7,wifi:6,nightlife:5,nature:8,safety:6,food:7,community:6,english:4,visa:7,culture:9,cleanliness:6,airquality:7},costPerMonth:1000,lat:16.737,lng:-92.6376,timezone:-6},
   {id:"ella",climateType:"Tropical Highland",name:"Ella",country:"Sri Lanka",flag:"🇱🇰",tagline:"A misty hill-country village of tea plantations, the Nine Arch Bridge, and hikes to sweeping viewpoints.",image:"/images/cities/ella-card.webp",scores:{climate:7,cost:7,wifi:5,nightlife:3,nature:9,safety:7,food:6,community:4,english:7,visa:6,culture:6,cleanliness:6,airquality:8},costPerMonth:900,lat:6.8667,lng:81.0466,timezone:5.5},
   {id:"dahab",climateType:"Desert",name:"Dahab",country:"Egypt",flag:"🇪🇬",tagline:"A laid-back Red Sea diving town on the Sinai coast, all barefoot cafes, coral reefs, and desert calm.",image:"/images/cities/dahab-card.webp",scores:{climate:8,cost:7,wifi:5,nightlife:4,nature:9,safety:6,food:6,community:6,english:6,visa:7,culture:5,cleanliness:6,airquality:8},costPerMonth:900,lat:28.501,lng:34.5136,timezone:2},
-  {id:"aveiro",climateType:"Mediterranean",name:"Aveiro",country:"Portugal",flag:"🇵🇹",tagline:"Portugal's 'Little Venice', a bright canal town of moliceiro boats, Art Nouveau facades, and nearby beaches.",image:"/images/cities/aveiro-card.webp",scores:{climate:7,cost:7,wifi:7,nightlife:5,nature:7,safety:8,food:7,community:4,english:6,visa:6,culture:7,cleanliness:7,airquality:8},costPerMonth:1300,lat:40.6405,lng:-8.6538,timezone:0},
+  {id:"aveiro",climateType:"Mediterranean",name:"Aveiro",country:"Portugal",flag:"🇵🇹",tagline:"Portugal's 'Little Venice', a bright canal town of moliceiro boats, Art Nouveau facades, and nearby beaches.",image:"/images/cities/aveiro-card.webp",scores:{climate:7,cost:7,wifi:7,nightlife:5,nature:7,safety:8,food:7,community:4,english:6,visa:6,culture:7,cleanliness:7,airquality:8},costPerMonth:1630,lat:40.6405,lng:-8.6538,timezone:0},
   {id:"jaisalmer",climateType:"Desert",name:"Jaisalmer",country:"India",flag:"🇮🇳",tagline:"The Golden City rising from the Thar Desert, a living sandstone fort of havelis, camels, and dune sunsets.",image:"/images/cities/jaisalmer-card.webp",scores:{climate:4,cost:8,wifi:4,nightlife:3,nature:6,safety:7,food:6,community:3,english:6,visa:5,culture:9,cleanliness:5,airquality:5},costPerMonth:750,lat:26.9157,lng:70.9083,timezone:5.5},
   {id:"ronda",climateType:"Mediterranean",name:"Ronda",country:"Spain",flag:"🇪🇸",tagline:"A dramatic Andalusian town split by a deep gorge, crowned by the Puente Nuevo and sweeping cliff-top views.",image:"/images/cities/ronda-card.webp",scores:{climate:8,cost:7,wifi:6,nightlife:4,nature:8,safety:8,food:7,community:3,english:5,visa:6,culture:8,cleanliness:7,airquality:8},costPerMonth:1300,lat:36.7461,lng:-5.1611,timezone:1},
-  {id:"rovinj",climateType:"Mediterranean",name:"Rovinj",country:"Croatia",flag:"🇭🇷",tagline:"A romantic Istrian fishing town of pastel houses tumbling to the Adriatic beneath a Venetian bell tower.",image:"/images/cities/rovinj-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:5,nature:8,safety:9,food:7,community:3,english:7,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1400,lat:45.0811,lng:13.6387,timezone:1},
+  {id:"rovinj",climateType:"Mediterranean",name:"Rovinj",country:"Croatia",flag:"🇭🇷",tagline:"A romantic Istrian fishing town of pastel houses tumbling to the Adriatic beneath a Venetian bell tower.",image:"/images/cities/rovinj-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:5,nature:8,safety:9,food:7,community:3,english:7,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1700,lat:45.0811,lng:13.6387,timezone:1},
   {id:"dharamshala",climateType:"Subtropical Highland",name:"Dharamshala",country:"India",flag:"🇮🇳",tagline:"The Himalayan home of the Dalai Lama, a misty hill town of Tibetan monasteries, cafes, and mountain trails.",image:"/images/cities/dharamshala-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:3,nature:9,safety:7,food:6,community:5,english:6,visa:5,culture:8,cleanliness:5,airquality:7},costPerMonth:750,lat:32.219,lng:76.3234,timezone:5.5},
   {id:"salento",climateType:"Subtropical Highland",name:"Salento",country:"Colombia",flag:"🇨🇴",tagline:"A colourful coffee-country village in the Andes, gateway to the towering wax palms of the Cocora Valley.",image:"/images/cities/salento-card.webp",scores:{climate:7,cost:7,wifi:5,nightlife:4,nature:9,safety:7,food:6,community:4,english:4,visa:7,culture:7,cleanliness:7,airquality:8},costPerMonth:900,lat:4.6378,lng:-75.5706,timezone:-5},
   {id:"matera",climateType:"Mediterranean",name:"Matera",country:"Italy",flag:"🇮🇹",tagline:"An ancient cave city of tufa-stone Sassi carved into a ravine, one of the world's oldest continuously inhabited places.",image:"/images/cities/matera-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:4,nature:7,safety:8,food:8,community:3,english:4,visa:6,culture:9,cleanliness:7,airquality:8},costPerMonth:1300,lat:40.6664,lng:16.6043,timezone:1},
   {id:"petra",climateType:"Arid",name:"Petra",country:"Jordan",flag:"🇯🇴",tagline:"The rose-red Nabataean city carved into desert cliffs, one of the New Seven Wonders of the World.",image:"/images/cities/petra-card.webp",scores:{climate:6,cost:6,wifi:5,nightlife:3,nature:8,safety:7,food:6,community:3,english:6,visa:6,culture:9,cleanliness:6,airquality:7},costPerMonth:1000,lat:30.3285,lng:35.4444,timezone:3},
   {id:"banos",climateType:"Subtropical Highland",name:"Banos",country:"Ecuador",flag:"🇪🇨",tagline:"An adventure town cradled in the Andes below an active volcano, all waterfalls, hot springs, and canyon swings.",image:"/images/cities/banos-card.webp",scores:{climate:7,cost:8,wifi:5,nightlife:5,nature:9,safety:7,food:6,community:4,english:4,visa:7,culture:6,cleanliness:6,airquality:8},costPerMonth:800,lat:-1.3928,lng:-78.4269,timezone:-5},
-  {id:"mysore",climateType:"Tropical Savanna",name:"Mysore",country:"India",flag:"🇮🇳",tagline:"A graceful South Indian city of palaces, silk, and sandalwood, with a world-famous ashtanga yoga scene in Gokulam.",image:"/images/cities/mysore-card.webp",scores:{climate:7,cost:8,wifi:6,nightlife:3,nature:5,safety:7,food:8,community:5,english:6,visa:5,culture:9,cleanliness:6,airquality:6},costPerMonth:700,lat:12.2958,lng:76.6394,timezone:5.5},
+  {id:"mysore",climateType:"Tropical Savanna",name:"Mysore",country:"India",flag:"🇮🇳",tagline:"A graceful South Indian city of palaces, silk, and sandalwood, with a world-famous ashtanga yoga scene in Gokulam.",image:"/images/cities/mysore-card.webp",scores:{climate:7,cost:8,wifi:6,nightlife:3,nature:5,safety:7,food:8,community:5,english:6,visa:5,culture:9,cleanliness:6,airquality:6},costPerMonth:290,lat:12.2958,lng:76.6394,timezone:5.5},
   {id:"sintra",climateType:"Mediterranean",name:"Sintra",country:"Portugal",flag:"🇵🇹",tagline:"A romantic hill town near Lisbon of fairytale palaces, misty forests, and Moorish castle ruins.",image:"/images/cities/sintra-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:3,nature:8,safety:8,food:7,community:3,english:7,visa:6,culture:9,cleanliness:7,airquality:8},costPerMonth:1400,lat:38.8029,lng:-9.3817,timezone:0},
   {id:"flores",climateType:"Tropical Rainforest",name:"Flores",country:"Guatemala",flag:"🇬🇹",tagline:"A colourful island town on a jungle lake in the Peten, the gateway to the great Maya ruins of Tikal.",image:"/images/cities/flores-card.webp",scores:{climate:7,cost:7,wifi:5,nightlife:4,nature:8,safety:6,food:6,community:4,english:5,visa:7,culture:8,cleanliness:6,airquality:8},costPerMonth:900,lat:16.928,lng:-89.8919,timezone:-6},
   {id:"leh",climateType:"Arid",name:"Leh",country:"India",flag:"🇮🇳",tagline:"A high-altitude desert town in the Himalayas, gateway to Ladakh's monasteries, passes, and moonscape valleys.",image:"/images/cities/leh-card.webp",scores:{climate:4,cost:7,wifi:4,nightlife:2,nature:9,safety:8,food:6,community:4,english:6,visa:5,culture:8,cleanliness:6,airquality:9},costPerMonth:900,lat:34.1526,lng:77.5771,timezone:5.5},
@@ -11139,32 +11139,32 @@ const CITIES = [
   {id:"meteora",climateType:"Mediterranean",name:"Meteora",country:"Greece",flag:"🇬🇷",tagline:"A cluster of monasteries perched atop soaring rock pillars in central Greece, a dramatic meeting of faith and stone.",image:"/images/cities/meteora-card.webp",scores:{climate:7,cost:7,wifi:6,nightlife:3,nature:9,safety:8,food:7,community:3,english:6,visa:6,culture:9,cleanliness:7,airquality:8},costPerMonth:1100,lat:39.7047,lng:21.6306,timezone:2},
   {id:"lalibela",climateType:"Subtropical Highland",name:"Lalibela",country:"Ethiopia",flag:"🇪🇹",tagline:"A highland pilgrimage town famed for its medieval churches hewn straight down into the rock, a living wonder of Ethiopia.",image:"/images/cities/lalibela-card.webp",scores:{climate:7,cost:8,wifi:3,nightlife:2,nature:7,safety:6,food:5,community:2,english:5,visa:5,culture:9,cleanliness:5,airquality:8},costPerMonth:600,lat:12.0319,lng:39.0453,timezone:3},
   {id:"colonia",climateType:"Humid Subtropical",name:"Colonia del Sacramento",country:"Uruguay",flag:"🇺🇾",tagline:"A tranquil, cobblestoned colonial old town on the Rio de la Plata, a UNESCO gem across the water from Buenos Aires.",image:"/images/cities/colonia-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:4,nature:6,safety:8,food:7,community:3,english:5,visa:7,culture:8,cleanliness:8,airquality:8},costPerMonth:1100,lat:-34.4726,lng:-57.8446,timezone:-3},
-  {id:"braga",climateType:"Oceanic",name:"Braga",country:"Portugal",flag:"🇵🇹",tagline:"One of Portugal's oldest cities, a baroque and student town in the green Minho where cathedrals meet a lively, affordable pace.",image:"/images/cities/braga-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:5,nature:6,safety:9,food:8,community:4,english:6,visa:7,culture:8,cleanliness:8,airquality:8},costPerMonth:1400,lat:41.5454,lng:-8.4265,timezone:0},
-  {id:"siena",climateType:"Mediterranean",name:"Siena",country:"Italy",flag:"🇮🇹",tagline:"A medieval Tuscan city built around the shell-shaped Piazza del Campo, all brick towers, Gothic art, and rolling vineyard hills.",image:"/images/cities/siena-card.webp",scores:{climate:7,cost:5,wifi:6,nightlife:4,nature:7,safety:8,food:9,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:7},costPerMonth:1700,lat:43.3188,lng:11.3308,timezone:1},
+  {id:"braga",climateType:"Oceanic",name:"Braga",country:"Portugal",flag:"🇵🇹",tagline:"One of Portugal's oldest cities, a baroque and student town in the green Minho where cathedrals meet a lively, affordable pace.",image:"/images/cities/braga-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:5,nature:6,safety:9,food:8,community:4,english:6,visa:7,culture:8,cleanliness:8,airquality:8},costPerMonth:1490,lat:41.5454,lng:-8.4265,timezone:0},
+  {id:"siena",climateType:"Mediterranean",name:"Siena",country:"Italy",flag:"🇮🇹",tagline:"A medieval Tuscan city built around the shell-shaped Piazza del Campo, all brick towers, Gothic art, and rolling vineyard hills.",image:"/images/cities/siena-card.webp",scores:{climate:7,cost:5,wifi:6,nightlife:4,nature:7,safety:8,food:9,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:7},costPerMonth:1880,lat:43.3188,lng:11.3308,timezone:1},
   {id:"naha",climateType:"Humid Subtropical",name:"Naha",country:"Japan",flag:"🇯🇵",tagline:"The sun-warmed capital of Okinawa, gateway to island beaches and Ryukyu culture, with its own laid-back subtropical rhythm.",image:"/images/cities/naha-card.webp",scores:{climate:7,cost:5,wifi:8,nightlife:6,nature:8,safety:9,food:8,community:4,english:4,visa:5,culture:8,cleanliness:9,airquality:8},costPerMonth:1600,lat:26.2124,lng:127.6809,timezone:9},
   {id:"puntadeleste",climateType:"Humid Subtropical",name:"Punta del Este",country:"Uruguay",flag:"🇺🇾",tagline:"South America's glossy summer playground, a peninsula of Atlantic beaches, marinas, and sleek high-rises on Uruguay's coast.",image:"/images/cities/puntadeleste-card.webp",scores:{climate:6,cost:4,wifi:7,nightlife:7,nature:7,safety:8,food:7,community:3,english:5,visa:7,culture:5,cleanliness:8,airquality:8},costPerMonth:1800,lat:-34.9587,lng:-54.9508,timezone:-3},
   {id:"aswan",climateType:"Desert",name:"Aswan",country:"Egypt",flag:"🇪🇬",tagline:"Egypt's serene southern city, where the Nile slides past golden dunes, felucca sails, and the vivid villages of Nubian culture.",image:"/images/cities/aswan-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:3,nature:6,safety:6,food:6,community:2,english:5,visa:6,culture:9,cleanliness:5,airquality:6},costPerMonth:700,lat:24.0889,lng:32.8998,timezone:2},
   {id:"popayan",climateType:"Subtropical Highland",name:"Popayan",country:"Colombia",flag:"🇨🇴",tagline:"Colombia's whitewashed colonial 'White City' in the Andes, a UNESCO city of gastronomy with a mild, spring-like climate.",image:"/images/cities/popayan-card.webp",scores:{climate:8,cost:8,wifi:6,nightlife:5,nature:7,safety:6,food:8,community:3,english:4,visa:7,culture:8,cleanliness:7,airquality:7},costPerMonth:900,lat:2.4448,lng:-76.6147,timezone:-5},
-  {id:"bergamo",climateType:"Humid Subtropical",name:"Bergamo",country:"Italy",flag:"🇮🇹",tagline:"A Lombard city of two halves, a Venetian-walled hilltop Citta Alta above a lively lower town, with the Alps on the horizon.",image:"/images/cities/bergamo-card.webp",scores:{climate:7,cost:5,wifi:7,nightlife:5,nature:7,safety:8,food:8,community:3,english:5,visa:6,culture:8,cleanliness:8,airquality:6},costPerMonth:1600,lat:45.6983,lng:9.6773,timezone:1},
+  {id:"bergamo",climateType:"Humid Subtropical",name:"Bergamo",country:"Italy",flag:"🇮🇹",tagline:"A Lombard city of two halves, a Venetian-walled hilltop Citta Alta above a lively lower town, with the Alps on the horizon.",image:"/images/cities/bergamo-card.webp",scores:{climate:7,cost:5,wifi:7,nightlife:5,nature:7,safety:8,food:8,community:3,english:5,visa:6,culture:8,cleanliness:8,airquality:6},costPerMonth:1440,lat:45.6983,lng:9.6773,timezone:1},
   {id:"nafplio",climateType:"Mediterranean",name:"Nafplio",country:"Greece",flag:"🇬🇷",tagline:"Greece's romantic first capital, a seaside Peloponnese town of Venetian fortresses, marble lanes, and bougainvillea.",image:"/images/cities/nafplio-card.webp",scores:{climate:8,cost:6,wifi:6,nightlife:5,nature:7,safety:8,food:8,community:3,english:6,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1300,lat:37.5679,lng:22.8075,timezone:2},
   {id:"taxco",climateType:"Subtropical Highland",name:"Taxco",country:"Mexico",flag:"🇲🇽",tagline:"A silver-mining town of whitewashed houses tumbling down steep Guerrero hillsides, crowned by the baroque Santa Prisca church.",image:"/images/cities/taxco-card.webp",scores:{climate:8,cost:8,wifi:5,nightlife:4,nature:7,safety:6,food:7,community:2,english:4,visa:7,culture:9,cleanliness:6,airquality:7},costPerMonth:800,lat:18.5561,lng:-99.6053,timezone:-6},
-  {id:"tangier",climateType:"Mediterranean",name:"Tangier",country:"Morocco",flag:"🇲🇦",tagline:"A storied port where the Mediterranean meets the Atlantic, a whitewashed kasbah and medina looking across to Spain.",image:"/images/cities/tangier-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:5,nature:7,safety:6,food:7,community:3,english:4,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:900,lat:35.7595,lng:-5.8340,timezone:1},
+  {id:"tangier",climateType:"Mediterranean",name:"Tangier",country:"Morocco",flag:"🇲🇦",tagline:"A storied port where the Mediterranean meets the Atlantic, a whitewashed kasbah and medina looking across to Spain.",image:"/images/cities/tangier-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:5,nature:7,safety:6,food:7,community:3,english:4,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:890,lat:35.7595,lng:-5.8340,timezone:1},
   {id:"gyeongju",climateType:"Humid Subtropical",name:"Gyeongju",country:"South Korea",flag:"🇰🇷",tagline:"South Korea's ancient Silla capital, an open-air museum of royal burial mounds, temples, and lakeside palace ruins.",image:"/images/cities/gyeongju-card.webp",scores:{climate:7,cost:6,wifi:9,nightlife:4,nature:7,safety:9,food:7,community:2,english:4,visa:6,culture:9,cleanliness:9,airquality:6},costPerMonth:1200,lat:35.8562,lng:129.2247,timezone:9},
   {id:"vigan",climateType:"Tropical Savanna",name:"Vigan",country:"Philippines",flag:"🇵🇭",tagline:"A remarkably preserved Spanish colonial town in Ilocos, its cobblestoned Calle Crisologo lined with ancestral mansions.",image:"/images/cities/vigan-card.webp",scores:{climate:7,cost:8,wifi:5,nightlife:3,nature:6,safety:7,food:6,community:2,english:7,visa:7,culture:9,cleanliness:6,airquality:7},costPerMonth:700,lat:17.5747,lng:120.3869,timezone:8},
-  {id:"lucca",climateType:"Mediterranean",name:"Lucca",country:"Italy",flag:"🇮🇹",tagline:"A graceful Tuscan city encircled by intact Renaissance walls, now a tree-lined promenade above piazzas, towers, and Puccini's streets.",image:"/images/cities/lucca-card.webp",scores:{climate:7,cost:5,wifi:6,nightlife:4,nature:6,safety:8,food:9,community:3,english:5,visa:6,culture:8,cleanliness:8,airquality:7},costPerMonth:1600,lat:43.8430,lng:10.5079,timezone:1},
+  {id:"lucca",climateType:"Mediterranean",name:"Lucca",country:"Italy",flag:"🇮🇹",tagline:"A graceful Tuscan city encircled by intact Renaissance walls, now a tree-lined promenade above piazzas, towers, and Puccini's streets.",image:"/images/cities/lucca-card.webp",scores:{climate:7,cost:5,wifi:6,nightlife:4,nature:6,safety:8,food:9,community:3,english:5,visa:6,culture:8,cleanliness:8,airquality:7},costPerMonth:1690,lat:43.8430,lng:10.5079,timezone:1},
   {id:"trogir",climateType:"Mediterranean",name:"Trogir",country:"Croatia",flag:"🇭🇷",tagline:"A tiny UNESCO island of Venetian stone near Split, a maze of marble lanes around a Romanesque cathedral and a seafront promenade.",image:"/images/cities/trogir-card.webp",scores:{climate:8,cost:6,wifi:6,nightlife:4,nature:7,safety:8,food:7,community:3,english:6,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1300,lat:43.5147,lng:16.2517,timezone:1},
-  {id:"berat",climateType:"Mediterranean",name:"Berat",country:"Albania",flag:"🇦🇱",tagline:"Albania's 'City of a Thousand Windows', tiers of white Ottoman houses climbing to a living hilltop castle above the Osum river.",image:"/images/cities/berat-card.webp",scores:{climate:8,cost:8,wifi:6,nightlife:3,nature:7,safety:8,food:7,community:2,english:5,visa:8,culture:8,cleanliness:6,airquality:7},costPerMonth:800,lat:40.7058,lng:19.9522,timezone:1},
+  {id:"berat",climateType:"Mediterranean",name:"Berat",country:"Albania",flag:"🇦🇱",tagline:"Albania's 'City of a Thousand Windows', tiers of white Ottoman houses climbing to a living hilltop castle above the Osum river.",image:"/images/cities/berat-card.webp",scores:{climate:8,cost:8,wifi:6,nightlife:3,nature:7,safety:8,food:7,community:2,english:5,visa:8,culture:8,cleanliness:6,airquality:7},costPerMonth:690,lat:40.7058,lng:19.9522,timezone:1},
   {id:"meknes",climateType:"Semi-Arid",name:"Meknes",country:"Morocco",flag:"🇲🇦",tagline:"A calmer imperial city of monumental gates and walls, its walled medina a quieter Moroccan base near the Roman ruins of Volubilis.",image:"/images/cities/meknes-card.webp",scores:{climate:7,cost:6,wifi:6,nightlife:3,nature:6,safety:6,food:7,community:2,english:4,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:800,lat:33.8935,lng:-5.5473,timezone:1},
-  {id:"jeonju",climateType:"Humid Subtropical",name:"Jeonju",country:"South Korea",flag:"🇰🇷",tagline:"The soul of Korean tradition, a city of hundreds of tiled hanok houses, the birthplace of bibimbap, and slow, crafted living.",image:"/images/cities/jeonju-card.webp",scores:{climate:7,cost:6,wifi:9,nightlife:5,nature:6,safety:9,food:8,community:2,english:4,visa:6,culture:9,cleanliness:9,airquality:6},costPerMonth:1100,lat:35.8242,lng:127.1480,timezone:9},
+  {id:"jeonju",climateType:"Humid Subtropical",name:"Jeonju",country:"South Korea",flag:"🇰🇷",tagline:"The soul of Korean tradition, a city of hundreds of tiled hanok houses, the birthplace of bibimbap, and slow, crafted living.",image:"/images/cities/jeonju-card.webp",scores:{climate:7,cost:6,wifi:9,nightlife:5,nature:6,safety:9,food:8,community:2,english:4,visa:6,culture:9,cleanliness:9,airquality:6},costPerMonth:770,lat:35.8242,lng:127.1480,timezone:9},
   {id:"villadeleyva",climateType:"Subtropical Highland",name:"Villa de Leyva",country:"Colombia",flag:"🇨🇴",tagline:"A whitewashed colonial town in the Boyaca highlands built around one of Latin America's largest cobbled plazas.",image:"/images/cities/villadeleyva-card.webp",scores:{climate:8,cost:7,wifi:5,nightlife:3,nature:7,safety:7,food:7,community:2,english:4,visa:7,culture:8,cleanliness:8,airquality:8},costPerMonth:1000,lat:5.6339,lng:-73.5250,timezone:-5},
-  {id:"toledo",climateType:"Mediterranean",name:"Toledo",country:"Spain",flag:"🇪🇸",tagline:"A golden hilltop city ringed by the Tagus gorge, a UNESCO maze where Christian, Muslim, and Jewish Spain layer into one skyline.",image:"/images/cities/toledo-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:4,nature:6,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1300,lat:39.8628,lng:-4.0273,timezone:1},
+  {id:"toledo",climateType:"Mediterranean",name:"Toledo",country:"Spain",flag:"🇪🇸",tagline:"A golden hilltop city ringed by the Tagus gorge, a UNESCO maze where Christian, Muslim, and Jewish Spain layer into one skyline.",image:"/images/cities/toledo-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:4,nature:6,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:2030,lat:39.8628,lng:-4.0273,timezone:1},
   {id:"nara",climateType:"Humid Subtropical",name:"Nara",country:"Japan",flag:"🇯🇵",tagline:"Japan's first great capital, a city of monumental temples, giant bronze Buddhas, and free-roaming deer in vast parkland.",image:"/images/cities/nara-card.webp",scores:{climate:7,cost:5,wifi:8,nightlife:4,nature:7,safety:9,food:7,community:2,english:4,visa:5,culture:9,cleanliness:9,airquality:8},costPerMonth:1500,lat:34.6851,lng:135.8048,timezone:9},
   {id:"campeche",climateType:"Tropical Savanna",name:"Campeche",country:"Mexico",flag:"🇲🇽",tagline:"A walled Gulf-coast colonial city of pastel streets and pirate-era forts, one of Mexico's safest and most laid-back gems.",image:"/images/cities/campeche-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:4,nature:6,safety:8,food:7,community:2,english:4,visa:7,culture:8,cleanliness:8,airquality:8},costPerMonth:800,lat:19.8301,lng:-90.5349,timezone:-6},
-  {id:"velikotarnovo",climateType:"Humid Continental",name:"Veliko Tarnovo",country:"Bulgaria",flag:"🇧🇬",tagline:"Bulgaria's medieval capital, houses stacked up a horseshoe gorge below the Tsarevets fortress on the Yantra river.",image:"/images/cities/velikotarnovo-card.webp",scores:{climate:7,cost:8,wifi:7,nightlife:4,nature:7,safety:8,food:7,community:3,english:5,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:800,lat:43.0757,lng:25.6172,timezone:2},
+  {id:"velikotarnovo",climateType:"Humid Continental",name:"Veliko Tarnovo",country:"Bulgaria",flag:"🇧🇬",tagline:"Bulgaria's medieval capital, houses stacked up a horseshoe gorge below the Tsarevets fortress on the Yantra river.",image:"/images/cities/velikotarnovo-card.webp",scores:{climate:7,cost:8,wifi:7,nightlife:4,nature:7,safety:8,food:7,community:3,english:5,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:850,lat:43.0757,lng:25.6172,timezone:2},
   {id:"hampi",climateType:"Semi-Arid",name:"Hampi",country:"India",flag:"🇮🇳",tagline:"A surreal boulder-strewn landscape scattered with the temples and ruins of the once-mighty Vijayanagara empire.",image:"/images/cities/hampi-card.webp",scores:{climate:6,cost:8,wifi:4,nightlife:2,nature:8,safety:7,food:5,community:2,english:5,visa:6,culture:9,cleanliness:5,airquality:7},costPerMonth:600,lat:15.3350,lng:76.4600,timezone:5.5},
   {id:"guimaraes",climateType:"Oceanic",name:"Guimaraes",country:"Portugal",flag:"🇵🇹",tagline:"The cradle of Portugal, a beautifully preserved medieval town of granite squares beneath a tenth-century castle.",image:"/images/cities/guimaraes-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:4,nature:6,safety:9,food:8,community:3,english:6,visa:7,culture:8,cleanliness:8,airquality:8},costPerMonth:1300,lat:41.4425,lng:-8.2918,timezone:0},
-  {id:"salamanca",climateType:"Continental",name:"Salamanca",country:"Spain",flag:"🇪🇸",tagline:"A golden sandstone university city, its baroque Plaza Mayor and Spain's oldest university buzzing with students and Spanish learners.",image:"/images/cities/salamanca-card.webp",scores:{climate:6,cost:6,wifi:7,nightlife:6,nature:5,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1200,lat:40.9701,lng:-5.6635,timezone:1},
-  {id:"matsumoto",climateType:"Humid Continental",name:"Matsumoto",country:"Japan",flag:"🇯🇵",tagline:"A castle town gateway to the Japanese Alps, built around an original black-walled keep with snow peaks on the skyline.",image:"/images/cities/matsumoto-card.webp",scores:{climate:6,cost:5,wifi:8,nightlife:4,nature:8,safety:9,food:7,community:2,english:4,visa:5,culture:8,cleanliness:9,airquality:8},costPerMonth:1400,lat:36.2381,lng:137.9720,timezone:9},  {id:"pondicherry",climateType:"Tropical Savanna",name:"Pondicherry",country:"India",flag:"🇮🇳",tagline:"A former French colony on the Tamil coast, its bougainvillea-draped French Quarter meeting a breezy seafront promenade.",image:"/images/cities/pondicherry-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:3,nature:6,safety:7,food:7,community:3,english:6,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:700,lat:11.9416,lng:79.8083,timezone:5.5},
+  {id:"salamanca",climateType:"Continental",name:"Salamanca",country:"Spain",flag:"🇪🇸",tagline:"A golden sandstone university city, its baroque Plaza Mayor and Spain's oldest university buzzing with students and Spanish learners.",image:"/images/cities/salamanca-card.webp",scores:{climate:6,cost:6,wifi:7,nightlife:6,nature:5,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1350,lat:40.9701,lng:-5.6635,timezone:1},
+  {id:"matsumoto",climateType:"Humid Continental",name:"Matsumoto",country:"Japan",flag:"🇯🇵",tagline:"A castle town gateway to the Japanese Alps, built around an original black-walled keep with snow peaks on the skyline.",image:"/images/cities/matsumoto-card.webp",scores:{climate:6,cost:5,wifi:8,nightlife:4,nature:8,safety:9,food:7,community:2,english:4,visa:5,culture:8,cleanliness:9,airquality:8},costPerMonth:1400,lat:36.2381,lng:137.9720,timezone:9},  {id:"pondicherry",climateType:"Tropical Savanna",name:"Pondicherry",country:"India",flag:"🇮🇳",tagline:"A former French colony on the Tamil coast, its bougainvillea-draped French Quarter meeting a breezy seafront promenade.",image:"/images/cities/pondicherry-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:3,nature:6,safety:7,food:7,community:3,english:6,visa:6,culture:8,cleanliness:6,airquality:7},costPerMonth:370,lat:11.9416,lng:79.8083,timezone:5.5},
   {id:"swakopmund",climateType:"Desert",name:"Swakopmund",country:"Namibia",flag:"🇳🇦",tagline:"A German colonial seaside town where the towering dunes of the Namib desert run straight into the cold Atlantic.",image:"/images/cities/swakopmund-card.webp",scores:{climate:6,cost:6,wifi:5,nightlife:4,nature:8,safety:7,food:6,community:2,english:7,visa:6,culture:6,cleanliness:8,airquality:8},costPerMonth:900,lat:-22.6784,lng:14.5258,timezone:2},
   {id:"ceskykrumlov",climateType:"Humid Continental",name:"Cesky Krumlov",country:"Czech Republic",flag:"🇨🇿",tagline:"A fairytale medieval town wrapped in a tight bend of the Vltava, red rooftops huddled below a painted Renaissance castle tower.",image:"/images/cities/ceskykrumlov-card.webp",scores:{climate:6,cost:7,wifi:7,nightlife:3,nature:7,safety:9,food:6,community:2,english:5,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1000,lat:48.8127,lng:14.3175,timezone:1},
   {id:"segovia",climateType:"Continental",name:"Segovia",country:"Spain",flag:"🇪🇸",tagline:"A Castilian hill town crowned by a fairytale Alcazar and spanned by a towering, mortarless Roman aqueduct still standing after millennia.",image:"/images/cities/segovia-card.webp",scores:{climate:6,cost:6,wifi:7,nightlife:4,nature:6,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1200,lat:40.9481,lng:-4.1184,timezone:1},
@@ -11173,21 +11173,21 @@ const CITIES = [
   {id:"pushkar",climateType:"Semi-Arid",name:"Pushkar",country:"India",flag:"🇮🇳",tagline:"A sacred Rajasthani lake town of ghats and temples, drowsy and mystical most of the year, then thronged by its vast camel fair.",image:"/images/cities/pushkar-card.webp",scores:{climate:6,cost:8,wifi:5,nightlife:2,nature:6,safety:7,food:5,community:3,english:5,visa:6,culture:9,cleanliness:5,airquality:6},costPerMonth:600,lat:26.4899,lng:74.5511,timezone:5.5},
   {id:"stellenbosch",climateType:"Mediterranean",name:"Stellenbosch",country:"South Africa",flag:"🇿🇦",tagline:"The heart of the Cape Winelands, an oak-shaded university town of Cape Dutch gables ringed by mountains and vineyards.",image:"/images/cities/stellenbosch-card.webp",scores:{climate:8,cost:6,wifi:6,nightlife:5,nature:8,safety:6,food:8,community:3,english:8,visa:6,culture:7,cleanliness:8,airquality:8},costPerMonth:1100,lat:-33.9321,lng:18.8602,timezone:2},
   {id:"gjirokaster",climateType:"Mediterranean",name:"Gjirokaster",country:"Albania",flag:"🇦🇱",tagline:"Albania's 'City of Stone', steep lanes of grey-roofed Ottoman tower houses climbing to a vast hilltop castle above the Drino valley.",image:"/images/cities/gjirokaster-card.webp",scores:{climate:7,cost:8,wifi:6,nightlife:3,nature:7,safety:8,food:7,community:2,english:5,visa:8,culture:8,cleanliness:6,airquality:7},costPerMonth:700,lat:40.0758,lng:20.1389,timezone:1},
-  {id:"kobe",climateType:"Humid Subtropical",name:"Kobe",country:"Japan",flag:"🇯🇵",tagline:"A cosmopolitan port city wedged between the Rokko mountains and the sea, famed for its marbled beef, sake, and glittering harbour night view.",image:"/images/cities/kobe-card.webp",scores:{climate:7,cost:5,wifi:8,nightlife:6,nature:7,safety:9,food:8,community:3,english:4,visa:5,culture:7,cleanliness:9,airquality:8},costPerMonth:1600,lat:34.6901,lng:135.1955,timezone:9},
-  {id:"perugia",climateType:"Mediterranean",name:"Perugia",country:"Italy",flag:"🇮🇹",tagline:"A hilltop Umbrian capital of Etruscan gates and medieval alleys, a lively university and chocolate town above rolling green hills.",image:"/images/cities/perugia-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:5,nature:7,safety:8,food:8,community:3,english:5,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1300,lat:43.1107,lng:12.3908,timezone:1},
+  {id:"kobe",climateType:"Humid Subtropical",name:"Kobe",country:"Japan",flag:"🇯🇵",tagline:"A cosmopolitan port city wedged between the Rokko mountains and the sea, famed for its marbled beef, sake, and glittering harbour night view.",image:"/images/cities/kobe-card.webp",scores:{climate:7,cost:5,wifi:8,nightlife:6,nature:7,safety:9,food:8,community:3,english:4,visa:5,culture:7,cleanliness:9,airquality:8},costPerMonth:1410,lat:34.6901,lng:135.1955,timezone:9},
+  {id:"perugia",climateType:"Mediterranean",name:"Perugia",country:"Italy",flag:"🇮🇹",tagline:"A hilltop Umbrian capital of Etruscan gates and medieval alleys, a lively university and chocolate town above rolling green hills.",image:"/images/cities/perugia-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:5,nature:7,safety:8,food:8,community:3,english:5,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1220,lat:43.1107,lng:12.3908,timezone:1},
   {id:"caceres",climateType:"Mediterranean",name:"Caceres",country:"Spain",flag:"🇪🇸",tagline:"One of Europe's best-preserved medieval old towns, a golden maze of walls, towers, and storks' nests in deep Extremadura.",image:"/images/cities/caceres-card.webp",scores:{climate:6,cost:6,wifi:7,nightlife:4,nature:6,safety:8,food:8,community:2,english:4,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1000,lat:39.4753,lng:-6.3724,timezone:1},
   {id:"elcalafate",climateType:"Semi-Arid",name:"El Calafate",country:"Argentina",flag:"🇦🇷",tagline:"A Patagonian steppe town on Lago Argentino, the gateway to the vast blue ice walls of the Perito Moreno glacier.",image:"/images/cities/elcalafate-card.webp",scores:{climate:5,cost:5,wifi:5,nightlife:3,nature:9,safety:8,food:6,community:2,english:5,visa:7,culture:5,cleanliness:8,airquality:9},costPerMonth:1100,lat:-50.3379,lng:-72.2648,timezone:-3},
   {id:"sighnaghi",climateType:"Continental",name:"Sighnaghi",country:"Georgia",flag:"🇬🇪",tagline:"A red-roofed hilltop wine town wrapped in old walls, gazing over the Alazani valley to the snowcapped Caucasus, in the heart of Kakheti.",image:"/images/cities/sighnaghi-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:3,nature:7,safety:8,food:7,community:2,english:4,visa:8,culture:7,cleanliness:7,airquality:8},costPerMonth:700,lat:41.6178,lng:45.9219,timezone:4},
   {id:"livingstone",climateType:"Tropical Savanna",name:"Livingstone",country:"Zambia",flag:"🇿🇲",tagline:"The historic Zambian gateway to Victoria Falls, where the Zambezi thunders over a mile-wide chasm amid safari and adventure country.",image:"/images/cities/livingstone-card.webp",scores:{climate:6,cost:6,wifi:4,nightlife:3,nature:9,safety:6,food:5,community:2,english:8,visa:6,culture:6,cleanliness:6,airquality:8},costPerMonth:900,lat:-17.8419,lng:25.8543,timezone:2},
-  {id:"santiagodecompostela",climateType:"Oceanic",name:"Santiago de Compostela",country:"Spain",flag:"🇪🇸",tagline:"The rain-washed granite end of the Camino, a Galician university city gathered around one of Christendom's greatest pilgrim cathedrals.",image:"/images/cities/santiagodecompostela-card.webp",scores:{climate:6,cost:6,wifi:7,nightlife:5,nature:6,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1200,lat:42.8805,lng:-8.5457,timezone:1},
+  {id:"santiagodecompostela",climateType:"Oceanic",name:"Santiago de Compostela",country:"Spain",flag:"🇪🇸",tagline:"The rain-washed granite end of the Camino, a Galician university city gathered around one of Christendom's greatest pilgrim cathedrals.",image:"/images/cities/santiagodecompostela-card.webp",scores:{climate:6,cost:6,wifi:7,nightlife:5,nature:6,safety:8,food:8,community:3,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1370,lat:42.8805,lng:-8.5457,timezone:1},
   {id:"kamakura",climateType:"Humid Subtropical",name:"Kamakura",country:"Japan",flag:"🇯🇵",tagline:"A laid-back seaside temple town south of Tokyo, home to a giant bronze Buddha, Zen gardens, hydrangea trails, and surf beaches.",image:"/images/cities/kamakura-card.webp",scores:{climate:7,cost:6,wifi:8,nightlife:4,nature:7,safety:9,food:7,community:3,english:5,visa:5,culture:8,cleanliness:9,airquality:8},costPerMonth:1600,lat:35.3192,lng:139.5467,timezone:9},
-  {id:"torun",climateType:"Humid Continental",name:"Torun",country:"Poland",flag:"🇵🇱",tagline:"A red-brick Gothic city on the Vistula, birthplace of Copernicus, its untouched medieval old town scented with famous gingerbread.",image:"/images/cities/torun-card.webp",scores:{climate:6,cost:8,wifi:8,nightlife:4,nature:6,safety:8,food:6,community:2,english:5,visa:6,culture:8,cleanliness:8,airquality:7},costPerMonth:800,lat:53.0138,lng:18.5984,timezone:1},
+  {id:"torun",climateType:"Humid Continental",name:"Torun",country:"Poland",flag:"🇵🇱",tagline:"A red-brick Gothic city on the Vistula, birthplace of Copernicus, its untouched medieval old town scented with famous gingerbread.",image:"/images/cities/torun-card.webp",scores:{climate:6,cost:8,wifi:8,nightlife:4,nature:6,safety:8,food:6,community:2,english:5,visa:6,culture:8,cleanliness:8,airquality:7},costPerMonth:1130,lat:53.0138,lng:18.5984,timezone:1},
   {id:"paraty",climateType:"Tropical Rainforest",name:"Paraty",country:"Brazil",flag:"🇧🇷",tagline:"A colonial port frozen in time on Brazil's Costa Verde, cobbled streets that flood with the tide, framed by rainforest peaks and islands.",image:"/images/cities/paraty-card.webp",scores:{climate:6,cost:6,wifi:5,nightlife:4,nature:8,safety:6,food:6,community:2,english:4,visa:7,culture:8,cleanliness:6,airquality:8},costPerMonth:1000,lat:-23.2178,lng:-44.7131,timezone:-3},
   {id:"safranbolu",climateType:"Humid Continental",name:"Safranbolu",country:"Turkey",flag:"🇹🇷",tagline:"A perfectly preserved Ottoman town of timber-framed mansions tumbling down wooded hillsides around an old caravan bazaar.",image:"/images/cities/safranbolu-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:3,nature:7,safety:7,food:7,community:2,english:4,visa:6,culture:8,cleanliness:7,airquality:7},costPerMonth:700,lat:41.2508,lng:32.6939,timezone:3},
   {id:"sidibousaid",climateType:"Mediterranean",name:"Sidi Bou Said",country:"Tunisia",flag:"🇹🇳",tagline:"A blue-and-white artists' village perched on a cliff above the Mediterranean near Carthage, all cobbled lanes and studded doors.",image:"/images/cities/sidibousaid-card.webp",scores:{climate:8,cost:8,wifi:5,nightlife:3,nature:7,safety:6,food:7,community:2,english:4,visa:6,culture:8,cleanliness:7,airquality:8},costPerMonth:800,lat:36.8704,lng:10.3472,timezone:1},
   {id:"chamonix",climateType:"Alpine",name:"Chamonix",country:"France",flag:"🇫🇷",tagline:"A legendary alpine base at the foot of Mont Blanc, where cable cars climb to glaciers and needle peaks above a lively mountain town.",image:"/images/cities/chamonix-card.webp",scores:{climate:5,cost:4,wifi:7,nightlife:4,nature:10,safety:8,food:7,community:3,english:6,visa:6,culture:5,cleanliness:8,airquality:9},costPerMonth:1800,lat:45.9237,lng:6.8694,timezone:1},
   {id:"nikko",climateType:"Humid Continental",name:"Nikko",country:"Japan",flag:"🇯🇵",tagline:"A sacred mountain town of gilded shrines wrapped in cedar forest, waterfalls, and hot springs in the highlands north of Tokyo.",image:"/images/cities/nikko-card.webp",scores:{climate:6,cost:5,wifi:7,nightlife:3,nature:9,safety:9,food:6,community:2,english:4,visa:5,culture:9,cleanliness:9,airquality:9},costPerMonth:1300,lat:36.7198,lng:139.6982,timezone:9},
-  {id:"regensburg",climateType:"Oceanic",name:"Regensburg",country:"Germany",flag:"🇩🇪",tagline:"One of Germany's best-preserved medieval cities, a UNESCO tangle of towers and lanes along the Danube crossed by an old stone bridge.",image:"/images/cities/regensburg-card.webp",scores:{climate:6,cost:6,wifi:8,nightlife:5,nature:6,safety:8,food:7,community:2,english:5,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1300,lat:49.0134,lng:12.1016,timezone:1},
+  {id:"regensburg",climateType:"Oceanic",name:"Regensburg",country:"Germany",flag:"🇩🇪",tagline:"One of Germany's best-preserved medieval cities, a UNESCO tangle of towers and lanes along the Danube crossed by an old stone bridge.",image:"/images/cities/regensburg-card.webp",scores:{climate:6,cost:6,wifi:8,nightlife:5,nature:6,safety:8,food:7,community:2,english:5,visa:6,culture:8,cleanliness:8,airquality:8},costPerMonth:1780,lat:49.0134,lng:12.1016,timezone:1},
   {id:"olinda",climateType:"Tropical Savanna",name:"Olinda",country:"Brazil",flag:"🇧🇷",tagline:"A colour-drenched hilltop colonial town above Recife, all baroque churches, artists' studios, and one of Brazil's most joyous carnivals.",image:"/images/cities/olinda-card.webp",scores:{climate:7,cost:6,wifi:5,nightlife:5,nature:6,safety:6,food:6,community:2,english:4,visa:7,culture:8,cleanliness:6,airquality:8},costPerMonth:800,lat:-8.0089,lng:-34.8553,timezone:-3},
   {id:"ayutthaya",climateType:"Tropical Savanna",name:"Ayutthaya",country:"Thailand",flag:"🇹🇭",tagline:"The ruined former capital of Siam, a river island scattered with crumbling temple spires and a Buddha head cradled in tree roots.",image:"/images/cities/ayutthaya-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:3,nature:6,safety:7,food:7,community:2,english:5,visa:7,culture:9,cleanliness:6,airquality:6},costPerMonth:700,lat:14.3532,lng:100.5689,timezone:7},
   {id:"khiva",climateType:"Desert",name:"Khiva",country:"Uzbekistan",flag:"🇺🇿",tagline:"A living Silk Road museum, its walled inner city of turquoise minarets and madrasas rising from the Central Asian desert.",image:"/images/cities/khiva-card.webp",scores:{climate:5,cost:8,wifi:5,nightlife:2,nature:5,safety:8,food:6,community:2,english:4,visa:7,culture:9,cleanliness:6,airquality:6},costPerMonth:600,lat:41.3783,lng:60.3639,timezone:5},
@@ -11261,11 +11261,11 @@ const CITIES = [
   {id:"bagan",climateType:"Tropical Savanna",name:"Bagan",country:"Myanmar",flag:"🇲🇲",tagline:"A vast plain scattered with thousands of ancient Buddhist temples and pagodas, best seen at dawn from a hot-air balloon.",image:"/images/cities/bagan-card.webp",scores:{climate:6,cost:8,wifi:4,nightlife:2,nature:7,safety:6,food:6,community:2,english:4,visa:5,culture:10,cleanliness:5,airquality:6},costPerMonth:600,lat:21.1717,lng:94.8585,timezone:6.5},
   {id:"izamal",climateType:"Tropical Savanna",name:"Izamal",country:"Mexico",flag:"🇲🇽",tagline:"The 'Yellow City' of the Yucatan, an entire colonial town painted golden ochre around a vast Franciscan convent and Maya pyramids.",image:"/images/cities/izamal-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:3,nature:6,safety:7,food:7,community:2,english:4,visa:7,culture:9,cleanliness:7,airquality:7},costPerMonth:800,lat:20.9300,lng:-88.9500,timezone:-6},
   {id:"potosi",climateType:"Alpine",name:"Potosi",country:"Bolivia",flag:"🇧🇴",tagline:"One of the world's highest cities at over 4,000m, a UNESCO colonial silver town beneath the Cerro Rico mountain that funded an empire.",image:"/images/cities/potosi-card.webp",scores:{climate:4,cost:8,wifi:5,nightlife:2,nature:6,safety:6,food:5,community:2,english:3,visa:6,culture:9,cleanliness:5,airquality:7},costPerMonth:600,lat:-19.5836,lng:-65.7531,timezone:-4},
-  {id:"budva",climateType:"Mediterranean",name:"Budva",country:"Montenegro",flag:"🇲🇪",tagline:"A walled medieval old town on a rocky Adriatic peninsula, ringed by beaches and the buzz of the Montenegrin riviera.",image:"/images/cities/budva-card.webp",scores:{climate:8,cost:7,wifi:6,nightlife:6,nature:8,safety:8,food:7,community:3,english:6,visa:6,culture:8,cleanliness:6,airquality:8},costPerMonth:1000,lat:42.2864,lng:18.8400,timezone:1},
-  {id:"shkoder",climateType:"Mediterranean",name:"Shkoder",country:"Albania",flag:"🇦🇱",tagline:"A historic northern Albanian city below Rozafa Castle, on the shore of the Balkans' largest lake and the gateway to the Accursed Mountains.",image:"/images/cities/shkoder-card.webp",scores:{climate:7,cost:8,wifi:6,nightlife:3,nature:8,safety:8,food:6,community:2,english:5,visa:7,culture:8,cleanliness:6,airquality:7},costPerMonth:700,lat:42.0693,lng:19.5126,timezone:1},
-  {id:"assisi",climateType:"Mediterranean",name:"Assisi",country:"Italy",flag:"🇮🇹",tagline:"A serene pink-stone hill town in Umbria, the birthplace of Saint Francis, crowned by his great frescoed basilica above olive groves.",image:"/images/cities/assisi-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:2,nature:7,safety:9,food:8,community:2,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1100,lat:43.0707,lng:12.6196,timezone:1},  {id:"delft",climateType:"Oceanic",name:"Delft",country:"Netherlands",flag:"🇳🇱",tagline:"A canal-laced Dutch city of gabled houses and blue-and-white pottery, the home of Vermeer and the burial church of the House of Orange.",image:"/images/cities/delft-card.webp",scores:{climate:6,cost:5,wifi:8,nightlife:4,nature:5,safety:9,food:6,community:3,english:9,visa:6,culture:8,cleanliness:9,airquality:8},costPerMonth:1500,lat:52.0116,lng:4.3571,timezone:1},
+  {id:"budva",climateType:"Mediterranean",name:"Budva",country:"Montenegro",flag:"🇲🇪",tagline:"A walled medieval old town on a rocky Adriatic peninsula, ringed by beaches and the buzz of the Montenegrin riviera.",image:"/images/cities/budva-card.webp",scores:{climate:8,cost:7,wifi:6,nightlife:6,nature:8,safety:8,food:7,community:3,english:6,visa:6,culture:8,cleanliness:6,airquality:8},costPerMonth:1440,lat:42.2864,lng:18.8400,timezone:1},
+  {id:"shkoder",climateType:"Mediterranean",name:"Shkoder",country:"Albania",flag:"🇦🇱",tagline:"A historic northern Albanian city below Rozafa Castle, on the shore of the Balkans' largest lake and the gateway to the Accursed Mountains.",image:"/images/cities/shkoder-card.webp",scores:{climate:7,cost:8,wifi:6,nightlife:3,nature:8,safety:8,food:6,community:2,english:5,visa:7,culture:8,cleanliness:6,airquality:7},costPerMonth:870,lat:42.0693,lng:19.5126,timezone:1},
+  {id:"assisi",climateType:"Mediterranean",name:"Assisi",country:"Italy",flag:"🇮🇹",tagline:"A serene pink-stone hill town in Umbria, the birthplace of Saint Francis, crowned by his great frescoed basilica above olive groves.",image:"/images/cities/assisi-card.webp",scores:{climate:7,cost:6,wifi:7,nightlife:2,nature:7,safety:9,food:8,community:2,english:5,visa:6,culture:9,cleanliness:8,airquality:8},costPerMonth:1100,lat:43.0707,lng:12.6196,timezone:1},  {id:"delft",climateType:"Oceanic",name:"Delft",country:"Netherlands",flag:"🇳🇱",tagline:"A canal-laced Dutch city of gabled houses and blue-and-white pottery, the home of Vermeer and the burial church of the House of Orange.",image:"/images/cities/delft-card.webp",scores:{climate:6,cost:5,wifi:8,nightlife:4,nature:5,safety:9,food:6,community:3,english:9,visa:6,culture:8,cleanliness:9,airquality:8},costPerMonth:2720,lat:52.0116,lng:4.3571,timezone:1},
   {id:"sibenik",climateType:"Mediterranean",name:"Sibenik",country:"Croatia",flag:"🇭🇷",tagline:"A Dalmatian coastal city of steep stone alleys, the UNESCO Cathedral of St James, and two hilltop fortresses over the Adriatic.",image:"/images/cities/sibenik-card.webp",scores:{climate:8,cost:6,wifi:7,nightlife:4,nature:8,safety:8,food:7,community:3,english:6,visa:6,culture:8,cleanliness:7,airquality:8},costPerMonth:1000,lat:43.7350,lng:15.8952,timezone:1},
-  {id:"bitola",climateType:"Humid Subtropical",name:"Bitola",country:"North Macedonia",flag:"🇲🇰",tagline:"A graceful southern Macedonian city of neoclassical consul-era facades and a long cafe promenade, beside the ruins of ancient Heraclea.",image:"/images/cities/bitola-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:3,nature:6,safety:8,food:6,community:2,english:4,visa:7,culture:8,cleanliness:6,airquality:6},costPerMonth:600,lat:41.0314,lng:21.3347,timezone:1},
+  {id:"bitola",climateType:"Humid Subtropical",name:"Bitola",country:"North Macedonia",flag:"🇲🇰",tagline:"A graceful southern Macedonian city of neoclassical consul-era facades and a long cafe promenade, beside the ruins of ancient Heraclea.",image:"/images/cities/bitola-card.webp",scores:{climate:6,cost:8,wifi:6,nightlife:3,nature:6,safety:8,food:6,community:2,english:4,visa:7,culture:8,cleanliness:6,airquality:6},costPerMonth:660,lat:41.0314,lng:21.3347,timezone:1},
   {id:"taormina",climateType:"Mediterranean",name:"Taormina",country:"Italy",flag:"🇮🇹",tagline:"A cliff-top Sicilian resort town of a Greek theatre framing Mount Etna and the sea, chic lanes, and bougainvillea terraces.",image:"/images/cities/taormina-card.webp",scores:{climate:8,cost:5,wifi:6,nightlife:4,nature:8,safety:8,food:8,community:2,english:6,visa:6,culture:9,cleanliness:7,airquality:8},costPerMonth:1300,lat:37.8526,lng:15.2876,timezone:1},
   {id:"bhaktapur",climateType:"Subtropical Highland",name:"Bhaktapur",country:"Nepal",flag:"🇳🇵",tagline:"A living medieval Newari city in the Kathmandu Valley, its Durbar Square, pagoda temples, and pottery lanes preserved in brick and carved wood.",image:"/images/cities/bhaktapur-card.webp",scores:{climate:7,cost:8,wifi:5,nightlife:2,nature:6,safety:7,food:6,community:2,english:5,visa:6,culture:10,cleanliness:5,airquality:5},costPerMonth:700,lat:27.6710,lng:85.4298,timezone:5.75},
   {id:"fenghuang",climateType:"Humid Subtropical",name:"Fenghuang",country:"China",flag:"🇨🇳",tagline:"An ancient river town of wooden stilt houses hanging over the Tuojiang, a gem of bridges, drum towers, and Miao culture in Hunan.",image:"/images/cities/fenghuang-card.webp",scores:{climate:7,cost:8,wifi:6,nightlife:4,nature:7,safety:8,food:6,community:2,english:3,visa:4,culture:9,cleanliness:6,airquality:6},costPerMonth:700,lat:27.9482,lng:109.5991,timezone:8},
