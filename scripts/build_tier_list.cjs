@@ -75,7 +75,7 @@ const PERSONA = [
 const master = {
   type: 'master', slug: 'tier-list', file: 'tier-list.html', hubLabel: 'All cities',
   h1: 'The Digital Nomad Cities Tier List',
-  metaTitle: 'Digital Nomad Cities Tier List: All Cities Ranked S to F',
+  metaTitle: 'Nomad Cities Tier List: All Ranked S to F',
   metaDesc: 'The definitive digital nomad cities tier list. Every rated city bucketed from S tier to F by Nomad Score, cost, WiFi, safety, climate and more.',
   kicker: 'The Nomad HQ City Index',
   pool: CITIES, score: nomadScore, mode: 'nomad',
@@ -83,7 +83,7 @@ const master = {
 const regionVariants = Object.keys(REGION_NAMES).map((rk) => ({
   type: 'region', slug: 'tier-list/' + REGION_SLUG[rk], file: path.join('tier-list', REGION_SLUG[rk] + '.html'), hubLabel: REGION_NAMES[rk].replace(/^the /, ''),
   h1: `Digital Nomad Cities in ${REGION_NAMES[rk]}: Tier List`,
-  metaTitle: `Digital Nomad Cities in ${REGION_NAMES[rk].replace(/^the /, '')} Tier List: S to F`,
+  metaTitle: `Nomad Cities in ${REGION_NAMES[rk]} Tier List: S to F`,
   metaDesc: `A tier list of the best digital nomad cities in ${REGION_NAMES[rk]}, every rated city bucketed from S to F by Nomad Score.`,
   kicker: 'Regional tier list',
   pool: CITIES.filter((c) => REGION[c.id] === rk), score: nomadScore, mode: 'nomad', region: rk,
@@ -91,7 +91,7 @@ const regionVariants = Object.keys(REGION_NAMES).map((rk) => ({
 const catVariants = CATS.map((cat) => ({
   type: 'category', slug: 'tier-list/' + cat.slug, file: path.join('tier-list', cat.slug + '.html'), hubLabel: cat.label,
   h1: `Digital Nomad Cities by ${cat.label}: Tier List`,
-  metaTitle: `${cat.label} Tier List: Digital Nomad Cities Ranked S to F`,
+  metaTitle: `${cat.label} Tier List: Nomad Cities S to F`,
   metaDesc: `A tier list of digital nomad cities by ${cat.lc}, every rated city bucketed from S to F on its ${cat.label} score.`,
   kicker: 'Category tier list',
   pool: CITIES, score: (c) => (typeof c.scores[cat.key] === 'number' ? c.scores[cat.key] : 0), mode: 'category', cat,
@@ -99,7 +99,7 @@ const catVariants = CATS.map((cat) => ({
 const countryVariants = Object.keys(COUNTRIES).map((cn) => ({
   type: 'country', slug: 'tier-list/' + COUNTRIES[cn], file: path.join('tier-list', COUNTRIES[cn] + '.html'), hubLabel: cn,
   h1: `Digital Nomad Cities in ${cn}: Tier List`,
-  metaTitle: `Digital Nomad Cities in ${cn} Tier List: S to F`,
+  metaTitle: `Nomad Cities in ${cn} Tier List: S to F`,
   metaDesc: `A tier list of the digital nomad cities we rate in ${cn}, bucketed from S to F by Nomad Score.`,
   kicker: 'Country tier list',
   pool: CITIES.filter((c) => c.country === cn), score: nomadScore, mode: 'nomad', country: cn, countrySlug: COUNTRIES[cn],
