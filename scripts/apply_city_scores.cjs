@@ -28,7 +28,9 @@ for (const f of files) {
   if (!city || !city.scores) { orphan++; continue; }
   const p = path.join(dir, f);
   let s = fs.readFileSync(p, 'utf8');
-  if (s.includes('<!-- city-scores -->')) { skip++; continue; }
+  // Guard on the closing marker: the opening one carries a trailing description, so matching
+  // '<!-- city-scores -->' never fired and a re-run would have duplicated the block everywhere.
+  if (s.includes('<!-- /city-scores -->')) { skip++; continue; }
   if (!s.includes(ANCHOR)) { noanchor++; console.error('no anchor: ' + slug); continue; }
 
   const sc = city.scores, nom = nomadScore(sc);

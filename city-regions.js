@@ -215,7 +215,17 @@ const CITY_REGIONS = {
         tiradentes: 'latam', uyuni: 'latam', villadeleyva: 'latam',
 
         // Oceania
-        wanaka: 'oceania'
+        wanaka: 'oceania',
+
+        // Batch 1 of the 650 -> 1000 expansion (2026-08-05)
+        neworleans: 'northamerica', washingtondc: 'northamerica', philadelphia: 'northamerica',
+        atlanta: 'northamerica', honolulu: 'northamerica', lasvegas: 'northamerica',
+        phoenix: 'northamerica', minneapolis: 'northamerica', asheville: 'northamerica',
+        quebeccity: 'northamerica', halifax: 'northamerica',
+        chengdu: 'asia', xian: 'asia', hangzhou: 'asia', guangzhou: 'asia', kunming: 'asia',
+        kolkata: 'asia', chennai: 'asia', hyderabad: 'asia', ahmedabad: 'asia',
+        tashkent: 'asia', sendai: 'asia',
+        curitiba: 'latam', belohorizonte: 'latam'
 
       };
 

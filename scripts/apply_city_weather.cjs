@@ -112,7 +112,9 @@ for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.html') && x !== '
   if (!CLIMATE[id]) { fs.writeFileSync(fp, html); skipped++; continue; }
   const section = buildSection(id);
   if (!section) { fs.writeFileSync(fp, html); skipped++; continue; }
-  const open = html.indexOf('<section class="categories-section">');
+  // Tolerate extra attributes on the anchor (apply_city_toc adds id="scores"); an exact-string
+  // match silently stripped the weather section from every page once the id landed.
+  const open = html.search(/<section class="categories-section"[^>]*>/);
   if (open < 0) { fs.writeFileSync(fp, html); skipped++; continue; }
   const close = html.indexOf('</section>', open) + '</section>'.length;
   html = html.slice(0, close) + '\n\n    ' + section + html.slice(close);
