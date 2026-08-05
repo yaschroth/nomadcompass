@@ -803,12 +803,12 @@ textarea::placeholder {
 .hub-hero h1 { font-family: var(--font-display); font-size: var(--text-h1); line-height: 1.08; margin: 0 0 1rem; color: #fff; text-shadow: 0 2px 24px rgba(0,0,0,.35); text-wrap: balance; }
 .hub-hero .sub { font-size: var(--text-lg); line-height: 1.6; color: rgba(255,255,255,.9); max-width: 60ch; margin: 0; text-shadow: 0 1px 12px rgba(0,0,0,.3); }
 
-/* Seamless ornamental floral pattern behind otherwise plain section bands (homepage sand bands
-   plus the sand bands on city pages), so they read as a soft decorative surface rather than flat
-   fills. The pattern lives on a masked ::before layer that fades out toward all four edges, so it
-   vignettes into the neighbouring plain areas instead of stopping abruptly. mix-blend-mode
-   multiply lets it sit on any light background (white, sand, the watercolor) without a hard tile
-   edge. Content stays fully opaque above it. */
+/* Seamless ornamental floral pattern behind otherwise plain section bands, so they read as a soft
+   decorative surface rather than flat fills. HOMEPAGE ONLY: the pattern is scoped to `body.home`
+   (set on index.html) so every other page keeps clean, plain bands. The pattern lives on a masked
+   ::before layer that fades out toward all four edges, so it vignettes into the neighbouring plain
+   areas instead of stopping abruptly. mix-blend-mode multiply lets it sit on any light background
+   (white, sand, the watercolor) without a hard tile edge. Content stays fully opaque above it. */
 .section-texture,
 .section,
 .affiliate-section,
@@ -831,25 +831,27 @@ textarea::placeholder {
   position: relative;
   isolation: isolate;
 }
-.section-texture::before,
-.section::before,
-.affiliate-section::before,
-.blog-rec-section::before,
-.tool-content::before,
-.cmp-pickerbar::before,
-.facts-section::before,
-.categories-section::before,
-.weather-section::before,
-.neighborhoods-section::before,
-.city-guide::before,
-.voting-section::before,
-.related-section::before,
-.vs-section::before,
-.results-section::before,
-.hub-wrap::before,
-.blog-main::before,
-.about-main::before,
-.about-section::before {
+body.home :is(
+  .section-texture,
+  .section,
+  .affiliate-section,
+  .blog-rec-section,
+  .tool-content,
+  .cmp-pickerbar,
+  .facts-section,
+  .categories-section,
+  .weather-section,
+  .neighborhoods-section,
+  .city-guide,
+  .voting-section,
+  .related-section,
+  .vs-section,
+  .results-section,
+  .hub-wrap,
+  .blog-main,
+  .about-main,
+  .about-section
+)::before {
   content: "";
   position: absolute;
   inset: 0;
