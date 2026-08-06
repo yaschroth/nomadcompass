@@ -59,7 +59,9 @@ function stayCta(city, country) {
           </div>`;
 }
 // (h2 anchor ... grid-open)(rest of grid-open tag)>(inner)(grid-close + container-close + section-close)
-const sectionRe = (anchor) => new RegExp('(<h2>' + anchor + '[^<]*</h2>[\\s\\S]*?<div class="affiliate-grid")[^>]*>[\\s\\S]*?(</div>\\s*</div>\\s*</section>)');
+// Attribute-tolerant on the <h2>: apply_city_toc.cjs stamps an id on every heading,
+// so a literal '<h2>' match silently finds nothing on TOC-processed pages.
+const sectionRe = (anchor) => new RegExp('(<h2[^>]*>' + anchor + '[^<]*</h2>[\\s\\S]*?<div class="affiliate-grid")[^>]*>[\\s\\S]*?(</div>\\s*</div>\\s*</section>)');
 
 let ok = 0, fail = 0;
 const flags = [];
