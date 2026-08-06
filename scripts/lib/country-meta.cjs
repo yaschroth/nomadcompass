@@ -35,5 +35,8 @@ const META = {
   Thailand: ['A/B/C', 0], Tunisia: ['C/E', 0], Turkey: ['C/F', 0], UAE: ['G', 0],
   UK: ['G', 0], Uganda: ['G', 0], 'United Kingdom': ['G', 0], 'United States': ['A/B', 0],
   Uruguay: ['C/F/L', 0], Vietnam: ['A/C/F', 0],
+  Algeria: ['C/F', 0], Bangladesh: ['C/D/G', 0], Cuba: ['A/B/C/L', 0], 'Ivory Coast': ['C/E', 0],
+  Jamaica: ['A/B', 0], Maldives: ['D/G', 0], Mongolia: ['C/E', 0], Myanmar: ['C/D/G', 0],
+  Pakistan: ['C/D', 0],
 };
 module.exports = META;

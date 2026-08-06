@@ -225,7 +225,19 @@ const CITY_REGIONS = {
         chengdu: 'asia', xian: 'asia', hangzhou: 'asia', guangzhou: 'asia', kunming: 'asia',
         kolkata: 'asia', chennai: 'asia', hyderabad: 'asia', ahmedabad: 'asia',
         tashkent: 'asia', sendai: 'asia',
-        curitiba: 'latam', belohorizonte: 'latam'
+        curitiba: 'latam', belohorizonte: 'latam',
+
+        // Batch 2 of the 650 -> 1000 expansion (2026-08-06)
+        beijing: 'asia', shanghai: 'asia', xiamen: 'asia', guilin: 'asia',
+        newdelhi: 'asia', dhaka: 'asia', islamabad: 'asia', male: 'asia',
+        yangon: 'asia', ulaanbaatar: 'asia', kohtao: 'asia', haiphong: 'asia',
+        vungtau: 'asia', bohol: 'asia',
+        dunedin: 'oceania',
+        isfahan: 'middleeast',
+        abidjan: 'africa', agadir: 'africa', algiers: 'africa',
+        monterrey: 'northamerica', houston: 'northamerica', tampa: 'northamerica',
+        dallas: 'northamerica', saltlakecity: 'northamerica', montegobay: 'northamerica',
+        manaus: 'latam', portoalegre: 'latam'
 
       };
 

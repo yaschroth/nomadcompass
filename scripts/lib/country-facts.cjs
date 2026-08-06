@@ -128,6 +128,13 @@ const FACTS = {
   Uruguay: { cur: 'Peso ($U, UYU)', lang: 'Spanish', volt: '230V / 50Hz', water: 'Safe to drink', tip: '10% often added', ride: 'Uber, Cabify', emg: '911' },
   Uzbekistan: { cur: "Som (so'm, UZS)", lang: 'Uzbek, Russian', volt: '220V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'Yandex Go, MyTaxi', emg: '112' },
   Vietnam: { cur: 'Dong (₫, VND)', lang: 'Vietnamese', volt: '220V / 50Hz', water: 'Bottled or filtered', tip: 'Not expected; appreciated', ride: 'Grab, Be', emg: '113 / 115' },
+  Algeria: { cur: 'Dinar (DA, DZD)', lang: 'Arabic, French', volt: '230V / 50Hz', water: 'Bottled recommended', tip: 'Round up or 10%', ride: 'Yassir, local taxis', emg: '17 / 14' },
+  Bangladesh: { cur: 'Taka (৳, BDT)', lang: 'Bengali', volt: '220V / 50Hz', water: 'Bottled or boiled', tip: 'Round up or 5-10%', ride: 'Uber, Pathao', emg: '999' },
+  'Ivory Coast': { cur: 'CFA franc (CFA, XOF)', lang: 'French', volt: '230V / 50Hz', water: 'Bottled recommended', tip: 'Round up or 10%', ride: 'Yango, Heetch', emg: '170 / 185' },
+  Jamaica: { cur: 'Dollar (J$, JMD)', lang: 'English, Patois', volt: '110V / 50Hz', water: 'Safe in Kingston; bottled elsewhere', tip: '10-15%, often added', ride: 'Uber, InDrive, route taxis', emg: '119 / 110' },
+  Maldives: { cur: 'Rufiyaa (Rf, MVR)', lang: 'Dhivehi, English', volt: '230V / 50Hz', water: 'Bottled or desalinated', tip: '10%, often added as service charge', ride: 'Local taxis, ferries', emg: '119 / 102' },
+  Mongolia: { cur: 'Tugrik (₮, MNT)', lang: 'Mongolian', volt: '220V / 50Hz', water: 'Bottled or boiled', tip: 'Round up or 10%', ride: 'UBCab, local taxis', emg: '103 / 105' },
+  Pakistan: { cur: 'Rupee (Rs, PKR)', lang: 'Urdu, English', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'Careem, InDrive, Bykea', emg: '15 / 1122' },
 };
 
 module.exports = FACTS;
