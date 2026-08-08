@@ -81,7 +81,10 @@ for (const c of CITIES) {
   const before = html;
 
   // 1) similar-cities section (update-in-place else insert before city-seo-explore)
-  const secRe = /    <!-- similar-cities -->[\s\S]*?<\/section>\n/;
+  // CRLF-tolerant. The pages are CRLF, so requiring "</section>\n" never matched the
+  // existing block ("</section>\r\n"), the update-in-place silently failed, and the
+  // script appended a SECOND copy to every page that already had one.
+  const secRe = /[ \t]*<!-- similar-cities -->[\s\S]*?<\/section>\r?\n/;
   const block = sectionHtml(c);
   if (secRe.test(html)) { html = html.replace(secRe, block); refreshed++; }
   else if (/<section class="container city-seo-explore"/.test(html)) {
