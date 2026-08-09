@@ -41,6 +41,7 @@ const CLAIMS = [
   ['venues', 'Named coworking, cafe and restaurant recommendations', 'cities/*.html'],
   ['country-facts', 'Currency, voltage, tap water, tipping, ride-hailing, emergency numbers', 'scripts/lib/country-facts.cjs'],
   ['country-meta', 'Plug types per country', 'scripts/lib/country-meta.cjs'],
+  ['city-elevations', 'Elevation reference used by the sanity gate', 'data/city-elevations.json'],
 ];
 
 const TIERS = ['primary', 'triangulated', 'editorial'];

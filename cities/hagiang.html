@@ -475,7 +475,7 @@
             <article class="neighborhood-card" data-index="2" data-lat="23.2775" data-lng="105.3625">
               <div class="neighborhood-card-header">
                 <div class="neighborhood-card-title">
-                  <h3 class="neighborhood-name">Dong Van Old Town</h3>
+                  <h3 class="neighborhood-name">Dong Van Old Town (Ha Giang loop, 64km north)</h3>
                   <span class="neighborhood-price">1</span>
                 </div>
                 <span class="neighborhood-vibe">Atmospheric high-plateau market town</span>
@@ -524,6 +524,8 @@
         </div>
       </div>
     </section>
+
+
 
 
 
@@ -1472,6 +1474,41 @@
     });
   }, true);
 })();</script>
-<!-- /aff-track -->
+<!-- /aff-track -->  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl || typeof L === 'undefined') return;
+      const neighborhoods = [{"name":"Ha Giang City Center","tagline":"The functional launch pad along the Lo river","lat":22.8233,"lng":104.9836},{"name":"Quan Ba and the Heaven Gate","tagline":"First mountain pass north of the city","lat":23.0725,"lng":104.9861},{"name":"Dong Van Old Town (Ha Giang loop, 64km north)","tagline":"Historic loop overnight on the karst plateau","lat":23.2775,"lng":105.3625},{"name":"Meo Vac","tagline":"Quiet base beneath the Ma Pi Leng Pass","lat":23.1583,"lng":105.4139}];
+      if (neighborhoods.length === 0) return;
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+      const map = L.map('neighborhoodsMap', { scrollWheelZoom: false }).setView([avgLat, avgLng], 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }).addTo(map);
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32]
+      });
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) }).addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+      function highlightNeighborhood(index) {
+        markers.forEach((mk, i) => mk.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.classList.toggle('active', i === index));
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.addEventListener('click', () => highlightNeighborhood(i)));
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
 </body>
 </html>

@@ -157,8 +157,8 @@ const CITIES = [
       cleanliness: 4,
       airquality: 6},
     costPerMonth: 1340,
-    lat: -8.4095,
-    lng: 115.1889,
+    lat: -8.6478,
+    lng: 115.1385,
     timezone: 8
   },
   {
@@ -2506,8 +2506,8 @@ const CITIES = [
       cleanliness: 7,
       airquality: 9},
     costPerMonth: 2400,
-    lat: 28.2916,
-    lng: -16.6291,
+    lat: 28.4682,
+    lng: -16.2546,
     timezone: 0
   },
   {
@@ -2587,8 +2587,8 @@ const CITIES = [
       cleanliness: 6,
       airquality: 8},
     costPerMonth: 2200,
-    lat: 35.2401,
-    lng: 24.8093,
+    lat: 35.3387,
+    lng: 25.1442,
     timezone: 2
   },
   {
