@@ -168,6 +168,64 @@ if (fs.existsSync(nbDir)) {
   }
 }
 
+// 8. National attributes must not disagree between cities of the same country.
+//    Visa policy is set nationally, so a spread inside one country is a scoring error,
+//    not a real difference. Genuine special zones exist and are allowlisted by name.
+const VISA_ZONE_EXCEPTION = {
+  phuquoc: 'Phu Quoc has a real visa exemption separate from the rest of Vietnam',
+};
+// KNOWN DEBT, not a pass. These five are genuinely inconsistent and the defect is real.
+// A replacement score derived from assets/visa-data.js was modelled on 2026-08-10 and
+// covers all 710 cities, making 67 countries consistent by construction. It is not applied
+// yet because the passport weighting behind it is a product decision, and applying it moves
+// the Nomad Score, every ranking and every share card. Remove entries here as they are fixed.
+const VISA_SPREAD_DEBT = {
+  Vietnam: 'spans 5-8; national 90-day e-visa, no per-city basis',
+  Netherlands: 'spans 4-7; Schengen, identical for every city',
+  'United States': 'spans 3-6; ESTA and B-1/B-2 are federal',
+  Montenegro: 'spans 6-9; single national policy',
+  Myanmar: 'spans 3-6; single national policy',
+};
+{
+  const byCountry = {};
+  for (const c of CITIES) (byCountry[c.country] = byCountry[c.country] || []).push(c);
+  for (const [country, list] of Object.entries(byCountry)) {
+    if (list.length < 3) continue;
+    const considered = list.filter(c => !VISA_ZONE_EXCEPTION[c.id]);
+    if (considered.length < 3) continue;
+    const v = considered.map(c => c.scores.visa);
+    const spread = Math.max(...v) - Math.min(...v);
+    const msg = `${country}: visa score spans ${Math.min(...v)}-${Math.max(...v)} across ${considered.length} cities, but visa policy is national`;
+    if (spread >= 3 && !VISA_SPREAD_DEBT[country]) err('national-attrs', msg);
+    else if (spread >= 2) warn('national-attrs', msg + (VISA_SPREAD_DEBT[country] ? ' [KNOWN DEBT: ' + VISA_SPREAD_DEBT[country] + ']' : ''));
+  }
+}
+
+// 9. Time zone should match the rest of the country, unless the country really spans zones.
+const MULTI_ZONE = new Set(['United States', 'Canada', 'Brazil', 'Australia', 'Russia', 'Indonesia',
+  'Mexico', 'Chile', 'Ecuador', 'Portugal', 'Spain', 'France', 'Kazakhstan', 'Micronesia', 'Kiribati']);
+{
+  const byCountry = {};
+  for (const c of CITIES) (byCountry[c.country] = byCountry[c.country] || []).push(c);
+  for (const [country, list] of Object.entries(byCountry)) {
+    if (list.length < 3 || MULTI_ZONE.has(country)) continue;
+    const counts = {};
+    for (const c of list) { const z = tz[c.id]; if (z) counts[z] = (counts[z] || 0) + 1; }
+    // Compare the CONTINENT prefix, not the full zone. Argentina legitimately uses several
+    // America/Argentina/* zones; a Georgian town on Europe/Moscow is the actual error.
+    const prefixCounts = {};
+    for (const c of list) { const z = tz[c.id]; if (z) { const p = z.split('/')[0]; prefixCounts[p] = (prefixCounts[p] || 0) + 1; } }
+    const modal = Object.entries(prefixCounts).sort((a, b) => b[1] - a[1])[0];
+    if (!modal) continue;
+    for (const c of list) {
+      const z = tz[c.id];
+      if (z && z.split('/')[0] !== modal[0]) {
+        err('tz', `${c.id} (${c.name}, ${country}) is on ${z} while the rest of ${country} is on ${modal[0]}/*`);
+      }
+    }
+  }
+}
+
 // --- report
 const group = rows => {
   const by = {};

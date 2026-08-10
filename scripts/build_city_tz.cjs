@@ -15,7 +15,10 @@ new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8'
 // cities with no lat/lng in the dataset
 const FALLBACK = { kochi: 'Asia/Kolkata', pune: 'Asia/Kolkata', jaipur: 'Asia/Kolkata', weligama: 'Asia/Colombo', adelaide: 'Australia/Adelaide' };
 // tz-lookup returns the neighbouring country's zone for these border towns; force the correct one
-const OVERRIDE = { sarande: 'Europe/Tirane', eilat: 'Asia/Jerusalem' };
+// Border cases where tz-lookup's boundary data puts the point in the neighbouring country.
+// Stepantsminda (Kazbegi) sits about 10km from the Russian border and resolved to
+// Europe/Moscow; it is in Georgia, which is Asia/Tbilisi. Same offset today, wrong country.
+const OVERRIDE = { sarande: 'Europe/Tirane', eilat: 'Asia/Jerusalem', stepantsminda: 'Asia/Tbilisi' };
 
 const out = {};
 let missing = [];
