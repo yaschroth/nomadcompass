@@ -3,6 +3,7 @@
    Sticky top navigation with mobile hamburger
    ============================================ */
 
+
 /* --------------------------------------------
    SCROLLBAR LAYOUT SHIFT PREVENTION
    Always reserve space for scrollbar
@@ -12,6 +13,139 @@ html {
   scrollbar-gutter: stable;
 }
 
+
+
+
+
+/* --------------------------------------------
+   MAIN NAVIGATION BAR
+   Fixed to top, full width
+   -------------------------------------------- */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  /* Only transition visual properties, not layout */
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+  transition-property: background-color, border-color, box-shadow;
+}
+
+/* Add solid background when page is scrolled */
+.nav.scrolled {
+  background-color: var(--color-cream);
+  border-bottom-color: var(--color-sand-dark);
+  box-shadow: var(--shadow-md);
+}
+
+/* Container for nav content */
+.nav-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+/* --------------------------------------------
+   LOGO
+   Elegant branding with icon and styled text
+   -------------------------------------------- */
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  text-decoration: none !important;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform var(--transition-fast);
+}
+
+.nav-logo * {
+  text-decoration: none !important;
+}
+
+.nav-logo:hover {
+  transform: scale(1.02);
+}
+
+/* Logo icon */
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 2px 4px rgba(192, 57, 43, 0.2));
+  transition: transform var(--transition-fast);
+}
+
+.nav-logo:hover .nav-logo-icon {
+  transform: rotate(-8deg) scale(1.05);
+}
+
+/* Logo text wrapper */
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+/* "Nomad" part - black and bold */
+.nav-logo-nomad {
+  font-weight: 700;
+  color: var(--color-ink, #1a1a1a);
+  letter-spacing: -0.5px;
+  transition: color var(--transition-fast);
+}
+
+/* "Compass" part - red accent */
+.nav-logo-accent {
+  color: #c0392b;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.nav-logo:hover .nav-logo-nomad {
+  color: #333;
+}
+
+.nav-logo:hover .nav-logo-accent {
+  color: #e74c3c;
+}
+
+/* --------------------------------------------
+   DESKTOP NAVIGATION LINKS
+   Centered links
+   -------------------------------------------- */
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: var(--space-8);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Show on desktop, centered in the header */
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 0;
+  }
 }
 
 /* Individual nav link */

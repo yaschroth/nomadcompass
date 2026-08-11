@@ -90,14 +90,31 @@ let shells = 0, shellPages = 0;
   }
 })(ROOT);
 
-// 4. the auth-state CSS, which only ever applied under html.auth-logged-in
+/* 4. the auth-state CSS, which only ever applied under html.auth-logged-in.
+ *
+ * Match one rule at a time and check each selector. The first version of this deleted
+ * everything after the section comment with `(?:[^{}]*\{[^}]*\}\s*)+`, which does not stop
+ * at the end of the auth rules: it ate .nav, .nav-container, .nav-logo and .nav-logo-icon
+ * as well, so the header logo rendered at its natural size on every page. Never sweep CSS
+ * by "comment plus everything following"; sweep by selector.
+ */
 const navCss = path.join(ROOT, 'styles/nav.css');
-let cssBefore = fs.readFileSync(navCss, 'utf8');
-let css = cssBefore.replace(/\/\*[^*]*AUTH STATE FLASH PREVENTION[\s\S]*?\*\/\s*(?:[^{}]*\{[^}]*\}\s*)+/g, '');
-css = css.replace(/\/\*[^*]*TEMPORARILY HIDE LOGIN\/SIGNUP BUTTONS[\s\S]*?\*\/\s*/g, '');
+const cssBefore = fs.readFileSync(navCss, 'utf8');
+// .nav-login also matches /^\.nav\b/, so the keep-list must name the layout classes in full
+const KEEP = /\.nav-logo|\.nav-container|\.nav-links|\.nav-toggle|\.nav-mobile-link|\.nav-drop|\.nav-search|\.nav\.scrolled|^\s*\.nav\s*[,{]/;
+let cssRules = 0;
+let css = cssBefore.replace(/^[ \t]*(?:html\.auth-logged-in[^{]*|\.nav-(?:login|signup)[^{]*)\{[^}]*\}\r?\n?/gm, (m) => {
+  if (KEEP.test(m.split('{')[0])) return m;
+  cssRules++;
+  return '';
+});
+css = css.replace(/\/\*[^*]*TEMPORARILY HIDE LOGIN\/SIGNUP BUTTONS[\s\S]*?\*\/\r?\n?/g, '');
+css = css.replace(/\/\* -+\s*\r?\n\s*AUTH STATE FLASH PREVENTION[\s\S]*?-+ \*\/\r?\n?/g, '');
+css = css.replace(/\/\* (?:If user is logged in|For logged-in users)[\s\S]*?\*\/\r?\n?/g, '');
+css = css.replace(/\n{3,}/g, '\n\n');
 if (css !== cssBefore && !DRY) fs.writeFileSync(navCss, css);
 
 console.log(`${DRY ? 'DRY RUN' : 'APPLIED'}`);
 console.log(`  Stadtseiten bereinigt: ${cityPages} (Init-Block: ${initBlocks}, isLoggedIn: ${loginFns})`);
 console.log(`  leere Nav-Huellen entfernt: ${shells} auf ${shellPages} Seiten`);
-console.log(`  nav.css Auth-Block entfernt: ${css !== cssBefore ? 'ja' : 'nein'}`);
+console.log(`  nav.css Auth-Regeln entfernt: ${cssRules}`);
