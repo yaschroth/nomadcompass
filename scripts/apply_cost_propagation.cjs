@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Propagates the reconciled cities-data.js `costPerMonth` into the pages that BAKE a per-city cost
  * (they don't live-load cities-data.js). Surgical number-only replacements keyed by city id, so all

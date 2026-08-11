@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds the legal/company links + affiliate disclosure to the footer of every
  * existing page (before the copyright line) and bumps the year 2025 -> 2026.

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds an early <link rel="preload" as="image"> for each city page's LCP hero image, so the
  * browser starts fetching it before the stylesheets/scripts are parsed (faster LCP). The hero

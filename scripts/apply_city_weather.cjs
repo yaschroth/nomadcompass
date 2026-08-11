@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects a static, crawlable "Weather in <City>" section (12-month temperature + rainfall
  * chart, best-time-to-visit summary) into every city page that has climate data in

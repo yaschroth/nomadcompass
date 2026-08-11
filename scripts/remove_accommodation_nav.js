@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Remove Accommodation link from navigation in all files
  */

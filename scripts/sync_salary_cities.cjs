@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * salary.html has no generator (it was hand-built), but it BAKES the same compact city array as
  * geoarbitrage: [id, name, country, iso, region, nomadScore, costPerMonth]. This rewrites that one

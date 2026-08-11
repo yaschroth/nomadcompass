@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Sitewide city-page sweep: inserts a "money & visa" callout into each city page's
  * explore block, just before the "Browse all city guides" row. The callout gives a

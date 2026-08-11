@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Replaces the broken "Time Difference" quick-stat in every city hero with an always-populated
  * "Timezone" stat (UTC offset from cities-data). The old stat showed "N/A" on UTC+0 cities (the

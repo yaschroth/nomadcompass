@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Builds the tier-list system, all data-driven from cities-data.js:
  *   - master  /tier-list            (all cities by Nomad Score)
@@ -124,7 +125,7 @@ const NAV = `  <nav class="nav" id="mainNav">
         <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
-      <div class="nav-actions"><a href="/login" class="nav-login">Login</a><a href="/signup" class="btn btn-primary nav-signup">Sign Up</a></div>
+      
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
     </div>
     <div class="nav-mobile" id="navMobile">
@@ -137,7 +138,7 @@ const NAV = `  <nav class="nav" id="mainNav">
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
-      <div class="nav-mobile-actions"><a href="/login" class="btn btn-secondary">Login</a><a href="/signup" class="btn btn-primary">Sign Up</a></div>
+      
     </div>
   </nav>`;
 const FOOTER = `<footer class="footer"><div class="container">

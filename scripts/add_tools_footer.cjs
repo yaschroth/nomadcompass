@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Sitewide footer sweep: adds the three trip tools (Time Zone Finder, Route Planner,
  * Tier List Maker) to the "Explore" column of every page's footer. Root-relative hrefs so

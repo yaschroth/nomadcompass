@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Internal-linking sweep: adds a "Best of" line to each city page's explore block linking to the
  * relevant /best country page (if one exists) and the /best region page. Helps those hub pages

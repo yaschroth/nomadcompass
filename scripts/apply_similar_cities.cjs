@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a static, crawlable "Cities with a Similar Vibe" section to every city page.
  * Similarity is by SCORE PROFILE (Euclidean distance across the 13 category scores),

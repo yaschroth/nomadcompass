@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Restores the informative score-description paragraph on newer city pages whose
  * intro was reduced to a bare tagline (a wrong earlier sweep). For any city page

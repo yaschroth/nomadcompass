@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Hides the Rentals section by removing its nav item (desktop + mobile) from
  * every page. Reversible: `git revert` the commit, or re-add via the nav order

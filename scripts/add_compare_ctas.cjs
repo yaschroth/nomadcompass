@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a "Compare {City} vs {Nearest}" CTA under the Nomad Score on every city page,
  * linking into /compare?a=<slug>&b=<nearest>. Nearest = closest city by great-circle

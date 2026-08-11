@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Generates cities.html  ->  served at /cities  (a crawlable, on-brand directory
  * of every city guide). Googlebot discovers the city pages by following the real
@@ -242,10 +243,7 @@ const html = `<!DOCTYPE html>
         <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
-      <div class="nav-actions">
-        <a href="/login" class="nav-login">Login</a>
-        <a href="/signup" class="btn btn-primary nav-signup">Sign Up</a>
-      </div>
+      
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span class="nav-toggle-line"></span>
         <span class="nav-toggle-line"></span>
@@ -262,10 +260,7 @@ const html = `<!DOCTYPE html>
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
-      <div class="nav-mobile-actions">
-        <a href="/login" class="btn btn-secondary">Login</a>
-        <a href="/signup" class="btn btn-primary">Sign Up</a>
-      </div>
+      
     </div>
   </nav>
 
@@ -362,7 +357,7 @@ ${slidersMarkup}
               </div>
               <div class="timezone-filter-locked" id="timezoneFilterLocked">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <a href="/signup">Sign up</a> to filter by time difference
+                 to filter by time difference
               </div>
             </div>
           </div>

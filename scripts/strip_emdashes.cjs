@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Site style rule: NO em-dashes anywhere. Replace every em-dash (— / &mdash; /
  * &#8212;) with ", " (comma) and collapse the surrounding horizontal whitespace.

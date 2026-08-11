@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * PILOT: appends researched long-form guide content to 3 city pages, AFTER the
  * original neighborhoods section (which has the interactive map + unique cards,

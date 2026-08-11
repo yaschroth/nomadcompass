@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Create individual accommodation detail pages and update city page links
  */
@@ -381,10 +382,7 @@ function createAccommodationPage(acc, cityName, cityId) {
         <li><a href="../rentals.html" class="nav-link">Rentals</a></li>
         <li><a href="../blog.html" class="nav-link">Blog</a></li>
       </ul>
-      <div class="nav-actions">
-        <a href="../login.html" class="nav-login">Login</a>
-        <a href="../signup.html" class="btn btn-primary nav-signup">Sign Up</a>
-      </div>
+      
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
         <span class="nav-toggle-line"></span>
         <span class="nav-toggle-line"></span>
@@ -399,10 +397,7 @@ function createAccommodationPage(acc, cityName, cityId) {
         <li><a href="../rentals.html" class="nav-mobile-link">Rentals</a></li>
         <li><a href="../blog.html" class="nav-mobile-link">Blog</a></li>
       </ul>
-      <div class="nav-mobile-actions">
-        <a href="../login.html" class="btn btn-secondary">Login</a>
-        <a href="../signup.html" class="btn btn-primary">Sign Up</a>
-      </div>
+      
     </div>
   </nav>
 

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a subtle transport affiliate aside at the end of each city page's "Getting Around" section:
  * airport transfer (GetTransfer) + car rental (Auto Europe, QEEQ), Travelpayouts links,

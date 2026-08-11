@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects the long-form guide sections (Cost of Living, Where to Work, Getting Around, Visas, Best
  * Time to Visit, Pros and Cons, Who It's For) that the base generator no longer emits, bringing new

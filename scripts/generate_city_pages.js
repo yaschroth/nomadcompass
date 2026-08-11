@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Generate city detail pages for all cities in cities-data.js
  * Based on the Hanoi template structure
@@ -27042,8 +27043,6 @@ function generateCityPage(city) {
         <li><a href="../index.html#cities" class="nav-mobile-link active">Cities</a></li><li><a href="../index.html#map" class="nav-mobile-link">Map</a></li>
         <li><a href="../rentals.html" class="nav-mobile-link">Rentals</a></li>
       </ul>
-      <div class="nav-mobile-actions">
-      </div>
     </div>
   </nav>
 

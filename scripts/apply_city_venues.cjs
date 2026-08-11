@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Replaces the fake venue cards on city pages with real, geo-verified venues.
  * Reads venues-<slug>.verified.json from argv[2] and edits cities/<slug>.html:

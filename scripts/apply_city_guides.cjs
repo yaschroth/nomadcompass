@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Inserts researched deep-dive guides into city pages. Reads guide-<slug>.html
  * files from the dir passed as argv[2], and for each appends the content as a

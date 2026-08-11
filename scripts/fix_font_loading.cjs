@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Fix the sitewide font-loading bug: pages reference 'DM Serif Display' /
  * Source Sans 3 (via base.css tokens) but never actually load the Google Fonts

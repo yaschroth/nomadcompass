@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 // Upgrade the city-page meta description (+ twitter:description) for CTR: add the distinctive Nomad
 // Score and a question framing that matches search intent, while staying accurate (every page shows
 // USD costs, so "cost of living in USD" is true even for cities without the real Numbeo table).

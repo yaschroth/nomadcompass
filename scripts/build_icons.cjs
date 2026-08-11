@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Build-time only (node_modules/lucide-static is gitignored, never shipped).
  * Generates the two committed icon assets from authentic Lucide line icons (ISC):

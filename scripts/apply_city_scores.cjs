@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 // apply_city_scores.cjs - expose each city's Nomad Score + 13 category scores in STATIC HTML so
 // AI crawlers (which don't run JS) and search engines can read them. The visible tiles/radar are
 // JS-rendered into an empty grid, so without this the scores are invisible to non-JS agents.

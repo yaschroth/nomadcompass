@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 // apply_city_toc.cjs — add the sticky in-page section nav (jump links) + scrollspy to every city page.
 // Idempotent (skips pages that already have id="cityToc"). RUN LAST, after all content-applying
 // scripts, because it needs every target section/heading present to anchor the jump links.

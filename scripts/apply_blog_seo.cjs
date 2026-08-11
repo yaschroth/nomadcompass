@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Applies the technical-SEO layer of BLOG_STYLE_GUIDE.md to every blog article:
  *

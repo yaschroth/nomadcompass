@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Generates about/yannick-schroth.html  ->  served at /about/yannick-schroth.
  * The author bio page (ProfilePage schema) that the author entity `url` points

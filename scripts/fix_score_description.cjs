@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * One-off/idempotent cleanup: replaces the auto-generated score blurb on new-city base pages
  * ("<City> excels in X. Areas for consideration include Y. Overall, it offers a ... environment

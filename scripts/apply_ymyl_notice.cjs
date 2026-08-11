@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a visible YMYL disclaimer wherever we publish visa, immigration or tax guidance.
  *

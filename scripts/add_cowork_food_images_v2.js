@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Add images to Coworking Spaces and Where to Eat & Drink sections (v2)
  */

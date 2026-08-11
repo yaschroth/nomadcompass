@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Brings expansion (new-template) city pages up to the enhanced hero design so
  * they match the original 410. The base generator emits a hero WITHOUT the stat

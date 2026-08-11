@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a substantial static content block (intro + "how it works" + FAQ + contextual internal
  * links) and FAQPage JSON-LD to each interactive tool page, so the pages are not thin content and

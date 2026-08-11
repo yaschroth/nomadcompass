@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a "/legal-notice" link to the footer of every existing page, handling both
  * footer variants: the footer-grid "Legal" column (li list) and the older

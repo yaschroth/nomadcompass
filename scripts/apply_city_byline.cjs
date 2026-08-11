@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds an author byline + "Updated" date to every city-page hero (E-E-A-T +
  * freshness + a sitewide link to the author entity). Inserted after the tagline,

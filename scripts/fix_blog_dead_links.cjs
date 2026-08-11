@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Repairs the dead links in the blog template. 301 links pointed at href="#".
  *

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Fix city pages:
  * 1. Remove duplicate "Where to Stay in [city]" section

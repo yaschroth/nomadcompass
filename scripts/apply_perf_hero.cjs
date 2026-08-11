@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Front-end performance sweep for city pages. Four changes, each measured rather than
  * assumed (see the audit that prompted them):

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Add timezone display to all city pages
  * - Adds a quick-stat for time difference

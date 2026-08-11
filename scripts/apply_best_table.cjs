@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds to each /best/* ranking page (a) a visible "Last updated" freshness stamp and (b) a compact
  * "at a glance" summary table (# | City | Country | key metric | Nomad Score) above the detailed

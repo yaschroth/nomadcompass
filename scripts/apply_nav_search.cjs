@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects a slim search box into the desktop nav of every page. It is an autocomplete
  * that resolves a typed city straight to /cities/<slug> (the city page). A datalist gives

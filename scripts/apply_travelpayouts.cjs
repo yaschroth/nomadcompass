@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Sitewide head sweep: injects the Travelpayouts partner script into the <head> of every page,
  * right before </head>, CONSENT-GATED so the external tp-em.com script only loads after the visitor

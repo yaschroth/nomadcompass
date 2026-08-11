@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Replaces flag EMOJI (which fall back to letters like "BE"/"PY" on Windows) with
  * self-hosted SVG flags in assets/flags/<iso>.svg. Touches:

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Home differentiation: the homepage no longer hosts the full city explorer
  * (that now lives on /cities). This:

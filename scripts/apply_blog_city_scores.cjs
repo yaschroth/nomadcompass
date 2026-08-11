@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * For blog posts that cover MULTIPLE cities (comparisons, "best of" lists), show scores +
  * key stats for EVERY city, not just one. Two idempotent edits per mapped post:

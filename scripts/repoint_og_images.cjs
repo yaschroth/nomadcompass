@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Repoints each city page's social image (og:image + twitter:image) from the raw hero
  * webp to the branded 1200x630 JPG share card, and adds og:image dimensions/type/alt.

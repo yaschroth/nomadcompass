@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects a "Nomad facts at a glance" panel into every city page: currency, language,
  * plug type + mains voltage, tap water, tipping norm, ride-hailing app, emergency number

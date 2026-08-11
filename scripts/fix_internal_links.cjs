@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Improves internal linking across city pages. Idempotent. Two passes:
  *  1) ORPHAN FIX: any city never linked from another city's static "Nearby:" strip

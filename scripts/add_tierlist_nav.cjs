@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a "Tier List" item (-> /tier-list) to the main + mobile nav, right after
  * "Rankings", across every live page. Derives the href prefix from the adjacent Rankings

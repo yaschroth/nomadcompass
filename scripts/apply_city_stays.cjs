@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds real, named accommodation cards to the "Where to Stay" section, ABOVE the
  * existing Booking.com search CTA (which is kept as a catch-all). Reads

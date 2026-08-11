@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a "Head-to-head" internal-links line to each city page that appears in a /vs/ comparison,
  * inside the existing .city-explore block (reuses .city-explore-links styling). Improves discovery

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects the interactive "Best Neighborhoods" section (card list + Leaflet map)
  * onto city pages that lack it, matching the enhanced 410 exactly. Reads

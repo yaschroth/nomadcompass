@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Sitewide nav sweep: restructures the header into a compact set of top-level links plus a
  * "Tools" dropdown that groups the interactive tools. Rewrites the desktop <ul class="nav-links">

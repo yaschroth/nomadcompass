@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Extracts the establishment list (coworking, eat, stays) from a city page into
  * a JSON the venue-image agent consumes. Usage: node scripts/extract_venues.cjs <slug> [<slug>...]

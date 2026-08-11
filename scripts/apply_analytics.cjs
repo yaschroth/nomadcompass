@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Installs Google Analytics 4 (gtag.js) with GDPR Consent Mode v2 on every page,
  * idempotently, plus a slim cookie-consent banner.

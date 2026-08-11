@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Generates the core trust/legal pages: about, contact, privacy, terms,
  * disclosure. Shared nav + footer + head (fonts loaded correctly). Regenerable.
@@ -9,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+
 const UPDATED = 'July 1, 2026';
 const CONTACT_EMAIL = 'info@topblog.agency';
 
@@ -27,10 +29,7 @@ const NAV = `  <nav class="nav" id="mainNav">
         <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
-      <div class="nav-actions">
-        <a href="/login" class="nav-login">Login</a>
-        <a href="/signup" class="btn btn-primary nav-signup">Sign Up</a>
-      </div>
+      
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span>
       </button>
@@ -45,10 +44,7 @@ const NAV = `  <nav class="nav" id="mainNav">
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
-      <div class="nav-mobile-actions">
-        <a href="/login" class="btn btn-secondary">Login</a>
-        <a href="/signup" class="btn btn-primary">Sign Up</a>
-      </div>
+      
     </div>
   </nav>
 
@@ -270,13 +266,12 @@ ${updatedLine}`),
     <h2>Information we collect</h2>
     <ul>
       <li><strong>Analytics data.</strong> We use privacy-respecting analytics and Google Search Console to understand aggregate traffic (pages viewed, approximate location, device, referrer). This is not used to personally identify you.</li>
-      <li><strong>Account data.</strong> If you create an account or vote on cities, we store the email and preferences you provide via our authentication provider.</li>
       <li><strong>Messages.</strong> If you email us, we keep your message and address to reply.</li>
     </ul>
     <h2>Cookies</h2>
     <p>We use essential cookies for basic functionality and may use analytics and affiliate cookies (e.g., to attribute a referral to a booking partner). You can block cookies in your browser; core content will still work.</p>
     <h2>Third parties</h2>
-    <p>We rely on trusted providers to run the site: hosting and CDN (Vercel), authentication and database (Supabase), and analytics (Google). When you open an interactive map, the map tiles and mapping library load from OpenStreetMap, Carto, and a public code CDN, which receive your IP address in order to serve them. Affiliate links are handled by their respective networks (for example, Booking.com). Each provider processes data under its own privacy policy. We host our own fonts, so no data is sent to any font CDN. We do not sell your personal information.</p>
+    <p>We rely on trusted providers to run the site: hosting and CDN (Vercel) and analytics (Google). When you open an interactive map, the map tiles and mapping library load from OpenStreetMap, Carto, and a public code CDN, which receive your IP address in order to serve them. Affiliate links are handled by their respective networks (for example, Booking.com). Each provider processes data under its own privacy policy. We host our own fonts, so no data is sent to any font CDN. We do not sell your personal information.</p>
     <h2>Your rights</h2>
     <p>Depending on where you live (e.g., the EU/UK under GDPR, or California under CCPA), you may have the right to access, correct, or delete your data, or opt out of certain processing. To exercise these rights, <a href="/contact">contact us</a>.</p>
     <h2>Data retention &amp; children</h2>

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Turns the "eSIM: Airalo / Holafly" value in the Nomad Facts panel into an affiliate link on
  * "Airalo" (Travelpayouts). Idempotent (skips pages already linking airalo.tpx.li), CRLF-safe.

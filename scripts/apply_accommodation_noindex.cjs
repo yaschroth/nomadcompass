@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * ACCOMMODATION_PAGE_STYLE_GUIDE.md Strategy B (chosen): thin listing pages are
  * noindex,follow and removed from the sitemap. They stay crawlable/browsable for

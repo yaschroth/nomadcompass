@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Sitewide structured-data sweep. Injects, idempotently, before </head>:
  *   1. the brand graph (Organization + WebSite) on EVERY page   -> marker <!-- brand-graph -->

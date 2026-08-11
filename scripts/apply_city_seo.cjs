@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Applies CITY_PAGE_STYLE_GUIDE.md to cities/*.html:
  *   - title (drop em-dash, keyword form, <=60), og:type=website, og:url, Twitter card, robots

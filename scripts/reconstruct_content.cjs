@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * One-off: rebuilds content-<key>.json from an already-built best/<slug>.html for the
  * legacy ranking pages whose source prose was never kept in the repo. Makes the whole

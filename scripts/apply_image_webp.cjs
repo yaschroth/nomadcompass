@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Image perf: (1) serve Unsplash images as WebP (append &fm=webp&q=80 — ~30%
  * smaller); Pexels already negotiates WebP via auto=compress. (2) Add width/height

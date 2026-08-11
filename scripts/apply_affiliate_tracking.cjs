@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Sitewide: injects a small GA4 click tracker for affiliate links before </body>. On any click of a
  * Travelpayouts link (*.tpx.li / tp.media / tp-em.com) it fires a GA4 'affiliate_click' event with

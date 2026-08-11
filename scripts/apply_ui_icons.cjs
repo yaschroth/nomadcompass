@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Replaces the emoji UI icons on every city page with the self-hosted line-icon system
  * (see scripts/lib/icons.cjs + /assets/icons.svg). Touches, per cities/*.html:

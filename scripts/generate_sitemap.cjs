@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Regenerates sitemap.xml from the current live pages with a fresh lastmod.
  * Includes: home, /cities, /wheel, /blog + posts, all city pages, and the core

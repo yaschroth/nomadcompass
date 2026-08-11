@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Builds the /best hub (root best.html) listing every "Best cities for X" ranking page
  * found as best-<key>.json in env DIR. Card per page: title, teaser, #1 city.
@@ -102,7 +103,7 @@ const html = `<!DOCTYPE html>
         <li><a href="/compare" class="nav-link">Compare</a></li>
         <li><a href="/blog" class="nav-link">Blog</a></li>
       </ul>
-      <div class="nav-actions"><a href="/login" class="nav-login">Login</a><a href="/signup" class="btn btn-primary nav-signup">Sign Up</a></div>
+      
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
     </div>
     <div class="nav-mobile" id="navMobile">
@@ -115,7 +116,7 @@ const html = `<!DOCTYPE html>
         <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
         <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
       </ul>
-      <div class="nav-mobile-actions"><a href="/login" class="btn btn-secondary">Login</a><a href="/signup" class="btn btn-primary">Sign Up</a></div>
+      
     </div>
   </nav>
   <main>

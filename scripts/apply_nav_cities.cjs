@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds the "Cities" nav item (after "Wheel") to every page's header so the tab
  * is consistent site-wide. It was only on index/cities/about, so it appeared to

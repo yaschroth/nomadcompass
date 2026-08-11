@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * One-time migration: compacts the old "Explore More Nomad Cities Like X" heading
  * + chip list + CTA paragraph on existing city pages into a single subtle "Nearby"

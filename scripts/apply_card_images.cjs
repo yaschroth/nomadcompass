@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Syncs the /cities hub (cities.html) preview-tile images to the same
  * vision-verified photo used on each city's hero. For every city that has a

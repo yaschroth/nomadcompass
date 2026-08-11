@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Applies CORE_PAGES_STYLE_GUIDE.md to the homepage, hubs, tools, and utility pages:
  *   - homepage: Organization + WebSite JSON-LD (sitewide, declared once), robots

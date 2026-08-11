@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * De-templatizes the repetitive scaffolding on city pages so each city's unique
  * content stands out (helps indexing). For every cities/*.html:

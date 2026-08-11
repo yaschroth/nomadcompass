@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Fix and regenerate accommodation sections with city-specific dummy data
  */

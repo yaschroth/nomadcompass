@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a small "Things to do in <city>" block to each city page that is featured on an activity
  * page, linking back to those activities (and the activities hub). Builds the reverse map by

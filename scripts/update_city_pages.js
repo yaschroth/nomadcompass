@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Update all city pages with weather display
  * Adds weather stat to quick-stats section and includes weather script

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds verified, freely-licensed real establishment photos to venue cards.
  * Reads venue-images-<slug>.json (from the image agent) in argv[2]. For each found

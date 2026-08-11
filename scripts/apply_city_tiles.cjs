@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Replaces each city page's CATEGORY_DESCRIPTIONS object with researched 50-100
  * word descriptions. Reads cats-<slug>.json (13 keys) from argv[2].

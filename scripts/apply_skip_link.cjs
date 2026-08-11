@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Accessibility: injects a "Skip to main content" link as the first focusable element on every
  * page (keyboard users can bypass the nav), and gives the <main> a focus target. Idempotent +

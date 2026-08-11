@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Applies vision-verified hero images to city pages. Reads img-<slug>.json
  * (from a verification agent) in argv[2]. For each ok:true entry it:

@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Add Accommodation and Cafe sections to all city pages
  * Sections styled similar to the eat-card format

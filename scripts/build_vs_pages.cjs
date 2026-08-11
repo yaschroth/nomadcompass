@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Generates static, indexable city-vs-city comparison pages at /vs/<a>-vs-<b>, targeting the
  * high-demand "X vs Y for digital nomads" query pattern. Content is fully data-driven from

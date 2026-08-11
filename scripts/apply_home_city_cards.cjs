@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Renders the homepage "Top-rated cities right now" grid as STATIC, crawlable city cards
  * (the grid was JS-only, so the homepage passed 0 static link equity to city pages). Injects

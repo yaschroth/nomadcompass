@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a "Rankings" link (-> /best) to the footer Explore column on every live page,
  * right after the "All Cities" link. Idempotent (skips pages whose footer already links

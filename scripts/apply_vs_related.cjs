@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Cross-links the /vs comparison pages: adds a "More head-to-heads" section to each vs page linking
  * to related comparisons that share one of its two cities. The vs pages are indexed but only had ~2

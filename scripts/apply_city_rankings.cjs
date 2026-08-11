@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Owns the styled "Explore" card on each city page (the block between the
  * city-seo-explore <section> and its FAQ <h2 id="faq">). Rebuilds it, idempotently,

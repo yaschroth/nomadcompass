@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Builds /cost-of-living-index — a linkable "Digital Nomad Cost of Living Index" asset: a sortable,
  * filterable table of every city we have real Numbeo data for, ranked by a transparent monthly

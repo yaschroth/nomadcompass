@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * The Nomad Score (raw average of 13 category scores) compresses to ~5.0-7.6 —
  * almost no variance. This sweep rewrites calculateNomadScore in every city page

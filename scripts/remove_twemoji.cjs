@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Removes the twemoji CDN dependency sitewide. Every emoji it used to upgrade is now a
  * self-hosted line-icon (assets/icons.svg) or flag SVG, so twemoji is dead weight + a third-party

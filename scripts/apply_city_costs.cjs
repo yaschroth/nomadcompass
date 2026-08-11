@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects a real, sourced cost-of-living table into each city page, right after the guide's
  * "Cost of Living in <City>" heading. Data: data/numbeo-costs.json (raw Numbeo components in

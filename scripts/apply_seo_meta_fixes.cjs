@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Targeted SEO meta fixes from the sitewide audit (touches only <title> and <meta> lines):
  *   1. Rewrite 28 titles that exceeded ~65 chars (SERP truncation) + fix title-case bugs

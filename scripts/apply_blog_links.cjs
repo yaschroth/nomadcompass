@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects a curated "Explore the data behind this guide" block into each blog post,
  * linking to the relevant city guides, rankings and tier lists. Closes the blog ->

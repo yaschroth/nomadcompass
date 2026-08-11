@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a "Map" item (-> /map) to the main + mobile nav, right after "Cities", across
  * every live page. Derives the href prefix from the adjacent Cities link so it matches

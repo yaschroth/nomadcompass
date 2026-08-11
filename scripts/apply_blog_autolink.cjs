@@ -1,3 +1,4 @@
+require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Inline-links the first mention of each city name in a blog post's article prose to that city's
  * guide, so posts have real contextual internal links instead of only the end-of-post block. Only
