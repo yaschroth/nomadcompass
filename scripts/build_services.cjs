@@ -49,7 +49,7 @@ const EVIDENCE = DB._evidence;
 const CAT_ICON = {
   doctor: 'stethoscope', dentist: 'smile', vet: 'paw-print', therapy: 'brain',
   physio: 'bone', optician: 'glasses', hair: 'scissors', legal: 'scale',
-  mechanic: 'wrench', fitness: 'dumbbell',
+  tax: 'calculator', realestate: 'key', mechanic: 'wrench', fitness: 'dumbbell',
 };
 
 // Strongest evidence first, so the best-sourced row in a city leads.
@@ -245,6 +245,8 @@ const html = `<!DOCTYPE html>
     .sv-c-optician .sv-ico { color:#0f766e; background:#e4f2f0; }
     .sv-c-hair .sv-ico { color:#be185d; background:#fbe8f0; }
     .sv-c-legal .sv-ico { color:#475569; background:#eef1f5; }
+    .sv-c-tax .sv-ico { color:#b45309; background:#f8efe2; }
+    .sv-c-realestate .sv-ico { color:#7e22ce; background:#f4ecfd; }
     .sv-c-mechanic .sv-ico { color:#c2410c; background:#fbe9dd; }
     .sv-c-fitness .sv-ico { color:#15803d; background:#e6f3e9; }
     /* The languages are the entire point of this page, so they get the strongest block on the

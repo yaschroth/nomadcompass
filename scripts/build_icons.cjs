@@ -31,6 +31,7 @@ const NAMES = [
   // /services provider categories (legal reuses 'scale' above). Lucide has no tooth, so
   // dentistry uses 'smile', which is the conventional stand-in.
   'stethoscope', 'smile', 'paw-print', 'brain', 'bone', 'glasses', 'scissors', 'wrench', 'dumbbell',
+  'calculator', 'key',
 ];
 
 // Pull the inner markup (paths/circles/...) out of a Lucide file, dropping the

@@ -38,26 +38,35 @@ function titleOf(html) {
   return m[1].replace(/\s+/g, ' ').replace(/&amp;/g, '&').replace(/&#0?39;|&apos;/g, "'").replace(/&quot;/g, '"').trim().slice(0, 120);
 }
 
+// Three attempts with backoff. A single transient failure used to mark a live link DEAD, and
+// acting on that would delete perfectly good rows: on 2026-08-12 one run reported six healthy
+// URLs as dead and all six answered on the retry. Only a repeated failure counts.
 async function check(url) {
   const out = { url, status: 0, finalUrl: '', title: '', verdict: '', note: '' };
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 20000);
-    const res = await fetch(url, { redirect: 'follow', signal: ctrl.signal, headers: { 'User-Agent': UA, 'Accept': 'text/html,*/*', 'Accept-Language': 'en' } });
-    clearTimeout(timer);
-    out.status = res.status;
-    out.finalUrl = res.url || url;
-    const ct = res.headers.get('content-type') || '';
-    if (res.ok && /html/i.test(ct)) {
-      const body = await res.text();
-      out.title = titleOf(body);
+  const ATTEMPTS = 3;
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 20000);
+      const res = await fetch(url, { redirect: 'follow', signal: ctrl.signal, headers: { 'User-Agent': UA, 'Accept': 'text/html,*/*', 'Accept-Language': 'en' } });
+      clearTimeout(timer);
+      out.status = res.status;
+      out.finalUrl = res.url || url;
+      const ct = res.headers.get('content-type') || '';
+      if (res.ok && /html/i.test(ct)) {
+        const body = await res.text();
+        out.title = titleOf(body);
+      }
+      if (res.status === 403 || res.status === 429) out.verdict = 'BLOCKED';
+      else if (res.ok) out.verdict = 'OK';
+      else out.verdict = 'DEAD';
+      out.note = attempt > 1 ? `answered on attempt ${attempt}` : '';
+      break;
+    } catch (e) {
+      out.verdict = 'DEAD';
+      out.note = ((e && e.message) ? e.message.slice(0, 60) : 'request failed') + ` (${attempt}/${ATTEMPTS} attempts)`;
+      if (attempt < ATTEMPTS) await sleep(1500 * attempt);
     }
-    if (res.status === 403 || res.status === 429) out.verdict = 'BLOCKED';
-    else if (res.ok) out.verdict = 'OK';
-    else out.verdict = 'DEAD';
-  } catch (e) {
-    out.verdict = 'DEAD';
-    out.note = (e && e.message) ? e.message.slice(0, 80) : 'request failed';
   }
   // A redirect that lands on a different host is worth a human look: parked domains and
   // aggregator takeovers both look like a 200.
