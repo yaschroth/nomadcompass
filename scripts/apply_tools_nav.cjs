@@ -17,6 +17,7 @@ const TOOLS = [
   ['/best-weather', 'Best Weather by Month'],
   ['/visa', 'Visa Finder'],
   ['/nomad-visas', 'Nomad Visa Finder'],
+  ['/services', 'Services by Language'],
   ['/geoarbitrage', 'Geoarbitrage Calculator'],
   ['/salary', 'Salary Calculator'],
   ['/cost-of-living-index', 'Cost of Living Index'],

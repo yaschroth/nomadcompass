@@ -22,6 +22,7 @@ add('/route', '0.6', 'monthly');
 add('/best-weather', '0.7', 'monthly');
 add('/visa', '0.7', 'monthly');
 add('/nomad-visas', '0.7', 'monthly');
+add('/services', '0.7', 'monthly');
 add('/geoarbitrage', '0.7', 'monthly');
 add('/salary', '0.7', 'monthly');
 add('/cost-of-living-index', '0.8', 'weekly');

@@ -39,6 +39,7 @@ const CLAIMS = [
   ['guide-prose', 'Seven long-form guide sections per city, including price figures', 'data/guide-content.json'],
   ['neighborhoods', 'Neighbourhood descriptions, price levels and map coordinates', 'data/neighborhoods'],
   ['venues', 'Named coworking, cafe and restaurant recommendations', 'cities/*.html'],
+  ['service-languages', 'Local service providers and the languages they work in', 'data/service-languages.json'],
   ['country-facts', 'Currency, voltage, tap water, tipping, ride-hailing, emergency numbers', 'scripts/lib/country-facts.cjs'],
   ['country-meta', 'Plug types per country', 'scripts/lib/country-meta.cjs'],
   ['city-elevations', 'Elevation reference used by the sanity gate', 'data/city-elevations.json'],
