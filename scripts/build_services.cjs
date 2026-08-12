@@ -27,7 +27,11 @@ new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8'
 const CITY = {};
 m.exports.forEach((c) => { if (c && c.id) CITY[c.id] = { name: c.name, country: c.country, iso: iso(c.flag) }; });
 
-const { icon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
+// inlineIcon, not icon(): the shared sprite /assets/icons.svg is served with
+// Cache-Control max-age=604800, so every visitor who loaded the site in the past week still
+// has the 39-symbol version cached, and a <use href="...#stethoscope"> into it renders
+// nothing. Inlining costs about 12KB across the page and cannot go stale.
+const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
 // City photos are reused from the city pages, so their credits come from the same manifest.
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
@@ -86,7 +90,7 @@ function card(p) {
   const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
   return `<article class="sv-card sv-c-${p.category}" data-city="${p.city}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
-          <span class="sv-ico">${icon(CAT_ICON[p.category])}</span>
+          <span class="sv-ico">${inlineIcon(CAT_ICON[p.category])}</span>
           <div>
             <h3 class="sv-name">${title}</h3>
             <p class="sv-meta">${meta}</p>
