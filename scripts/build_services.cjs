@@ -181,15 +181,19 @@ const html = `<!DOCTYPE html>
        it. They need near-opaque text on their own scrim to stay readable on any image. */
     .hub-hero a.hero-credit { position:absolute; right:.7rem; bottom:.5rem; z-index:2; font-size:.66rem; color:rgba(255,255,255,.92); text-decoration:none; background:rgba(15,23,42,.45); border-radius:6px; padding:.15rem .45rem; }
     .hub-hero a.hero-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
-    .sv-wrap { max-width:1080px; margin:0 auto; padding:2rem var(--space-4,1rem) 3.5rem; }
+    /* --color-cream is pure #fff, so white cards on the page background did not read as
+       separate objects. The listing sits on sand (the token is literally documented as
+       "Cards, sections") and the cards stay white, which is what gives them an edge. */
+    .sv-canvas { background:var(--color-sand,#f6f1e7); border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-wrap { max-width:1080px; margin:0 auto; padding:2.5rem var(--space-4,1rem) 4rem; }
     .sv-controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 8px 24px rgba(15,23,42,.05); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
     .sv-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--color-stone); }
     .sv-field select, .sv-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:180px; }
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; } .sv-count b { color:var(--color-ink); }
-    .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
-    .sv-city { margin:0 0 2.75rem; }
+    .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.15rem; }
+    .sv-city { margin:0 0 3.5rem; }
     .sv-city.is-hidden { display:none; }
     .sv-city-band { position:relative; display:flex; align-items:flex-end; min-height:148px; border-radius:16px; overflow:hidden; margin:0 0 1.1rem; background:var(--color-ink,#0f172a); }
     .sv-city-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
@@ -201,8 +205,8 @@ const html = `<!DOCTYPE html>
     .sv-city-count { margin-left:auto; font-size:.82rem; font-weight:600; color:#fff; background:rgba(255,255,255,.16); border-radius:999px; padding:.28rem .75rem; white-space:nowrap; }
     .sv-city-band a.sv-city-credit { position:absolute; right:.6rem; bottom:.45rem; z-index:2; font-size:.6rem; color:rgba(255,255,255,.9); text-decoration:none; background:rgba(15,23,42,.45); border-radius:5px; padding:.12rem .4rem; }
     .sv-city-band a.sv-city-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
-    .sv-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:1.15rem 1.25rem 1rem; transition:border-color .15s, box-shadow .15s, transform .15s; }
-    .sv-card:hover { border-color:var(--color-terracotta); box-shadow:0 10px 26px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-card { display:flex; flex-direction:column; background:#fff; border:1px solid #e7ded0; border-radius:14px; padding:1.2rem 1.3rem 1.05rem; box-shadow:0 1px 2px rgba(15,23,42,.04), 0 6px 16px rgba(15,23,42,.05); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    .sv-card:hover { border-color:var(--color-terracotta); box-shadow:0 12px 28px rgba(15,23,42,.12); transform:translateY(-2px); }
     .sv-card.is-hidden { display:none; }
     /* base.css has a:not(.btn):not(.nav-link){color:terracotta} at specificity (0,2,1), which
        beats a plain class. Anything here that sets a link colour has to outrank that. */
@@ -254,6 +258,7 @@ const html = `<!DOCTYPE html>
       </div></div>
       <a class="hero-credit" href="https://commons.wikimedia.org/wiki/File:Shavteli_Street_at_Night_,_Tbilisi_Georgia.jpg" target="_blank" rel="nofollow noopener">Photo: Shalika Malintha / Wikimedia Commons (CC BY 2.0), cropped</a>
     </header>
+    <div class="sv-canvas">
     <div class="sv-wrap">
       <div class="sv-controls">
         <div class="sv-field"><label for="svCity">City</label><select id="svCity"><option value="all">Any city</option>${cityOptions}</select></div>
@@ -282,6 +287,7 @@ const html = `<!DOCTYPE html>
         <p>Where the German Embassy in Bangkok is the source, note their own wording: the list is published without guarantee of accuracy or service quality, and naming a doctor or hospital does not constitute an endorsement. The same caution applies to everything else on this page.</p>
         <p>No provider has paid to appear here, and there are no affiliate links in these listings. If that ever changes, paid placement will be labelled as paid.</p>
       </section>
+    </div>
     </div>
   </main>
   ${FOOTER}
