@@ -131,21 +131,26 @@ const html = `<!DOCTYPE html>
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="stylesheet" href="/styles/fonts.css">
+  <link rel="preload" as="image" href="/assets/services-hero.webp" fetchpriority="high">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   <style>
-    .sv-hero { position:relative; padding:calc(var(--nav-height,64px) + 4rem) 0 3.5rem; background:linear-gradient(160deg,#0f172a 0%,#1e293b 55%,#334155 100%); color:#fff; overflow:hidden; }
-    .sv-hero::after { content:''; position:absolute; right:-12%; top:-30%; width:52%; height:170%; background:radial-gradient(circle at center, rgba(192,57,43,.30), transparent 68%); pointer-events:none; }
+    /* Same photo-hero pattern as the other tool pages (see build_timezones.cjs). */
+    .hub-hero { position:relative; width:100%; min-height:100vh; display:flex; align-items:flex-end; overflow:hidden; }
+    .hub-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .hub-hero-overlay { position:relative; z-index:1; width:100%; padding:calc(var(--nav-height,64px) + 3rem) 0 3rem; background:linear-gradient(to top, rgba(15,23,42,.94), rgba(15,23,42,.66) 55%, rgba(15,23,42,.15) 88%, transparent); color:#fff; }
     /* The nav is transparent with dark text until it scrolls, so a dark hero swallows the logo.
        Same light band every photo hero on the site uses, so the nav stays readable at scroll 0. */
-    .sv-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:calc(var(--nav-height,64px) + 44px); z-index:2; pointer-events:none; background:linear-gradient(to bottom, rgba(246,241,231,.94), rgba(246,241,231,.55) 55%, transparent); }
-    .sv-hero .container { max-width:1040px; position:relative; z-index:1; }
-    .sv-eyebrow { display:inline-block; font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; }
-    .sv-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-wrap:balance; }
-    .sv-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.88); line-height:1.6; margin:0; max-width:60ch; }
+    .hub-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:calc(var(--nav-height,64px) + 44px); z-index:1; pointer-events:none; background:linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
+    .hub-hero .container { max-width:1040px; }
+    .sv-eyebrow { display:inline-block; font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
+    .hub-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
+    .hub-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0; max-width:56ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
+    .hero-credit { position:absolute; right:.8rem; bottom:.55rem; z-index:2; font-size:.66rem; color:rgba(255,255,255,.6); text-decoration:none; }
+    .hero-credit:hover { color:rgba(255,255,255,.92); text-decoration:underline; }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2rem var(--space-4,1rem) 3.5rem; }
     .sv-controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 8px 24px rgba(15,23,42,.05); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -189,12 +194,14 @@ const html = `<!DOCTYPE html>
 <body>
   ${navHtml()}
   <main>
-    <header class="sv-hero">
-      <div class="container">
+    <header class="hub-hero">
+      <img class="hub-hero-img" src="/assets/services-hero.webp" alt="Shop signs and street lamps lighting Shavteli Street in the old town of Tbilisi at night" fetchpriority="high" width="1920" height="1090">
+      <div class="hub-hero-overlay"><div class="container">
         <span class="sv-eyebrow">Living-abroad tool</span>
         <h1>Find services in a language you speak</h1>
         <p class="sub">Finding a dentist is easy. Finding one who understands what hurts is not. This is a directory of local providers indexed by the language they work in, and every language claim links to the source we read it on.</p>
-      </div>
+      </div></div>
+      <a class="hero-credit" href="https://commons.wikimedia.org/wiki/File:Shavteli_Street_at_Night_,_Tbilisi_Georgia.jpg" target="_blank" rel="nofollow noopener">Photo: Shalika Malintha / Wikimedia Commons (CC BY 2.0), cropped</a>
     </header>
     <div class="sv-wrap">
       <div class="sv-controls">
