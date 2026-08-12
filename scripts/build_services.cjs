@@ -313,7 +313,8 @@ const html = `<!DOCTYPE html>
 
       <section class="sv-method">
         <h2>How to read this</h2>
-        <p>Currently ${providers.length} providers across ${nCities} cities, ${nCats} service types and ${nLangs} languages. It is small on purpose. Nothing goes in without a source, which rules out most of what a scraper would give us.</p>
+        <p>Currently ${providers.length} providers across ${nCities} cities, ${nCats} service types and ${nLangs} languages. Nothing goes in without a source, and the source is named on every card.</p>
+        <p><strong>Read the tier before you trust the row.</strong> Roughly half these listings now come from aggregator directories, and many of those make a claim about their whole roster ("our listed clinics speak English") rather than about the named business. We say so in the card's own words. A provider that states its languages on its own site is a stronger signal than one that appears on a list someone else curates, and a directory may sell placement.</p>
         <p>Each card carries a tier saying <em>how</em> we know, because that matters more than the claim itself:</p>
         <ul class="sv-tiers">
           ${Object.keys(EV_RANK).map((k) => `<li><span class="sv-ev sv-ev-${k}">${EV_LABEL[k]}</span>${esc(EVIDENCE[k])}</li>`).join('\n          ')}
