@@ -37,8 +37,10 @@
     .sv-eyebrow { display:inline-block; font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
     .hub-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
     .hub-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0; max-width:56ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
-    .hero-credit { position:absolute; right:.8rem; bottom:.55rem; z-index:2; font-size:.66rem; color:rgba(255,255,255,.6); text-decoration:none; }
-    .hero-credit:hover { color:rgba(255,255,255,.92); text-decoration:underline; }
+    /* Credits sit on photographs, so a faint white takes on the colour of whatever is behind
+       it. They need near-opaque text on their own scrim to stay readable on any image. */
+    .hub-hero a.hero-credit { position:absolute; right:.7rem; bottom:.5rem; z-index:2; font-size:.66rem; color:rgba(255,255,255,.92); text-decoration:none; background:rgba(15,23,42,.45); border-radius:6px; padding:.15rem .45rem; }
+    .hub-hero a.hero-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2rem var(--space-4,1rem) 3.5rem; }
     .sv-controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 8px 24px rgba(15,23,42,.05); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -47,27 +49,46 @@
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; } .sv-count b { color:var(--color-ink); }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+    .sv-city { margin:0 0 2.75rem; }
+    .sv-city.is-hidden { display:none; }
+    .sv-city-band { position:relative; display:flex; align-items:flex-end; min-height:148px; border-radius:16px; overflow:hidden; margin:0 0 1.1rem; background:var(--color-ink,#0f172a); }
+    .sv-city-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .sv-city-band::after { content:''; position:absolute; inset:0; background:linear-gradient(100deg, rgba(15,23,42,.9) 0%, rgba(15,23,42,.7) 42%, rgba(15,23,42,.25) 100%); }
+    .sv-city-band-in { position:relative; z-index:1; display:flex; align-items:center; gap:.7rem; padding:1.1rem 1.3rem; width:100%; flex-wrap:wrap; }
+    .sv-city-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(255,255,255,.25); flex:0 0 auto; }
+    .sv-city-band-in h2 { font-family:'DM Serif Display',serif; font-size:1.7rem; color:#fff; margin:0; line-height:1.1; }
+    .sv-city-band-in h2 span { display:block; font-family:inherit; font-size:.78rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.7); margin-top:.15rem; }
+    .sv-city-count { margin-left:auto; font-size:.82rem; font-weight:600; color:#fff; background:rgba(255,255,255,.16); border-radius:999px; padding:.28rem .75rem; white-space:nowrap; }
+    .sv-city-band a.sv-city-credit { position:absolute; right:.6rem; bottom:.45rem; z-index:2; font-size:.6rem; color:rgba(255,255,255,.9); text-decoration:none; background:rgba(15,23,42,.45); border-radius:5px; padding:.12rem .4rem; }
+    .sv-city-band a.sv-city-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
+    .sv-links { display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 .5rem; }
+    .sv-go { font-size:.78rem; font-weight:600; color:var(--color-terracotta); text-decoration:none; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:8px; padding:.3rem .6rem; transition:background .15s, border-color .15s; }
+    .sv-go:hover { background:var(--color-sand,#f6f1e7); border-color:var(--color-terracotta); }
+    .sv-nogo { font-size:.78rem; color:var(--color-stone); border:1px dashed var(--color-sand-dark,#e3d9c6); border-radius:8px; padding:.3rem .6rem; }
     .sv-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:1.1rem 1.2rem; transition:border-color .15s, box-shadow .15s; }
     .sv-card:hover { border-color:var(--color-terracotta); box-shadow:0 10px 24px rgba(15,23,42,.08); }
     .sv-card.is-hidden { display:none; }
     .sv-top { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.45rem; }
-    .sv-name { font-family:'DM Serif Display',serif; font-size:1.16rem; color:var(--color-ink); line-height:1.2; text-decoration:none; }
-    a.sv-name:hover { color:var(--color-terracotta); text-decoration:underline; }
+    /* base.css has a:not(.btn):not(.nav-link){color:terracotta} at specificity (0,2,1), which
+       beats a plain class. Anything here that sets a link colour has to outrank that. */
+    .sv-card .sv-name, .sv-card a.sv-name { font-family:'DM Serif Display',serif; font-size:1.16rem; color:var(--color-ink); line-height:1.2; text-decoration:none; }
+    .sv-card a.sv-name:hover { color:var(--color-terracotta); text-decoration:underline; }
     .sv-ev { margin-left:auto; flex:0 0 auto; font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; border-radius:5px; padding:.2rem .4rem; white-space:nowrap; }
     .sv-ev-official { color:#1c5c3c; background:#dff2e5; }
     .sv-ev-visited { color:#1c5c3c; background:#bfe8cf; }
     .sv-ev-self-declared { color:#8a5a00; background:#fbeecb; }
     .sv-ev-directory { color:#5c6672; background:#eceff3; }
     .sv-where { font-size:.8rem; color:var(--color-stone); margin:0 0 .5rem; line-height:1.5; }
-    .sv-where a { color:var(--color-stone); text-decoration:underline; }
-    .sv-where a:hover { color:var(--color-terracotta); }
+    .sv-card .sv-where a { color:var(--color-stone); text-decoration:underline; }
+    .sv-card .sv-where a:hover { color:var(--color-terracotta); }
     /* base.css sets img{display:block}, which would drop the flag onto its own line. */
     .sv-flag { display:inline-block; border-radius:2px; box-shadow:0 0 0 1px rgba(0,0,0,.08); vertical-align:-2px; margin-right:.3rem; }
     .sv-langs { font-size:.8rem; color:var(--color-stone); margin:0 0 .55rem; }
     .sv-lang { display:inline-block; background:var(--color-sand,#f6f1e7); color:var(--color-charcoal); border-radius:5px; padding:.1rem .4rem; margin:0 .25rem .2rem 0; font-size:.76rem; font-weight:600; }
     .sv-note { font-size:.86rem; line-height:1.55; color:var(--color-charcoal); margin:0 0 .55rem; }
     .sv-src { font-size:.74rem; color:var(--color-stone); margin:auto 0 0; padding-top:.4rem; }
-    .sv-src a { color:var(--color-stone); }
+    .sv-card .sv-src a { color:var(--color-stone); text-decoration:underline; }
+    .sv-card .sv-src a:hover { color:var(--color-terracotta); }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
@@ -109,12 +130,20 @@
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
       <p class="sv-count" id="svCount">Showing all <b>62</b> providers across <b>5</b> cities.</p>
-      <div class="sv-grid" id="svGrid">
+      <div id="svGrid">
+      <section class="sv-city" data-city="bangkok" id="city-bangkok">
+        <header class="sv-city-band"><img class="sv-city-img" src="/images/cities/bangkok-card.webp" alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district" loading="lazy" decoding="async" width="800" height="532">
+          <div class="sv-city-band-in"><img class="sv-city-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><h2>Bangkok<span>Thailand</span></h2>
+            <p class="sv-city-count" data-total="11">11 providers</p>
+          </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Twilight_over_the_modern_city_skyline_in_Ratchadamri_district,_Bangkok,_Thailand,_July_2019_-_Flickr_-_sergei.gussev.jpg" target="_blank" rel="nofollow noopener">Photo: Sergei Gussev (CC BY 4.0)</a>
+        </header>
+        <div class="sv-grid">
       <article class="sv-card" data-city="bangkok" data-cat="doctor" data-lang="de en" data-name="bangkok general hospital">
         <div class="sv-top"><a class="sv-name" href="https://www.bangkokhospital.com/" target="_blank" rel="nofollow noopener">Bangkok General Hospital</a><span class="sv-ev sv-ev-official">Official list</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">German</span><span class="sv-lang">English</span></p>
         <p class="sv-note">On the German Embassy's list of German- and English-speaking physicians and hospitals.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.bangkokhospital.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bangkok%20General%20Hospital%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bangkok.diplo.de/th-de/service/aerzteliste-1506722" target="_blank" rel="nofollow noopener">bangkok.diplo.de</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="doctor" data-lang="de en" data-name="bangkok nursing home hospital (bnh)">
@@ -122,6 +151,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Silom&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">German</span><span class="sv-lang">English</span></p>
         <p class="sv-note">On the German Embassy's list of German- and English-speaking physicians and hospitals in Thailand.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.bnhhospital.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bangkok%20Nursing%20Home%20Hospital%20(BNH)%2C%20Silom%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bangkok.diplo.de/th-de/service/aerzteliste-1506722" target="_blank" rel="nofollow noopener">bangkok.diplo.de</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="doctor" data-lang="de en" data-name="bumrungrad international hospital">
@@ -129,6 +159,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Nana / Sukhumvit&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">German</span><span class="sv-lang">English</span></p>
         <p class="sv-note">On the German Embassy list, and runs its own German-language patient service page.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.bumrungrad.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bumrungrad%20International%20Hospital%2C%20Nana%20%2F%20Sukhumvit%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bangkok.diplo.de/th-de/service/aerzteliste-1506722" target="_blank" rel="nofollow noopener">bangkok.diplo.de</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="doctor" data-lang="de en" data-name="medconsult clinic">
@@ -136,6 +167,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">German</span><span class="sv-lang">English</span></p>
         <p class="sv-note">Listed by the German Embassy as a cooperation practice (Dr. Donna Robinson, general and internal medicine).</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.medconsultasia.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MedConsult%20Clinic%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bangkok.diplo.de/th-de/service/aerzteliste-1506722" target="_blank" rel="nofollow noopener">bangkok.diplo.de</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="doctor" data-lang="de en" data-name="medpark hospital">
@@ -143,6 +175,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">German</span><span class="sv-lang">English</span></p>
         <p class="sv-note">Listed by the German Embassy as a cooperation practice (Dr. Cleopandh Soorapanthu).</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.medparkhospital.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MedPark%20Hospital%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bangkok.diplo.de/th-de/service/aerzteliste-1506722" target="_blank" rel="nofollow noopener">bangkok.diplo.de</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="doctor" data-lang="de en" data-name="samitivej sukhumvit hospital">
@@ -150,6 +183,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Sukhumvit&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">German</span><span class="sv-lang">English</span></p>
         <p class="sv-note">On the German Embassy's list of German- and English-speaking physicians and hospitals.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.samitivejhospitals.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Samitivej%20Sukhumvit%20Hospital%2C%20Sukhumvit%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bangkok.diplo.de/th-de/service/aerzteliste-1506722" target="_blank" rel="nofollow noopener">bangkok.diplo.de</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="hair" data-lang="en" data-name="46 studio">
@@ -157,6 +191,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Sukhumvit 46 / Phra Khanong&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">States its stylists are fluent English speakers. 50m from BTS Phra Khanong.</p>
+        <p class="sv-links"><a class="sv-go" href="https://46studio.net/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=46%20Studio%2C%20Sukhumvit%2046%20%2F%20Phra%20Khanong%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://46studio.net/" target="_blank" rel="nofollow noopener">46studio.net</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="hair" data-lang="en" data-name="the hills">
@@ -164,6 +199,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Thonglor / Sukhumvit&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         
+        <p class="sv-links"><a class="sv-go" href="https://www.thehillsbkk.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Hills%2C%20Thonglor%20%2F%20Sukhumvit%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.thehillsbkk.com/" target="_blank" rel="nofollow noopener">thehillsbkk.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="hair" data-lang="en" data-name="the london hair salon">
@@ -171,6 +207,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Sathorn / BTS Chong Nonsi&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Advertises expert English-speaking stylists.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.thelondonhairsalon.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20London%20Hair%20Salon%2C%20Sathorn%20%2F%20BTS%20Chong%20Nonsi%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.thelondonhairsalon.com/" target="_blank" rel="nofollow noopener">thelondonhairsalon.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="hair" data-lang="en" data-name="zahara hair salon">
@@ -178,6 +215,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Sukhumvit&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Advertises English-speaking stylists and experience with non-Asian hair types.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.zaharasalonbangkok.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Zahara%20Hair%20Salon%2C%20Sukhumvit%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.zaharasalonbangkok.com/" target="_blank" rel="nofollow noopener">zaharasalonbangkok.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="bangkok" data-cat="hair" data-lang="en" data-name="zenred hair salon">
@@ -185,13 +223,24 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/bangkok">Bangkok</a>&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Advertises English-speaking stylists for travellers and expats.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.zenredsalonbangkok.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Zenred%20Hair%20Salon%2C%20Bangkok%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.zenredsalonbangkok.com/" target="_blank" rel="nofollow noopener">zenredsalonbangkok.com</a>, 2026-08-12</p>
       </article>
+        </div>
+      </section>
+      <section class="sv-city" data-city="chiangmai" id="city-chiangmai">
+        <header class="sv-city-band"><img class="sv-city-img" src="/images/cities/chiangmai-card.webp" alt="Golden chedi and ceremonial umbrella of Wat Phra That Doi Suthep against a clear blue sky, Chiang Mai, Thailand" loading="lazy" decoding="async" width="800" height="532">
+          <div class="sv-city-band-in"><img class="sv-city-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><h2>Chiang Mai<span>Thailand</span></h2>
+            <p class="sv-city-count" data-total="27">27 providers</p>
+          </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Doi_Suthep_Temple_Chiang_Mai_Thailand.jpg" target="_blank" rel="nofollow noopener">Photo: Philip Nalangan (CC BY 4.0)</a>
+        </header>
+        <div class="sv-grid">
       <article class="sv-card" data-city="chiangmai" data-cat="dentist" data-lang="en" data-name="cidc (chiang mai international dental clinic)">
         <div class="sv-top"><a class="sv-name" href="https://chiangmaidentist.com/en/" target="_blank" rel="nofollow noopener">CIDC (Chiang Mai International Dental Clinic)</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Nimmanhaemin Soi 3&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">States a team of English-speaking dental professionals. Third floor above Starbucks Reserve.</p>
+        <p class="sv-links"><a class="sv-go" href="https://chiangmaidentist.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CIDC%20(Chiang%20Mai%20International%20Dental%20Clinic)%2C%20Nimmanhaemin%20Soi%203%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://chiangmaidentist.com/en/" target="_blank" rel="nofollow noopener">chiangmaidentist.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="dentist" data-lang="en" data-name="dc dental clinic">
@@ -199,34 +248,39 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Siri Mangkalajarn Rd, near Nimman&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Runs an English version of its site and states English-speaking staff.</p>
+        <p class="sv-links"><a class="sv-go" href="https://dcdental.clinic/en/about-en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=DC%20Dental%20Clinic%2C%20Siri%20Mangkalajarn%20Rd%2C%20near%20Nimman%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://dcdental.clinic/en/about-en/" target="_blank" rel="nofollow noopener">dcdental.clinic</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="dentist" data-lang="en" data-name="chiang mai dental hospital">
-        <div class="sv-top"><a class="sv-name" href="https://www.chiangmaidentalhospital.com/" target="_blank" rel="nofollow noopener">Chiang Mai Dental Hospital</a><span class="sv-ev sv-ev-directory">Directory only</span></div>
+        <div class="sv-top"><span class="sv-name">Chiang Mai Dental Hospital</span><span class="sv-ev sv-ev-directory">Directory only</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
-        <p class="sv-note">An expat guide reports all its dentists speak English.</p>
-        <p class="sv-src">Language claim read on <a href="https://www.expatden.com/thailand/dentist-chiang-mai/" target="_blank" rel="nofollow noopener">expatden.com</a>, 2026-08-12</p>
+        <p class="sv-note">An expat guide reports all its dentists speak English. No official site confirmed.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chiang%20Mai%20Dental%20Hospital%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
+        <p class="sv-src">Language claim read on <a href="https://www.thailandstarterkit.com/health/dentist-chiang-mai/" target="_blank" rel="nofollow noopener">thailandstarterkit.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="dentist" data-lang="en" data-name="dental 4 u clinic">
         <div class="sv-top"><span class="sv-name">Dental 4 U Clinic</span><span class="sv-ev sv-ev-directory">Directory only</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Recommended in an expat dentist guide for the city. No official site confirmed.</p>
-        <p class="sv-src">Language claim read on <a href="https://www.expatden.com/thailand/dentist-chiang-mai/" target="_blank" rel="nofollow noopener">expatden.com</a>, 2026-08-12</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dental%204%20U%20Clinic%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
+        <p class="sv-src">Language claim read on <a href="https://www.thailandstarterkit.com/health/dentist-chiang-mai/" target="_blank" rel="nofollow noopener">thailandstarterkit.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en" data-name="boston health polyclinic">
         <div class="sv-top"><a class="sv-name" href="https://bostonhealthcm.com/" target="_blank" rel="nofollow noopener">Boston Health Polyclinic</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Western-style polyclinic that states its doctors are fluent in English.</p>
+        <p class="sv-links"><a class="sv-go" href="https://bostonhealthcm.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Boston%20Health%20Polyclinic%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://bostonhealthcm.com/" target="_blank" rel="nofollow noopener">bostonhealthcm.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en th" data-name="cm mediclinic">
         <div class="sv-top"><a class="sv-name" href="https://www.cmmediclinic.com/" target="_blank" rel="nofollow noopener">CM Mediclinic</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
-        <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Doctors &amp; clinics</p>
+        <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Jed Yod, Chang Phueak&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Thai</span></p>
-        <p class="sv-note">States its doctors and nurses are fluent in Thai and English, with translators for other languages available.</p>
+        <p class="sv-note">Advertises &quot;friendly, affordable English speaking healthcare&quot; and states its doctors and nurses are fluent in Thai and English.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.cmmediclinic.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CM%20Mediclinic%2C%20Jed%20Yod%2C%20Chang%20Phueak%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.cmmediclinic.com/about-us.html" target="_blank" rel="nofollow noopener">cmmediclinic.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en" data-name="hugsa clinic">
@@ -234,6 +288,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Publishes a page stating its doctors consult in fluent English.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.hugsaclinic.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hugsa%20Clinic%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.hugsaclinic.com/post/doctorspeakenglishchiangmai" target="_blank" rel="nofollow noopener">hugsaclinic.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en ja" data-name="bangkok hospital chiang mai">
@@ -241,13 +296,15 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Nong Pa Khrang&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Japanese</span></p>
         <p class="sv-note">Reported to run an International Medical Services desk with multilingual coordinators; a Japanese guide lists Japanese and English support.</p>
-        <p class="sv-src">Language claim read on <a href="https://www.expatden.com/thailand/hospitals-in-chiang-mai/" target="_blank" rel="nofollow noopener">expatden.com</a>, 2026-08-12</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.bangkokhospital.com/en/chiangmai" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bangkok%20Hospital%20Chiang%20Mai%2C%20Nong%20Pa%20Khrang%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
+        <p class="sv-src">Language claim read on <a href="https://www.thailandstarterkit.com/health/hospitals-in-chiang-mai/" target="_blank" rel="nofollow noopener">thailandstarterkit.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en ja es fr" data-name="chiang mai ram hospital">
         <div class="sv-top"><a class="sv-name" href="https://www.chiangmairam.com/" target="_blank" rel="nofollow noopener">Chiang Mai Ram Hospital</a><span class="sv-ev sv-ev-directory">Directory only</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Bunrueang Rit Rd&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Japanese</span><span class="sv-lang">Spanish</span><span class="sv-lang">French</span></p>
         <p class="sv-note">A Japanese-language guide reports free Japanese, English, Spanish and French interpreters from 08:00 to 22:00, with 24-hour emergency. Interpreters, not doctors speaking the language.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.chiangmairam.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chiang%20Mai%20Ram%20Hospital%2C%20Bunrueang%20Rit%20Rd%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://thai-stay.jp/medical-care/japanese-hospital/chiang-mai-ram-hospital" target="_blank" rel="nofollow noopener">thai-stay.jp</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en ja" data-name="lanna hospital">
@@ -255,13 +312,15 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Sukkasem Rd&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Japanese</span></p>
         <p class="sv-note">A Japanese-language guide reports most doctors speak English and a Japanese interpreter is available.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.lanna-hospital.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lanna%20Hospital%2C%20Sukkasem%20Rd%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://thai-stay.jp/medical-care/japanese-hospital/chiang-mai-ram-hospital" target="_blank" rel="nofollow noopener">thai-stay.jp</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="doctor" data-lang="en ja" data-name="rajavej chiangmai hospital">
-        <div class="sv-top"><a class="sv-name" href="https://www.rajavejchiangmai.com/" target="_blank" rel="nofollow noopener">Rajavej Chiangmai Hospital</a><span class="sv-ev sv-ev-directory">Directory only</span></div>
+        <div class="sv-top"><span class="sv-name">Rajavej Chiangmai Hospital</span><span class="sv-ev sv-ev-directory">Directory only</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Chiangmai-Lamphun Rd&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Japanese</span></p>
-        <p class="sv-note">A Japanese-language guide lists a dedicated Japanese-language extension (777).</p>
+        <p class="sv-note">A Japanese-language guide lists a dedicated Japanese-language extension (777). We do not link its own site: its TLS certificate chain is incomplete.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rajavej%20Chiangmai%20Hospital%2C%20Chiangmai-Lamphun%20Rd%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://thai-stay.jp/medical-care/japanese-hospital/chiang-mai-ram-hospital" target="_blank" rel="nofollow noopener">thai-stay.jp</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="fitness" data-lang="en th" data-name="personal training chiang mai">
@@ -269,6 +328,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Gyms &amp; personal training</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Thai</span></p>
         <p class="sv-note">States it coaches locals and expats in English and Thai, at gyms across the city.</p>
+        <p class="sv-links"><a class="sv-go" href="https://personaltrainingchiangmai.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Personal%20Training%20Chiang%20Mai%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://personaltrainingchiangmai.com/" target="_blank" rel="nofollow noopener">personaltrainingchiangmai.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="hair" data-lang="en" data-name="56 barber shop">
@@ -276,6 +336,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Nimmanhaemin Rd&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Listed in an English-language city guide as an expat-facing barber. Closed Sundays.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=56%20Barber%20Shop%2C%20Nimmanhaemin%20Rd%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.timeout.com/chiang-mai/health-and-beauty/56-barbershop" target="_blank" rel="nofollow noopener">timeout.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="hair" data-lang="en" data-name="good old days barber shop">
@@ -283,6 +344,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Nimmanhaemin&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Listed in a city barber guide as priced and staffed for tourists and expats.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Good%20Old%20Days%20Barber%20Shop%2C%20Nimmanhaemin%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.thailandnomads.com/barber-shops-chiang-mai/" target="_blank" rel="nofollow noopener">thailandnomads.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="hair" data-lang="en" data-name="new york new york hair studio">
@@ -290,6 +352,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Nimmanhaemin Soi 13/2&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">An expat review reports the owner trained in New York; popular with expats wanting an English-speaking stylist.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=New%20York%20New%20York%20Hair%20Studio%2C%20Nimmanhaemin%20Soi%2013%2F2%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.tielandtothailand.com/chiang-mai-hair-salon-new-york-new-york/" target="_blank" rel="nofollow noopener">tielandtothailand.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="hair" data-lang="en" data-name="the cutler barbershop">
@@ -297,6 +360,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">A city barber guide reports the barbers speak good English.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Cutler%20Barbershop%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.thailandnomads.com/barber-shops-chiang-mai/" target="_blank" rel="nofollow noopener">thailandnomads.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="legal" data-lang="en" data-name="mj &amp; co">
@@ -304,6 +368,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Legal &amp; visa</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Visa and legal services agency.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.mjandco.net/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MJ%20%26%20Co%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.mjandco.net/" target="_blank" rel="nofollow noopener">mjandco.net</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="legal" data-lang="en" data-name="siam legal international">
@@ -311,6 +376,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Legal &amp; visa</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Visa and company law. Branch office; headquartered in Bangkok.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.siam-legal.com/thai-law/chiang-mai-lawyer.php" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Siam%20Legal%20International%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.siam-legal.com/thai-law/chiang-mai-lawyer.php" target="_blank" rel="nofollow noopener">siam-legal.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="legal" data-lang="en" data-name="themis partner">
@@ -318,6 +384,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Nimmanhaemin&nbsp;&middot; Legal &amp; visa</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Business law, visas and company setup.</p>
+        <p class="sv-links"><a class="sv-go" href="https://thailand.themispartner.com/lawyers/law-firm-chiang-mai/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Themis%20Partner%2C%20Nimmanhaemin%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://thailand.themispartner.com/lawyers/law-firm-chiang-mai/" target="_blank" rel="nofollow noopener">thailand.themispartner.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="optician" data-lang="en" data-name="diamond optical chiangmai">
@@ -325,6 +392,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Opticians &amp; eye care</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Its own page advertises English-speaking optometrists and opticians.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.facebook.com/DiamondOpticalChiangmai/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Diamond%20Optical%20Chiangmai%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.facebook.com/DiamondOpticalChiangmai/" target="_blank" rel="nofollow noopener">facebook.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="physio" data-lang="en th" data-name="vfix physical therapy clinic">
@@ -332,6 +400,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Physio &amp; chiropractic</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Thai</span></p>
         <p class="sv-note">States English- and Thai-speaking physiotherapists who explain procedures and care plans in both.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.vfixclinics.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vfix%20Physical%20Therapy%20Clinic%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.vfixclinics.com/" target="_blank" rel="nofollow noopener">vfixclinics.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="physio" data-lang="en" data-name="chiang mai osteopathy">
@@ -339,6 +408,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Physio &amp; chiropractic</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Directory reports a British-trained osteopath (Ben Thompson) serving the expat community.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chiang%20Mai%20Osteopathy%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://medicaltourismchat.com/providers/thailand/chiang-mai/chiang-mai-osteopathy" target="_blank" rel="nofollow noopener">medicaltourismchat.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="therapy" data-lang="en th" data-name="counseling chiang mai">
@@ -346,6 +416,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Therapy &amp; counselling</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Thai</span></p>
         <p class="sv-note">States male and female counsellors working in English and Thai. In person or online; no public address.</p>
+        <p class="sv-links"><a class="sv-go" href="https://chiangmaicounseling.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Counseling%20Chiang%20Mai%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://chiangmaicounseling.com/" target="_blank" rel="nofollow noopener">chiangmaicounseling.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="therapy" data-lang="en th" data-name="counselling thailand (therapy chiang mai)">
@@ -353,20 +424,23 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Chonpratan Rd, Suthep&nbsp;&middot; Therapy &amp; counselling</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Thai</span></p>
         <p class="sv-note">Registered Thai company offering therapy in English and Thai for adults, couples, children and teens.</p>
+        <p class="sv-links"><a class="sv-go" href="https://counsellingthailand.com/therapy-chiang-mai/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Counselling%20Thailand%20(Therapy%20Chiang%20Mai)%2C%20Chonpratan%20Rd%2C%20Suthep%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://counsellingthailand.com/therapy-chiang-mai/" target="_blank" rel="nofollow noopener">counsellingthailand.com</a>, 2026-08-12</p>
       </article>
-      <article class="sv-card" data-city="chiangmai" data-cat="mechanic" data-lang="en" data-name="motoplus">
-        <div class="sv-top"><span class="sv-name">MotoPlus</span><span class="sv-ev sv-ev-directory">Directory only</span></div>
-        <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Sanam Kila Rd, Chang Puak&nbsp;&middot; Vehicle &amp; scooter repair</p>
+      <article class="sv-card" data-city="chiangmai" data-cat="mechanic" data-lang="en" data-name="khun nung motorcycle mechanic">
+        <div class="sv-top"><span class="sv-name">Khun Nung Motorcycle Mechanic</span><span class="sv-ev sv-ev-directory">Directory only</span></div>
+        <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Hang Dong&nbsp;&middot; Vehicle &amp; scooter repair</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
-        <p class="sv-note">An expat mechanic round-up names a staff member (Nat) who speaks fluent English and answers email.</p>
-        <p class="sv-src">Language claim read on <a href="https://8milesfromhome.com/mechanics-in-chiang-mai-english-speaking/" target="_blank" rel="nofollow noopener">8milesfromhome.com</a>, 2026-08-12</p>
+        <p class="sv-note">Named in an expat blog's round-up of English-speaking mechanics in Chiang Mai. The list is titled English-speaking; it does not rate each mechanic's English separately.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Khun%20Nung%20Motorcycle%20Mechanic%2C%20Hang%20Dong%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
+        <p class="sv-src">Language claim read on <a href="https://8milesfromhome.tumblr.com/post/63236333438/mechanics-in-chiang-mai-english-speaking" target="_blank" rel="nofollow noopener">8milesfromhome.tumblr.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="vet" data-lang="en ja th" data-name="thonglor pet hospital (chiang mai airport)">
         <div class="sv-top"><a class="sv-name" href="https://thonglorpet.com/en/branch/pethospital-thonglorpet-chiangmaiairport" target="_blank" rel="nofollow noopener">Thonglor Pet Hospital (Chiang Mai Airport)</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Airport&nbsp;&middot; Veterinarians</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Japanese</span><span class="sv-lang">Thai</span></p>
         <p class="sv-note">States vets and staff fluent in English, Thai and Japanese. Open 24 hours with an emergency and surgery centre.</p>
+        <p class="sv-links"><a class="sv-go" href="https://thonglorpet.com/en/branch/pethospital-thonglorpet-chiangmaiairport" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Thonglor%20Pet%20Hospital%20(Chiang%20Mai%20Airport)%2C%20Airport%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://thonglorpet.com/en/branch/pethospital-thonglorpet-chiangmaiairport" target="_blank" rel="nofollow noopener">thonglorpet.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="chiangmai" data-cat="vet" data-lang="en" data-name="changnoi veterinary clinic &amp; animal eye center">
@@ -374,13 +448,24 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/th.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/chiangmai">Chiang Mai</a>&nbsp;&middot; Veterinarians</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">A local guide reports the vets here speak good English. Includes an animal eye centre.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Changnoi%20Veterinary%20Clinic%20%26%20Animal%20Eye%20Center%2C%20Chiang%20Mai%2C%20Thailand" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.chiangmaiambassador.com/guides/vets-pet-care-chiang-mai" target="_blank" rel="nofollow noopener">chiangmaiambassador.com</a>, 2026-08-12</p>
       </article>
+        </div>
+      </section>
+      <section class="sv-city" data-city="danang" id="city-danang">
+        <header class="sv-city-band"><img class="sv-city-img" src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" loading="lazy" decoding="async" width="800" height="532">
+          <div class="sv-city-band-in"><img class="sv-city-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><h2>Da Nang<span>Vietnam</span></h2>
+            <p class="sv-city-count" data-total="2">2 providers</p>
+          </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Da_Nang,_Vietnam.jpg" target="_blank" rel="nofollow noopener">Photo: Quangpraha (CC0)</a>
+        </header>
+        <div class="sv-grid">
       <article class="sv-card" data-city="danang" data-cat="doctor" data-lang="en ja ko ru fr" data-name="vinmec da nang international hospital">
         <div class="sv-top"><a class="sv-name" href="https://www.vinmec.com/eng/hospital/vinmec-da-nang-hospital" target="_blank" rel="nofollow noopener">Vinmec Da Nang International Hospital</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/vn.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/danang">Da Nang</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Japanese</span><span class="sv-lang">Korean</span><span class="sv-lang">Russian</span><span class="sv-lang">French</span></p>
         <p class="sv-note">States interpretation services in English, Japanese, Korean, Russian and French. Interpretation, not necessarily a doctor speaking your language.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.vinmec.com/eng/hospital/vinmec-da-nang-hospital" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vinmec%20Da%20Nang%20International%20Hospital%2C%20Da%20Nang%2C%20Vietnam" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.vinmec.com/eng/hospital/vinmec-da-nang-hospital" target="_blank" rel="nofollow noopener">vinmec.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="danang" data-cat="mechanic" data-lang="en" data-name="da nang motorcycles">
@@ -388,13 +473,24 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/vn.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/danang">Da Nang</a>&nbsp;&middot; Vehicle &amp; scooter repair</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Rental and repair shop advertising English-speaking support.</p>
+        <p class="sv-links"><a class="sv-go" href="https://danangmotorcycles.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Da%20Nang%20Motorcycles%2C%20Da%20Nang%2C%20Vietnam" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://danangmotorcycles.com/" target="_blank" rel="nofollow noopener">danangmotorcycles.com</a>, 2026-08-12</p>
       </article>
+        </div>
+      </section>
+      <section class="sv-city" data-city="hanoi" id="city-hanoi">
+        <header class="sv-city-band"><img class="sv-city-img" src="/images/cities/hanoi-card.webp" alt="Hoan Kiem Lake with red Huc Bridge and Ngoc Son Temple, Hanoi" loading="lazy" decoding="async" width="800" height="532">
+          <div class="sv-city-band-in"><img class="sv-city-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><h2>Hanoi<span>Vietnam</span></h2>
+            <p class="sv-city-count" data-total="2">2 providers</p>
+          </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Ngocson_Temple.jpg" target="_blank" rel="nofollow noopener">Photo: Khoitran1957 (CC BY-SA 4.0)</a>
+        </header>
+        <div class="sv-grid">
       <article class="sv-card" data-city="hanoi" data-cat="dentist" data-lang="en" data-name="navii dental care">
         <div class="sv-top"><a class="sv-name" href="https://navii.vn/en/dental-clinic-hanoi-old-quarter/" target="_blank" rel="nofollow noopener">Navii Dental Care</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/vn.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/hanoi">Hanoi</a>&nbsp;&middot; 42 Cua Dong, Old Quarter&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Markets itself to expats and tourists in English.</p>
+        <p class="sv-links"><a class="sv-go" href="https://navii.vn/en/dental-clinic-hanoi-old-quarter/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Navii%20Dental%20Care%2C%2042%20Cua%20Dong%2C%20Old%20Quarter%2C%20Hanoi%2C%20Vietnam" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://navii.vn/en/dental-clinic-hanoi-old-quarter/" target="_blank" rel="nofollow noopener">navii.vn</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="hanoi" data-cat="dentist" data-lang="en" data-name="picasso dental hanoi">
@@ -402,13 +498,24 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/vn.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/hanoi">Hanoi</a>&nbsp;&middot; Old Quarter&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">States an English-capable team across its locations; operating since 2013.</p>
+        <p class="sv-links"><a class="sv-go" href="https://picassodental.vn/hanoi/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Picasso%20Dental%20Hanoi%2C%20Old%20Quarter%2C%20Hanoi%2C%20Vietnam" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://picassodental.vn/hanoi/" target="_blank" rel="nofollow noopener">picassodental.vn</a>, 2026-08-12</p>
       </article>
+        </div>
+      </section>
+      <section class="sv-city" data-city="tbilisi" id="city-tbilisi">
+        <header class="sv-city-band"><img class="sv-city-img" src="/images/cities/tbilisi-card.webp" alt="Aerial view of Tbilisi old town with Kura River, Peace Bridge, and Sameba Cathedral" loading="lazy" decoding="async" width="800" height="532">
+          <div class="sv-city-band-in"><img class="sv-city-flag" src="/assets/flags/ge.svg" alt="" width="26" height="20" loading="lazy"><h2>Tbilisi<span>Georgia</span></h2>
+            <p class="sv-city-count" data-total="20">20 providers</p>
+          </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Tbilisi,_Old_Tbilisi,_Kura_River_2,_Georgia.jpg" target="_blank" rel="nofollow noopener">Photo: Vyacheslav Argenberg (CC BY 4.0)</a>
+        </header>
+        <div class="sv-grid">
       <article class="sv-card" data-city="tbilisi" data-cat="dentist" data-lang="en ru ka he" data-name="ultradent clinic">
         <div class="sv-top"><a class="sv-name" href="https://www.ultradent.ge/" target="_blank" rel="nofollow noopener">UltraDent Clinic</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span><span class="sv-lang">Hebrew</span></p>
         <p class="sv-note">States consultations and aftercare in English, Georgian, Russian and Hebrew.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.ultradent.ge/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=UltraDent%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.ultradent.ge/" target="_blank" rel="nofollow noopener">ultradent.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="dentist" data-lang="en ru" data-name="confident dental clinic">
@@ -416,6 +523,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span></p>
         <p class="sv-note">Directory lists named dentists working in English and Russian.</p>
+        <p class="sv-links"><a class="sv-go" href="https://confident.ge/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=ConfiDent%20Dental%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.dentaldepartures.com/dentist/confident-dental-clinic-tbilisi" target="_blank" rel="nofollow noopener">dentaldepartures.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="dentist" data-lang="en ru ka" data-name="denta plus clinic">
@@ -423,6 +531,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">Directory states the treating dentist works in Russian, English and Georgian.</p>
+        <p class="sv-links"><a class="sv-go" href="https://smilejet.app/clinic/denta-plus-clinic-tbilisi" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Denta%20Plus%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://smilejet.app/clinic/denta-plus-clinic-tbilisi" target="_blank" rel="nofollow noopener">smilejet.app</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="dentist" data-lang="en ru" data-name="dentus dental clinic">
@@ -430,6 +539,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span></p>
         <p class="sv-note">Dental-tourism directory states the staff is fluent in English and Russian.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.dentavacation.com/listing/dentus-tbilisi/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dentus%20Dental%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.dentavacation.com/listing/dentus-tbilisi/" target="_blank" rel="nofollow noopener">dentavacation.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="dentist" data-lang="en ru ka" data-name="ns dental clinic">
@@ -437,27 +547,31 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Dentists</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">Directory states consultations are available in Georgian, Russian and English.</p>
+        <p class="sv-links"><a class="sv-go" href="https://smilejet.app/clinic/ns-dental-clinic" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=NS%20Dental%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://smilejet.app/clinic/ns-dental-clinic" target="_blank" rel="nofollow noopener">smilejet.app</a>, 2026-08-12</p>
+      </article>
+      <article class="sv-card" data-city="tbilisi" data-cat="doctor" data-lang="en" data-name="american medical centers (amc) tbilisi">
+        <div class="sv-top"><a class="sv-name" href="https://www.amcenters.com/en/tbilisi" target="_blank" rel="nofollow noopener">American Medical Centers (AMC) Tbilisi</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
+        <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 11 Dimitri Arakishvili St, Vake&nbsp;&middot; Doctors &amp; clinics</p>
+        <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
+        <p class="sv-note">Its Tbilisi branch page states a team of national and international consultants, all English-speaking, with 24/7 emergency and home visits.</p>
+        <p class="sv-links"><a class="sv-go" href="https://www.amcenters.com/en/tbilisi" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=American%20Medical%20Centers%20(AMC)%20Tbilisi%2C%2011%20Dimitri%20Arakishvili%20St%2C%20Vake%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
+        <p class="sv-src">Language claim read on <a href="https://www.amcenters.com/en/tbilisi" target="_blank" rel="nofollow noopener">amcenters.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="doctor" data-lang="en ru ka" data-name="todua clinic">
         <div class="sv-top"><a class="sv-name" href="https://toduaclinic.ge/en/" target="_blank" rel="nofollow noopener">Todua Clinic</a><span class="sv-ev sv-ev-self-declared">Says so itself</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">States staff fluent in several languages including English and Russian, and publishes a full Russian-language doctors directory.</p>
+        <p class="sv-links"><a class="sv-go" href="https://toduaclinic.ge/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Todua%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://toduaclinic.ge/ru/doctors" target="_blank" rel="nofollow noopener">toduaclinic.ge</a>, 2026-08-12</p>
-      </article>
-      <article class="sv-card" data-city="tbilisi" data-cat="doctor" data-lang="en" data-name="american medical centers (amc) tbilisi">
-        <div class="sv-top"><a class="sv-name" href="https://www.amcenters.com/" target="_blank" rel="nofollow noopener">American Medical Centers (AMC) Tbilisi</a><span class="sv-ev sv-ev-directory">Directory only</span></div>
-        <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 11 Dimitri Arakishvili St, Vake&nbsp;&middot; Doctors &amp; clinics</p>
-        <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
-        <p class="sv-note">Expat-facing clinic network reported to run 24/7 emergency care and home consultations.</p>
-        <p class="sv-src">Language claim read on <a href="https://expathub.ge/hospitals-in-tbilisi/" target="_blank" rel="nofollow noopener">expathub.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="doctor" data-lang="en" data-name="mediclub georgia">
         <div class="sv-top"><span class="sv-name">MediClub Georgia</span><span class="sv-ev sv-ev-directory">Directory only</span></div>
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 22a Tashkenti St&nbsp;&middot; Doctors &amp; clinics</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">An expat guide reports a choice of Georgian or expatriate physicians, with the Georgian doctors fluent in English.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MediClub%20Georgia%2C%2022a%20Tashkenti%20St%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://expathub.ge/hospitals-in-tbilisi/" target="_blank" rel="nofollow noopener">expathub.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="fitness" data-lang="en" data-name="prime fit">
@@ -465,6 +579,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Gyms &amp; personal training</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">An expat gym guide reports reception and personal trainers usually speak English. Weakest kind of claim: about the gym in general, not a named person.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Prime%20Fit%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://expathub.ge/best-gyms-in-tbilisi-georgia/" target="_blank" rel="nofollow noopener">expathub.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="hair" data-lang="en" data-name="mitte beauty salon">
@@ -472,6 +587,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Ana Politkovskaia St 4g, Vake-Saburtalo&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Reviews cited in a city guide report the barber speaks English well.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mitte%20Beauty%20Salon%2C%20Ana%20Politkovskaia%20St%204g%2C%20Vake-Saburtalo%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://travelness.com/best-barber-shops-in-tbilisi" target="_blank" rel="nofollow noopener">travelness.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="hair" data-lang="en ru ka" data-name="partizan barbershop">
@@ -479,6 +595,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Vera&nbsp;&middot; Hair &amp; barbers</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">A city barber guide reports the team works in Georgian, English and Russian.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Partizan%20Barbershop%2C%20Vera%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://travelness.com/best-barber-shops-in-tbilisi" target="_blank" rel="nofollow noopener">travelness.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="legal" data-lang="en" data-name="expathub georgia">
@@ -486,6 +603,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 1 Davit Tavkhelidze St&nbsp;&middot; Legal &amp; visa</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">States &quot;only English-speaking staff&quot;, native or fluent bilingual. Residency, tax and company work. By appointment.</p>
+        <p class="sv-links"><a class="sv-go" href="https://expathub.ge/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=ExpatHub%20Georgia%2C%201%20Davit%20Tavkhelidze%20St%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://expathub.ge/" target="_blank" rel="nofollow noopener">expathub.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="legal" data-lang="en ru de tr ka" data-name="nomos georgia">
@@ -493,6 +611,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 70 Archil Tsagareli St&nbsp;&middot; Legal &amp; visa</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">German</span><span class="sv-lang">Turkish</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">Its founding partner is listed as working in English, Russian, German and Turkish alongside Georgian. Business and immigration law.</p>
+        <p class="sv-links"><a class="sv-go" href="https://nomosgeorgia.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nomos%20Georgia%2C%2070%20Archil%20Tsagareli%20St%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://nomosgeorgia.com/about-nomos/" target="_blank" rel="nofollow noopener">nomosgeorgia.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="therapy" data-lang="en" data-name="anton anfinogentov">
@@ -500,6 +619,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Therapy &amp; counselling</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">Advertises as an English-speaking psychotherapist in Tbilisi. In person or online.</p>
+        <p class="sv-links"><a class="sv-go" href="http://anfinogentov.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Anton%20Anfinogentov%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="http://anfinogentov.com/en/" target="_blank" rel="nofollow noopener">anfinogentov.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="therapy" data-lang="en ru" data-name="chaika tbilisi">
@@ -507,6 +627,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Therapy &amp; counselling</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span></p>
         <p class="sv-note">States its psychologist works in English and Russian.</p>
+        <p class="sv-links"><a class="sv-go" href="https://chaika.ge/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chaika%20Tbilisi%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://chaika.ge/blog/psychologist-tbilisi" target="_blank" rel="nofollow noopener">chaika.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="therapy" data-lang="en ru ka" data-name="ekaterine paverman">
@@ -514,6 +635,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Therapy &amp; counselling</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">Therapist directory lists sessions in Georgian, English or Russian, in Tbilisi or remotely.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ekaterine%20Paverman%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.therapyroute.com/therapist/ekaterine-paverman-tbilisi-ge" target="_blank" rel="nofollow noopener">therapyroute.com</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="mechanic" data-lang="ru" data-name="geodrive auto service">
@@ -521,6 +643,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Vehicle &amp; scooter repair</p>
         <p class="sv-langs">Works in <span class="sv-lang">Russian</span></p>
         <p class="sv-note">States Russian-speaking staff and a mobile mechanic. Site is published in English but only Russian is claimed for the staff.</p>
+        <p class="sv-links"><a class="sv-go" href="https://service.geodrive.info/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Geodrive%20Auto%20Service%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://service.geodrive.info/en" target="_blank" rel="nofollow noopener">service.geodrive.info</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="vet" data-lang="en ru" data-name="bionika veterinary clinic">
@@ -528,6 +651,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 63 Beri Gabriel Salosi Ave&nbsp;&middot; Veterinarians</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span></p>
         <p class="sv-note">An English-language vet directory lists English- and Russian-speaking staff.</p>
+        <p class="sv-links"><a class="sv-go" href="https://bionika.ge/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bionika%20Veterinary%20Clinic%2C%2063%20Beri%20Gabriel%20Salosi%20Ave%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://emia.ge/en/vet-clinics" target="_blank" rel="nofollow noopener">emia.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="vet" data-lang="en ru ka" data-name="kivi (kartli international veterinary institute)">
@@ -535,6 +659,7 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; 35-37 Zhiuli Shartava St&nbsp;&middot; Veterinarians</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span><span class="sv-lang">Russian</span><span class="sv-lang">Georgian</span></p>
         <p class="sv-note">Directory reports staff available in Georgian, English and Russian.</p>
+        <p class="sv-links"><a class="sv-go" href="https://kivi.ge/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=KIVI%20(Kartli%20International%20Veterinary%20Institute)%2C%2035-37%20Zhiuli%20Shartava%20St%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://emia.ge/en/vet-clinics" target="_blank" rel="nofollow noopener">emia.ge</a>, 2026-08-12</p>
       </article>
       <article class="sv-card" data-city="tbilisi" data-cat="vet" data-lang="en" data-name="natia beridze veterinary clinic">
@@ -542,8 +667,11 @@
         <p class="sv-where"><img class="sv-flag" src="/assets/flags/ge.svg" alt="" width="20" height="15" loading="lazy"><a href="/cities/tbilisi">Tbilisi</a>&nbsp;&middot; Veterinarians</p>
         <p class="sv-langs">Works in <span class="sv-lang">English</span></p>
         <p class="sv-note">An expat write-up reports the vet and her staff speak English.</p>
+        <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Natia%20Beridze%20Veterinary%20Clinic%2C%20Tbilisi%2C%20Georgia" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="https://www.reinisfischer.com/veterinary-clinic-natia-beridze-tbilisi" target="_blank" rel="nofollow noopener">reinisfischer.com</a>, 2026-08-12</p>
       </article>
+        </div>
+      </section>
       </div>
       <div class="sv-empty is-hidden" id="svEmpty">
         <p>Nothing matches that combination yet.</p>
@@ -581,6 +709,7 @@
       var grid=document.getElementById('svGrid'),count=document.getElementById('svCount'),empty=document.getElementById('svEmpty');
       var citySel=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang'),q=document.getElementById('svQ');
       var cards=[].slice.call(grid.querySelectorAll('.sv-card'));
+      var sections=[].slice.call(grid.querySelectorAll('.sv-city'));
       var CITY_LABEL={"bangkok":"Bangkok","chiangmai":"Chiang Mai","danang":"Da Nang","hanoi":"Hanoi","tbilisi":"Tbilisi"};
       var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","fitness":"Gyms & personal training","hair":"Hair & barbers","legal":"Legal & visa","optician":"Opticians & eye care","physio":"Physio & chiropractic","therapy":"Therapy & counselling","mechanic":"Vehicle & scooter repair","vet":"Veterinarians"};
       var LANG_LABEL={"en":"English","fr":"French","ka":"Georgian","de":"German","he":"Hebrew","ja":"Japanese","ko":"Korean","ru":"Russian","es":"Spanish","th":"Thai","tr":"Turkish"};
@@ -594,6 +723,17 @@
             &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
           el.classList.toggle('is-hidden',!ok);
           if(ok)shown++;
+        });
+        // Collapse a city band once nothing under it survives the filter, and keep its
+        // counter honest about how many are actually on screen.
+        sections.forEach(function(sec){
+          var vis=sec.querySelectorAll('.sv-card:not(.is-hidden)').length;
+          sec.classList.toggle('is-hidden',vis===0);
+          var cEl=sec.querySelector('.sv-city-count');
+          if(cEl){
+            var total=cEl.getAttribute('data-total');
+            cEl.textContent=(vis===+total?vis:vis+' of '+total)+' provider'+(vis===1?'':'s');
+          }
         });
         var bits=[];
         if(cat!=='all')bits.push('under '+CAT_LABEL[cat]);

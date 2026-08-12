@@ -28,6 +28,13 @@ const CITY = {};
 m.exports.forEach((c) => { if (c && c.id) CITY[c.id] = { name: c.name, country: c.country, iso: iso(c.flag) }; });
 
 const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// City photos are reused from the city pages, so their credits come from the same manifest.
+const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
+
+// A Maps *search*, not a claimed pin: we have not verified any listing's coordinates, and a
+// search always resolves to something sensible even when the business has moved.
+const mapsUrl = (p) => 'https://www.google.com/maps/search/?api=1&query=' +
+  encodeURIComponent([p.name, p.area, CITY[p.city].name, CITY[p.city].country].filter(Boolean).join(', '));
 const CATS = DB._categories;
 const LANGS = DB._languages;
 const EVIDENCE = DB._evidence;
@@ -80,10 +87,36 @@ function card(p) {
         <p class="sv-where">${where}</p>
         <p class="sv-langs">Works in ${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
+        <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Google Maps</a></p>
         <p class="sv-src">Language claim read on <a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a>, ${esc(p.checked || 'undated')}</p>
       </article>`;
 }
-const cards = providers.map(card).join('\n      ');
+
+// Grouped by city: one photo band per city rather than a photo per card, which keeps the
+// listing calm and means each city photo is credited once instead of 27 times.
+function citySection(slug) {
+  const rows = providers.filter((p) => p.city === slug);
+  const c = CITY[slug];
+  const a = ATTR[slug] || {};
+  const img = fs.existsSync(path.join(ROOT, 'images', 'cities', slug + '-card.webp'))
+    ? `<img class="sv-city-img" src="/images/cities/${slug}-card.webp" alt="${esc(a.alt || c.name)}" loading="lazy" decoding="async" width="800" height="532">`
+    : '';
+  const credit = a.author
+    ? `<a class="sv-city-credit" href="${esc(a.sourcePageUrl || '#')}" target="_blank" rel="nofollow noopener">Photo: ${esc(a.author)} (${esc(a.license || '')})</a>`
+    : '';
+  const flag = c.iso ? `<img class="sv-city-flag" src="/assets/flags/${c.iso}.svg" alt="" width="26" height="20" loading="lazy">` : '';
+  return `<section class="sv-city" data-city="${slug}" id="city-${slug}">
+        <header class="sv-city-band">${img}
+          <div class="sv-city-band-in">${flag}<h2>${esc(c.name)}<span>${esc(c.country)}</span></h2>
+            <p class="sv-city-count" data-total="${rows.length}">${rows.length} provider${rows.length === 1 ? '' : 's'}</p>
+          </div>${credit}
+        </header>
+        <div class="sv-grid">
+      ${rows.map(card).join('\n      ')}
+        </div>
+      </section>`;
+}
+const sections = usedCities.map(citySection).join('\n      ');
 
 function navHtml() {
   const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
@@ -149,8 +182,10 @@ const html = `<!DOCTYPE html>
     .sv-eyebrow { display:inline-block; font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:#ff8863; margin:0 0 .8rem; text-shadow:0 1px 10px rgba(0,0,0,.3); }
     .hub-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(2.1rem,5.5vw,3.5rem); line-height:1.08; margin:0 0 1rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35); text-wrap:balance; }
     .hub-hero .sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0; max-width:56ch; text-shadow:0 1px 12px rgba(0,0,0,.3); }
-    .hero-credit { position:absolute; right:.8rem; bottom:.55rem; z-index:2; font-size:.66rem; color:rgba(255,255,255,.6); text-decoration:none; }
-    .hero-credit:hover { color:rgba(255,255,255,.92); text-decoration:underline; }
+    /* Credits sit on photographs, so a faint white takes on the colour of whatever is behind
+       it. They need near-opaque text on their own scrim to stay readable on any image. */
+    .hub-hero a.hero-credit { position:absolute; right:.7rem; bottom:.5rem; z-index:2; font-size:.66rem; color:rgba(255,255,255,.92); text-decoration:none; background:rgba(15,23,42,.45); border-radius:6px; padding:.15rem .45rem; }
+    .hub-hero a.hero-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2rem var(--space-4,1rem) 3.5rem; }
     .sv-controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 8px 24px rgba(15,23,42,.05); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -159,27 +194,46 @@ const html = `<!DOCTYPE html>
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; } .sv-count b { color:var(--color-ink); }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+    .sv-city { margin:0 0 2.75rem; }
+    .sv-city.is-hidden { display:none; }
+    .sv-city-band { position:relative; display:flex; align-items:flex-end; min-height:148px; border-radius:16px; overflow:hidden; margin:0 0 1.1rem; background:var(--color-ink,#0f172a); }
+    .sv-city-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .sv-city-band::after { content:''; position:absolute; inset:0; background:linear-gradient(100deg, rgba(15,23,42,.9) 0%, rgba(15,23,42,.7) 42%, rgba(15,23,42,.25) 100%); }
+    .sv-city-band-in { position:relative; z-index:1; display:flex; align-items:center; gap:.7rem; padding:1.1rem 1.3rem; width:100%; flex-wrap:wrap; }
+    .sv-city-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(255,255,255,.25); flex:0 0 auto; }
+    .sv-city-band-in h2 { font-family:'DM Serif Display',serif; font-size:1.7rem; color:#fff; margin:0; line-height:1.1; }
+    .sv-city-band-in h2 span { display:block; font-family:inherit; font-size:.78rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.7); margin-top:.15rem; }
+    .sv-city-count { margin-left:auto; font-size:.82rem; font-weight:600; color:#fff; background:rgba(255,255,255,.16); border-radius:999px; padding:.28rem .75rem; white-space:nowrap; }
+    .sv-city-band a.sv-city-credit { position:absolute; right:.6rem; bottom:.45rem; z-index:2; font-size:.6rem; color:rgba(255,255,255,.9); text-decoration:none; background:rgba(15,23,42,.45); border-radius:5px; padding:.12rem .4rem; }
+    .sv-city-band a.sv-city-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
+    .sv-links { display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 .5rem; }
+    .sv-go { font-size:.78rem; font-weight:600; color:var(--color-terracotta); text-decoration:none; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:8px; padding:.3rem .6rem; transition:background .15s, border-color .15s; }
+    .sv-go:hover { background:var(--color-sand,#f6f1e7); border-color:var(--color-terracotta); }
+    .sv-nogo { font-size:.78rem; color:var(--color-stone); border:1px dashed var(--color-sand-dark,#e3d9c6); border-radius:8px; padding:.3rem .6rem; }
     .sv-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:1.1rem 1.2rem; transition:border-color .15s, box-shadow .15s; }
     .sv-card:hover { border-color:var(--color-terracotta); box-shadow:0 10px 24px rgba(15,23,42,.08); }
     .sv-card.is-hidden { display:none; }
     .sv-top { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.45rem; }
-    .sv-name { font-family:'DM Serif Display',serif; font-size:1.16rem; color:var(--color-ink); line-height:1.2; text-decoration:none; }
-    a.sv-name:hover { color:var(--color-terracotta); text-decoration:underline; }
+    /* base.css has a:not(.btn):not(.nav-link){color:terracotta} at specificity (0,2,1), which
+       beats a plain class. Anything here that sets a link colour has to outrank that. */
+    .sv-card .sv-name, .sv-card a.sv-name { font-family:'DM Serif Display',serif; font-size:1.16rem; color:var(--color-ink); line-height:1.2; text-decoration:none; }
+    .sv-card a.sv-name:hover { color:var(--color-terracotta); text-decoration:underline; }
     .sv-ev { margin-left:auto; flex:0 0 auto; font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; border-radius:5px; padding:.2rem .4rem; white-space:nowrap; }
     .sv-ev-official { color:#1c5c3c; background:#dff2e5; }
     .sv-ev-visited { color:#1c5c3c; background:#bfe8cf; }
     .sv-ev-self-declared { color:#8a5a00; background:#fbeecb; }
     .sv-ev-directory { color:#5c6672; background:#eceff3; }
     .sv-where { font-size:.8rem; color:var(--color-stone); margin:0 0 .5rem; line-height:1.5; }
-    .sv-where a { color:var(--color-stone); text-decoration:underline; }
-    .sv-where a:hover { color:var(--color-terracotta); }
+    .sv-card .sv-where a { color:var(--color-stone); text-decoration:underline; }
+    .sv-card .sv-where a:hover { color:var(--color-terracotta); }
     /* base.css sets img{display:block}, which would drop the flag onto its own line. */
     .sv-flag { display:inline-block; border-radius:2px; box-shadow:0 0 0 1px rgba(0,0,0,.08); vertical-align:-2px; margin-right:.3rem; }
     .sv-langs { font-size:.8rem; color:var(--color-stone); margin:0 0 .55rem; }
     .sv-lang { display:inline-block; background:var(--color-sand,#f6f1e7); color:var(--color-charcoal); border-radius:5px; padding:.1rem .4rem; margin:0 .25rem .2rem 0; font-size:.76rem; font-weight:600; }
     .sv-note { font-size:.86rem; line-height:1.55; color:var(--color-charcoal); margin:0 0 .55rem; }
     .sv-src { font-size:.74rem; color:var(--color-stone); margin:auto 0 0; padding-top:.4rem; }
-    .sv-src a { color:var(--color-stone); }
+    .sv-card .sv-src a { color:var(--color-stone); text-decoration:underline; }
+    .sv-card .sv-src a:hover { color:var(--color-terracotta); }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
@@ -212,8 +266,8 @@ const html = `<!DOCTYPE html>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
       <p class="sv-count" id="svCount">Showing all <b>${providers.length}</b> providers across <b>${nCities}</b> cities.</p>
-      <div class="sv-grid" id="svGrid">
-      ${cards}
+      <div id="svGrid">
+      ${sections}
       </div>
       <div class="sv-empty is-hidden" id="svEmpty">
         <p>Nothing matches that combination yet.</p>
@@ -239,6 +293,7 @@ const html = `<!DOCTYPE html>
       var grid=document.getElementById('svGrid'),count=document.getElementById('svCount'),empty=document.getElementById('svEmpty');
       var citySel=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang'),q=document.getElementById('svQ');
       var cards=[].slice.call(grid.querySelectorAll('.sv-card'));
+      var sections=[].slice.call(grid.querySelectorAll('.sv-city'));
       var CITY_LABEL=${JSON.stringify(Object.fromEntries(usedCities.map((c) => [c, CITY[c].name])))};
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(usedLangs.map((l) => [l, LANGS[l]])))};
@@ -252,6 +307,17 @@ const html = `<!DOCTYPE html>
             &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
           el.classList.toggle('is-hidden',!ok);
           if(ok)shown++;
+        });
+        // Collapse a city band once nothing under it survives the filter, and keep its
+        // counter honest about how many are actually on screen.
+        sections.forEach(function(sec){
+          var vis=sec.querySelectorAll('.sv-card:not(.is-hidden)').length;
+          sec.classList.toggle('is-hidden',vis===0);
+          var cEl=sec.querySelector('.sv-city-count');
+          if(cEl){
+            var total=cEl.getAttribute('data-total');
+            cEl.textContent=(vis===+total?vis:vis+' of '+total)+' provider'+(vis===1?'':'s');
+          }
         });
         var bits=[];
         if(cat!=='all')bits.push('under '+CAT_LABEL[cat]);
