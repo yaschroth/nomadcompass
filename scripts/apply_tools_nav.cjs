@@ -17,7 +17,6 @@ const TOOLS = [
   ['/best-weather', 'Best Weather by Month'],
   ['/visa', 'Visa Finder'],
   ['/nomad-visas', 'Nomad Visa Finder'],
-  ['/services', 'Services by Language'],
   ['/geoarbitrage', 'Geoarbitrage Calculator'],
   ['/salary', 'Salary Calculator'],
   ['/cost-of-living-index', 'Cost of Living Index'],
@@ -28,7 +27,9 @@ const TOOLS = [
   ['/tier-list', 'Tier List'],
   ['/tier-list/maker', 'Tier List Maker'],
 ];
-const FLAT_AFTER = [['/cities', 'Cities'], ['/best', 'Rankings'], ['/blog', 'Blog']];
+// Services is a top-level header item, not a Tools entry: it is a destination of its own
+// rather than a calculator, and it was invisible buried in the dropdown.
+const FLAT_AFTER = [['/cities', 'Cities'], ['/services', 'Services'], ['/best', 'Rankings'], ['/blog', 'Blog']];
 const TOOL_PATHS = TOOLS.map((t) => t[0]);
 
 function pagePath(file) {
@@ -44,6 +45,7 @@ function sectionOf(p) {
   if (p === '/tier-list/maker' || p === '/tier-list') return p; // tool exact
   if (TOOL_PATHS.indexOf(p) >= 0) return p;
   if (p.indexOf('/cities') === 0) return '/cities';
+  if (p.indexOf('/services') === 0) return '/services';
   if (p.indexOf('/best') === 0) return '/best';
   if (p.indexOf('/blog') === 0) return '/blog';
   return '';
