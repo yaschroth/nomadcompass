@@ -27,6 +27,7 @@ new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8'
 const CITY = {};
 m.exports.forEach((c) => { if (c && c.id) CITY[c.id] = { name: c.name, country: c.country, iso: iso(c.flag) }; });
 
+const { icon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
 // City photos are reused from the city pages, so their credits come from the same manifest.
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
@@ -39,12 +40,20 @@ const CATS = DB._categories;
 const LANGS = DB._languages;
 const EVIDENCE = DB._evidence;
 
+// A hospital and a barber looked identical at a glance, so each category carries its own
+// Lucide glyph and hue. Lucide has no tooth, hence 'smile' for dentistry.
+const CAT_ICON = {
+  doctor: 'stethoscope', dentist: 'smile', vet: 'paw-print', therapy: 'brain',
+  physio: 'bone', optician: 'glasses', hair: 'scissors', legal: 'scale',
+  mechanic: 'wrench', fitness: 'dumbbell',
+};
+
 // Strongest evidence first, so the best-sourced row in a city leads.
 const EV_RANK = { official: 0, visited: 1, 'self-declared': 2, directory: 3 };
 const EV_LABEL = { official: 'Official list', visited: 'We confirmed', 'self-declared': 'Says so itself', directory: 'Directory only' };
 
 const providers = DB.providers.slice();
-const bad = providers.filter((p) => !CITY[p.city] || !CATS[p.category] || !p.sourceUrl || !EVIDENCE[p.evidence] || !p.languages || !p.languages.length || p.languages.some((l) => !LANGS[l]));
+const bad = providers.filter((p) => !CITY[p.city] || !CATS[p.category] || !CAT_ICON[p.category] || !p.sourceUrl || !EVIDENCE[p.evidence] || !p.languages || !p.languages.length || p.languages.some((l) => !LANGS[l]));
 if (bad.length) {
   console.error('REFUSED: ' + bad.length + ' row(s) in data/service-languages.json are unusable:');
   bad.forEach((p) => console.error('  - ' + (p.name || '(unnamed)') + ' [' + p.city + '/' + p.category + '] missing a known city, category, language or sourceUrl/evidence'));
@@ -75,9 +84,14 @@ function card(p) {
   // The city and its flag live on the section band above, so repeating them on every card
   // is noise. What the card owes you is: who, what kind, which languages, and on whose word.
   const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card" data-city="${p.city}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
-        <h3 class="sv-name">${title}</h3>
-        <p class="sv-meta">${meta}</p>
+  return `<article class="sv-card sv-c-${p.category}" data-city="${p.city}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+        <div class="sv-head">
+          <span class="sv-ico">${icon(CAT_ICON[p.category])}</span>
+          <div>
+            <h3 class="sv-name">${title}</h3>
+            <p class="sv-meta">${meta}</p>
+          </div>
+        </div>
         <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
@@ -213,7 +227,22 @@ const html = `<!DOCTYPE html>
     .sv-card .sv-name { font-family:'DM Serif Display',serif; font-size:1.15rem; font-weight:400; line-height:1.25; margin:0 0 .25rem; }
     .sv-card .sv-name, .sv-card .sv-name a { color:var(--color-ink); text-decoration:none; }
     .sv-card .sv-name a:hover { color:var(--color-terracotta); text-decoration:underline; }
-    .sv-meta { font-size:.74rem; font-weight:600; letter-spacing:.02em; color:var(--color-stone); margin:0 0 .85rem; }
+    .sv-meta { font-size:.74rem; font-weight:600; letter-spacing:.02em; color:var(--color-stone); margin:0; }
+    /* A hospital and a barber were indistinguishable at a glance. Each category gets a glyph
+       and a hue, which is also what stops a column of cards reading as one grey block. */
+    .sv-head { display:flex; align-items:flex-start; gap:.75rem; margin:0 0 .95rem; }
+    .sv-head > div { min-width:0; }
+    .sv-ico { flex:0 0 auto; width:38px; height:38px; border-radius:11px; display:grid; place-items:center; font-size:19px; }
+    .sv-c-doctor .sv-ico { color:#0369a1; background:#e7f0f8; }
+    .sv-c-dentist .sv-ico { color:#0e7490; background:#e3f1f4; }
+    .sv-c-vet .sv-ico { color:#a16207; background:#f7f0df; }
+    .sv-c-therapy .sv-ico { color:#7c3aed; background:#f0eafc; }
+    .sv-c-physio .sv-ico { color:#4f46e5; background:#eceafc; }
+    .sv-c-optician .sv-ico { color:#0f766e; background:#e4f2f0; }
+    .sv-c-hair .sv-ico { color:#be185d; background:#fbe8f0; }
+    .sv-c-legal .sv-ico { color:#475569; background:#eef1f5; }
+    .sv-c-mechanic .sv-ico { color:#c2410c; background:#fbe9dd; }
+    .sv-c-fitness .sv-ico { color:#15803d; background:#e6f3e9; }
     /* The languages are the entire point of this page, so they get the strongest block on the
        card, above the prose and well clear of the provenance footer. */
     .sv-langs { display:flex; flex-wrap:wrap; align-items:center; gap:.32rem; margin:0 0 .85rem; }
