@@ -67,28 +67,23 @@ const catOptions = usedCats.map((c) => `<option value="${c}">${esc(CATS[c])}</op
 const langOptions = usedLangs.map((l) => `<option value="${l}">${esc(LANGS[l])}</option>`).join('');
 
 function card(p) {
-  const c = CITY[p.city];
-  const flag = c.iso ? `<img class="sv-flag" src="/assets/flags/${c.iso}.svg" alt="" width="20" height="15" loading="lazy">` : '';
   const chips = p.languages.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('');
   const host = (() => { try { return new URL(p.sourceUrl).hostname.replace(/^www\./, ''); } catch (e) { return 'source'; } })();
   const title = p.url
-    ? `<a class="sv-name" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
-    : `<span class="sv-name">${esc(p.name)}</span>`;
-  // Separators are glued to the preceding part with a non-breaking space, so a wrapped
-  // location line never starts with a stray middot.
-  const parts = [
-    `${flag}<a href="/cities/${p.city}">${esc(c.name)}</a>`,
-    p.area ? esc(p.area) : null,
-    esc(CATS[p.category]),
-  ].filter(Boolean);
-  const where = parts.map((s, i) => s + (i < parts.length - 1 ? '&nbsp;&middot;' : '')).join(' ');
+    ? `<a href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
+    : esc(p.name);
+  // The city and its flag live on the section band above, so repeating them on every card
+  // is noise. What the card owes you is: who, what kind, which languages, and on whose word.
+  const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
   return `<article class="sv-card" data-city="${p.city}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
-        <div class="sv-top">${title}<span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span></div>
-        <p class="sv-where">${where}</p>
-        <p class="sv-langs">Works in ${chips}</p>
+        <h3 class="sv-name">${title}</h3>
+        <p class="sv-meta">${meta}</p>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
-        <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Google Maps</a></p>
-        <p class="sv-src">Language claim read on <a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a>, ${esc(p.checked || 'undated')}</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
+          <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
       </article>`;
 }
 
@@ -206,34 +201,36 @@ const html = `<!DOCTYPE html>
     .sv-city-count { margin-left:auto; font-size:.82rem; font-weight:600; color:#fff; background:rgba(255,255,255,.16); border-radius:999px; padding:.28rem .75rem; white-space:nowrap; }
     .sv-city-band a.sv-city-credit { position:absolute; right:.6rem; bottom:.45rem; z-index:2; font-size:.6rem; color:rgba(255,255,255,.9); text-decoration:none; background:rgba(15,23,42,.45); border-radius:5px; padding:.12rem .4rem; }
     .sv-city-band a.sv-city-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
-    .sv-links { display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 .5rem; }
-    .sv-go { font-size:.78rem; font-weight:600; color:var(--color-terracotta); text-decoration:none; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:8px; padding:.3rem .6rem; transition:background .15s, border-color .15s; }
-    .sv-go:hover { background:var(--color-sand,#f6f1e7); border-color:var(--color-terracotta); }
-    .sv-nogo { font-size:.78rem; color:var(--color-stone); border:1px dashed var(--color-sand-dark,#e3d9c6); border-radius:8px; padding:.3rem .6rem; }
-    .sv-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:1.1rem 1.2rem; transition:border-color .15s, box-shadow .15s; }
-    .sv-card:hover { border-color:var(--color-terracotta); box-shadow:0 10px 24px rgba(15,23,42,.08); }
+    .sv-card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:14px; padding:1.15rem 1.25rem 1rem; transition:border-color .15s, box-shadow .15s, transform .15s; }
+    .sv-card:hover { border-color:var(--color-terracotta); box-shadow:0 10px 26px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-card.is-hidden { display:none; }
-    .sv-top { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.45rem; }
     /* base.css has a:not(.btn):not(.nav-link){color:terracotta} at specificity (0,2,1), which
        beats a plain class. Anything here that sets a link colour has to outrank that. */
-    .sv-card .sv-name, .sv-card a.sv-name { font-family:'DM Serif Display',serif; font-size:1.16rem; color:var(--color-ink); line-height:1.2; text-decoration:none; }
-    .sv-card a.sv-name:hover { color:var(--color-terracotta); text-decoration:underline; }
-    .sv-ev { margin-left:auto; flex:0 0 auto; font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; border-radius:5px; padding:.2rem .4rem; white-space:nowrap; }
+    .sv-card .sv-name { font-family:'DM Serif Display',serif; font-size:1.15rem; font-weight:400; line-height:1.25; margin:0 0 .25rem; }
+    .sv-card .sv-name, .sv-card .sv-name a { color:var(--color-ink); text-decoration:none; }
+    .sv-card .sv-name a:hover { color:var(--color-terracotta); text-decoration:underline; }
+    .sv-meta { font-size:.74rem; font-weight:600; letter-spacing:.02em; color:var(--color-stone); margin:0 0 .85rem; }
+    /* The languages are the entire point of this page, so they get the strongest block on the
+       card, above the prose and well clear of the provenance footer. */
+    .sv-langs { display:flex; flex-wrap:wrap; align-items:center; gap:.32rem; margin:0 0 .85rem; }
+    .sv-lang-label { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.11em; color:var(--color-stone); margin-right:.15rem; }
+    .sv-lang { background:#eef1f6; color:var(--color-ink); border-radius:6px; padding:.2rem .5rem; font-size:.79rem; font-weight:700; }
+    .sv-note { font-size:.85rem; line-height:1.6; color:var(--color-charcoal); margin:0 0 1rem; }
+    /* Never wrap: a long source host must ellipsize instead of pushing the actions onto a
+       second line, which left some cards with a stranded, separator-less row of links. */
+    .sv-foot { margin-top:auto; padding-top:.7rem; border-top:1px solid var(--color-sand,#f6f1e7); display:flex; align-items:center; justify-content:space-between; gap:.6rem; flex-wrap:nowrap; }
+    .sv-src { display:flex; align-items:center; gap:.4rem; flex:1 1 auto; min-width:0; font-size:.7rem; color:var(--color-stone); margin:0; }
+    .sv-card .sv-src a { color:var(--color-stone); text-decoration:underline; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .sv-card .sv-src a:hover { color:var(--color-terracotta); }
+    .sv-ev { flex:0 0 auto; font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; border-radius:5px; padding:.16rem .36rem; white-space:nowrap; }
     .sv-ev-official { color:#1c5c3c; background:#dff2e5; }
     .sv-ev-visited { color:#1c5c3c; background:#bfe8cf; }
     .sv-ev-self-declared { color:#8a5a00; background:#fbeecb; }
     .sv-ev-directory { color:#5c6672; background:#eceff3; }
-    .sv-where { font-size:.8rem; color:var(--color-stone); margin:0 0 .5rem; line-height:1.5; }
-    .sv-card .sv-where a { color:var(--color-stone); text-decoration:underline; }
-    .sv-card .sv-where a:hover { color:var(--color-terracotta); }
-    /* base.css sets img{display:block}, which would drop the flag onto its own line. */
-    .sv-flag { display:inline-block; border-radius:2px; box-shadow:0 0 0 1px rgba(0,0,0,.08); vertical-align:-2px; margin-right:.3rem; }
-    .sv-langs { font-size:.8rem; color:var(--color-stone); margin:0 0 .55rem; }
-    .sv-lang { display:inline-block; background:var(--color-sand,#f6f1e7); color:var(--color-charcoal); border-radius:5px; padding:.1rem .4rem; margin:0 .25rem .2rem 0; font-size:.76rem; font-weight:600; }
-    .sv-note { font-size:.86rem; line-height:1.55; color:var(--color-charcoal); margin:0 0 .55rem; }
-    .sv-src { font-size:.74rem; color:var(--color-stone); margin:auto 0 0; padding-top:.4rem; }
-    .sv-card .sv-src a { color:var(--color-stone); text-decoration:underline; }
-    .sv-card .sv-src a:hover { color:var(--color-terracotta); }
+    .sv-links { display:flex; align-items:center; gap:.75rem; margin:0; flex:0 0 auto; }
+    .sv-card a.sv-go { font-size:.76rem; font-weight:700; color:var(--color-terracotta); text-decoration:none; white-space:nowrap; }
+    .sv-card a.sv-go:hover { text-decoration:underline; }
+    .sv-nogo { font-size:.76rem; color:var(--color-stone); }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
