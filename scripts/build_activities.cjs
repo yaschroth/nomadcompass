@@ -181,7 +181,7 @@ ${NAV}
       ${crumbHtml}
       <section class="act-intro">
         ${introHtml}
-        <p class="act-note">This is a curated, editorial list based on each place's reputation for ${esc(a.activity.toLowerCase())} and how workable it is as a nomad base. Unlike our <a href="/best">rankings</a> and <a href="/tier-list">tier lists</a>, it is not generated from our 410-city Nomad Score, because we do not score cities on this activity.</p>
+        <p class="act-note">This is a curated, editorial list based on each place's reputation for ${esc(a.activity.toLowerCase())} and how workable it is as a nomad base. Unlike our <a href="/best">rankings</a> and <a href="/tier-list">tier lists</a>, it is not generated from our ${S.cities}-city Nomad Score, because we do not score cities on this activity.</p>
       </section>
       <p class="act-cta" style="margin:1.4rem 0 0;"><a href="https://klook.tpx.li/xK2DU5Pr" target="_blank" rel="sponsored nofollow" data-aff="activities" style="display:inline-block;padding:.6rem 1.1rem;border-radius:999px;background:var(--color-terracotta,#c0392b);color:#fff;font-weight:600;font-size:.92rem;text-decoration:none;">Browse tours, activities &amp; tickets on Klook &rarr;</a></p>
       <h2 class="act-h2">The picks</h2>
@@ -191,7 +191,7 @@ ${items}
       ${faqHtml ? `<section class="act-faq"><h2 class="act-h2">Frequently asked questions</h2>\n${faqHtml}\n      </section>` : ''}
       <section class="act-more"><h2 class="act-h2">More ways to choose</h2><div class="act-more-chips">${moreChips}</div></section>
       <div class="act-cta">
-        <a href="/cities" class="btn btn-primary btn-lg">Browse all 410 cities &rarr;</a>
+        <a href="/cities" class="btn btn-primary btn-lg">Browse all ${S.cities} cities &rarr;</a>
         <a href="/wheel" class="btn btn-secondary btn-lg">Find your match on the Wheel</a>
       </div>
     </div>
@@ -260,7 +260,7 @@ ${NAV}
       <div class="hub-grid">
 ${cards}
       </div>
-      <div class="hub-cta"><a href="/cities" class="btn btn-primary btn-lg">Browse all 410 cities &rarr;</a></div>
+      <div class="hub-cta"><a href="/cities" class="btn btn-primary btn-lg">Browse all ${S.cities} cities &rarr;</a></div>
     </div>
   </main>
   ${FOOTER}

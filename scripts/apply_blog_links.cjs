@@ -8,6 +8,8 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const { stats } = require('./lib/site-stats.cjs');
+const S = stats();
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // Per-post curated links: [href, label]. City guide first, then rankings + tier lists + a tool.
@@ -20,12 +22,12 @@ const MAP = {
   'dubai-digital-nomad-guide': [['/cities/dubai', 'Dubai city guide'], ['/best/best-digital-nomad-cities-in-the-middle-east', 'Best nomad cities in the Middle East'], ['/tier-list/middle-east', 'Middle East tier list'], ['/best/best-cities-for-fast-wifi', 'Best for WiFi ranking'], ['/tier-list/wifi', 'WiFi tier list']],
   'mexico-city-nomad-guide': [['/cities/mexicocity', 'Mexico City city guide'], ['/best/best-digital-nomad-cities-in-mexico', 'Best nomad cities in Mexico'], ['/tier-list/mexico', 'Mexico tier list'], ['/best/best-digital-nomad-cities-in-north-america', 'Best in North America & the Caribbean'], ['/tier-list', 'The full tier list']],
   'medellin-vs-chiang-mai': [['/compare?a=medellin&b=chiangmai', 'Compare Medellin vs Chiang Mai'], ['/cities/medellin', 'Medellin city guide'], ['/cities/chiangmai', 'Chiang Mai city guide'], ['/best/best-digital-nomad-cities-in-latin-america', 'Best nomad cities in Latin America'], ['/tier-list', 'The full tier list']],
-  'best-european-cities-nomads': [['/best/best-digital-nomad-cities-in-europe', 'Best nomad cities in Europe'], ['/tier-list/europe', 'Europe tier list'], ['/best/best-all-round-cities-for-digital-nomads', 'Best all-round cities ranking'], ['/cities', 'Browse all 410 cities'], ['/tier-list', 'The full tier list']],
+  'best-european-cities-nomads': [['/best/best-digital-nomad-cities-in-europe', 'Best nomad cities in Europe'], ['/tier-list/europe', 'Europe tier list'], ['/best/best-all-round-cities-for-digital-nomads', 'Best all-round cities ranking'], ['/cities', `Browse all ${S.cities} cities`], ['/tier-list', 'The full tier list']],
   'best-coworking-spaces-bali': [['/cities/bali', 'Bali (Canggu) city guide'], ['/best/best-digital-nomad-cities-in-indonesia', 'Best nomad cities in Indonesia'], ['/tier-list/indonesia', 'Indonesia tier list'], ['/best/best-cities-for-nomad-community', 'Best for nomad community ranking'], ['/tier-list/nomad-community', 'Nomad community tier list']],
   'portugal-digital-nomad-visa': [['/best/best-digital-nomad-cities-in-portugal', 'Best nomad cities in Portugal'], ['/tier-list/portugal', 'Portugal tier list'], ['/best/best-cities-for-digital-nomad-visas', 'Best for nomad visas ranking'], ['/tier-list/visa', 'Visa access tier list'], ['/cities/lisbon', 'Lisbon city guide']],
   'digital-nomad-tax-guide': [['/best/best-cities-for-digital-nomad-visas', 'Best for nomad visas ranking'], ['/tier-list/visa', 'Visa access tier list'], ['/best/best-value-cities-for-digital-nomads', 'Best value ranking'], ['/best', 'All city rankings'], ['/wheel', 'Match a city on the Nomad Wheel']],
   'remote-work-routine-guide': [['/best/best-cities-for-fast-wifi', 'Best for WiFi ranking'], ['/tier-list/wifi', 'WiFi tier list'], ['/best/best-cities-for-nomad-community', 'Best for nomad community ranking'], ['/best', 'All city rankings'], ['/wheel', 'Match a city on the Nomad Wheel']],
-  'rise-of-coliving-spaces': [['/best/best-cities-for-nomad-community', 'Best for nomad community ranking'], ['/tier-list/nomad-community', 'Nomad community tier list'], ['/best/best-cities-for-first-time-digital-nomads', 'Best for first-timers ranking'], ['/tier-list/first-timers', 'First-timers tier list'], ['/cities', 'Browse all 410 cities']],
+  'rise-of-coliving-spaces': [['/best/best-cities-for-nomad-community', 'Best for nomad community ranking'], ['/tier-list/nomad-community', 'Nomad community tier list'], ['/best/best-cities-for-first-time-digital-nomads', 'Best for first-timers ranking'], ['/tier-list/first-timers', 'First-timers tier list'], ['/cities', `Browse all ${S.cities} cities`]],
   'stay-productive-working-abroad': [['/best/best-cities-for-fast-wifi', 'Best for WiFi ranking'], ['/tier-list/wifi', 'WiFi tier list'], ['/best/best-all-round-cities-for-digital-nomads', 'Best all-round cities ranking'], ['/best', 'All city rankings'], ['/wheel', 'Match a city on the Nomad Wheel']],
 };
 

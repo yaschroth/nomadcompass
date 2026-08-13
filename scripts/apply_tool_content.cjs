@@ -9,9 +9,11 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const { stats } = require('./lib/site-stats.cjs');
+const S = stats();
 
 const CITY = (id, name) => ({ href: '/cities/' + id, label: name });
-const R = { cities: { href: '/cities', label: 'Browse all 410 cities' }, best: { href: '/best', label: 'Best cities rankings' }, map: { href: '/map', label: 'The world map' }, route: { href: '/route', label: 'Route Planner' }, tz: { href: '/timezones', label: 'Time Zone Finder' }, visa: { href: '/visa', label: 'Visa Finder' }, weather: { href: '/best-weather', label: 'Best Weather by Month' }, geo: { href: '/geoarbitrage', label: 'Geoarbitrage Calculator' }, wheel: { href: '/wheel', label: 'Decision Wheel' }, compare: { href: '/compare', label: 'Compare cities' }, blog: { href: '/blog', label: 'The blog' } };
+const R = { cities: { href: '/cities', label: `Browse all ${S.cities} cities` }, best: { href: '/best', label: 'Best cities rankings' }, map: { href: '/map', label: 'The world map' }, route: { href: '/route', label: 'Route Planner' }, tz: { href: '/timezones', label: 'Time Zone Finder' }, visa: { href: '/visa', label: 'Visa Finder' }, weather: { href: '/best-weather', label: 'Best Weather by Month' }, geo: { href: '/geoarbitrage', label: 'Geoarbitrage Calculator' }, wheel: { href: '/wheel', label: 'Decision Wheel' }, compare: { href: '/compare', label: 'Compare cities' }, blog: { href: '/blog', label: 'The blog' } };
 
 // ---- data for the static "popular results" blocks (real, crawlable city links, no JS) ----
 const m = {};
@@ -165,7 +167,7 @@ const TOOLS = {
   },
   'tier-list/maker.html': {
     h: 'About the Tier List Maker',
-    intro: 'A tier list is the fastest way to turn a messy opinion into something you can share. Drag the cities you know into S through F tiers, add any of our 410 destinations, and you have your own personal ranking of the best nomad cities, built on your priorities rather than ours. It is a bit of fun, and a genuinely useful way to compare places at a glance.',
+    intro: 'A tier list is the fastest way to turn a messy opinion into something you can share. Drag the cities you know into S through F tiers, add any of our ' + S.cities + ' destinations, and you have your own personal ranking of the best nomad cities, built on your priorities rather than ours. It is a bit of fun, and a genuinely useful way to compare places at a glance.',
     how: 'Start from a pool of the top-rated cities, then drag any card into a tier on desktop, or tap a city and tap a tier on a phone. Search to add more cities to the pool. Your whole board is saved in the page link, so the share button gives you a URL that reopens your exact tier list for a friend or a forum post.',
     faq: [
       ['How do I share my tier list?', 'Your arrangement is encoded in the page URL, so just hit "Copy share link" and paste it anywhere. Whoever opens it sees your exact board. Nothing is saved to an account, so the link is the tier list.'],

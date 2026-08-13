@@ -4,6 +4,9 @@
  * canonical Organization / WebSite / Person nodes so their @ids stay consistent
  * across every page (lets other JSON-LD reference publisher/author by @id).
  */
+const { stats } = require('./lib/site-stats.cjs');
+const S = stats();
+
 const SITE = 'https://thenomadhq.com';
 const ORG_ID = SITE + '/#organization';
 const SITE_ID = SITE + '/#website';
@@ -15,7 +18,7 @@ const ORG = {
   name: 'The Nomad HQ',
   url: SITE + '/',
   logo: { '@type': 'ImageObject', url: SITE + '/logo.png', width: 512, height: 512 },
-  description: 'Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 650+ cities scored across 13 categories.',
+  description: `Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of ${S.cities} cities scored across ${S.categories} categories.`,
   founder: { '@id': PERSON_ID },
   sameAs: [
     'https://www.linkedin.com/in/yannick-schroth/',

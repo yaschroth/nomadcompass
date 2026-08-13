@@ -115,7 +115,7 @@ const LEGEND = [
 const legendItems = LEGEND.map(([t, d], i) => `<div class="legend-item"><div class="legend-item-icon">${i + 1}</div><div class="legend-item-content"><div class="legend-item-title">${t}</div><div class="legend-item-desc">${d}</div></div></div>`).join('\n              ');
 
 // beautiful image cards (same component as the homepage), rendered statically for all
-// 410 cities so they stay crawlable; the toolbar below filters/sorts them client-side.
+// every city so they stay crawlable; the toolbar below filters/sorts them client-side.
 const CAT_LABELS = [['climate', 'Climate'], ['cost', 'Cost'], ['wifi', 'WiFi'], ['nightlife', 'Nightlife'], ['nature', 'Nature'], ['safety', 'Safety'], ['food', 'Food'], ['community', 'Community'], ['english', 'English'], ['visa', 'Visa'], ['culture', 'Culture'], ['cleanliness', 'Clean'], ['airquality', 'Air']];
 const barCls = (v) => (v >= 8 ? 'excellent' : v >= 6 ? 'good' : v >= 4 ? 'average' : 'below');
 const badgeCls = (v) => (v == null ? 'below' : v >= 8 ? 'excellent' : v >= 6.5 ? 'good' : v >= 5 ? 'average' : 'below');
