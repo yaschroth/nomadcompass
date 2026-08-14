@@ -45,9 +45,10 @@ const LANGS = DB._languages;
 const EVIDENCE = DB._evidence;
 
 // A hospital and a barber looked identical at a glance, so each category carries its own
-// Lucide glyph and hue. Lucide has no tooth, hence 'smile' for dentistry.
+// Lucide glyph and hue, plus the one custom glyph: 'tooth' is drawn in scripts/build_icons.cjs
+// because Lucide has none, and 'smile' read as a mood rather than a molar.
 const CAT_ICON = {
-  doctor: 'stethoscope', dentist: 'smile', vet: 'paw-print', therapy: 'brain',
+  doctor: 'stethoscope', dentist: 'tooth', vet: 'paw-print', therapy: 'brain',
   physio: 'bone', optician: 'glasses', hair: 'scissors', legal: 'scale',
   tax: 'calculator', realestate: 'key', mechanic: 'wrench', fitness: 'dumbbell',
 };

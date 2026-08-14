@@ -28,11 +28,18 @@ const NAMES = [
   'map', 'clock', 'target', 'scale', 'globe', 'trophy',
   // blog footer
   'compass', 'coffee',
-  // /services provider categories (legal reuses 'scale' above). Lucide has no tooth, so
-  // dentistry uses 'smile', which is the conventional stand-in.
-  'stethoscope', 'smile', 'paw-print', 'brain', 'bone', 'glasses', 'scissors', 'wrench', 'dumbbell',
+  // /services provider categories (legal reuses 'scale' above).
+  'stethoscope', 'paw-print', 'brain', 'bone', 'glasses', 'scissors', 'wrench', 'dumbbell',
   'calculator', 'key',
 ];
+
+// Lucide has no tooth (only bluetooth), and dentistry was standing in with 'smile', which reads
+// as a mood rather than a molar. This one is drawn to Lucide's own conventions: 24x24 box,
+// single stroked path, no fill, so it sits with the rest at any size. Kept here rather than
+// hand-added to scripts/lib/icons.cjs, or the next run of this script would drop it.
+const CUSTOM = {
+  tooth: '<path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" />',
+};
 
 // Pull the inner markup (paths/circles/...) out of a Lucide file, dropping the
 // license comment and the outer <svg> wrapper. Collapse to a single line.
@@ -49,20 +56,22 @@ function innerOf(name) {
 
 const inner = {};
 for (const n of NAMES) inner[n] = innerOf(n);
+Object.assign(inner, CUSTOM);
+const ALL = NAMES.concat(Object.keys(CUSTOM));
 
 // 1. assets/icons.svg sprite. Stroke attrs live on each <symbol> so external
 //    <use> resolves currentColor at the host; .nh-icon in CSS is the sizing hook.
 const symbolAttrs =
   'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
   'stroke-linecap="round" stroke-linejoin="round"';
-const symbols = NAMES.map((n) => `  <symbol id="${n}" ${symbolAttrs}>${inner[n]}</symbol>`).join('\n');
+const symbols = ALL.map((n) => `  <symbol id="${n}" ${symbolAttrs}>${inner[n]}</symbol>`).join('\n');
 const sprite =
   `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n` +
   `<!-- Line icons from Lucide (ISC). Built by scripts/build_icons.cjs. Do not edit by hand. -->\n` +
   symbols +
   `\n</svg>\n`;
 fs.writeFileSync(path.join(ROOT, 'assets', 'icons.svg'), sprite);
-console.log('assets/icons.svg written (' + NAMES.length + ' symbols)');
+console.log('assets/icons.svg written (' + ALL.length + ' symbols)');
 
 // 2. scripts/lib/icons.cjs source-of-truth.
 const CATEGORY_ICON = {
