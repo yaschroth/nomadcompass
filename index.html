@@ -100,30 +100,56 @@
       min-height: 100svh;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       position: relative;
       overflow: hidden;
-      padding: var(--space-16) var(--space-6);
+      padding: var(--space-16) 0;
       padding-top: calc(var(--nav-height) + var(--space-10));
       padding-bottom: 5rem;
     }
 
 
+    /* Left-aligned, and held to the site container rather than centred, so the headline starts
+       on exactly the same left edge as every section heading below it. The background is a
+       centred composition, which is why the copy is capped well short of the container: it sits
+       in the left half and leaves the watercolour visible. */
     .hero-content {
       position: relative;
       z-index: 1;
-      text-align: center;
-      max-width: 800px;
+      text-align: left;
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      /* Same gutter as .container, and the horizontal padding moved off .hero to get it. With
+         it on .hero instead, the copy started a full var(--space-6) left of every section
+         heading below, which is visible the moment you scroll. */
+      padding-left: var(--space-6);
+      padding-right: var(--space-6);
     }
 
     .hero-kicker {
-      margin: 0 0 var(--space-3);
+      margin: 0 0 var(--space-4);
     }
 
     .hero-kicker .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem 0.35rem 0.65rem;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--color-sand-dark);
       color: var(--color-terracotta-dark);
       letter-spacing: 0.14em;
-      text-shadow: 0 1px 12px rgba(253, 248, 243, 0.95), 0 0 20px rgba(253, 248, 243, 0.85);
+    }
+
+    .hero-kicker .eyebrow::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-terracotta);
+      flex: 0 0 auto;
     }
 
     /* The headline is static text now. It used to be typed in by JS, which left the served
@@ -133,8 +159,8 @@
       font-size: clamp(2.5rem, 8vw, 4.5rem);
       line-height: 1.1;
       margin: 0 0 var(--space-3);
+      max-width: 15ch;
       color: var(--color-ink);
-      text-wrap: balance;
       text-shadow: 0 2px 22px rgba(253, 248, 243, 0.95), 0 1px 3px rgba(253, 248, 243, 0.9);
     }
 
@@ -150,30 +176,24 @@
     .hero-subheadline {
       font-size: var(--text-xl);
       color: var(--color-charcoal);
-      max-width: 600px;
-      margin: 0 auto var(--space-6);
+      max-width: 48ch;
+      margin: 0 0 var(--space-6);
       line-height: var(--leading-relaxed);
       text-shadow: 0 1px 14px rgba(253, 248, 243, 0.95);
     }
 
-    /* Proof strip. One opaque bar rather than four tiles: the hero now carries a search
-       field and a row of region chips as well, and four separate cards pushed the whole block
-       past the fold on a 720px laptop. The opaque fill is still a contrast requirement, not
-       taste - terracotta on that blend is ~4.6:1 and passes AA, straight on the watercolour it
-       does not. */
+    /* A plain row of figures rather than tiles or a bar. They read as a caption under the
+       search, which is what they are. Contrast holds without an opaque backing here because the
+       numbers use terracotta-dark rather than terracotta, and the labels are charcoal; both sit
+       comfortably above AA on the watercolour, which the lighter terracotta did not. */
     .hero-stats {
       list-style: none;
-      margin: 0 auto;
-      padding: var(--space-2) var(--space-5);
-      display: inline-flex;
+      margin: 0;
+      padding: 0;
+      display: flex;
       flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-1) var(--space-6);
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-full);
-      box-shadow: var(--shadow-sm);
+      align-items: baseline;
+      gap: var(--space-2) var(--space-6);
     }
 
     .hero-stat {
@@ -182,13 +202,14 @@
       gap: 0.35rem;
       font-size: var(--text-sm);
       color: var(--color-charcoal);
+      text-shadow: 0 1px 12px rgba(253, 248, 243, 0.95);
     }
 
     .hero-stat .num {
       font-family: var(--font-display);
-      font-size: 1.3rem;
+      font-size: 1.45rem;
       line-height: 1;
-      color: var(--color-terracotta);
+      color: var(--color-terracotta-dark);
       font-variant-numeric: tabular-nums;
     }
 
@@ -199,7 +220,7 @@
       align-items: center;
       gap: 0.5rem;
       max-width: 560px;
-      margin: 0 auto var(--space-4);
+      margin: 0 0 var(--space-4);
       padding: 0.4rem 0.4rem 0.4rem 1.1rem;
       background: #fff;
       border: 1px solid var(--color-sand-dark);
@@ -245,7 +266,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.45rem;
-      justify-content: center;
       list-style: none;
       margin: 0 0 var(--space-6);
       padding: 0;
@@ -1234,6 +1254,7 @@
 
       .hero-headline {
         font-size: 2.25rem;
+        max-width: none;
       }
 
       .hero-subheadline {
@@ -1250,12 +1271,11 @@
         padding-bottom: var(--space-8);
       }
 
-      /* The bar wraps to two lines here rather than staying one row of four. */
       .hero-stats {
         gap: var(--space-1) var(--space-4);
-        padding: var(--space-2) var(--space-4);
-        border-radius: var(--radius-lg);
       }
+
+      .hero-stat .num { font-size: 1.25rem; }
 
       .hero-search {
         padding-left: 0.9rem;
