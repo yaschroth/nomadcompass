@@ -7,1451 +7,142 @@
   <!-- /ga4 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preload" as="image" href="/assets/fuji-hero.webp" fetchpriority="high">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="The Nomad HQ helps digital nomads cut through the noise and find the city that actually fits their life. Stop comparing. Start going.">
-
-  <title>Design variant: photo hero | The Nomad HQ (internal preview)</title>
-
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/logo-128.svg">
-
-  <!-- Stylesheets -->
-<link rel="stylesheet" href="/styles/fonts.css">
-  <link rel="stylesheet" href="styles/base.css">
-  <link rel="stylesheet" href="styles/nav.css">
-  <link rel="stylesheet" href="styles/footer.css">
-
-  <!-- Auth state check (runs synchronously before render to prevent flash) -->
-  <script>
-    (function() {
-      try {
-        var auth = JSON.parse(localStorage.getItem('nomadcompass_auth'));
-        if (auth && auth.loggedIn) {
-          document.documentElement.classList.add('auth-logged-in');
-        }
-      } catch (e) {}
-    })();
-  </script>
-
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="The Nomad HQ, Find Your Perfect Digital Nomad City">
-  <meta property="og:description" content="Stop comparing cities endlessly. The Nomad HQ helps digital nomads find the destination that actually fits their lifestyle.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://thenomadhq.com/">
-  <meta property="og:image" content="https://thenomadhq.com/assets/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The Nomad HQ: Find Your Perfect Digital Nomad City">
-  <meta name="twitter:description" content="Stop comparing cities endlessly. The Nomad HQ helps digital nomads find the destination that actually fits their lifestyle.">
-  <meta name="twitter:image" content="https://thenomadhq.com/assets/og-image.png">
-
-  <!-- Page-specific styles -->
+  <title>Version B: alternative homepage design | The Nomad HQ (internal preview)</title>
+  <meta name="description" content="Internal design review page. An alternative homepage layout for The Nomad HQ.">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/styles/fonts.css">
+  <link rel="preload" as="image" href="/assets/fuji-hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/nav.css">
+  <link rel="stylesheet" href="/styles/footer.css">
   <style>
-    /* Page fade-in animation */
-    body {
-      animation: pageIn 0.4s ease-out;
-    }
-    @keyframes pageIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
     /* ============================================
-       FULL PAGE BACKGROUND
+       VERSION B  (index-alt.html only)
+       A full alternative homepage. Namespaced .b- / .ha- so it cannot touch the live design.
        ============================================ */
-    .page-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('images/extended_surf_4000.webp') center top / cover no-repeat;
-      z-index: -2;
-    }
-
-    .page-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(253, 248, 243, 0.42) 0%,
-        rgba(253, 248, 243, 0.52) 25%,
-        rgba(253, 248, 243, 0.62) 50%,
-        rgba(253, 248, 243, 0.8) 75%,
-        rgba(253, 248, 243, 0.92) 100%
-      );
-      pointer-events: none;
-    }
-
-    /* ============================================
-       HERO SECTION
-       ============================================ */
-    .hero {
-      min-height: 100vh;
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      padding: var(--space-16) var(--space-6);
-      padding-top: calc(var(--nav-height) + var(--space-10));
-      padding-bottom: 5rem;
-    }
-
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      max-width: 800px;
-    }
-
-    .hero-kicker {
-      margin: 0 0 var(--space-3);
-    }
-
-    .hero-kicker .eyebrow {
-      color: var(--color-terracotta-dark);
-      letter-spacing: 0.14em;
-      text-shadow: 0 1px 12px rgba(253, 248, 243, 0.95), 0 0 20px rgba(253, 248, 243, 0.85);
-    }
-
-    /* The headline is static text now. It used to be typed in by JS, which left the served
-       heading empty for crawlers and shifted the layout mid-animation because this rule
-       reserved only one line for a two-line phrase. No min-height needed with real text. */
-    .hero-headline {
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      line-height: 1.1;
-      margin: 0 0 var(--space-3);
-      color: var(--color-ink);
-      text-wrap: balance;
-      text-shadow: 0 2px 22px rgba(253, 248, 243, 0.95), 0 1px 3px rgba(253, 248, 243, 0.9);
-    }
-
-    .hero-tagline {
-      font-family: var(--font-display);
-      font-size: clamp(1.15rem, 2.6vw, 1.5rem);
-      color: var(--color-terracotta);
-      margin: 0 0 var(--space-5);
-      line-height: 1.25;
-      text-shadow: 0 1px 14px rgba(253, 248, 243, 0.95);
-    }
-
-    .hero-subheadline {
-      font-size: var(--text-xl);
-      color: var(--color-charcoal);
-      max-width: 600px;
-      margin: 0 auto var(--space-6);
-      line-height: var(--leading-relaxed);
-      text-shadow: 0 1px 14px rgba(253, 248, 243, 0.95);
-    }
-
-    /* Proof strip. Tiles rather than bare text because the hero sits over a photograph:
-       an opaque card is the only way to hold AA contrast for a 12px label. The 0.92 fill is
-       a contrast requirement, not taste - terracotta on that blend is ~4.6:1 and passes,
-       at 0.72 it drops to ~3.7:1 and fails. Same visual language as .about-stat, but that
-       CSS lives inline in about.html and is not loaded here. */
-    .hero-stats {
-      list-style: none;
-      margin: 0 auto var(--space-8);
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: var(--space-3);
-      max-width: 620px;
-    }
-
-    .hero-stat {
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-lg);
-      padding: var(--space-3) var(--space-2);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .hero-stat .num {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.32em;
-      font-family: var(--font-display);
-      font-size: clamp(1.35rem, 3.2vw, 1.7rem);
-      line-height: 1;
-      color: var(--color-terracotta);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .hero-stat .num .nh-icon {
-      width: 0.8em;
-      height: 0.8em;
-      color: var(--color-stone);
-    }
-
-    .hero-stat .lbl {
-      display: block;
-      margin-top: var(--space-1);
-      font-size: var(--text-xs);
-      line-height: 1.35;
+    body.vb { background: var(--color-cream); }
+    .vb .b-wrap { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--space-4); }
+    .vb .b-eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 var(--space-4);
+      padding: .35rem .85rem .35rem .6rem; border-radius: var(--radius-full);
+      background: var(--color-sand); border: 1px solid var(--color-sand-dark);
+      font-size: var(--text-xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
       color: var(--color-charcoal);
     }
-
-    .hero-ctas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      justify-content: center;
-    }
-
-    .hero-ctas .btn {
-      min-width: 180px;
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: var(--space-5);
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-      color: var(--color-stone);
-      font-size: var(--text-sm);
-      animation: bounce 2s ease infinite;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .hero-scroll-icon {
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--color-stone);
-      border-radius: var(--radius-full);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hero-scroll-icon::after {
-      content: '';
-      width: 4px;
-      height: 4px;
-      background-color: var(--color-stone);
-      border-radius: var(--radius-full);
-      animation: scrollDot 2s ease infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
-
-    @keyframes scrollDot {
-      0%, 100% { transform: translateY(-4px); opacity: 0; }
-      50% { transform: translateY(4px); opacity: 1; }
-    }
-
-    /* ============================================
-       CITIES EXPLORER PAGE STYLES
-       (copied 1:1 from cities.html)
-       ============================================ */
-
-    /* --- FILTER BAR --- */
-    .filter-bar {
-      background-color: var(--color-white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      padding: var(--space-5);
-      margin-bottom: var(--space-8);
-    }
-
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      align-items: flex-end;
-    }
-
-    .filter-group {
-      flex: 1;
-      min-width: 150px;
-    }
-
-    .filter-label {
-      display: block;
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-charcoal);
-      margin-bottom: var(--space-2);
-    }
-
-    .filter-select {
-      width: 100%;
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--text-base);
-      color: var(--color-charcoal);
-      background-color: var(--color-sand);
-      border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233D3833' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 36px;
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: var(--color-terracotta);
-      box-shadow: 0 0 0 3px rgba(196, 112, 75, 0.15);
-    }
-
-    /* --- SEARCH INPUT --- */
-    .filter-input {
-      width: 100%;
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--text-base);
-      color: var(--color-charcoal);
-      background-color: var(--color-sand);
-      border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-md);
-      padding-left: 36px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: 10px center;
-    }
-
-    .filter-input:focus {
-      outline: none;
-      border-color: var(--color-terracotta);
-      box-shadow: 0 0 0 3px rgba(196, 112, 75, 0.15);
-    }
-
-    .filter-input::placeholder {
-      color: var(--color-stone);
-    }
-
-    /* --- ADVANCED FILTERS BUTTON --- */
-    .advanced-filters-btn {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-4);
-      font-size: var(--text-base);
-      font-weight: var(--font-medium);
-      color: var(--color-charcoal);
-      background-color: var(--color-sand);
-      border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-
-    .advanced-filters-btn:hover {
-      background-color: var(--color-sand-dark);
-    }
-
-    .advanced-filters-btn.active {
-      background-color: var(--color-terracotta);
-      color: var(--color-white);
-      border-color: var(--color-terracotta);
-    }
-
-    .advanced-filters-btn .filter-icon {
-      flex-shrink: 0;
-    }
-
-    .advanced-filters-btn .chevron-icon {
-      flex-shrink: 0;
-      transition: transform 0.2s ease;
-    }
-
-    .advanced-filters-btn.active .chevron-icon {
-      transform: rotate(180deg);
-    }
-
-    .filter-badge {
-      display: none;
-      background-color: var(--color-terracotta);
-      color: var(--color-white);
-      font-size: var(--text-xs);
-      font-weight: var(--font-semibold);
-      padding: 2px 6px;
-      border-radius: 999px;
-      min-width: 18px;
-      text-align: center;
-    }
-
-    .advanced-filters-btn.active .filter-badge {
-      background-color: var(--color-white);
-      color: var(--color-terracotta);
-    }
-
-    .filter-badge.visible {
-      display: inline-block;
-    }
-
-    /* --- SLIDERS PANEL --- */
-    .sliders-panel {
-      display: none;
-      margin-top: var(--space-5);
-      padding-top: var(--space-5);
-      border-top: 1px solid var(--color-sand-dark);
-      animation: slideDown 0.3s ease;
-    }
-
-    .sliders-panel.open {
-      display: block;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .sliders-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-4) var(--space-6);
-    }
-
-    .slider-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-
-    .slider-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .slider-label {
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-charcoal);
-    }
-
-    .slider-value {
-      font-size: var(--text-sm);
-      font-weight: var(--font-semibold);
-      color: var(--color-terracotta);
-      background-color: rgba(196, 112, 75, 0.1);
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      min-width: 28px;
-      text-align: center;
-    }
-
-    /* --- DUAL RANGE SLIDER STYLING --- */
-    .dual-range {
-      position: relative;
-      height: 20px;
-      display: flex;
-      align-items: center;
-    }
-
-    .slider-track {
-      position: absolute;
-      width: 100%;
-      height: 6px;
-      background: var(--color-sand-dark);
-      border-radius: 3px;
-      pointer-events: none;
-    }
-
-    .slider-range {
-      position: absolute;
-      height: 6px;
-      background: var(--color-terracotta);
-      border-radius: 3px;
-      pointer-events: none;
-    }
-
-    .filter-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      position: absolute;
-      width: 100%;
-      height: 6px;
-      background: transparent;
-      outline: none;
-      cursor: pointer;
-      pointer-events: none;
-    }
-
-    .filter-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      background: var(--color-terracotta);
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      pointer-events: auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .filter-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-    }
-
-    .filter-slider::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      background: var(--color-terracotta);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      pointer-events: auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .filter-slider::-moz-range-thumb:hover {
-      transform: scale(1.1);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-    }
-
-    .filter-slider-min {
-      z-index: 1;
-    }
-
-    .filter-slider-max {
-      z-index: 2;
-    }
-
-    /* --- TIMEZONE FILTER (signed-in only) --- */
-    .slider-group-timezone {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, var(--color-sand) 0%, rgba(255,255,255,0.5) 100%);
-      border-radius: var(--radius-md);
-      padding: var(--space-4);
-      margin-top: var(--space-2);
-      border: 1px dashed var(--color-sand-dark);
-    }
-
-    .slider-group-timezone .slider-label {
-      color: var(--color-terracotta);
-    }
-
-    .timezone-filter-content {
-      display: none;
-    }
-
-    .timezone-filter-content.active {
-      display: block;
-    }
-
-    .timezone-filter-locked {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: var(--text-sm);
-      color: var(--color-stone);
-      padding: var(--space-2) 0;
-    }
-
-    .timezone-filter-locked.hidden {
-      display: none;
-    }
-
-    .timezone-filter-locked svg {
-      color: var(--color-sand-dark);
-      flex-shrink: 0;
-    }
-
-    .timezone-filter-locked a {
-      color: var(--color-terracotta);
-      font-weight: var(--font-medium);
-      text-decoration: none;
-    }
-
-    .timezone-filter-locked a:hover {
-      text-decoration: underline;
-    }
-
-    /* --- RESET BUTTON --- */
-    .reset-filters-btn {
-      margin-top: var(--space-5);
-      padding: var(--space-2) var(--space-4);
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-stone);
-      background-color: transparent;
-      border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .reset-filters-btn:hover {
-      color: var(--color-charcoal);
-      border-color: var(--color-stone);
-      background-color: var(--color-sand);
-    }
-
-    /* --- RESULTS INFO --- */
-    .results-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-6);
-      flex-wrap: wrap;
-      gap: var(--space-3);
-    }
-
-    .results-count {
-      font-size: var(--text-base);
-      color: var(--color-stone);
-    }
-
-    .results-count strong {
-      color: var(--color-ink);
-    }
-
-    /* --- CITIES GRID --- */
-    .cities-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
-    }
-
-    @media (min-width: 640px) {
-      .cities-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .cities-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    /* --- COLLAPSED STATE --- */
-    .cities-grid.collapsed .city-card:nth-child(n+10) {
-      display: none;
-    }
-
-    /* --- SHOW MORE BUTTON --- */
-    .show-more-container {
-      display: flex;
-      justify-content: center;
-      margin-top: var(--space-8);
-    }
-
-    .show-more-btn {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-4) var(--space-8);
-      background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-dark, #1a3a2a) 100%);
-      color: white;
-      border: none;
-      border-radius: var(--radius-full);
-      font-family: var(--font-body);
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(45, 71, 57, 0.3);
-    }
-
-    .show-more-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(45, 71, 57, 0.4);
-    }
-
-    .show-more-icon {
-      transition: transform 0.3s ease;
-    }
-
-    .show-more-btn.expanded .show-more-icon {
-      transform: rotate(180deg);
-    }
-
-    .show-more-container.hidden {
-      display: none;
-    }
-
-    /* --- CITY CARD --- */
-    .city-card {
-      background-color: var(--color-white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-      transition: transform var(--transition-base), box-shadow var(--transition-base), opacity var(--transition-base);
-    }
-
-    .city-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .city-card.hidden {
-      display: none;
-    }
-
-    .city-card.fade-out {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-
-    .city-card.fade-in {
-      animation: cardFadeIn 0.4s ease forwards;
-    }
-
-    @keyframes cardFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Staggered animation delays */
-    .city-card:nth-child(1) { animation-delay: 0ms; }
-    .city-card:nth-child(2) { animation-delay: 50ms; }
-    .city-card:nth-child(3) { animation-delay: 100ms; }
-    .city-card:nth-child(4) { animation-delay: 150ms; }
-    .city-card:nth-child(5) { animation-delay: 200ms; }
-    .city-card:nth-child(6) { animation-delay: 250ms; }
-    .city-card:nth-child(7) { animation-delay: 300ms; }
-    .city-card:nth-child(8) { animation-delay: 350ms; }
-    .city-card:nth-child(9) { animation-delay: 400ms; }
-
-    .city-card-image-container {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .city-card-image {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .city-card:hover .city-card-image {
-      transform: scale(1.05);
-    }
-
-    /* Stats overlay on hover */
-    .city-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.92);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .city-card:hover .city-card-overlay {
-      opacity: 1;
-    }
-
-    .overlay-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 5px 8px;
-      padding: 10px;
-      width: 100%;
-    }
-
-    .overlay-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .overlay-stat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .overlay-stat-label {
-      font-size: 9px;
-      color: rgba(255, 255, 255, 0.75);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      font-weight: var(--font-medium);
-    }
-
-    .overlay-stat-value {
-      font-size: 9px;
-      font-weight: var(--font-semibold);
-      color: var(--color-white);
-    }
-
-    .overlay-stat-bar {
-      height: 3px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .overlay-stat-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-
-    .overlay-stat-fill.excellent { background: #4ade80; }
-    .overlay-stat-fill.good { background: #facc15; }
-    .overlay-stat-fill.average { background: #fb923c; }
-    .overlay-stat-fill.below { background: #f87171; }
-
-    .city-card-body {
-      padding: var(--space-5);
-    }
-
-    .city-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: var(--space-2);
-    }
-
-    .city-card-location {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .city-card-flag {
-      font-size: var(--text-2xl);
-    }
-
-    .city-card-name {
-      font-family: var(--font-display);
-      font-size: var(--text-xl);
-      color: var(--color-ink);
-      margin: 0;
-      line-height: 1.2;
-    }
-
-    .city-card-country {
-      font-size: var(--text-sm);
-      color: var(--color-stone);
-    }
-
-    /* Nomad Score badge */
-    .nomad-score {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-md);
-      min-width: 50px;
-    }
-
-    .nomad-score-value {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      line-height: 1;
-    }
-
-    .nomad-score-label {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      opacity: 0.9;
-    }
-
-    /* Score adjustment indicator */
-    .score-adj {
-      font-size: 10px;
-      margin-left: 2px;
-    }
-
-    .score-adj.up {
-      color: #4ade80;
-    }
-
-    .score-adj.down {
-      color: #f87171;
-    }
-
-    /* Score color variants */
-    .nomad-score.excellent {
-      background-color: var(--color-forest);
-      color: var(--color-white);
-    }
-
-    .nomad-score.good {
-      background-color: var(--color-forest-muted);
-      color: var(--color-white);
-    }
-
-    .nomad-score.average {
-      background-color: var(--color-warning);
-      color: var(--color-ink);
-    }
-
-    .nomad-score.below {
-      background-color: var(--color-sand-dark);
-      color: var(--color-charcoal);
-    }
-
-    .city-card-tagline {
-      font-size: var(--text-sm);
-      color: var(--color-charcoal);
-      line-height: var(--leading-relaxed);
-      margin-bottom: var(--space-4);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* Weather and Cost Info Row */
-    .city-card-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--space-3);
-      margin-bottom: var(--space-3);
-      background-color: var(--color-sand);
-      border-radius: var(--radius-md);
-    }
-
-    .city-card-weather {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .weather-icon {
-      font-size: var(--text-xl);
-    }
-
-    .weather-temp {
-      font-size: var(--text-base);
-      font-weight: var(--font-semibold);
-      color: var(--color-charcoal);
-    }
-
-    .city-card-climate-type {
-      font-size: var(--text-xs);
-      font-weight: var(--font-medium);
-      color: var(--color-white);
-      background-color: var(--color-stone);
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .city-card-cost {
-      display: flex;
-      align-items: baseline;
-      gap: 2px;
-    }
-
-    .cost-label {
-      font-size: var(--text-base);
-      font-weight: var(--font-semibold);
-      color: var(--color-terracotta);
-    }
-
-    .cost-period {
-      font-size: var(--text-xs);
-      color: var(--color-stone);
-    }
-
-    .city-card-action {
-      width: 100%;
-    }
-
-    /* --- RATINGS LEGEND --- */
-    .ratings-legend {
-      background-color: var(--color-white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: var(--space-6);
-      overflow: hidden;
-    }
-
-    .legend-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: var(--space-4) var(--space-5);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--color-charcoal);
-      transition: background-color 0.2s ease;
-    }
-
-    .legend-toggle:hover {
-      background-color: var(--color-sand);
-    }
-
-    .legend-toggle-text {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .legend-toggle svg {
-      transition: transform 0.2s ease;
-    }
-
-    .legend-toggle.active svg {
-      transform: rotate(180deg);
-    }
-
-    .legend-content {
-      display: none;
-      padding: 0 var(--space-5) var(--space-5);
-      animation: slideDown 0.3s ease;
-    }
-
-    .legend-content.open {
-      display: block;
-    }
-
-    .legend-intro {
-      font-size: var(--text-sm);
-      color: var(--color-stone);
-      margin-bottom: var(--space-4);
-      line-height: var(--leading-relaxed);
-    }
-
-    .legend-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: var(--space-3);
-    }
-
-    .legend-item {
-      display: flex;
-      gap: var(--space-3);
-      padding: var(--space-3);
-      background-color: var(--color-sand);
-      border-radius: var(--radius-md);
-    }
-
-    .legend-item-icon {
-      flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--color-terracotta);
-      color: white;
-      border-radius: var(--radius-sm);
-      font-size: var(--text-sm);
-      font-weight: var(--font-semibold);
-    }
-
-    .legend-item-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .legend-item-title {
-      font-size: var(--text-sm);
-      font-weight: var(--font-semibold);
-      color: var(--color-ink);
-      margin-bottom: 2px;
-    }
-
-    .legend-item-desc {
-      font-size: var(--text-xs);
-      color: var(--color-stone);
-      line-height: 1.4;
-    }
-
-    .legend-score-scale {
-      margin-top: var(--space-4);
-      padding-top: var(--space-4);
-      border-top: 1px solid var(--color-sand-dark);
-    }
-
-    .legend-scale-title {
-      font-size: var(--text-sm);
-      font-weight: var(--font-semibold);
-      color: var(--color-charcoal);
-      margin-bottom: var(--space-3);
-    }
-
-    .legend-scale-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .legend-scale-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: var(--text-xs);
-      color: var(--color-stone);
-    }
-
-    .legend-scale-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .legend-scale-dot.excellent { background: #4ade80; }
-    .legend-scale-dot.good { background: #facc15; }
-    .legend-scale-dot.average { background: #fb923c; }
-    .legend-scale-dot.below { background: #f87171; }
-
-    /* --- NO RESULTS --- */
-    .no-results {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: var(--space-16);
-      color: var(--color-stone);
-    }
-
-    .no-results-icon {
-      font-size: 3rem;
-      margin-bottom: var(--space-4);
-    }
-
-    .no-results h3 {
-      margin-bottom: var(--space-2);
-      color: var(--color-ink);
-    }
-
-    /* --- RESPONSIVE --- */
-    @media (max-width: 767px) {
-      .filter-group {
-        min-width: 100%;
-      }
-
-      .filter-row {
-        flex-direction: column;
-      }
-
-      .advanced-filters-btn {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .sliders-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-headline {
-        font-size: 2.25rem;
-      }
-
-      .hero-subheadline {
-        font-size: var(--text-lg);
-      }
-
-      .hero-scroll {
-        display: none;
-      }
-
-      /* The scroll cue is hidden here, so reclaim the 5rem it was reserving to pay for
-         the stat strip. Four tiles go 2-up, mirroring about.html's stat grid. */
-      .hero {
-        padding-bottom: var(--space-8);
-      }
-
-      .hero-stats {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 400px;
-        gap: var(--space-2);
-        margin-bottom: var(--space-6);
-      }
-
-      .hero-stat .num .nh-icon {
-        display: none;
-      }
-    }
-
-    /* Laptops with a short viewport (1280x720, 1366x768 once browser chrome is subtracted).
-       The kicker, tagline and stat strip add roughly 135px and the hero is min-height:100vh,
-       so without this the CTAs fall below the fold on exactly those machines. Never fires
-       above 780px of height. */
-    @media (min-width: 768px) and (max-height: 780px) {
-      .hero {
-        padding-top: calc(var(--nav-height) + var(--space-6));
-        padding-bottom: 3.5rem;
-      }
-
-      .hero-headline {
-        font-size: clamp(2.25rem, 6vw, 3.25rem);
-      }
-
-      .hero-tagline {
-        margin-bottom: var(--space-4);
-      }
-
-      .hero-subheadline {
-        font-size: var(--text-lg);
-        margin-bottom: var(--space-5);
-      }
-
-      .hero-stats {
-        margin-bottom: var(--space-5);
-      }
-
-      .hero-stat {
-        padding: var(--space-2);
-      }
-    }
-    /* ============================================
-       ALTERNATIVE HERO (index-alt.html only)
-       Photo-card treatment: full-bleed image in a rounded card, left-aligned copy over a
-       side scrim, a working city search on the bar, and region chips that link to real
-       ranking pages. Namespaced .ha- so none of it touches the live hero above.
-       ============================================ */
-    .ha-wrap {
-      padding: calc(var(--nav-height) + var(--space-4)) var(--space-4) var(--space-6);
-    }
-
-    .ha-card {
-      position: relative;
-      border-radius: 28px;
-      overflow: hidden;
-      min-height: min(76vh, 720px);
-      display: flex;
-      align-items: flex-end;
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
-      max-width: var(--container-max);
-      margin: 0 auto;
-    }
-
-    .ha-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* Two scrims: one from the left for the copy, one from the bottom for the search bar.
-       Deliberately light in the middle: Mount Fuji sits behind the headline and a heavier
-       wash erased it, which defeats the point of choosing this photograph. The copy gets its
-       contrast from text-shadow plus the concentrated bottom-left gradient instead. */
-    .ha-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(100deg, rgba(9, 17, 33, 0.78) 0%, rgba(9, 17, 33, 0.34) 30%, rgba(9, 17, 33, 0.04) 55%, transparent 78%),
-        linear-gradient(to top, rgba(9, 17, 33, 0.66) 0%, rgba(9, 17, 33, 0.12) 38%, transparent 58%);
-    }
-
-    .ha-inner {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      padding: clamp(1.5rem, 4vw, 3.25rem);
-      color: #fff;
-    }
-
-    .ha-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0 0 var(--space-5);
-      padding: 0.4rem 0.9rem 0.4rem 0.7rem;
-      border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #fff;
-    }
-
-    .ha-badge .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--color-accent-coral);
-      flex: 0 0 auto;
-    }
-
-    .ha-h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.3rem, 6vw, 4rem);
-      line-height: 1.06;
-      margin: 0 0 var(--space-4);
-      color: #fff;
-      max-width: 16ch;
-      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
-    }
-
-    .ha-sub {
-      font-size: var(--text-lg);
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.9);
-      margin: 0 0 var(--space-6);
-      max-width: 52ch;
-      text-shadow: 0 1px 16px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.45);
-    }
-
-    .ha-search {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: var(--radius-full);
-      padding: 0.45rem 0.45rem 0.45rem 1.1rem;
-      max-width: 560px;
-      box-shadow: 0 10px 30px rgba(9, 17, 33, 0.25);
-    }
-
-    .ha-search .nh-icon {
-      width: 1.1rem;
-      height: 1.1rem;
-      color: var(--color-stone);
-      flex: 0 0 auto;
-    }
-
-    .ha-search input {
-      flex: 1 1 auto;
-      min-width: 0;
-      border: none;
-      background: none;
-      font-family: inherit;
-      font-size: var(--text-base);
-      color: var(--color-ink);
-      padding: 0.55rem 0.2rem;
-    }
-
+    .vb .b-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-terracotta); }
+    .vb .b-h2 { font-family: var(--font-display); font-size: var(--text-h2); line-height: 1.1; color: var(--color-ink); margin: 0 0 var(--space-3); text-wrap: balance; }
+    .vb .b-lead { font-size: var(--text-lg); line-height: 1.65; color: var(--color-charcoal); margin: 0; max-width: 62ch; }
+
+    /* --- hero ------------------------------------------------------------------------ */
+    .ha-wrap { padding: calc(var(--nav-height) + var(--space-4)) var(--space-4) var(--space-6); }
+    .ha-card { position: relative; border-radius: 28px; overflow: hidden; min-height: min(76vh, 720px);
+      display: flex; align-items: flex-end; box-shadow: 0 24px 60px rgba(15,23,42,.22);
+      max-width: var(--container-max); margin: 0 auto; }
+    .ha-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    /* Light in the middle on purpose: a heavier wash erased Mount Fuji, which defeats the
+       point of the photograph. Contrast for the copy comes from text-shadow instead. */
+    .ha-card::after { content: ''; position: absolute; inset: 0; background:
+      linear-gradient(100deg, rgba(9,17,33,.78) 0%, rgba(9,17,33,.34) 30%, rgba(9,17,33,.04) 55%, transparent 78%),
+      linear-gradient(to top, rgba(9,17,33,.66) 0%, rgba(9,17,33,.12) 38%, transparent 58%); }
+    .ha-inner { position: relative; z-index: 1; width: 100%; padding: clamp(1.5rem, 4vw, 3.25rem); color: #fff; }
+    .ha-badge { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 var(--space-5);
+      padding: .4rem .9rem .4rem .7rem; border-radius: var(--radius-full);
+      background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28);
+      font-size: var(--text-xs); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #fff; }
+    .ha-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent-coral); flex: 0 0 auto; }
+    .ha-h1 { font-family: var(--font-display); font-size: clamp(2.3rem, 6vw, 4rem); line-height: 1.06;
+      margin: 0 0 var(--space-4); color: #fff; max-width: 16ch; text-shadow: 0 2px 30px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.4); }
+    .ha-sub { font-size: var(--text-lg); line-height: 1.6; color: rgba(255,255,255,.9); margin: 0 0 var(--space-6);
+      max-width: 52ch; text-shadow: 0 1px 16px rgba(0,0,0,.7), 0 1px 2px rgba(0,0,0,.45); }
+    .ha-search { display: flex; align-items: center; gap: .5rem; background: rgba(255,255,255,.96);
+      border-radius: var(--radius-full); padding: .45rem .45rem .45rem 1.1rem; max-width: 560px;
+      box-shadow: 0 10px 30px rgba(9,17,33,.25); }
+    .ha-search .nh-icon { width: 1.1rem; height: 1.1rem; color: var(--color-stone); flex: 0 0 auto; }
+    .ha-search input { flex: 1 1 auto; min-width: 0; border: none; background: none; font-family: inherit;
+      font-size: var(--text-base); color: var(--color-ink); padding: .55rem .2rem; }
     .ha-search input:focus { outline: none; }
-
-    .ha-go {
-      flex: 0 0 auto;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: var(--text-sm);
-      font-weight: 600;
-      color: #fff;
-      background: var(--color-terracotta);
-      border-radius: var(--radius-full);
-      padding: 0.62rem 1.35rem;
-      transition: background var(--transition-fast);
-    }
-
+    .ha-go { flex: 0 0 auto; border: none; cursor: pointer; font-family: inherit; font-size: var(--text-sm);
+      font-weight: 600; color: #fff; background: var(--color-terracotta); border-radius: var(--radius-full);
+      padding: .62rem 1.35rem; transition: background var(--transition-fast); }
     .ha-go:hover { background: var(--color-terracotta-dark); }
-
-    /* Every chip goes to a ranking page that actually exists, so the row is navigation
-       rather than decoration. */
-    .ha-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-      margin: var(--space-5) 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
+    .ha-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: var(--space-5) 0 0; padding: 0; list-style: none; }
     /* base.css has a:not(.btn):not(.nav-link){color:terracotta} at specificity (0,2,1), which
-       beats a plain class. Anything setting a link colour on this page has to outrank it or
-       the chips and the credit come out terracotta on the photograph. */
-    .ha-card .ha-chips a {
-      display: inline-block;
-      padding: 0.42rem 0.85rem;
-      border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #fff;
-      font-size: var(--text-sm);
-      font-weight: 600;
-      text-decoration: none;
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
-      transition: background var(--transition-fast), border-color var(--transition-fast);
-    }
+       beats a plain class. Every link colour on this page has to outrank that. */
+    .ha-card .ha-chips a { display: inline-block; padding: .42rem .85rem; border-radius: var(--radius-full);
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); color: #fff;
+      font-size: var(--text-sm); font-weight: 600; text-decoration: none; text-shadow: 0 1px 8px rgba(0,0,0,.35);
+      transition: background var(--transition-fast), border-color var(--transition-fast); }
+    .ha-card .ha-chips a:hover { background: rgba(255,255,255,.28); border-color: #fff; color: #fff; }
+    .ha-stats { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.4rem; list-style: none; margin: var(--space-6) 0 0; padding: 0; }
+    .ha-stats li { display: flex; align-items: baseline; gap: .4rem; color: rgba(255,255,255,.88);
+      font-size: var(--text-sm); text-shadow: 0 1px 10px rgba(0,0,0,.55); }
+    .ha-stats b { font-family: var(--font-display); font-size: 1.45rem; font-weight: 400; color: #fff;
+      font-variant-numeric: tabular-nums; text-shadow: 0 1px 12px rgba(0,0,0,.55); }
+    .ha-card a.ha-credit { position: absolute; right: .85rem; bottom: .6rem; z-index: 2; font-size: .64rem;
+      color: rgba(255,255,255,.88); text-decoration: none; background: rgba(9,17,33,.5); border-radius: 6px; padding: .18rem .5rem; }
+    .ha-card a.ha-credit:hover { color: #fff; background: rgba(9,17,33,.75); }
 
-    .ha-card .ha-chips a:hover {
-      background: rgba(255, 255, 255, 0.28);
-      border-color: #fff;
-      color: #fff;
-    }
+    /* --- city rail -------------------------------------------------------------------- */
+    .vb .b-rail-sec { padding: var(--space-16) 0 var(--space-12); }
+    .vb .b-rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; margin: 0 0 var(--space-8); }
+    .vb .b-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr);
+      gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 0 var(--space-4);
+      margin: 0; list-style: none; scrollbar-width: thin; }
+    .vb .b-city { scroll-snap-align: start; }
+    .vb .b-city a { display: block; text-decoration: none; color: var(--color-ink); }
+    .vb .b-city-img { position: relative; display: block; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--color-sand); }
+    .vb .b-city-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--transition-slow); }
+    .vb .b-city a:hover .b-city-img img { transform: scale(1.05); }
+    .vb .b-city-score { position: absolute; top: .6rem; right: .6rem; background: rgba(255,255,255,.94);
+      color: var(--color-ink); font-family: var(--font-display); font-size: 1rem; line-height: 1;
+      padding: .32rem .5rem; border-radius: 8px; box-shadow: var(--shadow-sm); }
+    .vb .b-city-meta { display: flex; align-items: center; gap: .35rem; margin: .7rem 0 .15rem;
+      font-size: var(--text-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
+    .vb .b-flag { border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); display: inline-block; }
+    .vb .b-city-name { display: block; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.15; color: var(--color-ink); }
+    .vb .b-city-cost { display: block; margin-top: .2rem; font-size: var(--text-sm); font-weight: 700; color: var(--color-terracotta); font-variant-numeric: tabular-nums; }
+    .vb .b-city-cost small { font-weight: 400; color: var(--color-stone); }
 
-    .ha-stats {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem 1.4rem;
-      list-style: none;
-      margin: var(--space-6) 0 0;
-      padding: 0;
-    }
+    /* --- dark proof band -------------------------------------------------------------- */
+    .vb .b-proof { background: linear-gradient(135deg, #0f172a 0%, #16233d 55%, #1d2f4d 100%); color: #fff;
+      border-radius: 28px; padding: clamp(2rem, 5vw, 3.5rem); margin: var(--space-8) 0 var(--space-16); }
+    .vb .b-proof-top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-8); flex-wrap: wrap; margin: 0 0 var(--space-10); }
+    .vb .b-proof .b-eyebrow { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.24); color: rgba(255,255,255,.9); }
+    .vb .b-proof .b-eyebrow .dot { background: var(--color-accent-coral); }
+    .vb .b-proof h2 { font-family: var(--font-display); font-size: var(--text-h2); line-height: 1.1; margin: 0; color: #fff; max-width: 18ch; }
+    .vb .b-proof-aside { max-width: 44ch; }
+    .vb .b-proof-aside p { color: rgba(255,255,255,.82); line-height: 1.7; margin: 0 0 var(--space-4); }
+    .vb .b-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: var(--space-5); list-style: none; margin: 0; padding: 0; }
+    .vb .b-feature { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: var(--space-5); }
+    .vb .b-feature-ico { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;
+      border-radius: 12px; background: rgba(255,255,255,.12); color: #fff; font-size: 20px; margin: 0 0 var(--space-4); }
+    .vb .b-feature h3 { font-size: var(--text-base); font-weight: 600; color: #fff; margin: 0 0 .4rem; }
+    .vb .b-feature p { font-size: var(--text-sm); line-height: 1.6; color: rgba(255,255,255,.72); margin: 0; }
 
-    .ha-stats li {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
-      color: rgba(255, 255, 255, 0.88);
-      font-size: var(--text-sm);
-      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
-    }
+    /* --- statement -------------------------------------------------------------------- */
+    .vb .b-statement { text-align: center; padding: 0 0 var(--space-16); }
+    .vb .b-statement h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.28;
+      color: var(--color-ink); margin: 0 auto var(--space-6); max-width: 26ch; }
+    .vb .b-pill { display: inline-block; vertical-align: middle; width: clamp(58px, 8vw, 96px); aspect-ratio: 16 / 10;
+      border-radius: var(--radius-full); overflow: hidden; margin: 0 .15em; box-shadow: var(--shadow-sm); }
+    .vb .b-pill img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .vb .b-statement-note { font-size: var(--text-sm); color: var(--color-stone); margin: 0 auto; max-width: 60ch; }
+    .vb .b-photo-credit { display: block; margin-top: var(--space-3); font-size: .68rem; color: var(--color-stone); }
 
-    .ha-stats b {
-      font-family: var(--font-display);
-      font-size: 1.45rem;
-      font-weight: 400;
-      color: #fff;
-      font-variant-numeric: tabular-nums;
-      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
-    }
-
-    .ha-card a.ha-credit {
-      position: absolute;
-      right: 0.85rem;
-      bottom: 0.6rem;
-      z-index: 2;
-      font-size: 0.64rem;
-      color: rgba(255, 255, 255, 0.88);
-      text-decoration: none;
-      background: rgba(9, 17, 33, 0.5);
-      border-radius: 6px;
-      padding: 0.18rem 0.5rem;
-    }
-
-    .ha-card a.ha-credit:hover { color: #fff; background: rgba(9, 17, 33, 0.75); }
+    /* --- closing band ----------------------------------------------------------------- */
+    .vb .b-cta { position: relative; overflow: hidden; border-radius: 28px; margin: 0 0 var(--space-16);
+      background: linear-gradient(120deg, #1b2a44 0%, #0f172a 65%); color: #fff;
+      padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem); text-align: center; }
+    .vb .b-cta::before { content: ''; position: absolute; right: -8%; top: -40%; width: 46%; height: 180%;
+      background: radial-gradient(circle at center, rgba(192,57,43,.32), transparent 68%); pointer-events: none; }
+    .vb .b-cta > * { position: relative; z-index: 1; }
+    .vb .b-cta h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 4.4vw, 2.9rem); line-height: 1.12;
+      margin: 0 auto var(--space-4); color: #fff; max-width: 20ch; }
+    .vb .b-cta p { color: rgba(255,255,255,.82); font-size: var(--text-lg); line-height: 1.6; margin: 0 auto var(--space-8); max-width: 54ch; }
+    .vb .b-cta-btns { display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; }
+    .vb .b-cta .btn-ghost { color: #fff; border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.06); }
+    .vb .b-cta .btn-ghost:hover { background: rgba(255,255,255,.16); border-color: #fff; color: #fff; }
 
     @media (max-width: 767px) {
       .ha-wrap { padding: calc(var(--nav-height) + var(--space-3)) var(--space-3) var(--space-5); }
@@ -1460,74 +151,26 @@
          the pagoda. Bias the crop right and down so the subject survives. */
       .ha-img { object-position: 64% 58%; }
       .ha-h1 { max-width: none; }
-      .ha-search { max-width: none; padding-left: 0.9rem; }
-      .ha-go { padding: 0.6rem 1rem; }
-      .ha-stats { gap: 0.35rem 1rem; }
+      .ha-search { max-width: none; padding-left: .9rem; }
+      .ha-go { padding: .6rem 1rem; }
+      .ha-stats { gap: .35rem 1rem; }
       .ha-stats b { font-size: 1.2rem; }
+      .vb .b-rail { grid-auto-columns: minmax(210px, 1fr); }
+      .vb .b-rail-sec { padding: var(--space-10) 0 var(--space-8); }
+      .vb .b-proof, .vb .b-cta { border-radius: 20px; }
     }
-
   </style>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "The Nomad HQ",
-    "url": "https://thenomadhq.com/",
-    "logo": "https://thenomadhq.com/assets/logo-256.svg",
-    "sameAs": [
-      "https://www.linkedin.com/in/yannick-schroth/",
-      "https://www.instagram.com/ynncks/"
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "The Nomad HQ",
-    "url": "https://thenomadhq.com/"
-  }
-  </script>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
-<!-- travelpayouts -->
-<script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
-  (function () {
-      var loaded = false;
-      function loadTP() {
-          if (loaded) return; loaded = true;
-          var script = document.createElement("script");
-          script.async = 1;
-          script.setAttribute("data-cmp-ab","2");
-          script.src = 'https://tp-em.com/NTU3OTE2.js?t=557916';
-          document.head.appendChild(script);
-      }
-      var granted = false;
-      try { granted = localStorage.getItem('nomadhq_consent') === 'granted'; } catch (e) {}
-      if (granted) { loadTP(); return; }
-      document.addEventListener('DOMContentLoaded', function () {
-          var a = document.getElementById('cc-accept');
-          if (a) a.addEventListener('click', loadTP);
-      });
-      window.addEventListener('nomadhq:consent-granted', loadTP);
-  })();
-</script>
-<!-- /travelpayouts -->
 </head>
-<body class="home">
+<body class="vb">
   <a href="#main-content" class="skip-link">Skip to main content</a>
-  <!-- Full page background -->
-  <div class="page-bg"></div>
-
-  <!-- ==========================================
-       NAVIGATION
-       ========================================== -->
-  <nav class="nav" id="mainNav">
+<nav class="nav" id="mainNav">
     <div class="nav-container">
       <a href="/" class="nav-logo">
         <img src="assets/logo.svg" alt="" class="nav-logo-icon">
         <span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span>
       </a>
-      <ul class="nav-links"><li><a href="/" class="nav-link active">Home</a></li><li class="nav-item-drop"><button type="button" class="nav-link nav-drop-btn" aria-haspopup="true" aria-expanded="false">Tools<span class="nav-caret" aria-hidden="true"></span></button><ul class="nav-drop-menu"><li><a href="/route" class="nav-drop-link">Route Planner</a></li><li><a href="/best-weather" class="nav-drop-link">Best Weather by Month</a></li><li><a href="/visa" class="nav-drop-link">Visa Finder</a></li><li><a href="/nomad-visas" class="nav-drop-link">Nomad Visa Finder</a></li><li><a href="/geoarbitrage" class="nav-drop-link">Geoarbitrage Calculator</a></li><li><a href="/salary" class="nav-drop-link">Salary Calculator</a></li><li><a href="/cost-of-living-index" class="nav-drop-link">Cost of Living Index</a></li><li><a href="/timezones" class="nav-drop-link">Time Zone Finder</a></li><li><a href="/compare" class="nav-drop-link">Compare Cities</a></li><li><a href="/wheel" class="nav-drop-link">Decision Wheel</a></li><li><a href="/map" class="nav-drop-link">World Map</a></li><li><a href="/tier-list" class="nav-drop-link">Tier List</a></li><li><a href="/tier-list/maker" class="nav-drop-link">Tier List Maker</a></li></ul></li><li><a href="/cities" class="nav-link">Cities</a></li><li><a href="/services" class="nav-link">Services</a></li><li><a href="/best" class="nav-link">Rankings</a></li><li><a href="/blog" class="nav-link">Blog</a></li></ul>
+      <ul class="nav-links"><li><a href="/" class="nav-link">Home</a></li><li class="nav-item-drop"><button type="button" class="nav-link nav-drop-btn" aria-haspopup="true" aria-expanded="false">Tools<span class="nav-caret" aria-hidden="true"></span></button><ul class="nav-drop-menu"><li><a href="/route" class="nav-drop-link">Route Planner</a></li><li><a href="/best-weather" class="nav-drop-link">Best Weather by Month</a></li><li><a href="/visa" class="nav-drop-link">Visa Finder</a></li><li><a href="/nomad-visas" class="nav-drop-link">Nomad Visa Finder</a></li><li><a href="/geoarbitrage" class="nav-drop-link">Geoarbitrage Calculator</a></li><li><a href="/salary" class="nav-drop-link">Salary Calculator</a></li><li><a href="/cost-of-living-index" class="nav-drop-link">Cost of Living Index</a></li><li><a href="/timezones" class="nav-drop-link">Time Zone Finder</a></li><li><a href="/compare" class="nav-drop-link">Compare Cities</a></li><li><a href="/wheel" class="nav-drop-link">Decision Wheel</a></li><li><a href="/map" class="nav-drop-link">World Map</a></li><li><a href="/tier-list" class="nav-drop-link">Tier List</a></li><li><a href="/tier-list/maker" class="nav-drop-link">Tier List Maker</a></li></ul></li><li><a href="/cities" class="nav-link">Cities</a></li><li><a href="/services" class="nav-link">Services</a></li><li><a href="/best" class="nav-link">Rankings</a></li><li><a href="/blog" class="nav-link">Blog</a></li></ul>
       <form class="nav-search" action="/cities" method="get" role="search"><input type="search" name="q" placeholder="Jump to a city&hellip;" aria-label="Search a city" autocomplete="off" list="navCityList"><datalist id="navCityList"></datalist></form>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span class="nav-toggle-line"></span>
@@ -1536,11 +179,10 @@
       </button>
     </div>
     <div class="nav-mobile" id="navMobile">
-      <ul class="nav-mobile-links"><li><a href="/" class="nav-mobile-link active">Home</a></li><li class="nav-mobile-group"><span class="nav-mobile-label">Tools</span><a href="/route" class="nav-mobile-sub">Route Planner</a><a href="/best-weather" class="nav-mobile-sub">Best Weather by Month</a><a href="/visa" class="nav-mobile-sub">Visa Finder</a><a href="/nomad-visas" class="nav-mobile-sub">Nomad Visa Finder</a><a href="/geoarbitrage" class="nav-mobile-sub">Geoarbitrage Calculator</a><a href="/salary" class="nav-mobile-sub">Salary Calculator</a><a href="/cost-of-living-index" class="nav-mobile-sub">Cost of Living Index</a><a href="/timezones" class="nav-mobile-sub">Time Zone Finder</a><a href="/compare" class="nav-mobile-sub">Compare Cities</a><a href="/wheel" class="nav-mobile-sub">Decision Wheel</a><a href="/map" class="nav-mobile-sub">World Map</a><a href="/tier-list" class="nav-mobile-sub">Tier List</a><a href="/tier-list/maker" class="nav-mobile-sub">Tier List Maker</a></li><li><a href="/cities" class="nav-mobile-link">Cities</a></li><li><a href="/services" class="nav-mobile-link">Services</a></li><li><a href="/best" class="nav-mobile-link">Rankings</a></li><li><a href="/blog" class="nav-mobile-link">Blog</a></li></ul>
+      <ul class="nav-mobile-links"><li><a href="/" class="nav-mobile-link">Home</a></li><li class="nav-mobile-group"><span class="nav-mobile-label">Tools</span><a href="/route" class="nav-mobile-sub">Route Planner</a><a href="/best-weather" class="nav-mobile-sub">Best Weather by Month</a><a href="/visa" class="nav-mobile-sub">Visa Finder</a><a href="/nomad-visas" class="nav-mobile-sub">Nomad Visa Finder</a><a href="/geoarbitrage" class="nav-mobile-sub">Geoarbitrage Calculator</a><a href="/salary" class="nav-mobile-sub">Salary Calculator</a><a href="/cost-of-living-index" class="nav-mobile-sub">Cost of Living Index</a><a href="/timezones" class="nav-mobile-sub">Time Zone Finder</a><a href="/compare" class="nav-mobile-sub">Compare Cities</a><a href="/wheel" class="nav-mobile-sub">Decision Wheel</a><a href="/map" class="nav-mobile-sub">World Map</a><a href="/tier-list" class="nav-mobile-sub">Tier List</a><a href="/tier-list/maker" class="nav-mobile-sub">Tier List Maker</a></li><li><a href="/cities" class="nav-mobile-link">Cities</a></li><li><a href="/services" class="nav-mobile-link">Services</a></li><li><a href="/best" class="nav-mobile-link">Rankings</a></li><li><a href="/blog" class="nav-mobile-link">Blog</a></li></ul>
     </div>
   </nav>
-
-  <!-- Navigation Script -->
+<!-- Navigation Script -->
   <script>
     (function() {
       const nav = document.getElementById('mainNav');
@@ -1570,15 +212,8 @@
       }, { passive: true });
     })();
   </script>
-
-  <!-- ==========================================
-       MAIN CONTENT
-       ========================================== -->
   <main id="main-content" tabindex="-1">
 
-    <!-- ==========================================
-         SECTION 1: HERO
-         ========================================== -->
     <section class="ha-wrap">
       <div class="ha-card">
         <img class="ha-img" src="/assets/fuji-hero.webp" alt="Mount Fuji seen across Fujiyoshida from Arakurayama Sengen Park, with the red Chureito Pagoda and autumn trees in the foreground" fetchpriority="high" width="1920" height="1080">
@@ -1589,8 +224,7 @@
           <form class="ha-search" action="/cities" method="get" role="search">
             <svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#compass"></use></svg>
             <label class="sr-only" for="haCity">Search a city</label>
-            <input type="search" id="haCity" name="q" placeholder="Lisbon, Chiang Mai, Medellin&hellip;" autocomplete="off" list="haCityList">
-            <datalist id="haCityList"></datalist>
+            <input type="search" id="haCity" name="q" placeholder="Lisbon, Chiang Mai, Medellin&hellip;" autocomplete="off">
             <button type="submit" class="ha-go">Search</button>
           </form>
           <ul class="ha-chips">
@@ -1612,292 +246,154 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         CITIES EXPLORER (copied from cities.html)
-         ========================================== -->
-    <section class="section" id="cities">
-      <div class="container">
-        <div style="text-align:center; max-width:820px; margin:0 auto;">
-          <h2 style="font-family:'DM Serif Display',serif; font-size:var(--text-h2); color:var(--color-ink); line-height:1.15; margin:0 0 .85rem;">Find your city, your way</h2>
-          <p style="color:var(--color-charcoal); font-size:1.12rem; line-height:1.7; margin:0 auto; max-width:660px;">We rate every city on the things that matter most to digital nomads: cost of living, WiFi, safety, climate, visas and more. Match your priorities to a city with the Nomad Wheel, or browse and compare them all yourself.</p>
-          <div style="display:flex; flex-wrap:wrap; gap:.75rem; justify-content:center; margin-top:1.6rem;">
-            <a href="wheel" class="btn btn-primary btn-lg">Find your match on the Wheel &rarr;</a>
-            <a href="cities" class="btn btn-secondary btn-lg">Browse &amp; compare all cities</a>
+    <section class="b-rail-sec">
+      <div class="b-wrap">
+        <div class="b-rail-head">
+          <div>
+            <p class="b-eyebrow"><span class="dot"></span>Top rated right now</p>
+            <h2 class="b-h2">The cities scoring highest today</h2>
+            <p class="b-lead">Ranked by Nomad Score, our composite of all 13 categories. Every card opens a full guide with the score breakdown, monthly costs and neighbourhoods.</p>
+          </div>
+          <a href="/cities" class="btn btn-secondary">Browse all cities &rarr;</a>
+        </div>
+        <ul class="b-rail">
+          <li class="b-city">
+            <a href="/cities/lisbon">
+              <span class="b-city-img"><img src="/images/cities/lisbon-card.webp" alt="Lisbon, Portugal" loading="lazy" width="800" height="532"><span class="b-city-score">9.6</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/pt.svg" alt="" width="20" height="15" loading="lazy">Portugal</span>
+              <span class="b-city-name">Lisbon</span>
+              <span class="b-city-cost">$2,400<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/barcelona">
+              <span class="b-city-img"><img src="/images/cities/barcelona-card.webp" alt="Barcelona, Spain" loading="lazy" width="800" height="532"><span class="b-city-score">9.1</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/es.svg" alt="" width="20" height="15" loading="lazy">Spain</span>
+              <span class="b-city-name">Barcelona</span>
+              <span class="b-city-cost">$2,440<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/porto">
+              <span class="b-city-img"><img src="/images/cities/porto-card.webp" alt="Porto, Portugal" loading="lazy" width="800" height="532"><span class="b-city-score">8.9</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/pt.svg" alt="" width="20" height="15" loading="lazy">Portugal</span>
+              <span class="b-city-name">Porto</span>
+              <span class="b-city-cost">$2,140<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/sydney">
+              <span class="b-city-img"><img src="/images/cities/sydney-card.webp" alt="Sydney, Australia" loading="lazy" width="800" height="532"><span class="b-city-score">8.9</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/au.svg" alt="" width="20" height="15" loading="lazy">Australia</span>
+              <span class="b-city-name">Sydney</span>
+              <span class="b-city-cost">$3,490<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/melbourne">
+              <span class="b-city-img"><img src="/images/cities/melbourne-card.webp" alt="Melbourne, Australia" loading="lazy" width="800" height="532"><span class="b-city-score">8.9</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/au.svg" alt="" width="20" height="15" loading="lazy">Australia</span>
+              <span class="b-city-name">Melbourne</span>
+              <span class="b-city-cost">$2,740<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/sansebastian">
+              <span class="b-city-img"><img src="/images/cities/sansebastian-card.webp" alt="San Sebastián, Spain" loading="lazy" width="800" height="532"><span class="b-city-score">8.9</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/es.svg" alt="" width="20" height="15" loading="lazy">Spain</span>
+              <span class="b-city-name">San Sebastián</span>
+              <span class="b-city-cost">$2,160<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/sandiego">
+              <span class="b-city-img"><img src="/images/cities/sandiego-card.webp" alt="San Diego, United States" loading="lazy" width="800" height="532"><span class="b-city-score">8.9</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/us.svg" alt="" width="20" height="15" loading="lazy">United States</span>
+              <span class="b-city-name">San Diego</span>
+              <span class="b-city-cost">$4,400<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/cancun">
+              <span class="b-city-img"><img src="/images/cities/cancun-card.webp" alt="Cancún, Mexico" loading="lazy" width="800" height="532"><span class="b-city-score">8.9</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/mx.svg" alt="" width="20" height="15" loading="lazy">Mexico</span>
+              <span class="b-city-name">Cancún</span>
+              <span class="b-city-cost">$1,340<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/tokyo">
+              <span class="b-city-img"><img src="/images/cities/tokyo-card.webp" alt="Tokyo, Japan" loading="lazy" width="800" height="532"><span class="b-city-score">8.7</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/jp.svg" alt="" width="20" height="15" loading="lazy">Japan</span>
+              <span class="b-city-name">Tokyo</span>
+              <span class="b-city-cost">$1,920<small> / month</small></span>
+            </a>
+          </li>
+          <li class="b-city">
+            <a href="/cities/wellington">
+              <span class="b-city-img"><img src="/images/cities/wellington-card.webp" alt="Wellington, New Zealand" loading="lazy" width="800" height="532"><span class="b-city-score">8.7</span></span>
+              <span class="b-city-meta"><img class="b-flag" src="/assets/flags/nz.svg" alt="" width="20" height="15" loading="lazy">New Zealand</span>
+              <span class="b-city-name">Wellington</span>
+              <span class="b-city-cost">$2,140<small> / month</small></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="b-wrap">
+      <section class="b-proof">
+        <div class="b-proof-top">
+          <div>
+            <p class="b-eyebrow"><span class="dot"></span>A better way to choose</p>
+            <h2>Comparable numbers, not a listicle</h2>
+          </div>
+          <div class="b-proof-aside">
+            <p>Most "best cities" articles are one person's holiday. This is an index: the same categories applied to every city, so the comparison actually means something.</p>
+            <a href="/about" class="btn btn-primary">How we score &rarr;</a>
           </div>
         </div>
+        <ul class="b-features">
+            <li class="b-feature">
+              <span class="b-feature-ico"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#scale"></use></svg></span>
+              <h3>13 scores per city</h3>
+              <p>Cost, WiFi, safety, climate, visas and eight more, the same 13 categories for every city so two places can actually be compared.</p>
+            </li>
+            <li class="b-feature">
+              <span class="b-feature-ico"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#globe"></use></svg></span>
+              <h3>710 cities, 121 countries</h3>
+              <p>Not a top-ten list. A full index, including the places nobody else bothers to write up.</p>
+            </li>
+            <li class="b-feature">
+              <span class="b-feature-ico"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#gem"></use></svg></span>
+              <h3>Free, no account</h3>
+              <p>No sign-up, no paywall, no email gate. Everything on this site is readable by anyone, including machines.</p>
+            </li>
+            <li class="b-feature">
+              <span class="b-feature-ico"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#target"></use></svg></span>
+              <h3>Built to be checked</h3>
+              <p>Where a figure comes from a source we name it, and where it is our own judgement we say that instead.</p>
+            </li>
+        </ul>
+      </section>
 
-        <h3 style="text-align:center; font-family:'DM Serif Display',serif; color:var(--color-ink); font-size:1.5rem; margin:3.5rem 0 1.75rem;">Top-rated cities right now</h3>
-        <div class="cities-grid" id="citiesGrid">
-          <!-- home-cards-start -->
-          <article class="city-card fade-in" data-city-id="lisbon" style="animation-delay:0ms"><div class="city-card-image-container"><img src="/images/cities/lisbon-card.webp" alt="Lisbon, Portugal" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">3</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill below" style="width:30%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/pt.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Lisbon</h2><span class="city-card-country">Portugal</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">9.6</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Mediterranean</div><div class="city-card-cost"><span class="cost-label">~$2,400</span><span class="cost-period">/month</span></div></div><a href="/cities/lisbon" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="barcelona" style="animation-delay:50ms"><div class="city-card-image-container"><img src="/images/cities/barcelona-card.webp" alt="Barcelona, Spain" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">3</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill below" style="width:30%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/es.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Barcelona</h2><span class="city-card-country">Spain</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">9.1</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Mediterranean</div><div class="city-card-cost"><span class="cost-label">~$2,440</span><span class="cost-period">/month</span></div></div><a href="/cities/barcelona" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="porto" style="animation-delay:100ms"><div class="city-card-image-container"><img src="/images/cities/porto-card.webp" alt="Porto, Portugal" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">4</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:40%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/pt.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Porto</h2><span class="city-card-country">Portugal</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.9</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Mediterranean</div><div class="city-card-cost"><span class="cost-label">~$2,140</span><span class="cost-period">/month</span></div></div><a href="/cities/porto" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="sydney" style="animation-delay:150ms"><div class="city-card-image-container"><img src="/images/cities/sydney-card.webp" alt="Sydney, Australia" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">2</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill below" style="width:20%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/au.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Sydney</h2><span class="city-card-country">Australia</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.9</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Humid Subtropical</div><div class="city-card-cost"><span class="cost-label">~$3,490</span><span class="cost-period">/month</span></div></div><a href="/cities/sydney" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="melbourne" style="animation-delay:200ms"><div class="city-card-image-container"><img src="/images/cities/melbourne-card.webp" alt="Melbourne, Australia" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">3</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill below" style="width:30%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/au.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Melbourne</h2><span class="city-card-country">Australia</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.9</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Oceanic</div><div class="city-card-cost"><span class="cost-label">~$2,740</span><span class="cost-period">/month</span></div></div><a href="/cities/melbourne" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="sansebastian" style="animation-delay:250ms"><div class="city-card-image-container"><img src="/images/cities/sansebastian-card.webp" alt="San Sebastián, Spain" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">4</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:40%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">4</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:40%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/es.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">San Sebastián</h2><span class="city-card-country">Spain</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.9</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Oceanic</div><div class="city-card-cost"><span class="cost-label">~$2,160</span><span class="cost-period">/month</span></div></div><a href="/cities/sansebastian" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="sandiego" style="animation-delay:300ms"><div class="city-card-image-container"><img src="/images/cities/sandiego-card.webp" alt="San Diego, United States" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">2</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill below" style="width:20%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/us.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">San Diego</h2><span class="city-card-country">United States</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.9</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Mediterranean</div><div class="city-card-cost"><span class="cost-label">~$4,400</span><span class="cost-period">/month</span></div></div><a href="/cities/sandiego" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="cancun" style="animation-delay:350ms"><div class="city-card-image-container"><img src="/images/cities/cancun-card.webp" alt="Cancún, Mexico" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/mx.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Cancún</h2><span class="city-card-country">Mexico</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.9</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Tropical Savanna</div><div class="city-card-cost"><span class="cost-label">~$1,340</span><span class="cost-period">/month</span></div></div><a href="/cities/cancun" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <article class="city-card fade-in" data-city-id="tokyo" style="animation-delay:400ms"><div class="city-card-image-container"><img src="/images/cities/tokyo-card.webp" alt="Tokyo, Japan" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats"><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Climate</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Cost</span><span class="overlay-stat-value">3</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill below" style="width:30%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">WiFi</span><span class="overlay-stat-value">9</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:90%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nightlife</span><span class="overlay-stat-value">8</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:80%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Nature</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Safety</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Food</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Community</span><span class="overlay-stat-value">6</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:60%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">English</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Visa</span><span class="overlay-stat-value">5</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill average" style="width:50%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Culture</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Clean</span><span class="overlay-stat-value">10</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill excellent" style="width:100%"></div></div></div><div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">Air</span><span class="overlay-stat-value">7</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill good" style="width:70%"></div></div></div></div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag"><img class="flag-img" src="/assets/flags/jp.svg" alt="" width="24" height="18" loading="lazy"></span><div><h2 class="city-card-name">Tokyo</h2><span class="city-card-country">Japan</span></div></div><div class="nomad-score excellent"><span class="nomad-score-value">8.7</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">Humid Subtropical</div><div class="city-card-cost"><span class="cost-label">~$1,920</span><span class="cost-period">/month</span></div></div><a href="/cities/tokyo" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>
-          <!-- home-cards-end -->
-        </div>
-        <div style="text-align:center; margin-top:2.5rem;">
-          <a href="cities" class="btn btn-primary btn-lg">Browse all cities &rarr;</a>
-        </div>
-      </div>
-    </section>
+      <section class="b-statement">
+        <h2>Real numbers <span class="b-pill"><img src="/images/cities/lisbon-card.webp" alt="" loading="lazy" width="800" height="532"></span> for the city you <span class="b-pill"><img src="/images/cities/barcelona-card.webp" alt="" loading="lazy" width="800" height="532"></span> actually move to</h2>
+        <p class="b-statement-note">710 cities across 121 countries, 32 rankings and 13 free tools, from a route planner to a visa finder.<span class="b-photo-credit">Photos: Lisbon: David Broad (CC BY 3.0) &middot; Barcelona: dronepicr (CC BY 2.0) &middot; Porto: Jakub Halun (CC BY 4.0) &middot; Wikimedia Commons</span></p>
+      </section>
 
-    <!-- Best cities rankings teaser -->
-    <section class="section section-texture" id="best-rankings">
-      <style>
-        .home-rank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.15rem;max-width:1080px;margin:0 auto;}
-        .home-rank-tile{position:relative;display:block;height:168px;border-radius:var(--radius-lg,16px);overflow:hidden;text-decoration:none;background:#0f172a;box-shadow:0 4px 14px rgba(15,23,42,.12);transition:transform .18s ease,box-shadow .18s ease;}
-        .home-rank-tile:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(15,23,42,.22);}
-        .home-rank-tile:focus-visible{outline:3px solid var(--color-terracotta);outline-offset:2px;}
-        .home-rank-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .45s ease;}
-        .home-rank-tile:hover .home-rank-bg{transform:scale(1.06);}
-        .home-rank-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.15) 0%,rgba(15,23,42,.08) 40%,rgba(15,23,42,.80) 100%);}
-        .home-rank-ico{position:absolute;top:.85rem;left:.85rem;z-index:2;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;font-size:1.2rem;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.25);color:var(--color-terracotta);}
-        .home-rank-ico .nh-icon{width:22px;height:22px;}
-        .home-rank-label{position:absolute;left:.95rem;right:.95rem;bottom:.85rem;z-index:2;color:#fff;font-weight:700;font-size:1.12rem;text-shadow:0 1px 5px rgba(0,0,0,.55);}
-        .home-rank-label .sub{display:block;font-weight:500;font-size:.86rem;color:#e2e8f0;text-shadow:0 1px 4px rgba(0,0,0,.6);margin-top:.15rem;}
-        .home-rank-all{background:var(--color-terracotta);display:flex;align-items:center;justify-content:center;text-align:center;}
-        .home-rank-all:hover{background:var(--color-terracotta-dark,#a03325);}
-        .home-rank-all span{color:#fff;font-family:'DM Serif Display',serif;font-size:1.35rem;line-height:1.2;}
-        .home-rank-subhead{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--color-ink);text-align:center;margin:2.75rem 0 1.2rem;}
-        .home-geo-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;max-width:960px;margin:0 auto;}
-        .home-geo-chip{display:inline-flex;align-items:center;padding:.55rem 1.05rem;background:#fff;border:1px solid var(--color-sand-dark);border-radius:999px;text-decoration:none;color:var(--color-ink);font-weight:600;font-size:.95rem;transition:border-color .15s,color .15s,transform .15s,box-shadow .15s;}
-        .home-geo-chip:hover{border-color:var(--color-terracotta);color:var(--color-terracotta);transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,23,42,.08);}
-        .home-rank-cta{text-align:center;margin-top:2.5rem;}
-        .home-rank-alt{margin:1.1rem auto 0;max-width:52ch;font-size:.95rem;line-height:1.6;color:var(--color-stone);}
-        .home-rank-alt a{color:var(--color-terracotta);font-weight:600;}
-        @media (prefers-reduced-motion:reduce){.home-rank-tile,.home-rank-bg{transition:none;}}
-      </style>
-      <div class="container">
-        <div style="text-align:center; max-width:820px; margin:0 auto 2.25rem;">
-          <h2 style="font-family:'DM Serif Display',serif; font-size:var(--text-h2); color:var(--color-ink); line-height:1.15; margin:0 0 .85rem;">Or start from what matters most</h2>
-          <p style="color:var(--color-charcoal); font-size:1.12rem; line-height:1.7; margin:0 auto; max-width:680px;">Not sure where to begin? We have 32 rankings, each built around one thing that matters, from the cheapest bases and fastest internet to the best cities for women, families and value, plus a ranking for every region and country.</p>
+      <section class="b-cta">
+        <h2>Ready to find your next base?</h2>
+        <p>Answer a few questions about what matters to you and the Wheel ranks all 710 cities against your priorities. No account, no email.</p>
+        <div class="b-cta-btns">
+          <a href="/wheel" class="btn btn-primary btn-lg">Find my city &rarr;</a>
+          <a href="/compare" class="btn btn-lg btn-ghost">Compare two cities</a>
         </div>
-        <div class="home-rank-grid">
-          <a href="best/best-value-cities-for-digital-nomads" class="home-rank-tile" aria-label="Best value cities ranking">
-            <span class="home-rank-bg" style="background-image:url(/images/cities/hue.webp)"></span>
-            <span class="home-rank-ico"><svg class="nh-icon nh-icon-gem" aria-hidden="true"><use href="/assets/icons.svg#gem"></use></svg></span>
-            <span class="home-rank-label">Best value<span class="sub">Most quality of life per dollar</span></span>
-          </a>
-          <a href="best/cheapest-cities-for-digital-nomads" class="home-rank-tile" aria-label="Cheapest cities ranking">
-            <span class="home-rank-bg" style="background-image:url(/images/cities/ninhbinh.webp)"></span>
-            <span class="home-rank-ico"><svg class="nh-icon nh-icon-coins" aria-hidden="true"><use href="/assets/icons.svg#coins"></use></svg></span>
-            <span class="home-rank-label">Cheapest cities<span class="sub">Lowest monthly cost of living</span></span>
-          </a>
-          <a href="best/best-cities-for-female-digital-nomads" class="home-rank-tile" aria-label="Best cities for female digital nomads ranking">
-            <span class="home-rank-bg" style="background-image:url(/images/cities/turku.webp)"></span>
-            <span class="home-rank-ico"><svg class="nh-icon nh-icon-flower-2" aria-hidden="true"><use href="/assets/icons.svg#flower-2"></use></svg></span>
-            <span class="home-rank-label">For female nomads<span class="sub">Safety-led picks for women</span></span>
-          </a>
-          <a href="best/best-cities-for-fast-wifi" class="home-rank-tile" aria-label="Best cities for fast WiFi ranking">
-            <span class="home-rank-bg" style="background-image:url(/images/cities/singapore.webp)"></span>
-            <span class="home-rank-ico"><svg class="nh-icon nh-icon-wifi" aria-hidden="true"><use href="/assets/icons.svg#wifi"></use></svg></span>
-            <span class="home-rank-label">Best for WiFi<span class="sub">Fastest, most reliable internet</span></span>
-          </a>
-          <a href="best/safest-cities-for-digital-nomads" class="home-rank-tile" aria-label="Safest cities ranking">
-            <span class="home-rank-bg" style="background-image:url(/images/cities/tokyo.webp)"></span>
-            <span class="home-rank-ico"><svg class="nh-icon nh-icon-shield" aria-hidden="true"><use href="/assets/icons.svg#shield"></use></svg></span>
-            <span class="home-rank-label">Safest cities<span class="sub">Highest safety scores</span></span>
-          </a>
-          <a href="best/best-cities-for-digital-nomad-families" class="home-rank-tile" aria-label="Best cities for digital nomad families ranking">
-            <span class="home-rank-bg" style="background-image:url(/images/cities/queenstown.webp)"></span>
-            <span class="home-rank-ico"><svg class="nh-icon nh-icon-users-round" aria-hidden="true"><use href="/assets/icons.svg#users-round"></use></svg></span>
-            <span class="home-rank-label">For families<span class="sub">Safe, clean, with room to roam</span></span>
-          </a>
-        </div>
-
-        <h3 class="home-rank-subhead">Or by region and country</h3>
-        <div class="home-geo-chips">
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-europe">Europe</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-asia">Asia</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-latin-america">Latin America</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-north-america">North America &amp; the Caribbean</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-oceania">Oceania</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-africa">Africa</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-the-middle-east">Middle East</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-spain">Spain</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-portugal">Portugal</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-mexico">Mexico</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-colombia">Colombia</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-thailand">Thailand</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-vietnam">Vietnam</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-indonesia">Indonesia</a>
-          <a class="home-geo-chip" href="best/best-digital-nomad-cities-in-italy">Italy</a>
-        </div>
-
-        <div class="home-rank-cta"><a href="best" class="btn btn-primary btn-lg">Browse all 32 rankings &rarr;</a>
-          <p class="home-rank-alt">Prefer the big picture? See every city ranked S to F on the <a href="tier-list">tier list</a>, or explore cities <a href="activities">by activity</a>: surfing, diving, watersports and shopping.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Popular comparisons teaser -->
-    <section class="section" id="popular-compares">
-      <style>
-        .home-vs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.15rem;max-width:1080px;margin:0 auto;}
-        .hth-card{position:relative;display:block;height:196px;border-radius:var(--radius-lg,16px);overflow:hidden;text-decoration:none;background:#0f172a;box-shadow:0 4px 14px rgba(15,23,42,.12);transition:transform .18s ease,box-shadow .18s ease;}
-        .hth-card:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(15,23,42,.22);}
-        .hth-card:focus-visible{outline:3px solid var(--color-terracotta);outline-offset:2px;}
-        .hth-half{position:absolute;top:0;bottom:0;width:100%;background-size:cover;background-position:center;transition:transform .45s ease;}
-        .hth-a{left:0;clip-path:polygon(0 0,55% 0,45% 100%,0 100%);}
-        .hth-b{right:0;clip-path:polygon(55% 0,100% 0,100% 100%,45% 100%);}
-        .hth-card:hover .hth-half{transform:scale(1.06);}
-        .hth-half::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.10) 0%,rgba(15,23,42,0) 42%,rgba(15,23,42,.74) 100%);}
-        .hth-seam{position:absolute;inset:0;z-index:2;background:#fff;clip-path:polygon(54.3% 0,55.7% 0,45.7% 100%,44.3% 100%);opacity:.92;}
-        .hth-vs{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;width:46px;height:46px;border-radius:50%;background:var(--color-terracotta);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-style:italic;font-size:1.02rem;box-shadow:0 3px 10px rgba(0,0,0,.35),0 0 0 4px rgba(255,255,255,.92);}
-        .hth-name{position:absolute;bottom:.75rem;z-index:3;display:flex;align-items:center;gap:.4rem;color:#fff;font-weight:700;font-size:1.05rem;letter-spacing:.01em;text-shadow:0 1px 5px rgba(0,0,0,.55);max-width:44%;}
-        .hth-name img{border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15);flex:0 0 auto;}
-        .hth-a-name{left:.9rem;}
-        .hth-b-name{right:.9rem;flex-direction:row-reverse;text-align:right;}
-        .home-vs-cta{text-align:center;margin-top:1.9rem;}
-        @media (prefers-reduced-motion:reduce){.hth-card,.hth-half{transition:none;}}
-      </style>
-      <div class="container">
-        <div style="text-align:center; max-width:820px; margin:0 auto 2.25rem;">
-          <h2 style="font-family:'DM Serif Display',serif; font-size:var(--text-h2); color:var(--color-ink); line-height:1.15; margin:0 0 .85rem;">Popular head-to-heads</h2>
-          <p style="color:var(--color-charcoal); font-size:1.12rem; line-height:1.7; margin:0 auto; max-width:660px;">Torn between two cities? See them side by side on the Nomad Score, monthly budget and all 13 categories.</p>
-        </div>
-        <div class="home-vs-grid">
-          <a class="hth-card" href="compare?a=lisbon&amp;b=porto" aria-label="Compare Lisbon vs Porto">
-            <span class="hth-half hth-a" style="background-image:url(/images/cities/lisbon.webp)"></span>
-            <span class="hth-half hth-b" style="background-image:url(/images/cities/porto.webp)"></span>
-            <span class="hth-seam"></span><span class="hth-vs">vs</span>
-            <span class="hth-name hth-a-name"><img src="/assets/flags/pt.svg" alt="" width="22" height="16">Lisbon</span>
-            <span class="hth-name hth-b-name">Porto<img src="/assets/flags/pt.svg" alt="" width="22" height="16"></span>
-          </a>
-          <a class="hth-card" href="compare?a=bangkok&amp;b=chiangmai" aria-label="Compare Bangkok vs Chiang Mai">
-            <span class="hth-half hth-a" style="background-image:url(/images/cities/bangkok.webp)"></span>
-            <span class="hth-half hth-b" style="background-image:url(/images/cities/chiangmai.webp)"></span>
-            <span class="hth-seam"></span><span class="hth-vs">vs</span>
-            <span class="hth-name hth-a-name"><img src="/assets/flags/th.svg" alt="" width="22" height="16">Bangkok</span>
-            <span class="hth-name hth-b-name">Chiang Mai<img src="/assets/flags/th.svg" alt="" width="22" height="16"></span>
-          </a>
-          <a class="hth-card" href="compare?a=mexicocity&amp;b=medellin" aria-label="Compare Mexico City vs Medellín">
-            <span class="hth-half hth-a" style="background-image:url(/images/cities/mexicocity.webp)"></span>
-            <span class="hth-half hth-b" style="background-image:url(/images/cities/medellin.webp)"></span>
-            <span class="hth-seam"></span><span class="hth-vs">vs</span>
-            <span class="hth-name hth-a-name"><img src="/assets/flags/mx.svg" alt="" width="22" height="16">Mexico City</span>
-            <span class="hth-name hth-b-name">Medellín<img src="/assets/flags/co.svg" alt="" width="22" height="16"></span>
-          </a>
-          <a class="hth-card" href="compare?a=barcelona&amp;b=valencia" aria-label="Compare Barcelona vs Valencia">
-            <span class="hth-half hth-a" style="background-image:url(/images/cities/barcelona.webp)"></span>
-            <span class="hth-half hth-b" style="background-image:url(/images/cities/valencia.webp)"></span>
-            <span class="hth-seam"></span><span class="hth-vs">vs</span>
-            <span class="hth-name hth-a-name"><img src="/assets/flags/es.svg" alt="" width="22" height="16">Barcelona</span>
-            <span class="hth-name hth-b-name">Valencia<img src="/assets/flags/es.svg" alt="" width="22" height="16"></span>
-          </a>
-          <a class="hth-card" href="compare?a=bali&amp;b=chiangmai" aria-label="Compare Bali Canggu vs Chiang Mai">
-            <span class="hth-half hth-a" style="background-image:url(/images/cities/bali.webp)"></span>
-            <span class="hth-half hth-b" style="background-image:url(/images/cities/chiangmai.webp)"></span>
-            <span class="hth-seam"></span><span class="hth-vs">vs</span>
-            <span class="hth-name hth-a-name"><img src="/assets/flags/id.svg" alt="" width="22" height="16">Bali (Canggu)</span>
-            <span class="hth-name hth-b-name">Chiang Mai<img src="/assets/flags/th.svg" alt="" width="22" height="16"></span>
-          </a>
-          <a class="hth-card" href="compare?a=berlin&amp;b=lisbon" aria-label="Compare Berlin vs Lisbon">
-            <span class="hth-half hth-a" style="background-image:url(/images/cities/berlin.webp)"></span>
-            <span class="hth-half hth-b" style="background-image:url(/images/cities/lisbon.webp)"></span>
-            <span class="hth-seam"></span><span class="hth-vs">vs</span>
-            <span class="hth-name hth-a-name"><img src="/assets/flags/de.svg" alt="" width="22" height="16">Berlin</span>
-            <span class="hth-name hth-b-name">Lisbon<img src="/assets/flags/pt.svg" alt="" width="22" height="16"></span>
-          </a>
-        </div>
-        <div class="home-vs-cta"><a href="compare" class="btn btn-secondary btn-lg">Compare any cities &rarr;</a></div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         PLAN THE WHOLE TRIP (tools)
-         ========================================== -->
-    <section class="section section-texture" id="tools">
-      <style>
-        #tools .tool-card { position:relative; display:flex; flex-direction:column; background:#fff; border:1px solid var(--color-sand-dark); border-radius:16px; padding:1.5rem 1.4rem; text-decoration:none; box-shadow:0 8px 24px rgba(15,23,42,.05); transition:transform .18s, box-shadow .18s, border-color .18s; }
-        #tools .tool-card:hover { transform:translateY(-4px); box-shadow:0 16px 36px rgba(15,23,42,.10); border-color:var(--color-terracotta); }
-        #tools .tool-ico { font-size:1.9rem; line-height:1; margin:0 0 .8rem; color:var(--color-terracotta); }
-        #tools .tool-ico .nh-icon { width:30px; height:30px; }
-        #tools .tool-card h3 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .5rem; }
-        #tools .tool-card p { font-size:.92rem; color:var(--color-charcoal); line-height:1.55; margin:0 0 1rem; flex:1; }
-        #tools .tool-go { font-size:.9rem; font-weight:600; color:var(--color-terracotta); }
-        #tools .tool-badge { position:absolute; top:1.1rem; right:1.2rem; font-size:.66rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#fff; background:var(--color-terracotta); padding:.18rem .5rem; border-radius:999px; }
-      </style>
-      <div class="container">
-        <div style="text-align:center; max-width:640px; margin:0 auto 2.4rem;">
-          <span style="display:inline-block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--color-terracotta); margin:0 0 .7rem;">Free interactive tools</span>
-          <h2 style="font-family:'DM Serif Display',serif; font-size:var(--text-h2); color:var(--color-ink); line-height:1.15; margin:0 0 .85rem;">Plan the whole trip</h2>
-          <p style="font-size:1.08rem; color:var(--color-charcoal); line-height:1.6; margin:0;">From a single city to a months-long route: map it, budget it, time it, and rank it. No sign-up.</p>
-        </div>
-        <div class="tools-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.1rem;">
-          <a href="route" class="tool-card" style="grid-column:span 1;">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-map" aria-hidden="true"><use href="/assets/icons.svg#map"></use></svg></span>
-            <span class="tool-badge">New</span>
-            <h3>Route Planner</h3>
-            <p>Chain cities into a dated trip and get a month-by-month budget, the weather you will get, a packing list, and a Schengen 90/180 tracker.</p>
-            <span class="tool-go">Plan a route &rarr;</span>
-          </a>
-          <a href="timezones" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-clock" aria-hidden="true"><use href="/assets/icons.svg#clock"></use></svg></span>
-            <h3>Time Zone Finder</h3>
-            <p>Find cities whose working hours overlap with your team back home, so calls land at noon, not 3am.</p>
-            <span class="tool-go">Check overlap &rarr;</span>
-          </a>
-          <a href="wheel" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-target" aria-hidden="true"><use href="/assets/icons.svg#target"></use></svg></span>
-            <h3>Decision Wheel</h3>
-            <p>Dial in what matters to you across 13 factors and get matched to the cities that fit best.</p>
-            <span class="tool-go">Find your match &rarr;</span>
-          </a>
-          <a href="compare" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-scale" aria-hidden="true"><use href="/assets/icons.svg#scale"></use></svg></span>
-            <h3>Compare Cities</h3>
-            <p>Put two or three cities side by side across cost, wifi, safety and every other score.</p>
-            <span class="tool-go">Compare &rarr;</span>
-          </a>
-          <a href="map" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-globe" aria-hidden="true"><use href="/assets/icons.svg#globe"></use></svg></span>
-            <h3>World Map</h3>
-            <p>See every rated city plotted where it actually is, and open any guide from the map.</p>
-            <span class="tool-go">Open the map &rarr;</span>
-          </a>
-          <a href="tier-list/maker" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-trophy" aria-hidden="true"><use href="/assets/icons.svg#trophy"></use></svg></span>
-            <h3>Tier List Maker</h3>
-            <p>Drag cities into S through F tiers to build your own ranking, then share it with a link.</p>
-            <span class="tool-go">Build a tier list &rarr;</span>
-          </a>
-          <a href="best-weather" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-sun" aria-hidden="true"><use href="/assets/icons.svg#sun"></use></svg></span>
-            <span class="tool-badge">New</span>
-            <h3>Best Weather by Month</h3>
-            <p>Pick a month and see which cities are warm and dry then, from five years of climate data.</p>
-            <span class="tool-go">Chase the sun &rarr;</span>
-          </a>
-          <a href="visa" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-stamp" aria-hidden="true"><use href="/assets/icons.svg#stamp"></use></svg></span>
-            <span class="tool-badge">New</span>
-            <h3>Visa Finder</h3>
-            <p>Pick your passport and see where you can go visa-free, on arrival or with a nomad visa.</p>
-            <span class="tool-go">Check your passport &rarr;</span>
-          </a>
-          <a href="geoarbitrage" class="tool-card">
-            <span class="tool-ico" aria-hidden="true"><svg class="nh-icon nh-icon-coins" aria-hidden="true"><use href="/assets/icons.svg#coins"></use></svg></span>
-            <span class="tool-badge">New</span>
-            <h3>Geoarbitrage Calculator</h3>
-            <p>Enter your income and see how much you could save living in each city.</p>
-            <span class="tool-go">Do the math &rarr;</span>
-          </a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
   </main>
-
-  <!-- ==========================================
-       FOOTER
-       ========================================== -->
-  <footer class="footer">
+<footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about">
@@ -1983,53 +479,7 @@
       </div>
     </div>
   </footer>
-
-
-  <!-- ==========================================
-       CITY DATA
-       ========================================== -->
-  <script src="cities-data.js"></script>
-
-  <!-- ==========================================
-       CITIES EXPLORER SCRIPTS (copied from cities.html)
-       ========================================== -->
-  <script>
-    // Home city teaser: top-rated cities (static baseline score, links into /cities).
-    // The full filter/sort explorer now lives on /cities; home just funnels there + to /wheel.
-    (function () {
-      var grid = document.getElementById('citiesGrid');
-      if (!grid || typeof CITIES === 'undefined') return;
-      if (grid.children.length) return; // static cards present (apply_home_city_cards.cjs)
-      var CATS = [['climate','Climate'],['cost','Cost'],['wifi','WiFi'],['nightlife','Nightlife'],['nature','Nature'],['safety','Safety'],['food','Food'],['community','Community'],['english','English'],['visa','Visa'],['culture','Culture'],['cleanliness','Clean'],['airquality','Air']];
-      function overall(c){ var s=c.scores||{},t=0,n=0; CATS.forEach(function(k){ if(typeof s[k[0]]==='number'){t+=s[k[0]];n++;} }); return n? t/n : 0; }
-      function cls(v){ return v>=8?'excellent':v>=6?'good':v>=4?'average':'below'; }
-      function nscore(c){ var r=overall(c); return Math.max(2.5, Math.min(9.9, 6.9 + (r - 6.47) / 0.44 * 1.05)); }
-      var flag = (typeof flagSvg==='function') ? flagSvg : function(e){return e;};
-      var featured = CITIES.slice().sort(function(a,b){ return overall(b)-overall(a); }).slice(0,9);
-      grid.innerHTML = featured.map(function(city,index){
-        var sc = nscore(city).toFixed(1);
-        var cost = city.costPerMonth ? '$'+city.costPerMonth.toLocaleString() : 'N/A';
-        var stats = CATS.map(function(k){
-          var v = (city.scores && typeof city.scores[k[0]]==='number') ? city.scores[k[0]] : 0;
-          return '<div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">'+k[1]+'</span><span class="overlay-stat-value">'+v+'</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill '+cls(v)+'" style="width:'+(v*10)+'%"></div></div></div>';
-        }).join('');
-        return '<article class="city-card fade-in" data-city-id="'+city.id+'" style="animation-delay:'+(index*50)+'ms">'
-          + '<div class="city-card-image-container">'
-          + '<img src="'+city.image+'" alt="'+city.name+', '+city.country+'" class="city-card-image" loading="lazy">'
-          + '<div class="city-card-overlay"><div class="overlay-stats">'+stats+'</div></div>'
-          + '</div>'
-          + '<div class="city-card-body">'
-          + '<div class="city-card-header"><div class="city-card-location"><span class="city-card-flag">'+flag(city.flag)+'</span><div><h2 class="city-card-name">'+city.name+'</h2><span class="city-card-country">'+city.country+'</span></div></div>'
-          + '<div class="nomad-score '+cls(nscore(city))+'"><span class="nomad-score-value">'+sc+'</span><span class="nomad-score-label">Score</span></div></div>'
-          + '<div class="city-card-info"><div class="city-card-climate-type">'+(city.climateType||'N/A')+'</div><div class="city-card-cost"><span class="cost-label">~'+cost+'</span><span class="cost-period">/month</span></div></div>'
-          + '<a href="cities/'+city.id+'" class="btn btn-primary city-card-action">View City &rarr;</a>'
-          + '</div></article>';
-      }).join('');
-    })();
-  </script>
-
-  <!-- Auth State Management -->
-
+  <script src="/cities-data.js" defer></script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>
@@ -2056,24 +506,5 @@
   <script src="/assets/city-search-index.js" defer></script>
   <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
-<!-- aff-track -->
-<script>(function(){
-  document.addEventListener("click", function (e) {
-    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
-    if (!a) return;
-    var h = a.href || "";
-    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
-    if (typeof gtag !== "function") return;
-    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
-    var partner = m ? m[1] : "travelpayouts";
-    gtag("event", "affiliate_click", {
-      affiliate_partner: partner,
-      affiliate_placement: a.getAttribute("data-aff") || "",
-      link_url: h,
-      page_path: location.pathname
-    });
-  }, true);
-})();</script>
-<!-- /aff-track -->
 </body>
 </html>
