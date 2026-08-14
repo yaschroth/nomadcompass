@@ -1423,7 +1423,90 @@
   <!-- /cc -->
   <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
-  <script>(function(){function init(){var forms=document.querySelectorAll('form.nav-search,form[data-city-search]');if(!forms.length||!window.NOMAD_CITIES)return;var L=window.NOMAD_CITIES;function fill(dl){if(!dl||dl.childElementCount)return;var frag=document.createDocumentFragment();L.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}Array.prototype.forEach.call(forms,function(f){var input=f.querySelector('input[name="q"]');if(!input)return;fill(document.getElementById(input.getAttribute('list')));f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
+  <style>
+  form[data-city-search]{position:relative;}
+  .cs-panel{position:absolute;top:calc(100% + .45rem);left:0;right:0;z-index:60;margin:0;padding:.3rem;list-style:none;background:#fff;border:1px solid var(--color-sand-dark,#e3d9c6);border-radius:var(--radius-md,8px);box-shadow:0 14px 34px rgba(15,23,42,.18);max-height:min(46vh,340px);overflow-y:auto;display:none;}
+  .cs-panel.is-open{display:block;}
+  .cs-opt{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;padding:.5rem .65rem;border-radius:var(--radius-sm,4px);cursor:pointer;}
+  .cs-opt[aria-selected="true"],.cs-opt:hover{background:var(--color-sand,#f6f1e7);}
+  .cs-name{font-weight:600;color:var(--color-ink,#0f172a);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cs-country{flex:0 0 auto;font-size:.78rem;color:var(--color-stone,#8a8175);}
+  .cs-empty{padding:.55rem .65rem;font-size:.85rem;color:var(--color-stone,#8a8175);}
+  </style>
+  <script>(function(){
+  function init(){
+    var forms=document.querySelectorAll('form.nav-search,form[data-city-search]');
+    if(!forms.length||!window.NOMAD_CITIES)return;
+    var L=window.NOMAD_CITIES,uid=0;
+    function fill(dl){if(!dl||dl.childElementCount)return;var frag=document.createDocumentFragment();L.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}
+    function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}
+    function suggest(q,max){q=q.trim().toLowerCase();if(!q)return [];var starts=[],has=[];for(var i=0;i<L.length&&starts.length<max;i++){var n=L[i][0].toLowerCase();if(n.indexOf(q)===0)starts.push(L[i]);}
+      if(starts.length<max)for(var j=0;j<L.length&&starts.length+has.length<max;j++){var m=L[j][0].toLowerCase();if(m.indexOf(q)>0&&starts.indexOf(L[j])<0)has.push(L[j]);}
+      return starts.concat(has);}
+    // The branded dropdown. The native datalist renders as a narrow dark strip that nothing on
+    // the page can style, so opted-in forms drop the list attribute and get this instead.
+    function combobox(f,input){
+      var id='csPanel'+(++uid),panel=document.createElement('ul'),rows=[],active=-1;
+      panel.className='cs-panel';panel.id=id;panel.setAttribute('role','listbox');
+      f.appendChild(panel);
+      input.removeAttribute('list');
+      input.setAttribute('role','combobox');
+      input.setAttribute('aria-expanded','false');
+      input.setAttribute('aria-controls',id);
+      input.setAttribute('aria-autocomplete','list');
+      input.setAttribute('autocomplete','off');
+      function close(){panel.classList.remove('is-open');input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');active=-1;}
+      function mark(i){
+        if(!rows.length)return;
+        if(active>-1&&rows[active])rows[active].el.setAttribute('aria-selected','false');
+        active=i<0?rows.length-1:i>=rows.length?0:i;
+        var r=rows[active];r.el.setAttribute('aria-selected','true');
+        input.setAttribute('aria-activedescendant',r.el.id);
+        var top=r.el.offsetTop,bot=top+r.el.offsetHeight;
+        if(top<panel.scrollTop)panel.scrollTop=top;
+        else if(bot>panel.scrollTop+panel.clientHeight)panel.scrollTop=bot-panel.clientHeight;
+      }
+      function go(c){window.location.href='/cities/'+c[1];}
+      function render(){
+        var list=suggest(input.value,8);
+        panel.textContent='';rows=[];active=-1;input.removeAttribute('aria-activedescendant');
+        if(!input.value.trim()){close();return;}
+        if(!list.length){
+          var e=document.createElement('li');e.className='cs-empty';e.textContent='No city matches that.';
+          panel.appendChild(e);panel.classList.add('is-open');input.setAttribute('aria-expanded','true');return;
+        }
+        list.forEach(function(c,i){
+          var li=document.createElement('li');
+          li.className='cs-opt';li.id=id+'-'+i;li.setAttribute('role','option');li.setAttribute('aria-selected','false');
+          var n=document.createElement('span');n.className='cs-name';n.textContent=c[0];li.appendChild(n);
+          if(c[2]){var k=document.createElement('span');k.className='cs-country';k.textContent=c[2];li.appendChild(k);}
+          // mousedown, not click: the input blurs first on click and the panel would already be gone.
+          li.addEventListener('mousedown',function(ev){ev.preventDefault();go(c);});
+          panel.appendChild(li);rows.push({el:li,city:c});
+        });
+        panel.classList.add('is-open');input.setAttribute('aria-expanded','true');
+      }
+      input.addEventListener('input',render);
+      input.addEventListener('focus',function(){if(input.value.trim())render();});
+      input.addEventListener('blur',function(){setTimeout(close,120);});
+      input.addEventListener('keydown',function(e){
+        if(e.key==='ArrowDown'){e.preventDefault();if(!rows.length)render();else mark(active+1);}
+        else if(e.key==='ArrowUp'){e.preventDefault();if(rows.length)mark(active-1);}
+        else if(e.key==='Escape'){close();}
+        else if(e.key==='Enter'&&active>-1&&rows[active]){e.preventDefault();go(rows[active].city);}
+      });
+      document.addEventListener('click',function(e){if(!f.contains(e.target))close();});
+    }
+    Array.prototype.forEach.call(forms,function(f){
+      var input=f.querySelector('input[name="q"]');
+      if(!input)return;
+      if(f.hasAttribute('data-city-search'))combobox(f,input);
+      else fill(document.getElementById(input.getAttribute('list')));
+      f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});
+    });
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  })();</script>
   <!-- /nav-search-js -->
   <!-- city-toc-js: highlight the active section in the sticky jump nav -->
   <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
