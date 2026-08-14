@@ -156,64 +156,121 @@
       text-shadow: 0 1px 14px rgba(253, 248, 243, 0.95);
     }
 
-    /* Proof strip. Tiles rather than bare text because the hero sits over a photograph:
-       an opaque card is the only way to hold AA contrast for a 12px label. The 0.92 fill is
-       a contrast requirement, not taste - terracotta on that blend is ~4.6:1 and passes,
-       at 0.72 it drops to ~3.7:1 and fails. Same visual language as .about-stat, but that
-       CSS lives inline in about.html and is not loaded here. */
+    /* Proof strip. One opaque bar rather than four tiles: the hero now carries a search
+       field and a row of region chips as well, and four separate cards pushed the whole block
+       past the fold on a 720px laptop. The opaque fill is still a contrast requirement, not
+       taste - terracotta on that blend is ~4.6:1 and passes AA, straight on the watercolour it
+       does not. */
     .hero-stats {
       list-style: none;
-      margin: 0 auto var(--space-8);
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: var(--space-3);
-      max-width: 620px;
-    }
-
-    .hero-stat {
+      margin: 0 auto;
+      padding: var(--space-2) var(--space-5);
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-1) var(--space-6);
       background: rgba(255, 255, 255, 0.92);
       border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-lg);
-      padding: var(--space-3) var(--space-2);
+      border-radius: var(--radius-full);
       box-shadow: var(--shadow-sm);
     }
 
-    .hero-stat .num {
+    .hero-stat {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.32em;
+      align-items: baseline;
+      gap: 0.35rem;
+      font-size: var(--text-sm);
+      color: var(--color-charcoal);
+    }
+
+    .hero-stat .num {
       font-family: var(--font-display);
-      font-size: clamp(1.35rem, 3.2vw, 1.7rem);
+      font-size: 1.3rem;
       line-height: 1;
       color: var(--color-terracotta);
       font-variant-numeric: tabular-nums;
     }
 
-    .hero-stat .num .nh-icon {
-      width: 0.8em;
-      height: 0.8em;
+    /* The search field is the hero's primary action now, so the two buttons that used to sit
+       here are gone: the section immediately below repeats both of them verbatim. */
+    .hero-search {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 560px;
+      margin: 0 auto var(--space-4);
+      padding: 0.4rem 0.4rem 0.4rem 1.1rem;
+      background: #fff;
+      border: 1px solid var(--color-sand-dark);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-md);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .hero-search:focus-within {
+      border-color: var(--color-terracotta);
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15), var(--shadow-md);
+    }
+
+    .hero-search .nh-icon {
+      width: 1.05rem;
+      height: 1.05rem;
       color: var(--color-stone);
+      flex: 0 0 auto;
     }
 
-    .hero-stat .lbl {
-      display: block;
-      margin-top: var(--space-1);
-      font-size: var(--text-xs);
-      line-height: 1.35;
-      color: var(--color-charcoal);
+    .hero-search input {
+      flex: 1 1 auto;
+      min-width: 0;
+      border: none;
+      background: none;
+      font-family: inherit;
+      font-size: var(--text-base);
+      color: var(--color-ink);
+      padding: 0.6rem 0.2rem;
     }
 
-    .hero-ctas {
+    .hero-search input:focus { outline: none; }
+
+    .hero-search .hero-go {
+      flex: 0 0 auto;
+      padding: 0.62rem 1.3rem;
+      font-size: var(--text-sm);
+    }
+
+    /* Every chip goes to a ranking page that already exists, so the row is navigation rather
+       than decoration. */
+    .hero-chips {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-4);
+      gap: 0.45rem;
       justify-content: center;
+      list-style: none;
+      margin: 0 0 var(--space-6);
+      padding: 0;
     }
 
-    .hero-ctas .btn {
-      min-width: 180px;
+    /* base.css has a:not(.btn):not(.nav-link){color:terracotta} at specificity (0,2,1). A plain
+       two-class selector only ties with it, so qualify to outrank it rather than relying on
+       source order. */
+    .hero-content .hero-chips a:not(.btn) {
+      display: inline-block;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--color-sand-dark);
+      color: var(--color-charcoal);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .hero-content .hero-chips a:not(.btn):hover {
+      border-color: var(--color-terracotta);
+      color: var(--color-terracotta);
     }
 
     .hero-scroll {
@@ -1193,16 +1250,21 @@
         padding-bottom: var(--space-8);
       }
 
+      /* The bar wraps to two lines here rather than staying one row of four. */
       .hero-stats {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 400px;
-        gap: var(--space-2);
-        margin-bottom: var(--space-6);
+        gap: var(--space-1) var(--space-4);
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--radius-lg);
       }
 
-      .hero-stat .num .nh-icon {
-        display: none;
+      .hero-search {
+        padding-left: 0.9rem;
+        margin-bottom: var(--space-3);
       }
+
+      .hero-search .hero-go { padding: 0.6rem 1rem; }
+
+      .hero-chips { margin-bottom: var(--space-5); }
     }
 
     /* Laptops with a short viewport (1280x720, 1366x768 once browser chrome is subtracted).
@@ -1228,13 +1290,9 @@
         margin-bottom: var(--space-5);
       }
 
-      .hero-stats {
-        margin-bottom: var(--space-5);
-      }
+      .hero-search { margin-bottom: var(--space-3); }
 
-      .hero-stat {
-        padding: var(--space-2);
-      }
+      .hero-chips { margin-bottom: var(--space-5); }
     }
   </style>
   <script type="application/ld+json">
@@ -1357,28 +1415,27 @@
         <p class="hero-subheadline">
           The Nomad HQ helps digital nomads cut through the noise and find the city that actually fits their life.
         </p>
-        <ul class="hero-stats">
-          <li class="hero-stat">
-            <span class="num"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#map"></use></svg><span data-stat="cities">710</span></span>
-            <span class="lbl">Cities rated</span>
-          </li>
-          <li class="hero-stat">
-            <span class="num"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#globe"></use></svg><span data-stat="countries">121</span></span>
-            <span class="lbl">Countries</span>
-          </li>
-          <li class="hero-stat">
-            <span class="num"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#scale"></use></svg><span data-stat="categories">13</span></span>
-            <span class="lbl">Scores per city</span>
-          </li>
-          <li class="hero-stat">
-            <span class="num"><svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#trophy"></use></svg><span data-stat="rankings">32</span></span>
-            <span class="lbl">Rankings</span>
-          </li>
+        <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
+          <svg class="nh-icon" aria-hidden="true"><use href="/assets/icons.svg#compass"></use></svg>
+          <label class="sr-only" for="heroCity">Search a city</label>
+          <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off" list="heroCityList">
+          <datalist id="heroCityList"></datalist>
+          <button type="submit" class="btn btn-primary hero-go">Search</button>
+        </form>
+        <ul class="hero-chips">
+          <li><a href="/best/best-digital-nomad-cities-in-europe">Europe</a></li>
+          <li><a href="/best/best-digital-nomad-cities-in-asia">Asia</a></li>
+          <li><a href="/best/best-digital-nomad-cities-in-latin-america">Latin America</a></li>
+          <li><a href="/best/best-digital-nomad-cities-in-north-america">North America</a></li>
+          <li><a href="/best/best-digital-nomad-cities-in-africa">Africa</a></li>
+          <li><a href="/best/best-digital-nomad-cities-in-oceania">Oceania</a></li>
         </ul>
-        <div class="hero-ctas">
-          <a href="wheel" class="btn btn-primary btn-lg">Find My City</a>
-          <a href="#cities" class="btn btn-secondary btn-lg">Explore All Places</a>
-        </div>
+        <ul class="hero-stats">
+          <li class="hero-stat"><span class="num" data-stat="cities">710</span> cities rated</li>
+          <li class="hero-stat"><span class="num" data-stat="countries">121</span> countries</li>
+          <li class="hero-stat"><span class="num" data-stat="categories">13</span> scores per city</li>
+          <li class="hero-stat"><span class="num" data-stat="rankings">32</span> rankings</li>
+        </ul>
       </div>
       <div class="hero-scroll">
         <span>Scroll</span>
@@ -1828,7 +1885,7 @@
   <!-- /cc -->
   <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
-  <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
+  <script>(function(){function init(){var forms=document.querySelectorAll('form.nav-search,form[data-city-search]');if(!forms.length||!window.NOMAD_CITIES)return;var L=window.NOMAD_CITIES;function fill(dl){if(!dl||dl.childElementCount)return;var frag=document.createDocumentFragment();L.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}Array.prototype.forEach.call(forms,function(f){var input=f.querySelector('input[name="q"]');if(!input)return;fill(document.getElementById(input.getAttribute('list')));f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->
 <!-- aff-track -->
 <script>(function(){

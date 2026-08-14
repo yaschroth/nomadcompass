@@ -20,9 +20,14 @@ const ROOT = path.resolve(__dirname, '..');
 
 const FORM = '<form class="nav-search" action="/cities" method="get" role="search"><input type="search" name="q" placeholder="Jump to a city&hellip;" aria-label="Search a city" autocomplete="off" list="navCityList"><datalist id="navCityList"></datalist></form>';
 
+// Drives every city-search form on the page, not just the one in the nav. The homepage hero
+// now carries a second field, and a lone querySelector meant it got neither the autocomplete
+// list nor the jump-straight-to-the-city-page behaviour: it fell back to a plain GET to
+// /cities?q=. Each form's datalist is resolved from its own input's list attribute, so the two
+// cannot collide over an id.
 const JS = `  <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
-  <script>(function(){function init(){var f=document.querySelector('form.nav-search');if(!f||!window.NOMAD_CITIES)return;var input=f.querySelector('input[name="q"]'),dl=document.getElementById('navCityList');if(dl&&!dl.childElementCount){var frag=document.createDocumentFragment();window.NOMAD_CITIES.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var L=window.NOMAD_CITIES;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
+  <script>(function(){function init(){var forms=document.querySelectorAll('form.nav-search,form[data-city-search]');if(!forms.length||!window.NOMAD_CITIES)return;var L=window.NOMAD_CITIES;function fill(dl){if(!dl||dl.childElementCount)return;var frag=document.createDocumentFragment();L.forEach(function(c){var o=document.createElement('option');o.value=c[0];frag.appendChild(o);});dl.appendChild(frag);}function resolve(q){q=q.trim().toLowerCase();if(!q)return null;var hit=L.find(function(c){return c[0].toLowerCase()===q;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)===0;});if(!hit)hit=L.find(function(c){return c[0].toLowerCase().indexOf(q)>-1;});return hit;}Array.prototype.forEach.call(forms,function(f){var input=f.querySelector('input[name="q"]');if(!input)return;fill(document.getElementById(input.getAttribute('list')));f.addEventListener('submit',function(e){var hit=resolve(input.value);if(hit){e.preventDefault();window.location.href='/cities/'+hit[1];}});});}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
   <!-- /nav-search-js -->`;
 
 function htmlIn(dir) {
