@@ -46,15 +46,14 @@ const cards = picks.map((c) => {
   // two short words and a lot of empty white before the score at the far right.
   const climate = c.climateType ? `<span class="hero-pick-climate"><span class="hero-pick-sep">&middot;</span> ${esc(c.climateType)}</span>` : '';
   return `          <li><a class="hero-pick" href="/cities/${c.id}">
-            <img class="hero-pick-photo" src="${esc(c.image)}" alt="${esc(c.name)}, ${esc(c.country)}" width="132" height="112" loading="eager" decoding="async">
-            <span class="hero-pick-body">
-              <span class="hero-pick-name">${esc(c.name)}</span>
-              <span class="hero-pick-meta">${flag}${esc(c.country)}${climate}</span>
+            <img class="hero-pick-photo" src="${esc(c.image)}" alt="${esc(c.name)}, ${esc(c.country)}" width="520" height="130" loading="eager" decoding="async">
+            <span class="hero-pick-score">${nscore(c).toFixed(1)}</span>
+            <span class="hero-pick-label">
+              <span class="hero-pick-text">
+                <span class="hero-pick-name">${esc(c.name)}</span>
+                <span class="hero-pick-meta">${flag}${esc(c.country)}${climate}</span>
+              </span>
               <span class="hero-pick-cost">${cost}<small> /mo</small></span>
-            </span>
-            <span class="hero-pick-score">
-              <span class="hero-pick-score-value">${nscore(c).toFixed(1)}</span>
-              <span class="hero-pick-score-label">Score</span>
             </span>
           </a></li>`;
 }).join('\n');
