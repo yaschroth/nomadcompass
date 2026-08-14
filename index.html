@@ -225,11 +225,10 @@
     .hero-pick {
       display: flex;
       align-items: stretch;
-      gap: 0;
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid var(--color-sand-dark);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.10);
       overflow: hidden;
       text-decoration: none;
       transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
@@ -237,13 +236,15 @@
 
     .hero-pick:hover {
       transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
       border-color: var(--color-terracotta);
     }
 
+    /* The photo stretches to the card rather than sitting in it as a square stamp. */
     .hero-pick-photo {
-      width: 104px;
-      height: 104px;
+      width: 132px;
+      align-self: stretch;
+      height: auto;
       object-fit: cover;
       flex: 0 0 auto;
       display: block;
@@ -253,33 +254,33 @@
       flex: 1 1 auto;
       min-width: 0;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-4);
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.15rem;
+      padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5);
     }
 
     /* base.css has a:not(.btn):not(.nav-link){color:var(--color-terracotta)} at specificity
        (0,2,1). A plain class ties with it at best, so every colour rule inside the card is
        qualified to outrank it. This file has been caught by that trap three times. */
     .hero-picks a.hero-pick .hero-pick-name {
-      display: block;
       font-family: var(--font-display);
-      font-size: 1.3rem;
-      line-height: 1.15;
+      font-size: 1.4rem;
+      line-height: 1.1;
       color: var(--color-ink);
     }
 
-    .hero-picks a.hero-pick .hero-pick-country {
+    .hero-picks a.hero-pick .hero-pick-meta {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      margin-top: 0.15rem;
+      flex-wrap: wrap;
+      gap: 0.3rem;
       font-size: var(--text-xs);
+      line-height: 1.4;
       color: var(--color-stone);
     }
 
-    .hero-pick-country img {
+    .hero-pick-meta img {
       width: 16px;
       height: 12px;
       border-radius: 2px;
@@ -287,27 +288,11 @@
       flex: 0 0 auto;
     }
 
-    .hero-pick-meta {
-      flex: 0 0 auto;
-      text-align: right;
-    }
-
-    .hero-picks a.hero-pick .hero-pick-score {
-      display: inline-block;
-      padding: 0.2rem 0.5rem;
-      border-radius: var(--radius-md);
-      background: var(--color-ink);
-      color: #fff;
-      font-family: var(--font-display);
-      font-size: 0.95rem;
-      line-height: 1.2;
-      font-variant-numeric: tabular-nums;
-    }
+    .hero-pick-sep { color: var(--color-sand-dark); }
 
     .hero-picks a.hero-pick .hero-pick-cost {
-      display: block;
-      margin-top: 0.3rem;
-      font-size: var(--text-xs);
+      margin-top: 0.35rem;
+      font-size: var(--text-sm);
       font-weight: 700;
       color: var(--color-terracotta-dark);
       font-variant-numeric: tabular-nums;
@@ -315,6 +300,37 @@
     }
 
     .hero-pick-cost small { font-weight: 400; color: var(--color-stone); }
+
+    /* The score is the reason the card is here, so it is set as a figure rather than hidden in a
+       chip. It also gives the right edge something to hold: the earlier layout left roughly 270px
+       of empty white between the country and a small badge. */
+    .hero-pick-score {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.1rem;
+      padding: 0 var(--space-5) 0 var(--space-4);
+      border-left: 1px solid var(--color-sand);
+      background: linear-gradient(180deg, rgba(253, 248, 243, 0) 0%, rgba(253, 248, 243, 0.7) 100%);
+    }
+
+    .hero-picks a.hero-pick .hero-pick-score-value {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      line-height: 1;
+      color: var(--color-ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero-picks a.hero-pick .hero-pick-score-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-stone);
+    }
 
     .hero-scroll {
       position: absolute;
@@ -1302,10 +1318,15 @@
 
       .hero-search .hero-go { padding: 0.62rem 1.1rem; font-size: var(--text-sm); }
 
-      /* The rail itself is set up at the 900px breakpoint; only the sizes change here. */
-      .hero-pick { flex: 0 0 min(84%, 300px); }
+      /* Three across stops fitting here, so the row becomes a snap rail: one card visible with
+         the next showing at the edge, which is also how it says "there is more". */
+      .hero-pick { flex: 0 0 min(86%, 300px); }
 
-      .hero-pick-photo { width: 84px; height: 84px; }
+      .hero-pick-photo { width: 100px; }
+
+      .hero-picks a.hero-pick .hero-pick-name { font-size: 1.35rem; }
+
+      .hero-picks a.hero-pick .hero-pick-score-value { font-size: 1.7rem; }
     }
 
     /* Two columns need room before the cards start squeezing the copy. Below this the layout
@@ -1328,10 +1349,27 @@
         scrollbar-width: thin;
       }
 
+      /* Between 768 and 900 all three still fit side by side, so they share the row instead of
+         scrolling: a cut-off third card here reads as a crop, not as a rail. */
       .hero-pick {
-        flex: 0 0 min(80%, 320px);
+        flex: 1 1 0;
+        min-width: 0;
         scroll-snap-align: start;
       }
+
+      /* In the row there is no room for the climate: it wrapped to a second line on the longer
+         names and left the three cards at three different heights. */
+      .hero-pick-climate { display: none; }
+
+      .hero-pick-photo { width: 92px; }
+
+      .hero-pick-body { padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4); }
+
+      .hero-picks a.hero-pick .hero-pick-name { font-size: 1.2rem; }
+
+      .hero-pick-score { padding: 0 var(--space-3); }
+
+      .hero-picks a.hero-pick .hero-pick-score-value { font-size: 1.5rem; }
     }
 
     /* Laptops with a short viewport (1280x720, 1366x768 once browser chrome is subtracted).
@@ -1486,42 +1524,39 @@
         <ul class="hero-picks" aria-label="Three cities from the index">
           <!-- hero-cards-start -->
           <li><a class="hero-pick" href="/cities/lisbon">
-            <img class="hero-pick-photo" src="/images/cities/lisbon-card.webp" alt="Lisbon, Portugal" width="104" height="104" loading="eager" decoding="async">
+            <img class="hero-pick-photo" src="/images/cities/lisbon-card.webp" alt="Lisbon, Portugal" width="132" height="112" loading="eager" decoding="async">
             <span class="hero-pick-body">
-              <span>
-                <span class="hero-pick-name">Lisbon</span>
-                <span class="hero-pick-country"><img src="/assets/flags/pt.svg" alt="" width="16" height="12" loading="lazy">Portugal</span>
-              </span>
-              <span class="hero-pick-meta">
-                <span class="hero-pick-score">9.6</span>
-                <span class="hero-pick-cost">$2,400<small> /mo</small></span>
-              </span>
+              <span class="hero-pick-name">Lisbon</span>
+              <span class="hero-pick-meta"><img src="/assets/flags/pt.svg" alt="" width="16" height="12" loading="lazy">Portugal<span class="hero-pick-climate"><span class="hero-pick-sep">&middot;</span> Mediterranean</span></span>
+              <span class="hero-pick-cost">$2,400<small> /mo</small></span>
+            </span>
+            <span class="hero-pick-score">
+              <span class="hero-pick-score-value">9.6</span>
+              <span class="hero-pick-score-label">Score</span>
             </span>
           </a></li>
           <li><a class="hero-pick" href="/cities/tokyo">
-            <img class="hero-pick-photo" src="/images/cities/tokyo-card.webp" alt="Tokyo, Japan" width="104" height="104" loading="eager" decoding="async">
+            <img class="hero-pick-photo" src="/images/cities/tokyo-card.webp" alt="Tokyo, Japan" width="132" height="112" loading="eager" decoding="async">
             <span class="hero-pick-body">
-              <span>
-                <span class="hero-pick-name">Tokyo</span>
-                <span class="hero-pick-country"><img src="/assets/flags/jp.svg" alt="" width="16" height="12" loading="lazy">Japan</span>
-              </span>
-              <span class="hero-pick-meta">
-                <span class="hero-pick-score">8.7</span>
-                <span class="hero-pick-cost">$1,920<small> /mo</small></span>
-              </span>
+              <span class="hero-pick-name">Tokyo</span>
+              <span class="hero-pick-meta"><img src="/assets/flags/jp.svg" alt="" width="16" height="12" loading="lazy">Japan<span class="hero-pick-climate"><span class="hero-pick-sep">&middot;</span> Humid Subtropical</span></span>
+              <span class="hero-pick-cost">$1,920<small> /mo</small></span>
+            </span>
+            <span class="hero-pick-score">
+              <span class="hero-pick-score-value">8.7</span>
+              <span class="hero-pick-score-label">Score</span>
             </span>
           </a></li>
           <li><a class="hero-pick" href="/cities/medellin">
-            <img class="hero-pick-photo" src="/images/cities/medellin-card.webp" alt="Medellín, Colombia" width="104" height="104" loading="eager" decoding="async">
+            <img class="hero-pick-photo" src="/images/cities/medellin-card.webp" alt="Medellín, Colombia" width="132" height="112" loading="eager" decoding="async">
             <span class="hero-pick-body">
-              <span>
-                <span class="hero-pick-name">Medellín</span>
-                <span class="hero-pick-country"><img src="/assets/flags/co.svg" alt="" width="16" height="12" loading="lazy">Colombia</span>
-              </span>
-              <span class="hero-pick-meta">
-                <span class="hero-pick-score">8.2</span>
-                <span class="hero-pick-cost">$1,440<small> /mo</small></span>
-              </span>
+              <span class="hero-pick-name">Medellín</span>
+              <span class="hero-pick-meta"><img src="/assets/flags/co.svg" alt="" width="16" height="12" loading="lazy">Colombia<span class="hero-pick-climate"><span class="hero-pick-sep">&middot;</span> Highland</span></span>
+              <span class="hero-pick-cost">$1,440<small> /mo</small></span>
+            </span>
+            <span class="hero-pick-score">
+              <span class="hero-pick-score-value">8.2</span>
+              <span class="hero-pick-score-label">Score</span>
             </span>
           </a></li>
           <!-- hero-cards-end -->
