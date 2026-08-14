@@ -86,7 +86,7 @@ const CSS = `
        VERSION B  (index-alt.html only)
        A full alternative homepage. Namespaced .b- / .ha- so it cannot touch the live design.
        ============================================ */
-    body.vb { background: var(--color-cream); }
+    body.vb { background: #faf7f2; }
     .vb .b-wrap { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--space-4); }
     .vb .b-eyebrow {
       display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 var(--space-4);
@@ -99,11 +99,32 @@ const CSS = `
     .vb .b-h2 { font-family: var(--font-display); font-size: var(--text-h2); line-height: 1.1; color: var(--color-ink); margin: 0 0 var(--space-3); text-wrap: balance; }
     .vb .b-lead { font-size: var(--text-lg); line-height: 1.65; color: var(--color-charcoal); margin: 0; max-width: 62ch; }
 
+    /* --- nav as a floating pill inside the hero --------------------------------------
+       The previous pass kept the site's standard nav bar above a separate hero card, which is
+       what made the page read as a transplant: a strip of chrome, then something pasted under
+       it. Here the photograph starts at the very top of the viewport and the nav floats on it,
+       so the page reads as one surface. Markup is untouched, so apply_tools_nav and the other
+       sweeps still own the nav's contents. */
+    .vb .nav {
+      position: fixed; top: var(--space-4); left: 50%; transform: translateX(-50%);
+      width: min(1180px, calc(100% - 2 * var(--space-4)));
+      height: auto; padding: .4rem .5rem; border: none; border-bottom: none;
+      background: rgba(255, 255, 255, .9); backdrop-filter: saturate(140%) blur(10px);
+      border-radius: var(--radius-full); box-shadow: 0 10px 30px rgba(15, 23, 42, .16); z-index: 90;
+    }
+    .vb .nav.scrolled { background: rgba(255, 255, 255, .96); box-shadow: 0 12px 34px rgba(15, 23, 42, .22); }
+    .vb .nav .nav-container { padding: 0 .6rem; height: 52px; }
+    /* The off-canvas panel is position:fixed with left:0;right:0 and hidden by
+       translateX(100%). Insetting it with a margin therefore leaves a sliver of it visible past
+       the right edge, because 100% is then narrower than the viewport. Full width, offset only
+       from the top so it clears the floating pill. */
+    .vb .nav-mobile { top: calc(var(--space-2) + 62px); }
+
     /* --- hero ------------------------------------------------------------------------ */
-    .ha-wrap { padding: calc(var(--nav-height) + var(--space-4)) var(--space-4) var(--space-6); }
-    .ha-card { position: relative; border-radius: 28px; overflow: hidden; min-height: min(76vh, 720px);
+    .ha-wrap { padding: var(--space-3); }
+    .ha-card { position: relative; border-radius: 26px; overflow: hidden; min-height: calc(100svh - 2 * var(--space-3));
       display: flex; align-items: flex-end; box-shadow: 0 24px 60px rgba(15,23,42,.22);
-      max-width: var(--container-max); margin: 0 auto; }
+      margin: 0 auto; }
     .ha-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     /* Light in the middle on purpose: a heavier wash erased Mount Fuji, which defeats the
        point of the photograph. Contrast for the copy comes from text-shadow instead. */
@@ -151,9 +172,17 @@ const CSS = `
     /* --- city rail -------------------------------------------------------------------- */
     .vb .b-rail-sec { padding: var(--space-16) 0 var(--space-12); }
     .vb .b-rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; margin: 0 0 var(--space-8); }
-    .vb .b-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr);
-      gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 0 var(--space-4);
-      margin: 0; list-style: none; scrollbar-width: thin; }
+    /* The rail runs to the viewport edge rather than stopping at the container, so the
+       half-visible card at the right reads as "keep scrolling" instead of as a crop. The gutter
+       is restored as scroll padding so the first card still lines up with the heading above it. */
+    .vb .b-rail { --rail-gutter: max(var(--space-4), calc(50vw - var(--container-max) / 2 + var(--space-4)));
+      display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr);
+      gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory;
+      margin: 0 calc(50% - 50vw); padding: 0 var(--rail-gutter) var(--space-4);
+      /* Without this the mandatory snap aligns the first card to the padding box and scrolls the
+         gutter away, clipping the leftmost city. Snapping has to respect the same inset. */
+      scroll-padding-inline: var(--rail-gutter);
+      list-style: none; scrollbar-width: thin; }
     .vb .b-city { scroll-snap-align: start; }
     .vb .b-city a { display: block; text-decoration: none; color: var(--color-ink); }
     .vb .b-city-img { position: relative; display: block; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--color-sand); }
@@ -169,9 +198,13 @@ const CSS = `
     .vb .b-city-cost { display: block; margin-top: .2rem; font-size: var(--text-sm); font-weight: 700; color: var(--color-terracotta); font-variant-numeric: tabular-nums; }
     .vb .b-city-cost small { font-weight: 400; color: var(--color-stone); }
 
-    /* --- dark proof band -------------------------------------------------------------- */
+    /* --- dark proof band --------------------------------------------------------------
+       Full bleed, not an inset rounded card. A stack of rounded panels with white gutters
+       between them reads as things laid on top of a page rather than as the page itself,
+       which is exactly the "hovering" this version was rejected for twice. The bands run
+       edge to edge and only their contents are constrained by .b-wrap. */
     .vb .b-proof { background: linear-gradient(135deg, #0f172a 0%, #16233d 55%, #1d2f4d 100%); color: #fff;
-      border-radius: 28px; padding: clamp(2rem, 5vw, 3.5rem); margin: var(--space-8) 0 var(--space-16); }
+      padding: clamp(3rem, 7vw, 5.5rem) 0; margin: var(--space-8) 0 0; }
     .vb .b-proof-top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-8); flex-wrap: wrap; margin: 0 0 var(--space-10); }
     .vb .b-proof .b-eyebrow { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.24); color: rgba(255,255,255,.9); }
     .vb .b-proof .b-eyebrow .dot { background: var(--color-accent-coral); }
@@ -186,7 +219,7 @@ const CSS = `
     .vb .b-feature p { font-size: var(--text-sm); line-height: 1.6; color: rgba(255,255,255,.72); margin: 0; }
 
     /* --- statement -------------------------------------------------------------------- */
-    .vb .b-statement { text-align: center; padding: 0 0 var(--space-16); }
+    .vb .b-statement { text-align: center; padding: clamp(4rem, 9vw, 7rem) 0; }
     .vb .b-statement h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.28;
       color: var(--color-ink); margin: 0 auto var(--space-6); max-width: 26ch; }
     .vb .b-pill { display: inline-block; vertical-align: middle; width: clamp(58px, 8vw, 96px); aspect-ratio: 16 / 10;
@@ -196,9 +229,11 @@ const CSS = `
     .vb .b-photo-credit { display: block; margin-top: var(--space-3); font-size: .68rem; color: var(--color-stone); }
 
     /* --- closing band ----------------------------------------------------------------- */
-    .vb .b-cta { position: relative; overflow: hidden; border-radius: 28px; margin: 0 0 var(--space-16);
-      background: linear-gradient(120deg, #1b2a44 0%, #0f172a 65%); color: #fff;
-      padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem); text-align: center; }
+    /* The closing band ends on the footer's own navy, so the two meet without a seam and the
+       page closes as one dark mass instead of a card sitting above a dark footer. */
+    .vb .b-cta { position: relative; overflow: hidden; margin: 0;
+      background: linear-gradient(170deg, #1b2a44 0%, #16233a 55%, #111a2b 100%); color: #fff;
+      padding: clamp(4rem, 9vw, 7rem) 0 clamp(4.5rem, 10vw, 8rem); text-align: center; }
     .vb .b-cta::before { content: ''; position: absolute; right: -8%; top: -40%; width: 46%; height: 180%;
       background: radial-gradient(circle at center, rgba(192,57,43,.32), transparent 68%); pointer-events: none; }
     .vb .b-cta > * { position: relative; z-index: 1; }
@@ -210,8 +245,9 @@ const CSS = `
     .vb .b-cta .btn-ghost:hover { background: rgba(255,255,255,.16); border-color: #fff; color: #fff; }
 
     @media (max-width: 767px) {
-      .ha-wrap { padding: calc(var(--nav-height) + var(--space-3)) var(--space-3) var(--space-5); }
-      .ha-card { border-radius: 20px; min-height: 82vh; }
+      .ha-wrap { padding: var(--space-2); }
+      .ha-card { border-radius: 18px; min-height: calc(100svh - 2 * var(--space-2)); }
+      .vb .nav { top: var(--space-2); width: calc(100% - 2 * var(--space-2)); }
       /* A portrait crop of a 16:9 photo centres on empty sky and loses both the mountain and
          the pagoda. Bias the crop right and down so the subject survives. */
       .ha-img { object-position: 64% 58%; }
@@ -220,9 +256,15 @@ const CSS = `
       .ha-go { padding: .6rem 1rem; }
       .ha-stats { gap: .35rem 1rem; }
       .ha-stats b { font-size: 1.2rem; }
+      /* The credit and the stats row share the bottom edge on a phone and overlap. The credit
+         cannot simply go static: it is a flex child of .ha-card, so it would land beside the
+         copy rather than under it. Keep it absolute, move it under the stats on the left, and
+         reserve the room in .ha-inner's padding. */
+      .ha-inner { padding-bottom: 2.6rem; }
+      .ha-card a.ha-credit { right: auto; left: var(--space-3); bottom: .55rem; background: none; padding: 0; }
       .vb .b-rail { grid-auto-columns: minmax(210px, 1fr); }
       .vb .b-rail-sec { padding: var(--space-10) 0 var(--space-8); }
-      .vb .b-proof, .vb .b-cta { border-radius: 20px; }
+      .vb .b-statement { padding: var(--space-12) 0; }
     }
 `;
 
@@ -276,8 +318,8 @@ ${railCards}
       </div>
     </section>
 
-    <div class="b-wrap">
-      <section class="b-proof">
+    <section class="b-proof">
+      <div class="b-wrap">
         <div class="b-proof-top">
           <div>
             <p class="b-eyebrow"><span class="dot"></span>A better way to choose</p>
@@ -291,22 +333,26 @@ ${railCards}
         <ul class="b-features">
 ${FEATURES}
         </ul>
-      </section>
+      </div>
+    </section>
 
-      <section class="b-statement">
+    <section class="b-statement">
+      <div class="b-wrap">
         <h2>Real numbers ${inlinePills[0]} for the city you ${inlinePills[1]} actually move to</h2>
         <p class="b-statement-note">${S.cities} cities across ${S.countries} countries, ${S.rankings} rankings and ${S.tools} free tools, from a route planner to a visa finder.<span class="b-photo-credit">Photos: ${inlineCredit} &middot; Wikimedia Commons</span></p>
-      </section>
+      </div>
+    </section>
 
-      <section class="b-cta">
+    <section class="b-cta">
+      <div class="b-wrap">
         <h2>Ready to find your next base?</h2>
         <p>Answer a few questions about what matters to you and the Wheel ranks all ${S.cities} cities against your priorities. No account, no email.</p>
         <div class="b-cta-btns">
           <a href="/wheel" class="btn btn-primary btn-lg">Find my city &rarr;</a>
           <a href="/compare" class="btn btn-lg btn-ghost">Compare two cities</a>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
 
   </main>`;
 
