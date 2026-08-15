@@ -123,27 +123,63 @@
 
     .home-hero .hero-search { max-width: 560px; margin: var(--space-6) 0 0; }
 
-    /* Two columns: the copy and the search on the left, the city tiles stacked down the right.
-       The right half of this hero was empty, and the tiles were a thin strip under the search
-       using none of it. Stacked they get more than twice the height each. */
-    .home-hero .home-hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-      gap: clamp(2rem, 5vw, 4rem);
-      align-items: end;
+    /* A diagonal split: copy on the left over the watercolour, the right side filled edge to edge
+       with cities. The panel is clipped rather than rotated, so the photographs stay upright and
+       only the boundary is on the slant. */
+    .home-hero-cities {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 56%;
+      z-index: 1;
+      clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
     }
 
+    /* No gaps and no corners: the three tiles are the surface here, not cards sitting on one. */
     .home-hero .hero-picks {
+      display: flex;
       flex-direction: column;
+      height: 100%;
+      gap: 0;
       margin: 0;
-      gap: var(--space-3);
     }
 
-    .home-hero .hero-pick { height: 150px; }
-    .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.6rem; }
+    .home-hero .hero-picks > li { flex: 1 1 0; min-height: 0; }
+
+    .home-hero .hero-pick {
+      height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .home-hero .hero-pick:hover { transform: none; }
+
+    /* Each tile's label sits at its own bottom edge, and the diagonal cuts furthest into the top
+       one, so the inset decreases down the stack. Without this the first city's name is sliced. */
+    .home-hero .hero-picks > li:nth-child(1) .hero-pick-label { left: 15%; }
+    .home-hero .hero-picks > li:nth-child(2) .hero-pick-label { left: 8%; }
+
+    /* The first tile runs under the header, so its score would sit behind the nav. */
+    .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: calc(var(--nav-height) + 0.7rem); }
+
+    .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.7rem; }
     .home-hero .hero-picks a.hero-pick .hero-pick-meta { font-size: 0.85rem; }
     .home-hero .hero-picks a.hero-pick .hero-pick-cost { font-size: 1.05rem; }
     .home-hero .hero-picks a.hero-pick .hero-pick-score { font-size: 1.2rem; padding: 0.22rem 0.62rem; }
+
+    /* Stacking, in the order the eye needs it: the photographs sit above the overlay's dark
+       gradient, or it would wash the bottom tile grey, and the nav's white fade sits above the
+       photographs, or the header disappears into the first city. */
+    .home-hero-cities { z-index: 3; }
+    .home-hero .hub-hero-overlay { position: relative; z-index: 2; }
+    .home-hero::before { z-index: 4; }
+
+    /* The copy keeps to the left of the slant. One width, on the column: setting a percentage on
+       the column and another on the search inside it resolved twice over and squeezed the field
+       to 220px. */
+    .home-hero .home-hero-copy { max-width: 46%; }
+    .home-hero .hero-search { max-width: 480px; }
 
     /* --radius-md, the same corner as every button on the site (32 uses sitewide), rather than a
        pill. The submit inside is a plain magnifier: a filled rectangular button in here cut the
@@ -1279,16 +1315,60 @@
       .hero-picks a.hero-pick .hero-pick-name { font-size: 1.35rem; }
     }
 
-    /* Below 900 the two columns stack, so the tiles move back under the search. */
+    /* Below 900 there is no room for a diagonal. The panel becomes a full-width strip under the
+       copy, and the tiles go back to being cards. */
     @media (max-width: 900px) {
-      .home-hero .home-hero-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: var(--space-8);
+      /* .hub-hero is a flex row with the overlay as its only item. Taking the cities panel out of
+         absolute positioning makes it a second item beside the copy, where it collapses to
+         nothing, so the hero becomes a column and the panel is ordered after the copy. */
+      /* No reserved viewport height here. Stacked, the copy and the three tiles come to less than
+         a screen, and holding 100svh open only pushed the tiles past the fold. */
+      .home-hero {
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 0;
       }
 
-      .home-hero .hero-pick { height: 124px; }
+      /* Trimmed so the copy and all three tiles fit one screen. The shared overlay reserves
+         3rem top and bottom for a hero that carries only text; here it carries a photo strip too. */
+      .home-hero .hub-hero-overlay {
+        order: 1;
+        width: 100%;
+        padding-top: calc(var(--nav-height) + var(--space-6));
+        padding-bottom: var(--space-5);
+      }
 
-      .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.35rem; }
+      .home-hero-cities {
+        order: 2;
+        position: static;
+        width: 100%;
+        clip-path: none;
+        padding: 0 var(--space-6) var(--space-8);
+      }
+
+      .home-hero .container > *,
+      .home-hero .hero-search { max-width: none; }
+
+      .home-hero .hero-picks { gap: var(--space-3); height: auto; }
+
+      /* The desktop rules make each tile a third of a full-height panel. Stacked they are cards
+         with their own height again, so the flex basis has to be released or they collapse. */
+      .home-hero .hero-picks > li { flex: 0 0 auto; min-height: 0; }
+
+      .home-hero .hero-pick {
+        height: 104px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.14);
+      }
+
+      .home-hero .hero-picks > li:nth-child(1) .hero-pick-label,
+      .home-hero .hero-picks > li:nth-child(2) .hero-pick-label { left: 1rem; }
+
+      /* No diagonal and no tile under the header here, so both nudges go back to normal. The
+         score offset alone pushed the first badge clean out of its 104px tile. */
+      .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: 0.7rem; }
+
+      .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.25rem; }
 
       .hero-picks {
         flex-direction: row;
@@ -1462,22 +1542,7 @@
          SECTION 1: HERO
          ========================================== -->
     <header class="hub-hero home-hero">
-      <div class="hub-hero-overlay"><div class="container home-hero-grid">
-        <div class="home-hero-copy">
-          <span class="hub-eyebrow">The digital nomad city index</span>
-          <h1>Find the best cities for digital nomads</h1>
-          <p class="sub">The Nomad HQ helps digital nomads find the city that actually fits their life.</p>
-          <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
-            <label class="sr-only" for="heroCity">Search a city</label>
-            <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off">
-            <!-- Inline SVG, not <use href="/assets/icons.svg#...">: the sprite has no magnifier and
-                 /assets/* is served with Cache-Control max-age=604800, so a symbol added to it
-                 renders as nothing for a week for everyone who already has the old sprite. -->
-            <button type="submit" class="hero-go" aria-label="Search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-            </button>
-          </form>
-        </div>
+      <div class="home-hero-cities">
         <ul class="hero-picks" aria-label="Three cities from the index">
           <!-- hero-cards-start -->
           <li><a class="hero-pick" href="/cities/lisbon">
@@ -1515,6 +1580,23 @@
           </a></li>
           <!-- hero-cards-end -->
         </ul>
+      </div>
+      <div class="hub-hero-overlay"><div class="container">
+        <div class="home-hero-copy">
+          <span class="hub-eyebrow">The digital nomad city index</span>
+          <h1>Find the best cities for digital nomads</h1>
+          <p class="sub">The Nomad HQ helps digital nomads find the city that actually fits their life.</p>
+          <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
+            <label class="sr-only" for="heroCity">Search a city</label>
+            <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off">
+            <!-- Inline SVG, not <use href="/assets/icons.svg#...">: the sprite has no magnifier and
+                 /assets/* is served with Cache-Control max-age=604800, so a symbol added to it
+                 renders as nothing for a week for everyone who already has the old sprite. -->
+            <button type="submit" class="hero-go" aria-label="Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            </button>
+          </form>
+        </div>
       </div></div>
     </header>
 
