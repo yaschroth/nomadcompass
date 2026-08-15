@@ -126,9 +126,17 @@
     /* A diagonal split: copy on the left over the watercolour, the right side filled edge to edge
        with cities. The panel is clipped rather than rotated, so the photographs stay upright and
        only the boundary is on the slant. */
+    /* Exactly one screen, never more: the panel is measured against the hero, so anything taller
+       would push a slice of city off the bottom of the viewport. */
+    .home-hero {
+      height: 100svh;
+      align-items: center;
+      overflow: hidden;
+    }
+
     .home-hero-cities {
       position: absolute;
-      top: 0;
+      top: var(--nav-height);
       right: 0;
       bottom: 0;
       width: 56%;
@@ -160,8 +168,7 @@
     .home-hero .hero-picks > li:nth-child(1) .hero-pick-label { left: 15%; }
     .home-hero .hero-picks > li:nth-child(2) .hero-pick-label { left: 8%; }
 
-    /* The first tile runs under the header, so its score would sit behind the nav. */
-    .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: calc(var(--nav-height) + 0.7rem); }
+    /* The panel starts below the header now, so no tile needs to dodge the nav. */
 
     .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.7rem; }
     .home-hero .hero-picks a.hero-pick .hero-pick-meta { font-size: 0.85rem; }
@@ -175,11 +182,30 @@
     .home-hero .hub-hero-overlay { position: relative; z-index: 2; }
     .home-hero::before { z-index: 4; }
 
-    /* The copy keeps to the left of the slant. One width, on the column: setting a percentage on
-       the column and another on the search inside it resolved twice over and squeezed the field
-       to 220px. */
-    .home-hero .home-hero-copy { max-width: 46%; }
-    .home-hero .hero-search { max-width: 480px; }
+    /* The copy is centred in the left band rather than pinned to the bottom of the hero, which
+       is what .hub-hero does by default. The band is what the diagonal leaves: the container is
+       capped to it and the block is centred inside, so the copy sits in the middle of its own
+       half instead of the middle of the page. */
+    .home-hero .hub-hero-overlay {
+      /* Stretched, not centred as a block. The hero centres its items, which left the overlay
+         only as tall as its text and its dark gradient stopping two thirds down, with the page
+         background showing through the bottom left. */
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      padding-top: var(--nav-height);
+      padding-bottom: var(--space-8);
+    }
+
+    .home-hero .hub-hero-overlay > .container {
+      max-width: 44%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .home-hero .home-hero-copy { width: 100%; max-width: 470px; }
+    .home-hero .hero-search { max-width: 470px; }
 
     /* --radius-md, the same corner as every button on the site (32 uses sitewide), rather than a
        pill. The submit inside is a plain magnifier: a filled rectangular button in here cut the
@@ -1327,7 +1353,16 @@
         flex-direction: column;
         justify-content: flex-end;
         min-height: 0;
+        height: auto;
       }
+
+      .home-hero .hub-hero-overlay > .container {
+        max-width: var(--container-max);
+        margin: 0 auto;
+        display: block;
+      }
+
+      .home-hero .home-hero-copy { max-width: none; }
 
       /* Trimmed so the copy and all three tiles fit one screen. The shared overlay reserves
          3rem top and bottom for a hero that carries only text; here it carries a photo strip too. */
