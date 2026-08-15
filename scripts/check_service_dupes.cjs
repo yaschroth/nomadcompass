@@ -26,6 +26,9 @@ const ALLOW = new Set([
   // The FCDO's Mexico list prints this name at two addresses in different districts; both are
   // kept and the second carries its district in the name so they can be told apart.
   'mexicocity|centromedicoabcobservatorio|centromedicoabcobservatoriolosmoralespolanco',
+  // Two St Luke's hospitals, one on E. Rodriguez in Quezon City and one in Bonifacio Global City
+  // in Taguig, both printed separately on the British Embassy Manila's list.
+  'manila|stlukesmedicalcenter|stlukesmedicalcenterbgc',
 ]);
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
