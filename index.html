@@ -95,79 +95,44 @@
     /* ============================================
        HERO SECTION
        ============================================ */
-    /* The page background is washed with only 42% cream at the top (.page-bg::before) and the
-       hero sits in exactly that band, so the copy lands on the busiest part of the watercolour:
-       the wave crest and the surfer run straight through it. A left-to-right wash lifts the
-       column without touching the right half, where the picks sit. A plain gradient, not
-       backdrop-filter: that forces a compositing layer over a fixed 4000px image and costs the
-       most on the weakest phones. */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      /* Radial, not a left-to-right linear. A linear wash reaches the hero's bottom edge at full
-         strength and stops dead there, which drew a hard horizontal line across the page exactly
-         where the hero ends. Anchored at the left edge, this fades in every direction, so it has
-         no edge of its own to show. */
-      background: radial-gradient(115% 88% at 0% 45%,
-        rgba(253, 248, 243, 0.58) 0%,
-        rgba(253, 248, 243, 0.30) 42%,
-        rgba(253, 248, 243, 0) 74%);
+    /* The homepage wears .hub-hero from base.css: the same hero as /best, /activities, /map,
+       /route, /services, /geoarbitrage, /nomad-visas, /best-weather and /cost-of-living-index.
+       Only the parts that pattern has no opinion about are set here.
+
+       Deliberately no .hub-hero-img. .page-bg is a fixed full-page layer carrying the watercolour
+       and this hero simply lets it show through, laying the shared overlay on top. Same image as
+       before, the other pages' treatment of it. */
+    .home-hero .container { max-width: var(--container-max); }
+
+    /* The shared overlay is tuned for a dark photograph. Over this watercolour, which is pale, it
+       lands too light and the coral eyebrow drops to roughly 2:1 against it. Same gradient, same
+       shape, deepened until the text band reads the way it does on the other pages. */
+    .home-hero .hub-hero-overlay {
+      background: linear-gradient(to top,
+        rgba(15, 23, 42, .96) 0%,
+        rgba(15, 23, 42, .82) 42%,
+        rgba(15, 23, 42, .42) 74%,
+        rgba(15, 23, 42, .10) 92%,
+        transparent 100%);
     }
 
-    .hero {
-      min-height: 100vh;
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      position: relative;
-      overflow: hidden;
-      padding: var(--space-16) 0;
-      padding-top: calc(var(--nav-height) + var(--space-10));
-      padding-bottom: 5rem;
+    /* The overlay stretches with its content, so on a narrow viewport the eyebrow rides up into
+       the pale part of the image. Its own shadow costs nothing and keeps the watercolour lighter
+       than deepening the gradient again would. */
+    .home-hero .hub-eyebrow { text-shadow: 0 1px 3px rgba(0, 0, 0, .65), 0 1px 16px rgba(0, 0, 0, .5); }
+
+    .home-hero .hero-search { max-width: 560px; margin: var(--space-6) 0 0; }
+
+    .home-hero .hero-picks {
+      flex-direction: row;
+      margin: var(--space-6) 0 0;
+      gap: var(--space-4);
     }
 
-
-    /* Two columns: the copy on the left, three real cities on the right. The right half used to
-       be empty, which is what made the composition read as a leftover rather than a choice.
-       Held to the site container, and the horizontal padding lives here rather than on .hero so
-       the headline starts on exactly the same left edge as every section heading below it.
-       Measured: headline at 124px, #cities .container content edge at 100 + 24 = 124. */
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: left;
-      width: 100%;
-      max-width: var(--container-max);
-      margin: 0 auto;
-      padding-left: var(--space-6);
-      padding-right: var(--space-6);
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: clamp(2rem, 5vw, 4.5rem);
-      align-items: center;
-    }
-
-    /* 15ch, not narrower. At 13ch the phrase broke into four lines ("for digital" / "nomads"),
-       which made the block taller than the picks column beside it. */
-    .hero-headline {
-      font-size: clamp(2.75rem, 5.2vw, 4.75rem);
-      line-height: 1.05;
-      margin: 0 0 var(--space-4);
-      max-width: 15ch;
-      color: var(--color-ink);
-    }
-
-    .hero-subheadline {
-      font-size: var(--text-xl);
-      color: var(--color-charcoal);
-      max-width: 40ch;
-      margin: 0 0 var(--space-8);
-      line-height: var(--leading-relaxed);
-    }
+    .home-hero .hero-picks > li { flex: 1 1 0; min-width: 0; }
+    .home-hero .hero-pick { height: 116px; }
+    .home-hero .hero-pick-climate { display: none; }
+    .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.2rem; }
 
     /* --radius-md, the same corner as every button on the site (32 uses sitewide), rather than a
        pill. The submit inside is a plain magnifier: a filled rectangular button in here cut the
@@ -378,51 +343,6 @@
       .hero-pick, .hero-pick-photo { transition: none; }
       .hero-pick:hover { transform: none; }
       .hero-pick:hover .hero-pick-photo { transform: none; }
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: var(--space-5);
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-      color: var(--color-stone);
-      font-size: var(--text-sm);
-      animation: bounce 2s ease infinite;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .hero-scroll-icon {
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--color-stone);
-      border-radius: var(--radius-full);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hero-scroll-icon::after {
-      content: '';
-      width: 4px;
-      height: 4px;
-      background-color: var(--color-stone);
-      border-radius: var(--radius-full);
-      animation: scrollDot 2s ease infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
-
-    @keyframes scrollDot {
-      0%, 100% { transform: translateY(-4px); opacity: 0; }
-      50% { transform: translateY(4px); opacity: 1; }
     }
 
     /* ============================================
@@ -1339,25 +1259,6 @@
         grid-template-columns: 1fr;
       }
 
-      .hero-headline {
-        font-size: 2.25rem;
-        max-width: none;
-      }
-
-      .hero-subheadline {
-        font-size: var(--text-lg);
-        margin-bottom: var(--space-6);
-      }
-
-      .hero-scroll {
-        display: none;
-      }
-
-      /* The scroll cue is hidden here, so reclaim the 5rem it was reserving. */
-      .hero {
-        padding-bottom: var(--space-8);
-      }
-
       .hero-search { padding-left: 0.95rem; }
 
       .hero-search input { font-size: var(--text-base); }
@@ -1367,15 +1268,14 @@
       .hero-picks a.hero-pick .hero-pick-name { font-size: 1.35rem; }
     }
 
-    /* Two columns need room before the cards start squeezing the copy. Below this the layout
-       stacks, and the cards become a horizontal rail rather than a stack: three stacked cards
-       under the search push the last one off the fold on a 900x800 window. One card visible with
-       the next showing at the edge also reads as "there is more". */
+    /* The hero is one column at every width now, so below 900 the tiles simply stack instead
+       of sitting three across. */
     @media (max-width: 900px) {
-      .hero-content {
-        grid-template-columns: minmax(0, 1fr);
-        gap: var(--space-8);
+      .home-hero .hero-picks {
+        flex-direction: column;
       }
+
+      .home-hero .hero-picks > li { flex: 1 1 auto; }
 
       .hero-picks {
         flex-direction: row;
@@ -1418,30 +1318,22 @@
     }
 
     /* Laptops with a short viewport (1280x720, 1366x768 once browser chrome is subtracted).
-       The hero is min-height:100vh, so on exactly those machines the search field is the thing
-       that falls below the fold. Never fires above 780px of height. */
+       .hub-hero is min-height:100vh and bottom-aligned, so on exactly those machines the tiles
+       are what runs out of room. Never fires above 780px of height.
+
+       Do not size .hero-pick-photo here. It is absolutely positioned to fill the tile, and a
+       width left over from the old thumbnail layout shrank it back to a strip with the navy tile
+       background showing through the rest. */
     @media (min-width: 768px) and (max-height: 780px) {
-      .hero {
-        padding-top: calc(var(--nav-height) + var(--space-6));
-        padding-bottom: 3.5rem;
-      }
+      .home-hero .hub-hero-overlay { padding-bottom: 2rem; }
 
-      .hero-headline {
-        font-size: clamp(2.25rem, 5vw, 3.5rem);
-        margin-bottom: var(--space-3);
-      }
+      .home-hero .hero-search { margin-top: var(--space-5); }
 
-      .hero-subheadline {
-        font-size: var(--text-lg);
-        margin-bottom: var(--space-6);
-      }
+      .home-hero .hero-picks { margin-top: var(--space-5); }
 
-      /* Do not size .hero-pick-photo here. It is absolutely positioned to fill the tile now, and
-         a width left over from the old thumbnail layout shrank it back to a strip with the navy
-         tile background showing through the rest. */
-      .hero-pick { height: 112px; }
+      .hero-pick { height: 104px; }
 
-      .hero-picks a.hero-pick .hero-pick-name { font-size: 1.3rem; }
+      .hero-picks a.hero-pick .hero-pick-name { font-size: 1.15rem; }
     }
   </style>
   <script type="application/ld+json">
@@ -1556,22 +1448,21 @@
     <!-- ==========================================
          SECTION 1: HERO
          ========================================== -->
-    <section class="hero">
-      <div class="hero-content">
-        <div class="hero-copy">
-          <h1 class="hero-headline">Find the best cities for digital nomads</h1>
-          <p class="hero-subheadline">The Nomad HQ helps digital nomads find the city that actually fits their life.</p>
-          <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
-            <label class="sr-only" for="heroCity">Search a city</label>
-            <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off">
-            <!-- Inline SVG, not <use href="/assets/icons.svg#...">: the sprite has no magnifier and
-                 /assets/* is served with Cache-Control max-age=604800, so a symbol added to it
-                 renders as nothing for a week for everyone who already has the old sprite. -->
-            <button type="submit" class="hero-go" aria-label="Search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-            </button>
-          </form>
-        </div>
+    <header class="hub-hero home-hero">
+      <div class="hub-hero-overlay"><div class="container">
+        <span class="hub-eyebrow">The digital nomad city index</span>
+        <h1>Find the best cities for digital nomads</h1>
+        <p class="sub">The Nomad HQ helps digital nomads find the city that actually fits their life.</p>
+        <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
+          <label class="sr-only" for="heroCity">Search a city</label>
+          <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off">
+          <!-- Inline SVG, not <use href="/assets/icons.svg#...">: the sprite has no magnifier and
+               /assets/* is served with Cache-Control max-age=604800, so a symbol added to it
+               renders as nothing for a week for everyone who already has the old sprite. -->
+          <button type="submit" class="hero-go" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+          </button>
+        </form>
         <ul class="hero-picks" aria-label="Three cities from the index">
           <!-- hero-cards-start -->
           <li><a class="hero-pick" href="/cities/lisbon">
@@ -1609,12 +1500,8 @@
           </a></li>
           <!-- hero-cards-end -->
         </ul>
-      </div>
-      <div class="hero-scroll">
-        <span>Scroll</span>
-        <div class="hero-scroll-icon"></div>
-      </div>
-    </section>
+      </div></div>
+    </header>
 
     <!-- ==========================================
          CITIES EXPLORER (copied from cities.html)
