@@ -123,16 +123,27 @@
 
     .home-hero .hero-search { max-width: 560px; margin: var(--space-6) 0 0; }
 
-    .home-hero .hero-picks {
-      flex-direction: row;
-      margin: var(--space-6) 0 0;
-      gap: var(--space-4);
+    /* Two columns: the copy and the search on the left, the city tiles stacked down the right.
+       The right half of this hero was empty, and the tiles were a thin strip under the search
+       using none of it. Stacked they get more than twice the height each. */
+    .home-hero .home-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: end;
     }
 
-    .home-hero .hero-picks > li { flex: 1 1 0; min-width: 0; }
-    .home-hero .hero-pick { height: 116px; }
-    .home-hero .hero-pick-climate { display: none; }
-    .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.2rem; }
+    .home-hero .hero-picks {
+      flex-direction: column;
+      margin: 0;
+      gap: var(--space-3);
+    }
+
+    .home-hero .hero-pick { height: 150px; }
+    .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.6rem; }
+    .home-hero .hero-picks a.hero-pick .hero-pick-meta { font-size: 0.85rem; }
+    .home-hero .hero-picks a.hero-pick .hero-pick-cost { font-size: 1.05rem; }
+    .home-hero .hero-picks a.hero-pick .hero-pick-score { font-size: 1.2rem; padding: 0.22rem 0.62rem; }
 
     /* --radius-md, the same corner as every button on the site (32 uses sitewide), rather than a
        pill. The submit inside is a plain magnifier: a filled rectangular button in here cut the
@@ -1268,14 +1279,16 @@
       .hero-picks a.hero-pick .hero-pick-name { font-size: 1.35rem; }
     }
 
-    /* The hero is one column at every width now, so below 900 the tiles simply stack instead
-       of sitting three across. */
+    /* Below 900 the two columns stack, so the tiles move back under the search. */
     @media (max-width: 900px) {
-      .home-hero .hero-picks {
-        flex-direction: column;
+      .home-hero .home-hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-8);
       }
 
-      .home-hero .hero-picks > li { flex: 1 1 auto; }
+      .home-hero .hero-pick { height: 124px; }
+
+      .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.35rem; }
 
       .hero-picks {
         flex-direction: row;
@@ -1449,20 +1462,22 @@
          SECTION 1: HERO
          ========================================== -->
     <header class="hub-hero home-hero">
-      <div class="hub-hero-overlay"><div class="container">
-        <span class="hub-eyebrow">The digital nomad city index</span>
-        <h1>Find the best cities for digital nomads</h1>
-        <p class="sub">The Nomad HQ helps digital nomads find the city that actually fits their life.</p>
-        <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
-          <label class="sr-only" for="heroCity">Search a city</label>
-          <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off">
-          <!-- Inline SVG, not <use href="/assets/icons.svg#...">: the sprite has no magnifier and
-               /assets/* is served with Cache-Control max-age=604800, so a symbol added to it
-               renders as nothing for a week for everyone who already has the old sprite. -->
-          <button type="submit" class="hero-go" aria-label="Search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-          </button>
-        </form>
+      <div class="hub-hero-overlay"><div class="container home-hero-grid">
+        <div class="home-hero-copy">
+          <span class="hub-eyebrow">The digital nomad city index</span>
+          <h1>Find the best cities for digital nomads</h1>
+          <p class="sub">The Nomad HQ helps digital nomads find the city that actually fits their life.</p>
+          <form class="hero-search" action="/cities" method="get" role="search" data-city-search>
+            <label class="sr-only" for="heroCity">Search a city</label>
+            <input type="search" id="heroCity" name="q" placeholder="Lisbon, Chiang Mai, Medell&iacute;n&hellip;" autocomplete="off">
+            <!-- Inline SVG, not <use href="/assets/icons.svg#...">: the sprite has no magnifier and
+                 /assets/* is served with Cache-Control max-age=604800, so a symbol added to it
+                 renders as nothing for a week for everyone who already has the old sprite. -->
+            <button type="submit" class="hero-go" aria-label="Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            </button>
+          </form>
+        </div>
         <ul class="hero-picks" aria-label="Three cities from the index">
           <!-- hero-cards-start -->
           <li><a class="hero-pick" href="/cities/lisbon">
