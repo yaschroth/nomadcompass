@@ -9,6 +9,13 @@
  * A 403 is not a dead link. Cloudflare and Facebook block non-browser clients, so those are
  * reported as BLOCKED and must be checked by hand rather than silently dropped.
  *
+ * Nor is a transport failure. The verdicts are deliberately separate, because only one of them
+ * is evidence that a link is wrong:
+ *   DEAD         the server answered, with 4xx/5xx. The only verdict that fails the run.
+ *   BLOCKED      403/429: the server refused this client, not the link.
+ *   TLS          a certificate chain browsers accept and Node does not.
+ *   UNREACHABLE  refused, timed out or DNS. Often this network rather than that server.
+ *
  * Usage:
  *   node scripts/verify_service_links.cjs           human readable
  *   node scripts/verify_service_links.cjs --json    machine readable, for a follow-up pass
@@ -63,8 +70,14 @@ async function check(url) {
       out.note = attempt > 1 ? `answered on attempt ${attempt}` : '';
       break;
     } catch (e) {
-      out.verdict = 'DEAD';
-      out.note = ((e && e.message) ? e.message.slice(0, 60) : 'request failed') + ` (${attempt}/${ATTEMPTS} attempts)`;
+      // Node's fetch collapses every transport failure into the message "fetch failed"; the
+      // useful part is in e.cause.code. Reporting them all as DEAD is what made this tool call a
+      // clinic chain that is plainly online dead: its server just omits an intermediate
+      // certificate, which a browser tolerates and Node does not.
+      const code = (e && e.cause && e.cause.code) || (e && e.name === 'AbortError' ? 'ETIMEDOUT' : '') || '';
+      const msg = (e && e.cause && e.cause.message) || (e && e.message) || 'request failed';
+      out.verdict = /CERT|SIGNATURE|SSL|TLS/i.test(code) ? 'TLS' : 'UNREACHABLE';
+      out.note = (code ? code + ': ' : '') + String(msg).slice(0, 60) + ` (${attempt}/${ATTEMPTS} attempts)`;
       if (attempt < ATTEMPTS) await sleep(1500 * attempt);
     }
   }
@@ -87,7 +100,7 @@ async function check(url) {
   }
   if (JSON_OUT) { console.log(JSON.stringify(results, null, 2)); return; }
 
-  const order = { DEAD: 0, BLOCKED: 1, OK: 2 };
+  const order = { DEAD: 0, UNREACHABLE: 1, TLS: 2, BLOCKED: 3, OK: 4 };
   results.sort((a, b) => order[a.verdict] - order[b.verdict] || a.url.localeCompare(b.url));
   for (const r of results) {
     console.log(`${r.verdict.padEnd(8)}${String(r.status).padEnd(5)}${r.url}`);
@@ -97,6 +110,9 @@ async function check(url) {
     if (r.verdict !== 'OK') console.log(`             rows:  ${refs.get(r.url).join(' | ')}`);
   }
   const n = (v) => results.filter((r) => r.verdict === v).length;
-  console.log(`\n${results.length} unique links: ${n('OK')} ok, ${n('BLOCKED')} blocked (check by hand), ${n('DEAD')} dead`);
+  console.log(`\n${results.length} unique links: ${n('OK')} ok, ${n('BLOCKED')} blocked, ${n('TLS')} tls, ${n('UNREACHABLE')} unreachable, ${n('DEAD')} dead`);
+  console.log('Only DEAD means the server answered with an error. BLOCKED, TLS and UNREACHABLE');
+  console.log('all need a human on a different network before any row is touched: acting on');
+  console.log('them has already threatened perfectly good rows twice.');
   process.exit(n('DEAD') ? 1 : 0);
 })();
