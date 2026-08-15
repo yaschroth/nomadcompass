@@ -142,6 +142,15 @@
       width: 56%;
       z-index: 1;
       clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+      /* Soft at the top only: the first city dissolves into the watercolour instead of starting on
+         a cut line under the header. Masked rather than covered, so the photograph itself thins
+         out and nothing is laid over it.
+
+         Not at the bottom. Fading there put the last city's name and price inside the fade, and
+         the abrupt edge into the next section was never the photographs: it was the dark shade on
+         the left, which now lets go before the hero ends. */
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 11%);
+              mask-image: linear-gradient(to bottom, transparent 0%, #000 11%);
     }
 
     /* No gaps and no corners: the three tiles are the surface here, not cards sitting on one. */
@@ -168,7 +177,13 @@
     .home-hero .hero-picks > li:nth-child(1) .hero-pick-label { left: 15%; }
     .home-hero .hero-picks > li:nth-child(2) .hero-pick-label { left: 8%; }
 
-    /* The panel starts below the header now, so no tile needs to dodge the nav. */
+    /* The last tile ends on the hero's own bottom edge, so its label needs more clearance than
+       the others or the price sits on the cut. */
+    .home-hero .hero-picks > li:last-child .hero-pick-label { bottom: 1.6rem; }
+
+    /* The top of the panel is fading, and the first tile's score badge sat inside the fade at a
+       readable-but-ghostly 40%. It drops past the fade instead; the other two keep their corner. */
+    .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: 38%; }
 
     .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.7rem; }
     .home-hero .hero-picks a.hero-pick .hero-pick-meta { font-size: 0.85rem; }
@@ -195,6 +210,17 @@
       align-items: center;
       padding-top: var(--nav-height);
       padding-bottom: var(--space-8);
+      /* The shared overlay is near-opaque at its foot, which met the light section below on a
+         hard line. This one is darkest behind the copy and lets go before the edge, so the hero
+         ends in the page rather than against it. */
+      background: linear-gradient(to top,
+        rgba(15, 23, 42, 0) 0%,
+        rgba(15, 23, 42, .45) 7%,
+        rgba(15, 23, 42, .92) 24%,
+        rgba(15, 23, 42, .88) 58%,
+        rgba(15, 23, 42, .45) 82%,
+        rgba(15, 23, 42, .12) 94%,
+        transparent 100%);
     }
 
     .home-hero .hub-hero-overlay > .container {
