@@ -210,17 +210,11 @@
       align-items: center;
       padding-top: var(--nav-height);
       padding-bottom: var(--space-8);
-      /* The shared overlay is near-opaque at its foot, which met the light section below on a
-         hard line. This one is darkest behind the copy and lets go before the edge, so the hero
-         ends in the page rather than against it. */
-      background: linear-gradient(to top,
-        rgba(15, 23, 42, 0) 0%,
-        rgba(15, 23, 42, .45) 7%,
-        rgba(15, 23, 42, .92) 24%,
-        rgba(15, 23, 42, .88) 58%,
-        rgba(15, 23, 42, .45) 82%,
-        rgba(15, 23, 42, .12) 94%,
-        transparent 100%);
+      /* No scrim. The shared overlay exists to hold white text on a dark photograph; this hero
+         has the watercolour on its left, which is pale, so the copy is set in ink instead and the
+         background is left alone. That also removes the hard line where the shade met the section
+         below, which no longer needs softening because there is nothing to soften. */
+      background: none;
     }
 
     .home-hero .hub-hero-overlay > .container {
@@ -232,6 +226,23 @@
 
     .home-hero .home-hero-copy { width: 100%; max-width: 470px; }
     .home-hero .hero-search { max-width: 470px; }
+
+    /* Ink on the watercolour, the palette this page used before it took the shared hero. The
+       shared rules set white with a dark shadow, which only works over a photograph. */
+    .home-hero .hub-hero-overlay h1 {
+      color: var(--color-ink);
+      text-shadow: none;
+    }
+
+    .home-hero .hub-hero-overlay .sub {
+      color: var(--color-charcoal);
+      text-shadow: none;
+    }
+
+    .home-hero .hub-eyebrow {
+      color: var(--color-terracotta-dark);
+      text-shadow: none;
+    }
 
     /* --radius-md, the same corner as every button on the site (32 uses sitewide), rather than a
        pill. The submit inside is a plain magnifier: a filled rectangular button in here cut the
@@ -1405,6 +1416,9 @@
         width: 100%;
         clip-path: none;
         padding: 0 var(--space-6) var(--space-8);
+        /* No diagonal here, so nothing to dissolve into: the mask only washed the top card. */
+        -webkit-mask-image: none;
+                mask-image: none;
       }
 
       .home-hero .container > *,
@@ -1425,9 +1439,11 @@
       .home-hero .hero-picks > li:nth-child(1) .hero-pick-label,
       .home-hero .hero-picks > li:nth-child(2) .hero-pick-label { left: 1rem; }
 
-      /* No diagonal and no tile under the header here, so both nudges go back to normal. The
-         score offset alone pushed the first badge clean out of its 104px tile. */
+      /* No diagonal and no fade here, so both nudges go back to normal. The score offset alone
+         left the first badge floating in the middle of its card. */
       .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: 0.7rem; }
+
+      .home-hero .hero-picks > li:last-child .hero-pick-label { bottom: 0.85rem; }
 
       .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.25rem; }
 
