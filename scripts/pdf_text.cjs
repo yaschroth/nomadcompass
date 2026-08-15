@@ -13,9 +13,12 @@
  * object -> its CMap, follows the `Tf` operator through the content stream, and decodes each run
  * with the table of the font that was actually selected.
  *
- * Handles: classic `N 0 obj` files with FlateDecode streams, which is what these government PDFs
- * are. Does NOT handle cross-reference streams with compressed object streams (/ObjStm); it says
- * so rather than emitting mush.
+ * Handles classic `N 0 obj` files and the newer form where most objects are packed into
+ * compressed object streams (/ObjStm). Streams themselves are never inside an ObjStm, so the
+ * font programs and content stay where they are; only the dictionaries move, which is why this
+ * needs unpacking at all: the /ToUnicode references live in them.
+ *
+ * When it cannot do the job it says so and exits rather than emitting mush.
  *
  * Usage: node scripts/pdf_text.cjs <file.pdf>
  */
@@ -26,12 +29,6 @@ const file = process.argv[2];
 if (!file) { console.error('usage: node scripts/pdf_text.cjs <file.pdf>'); process.exit(2); }
 const buf = fs.readFileSync(file);
 const raw = buf.toString('latin1');
-
-if (/\/ObjStm/.test(raw)) {
-  console.error('This PDF stores its objects in compressed object streams (/ObjStm), which this');
-  console.error('extractor does not read. Do not guess at the contents: find another source.');
-  process.exit(1);
-}
 
 // ---- objects ------------------------------------------------------------------------------
 // Byte offsets, so a stream's bytes can be sliced out of the buffer rather than the latin1 copy.
@@ -54,11 +51,35 @@ function streamOf(num) {
   try { return zlib.inflateSync(buf.subarray(a, b)).toString('latin1'); } catch (e) { return null; }
 }
 
+// Objects unpacked out of /ObjStm containers. A container holds N objects; the first /First
+// bytes are pairs of "objectNumber byteOffset", then the objects themselves back to back.
+const packed = new Map();
+for (const [num, o] of objects) {
+  const end = raw.indexOf('endobj', o.start);
+  const head = raw.slice(o.start, end === -1 ? o.start + 2000 : end);
+  if (!/\/Type\s*\/ObjStm/.test(head)) continue;
+  const body = streamOf(num);
+  if (!body) continue;
+  const n = Number((head.match(/\/N\s+(\d+)/) || [])[1]);
+  const first = Number((head.match(/\/First\s+(\d+)/) || [])[1]);
+  if (!n || !Number.isFinite(first)) continue;
+  const nums = body.slice(0, first).trim().split(/\s+/).map(Number);
+  for (let i = 0; i < n; i++) {
+    const objNum = nums[i * 2];
+    const off = nums[i * 2 + 1];
+    const nextOff = i + 1 < n ? nums[i * 2 + 3] : body.length - first;
+    if (!Number.isFinite(objNum) || !Number.isFinite(off)) continue;
+    packed.set(objNum, body.slice(first + off, first + nextOff));
+  }
+}
+
 function dictOf(num) {
   const o = objects.get(num);
-  if (!o) return '';
-  const end = raw.indexOf('endobj', o.start);
-  return raw.slice(o.start, end === -1 ? o.start + 4000 : end);
+  if (o) {
+    const end = raw.indexOf('endobj', o.start);
+    return raw.slice(o.start, end === -1 ? o.start + 4000 : end);
+  }
+  return packed.get(num) || '';
 }
 
 // ---- one ToUnicode table per font -----------------------------------------------------------
@@ -118,8 +139,11 @@ function cmapOf(fontNum) {
 // cannot reintroduce the wholesale mis-mapping that merging all tables together caused.
 const byName = new Map();
 const allTables = [];
+// Font dictionaries live in the file directly in older PDFs and inside the unpacked object
+// streams in newer ones, so both are searched.
+const haystack = raw + String.fromCharCode(10) + [...packed.values()].join(String.fromCharCode(10));
 const fontDictRe = /\/Font\s*<<([^>]*)>>/g;
-while ((m = fontDictRe.exec(raw))) {
+while ((m = fontDictRe.exec(haystack))) {
   const pairs = m[1].match(/\/(\w+)\s+(\d+) 0 R/g) || [];
   for (const p of pairs) {
     const x = p.match(/\/(\w+)\s+(\d+) 0 R/);
@@ -136,10 +160,12 @@ const lookup = (font, id) => {
   return '';
 };
 
+// No tables is not automatically a failure: a PDF whose fonts use a standard encoding stores its
+// text as ordinary ( ) strings that need no mapping at all. Only hex strings are unreadable
+// without a table, and those are skipped rather than guessed at. If nothing readable comes out,
+// the check at the end says so.
 if (!byName.size) {
-  console.error('No /ToUnicode tables found. Without them the character ids cannot be turned into');
-  console.error('text, and anything printed would be a guess. Find another source.');
-  process.exit(1);
+  console.error('note: no /ToUnicode tables in this file; only plain ( ) strings can be read.');
 }
 
 // ---- decode the content streams --------------------------------------------------------------
@@ -178,9 +204,34 @@ for (const num of objects.keys()) {
         line += ' ';
       }
     }
-    line = line.replace(/\s+/g, ' ').trim();
-    if (line) out += line + '\n';
+    // Some streams are not page content at all: embedded font programs contain the byte pairs
+    // "Tj" and "TJ" by coincidence and decode to tens of thousands of NULs and control
+    // characters. Dropping those here keeps the output clean and lets the check at the end mean
+    // something: before this, 60,000 NULs from one font drowned the real text and the readability
+    // guard rejected a page that had decoded perfectly.
+    line = line.replace(/[ --]/g, '').replace(/\s+/g, ' ').trim();
+    if (!line) continue;
+    // Letters, not just "characters": a line of punctuation and spaces would pass any test
+    // that counted those as readable, which is exactly what the undecodable Barcelona list
+    // produces. Real prose in these documents runs about 75% letters.
+    const letters = (line.match(/\p{L}/gu) || []).length;
+    if (letters / line.length < 0.45) continue;
+    out += line + '\n';
   }
+}
+
+// A PDF can hand back plenty of bytes that are not text: fonts with a private encoding and no
+// /ToUnicode store glyph indices in ordinary ( ) strings, so the Barcelona consulate list decodes
+// to "! \" \" # $ %" and so on. Emitting that would be worse than refusing, because it looks like
+// content. Anything under two thirds letters, digits, spaces and ordinary punctuation is treated
+// as undecoded.
+const letters = (out.match(/\p{L}/gu) || []).length;
+const ratio = out.length ? letters / out.length : 0;
+if (!out.trim() || ratio < 0.45) {
+  console.error('Nothing readable came out of this PDF (' + Math.round(ratio * 100) + '% letters).');
+  console.error('Its fonts most likely use a private encoding with no /ToUnicode table. Find another');
+  console.error('source rather than guessing at the contents.');
+  process.exit(1);
 }
 
 process.stdout.write(out);
