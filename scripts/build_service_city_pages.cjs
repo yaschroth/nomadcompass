@@ -117,7 +117,7 @@ const LOCAL = {
   Morocco: 'ar', Latvia: 'lv', Estonia: 'et', Croatia: 'hr', Kenya: 'sw', Hungary: 'hu',
   Japan: 'ja', Taiwan: 'zh', Singapore: null, Brazil: 'pt', Chile: 'es', Netherlands: 'nl',
   Malaysia: 'ms', Germany: 'de', Greece: 'el', Belgium: 'nl', 'Sri Lanka': 'si', Bulgaria: 'bg',
-  Turkey: 'tr', Romania: 'ro', 'South Korea': 'ko', Peru: 'es',
+  Turkey: 'tr', Romania: 'ro', 'South Korea': 'ko', Peru: 'es', Austria: 'de',
 };
 // A country in the data with no entry here would silently keep its own language in every title, so
 // say so loudly instead.
