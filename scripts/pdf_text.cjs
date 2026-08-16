@@ -225,10 +225,16 @@ for (const num of objects.keys()) {
 // to "! \" \" # $ %" and so on. Emitting that would be worse than refusing, because it looks like
 // content. Anything under two thirds letters, digits, spaces and ordinary punctuation is treated
 // as undecoded.
-const letters = (out.match(/\p{L}/gu) || []).length;
-const ratio = out.length ? letters / out.length : 0;
-if (!out.trim() || ratio < 0.45) {
-  console.error('Nothing readable came out of this PDF (' + Math.round(ratio * 100) + '% letters).');
+// Counting letters is not enough. The German embassy Beijing list decodes to a stream of accented
+// single characters that is exactly 45% letters, slips past a ratio test, and holds four real
+// words in five hundred characters. What separates text from noise is whether the letters group
+// into words, so the test is the share of the output sitting inside a run of three or more
+// letters. They have to be ASCII letters: the noise is full of accented characters, which count
+// as letters under p{L} and let the garbage pass. Real prose here is well above 50%.
+const inWords = (out.match(/[A-Za-z]{3,}/g) || []).join('').length;
+const ratio = out.length ? inWords / out.length : 0;
+if (!out.trim() || ratio < 0.35) {
+  console.error('Nothing readable came out of this PDF (' + Math.round(ratio * 100) + '% of it sits inside words).');
   console.error('Its fonts most likely use a private encoding with no /ToUnicode table. Find another');
   console.error('source rather than guessing at the contents.');
   process.exit(1);
