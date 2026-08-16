@@ -75,7 +75,9 @@ if (at('english') < 0) {
 }
 
 const deaccent = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
-const PHONE = /^(\+|00|0\d)[\d\s()./-]{6,}$/;
+// Mexico and Singapore print the dialling code in brackets, "(65) 6472 2000", so a leading
+// bracket counts as the start of a number too.
+const PHONE = /^(\+|00|0\d|\()[\d\s()./-]{6,}$/;
 // Not only Yes and No: at least one list prints "Some".
 const GRADE = /^(yes|no|some|limited)\b/i;
 const EMAIL = /@/;
