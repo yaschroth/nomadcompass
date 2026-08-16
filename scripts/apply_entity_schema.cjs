@@ -39,6 +39,7 @@ const all = [
   ...rootHtml,
   ...htmlIn('cities'), ...htmlIn('best'), ...htmlIn('tier-list'),
   ...htmlIn('activities'), ...htmlIn('blog'), ...htmlIn('blog/category'), ...htmlIn('about'),
+  ...htmlIn('services'),
 ];
 const articleDirs = ['cities' + path.sep, 'activities' + path.sep];
 

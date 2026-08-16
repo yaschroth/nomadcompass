@@ -39,6 +39,21 @@ add('/privacy', '0.2', 'yearly');
 add('/terms', '0.2', 'yearly');
 add('/legal-notice', '0.2', 'yearly');
 
+// One page per city in the services directory. Only the ones worth landing on: pages for cities
+// with fewer than three providers are built for readers and internal linking but carry noindex,
+// and build_service_city_pages.cjs records which is which.
+{
+  const manifest = path.join(ROOT, 'data', 'service-city-pages.json');
+  if (fs.existsSync(manifest)) {
+    const pages = JSON.parse(fs.readFileSync(manifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of pages.sort((a, b) => a.slug.localeCompare(b.slug))) {
+      add('/services/' + p.slug, '0.7', 'monthly');
+    }
+    console.log('  services: ' + pages.length + ' city pages added (' +
+      (JSON.parse(fs.readFileSync(manifest, 'utf8')).length - pages.length) + ' noindex, left out)');
+  }
+}
+
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
   add('/blog/' + f.replace(/\.html$/, ''), '0.7', 'monthly');
 }

@@ -130,7 +130,26 @@ function citySection(slug) {
         </div>
       </section>`;
 }
-const sections = usedCities.map(citySection).join('\n      ');
+// The hub used to print all 1,002 providers, which made it a 1.9 MB page that Search Console
+// recorded one impression for in three months. It is an index now: one card per city, linking to
+// services/<city>, which is the page shaped like what people actually search for. citySection is
+// kept because build_service_city_pages.cjs renders the same band on each city page.
+function cityIndexCard(slug) {
+  const rows = providers.filter((p) => p.city === slug);
+  const c = CITY[slug];
+  const langs = [...new Set(rows.flatMap((p) => p.languages))].sort((a, b) => LANGS[a].localeCompare(LANGS[b]));
+  const cats = [...new Set(rows.map((p) => p.category))];
+  const flag = c.iso ? `<img class="sv-ix-flag" src="/assets/flags/${c.iso}.svg" alt="" width="26" height="20" loading="lazy">` : '';
+  // Six is as many chips as fit on one line on a phone; the rest are counted instead of listed.
+  const shown = langs.slice(0, 6);
+  const rest = langs.length - shown.length;
+  return `<a class="sv-ix" href="/services/${slug}" data-city="${slug}" data-n="${rows.length}" data-cats="${cats.join(' ')}" data-langs="${langs.join(' ')}" data-name="${esc((c.name + ' ' + c.country).toLowerCase())}">
+        <span class="sv-ix-top">${flag}<span class="sv-ix-name">${esc(c.name)}<span class="sv-ix-country">${esc(c.country)}</span></span></span>
+        <span class="sv-ix-count">${rows.length} provider${rows.length === 1 ? '' : 's'}</span>
+        <span class="sv-ix-langs">${shown.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('')}${rest > 0 ? `<span class="sv-lang sv-lang-more">+${rest}</span>` : ''}</span>
+      </a>`;
+}
+const cityIndex = usedCities.map(cityIndexCard).join('\n      ');
 
 function navHtml() {
   const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
@@ -273,6 +292,21 @@ const html = `<!DOCTYPE html>
     .sv-nogo { font-size:.76rem; color:var(--color-stone); }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
+    /* The city index. Each card is a link to services/<city>, which is where the providers live. */
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
+    .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+      box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
+    .sv-ix:hover { border-color:var(--color-terracotta,#c65d3b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-ix.is-hidden { display:none; }
+    .sv-ix-top { display:flex; align-items:center; gap:.6rem; }
+    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
+    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2; }
+    .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
+    .sv-ix-count { font-size:var(--text-sm); color:var(--color-terracotta-dark,#a8492c); font-weight:600; }
+    .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .sv-ix .sv-lang-more { background:var(--color-sand,#f2e9da); color:var(--color-stone); }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
@@ -303,9 +337,9 @@ const html = `<!DOCTYPE html>
         <div class="sv-field"><label for="svQ">Search</label><input type="search" id="svQ" placeholder="Name contains..." autocomplete="off"></div>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
-      <p class="sv-count" id="svCount">Showing all <b>${providers.length}</b> providers across <b>${nCities}</b> cities.</p>
-      <div id="svGrid">
-      ${sections}
+      <p class="sv-count" id="svCount">Showing all <b>${nCities}</b> cities, <b>${providers.length}</b> providers in total.</p>
+      <div id="svGrid" class="sv-ix-grid">
+      ${cityIndex}
       </div>
       <div class="sv-empty is-hidden" id="svEmpty">
         <p>Nothing matches that combination yet.</p>
@@ -332,53 +366,47 @@ const html = `<!DOCTYPE html>
     (function(){
       var grid=document.getElementById('svGrid'),count=document.getElementById('svCount'),empty=document.getElementById('svEmpty');
       var citySel=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang'),q=document.getElementById('svQ');
-      var cards=[].slice.call(grid.querySelectorAll('.sv-card'));
-      var sections=[].slice.call(grid.querySelectorAll('.sv-city'));
-      var CITY_LABEL=${JSON.stringify(Object.fromEntries(usedCities.map((c) => [c, CITY[c].name])))};
+      var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(usedLangs.map((l) => [l, LANGS[l]])))};
+      var TOTAL=${providers.length};
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
       function render(){
-        var city=citySel.value,cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase();
-        var shown=0;
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase();
+        var shown=0,rows=0;
         cards.forEach(function(el){
-          var ok=(city==='all'||el.getAttribute('data-city')===city)
-            &&(cat==='all'||el.getAttribute('data-cat')===cat)
-            &&(lang==='all'||(' '+el.getAttribute('data-lang')+' ').indexOf(' '+lang+' ')>-1)
+          var ok=(cat==='all'||has(el,'data-cats',cat))
+            &&(lang==='all'||has(el,'data-langs',lang))
             &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
           el.classList.toggle('is-hidden',!ok);
-          if(ok)shown++;
-        });
-        // Collapse a city band once nothing under it survives the filter, and keep its
-        // counter honest about how many are actually on screen.
-        sections.forEach(function(sec){
-          var vis=sec.querySelectorAll('.sv-card:not(.is-hidden)').length;
-          sec.classList.toggle('is-hidden',vis===0);
-          var cEl=sec.querySelector('.sv-city-count');
-          if(cEl){
-            var total=cEl.getAttribute('data-total');
-            cEl.textContent=(vis===+total?vis:vis+' of '+total)+' provider'+(vis===1?'':'s');
-          }
+          if(ok){shown++;rows+=parseInt(el.getAttribute('data-n'),10)||0;}
         });
         var bits=[];
-        if(cat!=='all')bits.push('under '+CAT_LABEL[cat]);
+        if(cat!=='all')bits.push('with '+CAT_LABEL[cat]);
         if(lang!=='all')bits.push('working in '+LANG_LABEL[lang]);
-        if(city!=='all')bits.push('in '+CITY_LABEL[city]);
-        count.innerHTML='Showing <b>'+shown+'</b> '+(shown===1?'provider':'providers')+(bits.length?' '+bits.join(', '):'')+'.';
+        count.innerHTML='Showing <b>'+shown+'</b> '+(shown===1?'city':'cities')+(bits.length?' '+bits.join(', '):'')
+          +', <b>'+(bits.length?rows:TOTAL)+'</b> providers in total.';
         empty.classList.toggle('is-hidden',shown>0);
         try{
           var u=new URL(window.location);
-          [['city',city],['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
           history.replaceState(null,'',u);
         }catch(e){}
       }
-      [citySel,catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      // Picking a city goes to that city's page rather than filtering this one down to a single
+      // card: the city page is the thing worth landing on.
+      citySel.addEventListener('change',function(){ if(citySel.value!=='all')window.location.href='/services/'+citySel.value; });
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
       q.addEventListener('input',render);
       document.getElementById('svReset').addEventListener('click',function(){citySel.value='all';catSel.value='all';langSel.value='all';q.value='';render();});
       (function(){
         var sp=new URLSearchParams(window.location.search);
         function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;return;} } }
-        set(citySel,sp.get('city'));set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(sp.get('city')||sp.get('cat')||sp.get('lang'))render();
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        // ?city= used to filter this page; it now belongs to the city's own page.
+        if(sp.get('city')&&document.querySelector('.sv-ix[data-city="'+sp.get('city')+'"]'))
+          { window.location.replace('/services/'+sp.get('city')); return; }
+        if(sp.get('cat')||sp.get('lang'))render();
       })();
     })();
   </script>
