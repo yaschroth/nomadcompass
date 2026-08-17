@@ -282,6 +282,12 @@ for (const num of contentObjs) {
     // characters. Dropping those here keeps the output clean and lets the check at the end mean
     // something: before this, 60,000 NULs from one font drowned the real text and the readability
     // guard rejected a page that had decoded perfectly.
+    // A tagged PDF marks runs with /Lang, and some writers emit that tag into the content stream,
+    // so "de-DE" turns up mid-sentence and often glued to the next word: 500 of the German embassy
+    // Madrid list's 1,122 lines carry one, which is why its entries lose their names. The tag is
+    // never part of the text. No word boundary is required after it, because "de-DEALLGEMEIN" is
+    // exactly the case that matters.
+    line = line.replace(/[a-z]{2}-[A-Z]{2}(?![a-z])/g, " ");
     line = line.replace(/[ --]/g, '').replace(/\s+/g, ' ').trim();
     if (!line) continue;
     // Letters, not just "characters": a line of punctuation and spaces would pass any test
