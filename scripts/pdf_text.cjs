@@ -22,6 +22,16 @@
  *
  * Usage: node scripts/pdf_text.cjs <file.pdf>
  */
+
+// KNOWN GAP, measured 2026-08-17 on four blocked documents. Three of them (the German consulates
+// in Shanghai and Madrid, and the French embassy list for Portugal) DO carry /ToUnicode, and this
+// reader still finds nothing, because their fonts are Type0/CIDFontType2 with Identity encoding
+// and the CMap is not reached by the font resolution below. So "no /ToUnicode tables" is often
+// this tool failing rather than the document being undecodable, and an earlier commit message
+// saying those PDFs use a private encoding was wrong for that class.
+// Only the Beijing list genuinely has no /ToUnicode anywhere.
+// Fixing Type0/Identity resolution is the single highest-yield piece of work left on the services
+// directory: it unblocks the French, Spanish and Chinese consular lists at once.
 const fs = require('fs');
 const zlib = require('zlib');
 
