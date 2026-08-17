@@ -19,3 +19,13 @@ Tax advisers, estate agents, mechanics, hairdressers, opticians and gyms. No emb
 publishes a provider list with a language claim for these. They need directory-tier sources, which
 this file already uses for 113 rows, or they stay empty. Filling them without a source would remove
 the only argument this directory has.
+
+## Spain
+
+| Mission | Lists it publishes | Taken | Note |
+|---|---|---|---|
+| UK, FCDO | medical facilities; lawyers | yes | English only |
+| Germany, Madrid | doctors (PDF) | three rows | the PDF interleaves language tags into the text, so most entries lose their name or street |
+| Austria, Madrid | trusted doctor, trusted lawyers | both, via manual download | states Sprachkenntnisse per entry |
+| France, Madrid | not yet checked | none | four lists in Portugal, expect the same here |
+| Italy, Madrid | not yet checked | none | |
