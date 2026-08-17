@@ -23,22 +23,17 @@
  * Usage: node scripts/pdf_text.cjs <file.pdf>
  */
 
-// KNOWN GAP, measured 2026-08-17. Two documents this reader refuses, the German consulate list for
-// Shanghai and the French embassy's list of francophone doctors in Portugal, do carry /ToUnicode
-// tables: the French one has eight of them and four /Font dictionaries. So "no /ToUnicode tables in
-// this file" is this tool failing on them, not the documents being undecodable, and an earlier
-// commit message blaming a private encoding was wrong for that class. Only Beijing's genuinely has
-// no /ToUnicode at all.
+// KNOWN GAP, isolated 2026-08-17. Two consular PDFs still come out as noise, the German
+// consulate list for Shanghai and the French embassy list of francophone doctors in Portugal.
+// The cause is now known rather than guessed: their ToUnicode tables ARE found and read (the
+// French file has 289 glyph mappings across eight fonts), but their fonts are Identity-H, whose
+// CMap declares a two-byte codespace, <0000> <FFFF>. The decoder below reads text codes one byte
+// at a time, so every lookup misses and the output is rubbish that the final check then refuses.
 //
-// Two causes have been found and fixed below (an indirect /Font resource reference, and a /Font
-// dictionary whose nested dictionary truncated the pattern that read it), and neither unblocked
-// them: cmapOf still returns nothing for their fonts, which are Type0/CIDFontType2 with Identity
-// encoding. The remaining cause is not yet isolated.
-//
-// This matters more than it looks. Those are the non-English sources: measured the same day, 95%
-// of the directory's 2,637 rows carry English and 2,126 come from two British sources. The French,
-// Spanish and Chinese consular lists are where German, French and Chinese providers are, and this
-// reader is what stands between them and the site.
+// Fixing it means reading string and hex operands in two-byte units when the font's CMap
+// declares a two-byte codespacerange. That unblocks the French, Spanish and Chinese consular
+// lists, which is where the non-English providers are: 95% of this directory's 2,637 rows carry
+// English and 2,126 come from two British sources.
 const fs = require('fs');
 const zlib = require('zlib');
 
@@ -65,6 +60,11 @@ function streamOf(num) {
   if (buf[a] === 0x0a) a++;
   const b = raw.indexOf('endstream', a);
   if (b === -1) return null;
+  // Not every stream is compressed. The French embassy's Portugal list stores its ToUnicode CMaps
+  // as << /Length 338 >> with no /Filter at all, so inflating them fails with "incorrect header
+  // check" and this returned null, which is why a file with eight readable tables produced none.
+  const head = raw.slice(o.start, s);
+  if (!/\/Filter/.test(head)) return buf.subarray(a, b).toString('latin1');
   try { return zlib.inflateSync(buf.subarray(a, b)).toString('latin1'); } catch (e) { return null; }
 }
 
