@@ -23,15 +23,22 @@
  * Usage: node scripts/pdf_text.cjs <file.pdf>
  */
 
-// KNOWN GAP, measured 2026-08-17 on four blocked documents. Three of them (the German consulates
-// in Shanghai and Madrid, and the French embassy list for Portugal) DO carry /ToUnicode, and this
-// reader still finds nothing, because their fonts are Type0/CIDFontType2 with Identity encoding
-// and the CMap is not reached by the font resolution below. So "no /ToUnicode tables" is often
-// this tool failing rather than the document being undecodable, and an earlier commit message
-// saying those PDFs use a private encoding was wrong for that class.
-// Only the Beijing list genuinely has no /ToUnicode anywhere.
-// Fixing Type0/Identity resolution is the single highest-yield piece of work left on the services
-// directory: it unblocks the French, Spanish and Chinese consular lists at once.
+// KNOWN GAP, measured 2026-08-17. Two documents this reader refuses, the German consulate list for
+// Shanghai and the French embassy's list of francophone doctors in Portugal, do carry /ToUnicode
+// tables: the French one has eight of them and four /Font dictionaries. So "no /ToUnicode tables in
+// this file" is this tool failing on them, not the documents being undecodable, and an earlier
+// commit message blaming a private encoding was wrong for that class. Only Beijing's genuinely has
+// no /ToUnicode at all.
+//
+// Two causes have been found and fixed below (an indirect /Font resource reference, and a /Font
+// dictionary whose nested dictionary truncated the pattern that read it), and neither unblocked
+// them: cmapOf still returns nothing for their fonts, which are Type0/CIDFontType2 with Identity
+// encoding. The remaining cause is not yet isolated.
+//
+// This matters more than it looks. Those are the non-English sources: measured the same day, 95%
+// of the directory's 2,637 rows carry English and 2,126 come from two British sources. The French,
+// Spanish and Chinese consular lists are where German, French and Chinese providers are, and this
+// reader is what stands between them and the site.
 const fs = require('fs');
 const zlib = require('zlib');
 
@@ -152,9 +159,18 @@ const allTables = [];
 // Font dictionaries live in the file directly in older PDFs and inside the unpacked object
 // streams in newer ones, so both are searched.
 const haystack = raw + String.fromCharCode(10) + [...packed.values()].join(String.fromCharCode(10));
-const fontDictRe = /\/Font\s*<<([^>]*)>>/g;
-while ((m = fontDictRe.exec(haystack))) {
-  const pairs = m[1].match(/\/(\w+)\s+(\d+) 0 R/g) || [];
+// Two ways a page names its fonts, and only handling the first is why the French embassy's list of
+// francophone doctors in Portugal, and the German consulates' lists for Shanghai and Madrid, all
+// came out as noise. They write the resource as an indirect reference, /Font 12 0 R, so the inline
+// pattern below never matches and not one ToUnicode table is found, in files that carry them.
+const fontDicts = [];
+const inlineRe = /\/Font\s*<<([^>]*)>>/g;
+while ((m = inlineRe.exec(haystack))) fontDicts.push(m[1]);
+const indirectRe = /\/Font\s+(\d+) 0 R/g;
+while ((m = indirectRe.exec(haystack))) fontDicts.push(dictOf(Number(m[1])));
+
+for (const dict of fontDicts) {
+  const pairs = dict.match(/\/(\w+)\s+(\d+) 0 R/g) || [];
   for (const p of pairs) {
     const x = p.match(/\/(\w+)\s+(\d+) 0 R/);
     const t = cmapOf(Number(x[2]));
@@ -170,11 +186,22 @@ const lookup = (font, id) => {
   return '';
 };
 
+// Parsing the /Font dictionary is fragile: its value can hold a nested dictionary, so a pattern
+// that stops at the first ">" truncates before reaching the /F1 5 0 R pairs. The French embassy's
+// Portugal list has four such dictionaries and eight ToUnicode tables, and none were being read.
+// So every object that carries a /ToUnicode is also taken directly into the fallback pool, which
+// lookup() already consults for any id the named font does not define.
+for (const num of objects.keys()) {
+  if (!/\/ToUnicode\s+\d+ 0 R/.test(dictOf(num))) continue;
+  const t = cmapOf(num);
+  if (t && !allTables.includes(t)) allTables.push(t);
+}
+
 // No tables is not automatically a failure: a PDF whose fonts use a standard encoding stores its
 // text as ordinary ( ) strings that need no mapping at all. Only hex strings are unreadable
 // without a table, and those are skipped rather than guessed at. If nothing readable comes out,
 // the check at the end says so.
-if (!byName.size) {
+if (!byName.size && !allTables.length) {
   console.error('note: no /ToUnicode tables in this file; only plain ( ) strings can be read.');
 }
 
