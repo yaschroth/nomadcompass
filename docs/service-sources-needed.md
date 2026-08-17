@@ -13,6 +13,8 @@ so the reader below picks it up without being told.
 | Save as | URL | What is on it | Symptom |
 |---|---|---|---|
 | `ch-portugal-arzt-anwalt.html` | https://www.eda.admin.ch/countries/portugal/de/home/dienstleistungen/arzt-anwalt.html | Swiss embassy Lisbon: Vertrauensarzt and Vertrauensanwalt | 403 to this client |
+| `at-madrid-doctor.html` | https://www.bmeia.gv.at/oeb-madrid/service-fuer-buergerinnen/soziales-gesundheit/vertrauensarzt | Austrian embassy Madrid: trusted doctor | same bmeia block |
+| `at-madrid-lawyers.html` | https://www.bmeia.gv.at/oeb-madrid/service-fuer-buergerinnen/hilfe-in-rechtsfragen/vertrauensanwaelte-und-vertrauensanwaeltinnen | Austrian embassy Madrid: trusted lawyers | same bmeia block |
 
 ## Done
 
