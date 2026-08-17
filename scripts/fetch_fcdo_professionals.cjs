@@ -17,9 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const BASE = 'https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk';
 
-const [, , SERVICE, COUNTRY, OUT] = process.argv;
+const [, , SERVICE, COUNTRY, OUT, LANG] = process.argv;
 if (!SERVICE || !COUNTRY || !OUT) {
-  console.error('usage: node scripts/fetch_fcdo_professionals.cjs <lawyers|translators-interpreters> "<Country>" <out.json>');
+  console.error('usage: node scripts/fetch_fcdo_professionals.cjs <lawyers|translators-interpreters> "<Country>" <out.json> [languageCode]');
   process.exit(1);
 }
 
@@ -90,11 +90,17 @@ function parse(html) {
 }
 
 (async () => {
-  const start = `${BASE}/find/${SERVICE}/${encodeURIComponent(COUNTRY)}/region`;
+  // Where the flow starts differs by service: lawyers begin at a region step, translators at a
+  // language one. Read the first step off the country page's own Start button instead of assuming.
+  const landing = await get(`${BASE}/find/${SERVICE}?country=${encodeURIComponent(COUNTRY)}`);
+  const href = (landing.html.match(/<a href="([^"]+)"[^>]*class="govuk-button"/) || [])[1];
+  if (!href) { console.error('no Start button for ' + SERVICE + ' in ' + COUNTRY + ' (is the country spelled as the service spells it?)'); process.exit(1); }
+  const start = new URL(href, landing.url).href;
   let step = await get(start);
-  if (!csrfOf(step.html)) { console.error('no form at ' + start + ' (is the country spelled as the service spells it?)'); process.exit(1); }
+  if (!csrfOf(step.html)) { console.error('no form at ' + start); process.exit(1); }
 
-  step = await post(step.url, [['_csrf', csrfOf(step.html)], ['region', '']]);
+  // Only the lawyer flow has a region step to skip past.
+  if (/\/region$/.test(step.url)) step = await post(step.url, [['_csrf', csrfOf(step.html)], ['region', '']]);
 
   // The middle step differs by service: areas of law for lawyers, languages for translators.
   let guard = 0;
@@ -108,9 +114,28 @@ function parse(html) {
     if (!named.length) {
       // The translators branch asks for a language from a <select> rather than checkboxes. An
       // empty value means "any", which is what a whole-country sweep wants.
+      // The translators branch asks for one language from a <select>, and will not accept an empty
+      // answer, so a whole-country sweep needs one pass per language. That is the point rather than
+      // a nuisance: it is how you find someone who works in German or Russian rather than English.
       const sel = (step.html.match(/<select[^>]*name="([^"]+)"/) || [])[1];
       if (sel) {
-        step = await post(step.url, [['_csrf', csrf], [sel, '']]);
+        if (!LANG) {
+          console.error('this step needs a language; pass one as the fourth argument (an ISO 639-1 code such as de)');
+          process.exit(1);
+        }
+        // The language step is an "add to your list" pattern: choosing a language and pressing Add
+        // returns the same page with the language recorded, and only then does Continue move on.
+        const added = await post(step.url, [['_csrf', csrf], [sel, LANG], ['action', 'add']]);
+        step = await post(added.url, [['_csrf', csrfOf(added.html) || csrf]]);
+        continue;
+      }
+      // After a language is added the flow asks, on radio buttons, whether you want another. No.
+      const radios = [...step.html.matchAll(/<input[^>]*type="radio"[^>]*>/g)].map((x) => x[0])
+        .map((b) => [(b.match(/name="([^"]+)"/) || [])[1], (b.match(/value="([^"]+)"/) || [])[1]])
+        .filter(([n]) => n && n !== '_csrf');
+      if (radios.length) {
+        const no = radios.find(([, v]) => /^(no|false)$/i.test(v || '')) || radios[radios.length - 1];
+        step = await post(step.url, [['_csrf', csrf], no]);
         continue;
       }
       console.error('no choices at ' + step.url);
@@ -138,5 +163,5 @@ function parse(html) {
     rows.push(...more);
   }
   fs.writeFileSync(OUT, JSON.stringify({ service: SERVICE, country: COUNTRY, url: step.url, rows }, null, 1) + '\n');
-  console.log(SERVICE + ' / ' + COUNTRY + ': ' + rows.length + ' providers');
+  console.log(SERVICE + ' / ' + COUNTRY + (LANG ? ' / ' + LANG : '') + ': ' + rows.length + ' providers');
 })();
