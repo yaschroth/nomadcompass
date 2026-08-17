@@ -120,6 +120,7 @@ const LOCAL = {
   Turkey: 'tr', Romania: 'ro', 'South Korea': 'ko', Peru: 'es', Austria: 'de',
   // English is the local language here, so the pages lead on the foreign one the lists record.
   'United States': 'en', China: 'zh',
+  Albania: 'sq', Bolivia: 'es', Ecuador: 'es', Jordan: 'ar', Norway: 'no', Switzerland: 'de',
 };
 // A country in the data with no entry here would silently keep its own language in every title, so
 // say so loudly instead.
