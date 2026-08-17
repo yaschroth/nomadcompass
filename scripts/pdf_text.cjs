@@ -30,6 +30,12 @@
 // CMap declares a two-byte codespace, <0000> <FFFF>. The decoder below reads text codes one byte
 // at a time, so every lookup misses and the output is rubbish that the final check then refuses.
 //
+// Attempted and reverted on the same day: hex strings turn out to be read in two-byte units
+// already, so the remaining suspect was the literal ( ) branch, which passes its bytes through
+// without ever consulting the table. Sending those through the CMap in pairs when the font uses
+// two-byte codes did not open either file, and cost five lines of correctly decoded text in the
+// Australia list, so it went back. Whatever these two files do is not that.
+//
 // Fixing it means reading string and hex operands in two-byte units when the font's CMap
 // declares a two-byte codespacerange. That unblocks the French, Spanish and Chinese consular
 // lists, which is where the non-English providers are: 95% of this directory's 2,637 rows carry
