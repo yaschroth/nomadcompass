@@ -36,10 +36,15 @@
 // two-byte codes did not open either file, and cost five lines of correctly decoded text in the
 // Australia list, so it went back. Whatever these two files do is not that.
 //
-// Fixing it means reading string and hex operands in two-byte units when the font's CMap
-// declares a two-byte codespacerange. That unblocks the French, Spanish and Chinese consular
-// lists, which is where the non-English providers are: 95% of this directory's 2,637 rows carry
-// English and 2,126 come from two British sources.
+// Also tried and fixed, and it did not open them either: a page's /Font mapping is local to that
+// page, and this file maps /F1 to object 11 on one page and 19 on the next, so a global "first
+// table wins" decodes later pages with the wrong subset. Each page's own map is now used,
+// following /Contents arrays and indirect /Resources, both of which that file uses.
+//
+// So four plausible causes have been tried. Whatever remains is further down than the font wiring,
+// and the next attempt should print one decoded run beside the glyph ids it was handed rather than
+// keep fixing things that look likely. This matters because these are the non-English sources:
+// 95% of this directory's 2,637 rows carry English and 2,126 come from two British sources.
 const fs = require('fs');
 const zlib = require('zlib');
 
@@ -219,16 +224,42 @@ function unescapePdf(s) {
     .replace(/\\(.)/g, '$1');
 }
 
+// Font names are per page, not per document. The French embassy's Portugal list maps /F1 to object
+// 11 on its first page and to object 19 on its second, and letting the first table win globally
+// decodes every later page with the wrong subset: plausible letters, wrong ones. So each page's
+// own /Resources mapping is kept and used for that page's content stream.
+const pageFonts = new Map();
+for (const num of objects.keys()) {
+  const d = dictOf(num);
+  if (!/\/Type\s*\/Page\b/.test(d)) continue;
+  // /Contents is a single reference or an array of them, and /Resources is usually its own object
+  // rather than an inline dictionary, so both forms have to be followed.
+  const cRaw = (d.match(/\/Contents\s*(\[[^\]]*\]|\d+ 0 R)/) || [])[1] || '';
+  const contents = [...cRaw.matchAll(/(\d+) 0 R/g)].map((x) => Number(x[1]));
+  const resRef = (d.match(/\/Resources\s+(\d+) 0 R/) || [])[1];
+  const resDict = resRef ? dictOf(Number(resRef)) : d;
+  const fontBlock = resDict.match(/\/Font\s*<<([^>]*)>>/);
+  if (!contents.length || !fontBlock) continue;
+  const map = new Map();
+  for (const p of fontBlock[1].match(/\/(\w+)\s+(\d+) 0 R/g) || []) {
+    const x = p.match(/\/(\w+)\s+(\d+) 0 R/);
+    const t = cmapOf(Number(x[2]));
+    if (t) map.set(x[1], t);
+  }
+  if (map.size) contents.forEach((cn) => pageFonts.set(cn, map));
+}
+
 let out = '';
 for (const num of objects.keys()) {
   const c = streamOf(num);
   if (!c || !/(Tj|TJ)/.test(c)) continue;
+  const pageMap = pageFonts.get(num) || byName;
 
   let font = null;
   // Split on the operators that end a text run, keeping line structure roughly intact.
   for (const part of c.split(/\bET\b|\bT\*\b|\bTd\b|\bTD\b/)) {
     const tf = [...part.matchAll(/\/(\w+)\s+[\d.]+\s+Tf/g)].pop();
-    if (tf && byName.has(tf[1])) font = byName.get(tf[1]);
+    if (tf && pageMap.has(tf[1])) font = pageMap.get(tf[1]);
 
     let line = '';
     // Three token kinds matter: hex <..> for subset fonts, literal (..) for the rest, and the
