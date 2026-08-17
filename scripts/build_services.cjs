@@ -50,7 +50,7 @@ const EVIDENCE = DB._evidence;
 const CAT_ICON = {
   doctor: 'stethoscope', dentist: 'tooth', vet: 'paw-print', therapy: 'brain',
   physio: 'bone', optician: 'glasses', hair: 'scissors', legal: 'scale',
-  tax: 'calculator', realestate: 'key', mechanic: 'wrench', fitness: 'dumbbell',
+  tax: 'calculator', realestate: 'key', mechanic: 'wrench', fitness: 'dumbbell', translator: 'languages',
 };
 
 // Strongest evidence first, so the best-sourced row in a city leads.

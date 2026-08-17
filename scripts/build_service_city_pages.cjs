@@ -49,13 +49,13 @@ const EV_RANK = { official: 0, visited: 1, 'self-declared': 2, directory: 3 };
 const CAT_ICON = {
   doctor: 'stethoscope', dentist: 'tooth', vet: 'paw-print', therapy: 'brain', physio: 'activity',
   optician: 'glasses', hair: 'scissors', legal: 'scale', tax: 'calculator', realestate: 'building-2',
-  mechanic: 'wrench', fitness: 'dumbbell',
+  mechanic: 'wrench', fitness: 'dumbbell', translator: 'languages',
 };
 // Plain plurals for a title. The labels in the data ("Doctors & clinics") read as column headings.
 const CAT_PLURAL = {
   doctor: 'doctors', dentist: 'dentists', vet: 'vets', therapy: 'therapists',
   physio: 'physiotherapists', optician: 'opticians', hair: 'hairdressers', legal: 'lawyers',
-  tax: 'tax advisers', realestate: 'estate agents', mechanic: 'mechanics', fitness: 'gyms',
+  tax: 'tax advisers', realestate: 'estate agents', mechanic: 'mechanics', fitness: 'gyms', translator: 'translators',
 };
 
 const MIN_INDEXABLE = 3;
