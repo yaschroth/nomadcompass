@@ -23,28 +23,6 @@
  * Usage: node scripts/pdf_text.cjs <file.pdf>
  */
 
-// KNOWN GAP, isolated 2026-08-17. Two consular PDFs still come out as noise, the German
-// consulate list for Shanghai and the French embassy list of francophone doctors in Portugal.
-// The cause is now known rather than guessed: their ToUnicode tables ARE found and read (the
-// French file has 289 glyph mappings across eight fonts), but their fonts are Identity-H, whose
-// CMap declares a two-byte codespace, <0000> <FFFF>. The decoder below reads text codes one byte
-// at a time, so every lookup misses and the output is rubbish that the final check then refuses.
-//
-// Attempted and reverted on the same day: hex strings turn out to be read in two-byte units
-// already, so the remaining suspect was the literal ( ) branch, which passes its bytes through
-// without ever consulting the table. Sending those through the CMap in pairs when the font uses
-// two-byte codes did not open either file, and cost five lines of correctly decoded text in the
-// Australia list, so it went back. Whatever these two files do is not that.
-//
-// Also tried and fixed, and it did not open them either: a page's /Font mapping is local to that
-// page, and this file maps /F1 to object 11 on one page and 19 on the next, so a global "first
-// table wins" decodes later pages with the wrong subset. Each page's own map is now used,
-// following /Contents arrays and indirect /Resources, both of which that file uses.
-//
-// So four plausible causes have been tried. Whatever remains is further down than the font wiring,
-// and the next attempt should print one decoded run beside the glyph ids it was handed rather than
-// keep fixing things that look likely. This matters because these are the non-English sources:
-// 95% of this directory's 2,637 rows carry English and 2,126 come from two British sources.
 const fs = require('fs');
 const zlib = require('zlib');
 
@@ -255,8 +233,23 @@ for (const num of objects.keys()) {
   if (map.size) contents.forEach((cn) => pageFonts.set(cn, map));
 }
 
+// When the pages have been identified, decode their content streams and nothing else. An embedded
+// font program contains the byte pairs "Tj" and "TJ" by coincidence and decodes to pages of
+// high-bit rubbish; in the French embassy's Portugal list four such streams came first, drowned the
+// correctly decoded text, and the readability check then threw the whole file away. Stripping
+// control characters did not catch them because their noise is ordinary accented letters.
+// Decoding only the identified pages was too blunt: it halved the Philippines, Australia and Madrid
+// lists, whose text lives in streams their page dictionaries do not point at in a way this reader
+// resolves. So everything is still scanned, minus the streams that are font programs.
+// The reference lives in the font descriptor and points at the stream, so the stream's own
+// dictionary says nothing about being a font. Collect the targets instead.
+const fontProgramObjs = new Set(
+  [...haystack.matchAll(/\/FontFile\d?\s+(\d+) 0 R/g)].map((x) => Number(x[1])),
+);
+const contentObjs = [...objects.keys()].filter((n) => pageFonts.has(n) || !fontProgramObjs.has(n));
+
 let out = '';
-for (const num of objects.keys()) {
+for (const num of contentObjs) {
   const c = streamOf(num);
   if (!c || !/(Tj|TJ)/.test(c)) continue;
   const pageMap = pageFonts.get(num) || byName;
