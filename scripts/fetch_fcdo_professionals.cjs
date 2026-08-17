@@ -65,6 +65,9 @@ function parse(html) {
     if (!h2) continue;
     const name = strip(h2[1].replace(/<span[\s\S]*?<\/span>/g, ''));
     if (!name || name.length < 3) continue;
+    // The page furniture is marked up like a result. A provider always has contact details.
+    if (/^(related content|support links|cookies on|feedback)/i.test(name)) continue;
+    if (!/<strong>(Address|Telephone|Email)<\/strong>/.test(raw)) continue;
     const field = (label) => {
       const m = raw.match(new RegExp('<strong>' + label + '</strong>\\s*:?([\\s\\S]*?)</p>'));
       return m ? strip(m[1]) : '';
@@ -126,7 +129,9 @@ function parse(html) {
         // The language step is an "add to your list" pattern: choosing a language and pressing Add
         // returns the same page with the language recorded, and only then does Continue move on.
         const added = await post(step.url, [['_csrf', csrf], [sel, LANG], ['action', 'add']]);
-        step = await post(added.url, [['_csrf', csrfOf(added.html) || csrf]]);
+        // The same page then carries two buttons, add another or continue, and the server needs to
+        // be told which. Posting only the token leaves it sitting on the summary forever.
+        step = await post(added.url, [['_csrf', csrfOf(added.html) || csrf], ['action', 'continue']]);
         continue;
       }
       // After a language is added the flow asks, on radio buttons, whether you want another. No.
@@ -138,6 +143,13 @@ function parse(html) {
         step = await post(step.url, [['_csrf', csrf], no]);
         continue;
       }
+      // Some steps carry on with a link rather than a form. The languages summary does: its
+      // Continue is an anchor to ../types, and posting to it forever gets nowhere.
+      const cont = [...step.html.matchAll(/<a[^>]*class="[^"]*govuk-button[^"]*"[^>]*href="([^"]+)"[^>]*>([\s\S]{0,40}?)<\/a>|<a[^>]*href="([^"]+)"[^>]*class="[^"]*govuk-button[^"]*"[^>]*>([\s\S]{0,40}?)<\/a>/g)]
+        .map((x) => ({ href: x[1] || x[3], text: strip(x[2] || x[4] || '') }))
+        .find((x) => x.href && /continue|next/i.test(x.text));
+      if (cont) { step = await get(new URL(cont.href, step.url).href); continue; }
+
       console.error('no choices at ' + step.url);
       process.exit(1);
     }
