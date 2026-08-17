@@ -25,7 +25,7 @@ the only argument this directory has.
 | Mission | Lists it publishes | Taken | Note |
 |---|---|---|---|
 | UK, FCDO | medical facilities; lawyers | yes | English only |
-| Germany, Madrid | doctors (PDF) | three rows | the PDF interleaves language tags into the text, so most entries lose their name or street |
+| Germany, Madrid | doctors (PDF) | eleven rows | the PDF wrote /Lang tags into its text and the reader now strips them; a first pass got three rows, a second got eight more across nine specialties |
 | Austria, Madrid | trusted doctor, trusted lawyers | both, via manual download | states Sprachkenntnisse per entry |
 | France, Madrid | not yet checked | none | four lists in Portugal, expect the same here |
 | Italy, Madrid | not yet checked | none | |
