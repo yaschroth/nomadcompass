@@ -191,8 +191,14 @@ for (const dict of fontDicts) {
   }
 }
 
-const lookup = (font, id) => {
+const lookup = (font, id, strict) => {
   if (font && font.has(id)) return font.get(id);
+  // The fallback pool is for documents where the font could not be identified. When the page's own
+  // resource dictionary told us exactly which font is selected, borrowing a glyph from a different
+  // subset is not a rescue, it is an invention: in the French embassy's Portugal list, ids missing
+  // from the selected font came back as letters from another one, and the wrong letters buried the
+  // correctly decoded text under enough noise for the readability check to reject the whole file.
+  if (strict) return '';
   for (const t of allTables) if (t.has(id)) return t.get(id);
   return '';
 };
@@ -269,7 +275,7 @@ for (const num of objects.keys()) {
       if (tok[0] === '<') {
         const h = tok.slice(1, -1);
         for (let i = 0; i + 3 < h.length; i += 4) {
-          line += lookup(font, parseInt(h.substr(i, 4), 16));
+          line += lookup(font, parseInt(h.substr(i, 4), 16), pageFonts.has(num));
         }
       } else if (tok[0] === '(') {
         line += unescapePdf(tok.slice(1, -1));
