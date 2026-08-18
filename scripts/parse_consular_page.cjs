@@ -40,9 +40,14 @@ const lines = html
   .map((s) => s.trim())
   .filter(Boolean);
 
+// Which country's tables to read the addresses against. This is not a nicety: Spanish and French
+// postcodes are both five digits and they collide. 38001 is Santa Cruz de Tenerife and 38000 is
+// Grenoble, so a list read with the wrong table would file Grenoble's lawyers on a Canary island.
+const COUNTRY = ((process.argv.find((a) => a.startsWith('--country=')) || '').split('=')[1] || 'es').toLowerCase();
+
 // City names as this page writes them, French and Spanish, against our ids. Postcodes are the
 // tie-breaker: several of these names appear in an address that belongs to a different town.
-const CITIES = [
+const CITIES_ES = [
   ['barcelon', 'barcelona', /^08/],
   ['madrid', 'madrid', /^28/],
   ['valenc', 'valencia', /^46/],
@@ -82,7 +87,38 @@ const CITIES = [
 // all. It is only consulted when nothing follows the code on the line, because what follows is
 // usually a different town: "28220 Majadahonda" is not Madrid, and the range alone would have
 // swallowed it.
-const CORE = {
+const CITIES_FR = [
+  ['paris', 'paris', /^75/],
+  ['lyon', 'lyon', /^69/],
+  ['marseille', 'marseille', /^13(0|1)/],
+  ['marsiglia', 'marseille', /^13(0|1)/],
+  ['nice', 'nice', /^06/],
+  ['nizza', 'nice', /^06/],
+  ['bordeaux', 'bordeaux', /^33/],
+  ['toulouse', 'toulouse', /^31/],
+  ['tolosa', 'toulouse', /^31/],
+  ['montpellier', 'montpellier', /^34/],
+  ['nantes', 'nantes', /^44/],
+  ['strasbourg', 'strasbourg', /^67/],
+  ['strasburgo', 'strasbourg', /^67/],
+  ['grenoble', 'grenoble', /^38/],
+  ['annecy', 'annecy', /^74/],
+  ['aix-en-provence', 'aixenprovence', /^13/],
+  ['aix en provence', 'aixenprovence', /^13/],
+  ['colmar', 'colmar', /^68/],
+  ['chamonix', 'chamonix', /^74/],
+  ['avignon', 'avignon', /^84/],
+];
+
+const CORE_FR = {
+  paris: [75001, 75020], lyon: [69001, 69009], marseille: [13001, 13016],
+  nice: [6000, 6300], bordeaux: [33000, 33300], toulouse: [31000, 31500],
+  montpellier: [34000, 34090], nantes: [44000, 44300], strasbourg: [67000, 67200],
+  grenoble: [38000, 38100], annecy: [74000, 74000], aixenprovence: [13090, 13100],
+  colmar: [68000, 68000], chamonix: [74400, 74400], avignon: [84000, 84000],
+};
+
+const CORE_ES = {
   madrid: [28001, 28055], barcelona: [8001, 8042], valencia: [46001, 46026],
   seville: [41001, 41020], malaga: [29001, 29018], marbella: [29600, 29604],
   granadaspain: [18001, 18016], alicante: [3001, 3016], cadiz: [11001, 11012],
@@ -91,6 +127,9 @@ const CORE = {
   girona: [17001, 17007], sansebastian: [20001, 20018], toledo: [45001, 45009],
   salamanca: [37001, 37008],
 };
+
+const CITIES = COUNTRY === 'fr' ? CITIES_FR : CITIES_ES;
+const CORE = COUNTRY === 'fr' ? CORE_FR : CORE_ES;
 
 const startsEntry = (l) =>
   /^(Me\.?|Docteure?|Doctora|Dr\.?|Dra\.?|Maître|Avv\.?|Dott\.ssa|Dott\.?|Prof\.?|Ing\.?|Arch\.?)\s+[A-ZÁÉÍÓÚÑÜÈÊ]/.test(l) ||
@@ -112,6 +151,25 @@ const categoryOf = (text) => {
   }
   return null;
 };
+
+// Some tables put the surname in one cell and the given name in the next, so they arrive on two
+// lines and no entry is ever recognised: the Italian consulate in Paris lists its surgeons that
+// way. They are rejoined here, but only when the second line is a given name in ordinary case. A
+// heading is followed by another all-capitals line, so headings never trigger this.
+for (let i = 0; i < lines.length - 1; i++) {
+  const a = lines[i];
+  const b = lines[i + 1];
+  if (a.length < 3 || a.length > 30 || /[\d@]/.test(a)) continue;
+  if (a !== a.toUpperCase() || !/[A-ZÀ-Ý]{3}/.test(a)) continue;
+  if (!/^[A-ZÀ-Ý][a-zà-ÿ]{2,}(\s[A-ZÀ-Ý][a-zà-ÿ]+)*$/.test(b)) continue;
+  lines[i] = a + ' ' + b;
+  lines.splice(i + 1, 1);
+}
+
+// A single-purpose list states its profession once, in its title, and never again per entry: the
+// Italian consulate in Paris publishes a page of lawyers where most blocks say only an address.
+const DEFAULT_CATEGORY =
+  (process.argv.find((a) => a.startsWith('--default-category=')) || '').split('=')[1] || null;
 
 const entries = [];
 let current = null;
@@ -163,7 +221,7 @@ for (const e of entries) {
   // the entry's own words do not: a lawyer's block often says only "droit civil et des affaires".
   const category = categoryOf(text) ||
     (/^(Me\.?|Ma[iî]tre|Avv\.?)\s/.test(e.name) ? 'legal'
-      : /^(Docteure?|Doctora|Dr\.?|Dra\.?|Dott\.ssa|Dott\.?)\s/.test(e.name) ? 'doctor' : null);
+      : /^(Docteure?|Doctora|Dr\.?|Dra\.?|Dott\.ssa|Dott\.?)\s/.test(e.name) ? 'doctor' : DEFAULT_CATEGORY);
   if (!category) { skipped.push([e.name, 'no category in the text']); continue; }
   // "Me. CHABANEIX Luis" and "Docteur Laetitia RICAUD": the page puts the surname in capitals on
   // either side of the given name, so the title is dropped and the rest kept as written.
@@ -193,7 +251,7 @@ const unique = rows.filter((r) => {
   return true;
 });
 
-if (process.argv[3] === '--json') {
+if (process.argv.includes('--json')) {
   console.log(JSON.stringify(unique, null, 2));
 } else {
   const per = {};

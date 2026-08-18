@@ -97,3 +97,18 @@ tried and it invented people: BOVE and FRANCESCA in adjacent cells became Bovefr
 a record that had lost its email swallowed the next one's city. 48 records are skipped and
 reported rather than repaired. The Madrid page is also worth noting for its admission bar: an
 Italian law degree, three years on the Spanish roll, and three client references.
+
+### Italian consular network in France (2026-08-18)
+
+Paris publishes four separate lists (lawyers, doctors and psychologists, notaries, chartered
+accountants) and Lyon one (lawyers). 105 rows: Paris 94, Lyon 9, Grenoble 2. France had no
+Italian-language rows at all before this.
+
+Two things the reader had to learn here. Postcodes are five digits in both countries and they
+collide, 38001 being Santa Cruz de Tenerife and 38000 Grenoble, so parse_consular_page.cjs now
+takes --country and keeps a table per country. And these tables put the surname in one cell and the
+given name in the next, so entries arrived on two lines and were never recognised; rejoining them,
+only where the second line is a given name in ordinary case, took Paris from 15 rows to 45.
+
+Dead end: the Marseille consulate general publishes no names. Its page of psychologists holds a
+link away to a third-party site and nothing else, so there is nothing to cite.
