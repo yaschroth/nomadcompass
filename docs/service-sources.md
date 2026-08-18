@@ -29,3 +29,12 @@ the only argument this directory has.
 | Austria, Madrid | trusted doctor, trusted lawyers | both, via manual download | states Sprachkenntnisse per entry |
 | France, Madrid | not yet checked | none | four lists in Portugal, expect the same here |
 | Italy, Madrid | not yet checked | none | |
+
+### German consulate general, Malaga (2026-08-18)
+
+List of German-speaking doctors, PDF, stand 10.07.2026. Twenty rows across Marbella (9), Malaga (5),
+Seville (4) and Granada (2), in four categories: doctors, dentists, a physiotherapist and two
+therapy entries. It only opened after the reader learned to cut /Lang tags glued to the front of a
+word: 157 of its lines carried one. Entries in Estepona, Mijas, Benalmadena, Torrox, Nerja,
+Sotogrande, Vejer, Palmones and Gibraltar are outside the index, and one dentist was left out
+because the address pairs a Granada city postcode with the town name Motril.

@@ -285,8 +285,14 @@ for (const num of contentObjs) {
     // A tagged PDF marks runs with /Lang, and some writers emit that tag into the content stream,
     // so "de-DE" turns up mid-sentence and often glued to the next word: 500 of the German embassy
     // Madrid list's 1,122 lines carry one, which is why its entries lose their names. The tag is
-    // never part of the text. No word boundary is required after it, because "de-DEALLGEMEIN" is
-    // exactly the case that matters.
+    // never part of the text. Two passes, because the two shapes need different care. A named tag
+    // can be cut wherever it sits, including "de-DEfassung", where a lowercase letter follows it:
+    // 157 of the Malaga list's lines are that shape. An unnamed one is only cut when no lowercase
+    // letter follows, so that a real hyphenated form is never touched.
+    line = line.replace(
+      /de-DE|en-US|en-GB|en-CA|en-AU|en-IE|it-IT|fr-FR|fr-BE|es-ES|pt-PT|pt-BR|nl-NL|nl-BE|sv-SE|da-DK|nb-NO|fi-FI|pl-PL|cs-CZ|ru-RU|tr-TR|el-GR|zh-CN|ja-JP|ko-KR/g,
+      ' ',
+    );
     line = line.replace(/[a-z]{2}-[A-Z]{2}(?![a-z])/g, " ");
     line = line.replace(/[ --]/g, '').replace(/\s+/g, ' ').trim();
     if (!line) continue;
