@@ -48,16 +48,12 @@ const { CAT_ICON, CAT_PLURAL, EV_RANK, EV_LABEL } = require(path.join(ROOT, 'scr
 
 const MIN_INDEXABLE = 3;
 
-// --- the shell, taken from the hub so the two cannot drift -----------------------------------
-const hub = fs.readFileSync(path.join(ROOT, 'services.html'), 'utf8');
-const grab = (re, what) => {
-  const mm = hub.match(re);
-  if (!mm) { console.error('could not find ' + what + ' in services.html. Run build_services.cjs first.'); process.exit(1); }
-  return mm[0];
-};
-const STYLE = grab(/<style>[\s\S]*?<\/style>/, 'the style block');
-const NAV = grab(/<nav class="nav"[\s\S]*?<\/nav>\s*<script>[\s\S]*?<\/script>/, 'the nav');
-const FOOTER = grab(/<footer class="footer"[\s\S]*?<\/footer>/, 'the footer');
+// --- the shell ---------------------------------------------------------------------------------
+// Everything a page needs, including the blocks the sweeps inject. Lifting only the style, nav and
+// footer left every generated page short of five tracked features, so _safe_write refused the
+// second run and the family was being built with --force, guard off. See scripts/lib/page_shell.cjs.
+const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const { style: STYLE, nav: NAV, footer: FOOTER } = shell;
 
 const mapsUrl = (p) => 'https://www.google.com/maps/search/?api=1&query=' +
   encodeURIComponent([p.name, p.area, CITY[p.city] && CITY[p.city].name, CITY[p.city] && CITY[p.city].country].filter(Boolean).join(', '));
@@ -212,6 +208,7 @@ for (const slug of slugs) {
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(title)} | The Nomad HQ</title>
@@ -231,6 +228,7 @@ for (const slug of slugs) {
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   ${STYLE}
+${shell.headEnd}
   <style>
     /* This page is one city, so it opens on the listing rather than on a full-height photo. */
     .svc-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
@@ -261,6 +259,7 @@ for (const slug of slugs) {
   </style>
 </head>
 <body>
+  ${shell.bodyStart}
   ${NAV}
   <main class="svc-page">
     <div class="container">
@@ -306,6 +305,7 @@ for (const slug of slugs) {
     </div>
   </main>
   ${FOOTER}
+${shell.bodyEnd}
   <script>
     (function(){
       var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),

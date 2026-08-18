@@ -46,6 +46,10 @@ const EVIDENCE = DB._evidence;
 
 const { CAT_ICON, CAT_PLURAL, EV_RANK, EV_LABEL } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
+// The blocks the sweeps inject. Without them this generator loses six tracked features on every
+// rebuild and only runs with --force, which is the guard switched off. See lib/page_shell.cjs.
+const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+
 const providers = DB.providers.slice();
 const bad = providers.filter((p) => !CITY[p.city] || !CATS[p.category] || !CAT_ICON[p.category] || !p.sourceUrl || !EVIDENCE[p.evidence] || !p.languages || !p.languages.length || p.languages.some((l) => !LANGS[l]));
 if (bad.length) {
@@ -165,18 +169,10 @@ usedCities.forEach((slug) => {
   COUNTS[slug] = { t: rows.length, c, l, p: pair };
 });
 
-function navHtml() {
-  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
-  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}">${t}</a></li>`).join('');
-  return `<nav class="nav" id="mainNav"><div class="nav-container">
-      <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
-      <ul class="nav-links">${li('nav-link')}</ul>
-      <form class="nav-search" action="/cities" method="get" role="search"><input type="search" name="q" placeholder="Jump to a city&hellip;" aria-label="Search a city" autocomplete="off" list="navCityList"><datalist id="navCityList"></datalist></form>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
-    </div><div class="nav-mobile" id="navMobile"><ul class="nav-mobile-links">${li('nav-mobile-link')}</ul>
-      </div></nav>
-  <script>(function(){var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),mm=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');mm.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
-}
+// The nav is not built here. apply_tools_nav.cjs owns it, and a locally templated copy lost the
+// Tools dropdown on every rebuild, which is one of the features _safe_write.cjs guards: the write
+// was refused until --force was passed. Lifting it means this generator emits whatever the sweep
+// last wrote and the guard stays on.
 const FOOTER = `<footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
@@ -197,6 +193,7 @@ const evCounts = Object.keys(EV_RANK).map((k) => [k, providers.filter((p) => p.e
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Find Local Services in Your Language | The Nomad HQ</title>
@@ -330,9 +327,11 @@ const html = `<!DOCTYPE html>
     .sv-tiers .sv-ev { margin:0 .5rem 0 0; }
     @media (max-width:640px) { .sv-field select, .sv-field input { min-width:0; width:100%; } .sv-field { width:100%; } }
   </style>
+${shell.headEnd}
 </head>
 <body>
-  ${navHtml()}
+  ${shell.bodyStart}
+  ${shell.nav}
   <main>
     <header class="hub-hero">
       <img class="hub-hero-img" src="/assets/services-hero.webp" alt="Shop signs and street lamps lighting Shavteli Street in the old town of Tbilisi at night" fetchpriority="high" width="1920" height="1090">
@@ -376,6 +375,7 @@ const html = `<!DOCTYPE html>
     </div>
   </main>
   ${FOOTER}
+${shell.bodyEnd}
   <script>
     (function(){
       var grid=document.getElementById('svGrid'),count=document.getElementById('svCount'),empty=document.getElementById('svEmpty');
