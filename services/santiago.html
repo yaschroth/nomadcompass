@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -181,38 +194,19 @@
             <p class="sv-city-count">16 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Santiago_de_Chile,_Desde_Cerro_San_Crist%C3%B3bal_(cropped).jpg" target="_blank" rel="nofollow noopener">Photo: Omnespsx (CC BY-SA 4.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Backwater Psychotherapy</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. Padre Sergio Correa 14100, Chicureo, Colina</p>
-          </div>
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (16)</option><option value="doctor">Doctors &amp; clinics (6)</option><option value="legal">Legal &amp; visa (5)</option><option value="therapy">Therapy &amp; counselling (5)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (16)</option><option value="es">Spanish (16)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
         </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Backwater%20Psychotherapy%2C%20Av.%20Padre%20Sergio%20Correa%2014100%2C%20Chicureo%2C%20Colina%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.carey.cl/en/" target="_blank" rel="nofollow noopener">Carey</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Isidora Goyenechea 2800, 43rd floor, Las Condes, 7550647, Santiago</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, health, immigration, intellectual property, international, maritime, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.carey.cl/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Carey%2C%20Isidora%20Goyenechea%202800%2C%2043rd%20floor%2C%20Las%20Condes%2C%207550647%2C%20Santiago%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <p class="sv-count" id="svcCount">All <b>16</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="6">6</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica alemana">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -227,22 +221,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Alemana%2C%20Av.%20Vitacura%205951%2C%20Vitacura%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Clinica El Cedro</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Julia Bernstein 1240, La Reina</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20El%20Cedro%2C%20Julia%20Bernstein%201240%2C%20La%20Reina%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica indisa">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -257,7 +236,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Indisa%2C%20Av.%20Santa%20Maria%201810%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica las condes">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -272,82 +251,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Las%20Condes%2C%20Estoril%20450%2C%20Las%20Condes%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Clinica Psiquiatrica Los Tiempos</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. Jose Arrieta 6024, La Reina</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Psiquiatrica%20Los%20Tiempos%2C%20Av.%20Jose%20Arrieta%206024%2C%20La%20Reina%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Clinica Psiquiatrica Renacer</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. Capitan Orellana 2404, Nunoa</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Psiquiatrica%20Renacer%2C%20Av.%20Capitan%20Orellana%202404%2C%20Nunoa%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.dnycia.cl" target="_blank" rel="nofollow noopener">Daneri Norambuena Y Compania</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; CALLE SAN SEBASTIAN, 2750, OFICINA 803, LAS CONDES, 00000, SANTIAGO</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, employment, family, intellectual property, international, personal injury, real estate&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.dnycia.cl" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Daneri%20Norambuena%20Y%20Compania%2C%20CALLE%20SAN%20SEBASTIAN%2C%202750%2C%20OFICINA%20803%2C%20LAS%20CONDES%2C%2000000%2C%20SANTIAGO%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://dgsabogados.cl/" target="_blank" rel="nofollow noopener">Dgs Abogados Y Asociados Spa</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; La Capitania N 70, B, oficina S, 07, Las Condes, Santiago, Region Metropolitana., Ladera 2126, Penalolen, Santiago, Regi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://dgsabogados.cl/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dgs%20Abogados%20Y%20Asociados%20Spa%2C%20La%20Capitania%20N%2070%2C%20B%2C%20oficina%20S%2C%2007%2C%20Las%20Condes%2C%20Santiago%2C%20Region%20Metropolitana.%2C%20Ladera%202126%2C%20Penalolen%2C%20Santiago%2C%20Regi%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.hgomezgroup.com/" target="_blank" rel="nofollow noopener">Harris Gomez Group Spa</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Av. Vitacura 5250 Of. 802 Santiago, Chile, Level 7, 92 Pitt Street, Sydney, NSW, 2000, Australia, 7630260, Santiago</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, immigration, intellectual property, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.hgomezgroup.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Harris%20Gomez%20Group%20Spa%2C%20Av.%20Vitacura%205250%20Of.%20802%20Santiago%2C%20Chile%2C%20Level%207%2C%2092%20Pitt%20Street%2C%20Sydney%2C%20NSW%2C%202000%2C%20Australia%2C%207630260%2C%20Santiago%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="hospital clinico universidad catolica (uc christus)">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -362,7 +266,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Clinico%20Universidad%20Catolica%20(UC%20Christus)%2C%20Several%20locations%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="hospital clinico universidad de chile">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -377,22 +281,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Clinico%20Universidad%20de%20Chile%2C%20Av.%20Santos%20Dumont%20999%2C%20Independencia%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Instituto Psiquiatrico Horwitz</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. La Paz 841</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Instituto%20Psiquiatrico%20Horwitz%2C%20Av.%20La%20Paz%20841%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="no email">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -407,7 +296,72 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=No%20email%2C%20Av.%20Santa%20Maria%201810%2C%20Santiago%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+          </div>
+        </section>
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="5">5</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="carey">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://www.carey.cl/en/" target="_blank" rel="nofollow noopener">Carey</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Isidora Goyenechea 2800, 43rd floor, Las Condes, 7550647, Santiago</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, health, immigration, intellectual property, international, maritime, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://www.carey.cl/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Carey%2C%20Isidora%20Goyenechea%202800%2C%2043rd%20floor%2C%20Las%20Condes%2C%207550647%2C%20Santiago%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="daneri norambuena y compania">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://www.dnycia.cl" target="_blank" rel="nofollow noopener">Daneri Norambuena Y Compania</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; CALLE SAN SEBASTIAN, 2750, OFICINA 803, LAS CONDES, 00000, SANTIAGO</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, employment, family, intellectual property, international, personal injury, real estate&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://www.dnycia.cl" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Daneri%20Norambuena%20Y%20Compania%2C%20CALLE%20SAN%20SEBASTIAN%2C%202750%2C%20OFICINA%20803%2C%20LAS%20CONDES%2C%2000000%2C%20SANTIAGO%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="dgs abogados y asociados spa">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://dgsabogados.cl/" target="_blank" rel="nofollow noopener">Dgs Abogados Y Asociados Spa</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; La Capitania N 70, B, oficina S, 07, Las Condes, Santiago, Region Metropolitana., Ladera 2126, Penalolen, Santiago, Regi</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://dgsabogados.cl/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dgs%20Abogados%20Y%20Asociados%20Spa%2C%20La%20Capitania%20N%2070%2C%20B%2C%20oficina%20S%2C%2007%2C%20Las%20Condes%2C%20Santiago%2C%20Region%20Metropolitana.%2C%20Ladera%202126%2C%20Penalolen%2C%20Santiago%2C%20Regi%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="harris gomez group spa">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://www.hgomezgroup.com/" target="_blank" rel="nofollow noopener">Harris Gomez Group Spa</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Av. Vitacura 5250 Of. 802 Santiago, Chile, Level 7, 92 Pitt Street, Sydney, NSW, 2000, Australia, 7630260, Santiago</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, immigration, intellectual property, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Chile/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://www.hgomezgroup.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Harris%20Gomez%20Group%20Spa%2C%20Av.%20Vitacura%205250%20Of.%20802%20Santiago%2C%20Chile%2C%20Level%207%2C%2092%20Pitt%20Street%2C%20Sydney%2C%20NSW%2C%202000%2C%20Australia%2C%207630260%2C%20Santiago%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="wolfenson abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -422,6 +376,91 @@
           <p class="sv-links"><a class="sv-go" href="https://www.wolfenson.cl" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Wolfenson%20Abogados%2C%20Av.%20El%20Golf%2040%2C%20Piso%2012%2C%20Las%20Condes%2C%207550107%2C%20Santiago%20de%20Chile%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="therapy" id="svc-therapy">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="5">5</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="es en" data-name="backwater psychotherapy">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Backwater Psychotherapy</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. Padre Sergio Correa 14100, Chicureo, Colina</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Backwater%20Psychotherapy%2C%20Av.%20Padre%20Sergio%20Correa%2014100%2C%20Chicureo%2C%20Colina%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="es en" data-name="clinica el cedro">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Clinica El Cedro</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Julia Bernstein 1240, La Reina</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20El%20Cedro%2C%20Julia%20Bernstein%201240%2C%20La%20Reina%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="es en" data-name="clinica psiquiatrica los tiempos">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Clinica Psiquiatrica Los Tiempos</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. Jose Arrieta 6024, La Reina</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Psiquiatrica%20Los%20Tiempos%2C%20Av.%20Jose%20Arrieta%206024%2C%20La%20Reina%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="es en" data-name="clinica psiquiatrica renacer">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Clinica Psiquiatrica Renacer</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. Capitan Orellana 2404, Nunoa</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Psiquiatrica%20Renacer%2C%20Av.%20Capitan%20Orellana%202404%2C%20Nunoa%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="es en" data-name="instituto psiquiatrico horwitz">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Instituto Psiquiatrico Horwitz</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Av. La Paz 841</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Chile, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/chile-list-of-medical-facilitiespractitioners-2/list-of-medical-facilities-and-practitioners-in-chile" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Instituto%20Psiquiatrico%20Horwitz%2C%20Av.%20La%20Paz%20841%2C%20Santiago%2C%20Chile" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Santiago matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -444,6 +483,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
+      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers","therapy":"therapists"};
+      var LANG_LABEL={"en":"English","es":"Spanish"};
+      var TOTAL=16;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

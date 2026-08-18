@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -183,8 +196,19 @@
             <p class="sv-city-count">14 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Granada_-_View_from_Mirador_de_San_Nicol%C3%A1s_-_02.jpg" target="_blank" rel="nofollow noopener">Photo: Diego Delso (CC BY-SA 4.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-doctor">
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (14)</option><option value="doctor">Doctors &amp; clinics (9)</option><option value="legal">Legal &amp; visa (3)</option><option value="dentist">Dentists (1)</option><option value="therapy">Therapy &amp; counselling (1)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="es">Spanish (14)</option><option value="en">English (11)</option><option value="de">German (2)</option><option value="fr">French (1)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
+        </div>
+        <p class="sv-count" id="svcCount">All <b>14</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="9">9</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="almunecar international clinic">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -199,22 +223,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Almunecar%20International%20Clinic%2C%20Paseo%20de%20Altillo%204%2C%203%20C%2C%2018690%20Almunecar%2C%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://bielgleeson.com/" target="_blank" rel="nofollow noopener">Biel Gleeson Abogado Solicitor</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Calle Boleros 11, Huetor Vega, 18198, Granada</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Spain/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://bielgleeson.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Biel%20Gleeson%20Abogado%20Solicitor%2C%20Calle%20Boleros%2011%2C%20Huetor%20Vega%2C%2018198%2C%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica dermatologica cenderlaser">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -229,7 +238,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Dermatologica%20Cenderlaser%2C%20Avda%20de%20la%20Constitucion%20(esquina%20Avda%20de%20los%20Andaluces)%2C%2018014%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica dr. gonzalez de vega">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -244,7 +253,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Dr.%20Gonzalez%20de%20Vega%2C%20Avenida%20Madrid%2C%203%20-%201%20B%2C%2018012%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica dr. manuel valenzuela">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -259,7 +268,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Dr.%20Manuel%20Valenzuela%2C%20Calle%20Recogidas%2039%2C%201D%2C%2018005%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica dr. menjon">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -274,7 +283,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Dr.%20Menjon%2C%20Calle%20Alhondiga%2037%2C%205%20Izda%2C%2018001%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de es" data-name="clinica oftalmologica ancha de gracia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -289,22 +298,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Oftalmologica%20Ancha%20de%20Gracia%2C%20C%2F%20Ancha%20de%20Gracia%204%2C%2018002%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dentist M Luz Concha Saez-Pardo</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; Avda de la Constitucion 23, 1 B, 18014 Granada</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities and practitioners in Spain, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;Dentist, Odontology&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/spain-list-of-medical-facilitiespractitioners/spain-medical-facilities-and-practitioners" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dentist%20M%20Luz%20Concha%20Saez-Pardo%2C%20Avda%20de%20la%20Constitucion%2023%2C%201%20B%2C%2018014%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="dr. armando zuluaga gomez">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -319,7 +313,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Armando%20Zuluaga%20Gomez%2C%20Calle%20Doctor%20Emilio%20Munoz%20Fernandez%2C2-3A%2C%2018012%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="dr. jorge cervilla">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -334,52 +328,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Jorge%20Cervilla%2C%20Clinica%20MenSana%2C%20Calle%20Mirasol%2C%2026%2C%202-C%2C%2018009%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Grupo de Psicoterapia y Atencion Psiquiatrica Praxis</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Camino de Ronda 68, 1 izq., 18004</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the German consulate general in Malaga's list of German-speaking doctors, under its heading for psychiatry and psychotherapy. The consulate says the list covers doctors who have shown it their Spanish licence to practise, that the naming of a doctor is without obligation and without warranty, and that the list does not claim to be complete.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1776064/dc26d030ecb6f9d26d0c3925214a0359/dd-aerzteliste-malaga-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Grupo%20de%20Psicoterapia%20y%20Atencion%20Psiquiatrica%20Praxis%2C%20Camino%20de%20Ronda%2068%2C%201%20izq.%2C%2018004%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://hidalgoasociados.com/" target="_blank" rel="nofollow noopener">Hidalgo Asociados</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; C/MUSICO VICENTE ZARZO, 1, 2 A, 18002, GRANADA</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, family, health, immigration, intellectual property, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Spain/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://hidalgoasociados.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hidalgo%20Asociados%2C%20C%2FMUSICO%20VICENTE%20ZARZO%2C%201%2C%202%20A%2C%2018002%2C%20GRANADA%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">MONESTIER MORALES Juan-Luis</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; C/ Melchor Almagro, 9 - 1 D, 18002 Granada</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the French embassy in Spain's list of francophone professionals, under &quot;Liste des avocats de Granada&quot;, as a lawyer. The embassy says the list is non-exhaustive and given for information only, that it does not engage the administration on the quality of the services or the level of the fees, and that the choice of practitioner is free.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://es.diplomatie.gouv.fr/fr/liste-de-notoriete" target="_blank" rel="nofollow noopener">es.diplomatie.gouv.fr</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MONESTIER%20MORALES%20Juan-Luis%2C%20C%2F%20Melchor%20Almagro%2C%209%20-%201%20D%2C%2018002%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="policlinica granada">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -394,6 +343,101 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Policlinica%20Granada%2C%20Calle%20Alminares%20del%20Genil%2C%206-7%20Bajos%2C%2018006%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="3">3</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="biel gleeson abogado solicitor">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://bielgleeson.com/" target="_blank" rel="nofollow noopener">Biel Gleeson Abogado Solicitor</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Calle Boleros 11, Huetor Vega, 18198, Granada</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Spain/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://bielgleeson.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Biel%20Gleeson%20Abogado%20Solicitor%2C%20Calle%20Boleros%2011%2C%20Huetor%20Vega%2C%2018198%2C%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="hidalgo asociados">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://hidalgoasociados.com/" target="_blank" rel="nofollow noopener">Hidalgo Asociados</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; C/MUSICO VICENTE ZARZO, 1, 2 A, 18002, GRANADA</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, family, health, immigration, intellectual property, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Spain/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://hidalgoasociados.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hidalgo%20Asociados%2C%20C%2FMUSICO%20VICENTE%20ZARZO%2C%201%2C%202%20A%2C%2018002%2C%20GRANADA%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="monestier morales juan-luis">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name">MONESTIER MORALES Juan-Luis</h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; C/ Melchor Almagro, 9 - 1 D, 18002 Granada</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the French embassy in Spain's list of francophone professionals, under &quot;Liste des avocats de Granada&quot;, as a lawyer. The embassy says the list is non-exhaustive and given for information only, that it does not engage the administration on the quality of the services or the level of the fees, and that the choice of practitioner is free.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://es.diplomatie.gouv.fr/fr/liste-de-notoriete" target="_blank" rel="nofollow noopener">es.diplomatie.gouv.fr</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MONESTIER%20MORALES%20Juan-Luis%2C%20C%2F%20Melchor%20Almagro%2C%209%20-%201%20D%2C%2018002%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="dentist" id="svc-dentist">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="1">1</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="es en" data-name="dentist m luz concha saez-pardo">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">Dentist M Luz Concha Saez-Pardo</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; Avda de la Constitucion 23, 1 B, 18014 Granada</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities and practitioners in Spain, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;Dentist, Odontology&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/spain-list-of-medical-facilitiespractitioners/spain-medical-facilities-and-practitioners" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dentist%20M%20Luz%20Concha%20Saez-Pardo%2C%20Avda%20de%20la%20Constitucion%2023%2C%201%20B%2C%2018014%20Granada%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="therapy" id="svc-therapy">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="1">1</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="de es" data-name="grupo de psicoterapia y atencion psiquiatrica praxis">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Grupo de Psicoterapia y Atencion Psiquiatrica Praxis</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Camino de Ronda 68, 1 izq., 18004</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the German consulate general in Malaga's list of German-speaking doctors, under its heading for psychiatry and psychotherapy. The consulate says the list covers doctors who have shown it their Spanish licence to practise, that the naming of a doctor is without obligation and without warranty, and that the list does not claim to be complete.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1776064/dc26d030ecb6f9d26d0c3925214a0359/dd-aerzteliste-malaga-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Grupo%20de%20Psicoterapia%20y%20Atencion%20Psiquiatrica%20Praxis%2C%20Camino%20de%20Ronda%2068%2C%201%20izq.%2C%2018004%2C%20Granada%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Granada matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -416,6 +460,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
+      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers","therapy":"therapists"};
+      var LANG_LABEL={"en":"English","fr":"French","de":"German","es":"Spanish"};
+      var TOTAL=14;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

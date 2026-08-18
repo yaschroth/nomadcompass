@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -180,8 +193,19 @@
             <p class="sv-city-count">16 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Howrah_Bridge,_Foggy.jpg" target="_blank" rel="nofollow noopener">Photo: Dey.sandip (CC BY-SA 3.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-doctor">
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (16)</option><option value="doctor">Doctors &amp; clinics (12)</option><option value="legal">Legal &amp; visa (4)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (16)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
+        </div>
+        <p class="sv-count" id="svcCount">All <b>16</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="12">12</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="b.m.birla heart research centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -196,7 +220,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=B.M.Birla%20Heart%20Research%20Centre%2C%201%2F1%20National%20Library%20Avenue%2C%20Kolkata%20-%20700%20027%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="belle vue clinic">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -211,22 +235,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Belle%20Vue%20Clinic%2C%209%20Dr.%20U.N.Brahmchari%20Street%20(Formerly%20Loudon%20Street)%2C%20Kolkata%20-%20700%20071%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.biswajitsarkar.com" target="_blank" rel="nofollow noopener">Biswajit Sarkar Advocates Ip Attorneys</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 42A D. D. Khanna Road, 700054, Kolkata</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, intellectual property, international, maritime, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.biswajitsarkar.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Biswajit%20Sarkar%20Advocates%20Ip%20Attorneys%2C%2042A%20D.%20D.%20Khanna%20Road%2C%20700054%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="calcutta national medical college &amp; hospital">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -241,7 +250,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Calcutta%20National%20Medical%20College%20%26%20Hospital%2C%20Kolkata%20-%20700%20014%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="kothari medical centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -256,22 +265,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kothari%20Medical%20Centre%2C%20Kolkata%20-%20700%20027%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">M S Khanna Co Advocates Solicitors</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 5H, Hastings Chambers, 7C, Kiran Shankar Roy Road, 700001, Kolkata</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, family, intellectual property, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=M%20S%20Khanna%20Co%20Advocates%20Solicitors%2C%205H%2C%20Hastings%20Chambers%2C%207C%2C%20Kiran%20Shankar%20Roy%20Road%2C%20700001%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="manipal hospitals">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -286,7 +280,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Manipal%20Hospitals%2C%20IB193%2C%20Sector%20-III%2C%20Salt%20Lake%20City%2C%20Kolkata-700091%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="medica superspeciality hospital">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -301,7 +295,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medica%20Superspeciality%20Hospital%2C%20127%20Mukundapur%2C%20E.M.Bypass%2C%20Kolkata-700%20099%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="mission of mercy hospital &amp; research centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -316,7 +310,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mission%20of%20Mercy%20Hospital%20%26%20Research%20Centre%2C%20125%2F1%20Park%20Street%2C%20Kolkata%20-%20700%20017%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="neotia bhagirathi woman &amp; child care centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -331,7 +325,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Neotia%20Bhagirathi%20Woman%20%26%20Child%20Care%20Centre%2C%202%20Rawdon%20Street%2C%20Kolkata%20-%20700%200017%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="peerless hospital &amp; b.k. roy research centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -346,37 +340,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Peerless%20Hospital%20%26%20B.K.%20Roy%20Research%20Centre%2C%20360%20Panchasayar%2C%20Garia%2C%20Kolkata%20-%20700%20094%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Rudraman Bhattacharyya</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 1, Haraprasad Shastri Sarani, Block B, New Alipore, 700053, Kolkata</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rudraman%20Bhattacharyya%2C%201%2C%20Haraprasad%20Shastri%20Sarani%2C%20Block%20B%2C%20New%20Alipore%2C%20700053%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.sandersons.in" target="_blank" rel="nofollow noopener">Sandersons Morgans</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Royal Insurance Building, 5, Netaji Subhas Road, 700001, Kolkata</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, health, intellectual property, international, maritime, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.sandersons.in" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sandersons%20Morgans%2C%20Royal%20Insurance%20Building%2C%205%2C%20Netaji%20Subhas%20Road%2C%20700001%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="sskm hospital (seth sukhlal karnani memorial hospital)">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -391,7 +355,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SSKM%20Hospital%20(Seth%20Sukhlal%20Karnani%20Memorial%20Hospital)%2C%20Kolkata%20-%20700%20020%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="the calcutta medical research institute (cmri)">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -406,7 +370,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Calcutta%20Medical%20Research%20Institute%20(CMRI)%2C%20Kolkata%20-%20700%20027%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en" data-name="woodlands multispecialty hospital">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -421,6 +385,76 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Woodlands%20Multispecialty%20Hospital%2C%208%2F5%20Alipore%20Road%2C%20Kolkata%20-%20700%20027%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="4">4</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="biswajit sarkar advocates ip attorneys">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="http://www.biswajitsarkar.com" target="_blank" rel="nofollow noopener">Biswajit Sarkar Advocates Ip Attorneys</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 42A D. D. Khanna Road, 700054, Kolkata</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, intellectual property, international, maritime, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="http://www.biswajitsarkar.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Biswajit%20Sarkar%20Advocates%20Ip%20Attorneys%2C%2042A%20D.%20D.%20Khanna%20Road%2C%20700054%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="m s khanna co advocates solicitors">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name">M S Khanna Co Advocates Solicitors</h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 5H, Hastings Chambers, 7C, Kiran Shankar Roy Road, 700001, Kolkata</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, family, intellectual property, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=M%20S%20Khanna%20Co%20Advocates%20Solicitors%2C%205H%2C%20Hastings%20Chambers%2C%207C%2C%20Kiran%20Shankar%20Roy%20Road%2C%20700001%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="rudraman bhattacharyya">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name">Rudraman Bhattacharyya</h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 1, Haraprasad Shastri Sarani, Block B, New Alipore, 700053, Kolkata</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rudraman%20Bhattacharyya%2C%201%2C%20Haraprasad%20Shastri%20Sarani%2C%20Block%20B%2C%20New%20Alipore%2C%20700053%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="sandersons morgans">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="http://www.sandersons.in" target="_blank" rel="nofollow noopener">Sandersons Morgans</a></h3>
+            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Royal Insurance Building, 5, Netaji Subhas Road, 700001, Kolkata</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, health, intellectual property, international, maritime, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/India/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
+          <p class="sv-links"><a class="sv-go" href="http://www.sandersons.in" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sandersons%20Morgans%2C%20Royal%20Insurance%20Building%2C%205%2C%20Netaji%20Subhas%20Road%2C%20700001%2C%20Kolkata%2C%20Kolkata%2C%20India" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Kolkata matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -443,6 +477,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa"};
+      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers"};
+      var LANG_LABEL={"en":"English"};
+      var TOTAL=16;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

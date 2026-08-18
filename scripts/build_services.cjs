@@ -44,18 +44,7 @@ const CATS = DB._categories;
 const LANGS = DB._languages;
 const EVIDENCE = DB._evidence;
 
-// A hospital and a barber looked identical at a glance, so each category carries its own
-// Lucide glyph and hue, plus the one custom glyph: 'tooth' is drawn in scripts/build_icons.cjs
-// because Lucide has none, and 'smile' read as a mood rather than a molar.
-const CAT_ICON = {
-  doctor: 'stethoscope', dentist: 'tooth', vet: 'paw-print', therapy: 'brain',
-  physio: 'bone', optician: 'glasses', hair: 'scissors', legal: 'scale',
-  tax: 'calculator', realestate: 'key', mechanic: 'wrench', fitness: 'dumbbell', translator: 'languages',
-};
-
-// Strongest evidence first, so the best-sourced row in a city leads.
-const EV_RANK = { official: 0, visited: 1, 'self-declared': 2, directory: 3 };
-const EV_LABEL = { official: 'Official list', visited: 'We confirmed', 'self-declared': 'Says so itself', directory: 'Directory only' };
+const { CAT_ICON, CAT_PLURAL, EV_RANK, EV_LABEL } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
 const providers = DB.providers.slice();
 const bad = providers.filter((p) => !CITY[p.city] || !CATS[p.category] || !CAT_ICON[p.category] || !p.sourceUrl || !EVIDENCE[p.evidence] || !p.languages || !p.languages.length || p.languages.some((l) => !LANGS[l]));
@@ -145,11 +134,30 @@ function cityIndexCard(slug) {
   const rest = langs.length - shown.length;
   return `<a class="sv-ix" href="/services/${slug}" data-city="${slug}" data-n="${rows.length}" data-cats="${cats.join(' ')}" data-langs="${langs.join(' ')}" data-name="${esc((c.name + ' ' + c.country).toLowerCase())}">
         <span class="sv-ix-top">${flag}<span class="sv-ix-name">${esc(c.name)}<span class="sv-ix-country">${esc(c.country)}</span></span></span>
-        <span class="sv-ix-count">${rows.length} provider${rows.length === 1 ? '' : 's'}</span>
+        <span class="sv-ix-count" data-total="${rows.length} provider${rows.length === 1 ? '' : 's'}">${rows.length} provider${rows.length === 1 ? '' : 's'}</span>
         <span class="sv-ix-langs">${shown.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('')}${rest > 0 ? `<span class="sv-lang sv-lang-more">+${rest}</span>` : ''}</span>
       </a>`;
 }
 const cityIndex = usedCities.map(cityIndexCard).join('\n      ');
+
+// What each city holds, per service, per language, and per pair of the two. Without this the index
+// answered a narrow question with a broad number: ask for therapists who work in German and every
+// card still announced its total, so Barcelona claimed 147 providers when it holds four that match.
+// The pairs are needed separately because a provider can carry two languages and must not be
+// counted twice when only the service is chosen.
+const COUNTS = {};
+usedCities.forEach((slug) => {
+  const rows = providers.filter((p) => p.city === slug);
+  const c = {}; const l = {}; const pair = {};
+  rows.forEach((p) => {
+    c[p.category] = (c[p.category] || 0) + 1;
+    p.languages.forEach((lang) => {
+      l[lang] = (l[lang] || 0) + 1;
+      pair[p.category + '|' + lang] = (pair[p.category + '|' + lang] || 0) + 1;
+    });
+  });
+  COUNTS[slug] = { t: rows.length, c, l, p: pair };
+});
 
 function navHtml() {
   const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
@@ -368,18 +376,35 @@ const html = `<!DOCTYPE html>
       var citySel=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang'),q=document.getElementById('svQ');
       var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
+      var CAT_PLURAL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CAT_PLURAL[c] || CATS[c].toLowerCase()])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(usedLangs.map((l) => [l, LANGS[l]])))};
+      var COUNTS=${JSON.stringify(COUNTS)};
       var TOTAL=${providers.length};
       function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
       function render(){
         var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase();
         var shown=0,rows=0;
         cards.forEach(function(el){
-          var ok=(cat==='all'||has(el,'data-cats',cat))
-            &&(lang==='all'||has(el,'data-langs',lang))
-            &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+          var slug=el.getAttribute('data-city'),k=COUNTS[slug];
+          // How many of this city's providers actually answer the question being asked. A city
+          // whose match count is zero is hidden even if it holds the service and the language
+          // separately: Barcelona has therapists and it has German, but not both in one provider.
+          var n;
+          if(cat!=='all'&&lang!=='all') n=k.p[cat+'|'+lang]||0;
+          else if(cat!=='all') n=k.c[cat]||0;
+          else if(lang!=='all') n=k.l[lang]||0;
+          else n=k.t;
+          var ok=n>0&&(!term||el.getAttribute('data-name').indexOf(term)>-1);
           el.classList.toggle('is-hidden',!ok);
-          if(ok){shown++;rows+=parseInt(el.getAttribute('data-n'),10)||0;}
+          var cEl=el.querySelector('.sv-ix-count');
+          if(cat!=='all') cEl.textContent=n+' '+(n===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+          else cEl.textContent=cEl.getAttribute('data-total');
+          // The filter travels with the click, so the city page opens on the same question.
+          var qs=[];
+          if(cat!=='all')qs.push('cat='+cat);
+          if(lang!=='all')qs.push('lang='+lang);
+          el.setAttribute('href','/services/'+slug+(qs.length?'?'+qs.join('&'):''));
+          if(ok){shown++;rows+=n;}
         });
         var bits=[];
         if(cat!=='all')bits.push('with '+CAT_LABEL[cat]);
@@ -395,7 +420,13 @@ const html = `<!DOCTYPE html>
       }
       // Picking a city goes to that city's page rather than filtering this one down to a single
       // card: the city page is the thing worth landing on.
-      citySel.addEventListener('change',function(){ if(citySel.value!=='all')window.location.href='/services/'+citySel.value; });
+      citySel.addEventListener('change',function(){
+        if(citySel.value==='all')return;
+        var qs=[];
+        if(catSel.value!=='all')qs.push('cat='+catSel.value);
+        if(langSel.value!=='all')qs.push('lang='+langSel.value);
+        window.location.href='/services/'+citySel.value+(qs.length?'?'+qs.join('&'):'');
+      });
       [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
       q.addEventListener('input',render);
       document.getElementById('svReset').addEventListener('click',function(){citySel.value='all';catSel.value='all';langSel.value='all';q.value='';render();});

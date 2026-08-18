@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -193,8 +206,19 @@
             <p class="sv-city-count">32 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Minato_City,_Tokyo,_Japan.jpg" target="_blank" rel="nofollow noopener">Photo: David Kernan (CC BY 4.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-legal">
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (32)</option><option value="legal">Legal &amp; visa (22)</option><option value="doctor">Doctors &amp; clinics (8)</option><option value="therapy">Therapy &amp; counselling (2)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (32)</option><option value="ja">Japanese (32)</option><option value="zh">Chinese (7)</option><option value="ru">Russian (2)</option><option value="fr">French (1)</option><option value="ko">Korean (1)</option><option value="ms">Malay (1)</option><option value="ne">Nepali (1)</option><option value="pt">Portuguese (1)</option><option value="es">Spanish (1)</option><option value="sv">Swedish (1)</option><option value="tl">Tagalog (1)</option><option value="th">Thai (1)</option><option value="vi">Vietnamese (1)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
+        </div>
+        <p class="sv-count" id="svcCount">All <b>32</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="22">22</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="alcien law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -209,22 +233,7 @@
           <p class="sv-links"><a class="sv-go" href="https://alcien.jp/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Alcien%20Law%20Office%2C%20Kasumigaseki%20MH%20Towers%202%2C4%2C5F%2C%203%2C%206%2C%2015%2C%20Kasumigaseki%2C%20Chiyoda%2C%20ku%2C%20100%2C%200013%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">American Clinic Tokyo</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1-7-4 Akasaka, Minato</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=American%20Clinic%20Tokyo%2C%201-7-4%20Akasaka%2C%20Minato%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="ginza tokushige law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -239,7 +248,7 @@
           <p class="sv-links"><a class="sv-go" href="https://mbp-global.com/pro/ginzatokushigelaw/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ginza%20Tokushige%20Law%20Office%2C%205%2C%2014%2C%208%20GINZA%20Chuo%2C%20ku%2C%20GINZA%20WAKAHO%20Bd.%204th%20floor%2C%201040061%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="higashimachi lpc">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -254,7 +263,7 @@
           <p class="sv-links"><a class="sv-go" href="https://higashimachi.jp/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Higashimachi%20Lpc%2C%2015th%20Floor%2C%20Fukoku%20Seimei%20Building%2C%202%2C%202%2C%202%20Uchisaiwai%2C%20cho%2C%20Chiyoda%2C%20ku%2C%20100%2C%200011%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="honda law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -269,7 +278,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.hondalaw.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Honda%20Law%20Office%2C%20Park%20Axis%20Shibuya%20Sakuragaoka%20South%20801%2C%208%2C%2011%20Sakuragaokacho%2C%20Shibuya%2C%20Ku%2C%201500031%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="ikuta sogo legal office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -284,7 +293,7 @@
           <p class="sv-links"><a class="sv-go" href="https://ikutalegal.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ikuta%20Sogo%20Legal%20Office%2C%202%2C%2011%2C%2010%20Shimbashi%2C%20HULIC%20%26%20New%20SHINBASHI%208th%20Floor%2C%20105%2C%200004%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="jin international criminal defense law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -299,7 +308,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.jin-law.jp/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Jin%20International%20Criminal%20Defense%20Law%20Firm%2C%20Signature%20Roppongi%20Hills%2C%20Roppongi%20Hills%20Mori%20Tower%2016F%2C%206%2C%2010%2C%201%20Roppongi%2C%20Minato%2C%20ku%2C%20106%2C%206116%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="kuwayama law offices">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -314,22 +323,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.kuwayamalaw.com/english/index.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kuwayama%20Law%20Offices%2C%20BUREX%20Kojimachi%2C%203%2C%205%2C%202%2C%20Kojimachi%2C%20Chiyoda%2C%20ku%2C%20102%2C%200083%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Kyorin University Suginami Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 2-25-1 Wada, Suginami</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kyorin%20University%20Suginami%20Hospital%2C%202-25-1%20Wada%2C%20Suginami%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="masayuki honda international law office lpc">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -344,7 +338,7 @@
           <p class="sv-links"><a class="sv-go" href="http://en.honda-law.net/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Masayuki%20Honda%20International%20Law%20Office%20Lpc%2C%20Ebisu%20Plax%20Bldg.%206F%201%2C%2025%2C%201%20Ebisu%2C%20Minami%2C%20Shibuya%2C%20ku%2C%20150%2C%200022%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="max law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -359,7 +353,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.marinelaw.jp/e/index.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Max%20Law%20Office%2C%205%2FF%20Izumi%20Garden%20Wing%2C1%2C%206%2C%203%20Roppongi%2C%20Minato%2C%20ku%2C%20106%2C%200032%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="miyoshi associates">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -374,7 +368,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.miyoshi-law.org/en/index.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Miyoshi%20Associates%2C%207th%20Floor%2C%20Yajima%20Bldg.%2C%2011%2C%203%2C%20Ginza%207%2C%20chome%2C%20Chuo%2C%20ku%2C%201040061%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="nakamoto partners">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -389,22 +383,7 @@
           <p class="sv-links"><a class="sv-go" href="http://nakamotopartners.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nakamoto%20Partners%2C%204F%2C%20K%2C%20Front%20Building%201%2C%203%2C%209%20Moto%2C%20Akasaka%2C%20Minato%2C%20ku%2C%20107%2C%200051%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">National Center for Global Health and Medicine</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1-21-1 Toyama, Shinjuku ward, Tokyo, 162-8655</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Japanese</span><span class="sv-lang">Chinese</span><span class="sv-lang">Vietnamese</span><span class="sv-lang">Nepali</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. Its languages column for this one reads &quot;English, Japanese, Chinese, Vietnamese, Nepali&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=National%20Center%20for%20Global%20Health%20and%20Medicine%2C%201-21-1%20Toyama%2C%20Shinjuku%20ward%2C%20Tokyo%2C%20162-8655%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="nii hoshi law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -419,7 +398,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.nhlaw.site/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nii%20Hoshi%20Law%20Office%2C%20Keitoku%20Bldg.%2C%205%2C%208%2C%202%2C%20Nishi%2C%20Shinjuku%2C%20Shinjuku%2C%20ku%2C%201600023%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="ns law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -434,7 +413,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.ns-law.jp/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ns%20Law%20Office%2C%20Toyo%2C%20Sudacho%20Bldg%205F%2C%201%2C%205%20Kanda%2C%20Sudacho%2C%20Chiyoda%2C%20ku%2C%201010041%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="nt international law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -449,22 +428,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nt%20International%20Law%2C%20Daiwa%20Akasaka%20bldg%202F%2C%20Legal%20Square%2C%20Akasaka%202%2C%2014%2C%205%2C%20Minato%2C%20ku%2C%201070052%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">NTT Medical Center Tokyo</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 5-9-22 Higashi Gotanda, Shinagawa</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=NTT%20Medical%20Center%20Tokyo%2C%205-9-22%20Higashi%20Gotanda%2C%20Shinagawa%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="otani partners">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -479,22 +443,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.otani-p.com/en/lawyer.html#name-05" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Otani%20Partners%2C%20Kubo%20Bldg.%202F%2C%202%2C%204%2C%203%20Yotsuya%2C%20160%2C%200004%2C%20Shinjuku%2C%20ku%2C%20TOKYO%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Roppongi Clinic</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Roppongi 5-1-4, Minato</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Korean</span><span class="sv-lang">Tagalog</span><span class="sv-lang">Portuguese</span><span class="sv-lang">Thai</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Roppongi%20Clinic%2C%20Roppongi%205-1-4%2C%20Minato%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="rsm shiodome partners as co">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -509,7 +458,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.rsm.global/japan/shiodome/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rsm%20Shiodome%20Partners%20As%20Co%2C%2033rd%20Floor%2C%20Shiodome%20City%20Center%2C%201%2C%205%2C%202%2C%20Higashishimbashi%2C%20Minato%2C%20ku%2C%20105%2C%207133%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="sato ichikawa">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -524,22 +473,7 @@
           <p class="sv-links"><a class="sv-go" href="https://iinosato.com/ilpg_english" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sato%20Ichikawa%2C%20Kojimachi%20KS%20Square%201F%2C%20Kojimachi%205%2C%203%2C%203%2C%20Chiyodaku%2C%20102%2C%200083%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Sendagaya International Clinic</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1-20-3 Sendagaya, Shibuya</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">French</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sendagaya%20International%20Clinic%2C%201-20-3%20Sendagaya%2C%20Shibuya%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="shiki no kaze law group">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -554,22 +488,7 @@
           <p class="sv-links"><a class="sv-go" href="http://shikinokaze.jp/english-index.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Shiki%20No%20Kaze%20Law%20Group%2C%20Fukuya%20Building%205th%20Floor%2C%204%2C%203%2C%20Yotsuya%2C%20Shinjuku%2C%20ku%2C%20162%2C%200004%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">St. Luke's International Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 9-1 Akashi-cho, Chuo</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span><span class="sv-lang">Russian</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=St.%20Luke's%20International%20Hospital%2C%209-1%20Akashi-cho%2C%20Chuo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="tmi associates">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -584,7 +503,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.tmi.gr.jp/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tmi%20Associates%2C%2023rd%20Floor%2C%20Roppongi%20Hills%20Mori%20Tower%2C%206%2C%2010%2C%201%20Roppongi%2C%20Minato%2C%20ku%2C%20106%2C%206123%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="tokyo kokusai partners law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -599,37 +518,7 @@
           <p class="sv-links"><a class="sv-go" href="https://tkp-law.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Kokusai%20Partners%20Law%20Office%2C%20Hareza%20Tower%2020F%2C%201%2C%2018%2C%201%2C%20Higashiikebukuro%2C%20Toshima%2C%20ku%2C%20Tokyo%2C%201700013%2C%20Toshima%2C%20ku%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Tokyo Mental Health</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; 2-4-6 Shintomi, Chuo</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span><span class="sv-lang">Swedish</span><span class="sv-lang">Chinese</span><span class="sv-lang">Malay</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Mental%20Health%2C%202-4-6%20Shintomi%2C%20Chuo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Tokyo Metropolitan Bokutoh Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 4-23-15 Kotobashi, Sumida</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Metropolitan%20Bokutoh%20Hospital%2C%204-23-15%20Kotobashi%2C%20Sumida%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="tokyo taiju law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -644,22 +533,7 @@
           <p class="sv-links"><a class="sv-go" href="https://tokyotaiju.com/form-en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Taiju%20Law%20Office%2C%201%2C%2026%2C%201%20Shinjuku%20Shinjuku%2C%20ku%2C%20Nagataya%20Bldg.%205F%2C%201600022%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Tokyo Takanawa Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 3-10-11 Takanawa, Minato</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span><span class="sv-lang">Russian</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Takanawa%20Hospital%2C%203-10-11%20Takanawa%2C%20Minato%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ja en" data-name="toranomon sakura sogo law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -674,6 +548,171 @@
           <p class="sv-links"><a class="sv-go" href="https://torasaku-sogo.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Toranomon%20Sakura%20Sogo%20Law%20Office%2C%20%231303%20Toranomon%20Hosou%20Building%2C%201%2C%2020%2C%203%20Nishishinbashi%2C%20Minato%2C%20ku%2C%20105%2C%200003%2C%20Tokyo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="8">8</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en" data-name="american clinic tokyo">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">American Clinic Tokyo</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1-7-4 Akasaka, Minato</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=American%20Clinic%20Tokyo%2C%201-7-4%20Akasaka%2C%20Minato%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en zh" data-name="kyorin university suginami hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Kyorin University Suginami Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 2-25-1 Wada, Suginami</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kyorin%20University%20Suginami%20Hospital%2C%202-25-1%20Wada%2C%20Suginami%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en ja zh vi ne" data-name="national center for global health and medicine">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">National Center for Global Health and Medicine</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1-21-1 Toyama, Shinjuku ward, Tokyo, 162-8655</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Japanese</span><span class="sv-lang">Chinese</span><span class="sv-lang">Vietnamese</span><span class="sv-lang">Nepali</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. Its languages column for this one reads &quot;English, Japanese, Chinese, Vietnamese, Nepali&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=National%20Center%20for%20Global%20Health%20and%20Medicine%2C%201-21-1%20Toyama%2C%20Shinjuku%20ward%2C%20Tokyo%2C%20162-8655%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en zh" data-name="ntt medical center tokyo">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">NTT Medical Center Tokyo</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 5-9-22 Higashi Gotanda, Shinagawa</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=NTT%20Medical%20Center%20Tokyo%2C%205-9-22%20Higashi%20Gotanda%2C%20Shinagawa%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en fr" data-name="sendagaya international clinic">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Sendagaya International Clinic</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1-20-3 Sendagaya, Shibuya</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">French</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sendagaya%20International%20Clinic%2C%201-20-3%20Sendagaya%2C%20Shibuya%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en zh ru" data-name="st. luke's international hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">St. Luke's International Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 9-1 Akashi-cho, Chuo</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span><span class="sv-lang">Russian</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=St.%20Luke's%20International%20Hospital%2C%209-1%20Akashi-cho%2C%20Chuo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en zh" data-name="tokyo metropolitan bokutoh hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Tokyo Metropolitan Bokutoh Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 4-23-15 Kotobashi, Sumida</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Metropolitan%20Bokutoh%20Hospital%2C%204-23-15%20Kotobashi%2C%20Sumida%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ja en zh ru" data-name="tokyo takanawa hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Tokyo Takanawa Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 3-10-11 Takanawa, Minato</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span><span class="sv-lang">Russian</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Takanawa%20Hospital%2C%203-10-11%20Takanawa%2C%20Minato%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="therapy" id="svc-therapy">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="2">2</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="ja en ko tl pt th" data-name="roppongi clinic">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Roppongi Clinic</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Roppongi 5-1-4, Minato</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Korean</span><span class="sv-lang">Tagalog</span><span class="sv-lang">Portuguese</span><span class="sv-lang">Thai</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Roppongi%20Clinic%2C%20Roppongi%205-1-4%2C%20Minato%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="ja en es sv zh ms" data-name="tokyo mental health">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Tokyo Mental Health</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; 2-4-6 Shintomi, Chuo</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Japanese</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span><span class="sv-lang">Swedish</span><span class="sv-lang">Chinese</span><span class="sv-lang">Malay</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Japan, which names the languages of each facility rather than only whether English is spoken. These are the languages it lists against this one. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/japan-list-of-doctors-and-medical-facilities/list-of-medical-facilities-in-japan" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo%20Mental%20Health%2C%202-4-6%20Shintomi%2C%20Chuo%2C%20Tokyo%2C%20Japan" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Tokyo matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -696,6 +735,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
+      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers","therapy":"therapists"};
+      var LANG_LABEL={"zh":"Chinese","en":"English","fr":"French","ja":"Japanese","ko":"Korean","ms":"Malay","ne":"Nepali","pt":"Portuguese","ru":"Russian","es":"Spanish","sv":"Swedish","tl":"Tagalog","th":"Thai","vi":"Vietnamese"};
+      var TOTAL=32;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

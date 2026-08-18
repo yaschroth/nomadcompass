@@ -44,19 +44,7 @@ const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'att
 const CATS = DB._categories;
 const LANGS = DB._languages;
 const EVIDENCE = DB._evidence;
-const EV_LABEL = { official: 'Official list', visited: 'We confirmed', 'self-declared': 'Says so itself', directory: 'Directory only' };
-const EV_RANK = { official: 0, visited: 1, 'self-declared': 2, directory: 3 };
-const CAT_ICON = {
-  doctor: 'stethoscope', dentist: 'tooth', vet: 'paw-print', therapy: 'brain', physio: 'activity',
-  optician: 'glasses', hair: 'scissors', legal: 'scale', tax: 'calculator', realestate: 'building-2',
-  mechanic: 'wrench', fitness: 'dumbbell', translator: 'languages',
-};
-// Plain plurals for a title. The labels in the data ("Doctors & clinics") read as column headings.
-const CAT_PLURAL = {
-  doctor: 'doctors', dentist: 'dentists', vet: 'vets', therapy: 'therapists',
-  physio: 'physiotherapists', optician: 'opticians', hair: 'hairdressers', legal: 'lawyers',
-  tax: 'tax advisers', realestate: 'estate agents', mechanic: 'mechanics', fitness: 'gyms', translator: 'translators',
-};
+const { CAT_ICON, CAT_PLURAL, EV_RANK, EV_LABEL } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
 const MIN_INDEXABLE = 3;
 
@@ -81,7 +69,7 @@ function card(p) {
     ? `<a href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
     : esc(p.name);
   const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card sv-c-${p.category}">
+  return `<article class="sv-card sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${inlineIcon(CAT_ICON[p.category])}</span>
           <div>
@@ -180,6 +168,31 @@ for (const slug of slugs) {
   const desc = `${rows.length} ${rows.length === 1 ? 'provider' : 'providers'} in ${c.name} listed by the language they work in, ` +
     `across ${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}. Every language claim names its source.`;
 
+  // Grouped by service, biggest group first. The page used to be one undifferentiated grid sorted
+  // by evidence tier, so a dentist sat between two lawyers and the only way to find the thing you
+  // came for was to read all of it. Inside a group the best-sourced row still leads.
+  const groups = allCats
+    .map((cat) => ({ cat, rows: rows.filter((p) => p.category === cat) }))
+    .sort((x, y) => y.rows.length - x.rows.length || CATS[x.cat].localeCompare(CATS[y.cat]));
+  const groupsHtml = groups.map((g) => `<section class="svc-group" data-cat="${g.cat}" id="svc-${g.cat}">
+          <h2 class="svc-group-head"><span class="svc-group-ico">${inlineIcon(CAT_ICON[g.cat])}</span>${esc(CATS[g.cat])}<span class="svc-group-n" data-total="${g.rows.length}">${g.rows.length}</span></h2>
+          <div class="sv-grid">
+        ${g.rows.map(card).join('\n        ')}
+          </div>
+        </section>`).join('\n      ');
+
+  // Every option says how many rows it holds, so the menu answers "is there anything here for me"
+  // before you pick it and the page cannot promise something it does not have.
+  const catCount = {};
+  rows.forEach((p) => { catCount[p.category] = (catCount[p.category] || 0) + 1; });
+  const langCount = {};
+  rows.forEach((p) => p.languages.forEach((l) => { langCount[l] = (langCount[l] || 0) + 1; }));
+  const catOptions = `<option value="all">All services (${rows.length})</option>` +
+    groups.map((g) => `<option value="${g.cat}">${esc(CATS[g.cat])} (${g.rows.length})</option>`).join('');
+  const langOptions = `<option value="all">Any language</option>` +
+    allLangs.slice().sort((x, y) => langCount[y] - langCount[x] || LANGS[x].localeCompare(LANGS[y]))
+      .map((l) => `<option value="${l}">${esc(LANGS[l])} (${langCount[l]})</option>`).join('');
+
   const a = ATTR[slug] || {};
   const img = fs.existsSync(path.join(ROOT, 'images', 'cities', slug + '-card.webp'))
     ? `<img class="sv-city-img" src="/images/cities/${slug}-card.webp" alt="${esc(a.alt || c.name)}" loading="eager" decoding="async" width="800" height="532">`
@@ -232,6 +245,19 @@ for (const slug of slugs) {
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
 </head>
 <body>
@@ -254,8 +280,19 @@ for (const slug of slugs) {
             <p class="sv-city-count">${rows.length} provider${rows.length === 1 ? '' : 's'}</p>
           </div>${credit}
         </header>
-        <div class="sv-grid">
-      ${rows.map(card).join('\n      ')}
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat">${catOptions}</select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang">${langOptions}</select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
+        </div>
+        <p class="sv-count" id="svcCount">All <b>${rows.length}</b> ${rows.length === 1 ? 'provider' : 'providers'}, grouped by service.</p>
+
+      ${groupsHtml}
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in ${esc(c.name)} matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -269,6 +306,62 @@ for (const slug of slugs) {
     </div>
   </main>
   ${FOOTER}
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL=${JSON.stringify(Object.fromEntries(allCats.map((x) => [x, CATS[x]])))};
+      var CAT_PLURAL=${JSON.stringify(Object.fromEntries(allCats.map((x) => [x, CAT_PLURAL[x] || CATS[x].toLowerCase()])))};
+      var LANG_LABEL=${JSON.stringify(Object.fromEntries(allLangs.map((x) => [x, LANGS[x]])))};
+      var TOTAL=${rows.length};
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
 </body>
 </html>`;
 

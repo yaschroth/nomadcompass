@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -181,23 +194,19 @@
             <p class="sv-city-count">22 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:AlexanderNevskyCathedral-Sofia-6.jpg" target="_blank" rel="nofollow noopener">Photo: Plamen Agov (user:MrPanyGoff) (CC BY-SA 4.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Acibadem City Clinic University Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 51B Nikola Vaptsarov Blvd</p>
-          </div>
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (22)</option><option value="legal">Legal &amp; visa (16)</option><option value="doctor">Doctors &amp; clinics (4)</option><option value="dentist">Dentists (1)</option><option value="therapy">Therapy &amp; counselling (1)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="bg">Bulgarian (22)</option><option value="en">English (22)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
         </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Acibadem%20City%20Clinic%20University%20Hospital%2C%2051B%20Nikola%20Vaptsarov%20Blvd%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <p class="sv-count" id="svcCount">All <b>22</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="16">16</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="borislavova ivanov law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -212,7 +221,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.bi-lawfirm.com/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Borislavova%20Ivanov%20Law%20Firm%2C%2017A%20Vrabcha%20Str.%2C%201st%20floor%2C%203rd%20office%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="braykov legal office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -227,7 +236,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.braykov.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Braykov%20Legal%20Office%2C%2024%2C%20Stefan%20Karadzha%20st.%2C%20fl.1%2C%20ap.3%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="bulgaria legal law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -242,7 +251,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.bulgaria-legal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bulgaria%20Legal%20Law%20Office%2C%2046%2C%20Bul.%20Vasil%20Levski%2C%201142%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="c i legal partners">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -257,7 +266,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.cilpartners.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=C%20I%20Legal%20Partners%2C%2093%20James%20Bourchier%20Blvd.%20office%201%2C%20Sofia%2C%208%20Mara%20Gidik%20Str.%2C%202nd%20floor%2C%20Bourgas%2C%201407%2C%20Sofia%2C%208000%2C%20Bourgas%2C%20Sofia%2C%20Bour%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="cms sofia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -272,7 +281,7 @@
           <p class="sv-links"><a class="sv-go" href="https://cms.law/en/bgr/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Cms%20Sofia%2C%2014%20Tsar%20Osvoboditel%20Blvd.%2C%20fl.%201%2C%20Bulgaria%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="dyankova stoichevska law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -287,22 +296,7 @@
           <p class="sv-links"><a class="sv-go" href="https://lawyers-dyankovi.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dyankova%20Stoichevska%20Law%20Firm%2C%20bul.%20Totleben%205%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Eirene Centre</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; 113A Kesenova Gora, apartment 2</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Eirene%20Centre%2C%20113A%20Kesenova%20Gora%2C%20apartment%202%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="lavcheva and partners legal office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -317,22 +311,7 @@
           <p class="sv-links"><a class="sv-go" href="https://bilyanalavcheva.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lavcheva%20And%20Partners%20Legal%20Office%2C%20Sofia%2C%20st.%20%22Pears%20O'Mahonni%22%20N%2039%2C%2041%2C%201612%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Medical Center Afrodita</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 15 Henrik Ibsen Street</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medical%20Center%20Afrodita%2C%2015%20Henrik%20Ibsen%20Street%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="new balkans law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -347,7 +326,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.newbalkanslawoffice.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=New%20Balkans%20Law%20Office%2C%2019%20Karnigradska%20Street%2C%20Floor%201%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="nina boteva law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -362,7 +341,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.nbotevalaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nina%20Boteva%20Law%20Office%2C%202%20Pavlovich%20Street%202%2C%201142%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="popov arnaudov partners">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -377,22 +356,7 @@
           <p class="sv-links"><a class="sv-go" href="https://popovarnaudov.bg/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Popov%20Arnaudov%20Partners%2C%204%20Sveta%20Nedelya%20square%2C%20floor%204%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">RIBAGINDENT</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; 23 Tvardishki prohod, Strelbishte</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=RIBAGINDENT%2C%2023%20Tvardishki%20prohod%2C%20Strelbishte%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="sabina vankova">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -407,7 +371,7 @@
           <p class="sv-links"><a class="sv-go" href="https://lawfirm-bulgaria.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sabina%20Vankova%2C%20109%2C%20111%20Pernik%20Street%2C%20floor%201%2C%201309%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="slavchev vasilev law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -422,7 +386,7 @@
           <p class="sv-links"><a class="sv-go" href="https://svlaw.bg/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Slavchev%20Vasilev%20Law%20Firm%2C%2014%20Antim%20I%20Str.%2C%201303%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="tanchev and chekeleva attorney at law partnership">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -437,22 +401,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.tanchev-chekeleva.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tanchev%20And%20Chekeleva%20Attorney%20At%20Law%20Partnership%2C%2034%20Kniaz%20Al.%20Dondukov%20Blvd%2C%20entrance%20%22V%22%2C%20floor%202%2C%20flat%204%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">UMBALSM N.I. Pirogov</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 21 Totleben Blvd</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=UMBALSM%20N.I.%20Pirogov%2C%2021%20Totleben%20Blvd%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="vakarelova and partners law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -467,7 +416,7 @@
           <p class="sv-links"><a class="sv-go" href="https://vakarelova.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vakarelova%20And%20Partners%20Law%20Office%2C%2036%2C%20Dragan%20Tsankov%20Blvd.%2C%20INTERPRED%20-%20World%20Trade%20Center%20fl.%203%2C%20office%20B%2C%20327%2C%20Sofia%2C%204%20Nelson%20Mandela%20Str.%2C%20fl.2%2C%201040%2C%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="vakarelova partners law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -482,22 +431,7 @@
           <p class="sv-links"><a class="sv-go" href="https://vakarelova.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vakarelova%20Partners%20Law%20Office%2C%2036%20Dragan%20Tsankov%20Blvd%2C%20INTERPRED%2C%20World%20Trade%20Centre%2C%20office%20B%2C%20323%2C%201040%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Vita Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 10 Filip Kutev Street</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vita%20Hospital%2C%2010%20Filip%20Kutev%20Street%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="bg en" data-name="yard law co">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -512,6 +446,116 @@
           <p class="sv-links"><a class="sv-go" href="https://yardlaw.eu/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Yard%20Law%20Co%2C%2012%20Vitosha%20blvd.%2C%20en.%201%3B%20fl.2%3B%20ap.4%2C%201000%2C%20Sofia%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="4">4</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="bg en" data-name="acibadem city clinic university hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Acibadem City Clinic University Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 51B Nikola Vaptsarov Blvd</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Acibadem%20City%20Clinic%20University%20Hospital%2C%2051B%20Nikola%20Vaptsarov%20Blvd%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="bg en" data-name="medical center afrodita">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Medical Center Afrodita</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 15 Henrik Ibsen Street</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medical%20Center%20Afrodita%2C%2015%20Henrik%20Ibsen%20Street%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="bg en" data-name="umbalsm n.i. pirogov">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">UMBALSM N.I. Pirogov</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 21 Totleben Blvd</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=UMBALSM%20N.I.%20Pirogov%2C%2021%20Totleben%20Blvd%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="bg en" data-name="vita hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Vita Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 10 Filip Kutev Street</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vita%20Hospital%2C%2010%20Filip%20Kutev%20Street%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="dentist" id="svc-dentist">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="1">1</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="bg en" data-name="ribagindent">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">RIBAGINDENT</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; 23 Tvardishki prohod, Strelbishte</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=RIBAGINDENT%2C%2023%20Tvardishki%20prohod%2C%20Strelbishte%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="therapy" id="svc-therapy">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="1">1</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="bg en" data-name="eirene centre">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Eirene Centre</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; 113A Kesenova Gora, apartment 2</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Bulgarian</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Bulgaria, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/bulgaria-list-of-medical-facilities/bulgaria-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Eirene%20Centre%2C%20113A%20Kesenova%20Gora%2C%20apartment%202%2C%20Sofia%2C%20Bulgaria" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Sofia matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -534,6 +578,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
+      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers","therapy":"therapists"};
+      var LANG_LABEL={"bg":"Bulgarian","en":"English"};
+      var TOTAL=22;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

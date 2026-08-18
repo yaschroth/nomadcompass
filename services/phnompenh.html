@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -185,23 +198,19 @@
             <p class="sv-city-count">28 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Skyline_of_Phnom_Penh.jpg" target="_blank" rel="nofollow noopener">Photo: Mao Piseth (CC BY-SA 4.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Advance European Medicare Center (AEMC)</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 3, Street 240, Sangkat Chatumouk</p>
-          </div>
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (28)</option><option value="legal">Legal &amp; visa (11)</option><option value="doctor">Doctors &amp; clinics (9)</option><option value="therapy">Therapy &amp; counselling (5)</option><option value="dentist">Dentists (3)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="km">Khmer (28)</option><option value="en">English (27)</option><option value="zh">Chinese (1)</option><option value="fr">French (1)</option><option value="ja">Japanese (1)</option><option value="th">Thai (1)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
         </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff and are experienced in dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advance%20European%20Medicare%20Center%20(AEMC)%2C%20No.%203%2C%20Street%20240%2C%20Sangkat%20Chatumouk%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <p class="sv-count" id="svcCount">All <b>28</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="11">11</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="an lor law group">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -216,7 +225,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.anlor.legal/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=An%20Lor%20Law%20Group%2C%20Building%20%2336%20(PPIU%20Building)%20Level%209%2C%20St.%20169%2C%20Sangkat%20Veal%20Vong%2C%20Khan%207%20Makara%2C%20120307%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="andersen law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -231,7 +240,7 @@
           <p class="sv-links"><a class="sv-go" href="https://kh.andersen.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Andersen%20Law%20Office%2C%20Level%202%2C%20No.%2033%2C%20Street%20294%20(corner%20of%20Street%2029)%2C%20Sangkat%20Tonle%20Bassac%2C%20Khan%20Chamkarmorn%2C%20Phum%204%2C%20120101%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="bng legal">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -246,37 +255,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.bnglegal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bng%20Legal%2C%20No.100%2C%20TonleMekong%20Street%2C%20Sangkat%2FKhan%20Chroy%2C%20Changva%2C%2012110%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Calmette Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 3, Monivong Blvd, Sangkat Sras Chok, Khan Daun Penh</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">French</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical services in Cambodia, which records what each provider told the British Embassy. This is the one entry the list warns about rather than recommends: it says the &quot;language barrier is the main problem for foreigners&quot; and that &quot;many doctors speak French&quot;. It is listed here for French, not English. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Calmette%20Hospital%2C%20No.%203%2C%20Monivong%20Blvd%2C%20Sangkat%20Sras%20Chok%2C%20Khan%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Central Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 82A, Street 154</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;most of their staff are English speakers and they are experienced in dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Central%20Hospital%2C%20No.%2082A%2C%20Street%20154%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="csp associates law group">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -291,7 +270,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.cspalawfirm.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Csp%20Associates%20Law%20Group%2C%20No.%20163A%2C%20Street%20182%2C%20Sangkat%20Phsa%20Depo%201%2C%20Khan%20Tuol%20Kork%2C%2012040100%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="davies sm attorneys at law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -306,97 +285,7 @@
           <p class="sv-links"><a class="sv-go" href="https://daviessm-attorneys.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Davies%20Sm%20Attorneys%20At%20Law%2C%20Level%2017%20(Units%20F%2C%20G%2C%20H%2C%20I)%2C%20Time%20Square%203%2C%20St%20335%2C%20Beoung%20Kak%201%2C%20Toul%20Kork%2C%20120407%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">European Dental Clinic</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; No. 9, Street 306</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=European%20Dental%20Clinic%2C%20No.%209%2C%20Street%20306%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Intercare Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Olympia Medical Hub, Street 161, Sangkat Veal Vong, Khan 7 Makara</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Intercare%20Hospital%2C%20Olympia%20Medical%20Hub%2C%20Street%20161%2C%20Sangkat%20Veal%20Vong%2C%20Khan%207%20Makara%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Kamkikazer Mental Clinic</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; 18A Street 113</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kamkikazer%20Mental%20Clinic%2C%2018A%20Street%20113%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Kampuchea Paramed</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 253-255 Sisowath Quay, Daun Penh</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kampuchea%20Paramed%2C%20253-255%20Sisowath%20Quay%2C%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Khema Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Three sites: 18 Street 528 Toul Kork, 28 Street 294 Boeng Keng Kang 1, and Street Nakri, Sen Sok</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff (doctors) and have experience dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Khema%20Hospital%2C%20Three%20sites%3A%2018%20Street%20528%20Toul%20Kork%2C%2028%20Street%20294%20Boeng%20Keng%20Kang%201%2C%20and%20Street%20Nakri%2C%20Sen%20Sok%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Khmer-Soviet Friendship Hospital</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Street 271, Sangkat Tumnub Teuk, Khan Chamkar Morn</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Khmer-Soviet%20Friendship%20Hospital%2C%20Street%20271%2C%20Sangkat%20Tumnub%20Teuk%2C%20Khan%20Chamkar%20Morn%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="nexus law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -411,52 +300,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.nexuslawoffice.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nexus%20Law%20Office%2C%20Borei%20Chip%20Mong%20Landmark%20271%2C%20No.%20134%2C%20Commercial%20St.%2C%20Phum%20Praek%20Tanou%2C%20Sangkat%20Chak%20Angrae%20Leu%2C%20Khan%20Meanchey%2C%20120606%2C%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Pachem Dental Clinic</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; No. 170ABC, Norodom Blvd</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Pachem%20Dental%20Clinic%2C%20No.%20170ABC%2C%20Norodom%20Blvd%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Raffles Medical Phnom Penh</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 161, Street 51 (Pasteur Street), Khan Daun Penh</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff and are experienced in dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Raffles%20Medical%20Phnom%20Penh%2C%20No.%20161%2C%20Street%2051%20(Pasteur%20Street)%2C%20Khan%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Roomchang Dental Hospital</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; No. 4, Street 184, Khan Daun Penh</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Roomchang%20Dental%20Hospital%2C%20No.%204%2C%20Street%20184%2C%20Khan%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="royal cambode">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -471,22 +315,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Royal%20Cambode%2C%20No.%2012CE02%2C%2003%2C%20Street%20Beton%20(Boeung%20Kak%20Area)%2C%20Sangkat%20Srah%20Chak%2C%20Khan%20Daun%20Penh%2C%20120210%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Royal Phnom Penh Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 888, Russian Confederation Blvd (Street 110), Khan Sen Sok</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span><span class="sv-lang">Thai</span><span class="sv-lang">Japanese</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical services in Cambodia, which records what each provider told the British Embassy. This one says &quot;most of their staff are English speakers and they have available interpreters for Chinese, Thai, and Japanese&quot;. Read those three as interpreter cover the hospital arranges, not as staff who speak them. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Royal%20Phnom%20Penh%20Hospital%2C%20No.%20888%2C%20Russian%20Confederation%20Blvd%20(Street%20110)%2C%20Khan%20Sen%20Sok%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="sok siphana sethalay">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -501,7 +330,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.kinstellarsea.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sok%20Siphana%20Sethalay%2C%20Level%2033A%20GIA%20Tower%2C%20Diamond%20Island%2C%20120101%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="sotheaphal samnang sophy partners">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -516,7 +345,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.spp-legal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sotheaphal%20Samnang%20Sophy%20Partners%2C%20Koh%20Pich%20(Diamond%20Island%20City)%2C%20GIA%20Tower%2C%2025th%20Floor%2C%20%2313%2C%2015%2C%20Street%20Sopheak%20Mongkul%2C%20Sangkat%20Tonle%20Bassac%2C%20Khan%20Chamk%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="spkl law office formerly sp khmer legal law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -531,37 +360,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.spkhmerlegal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Spkl%20Law%20Office%20Formerly%20Sp%20Khmer%20Legal%20Law%20Office%2C%20House%20no.%20483%2C%20Street%20Preah%20Sisowath%2C%20120207%2C%20Chaktomuk%20Commune%2C%20Daun%20Penh%20District%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Sunrise Japan Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 177E, Kola Loum Street, Khan Chroy Changvar</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff and they have experience dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sunrise%20Japan%20Hospital%2C%20No.%20177E%2C%20Kola%20Loum%20Street%2C%20Khan%20Chroy%20Changvar%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-therapy">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
-          <div>
-            <h3 class="sv-name">Sunrise Mental Clinic</h3>
-            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; No. 112, Street 432, Sangkat Toul Tum Poung II, Khan Chamkar Morn</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sunrise%20Mental%20Clinic%2C%20No.%20112%2C%20Street%20432%2C%20Sangkat%20Toul%20Tum%20Poung%20II%2C%20Khan%20Chamkar%20Morn%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="km en" data-name="t s m law group">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -576,7 +375,197 @@
           <p class="sv-links"><a class="sv-go" href="https://www.tsmlawgroup.com.kh" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=T%20S%20M%20Law%20Group%2C%20No.%2012%2C%20St.%20466%2C%20Sangkat%20Tonle%20Bassac%2C%20Khan%20Chamkarmon%2C%20120101%2C%20Phnom%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
+          </div>
+        </section>
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="9">9</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="advance european medicare center (aemc)">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Advance European Medicare Center (AEMC)</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 3, Street 240, Sangkat Chatumouk</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff and are experienced in dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advance%20European%20Medicare%20Center%20(AEMC)%2C%20No.%203%2C%20Street%20240%2C%20Sangkat%20Chatumouk%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km fr" data-name="calmette hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Calmette Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 3, Monivong Blvd, Sangkat Sras Chok, Khan Daun Penh</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">French</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical services in Cambodia, which records what each provider told the British Embassy. This is the one entry the list warns about rather than recommends: it says the &quot;language barrier is the main problem for foreigners&quot; and that &quot;many doctors speak French&quot;. It is listed here for French, not English. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Calmette%20Hospital%2C%20No.%203%2C%20Monivong%20Blvd%2C%20Sangkat%20Sras%20Chok%2C%20Khan%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="central hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Central Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 82A, Street 154</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;most of their staff are English speakers and they are experienced in dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Central%20Hospital%2C%20No.%2082A%2C%20Street%20154%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="intercare hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Intercare Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Olympia Medical Hub, Street 161, Sangkat Veal Vong, Khan 7 Makara</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Intercare%20Hospital%2C%20Olympia%20Medical%20Hub%2C%20Street%20161%2C%20Sangkat%20Veal%20Vong%2C%20Khan%207%20Makara%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="kampuchea paramed">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Kampuchea Paramed</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 253-255 Sisowath Quay, Daun Penh</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kampuchea%20Paramed%2C%20253-255%20Sisowath%20Quay%2C%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="khema hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Khema Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Three sites: 18 Street 528 Toul Kork, 28 Street 294 Boeng Keng Kang 1, and Street Nakri, Sen Sok</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff (doctors) and have experience dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Khema%20Hospital%2C%20Three%20sites%3A%2018%20Street%20528%20Toul%20Kork%2C%2028%20Street%20294%20Boeng%20Keng%20Kang%201%2C%20and%20Street%20Nakri%2C%20Sen%20Sok%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="raffles medical phnom penh">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Raffles Medical Phnom Penh</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 161, Street 51 (Pasteur Street), Khan Daun Penh</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff and are experienced in dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Raffles%20Medical%20Phnom%20Penh%2C%20No.%20161%2C%20Street%2051%20(Pasteur%20Street)%2C%20Khan%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en zh th ja" data-name="royal phnom penh hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Royal Phnom Penh Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 888, Russian Confederation Blvd (Street 110), Khan Sen Sok</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span><span class="sv-lang">Chinese</span><span class="sv-lang">Thai</span><span class="sv-lang">Japanese</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical services in Cambodia, which records what each provider told the British Embassy. This one says &quot;most of their staff are English speakers and they have available interpreters for Chinese, Thai, and Japanese&quot;. Read those three as interpreter cover the hospital arranges, not as staff who speak them. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Royal%20Phnom%20Penh%20Hospital%2C%20No.%20888%2C%20Russian%20Confederation%20Blvd%20(Street%20110)%2C%20Khan%20Sen%20Sok%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="km en" data-name="sunrise japan hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Sunrise Japan Hospital</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; No. 177E, Kola Loum Street, Khan Chroy Changvar</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical and dental services in Cambodia, which records what each provider told the British Embassy. This one is listed as: &quot;they have English-speaking staff and they have experience dealing with foreigners&quot;. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sunrise%20Japan%20Hospital%2C%20No.%20177E%2C%20Kola%20Loum%20Street%2C%20Khan%20Chroy%20Changvar%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="therapy" id="svc-therapy">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="5">5</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="km en" data-name="kamkikazer mental clinic">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Kamkikazer Mental Clinic</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; 18A Street 113</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kamkikazer%20Mental%20Clinic%2C%2018A%20Street%20113%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="km en" data-name="khmer-soviet friendship hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Khmer-Soviet Friendship Hospital</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; Street 271, Sangkat Tumnub Teuk, Khan Chamkar Morn</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Khmer-Soviet%20Friendship%20Hospital%2C%20Street%20271%2C%20Sangkat%20Tumnub%20Teuk%2C%20Khan%20Chamkar%20Morn%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="km en" data-name="sunrise mental clinic">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
+          <div>
+            <h3 class="sv-name">Sunrise Mental Clinic</h3>
+            <p class="sv-meta">Therapy &amp; counselling&nbsp;&middot; No. 112, Street 432, Sangkat Toul Tum Poung II, Khan Chamkar Morn</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sunrise%20Mental%20Clinic%2C%20No.%20112%2C%20Street%20432%2C%20Sangkat%20Toul%20Tum%20Poung%20II%2C%20Khan%20Chamkar%20Morn%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="km en" data-name="the bamboo centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
           <div>
@@ -591,7 +580,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Bamboo%20Centre%2C%2030b%20Street%2021%2C%20Tonle%20Bassac%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-therapy">
+        <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="km en" data-name="tpo cambodia (transcultural psychological organization)">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
           <div>
@@ -606,6 +595,61 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=TPO%20Cambodia%20(Transcultural%20Psychological%20Organization)%2C%20No.%202-4%2C%20Oknha%20Vaing%20Road%20(Street%201952)%2C%20Sangkat%20Phnom%20Penh%20Thmey%2C%20Khan%20Sen%20Sok%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="dentist" id="svc-dentist">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="3">3</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="km en" data-name="european dental clinic">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">European Dental Clinic</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; No. 9, Street 306</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=European%20Dental%20Clinic%2C%20No.%209%2C%20Street%20306%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="km en" data-name="pachem dental clinic">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">Pachem Dental Clinic</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; No. 170ABC, Norodom Blvd</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Pachem%20Dental%20Clinic%2C%20No.%20170ABC%2C%20Norodom%20Blvd%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="km en" data-name="roomchang dental hospital">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">Roomchang Dental Hospital</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; No. 4, Street 184, Khan Daun Penh</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Khmer</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of English-speaking doctors and medical facilities in Cambodia. The claim is roster-level: this entry carries no language sentence of its own, only the heading the list is published under. The FCDO publishes the list without endorsing anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/cambodia-list-of-medical-and-dental-services--2/medical-and-dental-services-and-psychiatric-care-in-cambodia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Roomchang%20Dental%20Hospital%2C%20No.%204%2C%20Street%20184%2C%20Khan%20Daun%20Penh%2C%20Phnom%20Penh%2C%20Cambodia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Phnom Penh matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -628,6 +672,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
+      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers","therapy":"therapists"};
+      var LANG_LABEL={"zh":"Chinese","en":"English","fr":"French","ja":"Japanese","km":"Khmer","th":"Thai"};
+      var TOTAL=28;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

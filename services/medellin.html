@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -183,8 +196,19 @@
             <p class="sv-city-count">23 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Medell%C3%ADn,_Robledo,_2023-07_CN-05.jpg" target="_blank" rel="nofollow noopener">Photo: Steffen Schmitz (CC BY-SA 4.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-legal">
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (23)</option><option value="legal">Legal &amp; visa (10)</option><option value="dentist">Dentists (7)</option><option value="doctor">Doctors &amp; clinics (6)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (23)</option><option value="es">Spanish (23)</option><option value="fr">French (1)</option><option value="de">German (1)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
+        </div>
+        <p class="sv-count" id="svcCount">All <b>23</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="10">10</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="ce ortiz y abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -199,52 +223,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ce%20Ortiz%20Y%20Abogados%2C%20Cra%2043%20A%20No%201%2C%2050%20ed%20san%20Fernando%20plaza%2C%20Torre%203%20of%20701%2C%2000000%2C%20Medellin%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Clinica Medellin S.A.S</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Calle 7 # 39-290</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Colombia, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it. The list spells it &quot;Clibnica&quot;.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/colombia-list-of-medical-facilities/list-of-medical-facilities-in-colombia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Medellin%20S.A.S%2C%20Calle%207%20%23%2039-290%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Hospital General de Medellin</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Carrera 48 no 32-102</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Colombia, where its English column reads &quot;Some&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/colombia-list-of-medical-facilities/list-of-medical-facilities-in-colombia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20General%20de%20Medellin%2C%20Carrera%2048%20no%2032-102%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Hospital Pablo Tobon Uribe</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Calle 78B # 69-240</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Colombia, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/colombia-list-of-medical-facilities/list-of-medical-facilities-in-colombia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Pablo%20Tobon%20Uribe%2C%20Calle%2078B%20%23%2069-240%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="ibandcla">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -259,7 +238,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.ibandcla.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ibandcla%2C%20CARRERA%2088A%20N%2034A%2031%2C%20Senderos%20de%20a%20Almeria%20Int%20501%2C%20050032%2C%20MEDELLIN%2C%20ANTIOQUIA%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="lynceus law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -274,7 +253,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.lynceuslawfirm.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lynceus%20Law%20Firm%2C%20Calle%2026%20%2379%2C%20239%2C%20050025%2C%20Medellin%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="molina diaz abogados sas">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -289,7 +268,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.molinadiazabogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Molina%20Diaz%20Abogados%20Sas%2C%20Calle%2056%20No%2047%2C%2014%20Oficina%20301%2C%20Edificio%20Apabi%2C%20050010%2C%20Medellin%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="parrado cossio abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -304,7 +283,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.parradoabogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Parrado%20Cossio%20Abogados%2C%20Cra%2025%20A%201%2C%2031%20OF%201408%2C%20Parque%20Empresarial%20El%20Tesoro%2C%20050021%2C%20Medellin%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="rada lawyers colombia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -319,67 +298,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.lawyerscolombia.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rada%20Lawyers%20Colombia%2C%20carrera%2040A%2011b%2054%2C%2005001%2C%20Medellin%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://clinicaartica.com/en/" target="_blank" rel="nofollow noopener">Clinica Artica</a></h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; Near Parque Lleras, El Poblado</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">Publishes an English page stating its dentist can treat you in English.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://clinicaartica.com/en/" target="_blank" rel="nofollow noopener">clinicaartica.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://clinicaartica.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Artica%2C%20Near%20Parque%20Lleras%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://doctorsforexpats.com/medellin" target="_blank" rel="nofollow noopener">DoctorsForExpats</a></h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; El Poblado and Laureles, home visits</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">German</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">States doctors working in German, English and French, by telemedicine or home visit.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://doctorsforexpats.com/medellin" target="_blank" rel="nofollow noopener">doctorsforexpats.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://doctorsforexpats.com/medellin" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=DoctorsForExpats%2C%20El%20Poblado%20and%20Laureles%2C%20home%20visits%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://internationalsmiles.co/" target="_blank" rel="nofollow noopener">International Smiles</a></h3>
-            <p class="sv-meta">Dentists</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">States bilingual dental professionals treating local and international patients.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://internationalsmiles.co/" target="_blank" rel="nofollow noopener">internationalsmiles.co</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://internationalsmiles.co/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=International%20Smiles%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://medellindentalsolutions.com/english-speaking-dentist/" target="_blank" rel="nofollow noopener">Medellin Dental Solutions</a></h3>
-            <p class="sv-meta">Dentists</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">States fluent English-speaking dentists and offers translation and transport help. Dental-tourism orientation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://medellindentalsolutions.com/english-speaking-dentist/" target="_blank" rel="nofollow noopener">medellindentalsolutions.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://medellindentalsolutions.com/english-speaking-dentist/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medellin%20Dental%20Solutions%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es" data-name="medellin lawyer">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -394,7 +313,7 @@
           <p class="sv-links"><a class="sv-go" href="https://medellinlawyer.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medellin%20Lawyer%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es" data-name="owen taylor law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -409,7 +328,7 @@
           <p class="sv-links"><a class="sv-go" href="https://owentaylorlaw.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Owen%20Taylor%20Law%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es" data-name="restrepo legal">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -424,7 +343,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.restrepolegal.co/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Restrepo%20Legal%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es" data-name="stanford baker &amp; associates">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -439,37 +358,57 @@
           <p class="sv-links"><a class="sv-go" href="https://www.stanfordbaker.com/immigration-lawyers-in-colombia" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Stanford%20Baker%20%26%20Associates%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+          </div>
+        </section>
+      <section class="svc-group" data-cat="dentist" id="svc-dentist">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="7">7</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="clinica artica">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
-            <h3 class="sv-name"><a href="https://urgentcarecolombia.com/" target="_blank" rel="nofollow noopener">Urgent Care Colombia</a></h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Cra. 32 #13-49, El Poblado</p>
+            <h3 class="sv-name"><a href="https://clinicaartica.com/en/" target="_blank" rel="nofollow noopener">Clinica Artica</a></h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; Near Parque Lleras, El Poblado</p>
           </div>
         </div>
         <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">Advertises English-speaking doctors for virtual and in-person urgent care.</p>
+        <p class="sv-note">Publishes an English page stating its dentist can treat you in English.</p>
         <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://urgentcarecolombia.com/" target="_blank" rel="nofollow noopener">urgentcarecolombia.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://urgentcarecolombia.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Urgent%20Care%20Colombia%2C%20Cra.%2032%20%2313-49%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://clinicaartica.com/en/" target="_blank" rel="nofollow noopener">clinicaartica.com</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://clinicaartica.com/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Artica%2C%20Near%20Parque%20Lleras%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="international smiles">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
-            <h3 class="sv-name">Clinica Medellin, El Poblado</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Calle 7 # 39-290, El Poblado</p>
+            <h3 class="sv-name"><a href="https://internationalsmiles.co/" target="_blank" rel="nofollow noopener">International Smiles</a></h3>
+            <p class="sv-meta">Dentists</p>
           </div>
         </div>
         <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">Listed in a guide to Medellin hospitals for English speakers. High-complexity hospital with an El Poblado site.</p>
+        <p class="sv-note">States bilingual dental professionals treating local and international patients.</p>
         <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://blog.saludyvos.com/top-hospitals-in-medellin-for-english-speakers/" target="_blank" rel="nofollow noopener">blog.saludyvos.com</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Medellin%2C%20El%20Poblado%2C%20Calle%207%20%23%2039-290%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://internationalsmiles.co/" target="_blank" rel="nofollow noopener">internationalsmiles.co</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://internationalsmiles.co/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=International%20Smiles%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="medellin dental solutions">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://medellindentalsolutions.com/english-speaking-dentist/" target="_blank" rel="nofollow noopener">Medellin Dental Solutions</a></h3>
+            <p class="sv-meta">Dentists</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">States fluent English-speaking dentists and offers translation and transport help. Dental-tourism orientation.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://medellindentalsolutions.com/english-speaking-dentist/" target="_blank" rel="nofollow noopener">medellindentalsolutions.com</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://medellindentalsolutions.com/english-speaking-dentist/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medellin%20Dental%20Solutions%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="clinica odontologica viena">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -484,7 +423,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Odontologica%20Viena%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="colombia care dental">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -499,7 +438,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Colombia%20Care%20Dental%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="dental specialists clinica liv">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -514,7 +453,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dental%20Specialists%20Clinica%20Liv%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en es" data-name="oralimagen">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -529,6 +468,106 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Oralimagen%2C%20Laureles%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="6">6</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="clinica medellin s.a.s">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Clinica Medellin S.A.S</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Calle 7 # 39-290</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Colombia, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it. The list spells it &quot;Clibnica&quot;.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/colombia-list-of-medical-facilities/list-of-medical-facilities-in-colombia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Medellin%20S.A.S%2C%20Calle%207%20%23%2039-290%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="hospital general de medellin">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Hospital General de Medellin</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Carrera 48 no 32-102</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Colombia, where its English column reads &quot;Some&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/colombia-list-of-medical-facilities/list-of-medical-facilities-in-colombia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20General%20de%20Medellin%2C%20Carrera%2048%20no%2032-102%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="hospital pablo tobon uribe">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Hospital Pablo Tobon Uribe</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Calle 78B # 69-240</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Colombia, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/colombia-list-of-medical-facilities/list-of-medical-facilities-in-colombia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Pablo%20Tobon%20Uribe%2C%20Calle%2078B%20%23%2069-240%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en de fr es" data-name="doctorsforexpats">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://doctorsforexpats.com/medellin" target="_blank" rel="nofollow noopener">DoctorsForExpats</a></h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; El Poblado and Laureles, home visits</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">German</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">States doctors working in German, English and French, by telemedicine or home visit.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://doctorsforexpats.com/medellin" target="_blank" rel="nofollow noopener">doctorsforexpats.com</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://doctorsforexpats.com/medellin" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=DoctorsForExpats%2C%20El%20Poblado%20and%20Laureles%2C%20home%20visits%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en es" data-name="urgent care colombia">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name"><a href="https://urgentcarecolombia.com/" target="_blank" rel="nofollow noopener">Urgent Care Colombia</a></h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Cra. 32 #13-49, El Poblado</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">Advertises English-speaking doctors for virtual and in-person urgent care.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://urgentcarecolombia.com/" target="_blank" rel="nofollow noopener">urgentcarecolombia.com</a></p>
+          <p class="sv-links"><a class="sv-go" href="https://urgentcarecolombia.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Urgent%20Care%20Colombia%2C%20Cra.%2032%20%2313-49%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en es" data-name="clinica medellin, el poblado">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Clinica Medellin, El Poblado</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Calle 7 # 39-290, El Poblado</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">Listed in a guide to Medellin hospitals for English speakers. High-complexity hospital with an El Poblado site.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://blog.saludyvos.com/top-hospitals-in-medellin-for-english-speakers/" target="_blank" rel="nofollow noopener">blog.saludyvos.com</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Medellin%2C%20El%20Poblado%2C%20Calle%207%20%23%2039-290%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Colombia" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Medellín matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -551,6 +590,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa"};
+      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers"};
+      var LANG_LABEL={"en":"English","fr":"French","de":"German","es":"Spanish"};
+      var TOTAL=23;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>

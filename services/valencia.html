@@ -149,6 +149,19 @@
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
+    /* The filter sits with the listing, not in the header: it acts on what is below it. */
+    .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
+    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group.is-hidden { display: none; }
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+      font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
+      padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+    .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+      border-radius: 8px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); flex: 0 0 auto; }
+    .svc-group-ico svg { width: 17px; height: 17px; }
+    .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
+      font-weight: 700; color: var(--color-stone); }
+    .sv-card.is-hidden { display: none; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -184,8 +197,19 @@
             <p class="sv-city-count">27 providers</p>
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Ciudad_de_las_Artes_y_las_Ciencias,_Valencia.jpg" target="_blank" rel="nofollow noopener">Photo: Maribelle71 (CC BY 2.0)</a>
         </header>
-        <div class="sv-grid">
-      <article class="sv-card sv-c-legal">
+
+        <div class="sv-controls svc-controls">
+          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (27)</option><option value="legal">Legal &amp; visa (14)</option><option value="doctor">Doctors &amp; clinics (5)</option><option value="dentist">Dentists (4)</option><option value="translator">Translators &amp; interpreters (4)</option></select></div>
+          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="es">Spanish (27)</option><option value="en">English (10)</option><option value="it">Italian (8)</option><option value="fr">French (7)</option><option value="de">German (3)</option></select></div>
+          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
+          <button type="button" class="sv-reset" id="svcReset">Reset</button>
+        </div>
+        <p class="sv-count" id="svcCount">All <b>27</b> providers, grouped by service.</p>
+
+      <section class="svc-group" data-cat="legal" id="svc-legal">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="14">14</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="a scarante partners law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -200,7 +224,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.studiolegalescarante.info" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=A%20Scarante%20Partners%20Law%20Firm%2C%20Plaza%20Ramon%20Ibars%2C%207%2C%2046920%2C%20Mislata%20(Valencia)%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="abogado augusto scerrato">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -215,7 +239,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.european-lawyer.net" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Abogado%20Augusto%20Scerrato%2C%20Calle%20Cirilo%20Amoros%20n.%2076%2C%20floor%206%20door%2012%2C%2046004%2C%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="albinana moscardo abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -230,7 +254,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.lawyersinvalencia.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Albinana%20Moscardo%20Abogados%2C%20C%2F%20Padilla%2C%201%2C%202%2C%2046001%2C%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="it es" data-name="alessandro scarante">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -245,7 +269,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Alessandro%20Scarante%2C%20Pl.%2C%20Ramon%20Ibars%2C%207%2C%2046920%20MISLATA%2C%20(VALENCIA%5C%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="it es" data-name="augusto spadini">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -260,7 +284,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Augusto%20Spadini%2C%20C%2F%20Conde%20Salvatierra%2C%20de%20Alava%2039%2C%201%20%2C%203%20%2C%2046004%20VALENCIA%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="bonmati blanc benjamin">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -275,52 +299,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=BONMATI%20BLANC%20Benjamin%2C%20C%2F%20Colon%2C%2084%20-%204%2C%2046004%20Valence%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. Blanca Quesada Ocete</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Hospital Casa la Salud, C/ del Dr. Manuel Candela 41, 46021</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the German consulate general in Barcelona's selection of German-speaking doctors, under internal medicine with cardiology. The entry states the languages as Spanish, German and English. The consulate says the list is ordered by specialty, that it does not name every local doctor but gives a representative selection, and that all of it is without obligation and without warranty.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1770992/eba6411ad299225a3ee5b5856ea7ac26/dd-aerzteliste-barcelona-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Blanca%20Quesada%20Ocete%2C%20Hospital%20Casa%20la%20Salud%2C%20C%2F%20del%20Dr.%20Manuel%20Candela%2041%2C%2046021%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. German Gomez Serrano</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; Av. Cortes Valencianas 39, E2-H, 46015</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the German consulate general in Barcelona's selection of German-speaking doctors, under dentistry, implantology and aesthetic dentistry. The list itself is the German-language claim; the entry names no further languages. The consulate says the list is ordered by specialty, that it does not name every local doctor but gives a representative selection, and that all of it is without obligation and without warranty.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1770992/eba6411ad299225a3ee5b5856ea7ac26/dd-aerzteliste-barcelona-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20German%20Gomez%20Serrano%2C%20Av.%20Cortes%20Valencianas%2039%2C%20E2-H%2C%2046015%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. Laura Marti Murciano</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; C/ Guillem de Castro 83, 46008</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the German consulate general in Barcelona's selection of German-speaking doctors, under gynaecology. The list itself is the German-language claim; the entry names no further languages. The consulate says the list is ordered by specialty, that it does not name every local doctor but gives a representative selection, and that all of it is without obligation and without warranty.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1770992/eba6411ad299225a3ee5b5856ea7ac26/dd-aerzteliste-barcelona-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Laura%20Marti%20Murciano%2C%20C%2F%20Guillem%20de%20Castro%2083%2C%2046008%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="dwf rcd rousaud costas duran s l p">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -335,22 +314,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.rcd.legal/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dwf%20Rcd%20Rousaud%20Costas%20Duran%20S%20L%20P%2C%20Colon%2C%2031%2C%2046004%2C%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-translator">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
-          <div>
-            <h3 class="sv-name">Florentino Munoz Estupina</h3>
-            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; C/ SAN FRANCESC 45</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Florentino%20Munoz%20Estupina%2C%20C%2F%20SAN%20FRANCESC%2045%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="gbassi senakpon">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -365,7 +329,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=GBASSI%20Senakpon%2C%20Calle%20Colon%2C4-3%20A%2C%2046004%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="it es" data-name="gianfraco spada">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -380,52 +344,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Gianfraco%20Spada%2C%20C%2F%20ADRESSADORS%2C%2046001%20VALENCIA%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Hospital Quiron Salud Valencia</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Avenida Blasco Ibanez 14</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Spain, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/spain-list-of-medical-facilitiespractitioners/spain-medical-facilities-and-practitioners" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Quiron%20Salud%20Valencia%2C%20Avenida%20Blasco%20Ibanez%2014%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-doctor">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">IMED Hospital Valencia</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Avenida de la Ilustracion 1, Burjassot (greater Valencia)</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Spain, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/spain-list-of-medical-facilitiespractitioners/spain-medical-facilities-and-practitioners" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=IMED%20Hospital%20Valencia%2C%20Avenida%20de%20la%20Ilustracion%201%2C%20Burjassot%20(greater%20Valencia)%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">LURQUIN Jessica</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; Av. de les Corts Valencianes, 13, bajo izquierda, 46980 Paterna</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the French embassy in Spain's list of francophone professionals, under &quot;Liste des avocats de Seville&quot;, as a dentist. The embassy says the list is non-exhaustive and given for information only, that it does not engage the administration on the quality of the services or the level of the fees, and that the choice of practitioner is free.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://es.diplomatie.gouv.fr/fr/liste-de-notoriete" target="_blank" rel="nofollow noopener">es.diplomatie.gouv.fr</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=LURQUIN%20Jessica%2C%20Av.%20de%20les%20Corts%20Valencianes%2C%2013%2C%20bajo%20izquierda%2C%2046980%20Paterna%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="marco anai">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -440,37 +359,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MARCO%20Anai%2C%20c%2F%20Marques%20de%20dos%20Aguas%2C%205%202%20-3a%2C%2046002%20Valence%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-translator">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
-          <div>
-            <h3 class="sv-name">Maria Luz Camara Hernando</h3>
-            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; AVDA. PRIMADO REIG 83, P.TA 6</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maria%20Luz%20Camara%20Hernando%2C%20AVDA.%20PRIMADO%20REIG%2083%2C%20P.TA%206%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-translator">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
-          <div>
-            <h3 class="sv-name">Marta Marcelli</h3>
-            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; C/ de la Republica de la Guinea Ecuatorial n. 6-4 A</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Marta%20Marcelli%2C%20C%2F%20de%20la%20Republica%20de%20la%20Guinea%20Ecuatorial%20n.%206-4%20A%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="mercier sophie">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -485,22 +374,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MERCIER%20Sophie%2C%20Calle%20Colon%2040-1-1%2C%2046004%20Valence%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Paolo Collalti</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; C/ Mar de los, Sargazos n 12,, 46185 Pobla de, Vallbona</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the Italian consulate general in Barcelona's list of doctors and health professionals who have deposited their signature at the consulate. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2025/03/Elenco-dei-medici-18032025.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Paolo%20Collalti%2C%20C%2F%20Mar%20de%20los%2C%20Sargazos%20n%2012%2C%2C%2046185%20Pobla%20de%2C%20Vallbona%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="rsm spain">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -515,22 +389,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.rsm.global/spain/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rsm%20Spain%2C%20Avda.%20Cardenal%20Benlloch%2C%2067%2C%20planta%206%2C%2046021%2C%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-dentist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">SALOM Ricardo</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; C/ Jesus, 81 - bajo (junto finca Roja), 46007 Valencia</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the French embassy in Spain's list of francophone professionals, under &quot;Liste des avocats de Seville&quot;, as a dentist. The embassy says the list is non-exhaustive and given for information only, that it does not engage the administration on the quality of the services or the level of the fees, and that the choice of practitioner is free.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://es.diplomatie.gouv.fr/fr/liste-de-notoriete" target="_blank" rel="nofollow noopener">es.diplomatie.gouv.fr</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SALOM%20Ricardo%2C%20C%2F%20Jesus%2C%2081%20-%20bajo%20(junto%20finca%20Roja)%2C%2046007%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="sandra marquez abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -545,22 +404,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.sandramarquezabogados.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sandra%20Marquez%20Abogados%2C%20C.%20de%20Sant%20Vicent%20Martir%2C%20112%2C%2046007%2C%20valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-translator">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
-          <div>
-            <h3 class="sv-name">Silvia Ponce Gonzalez</h3>
-            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; C/ BURRIANA 26, 12</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
-        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Silvia%20Ponce%20Gonzalez%2C%20C%2F%20BURRIANA%2026%2C%2012%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-      <article class="sv-card sv-c-legal">
+        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="es en" data-name="vicente luis bernat issenjou abogado">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -575,7 +419,72 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vicente%20Luis%20Bernat%20Issenjou%20Abogado%2C%20C%2F%20General%20San%20Martin%207%2C%2020.%2C%2046004%2C%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-      <article class="sv-card sv-c-doctor">
+          </div>
+        </section>
+      <section class="svc-group" data-cat="doctor" id="svc-doctor">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="5">5</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de es en" data-name="dr. blanca quesada ocete">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Dr. Blanca Quesada Ocete</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Hospital Casa la Salud, C/ del Dr. Manuel Candela 41, 46021</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the German consulate general in Barcelona's selection of German-speaking doctors, under internal medicine with cardiology. The entry states the languages as Spanish, German and English. The consulate says the list is ordered by specialty, that it does not name every local doctor but gives a representative selection, and that all of it is without obligation and without warranty.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1770992/eba6411ad299225a3ee5b5856ea7ac26/dd-aerzteliste-barcelona-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Blanca%20Quesada%20Ocete%2C%20Hospital%20Casa%20la%20Salud%2C%20C%2F%20del%20Dr.%20Manuel%20Candela%2041%2C%2046021%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de es" data-name="dr. laura marti murciano">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Dr. Laura Marti Murciano</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; C/ Guillem de Castro 83, 46008</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the German consulate general in Barcelona's selection of German-speaking doctors, under gynaecology. The list itself is the German-language claim; the entry names no further languages. The consulate says the list is ordered by specialty, that it does not name every local doctor but gives a representative selection, and that all of it is without obligation and without warranty.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1770992/eba6411ad299225a3ee5b5856ea7ac26/dd-aerzteliste-barcelona-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Laura%20Marti%20Murciano%2C%20C%2F%20Guillem%20de%20Castro%2083%2C%2046008%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="hospital quiron salud valencia">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">Hospital Quiron Salud Valencia</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Avenida Blasco Ibanez 14</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Spain, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/spain-list-of-medical-facilitiespractitioners/spain-medical-facilities-and-practitioners" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Quiron%20Salud%20Valencia%2C%20Avenida%20Blasco%20Ibanez%2014%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="es en" data-name="imed hospital valencia">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
+          <div>
+            <h3 class="sv-name">IMED Hospital Valencia</h3>
+            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Avenida de la Ilustracion 1, Burjassot (greater Valencia)</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Spanish</span><span class="sv-lang">English</span></p>
+        <p class="sv-note">On the UK FCDO's published list of medical facilities in Spain, where its English column reads &quot;Yes&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/spain-list-of-medical-facilitiespractitioners/spain-medical-facilities-and-practitioners" target="_blank" rel="nofollow noopener">gov.uk</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=IMED%20Hospital%20Valencia%2C%20Avenida%20de%20la%20Ilustracion%201%2C%20Burjassot%20(greater%20Valencia)%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr es" data-name="vidal francoise">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -590,6 +499,141 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=VIDAL%20Francoise%2C%20c%2F%20Bachiller%2C%2028%2C%2015%2C%2046010%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="dentist" id="svc-dentist">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="4">4</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="de es" data-name="dr. german gomez serrano">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">Dr. German Gomez Serrano</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; Av. Cortes Valencianas 39, E2-H, 46015</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the German consulate general in Barcelona's selection of German-speaking doctors, under dentistry, implantology and aesthetic dentistry. The list itself is the German-language claim; the entry names no further languages. The consulate says the list is ordered by specialty, that it does not name every local doctor but gives a representative selection, and that all of it is without obligation and without warranty.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://spanien.diplo.de/resource/blob/1770992/eba6411ad299225a3ee5b5856ea7ac26/dd-aerzteliste-barcelona-data.pdf" target="_blank" rel="nofollow noopener">spanien.diplo.de</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20German%20Gomez%20Serrano%2C%20Av.%20Cortes%20Valencianas%2039%2C%20E2-H%2C%2046015%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="fr es" data-name="lurquin jessica">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">LURQUIN Jessica</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; Av. de les Corts Valencianes, 13, bajo izquierda, 46980 Paterna</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the French embassy in Spain's list of francophone professionals, under &quot;Liste des avocats de Seville&quot;, as a dentist. The embassy says the list is non-exhaustive and given for information only, that it does not engage the administration on the quality of the services or the level of the fees, and that the choice of practitioner is free.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://es.diplomatie.gouv.fr/fr/liste-de-notoriete" target="_blank" rel="nofollow noopener">es.diplomatie.gouv.fr</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=LURQUIN%20Jessica%2C%20Av.%20de%20les%20Corts%20Valencianes%2C%2013%2C%20bajo%20izquierda%2C%2046980%20Paterna%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it es" data-name="paolo collalti">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">Paolo Collalti</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; C/ Mar de los, Sargazos n 12,, 46185 Pobla de, Vallbona</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the Italian consulate general in Barcelona's list of doctors and health professionals who have deposited their signature at the consulate. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2025/03/Elenco-dei-medici-18032025.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Paolo%20Collalti%2C%20C%2F%20Mar%20de%20los%2C%20Sargazos%20n%2012%2C%2C%2046185%20Pobla%20de%2C%20Vallbona%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="fr es" data-name="salom ricardo">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
+          <div>
+            <h3 class="sv-name">SALOM Ricardo</h3>
+            <p class="sv-meta">Dentists&nbsp;&middot; C/ Jesus, 81 - bajo (junto finca Roja), 46007 Valencia</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">French</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the French embassy in Spain's list of francophone professionals, under &quot;Liste des avocats de Seville&quot;, as a dentist. The embassy says the list is non-exhaustive and given for information only, that it does not engage the administration on the quality of the services or the level of the fees, and that the choice of practitioner is free.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://es.diplomatie.gouv.fr/fr/liste-de-notoriete" target="_blank" rel="nofollow noopener">es.diplomatie.gouv.fr</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SALOM%20Ricardo%2C%20C%2F%20Jesus%2C%2081%20-%20bajo%20(junto%20finca%20Roja)%2C%2046007%20Valencia%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+      <section class="svc-group" data-cat="translator" id="svc-translator">
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>Translators &amp; interpreters<span class="svc-group-n" data-total="4">4</span></h2>
+          <div class="sv-grid">
+        <article class="sv-card sv-c-translator" data-cat="translator" data-lang="it es" data-name="florentino munoz estupina">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <div>
+            <h3 class="sv-name">Florentino Munoz Estupina</h3>
+            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; C/ SAN FRANCESC 45</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Florentino%20Munoz%20Estupina%2C%20C%2F%20SAN%20FRANCESC%2045%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-translator" data-cat="translator" data-lang="it es" data-name="maria luz camara hernando">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <div>
+            <h3 class="sv-name">Maria Luz Camara Hernando</h3>
+            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; AVDA. PRIMADO REIG 83, P.TA 6</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maria%20Luz%20Camara%20Hernando%2C%20AVDA.%20PRIMADO%20REIG%2083%2C%20P.TA%206%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-translator" data-cat="translator" data-lang="it es" data-name="marta marcelli">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <div>
+            <h3 class="sv-name">Marta Marcelli</h3>
+            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; C/ de la Republica de la Guinea Ecuatorial n. 6-4 A</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Marta%20Marcelli%2C%20C%2F%20de%20la%20Republica%20de%20la%20Guinea%20Ecuatorial%20n.%206-4%20A%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+        <article class="sv-card sv-c-translator" data-cat="translator" data-lang="it es" data-name="silvia ponce gonzalez">
+        <div class="sv-head">
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <div>
+            <h3 class="sv-name">Silvia Ponce Gonzalez</h3>
+            <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; C/ BURRIANA 26, 12</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Italian</span><span class="sv-lang">Spanish</span></p>
+        <p class="sv-note">On the Italian consulate general in Barcelona's list of translators and interpreters, dated 13 May 2026. The consulate says it does not answer for the quality of the service, for how these professionals work or for the fees they charge, and that the list is not exhaustive.</p>
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://consbarcellona.esteri.it/wp-content/uploads/2026/05/traduttor-13-05-2026.pdf" target="_blank" rel="nofollow noopener">consbarcellona.esteri.it</a></p>
+          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Silvia%20Ponce%20Gonzalez%2C%20C%2F%20BURRIANA%2026%2C%2012%2C%20Valencia%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>
+          </div>
+        </section>
+        <div class="sv-empty is-hidden" id="svcEmpty">
+          <p>No provider in Valencia matches that combination.</p>
+          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
         </div>
       </section>
 
@@ -612,6 +656,62 @@
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
+  <script>
+    (function(){
+      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
+          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
+          empty=document.getElementById('svcEmpty');
+      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
+      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa","translator":"Translators & interpreters"};
+      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers","translator":"translators"};
+      var LANG_LABEL={"en":"English","fr":"French","de":"German","it":"Italian","es":"Spanish"};
+      var TOTAL=27;
+      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      function render(){
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        groups.forEach(function(g){
+          var n=0;
+          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
+            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
+              &&(lang==='all'||has(el,'data-lang',lang))
+              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+            el.classList.toggle('is-hidden',!ok);
+            if(ok)n++;
+          });
+          // A heading with nothing under it is worse than no heading, so an empty group goes too.
+          g.classList.toggle('is-hidden',n===0);
+          g.querySelector('.svc-group-n').textContent=n;
+          shown+=n;
+        });
+        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
+        var bits='';
+        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
+        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
+        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
+          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
+          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
+        empty.classList.toggle('is-hidden',shown>0);
+        try{
+          var u=new URL(window.location);
+          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
+      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      q.addEventListener('input',render);
+      document.getElementById('svcReset').addEventListener('click',function(){
+        catSel.value='all';langSel.value='all';q.value='';render();
+      });
+      // The question asked on the hub arrives in the URL, so this page opens on the same answer
+      // instead of dropping you into everything the city holds.
+      (function(){
+        var sp=new URLSearchParams(window.location.search),touched=false;
+        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
+        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
+        if(touched)render();
+      })();
+    })();
+  </script>
   <!-- cc -->
   <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
     <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>
