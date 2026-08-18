@@ -81,6 +81,15 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
     P.list(topLangs.slice(0, 3).map(([l, n]) => P.langName(l) + ' (' + n + ')')) +
     `, and every language claim on every page links to the source it was read on.`;
 
+  // The language pages are this hub's most specific children, and without a link from here they
+  // would be reachable only from the directory index.
+  const LANGS_FOR = (() => {
+    const f = path.join(ROOT, 'data', 'service-lang-pages.json');
+    if (!fs.existsSync(f)) return [];
+    return JSON.parse(fs.readFileSync(f, 'utf8')).filter((x) => x.service === cat).sort((a, b) => b.n - a.n);
+  })();
+  const langChips = LANGS_FOR.map((x) => `<a class="svh-lang" href="${x.url}">${esc(P.langName(x.language))}<span>${x.n}</span></a>`).join('');
+
   const countryBlocks = countries.map((country) => {
     const slugs = byCountry[country].slice().sort((a, b) => rowsFor(b).n - rowsFor(a).n || M.cities[a].name.localeCompare(M.cities[b].name));
     const total = slugs.reduce((s, x) => s + rowsFor(x).n, 0);
@@ -158,6 +167,14 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
       border-radius: 12px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); }
     .svh-ico svg { width: 24px; height: 24px; }
     .svh-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+    .svh-langs { margin: 0 0 var(--space-7); }
+    .svh-langs h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 0 var(--space-3); }
+    .svh-langs-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
+    a.svh-lang:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem .75rem;
+      background: #fff; color: var(--color-ink); border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); text-decoration: none; font-weight: 700; font-size: var(--text-sm); }
+    a.svh-lang:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svh-lang span { font-size: var(--text-xs); font-weight: 600; color: var(--color-stone); }
     .svh-country { margin: 0 0 var(--space-7); }
     .svh-country h2 { display: flex; align-items: baseline; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.3rem;
       margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
@@ -185,6 +202,11 @@ ${shell.headEnd}
         <h1><span class="svh-ico">${inlineIcon(CAT_ICON[cat])}</span>${esc(h1)}</h1>
         <p>${esc(standfirst)}</p>
       </header>
+
+      ${langChips ? `<nav class="svh-langs" aria-label="By language">
+        <h2>Pick a language</h2>
+        <div class="svh-langs-grid">${langChips}</div>
+      </nav>` : ''}
 
       ${countryBlocks}
 

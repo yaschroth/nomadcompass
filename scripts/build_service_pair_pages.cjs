@@ -133,6 +133,13 @@ const linkTo = (slug, category) => (WILL_EXIST.has(slug + '|' + category)
   ? '/services/' + slug + '/' + M.SERVICE_SLUGS[category]
   : '/services/' + slug);
 
+// The service-and-language pages, so a language section can point at the same language elsewhere.
+const LANG_PAGES = new Map();
+{
+  const f = path.join(ROOT, 'data', 'service-lang-pages.json');
+  if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => LANG_PAGES.set(x.service + '|' + x.language, x));
+}
+
 const written = [];
 const held = [];
 const usedTitles = new Set();
@@ -226,6 +233,14 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
           <div class="sv-grid">
         ${s.rows.map((r) => P.card(r, { icon, showCategory: false })).join('\n        ')}
           </div>
+          ${(() => {
+    // The same language elsewhere. Without this the fifteen service-and-language pages have one
+    // inbound link each, from their hub, and a page nothing points at is a page we do not publish.
+    const lp = s.lang ? LANG_PAGES.get(cat + '|' + s.lang) : null;
+    if (!lp || lp.cities < 2) return '';
+    const others = lp.cities - 1;
+    return `<p class="svp-more-lang"><a href="${lp.url}">${esc(P.langName(s.lang))}-speaking ${esc(P.catName(cat))} in ${others} other ${others === 1 ? 'city' : 'cities'} &rarr;</a></p>`;
+  })()}
         </section>`).join('\n        ')
     : `<div class="sv-grid">
         ${pair.rows.map((r) => P.card(r, { icon, showCategory: false })).join('\n        ')}
@@ -316,6 +331,7 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
     .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
     .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+    .svp-more-lang { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
     .svp-langbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-6); }
     .svp-lang { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
     .svp-lang h2 { display: flex; align-items: center; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.45rem;

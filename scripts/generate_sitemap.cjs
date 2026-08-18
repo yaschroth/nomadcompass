@@ -69,6 +69,14 @@ add('/legal-notice', '0.2', 'yearly');
     for (const p of hubs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.7', 'monthly');
     console.log('  services: ' + hubs.length + ' service hubs added');
   }
+  // A service in one language across cities: the answer to "German-speaking doctors", which no
+  // other page in the family is shaped like.
+  const langManifest = path.join(ROOT, 'data', 'service-lang-pages.json');
+  if (fs.existsSync(langManifest)) {
+    const langs = JSON.parse(fs.readFileSync(langManifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of langs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.7', 'monthly');
+    console.log('  services: ' + langs.length + ' service-and-language pages added');
+  }
 }
 
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
