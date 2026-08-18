@@ -81,6 +81,19 @@ for (const row of pages) {
         ' but no provider on the page is listed as working in it');
     }
 
+    // The search result is a surface too, and it was the one that failed. A reader looking for
+    // German-speaking doctors in Barcelona saw a title about English and French and never clicked
+    // the page holding eleven of them, so a language the page can serve has to be visible in the
+    // title or the description, not only in the body.
+    const localForSerp = M.LOCAL[pair.country];
+    const servable = Object.entries(held).filter(([l, n]) => l !== localForSerp && n >= 2).map(([l]) => l);
+    const inSerp = (code) => new RegExp('\\b' + M.LANGS[code] + '\\b').test(title + ' ' + desc);
+    const invisible = servable.filter((code) => !inSerp(code));
+    if (invisible.length) {
+      note(row.url, 'serves ' + invisible.map((c) => held[c] + ' providers in ' + M.LANGS[c]).join(', ') +
+        ', and neither the title nor the description says so');
+    }
+
     // A language on two or more of the page's providers has to be findable on the page itself, in
     // the heading or in a section heading. Two rows is the point at which it stops being a curiosity.
     const local = M.LOCAL[pair.country];

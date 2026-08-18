@@ -50,6 +50,7 @@ const MONEY = new Set(['legal', 'tax']);
 // as a heading that does. Google showed "English-speaking doctors in Barcelona" for the page that
 // holds eleven German-speaking ones, so a reader looking for German had no reason to click.
 const SKELETONS_ONE_LANGUAGE = [
+  (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}`,
   (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}, each with its source`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}, ${t.n} listed and checked ${t.month}`,
   (t) => `Where to find a ${t.lang1}-speaking ${t.singular} in ${t.city}: ${t.n} listed`,
@@ -57,13 +58,19 @@ const SKELETONS_ONE_LANGUAGE = [
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}: ${t.n} names and where they came from`,
   (t) => `${t.Service} in ${t.city} for ${t.lang1} speakers, ${t.n} with a cited source`,
 ];
+// Every one of these names at least two languages, and three where the page has them. A title that
+// says only "34 doctors in Barcelona, sorted by the language they work in" is what a searcher for
+// German-speaking doctors sees in the result list, and it gives them no reason to click on the page
+// that holds eleven of them. The title is the door; the door has to say what is behind it.
 const SKELETONS_MANY_LANGUAGES = [
-  (t) => `${t.Service} in ${t.city} who work in ${t.lang1}, ${t.lang2} or ${t.lang3 || t.lang1}: ${t.n} listed`,
-  (t) => `${t.n} ${t.service} in ${t.city} across ${t.langCount} languages, each with its source`,
-  (t) => `${t.Service} in ${t.city} by working language: ${t.lang1}, ${t.lang2} and ${t.langCount - 2} more`,
-  (t) => `${t.Service} in ${t.city} listed by working language, ${t.n} from ${t.publisher}`,
-  (t) => `${t.n} ${t.service} in ${t.city}, sorted by the language they work in`,
-  (t) => `${t.lang1}, ${t.lang2} or ${t.lang3 || t.lang2}-speaking ${t.service} in ${t.city}: ${t.n} listed`,
+  (t) => `${t.n} ${t.langList}-speaking ${t.service} in ${t.city}`,
+  (t) => `${t.langList}-speaking ${t.service} in ${t.city}: ${t.n} listed`,
+  (t) => `${t.Service} in ${t.city} who work in ${t.langList}: ${t.n} listed`,
+  (t) => `${t.n} ${t.service} in ${t.city}: ${t.langList}, each with its source`,
+  (t) => `${t.langList}-speaking ${t.service} in ${t.city}, ${t.n} listed`,
+  (t) => `${t.Service} in ${t.city} for ${t.langList} speakers, ${t.n} with sources`,
+  (t) => `${t.n} ${t.service} in ${t.city} working in ${t.langList}, checked ${t.month}`,
+  (t) => `${t.Service} in ${t.city}: ${t.langList}, ${t.n} names and their sources`,
 ];
 
 const hash = (s) => {
@@ -155,19 +162,33 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
     publisher: P.publisherOf(pair.sources[0].host).short,
     postcode: topArea ? topArea[0] : '',
     lang3: servable[2] ? P.langName(servable[2][0]) : '',
+    // The three biggest, which is as many as a title can carry. Everything else the page serves
+    // goes into the description, so no language is invisible in a search result.
+    langList: P.list(servable.slice(0, 3).map(([l]) => P.langName(l))),
     langCount: servable.length,
   };
   const pool = servable.length <= 1 ? SKELETONS_ONE_LANGUAGE : SKELETONS_MANY_LANGUAGES;
-  let title = '';
-  for (let i = 0; i < pool.length; i++) {
-    const cand = pool[(hash(page.url) + i) % pool.length](tokens);
-    if (!usedTitles.has(cand) && cand !== h1) { title = cand; break; }
-  }
-  if (!title) title = `${h1}, ${pair.n} listed with sources`;
+  // A title Google truncates at 60 characters is a title whose last words never appear in a result,
+  // and 288 of these ran past 75. Candidates are generated, then the shortest one that still fits is
+  // preferred, with the hash only choosing between those that fit so the family keeps its variety.
+  const candidates = pool
+    .map((fn, k) => ({ text: fn(tokens), k }))
+    .filter((c) => c.text !== h1 && !usedTitles.has(c.text));
+  const BUDGET = 60;
+  const fits = candidates.filter((c) => c.text.length <= BUDGET);
+  let title;
+  if (fits.length) title = fits[hash(page.url) % fits.length].text;
+  else if (candidates.length) title = candidates.slice().sort((a, b) => a.text.length - b.text.length)[0].text;
+  else title = `${h1}, ${pair.n} listed`;
   usedTitles.add(title);
 
-  const desc = `${pair.n} ${P.catName(cat)} in ${city.name} who work in ${P.list(langs)}` +
-    (topArea ? `, ${Object.keys(pair.areas).length > 1 ? 'across ' + Object.keys(pair.areas).length + ' postcodes' : 'in postcode ' + topArea[0]}` : '') +
+  // The other half of the search result, and it was still naming the headline two languages. Every
+  // language the page can serve is named here, with its count, even where the title had no room.
+  const descLangs = servable.length
+    ? P.list(servable.slice(0, 6).map(([l, n]) => P.langName(l) + ' (' + n + ')'))
+    : P.list(langs);
+  const desc = `${pair.n} ${P.catName(cat)} in ${city.name} who work in ${descLangs}` +
+    (topArea && Object.keys(pair.areas).length > 1 ? `, across ${Object.keys(pair.areas).length} postcodes` : '') +
     `. Every language claim names the source it came from.`;
 
   // --- listing --------------------------------------------------------------------------------
