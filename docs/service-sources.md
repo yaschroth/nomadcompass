@@ -38,3 +38,24 @@ therapy entries. It only opened after the reader learned to cut /Lang tags glued
 word: 157 of its lines carried one. Entries in Estepona, Mijas, Benalmadena, Torrox, Nerja,
 Sotogrande, Vejer, Palmones and Gibraltar are outside the index, and one dentist was left out
 because the address pairs a Granada city postcode with the town name Motril.
+
+### German consulate, Las Palmas de Gran Canaria (2026-08-18)
+
+List of German-speaking doctors, stand August 2026, covering the provinces of Las Palmas and
+Tenerife. Seventeen rows: Tenerife 13, Las Palmas 2, Fuerteventura 2. Maspalomas and Playa del
+Ingles were left out because they are their own resorts 50 km from Las Palmas de Gran Canaria, and
+Lanzarote and La Palma are not in the index.
+
+### German consulate general, Barcelona (2026-08-18)
+
+Selection of German-speaking doctors in the Barcelona consular district. Twenty-four rows across
+Barcelona (21) and Valencia (3), in three categories, and the first Catalan-language rows in the
+directory: the file states the languages per entry, so eleven of them carry Catalan, English,
+French or Italian rather than a blanket German.
+
+It needed two more repairs to the reader. Its objects all sit in one compressed object stream, and
+its text sits in literal strings that mean nothing until they go through a subset font table. The
+file also mismaps two of its own glyphs, K as a masculine ordinal and T as a backslash, which is
+legible from TEºNON for the Teknon clinic and restored by hand. Six entries were skipped because
+the name is set in a decorative font and cannot be read; two of those are listed under their
+practice name, which is readable.

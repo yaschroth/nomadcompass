@@ -169,6 +169,20 @@ for (const dict of fontDicts) {
   }
 }
 
+// Whether a font's codes start below the space character. That is the mark of a subset simple font
+// whose literal strings are meaningless until they go through its table, and it is what separates
+// the Barcelona list from every other file here: run the ordinary WinAnsi ones through their tables
+// as well and the German consulate Malaga list turns "de-DE" into "deJab", which then survives the
+// tag strip and lands in the output. Cached, because it is asked once per string token.
+// The font's own code range does not separate the two cases: the Malaga list's fonts also define
+// codes below the space, yet its strings are ordinary text. What separates them is the string. A
+// control byte inside one is never text, so that string is a subset font's codes and has to go
+// through the table. Anything printable is left exactly as written.
+const needsTable = (s) => {
+  for (let i = 0; i < s.length; i++) if (s.charCodeAt(i) < 32) return true;
+  return false;
+};
+
 const lookup = (font, id, strict) => {
   if (font && font.has(id)) return font.get(id);
   // The fallback pool is for documents where the font could not be identified. When the page's own
@@ -186,7 +200,9 @@ const lookup = (font, id, strict) => {
 // Portugal list has four such dictionaries and eight ToUnicode tables, and none were being read.
 // So every object that carries a /ToUnicode is also taken directly into the fallback pool, which
 // lookup() already consults for any id the named font does not define.
-for (const num of objects.keys()) {
+// Both stores, not just the top level: in a file written entirely into object streams, every font
+// dictionary sits in the packed store and none of this pool would be filled from objects alone.
+for (const num of [...objects.keys(), ...packed.keys()]) {
   if (!/\/ToUnicode\s+\d+ 0 R/.test(dictOf(num))) continue;
   const t = cmapOf(num);
   if (t && !allTables.includes(t)) allTables.push(t);
@@ -248,6 +264,7 @@ const fontProgramObjs = new Set(
 );
 const contentObjs = [...objects.keys()].filter((n) => pageFonts.has(n) || !fontProgramObjs.has(n));
 
+function decode(mapLiterals) {
 let out = '';
 for (const num of contentObjs) {
   const c = streamOf(num);
@@ -271,7 +288,22 @@ for (const num of contentObjs) {
           line += lookup(font, parseInt(h.substr(i, 4), 16), pageFonts.has(num));
         }
       } else if (tok[0] === '(') {
-        line += unescapePdf(tok.slice(1, -1));
+        // A literal string is not always plain text. A simple font can be subset so that its codes
+        // start at 1, and then the string is a run of control bytes that means nothing until it
+        // goes through the font's own table: the German consulate Barcelona list is written that
+        // way, /FirstChar 1 /LastChar 93, which is why it read as 4% words. Where the selected font
+        // maps the byte, its mapping wins; where it does not, the byte is already the character,
+        // which is the ordinary WinAnsi case and stays untouched.
+        const lit = unescapePdf(tok.slice(1, -1));
+        if (font && (mapLiterals || needsTable(lit))) {
+          for (const ch of lit) {
+            const code = ch.charCodeAt(0);
+            if (font.has(code)) line += font.get(code);
+            else if (code >= 32) line += ch;
+          }
+        } else {
+          line += lit;
+        }
       } else if (Number(tok) < -120 && !/\s$/.test(line) && line) {
         // A wide negative adjustment is a word gap. Small ones are ordinary kerning.
         line += ' ';
@@ -304,9 +336,25 @@ for (const num of contentObjs) {
     out += line + '\n';
   }
 }
+  return out;
+}
+
+// Two readings, and the file picks one. Whether a literal string is already text or a subset font's
+// codes cannot be settled from the fonts: the Barcelona and Malaga lists are built the same way,
+// both with subset tables that map nothing to itself, yet one carries its text in literal strings
+// and the other only its /Lang artifacts. Mapping the wrong one turns "de-DE" into "deJab", which
+// then walks straight past the tag strip. So both readings are produced and the one with more of
+// its output inside real words wins, by a margin wide enough that a tie keeps the plain reading.
+const wordShare = (s) => {
+  const runs = s.match(/[A-Za-zÀ-ſ]{3,}/g) || [];
+  return runs.join('').length / Math.max(1, s.replace(/\s/g, '').length);
+};
+const plainRead = decode(false);
+const mappedRead = decode(true);
+const out = wordShare(mappedRead) > wordShare(plainRead) + 0.05 ? mappedRead : plainRead;
 
 // A PDF can hand back plenty of bytes that are not text: fonts with a private encoding and no
-// /ToUnicode store glyph indices in ordinary ( ) strings, so the Barcelona consulate list decodes
+// /ToUnicode store glyph indices in ordinary ( ) strings, so a list can decode
 // to "! \" \" # $ %" and so on. Emitting that would be worse than refusing, because it looks like
 // content. Anything under two thirds letters, digits, spaces and ordinary punctuation is treated
 // as undecoded.
