@@ -15,7 +15,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
-const { CAT_PLURAL } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
+const { CAT_PLURAL, EV_LABEL } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 const PUB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-publishers.json'), 'utf8'));
 
 const words = (s) => String(s || '').trim().split(/\s+/).filter(Boolean).length;
@@ -212,7 +212,47 @@ const BOILERPLATE = [
   'We have not called or visited any of them, so nothing here is a recommendation from us.',
 ];
 
+
+// --- the provider card -------------------------------------------------------------------------
+// One renderer for every page in the family. Two copies had already drifted once: a physiotherapist
+// was a bone on the hub and a pulse on the city page.
+const esc = (s) => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function mapsUrl(p) {
+  const c = M.cities[p.city];
+  // A Maps search, not a claimed pin: we have not verified any listing's coordinates.
+  return 'https://www.google.com/maps/search/?api=1&query=' +
+    encodeURIComponent([p.name, p.area, c && c.name, c && c.country].filter(Boolean).join(', '));
+}
+
+function card(p, opts) {
+  const o = opts || {};
+  const chips = p.languages.map((l) => `<span class="sv-lang">${esc(langName(l))}</span>`).join('');
+  const host = M.hostOf(p.sourceUrl);
+  const name = p.url
+    ? `<a href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
+    : esc(p.name);
+  const meta = [o.showCategory === false ? '' : esc(M.CATS[p.category]), p.area ? esc(p.area) : '']
+    .filter(Boolean).join('&nbsp;&middot; ');
+  return `<article class="sv-card sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+        <div class="sv-head">
+          <span class="sv-ico">${o.icon || ''}</span>
+          <div>
+            <h3 class="sv-name">${name}</h3>
+            <p class="sv-meta">${meta}</p>
+          </div>
+        </div>
+        <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
+        ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
+        <div class="sv-foot">
+          <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
+          <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a></p>
+        </div>
+      </article>`;
+}
 module.exports = {
+  esc, card, mapsUrl,
   words, list, plural, count, langName, catName, singular, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,
 };

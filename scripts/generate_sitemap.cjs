@@ -52,6 +52,16 @@ add('/legal-notice', '0.2', 'yearly');
     console.log('  services: ' + pages.length + ' city pages added (' +
       (JSON.parse(fs.readFileSync(manifest, 'utf8')).length - pages.length) + ' noindex, left out)');
   }
+  // The city-and-service pages, which are the ones shaped like what people actually search for.
+  // They live in a nested directory, and nothing in this file reads directories recursively, so the
+  // manifest their generator writes is the only way in. A page that failed the word floor is not in
+  // it, because it was never written.
+  const pairManifest = path.join(ROOT, 'data', 'service-pair-pages.json');
+  if (fs.existsSync(pairManifest)) {
+    const pairs = JSON.parse(fs.readFileSync(pairManifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of pairs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.6', 'monthly');
+    console.log('  services: ' + pairs.length + ' city-and-service pages added');
+  }
 }
 
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {

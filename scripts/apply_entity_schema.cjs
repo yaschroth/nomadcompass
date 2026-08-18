@@ -34,12 +34,20 @@ function htmlIn(dir) {
   if (!fs.existsSync(abs)) return [];
   return fs.readdirSync(abs).filter((f) => f.endsWith('.html')).map((f) => path.join(dir, f));
 }
+
+function htmlUnder(dir) {
+  const abs = path.join(ROOT, dir);
+  if (!fs.existsSync(abs)) return [];
+  return fs.readdirSync(abs, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .flatMap((e) => htmlIn(path.join(dir, e.name)));
+}
 const rootHtml = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html'));
 const all = [
   ...rootHtml,
   ...htmlIn('cities'), ...htmlIn('best'), ...htmlIn('tier-list'),
   ...htmlIn('activities'), ...htmlIn('blog'), ...htmlIn('blog/category'), ...htmlIn('about'),
-  ...htmlIn('services'),
+  ...htmlIn('services'), ...htmlUnder('services'),
 ];
 const articleDirs = ['cities' + path.sep, 'activities' + path.sep];
 

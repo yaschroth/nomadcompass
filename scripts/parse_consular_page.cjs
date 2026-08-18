@@ -238,7 +238,13 @@ for (const e of entries) {
       area = clean(prev) + ', ' + area;
     }
   }
-  rows.push({ city, name, category, area, heading: clean(e.heading || '') });
+  // The heading only travels with the row when it agrees with what the row is. This tracker
+  // recognises "Liste des ..." lines and nothing else, so a dentist further down the page inherited
+  // whichever lawyer list came last and its note claimed it was found "under Liste des avocats de
+  // Seville". A wrong statement about a source is worse than no statement, so it is dropped.
+  const heading = clean(e.heading || '');
+  const headingAgrees = heading && (categoryOf(heading) === category);
+  rows.push({ city, name, category, area, heading: headingAgrees ? heading : '' });
 }
 
 // The same lawyer appears under two consular districts where their practice covers both, so the

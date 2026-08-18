@@ -49,7 +49,19 @@ function htmlIn(dir) {
   if (!fs.existsSync(abs)) return [];
   return fs.readdirSync(abs).filter((f) => f.endsWith('.html')).map((f) => (dir === '.' ? f : path.join(dir, f)));
 }
-const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'blog/category', 'about', 'accommodations', 'services'].flatMap(htmlIn);
+// One level below a listed directory too, for services/<city>/<service>.html. Without this the
+// city-and-service pages are invisible to this sweep, and while they now carry the block from
+// lib/page_shell.cjs, a sweep that cannot see a page cannot repair it either.
+function htmlUnder(dir) {
+  const abs = dir === '.' ? ROOT : path.join(ROOT, dir);
+  if (!fs.existsSync(abs)) return [];
+  return fs.readdirSync(abs, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .flatMap((e) => htmlIn(path.join(dir, e.name)));
+}
+const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'blog/category', 'about', 'accommodations', 'services']
+  .flatMap(htmlIn)
+  .concat(htmlUnder('services'));
 
 const gaRe = /  <!-- ga4 -->[\s\S]*?<!-- \/ga4 -->/;
 const ccRe = /  <!-- cc -->[\s\S]*?<!-- \/cc -->/;
