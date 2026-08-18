@@ -22,7 +22,7 @@ const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const problems = [];
 const note = (file, msg) => problems.push(file + ': ' + msg);
 
-const manifests = ['data/service-pair-pages.json', 'data/service-lang-pages.json']
+const manifests = ['data/service-pair-pages.json', 'data/service-hub-pages.json', 'data/service-lang-pages.json']
   .map((f) => path.join(ROOT, f))
   .filter((f) => fs.existsSync(f))
   .flatMap((f) => JSON.parse(fs.readFileSync(f, 'utf8')));

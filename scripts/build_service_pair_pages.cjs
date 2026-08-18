@@ -46,15 +46,24 @@ const MONEY = new Set(['legal', 'tax']);
 // Meta titles come from a pool, not a template, and every skeleton must carry at least two
 // page-specific tokens. The old family had 41 title patterns across 287 pages with the title equal
 // to the h1, which is what a near-duplicate looks like to a search engine.
-const SKELETONS = [
+// Two pools, because a title that claims one language for a page serving five is the same failure
+// as a heading that does. Google showed "English-speaking doctors in Barcelona" for the page that
+// holds eleven German-speaking ones, so a reader looking for German had no reason to click.
+const SKELETONS_ONE_LANGUAGE = [
   (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}, each with its source`,
-  (t) => `${t.Service} in ${t.city} who work in ${t.lang1}${t.lang2 ? ' or ' + t.lang2 : ''}: ${t.n} listed`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}, ${t.n} listed and checked ${t.month}`,
-  (t) => `${t.Service} in ${t.city} listed by working language, ${t.n} from ${t.publisher}`,
   (t) => `Where to find a ${t.lang1}-speaking ${t.singular} in ${t.city}: ${t.n} listed`,
   (t) => `${t.n} ${t.service} in ${t.city} who work in ${t.lang1}, with a source for each`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}: ${t.n} names and where they came from`,
   (t) => `${t.Service} in ${t.city} for ${t.lang1} speakers, ${t.n} with a cited source`,
+];
+const SKELETONS_MANY_LANGUAGES = [
+  (t) => `${t.Service} in ${t.city} who work in ${t.lang1}, ${t.lang2} or ${t.lang3 || t.lang1}: ${t.n} listed`,
+  (t) => `${t.n} ${t.service} in ${t.city} across ${t.langCount} languages, each with its source`,
+  (t) => `${t.Service} in ${t.city} by working language: ${t.lang1}, ${t.lang2} and ${t.langCount - 2} more`,
+  (t) => `${t.Service} in ${t.city} listed by working language, ${t.n} from ${t.publisher}`,
+  (t) => `${t.n} ${t.service} in ${t.city}, sorted by the language they work in`,
+  (t) => `${t.lang1}, ${t.lang2} or ${t.lang3 || t.lang2}-speaking ${t.service} in ${t.city}: ${t.n} listed`,
 ];
 
 const hash = (s) => {
@@ -145,10 +154,13 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
     month: P.niceDate(pair.checked[pair.checked.length - 1]).replace(/^\d+ /, ''),
     publisher: P.publisherOf(pair.sources[0].host).short,
     postcode: topArea ? topArea[0] : '',
+    lang3: servable[2] ? P.langName(servable[2][0]) : '',
+    langCount: servable.length,
   };
+  const pool = servable.length <= 1 ? SKELETONS_ONE_LANGUAGE : SKELETONS_MANY_LANGUAGES;
   let title = '';
-  for (let i = 0; i < SKELETONS.length; i++) {
-    const cand = SKELETONS[(hash(page.url) + i) % SKELETONS.length](tokens);
+  for (let i = 0; i < pool.length; i++) {
+    const cand = pool[(hash(page.url) + i) % pool.length](tokens);
     if (!usedTitles.has(cand) && cand !== h1) { title = cand; break; }
   }
   if (!title) title = `${h1}, ${pair.n} listed with sources`;

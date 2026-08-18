@@ -62,6 +62,13 @@ add('/legal-notice', '0.2', 'yearly');
     for (const p of pairs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.6', 'monthly');
     console.log('  services: ' + pairs.length + ' city-and-service pages added');
   }
+  // The service hubs, the third way in: one page per service across every city that has it.
+  const hubManifest = path.join(ROOT, 'data', 'service-hub-pages.json');
+  if (fs.existsSync(hubManifest)) {
+    const hubs = JSON.parse(fs.readFileSync(hubManifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of hubs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.7', 'monthly');
+    console.log('  services: ' + hubs.length + ' service hubs added');
+  }
 }
 
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {
