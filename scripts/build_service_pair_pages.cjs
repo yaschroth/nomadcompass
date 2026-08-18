@@ -75,11 +75,18 @@ function langSections(pair) {
   // reads better, and in 484 of 540 pairs one language covers nine rows in ten.
   const langs = pair.nonLocal.filter(([, n]) => n >= 2);
   if (langs.length < 2) return null;
-  return langs.map(([l, n]) => ({
+  const sections = langs.map(([l, n]) => ({
     lang: l,
     n,
     rows: pair.rows.filter((r) => r.languages.includes(l)),
   }));
+  // Anyone whose only recorded language is the local one belongs to no section and used to vanish
+  // from the page: five pages were rendering fewer cards than they held providers, which the gate
+  // caught. A listing that silently drops a row is worse than an ugly one.
+  const shown = new Set(sections.flatMap((s) => s.rows));
+  const rest = pair.rows.filter((r) => !shown.has(r));
+  if (rest.length) sections.push({ lang: null, n: rest.length, rows: rest });
+  return sections;
 }
 
 const written = [];
@@ -114,7 +121,18 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
   }
 
   // --- titles ---------------------------------------------------------------------------------
-  const h1 = `${P.list(langs)}-speaking ${P.catName(cat)} in ${city.name}`;
+  // The heading names every language the page can actually serve, not the top two. Naming a subset
+  // is what turned a reader searching for German-speaking doctors in Barcelona away from the page
+  // that holds eleven of them, because the heading said "English and French-speaking doctors".
+  const servable = pair.nonLocal.filter(([, n]) => n >= 2);
+  const named = servable.slice(0, 4).map(([l]) => P.langName(l));
+  const spare = servable.length - named.length;
+  const h1 = servable.length <= 1
+    ? `${P.list(langs)}-speaking ${P.catName(cat)} in ${city.name}`
+    : `${P.catName(cat).replace(/^./, (x) => x.toUpperCase())} in ${city.name} who work in ` +
+      (spare > 0
+        ? `${named.join(', ')} and ${spare} more ${spare === 1 ? 'language' : 'languages'}`
+        : P.list(named));
   const topArea = Object.entries(pair.areas).sort((a, b) => b[1] - a[1])[0];
   const tokens = {
     n: pair.n,
@@ -144,8 +162,10 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
   const icon = inlineIcon(CAT_ICON[cat]);
   const sections = langSections(pair);
   const listing = sections
-    ? sections.map((s) => `<section class="svp-lang" id="lang-${s.lang}">
-          <h2>${esc(P.langName(s.lang))}-speaking ${esc(P.catName(cat))} in ${esc(city.name)}<span class="svp-lang-n">${s.n}</span></h2>
+    ? sections.map((s) => `<section class="svp-lang" id="lang-${s.lang || 'other'}">
+          <h2>${s.lang
+            ? esc(P.langName(s.lang)) + '-speaking ' + esc(P.catName(cat)) + ' in ' + esc(city.name)
+            : 'Listed only in ' + esc(P.langName(M.LOCAL[pair.country]) || 'the local language')}<span class="svp-lang-n">${s.n}</span></h2>
           <div class="sv-grid">
         ${s.rows.map((r) => P.card(r, { icon, showCategory: false })).join('\n        ')}
           </div>
@@ -239,6 +259,7 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
     .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
     .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+    .svp-langbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-6); }
     .svp-lang { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
     .svp-lang h2 { display: flex; align-items: center; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.45rem;
       margin: 0 0 var(--space-4); padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
@@ -268,6 +289,9 @@ ${shell.headEnd}
         <h1>${esc(h1)}</h1>
         <p class="svp-stand">${esc(blocks.standfirst)}${sections ? ' Each language has its own list below, so anyone who works in two appears in both.' : ''}</p>
       </header>
+      ${sections ? `<nav class="svp-langbar" aria-label="Languages on this page">` +
+        sections.map((sec) => `<a class="svp-chip" href="#lang-${sec.lang || 'other'}">${esc(sec.lang ? P.langName(sec.lang) : 'Local language only')}<span>${sec.n}</span></a>`).join('') +
+        `</nav>` : ''}
       ${ymyl}
 
       ${listing}
