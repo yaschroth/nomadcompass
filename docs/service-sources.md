@@ -59,3 +59,23 @@ file also mismaps two of its own glyphs, K as a masculine ordinal and T as a bac
 legible from TEºNON for the Teknon clinic and restored by hand. Six entries were skipped because
 the name is set in a decorative font and cannot be read; two of those are listed under their
 practice name, which is readable.
+
+### French embassy in Spain, Professionnels francophones (2026-08-18)
+
+https://es.diplomatie.gouv.fr/fr/liste-de-notoriete carries the whole country on one page: lawyers
+by consular district, doctors by specialty, then sworn translators and interpreters. Read by
+scripts/parse_fr_es.cjs, 151 new rows across 16 cities, Barcelona 79 and Madrid 32.
+
+The city is taken from each address, never from the heading, because a consular district is not a
+city: the Granada heading covers a lawyer who also serves Malaga and Cordoba, and the Estremadura
+heading is followed by a practice whose own text places it in Seville. Where an address prints only
+a postcode, a core-range table decides, and only when nothing follows the code on the line, since
+what follows is usually another town. That rule is what keeps Majadahonda out of Madrid and Arona
+out of Tenerife.
+
+The translator section splits into a French/Spanish list and a French/Catalan one. That heading is
+the only statement of the language pair, so it travels with the row: the Catalan interpreters are
+listed as French and Catalan, not French and Spanish.
+
+Note the shape of the source. It is the first that carries lawyers, doctors and translators
+together, and it moved French from 6 percent of the directory to 11.
