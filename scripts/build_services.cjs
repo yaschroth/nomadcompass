@@ -150,6 +150,18 @@ function cityIndexCard(slug) {
 }
 const cityIndex = usedCities.map(cityIndexCard).join('\n      ');
 
+// The service hubs were reachable from almost nowhere: /services/hairdressers had one inbound link
+// in the whole site, and neither this page nor any city page pointed at one. A page in the sitemap
+// that nothing links to is a page we do not really publish. Only hubs that were written are listed.
+const SERVICE_HUBS = (() => {
+  const f = path.join(ROOT, 'data', 'service-hub-pages.json');
+  if (!fs.existsSync(f)) return '';
+  return JSON.parse(fs.readFileSync(f, 'utf8'))
+    .sort((a, b) => b.n - a.n)
+    .map((h) => `<a class="sv-hub" href="${h.url}">${inlineIcon(CAT_ICON[h.service])}<span class="sv-hub-name">${esc(CATS[h.service])}</span><span class="sv-hub-n">${h.n} in ${h.cities} cities</span></a>`)
+    .join('');
+})();
+
 // What each city holds, per service, per language, and per pair of the two. Without this the index
 // answered a narrow question with a broad number: ask for therapists who work in German and every
 // card still announced its total, so Barcelona claimed 147 providers when it holds four that match.
@@ -305,6 +317,15 @@ ${shell.headTop}
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
+    .sv-hubs { margin:0 0 2rem; }
+    .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
+    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.7rem; }
+    a.sv-hub:not(.btn):not(.nav-link) { display:flex; align-items:center; gap:.6rem; padding:.7rem .85rem; background:#fff;
+      color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); text-decoration:none; }
+    a.sv-hub:hover { border-color:var(--color-terracotta,#c65d3b); }
+    .sv-hub svg { width:18px; height:18px; color:var(--color-terracotta-dark,#a8492c); flex:0 0 auto; }
+    .sv-hub-name { font-weight:700; font-size:var(--text-sm); }
+    .sv-hub-n { margin-left:auto; font-size:var(--text-xs); color:var(--color-stone); }
     .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
     .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
       border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
@@ -350,6 +371,10 @@ ${shell.headEnd}
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
+      <nav class="sv-hubs" id="by-service" aria-label="Browse by service">
+        <h2>Browse by service</h2>
+        <div class="sv-hubs-grid">${SERVICE_HUBS}</div>
+      </nav>
       <p class="sv-count" id="svCount">Showing all <b>${nCities}</b> cities, <b>${providers.length}</b> providers in total.</p>
       <div id="svGrid" class="sv-ix-grid">
       ${cityIndex}

@@ -132,6 +132,28 @@ const claimed = new Set(pages.map((r) => r.file.split(path.sep).join('/')));
 const orphans = onDisk.filter((f) => !claimed.has(f));
 orphans.forEach((f) => note(f, 'is on disk but in no manifest'));
 
+// Every internal link into the directory has to land on a file. 172 did not: the sibling and
+// nearby-city chips pointed at child pages for single-service cities, which never get one, and at
+// pairs the word floor held back. A link to a page we chose not to create is our mistake.
+{
+  const onDiskSet = new Set(onDisk);
+  const resolves = (url) => {
+    const rel = url.replace(/^\//, '').split('#')[0].split('?')[0];
+    return onDiskSet.has(rel + '.html') || onDiskSet.has(rel) || fs.existsSync(path.join(ROOT, rel + '.html'));
+  };
+  const dead = new Map();
+  for (const f of onDisk) {
+    const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    for (const m of html.matchAll(/href="(\/services\/[^"#?]*)"/g)) {
+      if (!resolves(m[1])) dead.set(m[1], (dead.get(m[1]) || 0) + 1);
+    }
+  }
+  [...dead.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .forEach(([url, n]) => note(url, 'is linked ' + n + ' times and does not exist'));
+}
+
 // Vercel would serve services/<city>/index.html and services/<city>.html at the same clean URL.
 onDisk.filter((f) => /\/index\.html$/.test(f)).forEach((f) => note(f, 'would collide with the city page URL'));
 

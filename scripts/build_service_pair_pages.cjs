@@ -105,6 +105,34 @@ function langSections(pair) {
   return sections;
 }
 
+// Which pairs will actually be written. Worked out before anything is rendered, because a page
+// links to its siblings and to the same service nearby, and both were pointing at pages that were
+// never written: 172 dead links, to single-service cities that get no child at all and to pairs the
+// word floor held back. A link to a page we chose not to create is our mistake, not the reader's.
+function proseWordsOf(pair) {
+  const blocks = [P.standfirst(pair), P.provenance(pair), P.claimScope(pair), P.geography(pair), P.alternatives(pair)];
+  const faq = P.faq(pair);
+  const boiler = P.BOILERPLATE.reduce((a, b) => a + (blocks.join(' ').includes(b) ? P.words(b) : 0), 0);
+  return blocks.reduce((a, t) => a + P.words(t), 0)
+    + faq.reduce((a, q) => a + P.words(q.q) + P.words(q.a), 0)
+    - boiler
+    + pair.rows.reduce((a, r) => a + P.words(r.note), 0);
+}
+const WILL_EXIST = new Set(
+  M.pageList()
+    .filter((p) => p.kind === 'pair' && proseWordsOf(M.pairOf(p.city, p.category)) >= WORD_FLOOR)
+    .map((p) => p.city + '|' + p.category),
+);
+// The service hubs below five cities were held back too, so the "all cities" link has to know.
+const HUBS = new Set();
+{
+  const f = path.join(ROOT, 'data', 'service-hub-pages.json');
+  if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => HUBS.add(x.service));
+}
+const linkTo = (slug, category) => (WILL_EXIST.has(slug + '|' + category)
+  ? '/services/' + slug + '/' + M.SERVICE_SLUGS[category]
+  : '/services/' + slug);
+
 const written = [];
 const held = [];
 const usedTitles = new Set();
@@ -125,12 +153,8 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
     alternatives: P.alternatives(pair),
   };
   const faq = P.faq(pair);
-  const noteWords = pair.rows.reduce((a, r) => a + P.words(r.note), 0);
-  const proseWords = Object.values(blocks).reduce((a, t) => a + P.words(t), 0) +
-    faq.reduce((a, q) => a + P.words(q.q) + P.words(q.a), 0);
   // Declared boilerplate does not count towards the floor: a page must earn its own words.
-  const boiler = P.BOILERPLATE.reduce((a, b) => a + (Object.values(blocks).join(' ').includes(b) ? P.words(b) : 0), 0);
-  const uniqueWords = proseWords - boiler + noteWords;
+  const uniqueWords = proseWordsOf(pair);
   if (uniqueWords < WORD_FLOOR) {
     held.push({ url: page.url, n: pair.n, words: uniqueWords });
     continue;
@@ -209,9 +233,9 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
 
   // --- linking --------------------------------------------------------------------------------
   const siblings = city.services.filter((c) => c !== cat).slice(0, 9);
-  const siblingChips = siblings.map((c) => `<a class="svp-chip" href="/services/${city.id}/${M.SERVICE_SLUGS[c]}">${esc(P.catName(c).replace(/^./, (x) => x.toUpperCase()))}<span>${M.pairOf(city.id, c).n}</span></a>`).join('');
+  const siblingChips = siblings.map((c) => `<a class="svp-chip" href="${linkTo(city.id, c)}">${esc(P.catName(c).replace(/^./, (x) => x.toUpperCase()))}<span>${M.pairOf(city.id, c).n}</span></a>`).join('');
   const near = M.nearest(city.id, cat, 6);
-  const nearChips = near.map((x) => `<a class="svp-chip" href="/services/${x.city}/${M.SERVICE_SLUGS[cat]}">${esc(x.name)}<span>${x.n}</span></a>`).join('');
+  const nearChips = near.map((x) => `<a class="svp-chip" href="${linkTo(x.city, cat)}">${esc(x.name)}<span>${x.n}</span></a>`).join('');
 
   // --- structured data ------------------------------------------------------------------------
   const ld = [
@@ -337,7 +361,7 @@ ${shell.headEnd}
         <h2>If none of these fits</h2>
         <p>${esc(blocks.alternatives)}</p>
         ${siblingChips ? `<h2>Other services in ${esc(city.name)}</h2>\n        <div class="svp-chips">${siblingChips}</div>` : ''}
-        ${nearChips ? `<h2>${esc(P.catName(cat).replace(/^./, (x) => x.toUpperCase()))} in nearby cities</h2>\n        <div class="svp-chips">${nearChips}</div>\n        <p><a href="/services/${M.SERVICE_SLUGS[cat]}">All ${M.services[cat].cities.length} cities where we list ${esc(P.catName(cat))}</a> or <a href="/services/${city.id}">everything we list in ${esc(city.name)}</a>.</p>` : ''}
+        ${nearChips ? `<h2>${esc(P.catName(cat).replace(/^./, (x) => x.toUpperCase()))} in nearby cities</h2>\n        <div class="svp-chips">${nearChips}</div>\n        <p>${HUBS.has(cat) ? `<a href="/services/${M.SERVICE_SLUGS[cat]}">All ${M.services[cat].cities.length} cities where we list ${esc(P.catName(cat))}</a> or ` : ''}<a href="/services/${city.id}">everything we list in ${esc(city.name)}</a>.</p>` : ''}
         <h2>Questions</h2>
         <dl class="svp-faq">
 ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a) + '</dd>').join('\n')}
