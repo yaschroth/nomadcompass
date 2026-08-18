@@ -167,11 +167,33 @@ for (const slug of slugs) {
   const isIndexable = rows.length >= MIN_INDEXABLE;
   if (isIndexable) indexable++;
 
-  const title = `${list(langs)}-speaking ${list(cats)} in ${c.name}`;
   const allLangs = [...new Set(rows.flatMap((p) => p.languages))].sort((a, b) => LANGS[a].localeCompare(LANGS[b]));
   const allCats = [...new Set(rows.map((p) => p.category))].sort((a, b) => CATS[a].localeCompare(CATS[b]));
-  const desc = `${rows.length} ${rows.length === 1 ? 'provider' : 'providers'} in ${c.name} listed by the language they work in, ` +
-    `across ${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}. Every language claim names its source.`;
+  const langCount = {};
+  rows.forEach((p) => p.languages.forEach((l) => { langCount[l] = (langCount[l] || 0) + 1; }));
+  const localLang = LOCAL[c.country];
+  const foreign = Object.entries(langCount)
+    .filter(([l]) => l !== localLang)
+    .sort((a, b) => b[1] - a[1]);
+
+  // A city holding eight services and seven languages was announcing itself as "French and
+  // English-speaking lawyers and doctors in Barcelona", which names two of each and hides the rest.
+  // A page that indexes everything has to say so; the narrow headings belong on the narrow pages.
+  // A city with one service is a narrow page, so it keeps the specific heading.
+  const isHub = allCats.length > 1;
+  const heading = isHub
+    ? `Services in ${c.name} in a language you speak`
+    : `${list(langs)}-speaking ${list(cats)} in ${c.name}`;
+  // The meta title is deliberately a different string from the h1, and carries the numbers a search
+  // result can use.
+  const title = isHub
+    ? `${c.name} services by language: ${rows.length} providers across ${allCats.length} services`
+    : `${rows.length} ${list(langs)}-speaking ${list(cats)} in ${c.name}, each with its source`;
+  const desc = isHub
+    ? `${rows.length} providers in ${c.name} across ${allCats.length} services, indexed by the language they work in: ` +
+      `${foreign.slice(0, 4).map(([l, n]) => LANGS[l] + ' ' + n).join(', ')}. Every language claim names its source.`
+    : `${rows.length} ${rows.length === 1 ? 'provider' : 'providers'} in ${c.name} listed by the language they work in, ` +
+      `across ${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}. Every language claim names its source.`;
 
   // Grouped by service, biggest group first. The page used to be one undifferentiated grid sorted
   // by evidence tier, so a dentist sat between two lawyers and the only way to find the thing you
@@ -213,8 +235,6 @@ for (const slug of slugs) {
   // before you pick it and the page cannot promise something it does not have.
   const catCount = {};
   rows.forEach((p) => { catCount[p.category] = (catCount[p.category] || 0) + 1; });
-  const langCount = {};
-  rows.forEach((p) => p.languages.forEach((l) => { langCount[l] = (langCount[l] || 0) + 1; }));
   const catOptions = `<option value="all">All services (${rows.length})</option>` +
     groups.map((g) => `<option value="${g.cat}">${esc(CATS[g.cat])} (${g.rows.length})</option>`).join('');
   const langOptions = `<option value="all">Any language</option>` +
@@ -270,7 +290,8 @@ ${shell.headEnd}
     .svc-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
     .svc-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
     .svc-facets { display: flex; flex-wrap: wrap; gap: .5rem; margin: var(--space-5) 0 0; padding: 0; list-style: none; }
-    .svc-facets li { font-size: var(--text-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-charcoal); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); padding: .4rem .7rem; }
+    .svc-facets li b { margin-left: .4rem; font-weight: 700; color: var(--color-terracotta-dark, #a8492c); }
+    .svc-facets li { display: inline-flex; align-items: baseline; font-size: var(--text-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-charcoal); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); padding: .4rem .7rem; }
     .svc-more { margin: var(--space-8) 0 0; padding: var(--space-6); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); }
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
@@ -305,11 +326,12 @@ ${shell.headEnd}
     <div class="container">
       <p class="svc-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; ${esc(c.name)}</p>
       <header class="svc-head">
-        <h1 id="svcTitle">${esc(title)}</h1>
-        <p>${esc(rows.length === 1 ? 'One provider' : rows.length + ' providers')} in ${esc(c.name)}, ${esc(c.country)}, listed by the language they work in. Every language claim on this page names the source it came from.</p>
+        <h1 id="svcTitle">${esc(heading)}</h1>
+        <p>${esc(rows.length === 1 ? 'One provider' : rows.length + ' providers')} in ${esc(c.name)}, ${esc(c.country)}${isHub ? `, across ${allCats.length} services` : ''}, listed by the language they work in rather than by rating. Every language claim on this page names the source it came from.</p>
         <ul class="svc-facets">
-          <li>${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}</li>
-          ${allLangs.map((l) => `<li>${esc(LANGS[l])}</li>`).join('\n          ')}
+          ${foreign.length
+    ? foreign.map(([l, n]) => `<li>${esc(LANGS[l])}<b>${n}</b></li>`).join('\n          ')
+    : allLangs.map((l) => `<li>${esc(LANGS[l])}<b>${langCount[l]}</b></li>`).join('\n          ')}
         </ul>
       </header>
 

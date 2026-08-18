@@ -22,7 +22,7 @@ const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const problems = [];
 const note = (file, msg) => problems.push(file + ': ' + msg);
 
-const manifests = ['data/service-pair-pages.json', 'data/service-hub-pages.json', 'data/service-lang-pages.json']
+const manifests = ['data/service-city-pages.json', 'data/service-pair-pages.json', 'data/service-hub-pages.json', 'data/service-lang-pages.json']
   .map((f) => path.join(ROOT, f))
   .filter((f) => fs.existsSync(f))
   .flatMap((f) => JSON.parse(fs.readFileSync(f, 'utf8')));
@@ -32,6 +32,12 @@ if (!manifests.length) {
   process.exit(1);
 }
 
+// The city manifest keys a page by slug where the others key by url and file. One shape here, so
+// the orphan check and the page loop cannot disagree about what exists.
+const pages = manifests.map((r) => (r.slug && !r.url
+  ? Object.assign({}, r, { url: '/services/' + r.slug, file: 'services/' + r.slug + '.html', city: r.slug })
+  : r));
+
 // Every language name the dataset knows, so a heading can be read for the languages it claims.
 const LANG_NAMES = Object.entries(M.LANGS).map(([code, name]) => ({ code, name }));
 
@@ -39,7 +45,7 @@ const titles = new Map();
 const descs = new Map();
 let checked = 0;
 
-for (const row of manifests) {
+for (const row of pages) {
   const file = path.join(ROOT, row.file);
   if (!fs.existsSync(file)) { note(row.url, 'in the manifest but not on disk'); continue; }
   const html = fs.readFileSync(file, 'utf8');
@@ -109,9 +115,8 @@ const onDisk = [];
     else if (e.name.endsWith('.html')) onDisk.push(path.relative(ROOT, p).split(path.sep).join('/'));
   }
 })(path.join(ROOT, 'services'));
-const claimed = new Set(manifests.map((r) => r.file.split(path.sep).join('/')));
-const cityFiles = new Set(Object.keys(M.cities).map((s) => 'services/' + s + '.html'));
-const orphans = onDisk.filter((f) => !claimed.has(f) && !cityFiles.has(f));
+const claimed = new Set(pages.map((r) => r.file.split(path.sep).join('/')));
+const orphans = onDisk.filter((f) => !claimed.has(f));
 orphans.forEach((f) => note(f, 'is on disk but in no manifest'));
 
 // Vercel would serve services/<city>/index.html and services/<city>.html at the same clean URL.
