@@ -266,7 +266,7 @@ for (const slug of slugs) {
     <div class="container">
       <p class="svc-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; ${esc(c.name)}</p>
       <header class="svc-head">
-        <h1>${esc(title)}</h1>
+        <h1 id="svcTitle">${esc(title)}</h1>
         <p>${esc(rows.length === 1 ? 'One provider' : rows.length + ' providers')} in ${esc(c.name)}, ${esc(c.country)}, listed by the language they work in. Every language claim on this page names the source it came from.</p>
         <ul class="svc-facets">
           <li>${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}</li>
@@ -316,9 +316,28 @@ for (const slug of slugs) {
       var CAT_PLURAL=${JSON.stringify(Object.fromEntries(allCats.map((x) => [x, CAT_PLURAL[x] || CATS[x].toLowerCase()])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(allLangs.map((x) => [x, LANGS[x]])))};
       var TOTAL=${rows.length};
+      var CITY_NAME=${JSON.stringify(c.name)},BASE_TITLE=${JSON.stringify(title)},LOCAL_LANG=${JSON.stringify(LOCAL[c.country] || '')};
+      var h1=document.getElementById('svcTitle');
+      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
+      // The heading is built from the rows still on screen, never from the filter alone. Ask for
+      // hairdressers on a page whose static title says "English and German-speaking doctors and
+      // lawyers" and the old heading contradicted the list under it; announcing "English and
+      // German-speaking hairdressers" instead would have been a worse answer, because the German
+      // belonged to the doctors. So the languages are counted from what is actually visible.
+      function headingLanguages(visible,lang){
+        if(lang!=='all')return [LANG_LABEL[lang]];
+        var n={};
+        visible.forEach(function(el){
+          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
+        });
+        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
+        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
+        if(!pick.length)pick=ranked.slice(0,1);
+        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
+      }
       function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
       function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0;
+        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
         groups.forEach(function(g){
           var n=0;
           [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
@@ -326,7 +345,7 @@ for (const slug of slugs) {
               &&(lang==='all'||has(el,'data-lang',lang))
               &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
             el.classList.toggle('is-hidden',!ok);
-            if(ok)n++;
+            if(ok){n++;visible.push(el);}
           });
           // A heading with nothing under it is worse than no heading, so an empty group goes too.
           g.classList.toggle('is-hidden',n===0);
@@ -341,6 +360,13 @@ for (const slug of slugs) {
           ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
           : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
         empty.classList.toggle('is-hidden',shown>0);
+        // The heading follows the question. Unfiltered it is the page's own title, which is what
+        // the URL without parameters is indexed under and what search results should keep showing.
+        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
+        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
+        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
+        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
+        document.title=h1.textContent+' | The Nomad HQ';
         try{
           var u=new URL(window.location);
           [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
