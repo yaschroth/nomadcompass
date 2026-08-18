@@ -79,3 +79,21 @@ listed as French and Catalan, not French and Spanish.
 
 Note the shape of the source. It is the first that carries lawyers, doctors and translators
 together, and it moved French from 6 percent of the directory to 11.
+
+### Italian consular network in Spain (2026-08-18)
+
+Five sources: the consulate general in Madrid, the vice-consulate in Arona on Tenerife, and the
+consulate general in Barcelona's three PDFs (doctors, professionals of reference, translators).
+109 rows across 12 cities in seven categories. Italian stood at 2 rows in the whole of Spain
+before this.
+
+Two shapes, two readers. Madrid and Arona publish blocks and go through parse_consular_page.cjs,
+the French parser generalised with Italian titles and vocabulary. Barcelona publishes tables whose
+cells arrive one per line, so parse_it_table.cjs cuts records at the email and joins the fields
+from the right until the tail spells a known city, which is what repairs BARCEL + ONA.
+
+That parser takes only records that resolve to exactly two name fields. Gluing more together was
+tried and it invented people: BOVE and FRANCESCA in adjacent cells became Bovefrancesca, and
+a record that had lost its email swallowed the next one's city. 48 records are skipped and
+reported rather than repaired. The Madrid page is also worth noting for its admission bar: an
+Italian law degree, three years on the Spanish roll, and three client references.

@@ -1,5 +1,10 @@
 /**
- * Reads the French embassy in Spain's "Professionnels francophones" page.
+ * Reads a consular list of local professionals, in the block form that several ministries use.
+ *
+ * Written for the French embassy in Spain's "Professionnels francophones", which carries the whole
+ * country on one page, and since extended to the Italian consulates in Spain, whose pages and PDFs
+ * are laid out the same way: a title and a name, then the practice, then an address line with a
+ * postcode. Takes HTML or the plain text of a PDF as produced by scripts/pdf_text.cjs.
  *
  * One page carries the whole country: lawyers by consular district, then doctors by specialty,
  * then sworn translators and interpreters. It is not a table, it is a run of blocks, so entries are
@@ -12,14 +17,16 @@
  * both in the wrong place, which is the same mistake that put Jalandhar's hospitals under Amritsar
  * in the India list.
  *
- * Usage: node scripts/parse_fr_es.cjs <page.html> [--json]
+ * Usage: node scripts/parse_consular_page.cjs <page.html|list.txt> [--json]
  */
 const fs = require('fs');
 
 const file = process.argv[2];
-if (!file) { console.error('usage: node scripts/parse_fr_es.cjs <page.html> [--json]'); process.exit(2); }
+if (!file) { console.error('usage: node scripts/parse_consular_page.cjs <page.html|list.txt> [--json]'); process.exit(2); }
 
-const html = fs.readFileSync(file, 'utf8');
+const raw = fs.readFileSync(file, 'utf8');
+// A PDF read by pdf_text.cjs arrives as plain lines; only markup needs stripping.
+const html = /.html?$/i.test(file) ? raw : raw.replace(/&/g, '&amp;');
 const lines = html
   .replace(/<script[\s\S]*?<\/script>/gi, '')
   .replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -27,6 +34,7 @@ const lines = html
   .replace(/&nbsp;/g, ' ')
   .replace(/&#8217;|&rsquo;|&#039;/g, "'")
   .replace(/&amp;/g, '&')
+  .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
   .replace(/&deg;/g, ' ')
   .split('\n')
   .map((s) => s.trim())
@@ -85,20 +93,21 @@ const CORE = {
 };
 
 const startsEntry = (l) =>
-  /^(Me\.?|Docteure?|Doctora|Dr\.?|Dra\.?|Maître)\s+[A-ZÁÉÍÓÚÑÜÈÊ]/.test(l) ||
+  /^(Me\.?|Docteure?|Doctora|Dr\.?|Dra\.?|Maître|Avv\.?|Dott\.ssa|Dott\.?|Prof\.?|Ing\.?|Arch\.?)\s+[A-ZÁÉÍÓÚÑÜÈÊ]/.test(l) ||
   /^[A-ZÁÉÍÓÚÑÜÇ][A-ZÁÉÍÓÚÑÜÇ'’ -]{3,}\s+[A-ZÁÉÍÓÚÑÜ][a-zà-ÿ]/.test(l);
 
 // What the entry is, read from the words the page itself uses. The section heading is only the
 // fallback, because a block of dentists sits under a medical heading and says "Dentiste" per entry.
 const categoryOf = (text) => {
-  if (/dentiste|dentaire|implantolog|orthodont|stomatolog/i.test(text)) return 'dentist';
-  if (/psycholog|psychiatr|psychanalys|psychoth[eé]rap/i.test(text)) return 'therapy';
-  if (/kin[eé]sith[eé]rap|physioth[eé]rap|ost[eé]opath/i.test(text)) return 'physio';
+  if (/dentiste|dentaire|dentist|odontoiatr|implantolog|orthodont|ortodonz|stomatolog/i.test(text)) return 'dentist';
+  if (/psycholog|psicolog|psychiatr|psichiatr|psychanalys|psicoterap|psychoth[eé]rap/i.test(text)) return 'therapy';
+  if (/kin[eé]sith[eé]rap|physioth[eé]rap|fisioterap|ost[eé]opath|osteopat/i.test(text)) return 'physio';
   if (/opticien|optom[eé]tr/i.test(text)) return 'optician';
-  if (/v[eé]t[eé]rinaire/i.test(text)) return 'vet';
-  if (/traducteur|traductrice|interpr[eè]te/i.test(text)) return 'translator';
-  if (/avocat|abogad|juriste|barreau/i.test(text)) return 'legal';
-  if (/m[eé]decin|docteur|chirurgien|cardiolog|dermatolog|gyn[eé]colog|p[eé]diatr|ophtalmolog|radiolog|urolog|neurolog|angiolog|endocrinolog|gastro|rhumatolog|allergolog|orl|sage-femme|nutrition/i.test(text)) {
+  if (/v[eé]t[eé]rinaire|veterinar/i.test(text)) return 'vet';
+  if (/traducteur|traductrice|traduttor|traduttric|interpr[eè]te|interpret[ei]/i.test(text)) return 'translator';
+  if (/commercialist|tributarist|fiscalist/i.test(text)) return 'tax';
+  if (/avocat|abogad|avvocat|juriste|barreau|studio legale/i.test(text)) return 'legal';
+  if (/m[eé]decin|docteur|chirurgien|cardiolog|dermatolog|gyn[eé]colog|p[eé]diatr|ophtalmolog|radiolog|urolog|neurolog|angiolog|endocrinolog|gastro|rhumatolog|allergolog|orl|sage-femme|nutrition|medico|chirurg|pediatr|ginecolog|oculist|cardiolog/i.test(text)) {
     return 'doctor';
   }
   return null;
@@ -153,11 +162,12 @@ for (const e of entries) {
   // The title is a claim about the profession and the page uses it consistently, so it decides when
   // the entry's own words do not: a lawyer's block often says only "droit civil et des affaires".
   const category = categoryOf(text) ||
-    (/^(Me\.?|Ma[iî]tre)\s/.test(e.name) ? 'legal' : /^(Docteure?|Doctora|Dr\.?|Dra\.?)\s/.test(e.name) ? 'doctor' : null);
+    (/^(Me\.?|Ma[iî]tre|Avv\.?)\s/.test(e.name) ? 'legal'
+      : /^(Docteure?|Doctora|Dr\.?|Dra\.?|Dott\.ssa|Dott\.?)\s/.test(e.name) ? 'doctor' : null);
   if (!category) { skipped.push([e.name, 'no category in the text']); continue; }
   // "Me. CHABANEIX Luis" and "Docteur Laetitia RICAUD": the page puts the surname in capitals on
   // either side of the given name, so the title is dropped and the rest kept as written.
-  const name = clean(e.name.replace(/^(Me\.?|Docteure?|Doctora|Dr\.?|Dra\.?|Ma[iî]tre)\s+/, ''))
+  const name = clean(e.name.replace(/^(Me\.?|Docteure?|Doctora|Dr\.?|Dra\.?|Ma[iî]tre|Avv\.?|Dott\.ssa|Dott\.?|Prof\.?|Ing\.?|Arch\.?)\s+/, ''))
     .replace(/\s*\(.*$/, '')
     .replace(/[,;:.\s-]+$/, '');
   // Half of these entries put the street on its own line and the postcode on the next, so an area
