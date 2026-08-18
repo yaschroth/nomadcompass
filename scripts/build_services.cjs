@@ -65,7 +65,13 @@ const usedCities = [...new Set(providers.map((p) => p.city))].sort((a, b) => CIT
 const usedCats = [...new Set(providers.map((p) => p.category))].sort((a, b) => CATS[a].localeCompare(CATS[b]));
 const usedLangs = [...new Set(providers.flatMap((p) => p.languages))].sort((a, b) => LANGS[a].localeCompare(LANGS[b]));
 
-const cityOptions = usedCities.map((c) => `<option value="${c}">${esc(CITY[c].name)}, ${esc(CITY[c].country)}</option>`).join('');
+// A typed field with suggestions, not a menu: 287 cities in a dropdown is a scroll, and everyone
+// arrives already knowing which city they mean. The value is what a person would type, "Lisbon,
+// Portugal", and the slug is carried alongside so the field can send you straight there.
+const cityOptions = usedCities
+  .map((c) => `<option data-slug="${c}" value="${esc(CITY[c].name)}, ${esc(CITY[c].country)}"></option>`).join('');
+const cityLookup = Object.fromEntries(
+  usedCities.map((c) => [(CITY[c].name + ', ' + CITY[c].country).toLowerCase(), c]));
 const catOptions = usedCats.map((c) => `<option value="${c}">${esc(CATS[c])}</option>`).join('');
 const langOptions = usedLangs.map((l) => `<option value="${l}">${esc(LANGS[l])}</option>`).join('');
 
@@ -236,6 +242,7 @@ const html = `<!DOCTYPE html>
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
     .sv-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--color-stone); }
     .sv-field select, .sv-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:180px; }
+    .sv-field-city input { min-width:240px; }
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; } .sv-count b { color:var(--color-ink); }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.15rem; }
@@ -339,10 +346,9 @@ const html = `<!DOCTYPE html>
     <div class="sv-canvas">
     <div class="sv-wrap">
       <div class="sv-controls">
-        <div class="sv-field"><label for="svCity">City</label><select id="svCity"><option value="all">Any city</option>${cityOptions}</select></div>
+        <div class="sv-field sv-field-city"><label for="svCity">City</label><input type="search" id="svCity" list="svCityList" placeholder="Type a city&hellip;" autocomplete="off" aria-describedby="svCityHint"><datalist id="svCityList">${cityOptions}</datalist><span id="svCityHint" class="sr-only">Type to narrow the list below, or complete a city name to open its page</span></div>
         <div class="sv-field"><label for="svCat">Service</label><select id="svCat"><option value="all">Any service</option>${catOptions}</select></div>
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
-        <div class="sv-field"><label for="svQ">Search</label><input type="search" id="svQ" placeholder="Name contains..." autocomplete="off"></div>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
       <p class="sv-count" id="svCount">Showing all <b>${nCities}</b> cities, <b>${providers.length}</b> providers in total.</p>
@@ -373,7 +379,8 @@ const html = `<!DOCTYPE html>
   <script>
     (function(){
       var grid=document.getElementById('svGrid'),count=document.getElementById('svCount'),empty=document.getElementById('svEmpty');
-      var citySel=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang'),q=document.getElementById('svQ');
+      var q=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang');
+      var CITY_SLUG=${JSON.stringify(cityLookup)};
       var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var CAT_PLURAL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CAT_PLURAL[c] || CATS[c].toLowerCase()])))};
@@ -409,8 +416,11 @@ const html = `<!DOCTYPE html>
         var bits=[];
         if(cat!=='all')bits.push('with '+CAT_LABEL[cat]);
         if(lang!=='all')bits.push('working in '+LANG_LABEL[lang]);
+        // The total belongs to an unfiltered page only. Typing a city and still being told about
+        // 3,096 providers is the same false promise the per-city counts used to make.
+        var filtered=cat!=='all'||lang!=='all'||!!term;
         count.innerHTML='Showing <b>'+shown+'</b> '+(shown===1?'city':'cities')+(bits.length?' '+bits.join(', '):'')
-          +', <b>'+(bits.length?rows:TOTAL)+'</b> providers in total.';
+          +', <b>'+(filtered?rows:TOTAL)+'</b> providers'+(filtered?' in '+(shown===1?'it':'them'):' in total')+'.';
         empty.classList.toggle('is-hidden',shown>0);
         try{
           var u=new URL(window.location);
@@ -420,16 +430,33 @@ const html = `<!DOCTYPE html>
       }
       // Picking a city goes to that city's page rather than filtering this one down to a single
       // card: the city page is the thing worth landing on.
-      citySel.addEventListener('change',function(){
-        if(citySel.value==='all')return;
-        var qs=[];
-        if(catSel.value!=='all')qs.push('cat='+catSel.value);
-        if(langSel.value!=='all')qs.push('lang='+langSel.value);
-        window.location.href='/services/'+citySel.value+(qs.length?'?'+qs.join('&'):'');
+      function qs(){
+        var p=[];
+        if(catSel.value!=='all')p.push('cat='+catSel.value);
+        if(langSel.value!=='all')p.push('lang='+langSel.value);
+        return p.length?'?'+p.join('&'):'';
+      }
+      function go(slug){ window.location.href='/services/'+slug+qs(); }
+      // Typing narrows the cards below. Completing a city, either from the browser's suggestions or
+      // by hand, opens that city, because the city page is the thing worth landing on.
+      q.addEventListener('input',function(){
+        var slug=CITY_SLUG[(q.value||'').trim().toLowerCase()];
+        if(slug){go(slug);return;}
+        render();
+      });
+      // Enter on a narrowed-down list opens the one city left, so the keyboard never dead-ends.
+      q.addEventListener('keydown',function(e){
+        if(e.key!=='Enter')return;
+        e.preventDefault();
+        var slug=CITY_SLUG[(q.value||'').trim().toLowerCase()];
+        if(!slug){
+          var left=cards.filter(function(el){return !el.classList.contains('is-hidden');});
+          if(left.length===1)slug=left[0].getAttribute('data-city');
+        }
+        if(slug)go(slug);
       });
       [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svReset').addEventListener('click',function(){citySel.value='all';catSel.value='all';langSel.value='all';q.value='';render();});
+      document.getElementById('svReset').addEventListener('click',function(){catSel.value='all';langSel.value='all';q.value='';render();});
       (function(){
         var sp=new URLSearchParams(window.location.search);
         function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;return;} } }
