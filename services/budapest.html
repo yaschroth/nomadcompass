@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -200,16 +208,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:HUN-2015-Budapest-Hungarian_Parliament_(Budapest)_2015-01.jpg" target="_blank" rel="nofollow noopener">Photo: Godot13 (CC BY-SA 4.0)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (28)</option><option value="legal">Legal &amp; visa (18)</option><option value="dentist">Dentists (8)</option><option value="doctor">Doctors &amp; clinics (2)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (28)</option><option value="hu">Hungarian (19)</option><option value="de">German (2)</option><option value="pl">Polish (1)</option><option value="vi">Vietnamese (1)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>28</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Budapest"><a class="svc-chip" data-cat="legal" href="/services/budapest/lawyers">Legal &amp; visa<span>18</span></a><a class="svc-chip" data-cat="dentist" href="/services/budapest/dentists">Dentists<span>8</span></a><a class="svc-chip" data-cat="doctor" href="/services/budapest/doctors">Doctors &amp; clinics<span>2</span></a></nav>
+        <p class="sv-count"><b>28</b> providers across <b>3</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="legal" id="svc-legal">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="18">18</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><a href="/services/budapest/lawyers">Legal &amp; visa</a><span class="svc-group-n">18</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="bohanek fekete law associates">
         <div class="sv-head">
@@ -256,235 +259,11 @@
           <p class="sv-links"><a class="sv-go" href="https://www.drkovacsdora.com/home-english.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20K%20Kovacs%20Dora%20Ugyved%2C%20MORICZ%20ZSIGMOND%20korter%2015.%2C%201117%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="dr pal batki law office">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://batki.info/lawyer-in-budapest-specialized-in-criminal-law/" target="_blank" rel="nofollow noopener">Dr Pal Batki Law Office</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Ujpesti rakpart 7. 1st floor 7., 1137, Budapest</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, immigration&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://batki.info/lawyer-in-budapest-specialized-in-criminal-law/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Pal%20Batki%20Law%20Office%2C%20Ujpesti%20rakpart%207.%201st%20floor%207.%2C%201137%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="dr szabo eniko law office">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.drszaboeniko.hu/site/eng/kapcsolat.html" target="_blank" rel="nofollow noopener">Dr Szabo Eniko Law Office</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Krisztina korut 30., 1/11., 1013, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;employment, family, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.drszaboeniko.hu/site/eng/kapcsolat.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Szabo%20Eniko%20Law%20Office%2C%20Krisztina%20korut%2030.%2C%201%2F11.%2C%201013%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="dr toth m gabor law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Toth M Gabor Law Firm</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Szemere street 8. 4th floor 1., Doorbell:18, 1054, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Toth%20M%20Gabor%20Law%20Firm%2C%20Szemere%20street%208.%204th%20floor%201.%2C%20Doorbell%3A18%2C%201054%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="duna legal">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.dunalegal.com/en" target="_blank" rel="nofollow noopener">Duna Legal</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; White House Office Building, Vaci ut 47/E, 1134, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, intellectual property, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.dunalegal.com/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Duna%20Legal%2C%20White%20House%20Office%20Building%2C%20Vaci%20ut%2047%2FE%2C%201134%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="kovacs hawa law office">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://kovacs-hawa.hu/" target="_blank" rel="nofollow noopener">Kovacs Hawa Law Office</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 19 Kiraly utca, H, 1075, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, family, immigration, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://kovacs-hawa.hu/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kovacs%20Hawa%20Law%20Office%2C%2019%20Kiraly%20utca%2C%20H%2C%201075%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="lorik law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://lorik.hu/en/" target="_blank" rel="nofollow noopener">Lorik Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 40Honved utca, 1055, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://lorik.hu/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lorik%20Law%20Firm%2C%2040Honved%20utca%2C%201055%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="pakay law office">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://pakay.hu/" target="_blank" rel="nofollow noopener">Pakay Law Office</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Vaci str. 12., 1052, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, immigration, intellectual property, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://pakay.hu/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Pakay%20Law%20Office%2C%20Vaci%20str.%2012.%2C%201052%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="prandler and petroczy law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Prandler And Petroczy Law Firm</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Paulay Ede street 16, groundfloor, office, 1061, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, immigration, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Prandler%20And%20Petroczy%20Law%20Firm%2C%20Paulay%20Ede%20street%2016%2C%20groundfloor%2C%20office%2C%201061%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="sule law firm budapest">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://sulelaw.com" target="_blank" rel="nofollow noopener">Sule Law Firm Budapest</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Frankel Leo ut 84, 1023, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;intellectual property, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://sulelaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sule%20Law%20Firm%20Budapest%2C%20Frankel%20Leo%20ut%2084%2C%201023%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="szecskay attorneys at law">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://szecskay.hu" target="_blank" rel="nofollow noopener">Szecskay Attorneys At Law</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Kossuth ter 16, 17. III/2., 1055, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, intellectual property, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://szecskay.hu" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Szecskay%20Attorneys%20At%20Law%2C%20Kossuth%20ter%2016%2C%2017.%20III%2F2.%2C%201055%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="tivadar law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.drtivadar.hu/en/" target="_blank" rel="nofollow noopener">Tivadar Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Szerena ut 5/3, 1025, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, intellectual property, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.drtivadar.hu/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tivadar%20Law%20Firm%2C%20Szerena%20ut%205%2F3%2C%201025%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="hu en" data-name="wagner wagner law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://wagnerlaw.hu/" target="_blank" rel="nofollow noopener">Wagner Wagner Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Regus Obuda Gate Office Building, Arpad fejedelem utja 26, 28., 5th floor, 1023, Budapest</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Hungarian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, employment, family, immigration, international, personal injury&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Hungary/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://wagnerlaw.hu/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Wagner%20Wagner%20Law%20Firm%2C%20Regus%20Obuda%20Gate%20Office%20Building%2C%20Arpad%20fejedelem%20utja%2026%2C%2028.%2C%205th%20floor%2C%201023%2C%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="immigration lawyers hungary">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.immigrationlawyershungary.com/en" target="_blank" rel="nofollow noopener">Immigration Lawyers Hungary</a></h3>
-            <p class="sv-meta">Legal &amp; visa</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">Publishes its residence and work permit practice in English.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://www.immigrationlawyershungary.com/en" target="_blank" rel="nofollow noopener">immigrationlawyershungary.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.immigrationlawyershungary.com/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Immigration%20Lawyers%20Hungary%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en pl vi" data-name="kecser law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://kecser.com/en/services/immigration-law" target="_blank" rel="nofollow noopener">Kecser Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Nadasdy u. 12, District IX</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">Polish</span><span class="sv-lang">Vietnamese</span></p>
-        <p class="sv-note">States it deals with clients directly in English, Polish and Vietnamese. Residence and settlement permits, citizenship.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://kecser.com/en/" target="_blank" rel="nofollow noopener">kecser.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://kecser.com/en/services/immigration-law" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kecser%20Law%20Firm%2C%20Nadasdy%20u.%2012%2C%20District%20IX%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en de hu" data-name="madarassy, bodroghelyi &amp; partners">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.madarassy-legal.com/en/get-a-residence-permit-in-hungary/" target="_blank" rel="nofollow noopener">Madarassy, Bodroghelyi &amp; Partners</a></h3>
-            <p class="sv-meta">Legal &amp; visa</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span><span class="sv-lang">German</span><span class="sv-lang">Hungarian</span></p>
-        <p class="sv-note">States it works in English and German alongside Hungarian, handling filings and contact with the authorities.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-self-declared">Says so itself</span><a href="https://www.madarassy-legal.com/en/get-a-residence-permit-in-hungary/" target="_blank" rel="nofollow noopener">madarassy-legal.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.madarassy-legal.com/en/get-a-residence-permit-in-hungary/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Madarassy%2C%20Bodroghelyi%20%26%20Partners%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/budapest/lawyers">See all 18 lawyers in Budapest &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="dentist" id="svc-dentist">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="8">8</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span><a href="/services/budapest/dentists">Dentists</a><span class="svc-group-n">8</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="hu en" data-name="madenta">
         <div class="sv-head">
@@ -531,85 +310,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dental%20Angels%20Smile%20Clinic%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="egressy dental">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Egressy Dental</h3>
-            <p class="sv-meta">Dentists</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">From a dental directory stating its partner dentists and their staff speak English. Roster-level claim, not checked for this clinic on its own.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://www.dentaldepartures.com/info/treatments/hungary/central-hungary/budapest" target="_blank" rel="nofollow noopener">dentaldepartures.com</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Egressy%20Dental%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="fulop dental clinic budapest">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Fulop Dental Clinic Budapest</h3>
-            <p class="sv-meta">Dentists</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">From a dental directory stating its partner dentists and their staff speak English. Roster-level claim, not checked for this clinic on its own.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://www.dentaldepartures.com/info/treatments/hungary/central-hungary/budapest" target="_blank" rel="nofollow noopener">dentaldepartures.com</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Fulop%20Dental%20Clinic%20Budapest%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="helvetic clinics">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.helvetic-clinics.co.uk/" target="_blank" rel="nofollow noopener">Helvetic Clinics</a></h3>
-            <p class="sv-meta">Dentists</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">Its own site blocks all access and states no language, so this rests entirely on a directory that says its partner dentists speak English. Roster-level claim.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://www.dentaldepartures.com/info/treatments/hungary/central-hungary/budapest" target="_blank" rel="nofollow noopener">dentaldepartures.com</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.helvetic-clinics.co.uk/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Helvetic%20Clinics%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="rosental dental and oral surgery clinic">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Rosental Dental and Oral Surgery Clinic</h3>
-            <p class="sv-meta">Dentists</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">From a dental directory stating its partner dentists and their staff speak English plus other languages. Roster-level claim, not checked for this clinic on its own.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://www.dentaldepartures.com/info/treatments/hungary/central-hungary/budapest" target="_blank" rel="nofollow noopener">dentaldepartures.com</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rosental%20Dental%20and%20Oral%20Surgery%20Clinic%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="suba dental">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Suba Dental</h3>
-            <p class="sv-meta">Dentists</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">From a dental directory stating its partner dentists and their staff speak English. Roster-level claim, not checked for this clinic on its own.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-directory">Directory only</span><a href="https://www.dentaldepartures.com/info/treatments/hungary/central-hungary/budapest" target="_blank" rel="nofollow noopener">dentaldepartures.com</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Suba%20Dental%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/budapest/dentists">See all 8 dentists in Budapest &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="2">2</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/budapest/doctors">Doctors &amp; clinics</a><span class="svc-group-n">2</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="hu en" data-name="firstmed centre">
         <div class="sv-head">
@@ -642,11 +347,8 @@
         </div>
       </article>
           </div>
+          
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Budapest matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -778,85 +480,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa"};
-      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers"};
-      var LANG_LABEL={"en":"English","de":"German","hu":"Hungarian","pl":"Polish","vi":"Vietnamese"};
-      var TOTAL=28;
-      var CITY_NAME="Budapest",BASE_TITLE="English-speaking lawyers and dentists in Budapest",LOCAL_LANG="hu";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

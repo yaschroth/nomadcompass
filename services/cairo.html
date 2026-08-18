@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -197,16 +205,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Cairo,_Cairo_Citadel,_Muhammad_Ali_Mosque,_Egypt.jpg" target="_blank" rel="nofollow noopener">Photo: Vyacheslav Argenberg (CC BY 4.0)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (26)</option><option value="doctor">Doctors &amp; clinics (21)</option><option value="dentist">Dentists (4)</option><option value="legal">Legal &amp; visa (1)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="ar">Arabic (26)</option><option value="en">English (26)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>26</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Cairo"><a class="svc-chip" data-cat="doctor" href="/services/cairo/doctors">Doctors &amp; clinics<span>21</span></a><a class="svc-chip" data-cat="dentist" href="/services/cairo/dentists">Dentists<span>4</span></a><a class="svc-chip" data-cat="legal" href="/services/cairo/lawyers">Legal &amp; visa<span>1</span></a></nav>
+        <p class="sv-count"><b>26</b> providers across <b>3</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="21">21</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/cairo/doctors">Doctors &amp; clinics</a><span class="svc-group-n">21</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="al-shorouk hospital">
         <div class="sv-head">
@@ -253,280 +256,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=As-Salam%20International%20Hospital%2C%20Nile%20Corniche%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dar al fouad hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dar Al Fouad Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 26th July Street, 6th October City, Giza</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dar%20Al%20Fouad%20Hospital%2C%2026th%20July%20Street%2C%206th%20October%20City%2C%20Giza%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="degla medical centre">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Degla Medical Centre</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 4 Street 203, Degla, Maadi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Degla%20Medical%20Centre%2C%204%20Street%20203%2C%20Degla%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr cherif hamza">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Cherif Hamza</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 53 Al Zahraa Street, Mohandeseen, and 9 Road 256, Maadi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Cherif%20Hamza%2C%2053%20Al%20Zahraa%20Street%2C%20Mohandeseen%2C%20and%209%20Road%20256%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr fadel shaltout">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Fadel Shaltout</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; El Tabei Building 87, Street N9, Maadi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Fadel%20Shaltout%2C%20El%20Tabei%20Building%2087%2C%20Street%20N9%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr fawzan shaltout">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Fawzan Shaltout</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; El Tabei Building 87, Street N9, Maadi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Fawzan%20Shaltout%2C%20El%20Tabei%20Building%2087%2C%20Street%20N9%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr ismail abou el fotouh">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Ismail Abou El Fotouh</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Aswan Square, Dokki</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Ismail%20Abou%20El%20Fotouh%2C%20Aswan%20Square%2C%20Dokki%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr mohamed saeed gomaa">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Mohamed Saeed Gomaa</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 20 El Batal Ahmed Abdel Aziz Street, 3rd floor</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Mohamed%20Saeed%20Gomaa%2C%2020%20El%20Batal%20Ahmed%20Abdel%20Aziz%20Street%2C%203rd%20floor%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr mona abu zekri">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Mona Abu Zekri</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 7 El Zuhur Street, Mohandesseen</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Mona%20Abu%20Zekri%2C%207%20El%20Zuhur%20Street%2C%20Mohandesseen%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr nevine f el hefnawi">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Nevine F El Hefnawi</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Cairo Motherhood Centre, 10 Syria Street, 3rd floor</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Nevine%20F%20El%20Hefnawi%2C%20Cairo%20Motherhood%20Centre%2C%2010%20Syria%20Street%2C%203rd%20floor%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr. ahmed sheble">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. Ahmed Sheble</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Jedda Tower, 17 Ismail Mohamed Street, Zamalek</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Ahmed%20Sheble%2C%20Jedda%20Tower%2C%2017%20Ismail%20Mohamed%20Street%2C%20Zamalek%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr. ahmed zakaria">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. Ahmed Zakaria</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; City Clinic, Beverly Hills, 6th October City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Ahmed%20Zakaria%2C%20City%20Clinic%2C%20Beverly%20Hills%2C%206th%20October%20City%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr. mary nabil rizk">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. Mary Nabil Rizk</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Street 198, Degla, building 13</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Mary%20Nabil%20Rizk%2C%20Street%20198%2C%20Degla%2C%20building%2013%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="dr. mohammed omar">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr. Mohammed Omar</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 4A Road 200, Degla, Maadi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Mohammed%20Omar%2C%204A%20Road%20200%2C%20Degla%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="el gezira polyclinic">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">El Gezira Polyclinic</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 3 Ibn El Nabieh Street, Zamalek</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=El%20Gezira%20Polyclinic%2C%203%20Ibn%20El%20Nabieh%20Street%2C%20Zamalek%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="el nada hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">El Nada Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 54 Manial Street</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=El%20Nada%20Hospital%2C%2054%20Manial%20Street%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="ghaly medical group">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Ghaly Medical Group</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 32-33 Golf Street, Maadi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ghaly%20Medical%20Group%2C%2032-33%20Golf%20Street%2C%20Maadi%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="manial clinic">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Manial Clinic</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 5 Mostafa Reda Street, El Manial</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Manial%20Clinic%2C%205%20Mostafa%20Reda%20Street%2C%20El%20Manial%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ar en" data-name="safa hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Safa Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 40 El Iraq Street, Mohandeseen</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Safa%20Hospital%2C%2040%20El%20Iraq%20Street%2C%20Mohandeseen%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/cairo/doctors">See all 21 doctors in Cairo &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="dentist" id="svc-dentist">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>Dentists<span class="svc-group-n" data-total="4">4</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span><a href="/services/cairo/dentists">Dentists</a><span class="svc-group-n">4</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="ar en" data-name="barsoum dental clinic">
         <div class="sv-head">
@@ -573,25 +307,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Osman%20Dental%20Clinic%2C%20Maadi%20branch%2C%20Road%20233%2C%20building%2019%2C%20Maadi%20Degla%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="ar en" data-name="osman dental clinic, mohandaseen branch">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
-          <div>
-            <h3 class="sv-name">Osman Dental Clinic, Mohandaseen branch</h3>
-            <p class="sv-meta">Dentists&nbsp;&middot; 54 Abdel Moneim Raid Street, 1st floor</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Arabic</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of doctors and medical facilities in Egypt. The claim is roster-level: the FCDO describes it as providers where some staff speak English, and the list itself carries no language column. It publishes the list without endorsing anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/egypt-list-of-medical-facilities-practitioners/egypt-doctors-and-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Osman%20Dental%20Clinic%2C%20Mohandaseen%20branch%2C%2054%20Abdel%20Moneim%20Raid%20Street%2C%201st%20floor%2C%20Cairo%2C%20Egypt" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/cairo/dentists">See all 4 dentists in Cairo &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="legal" id="svc-legal">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="1">1</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><a href="/services/cairo/lawyers">Legal &amp; visa</a><span class="svc-group-n">1</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="dr adel kheir law office aklo">
         <div class="sv-head">
@@ -609,11 +329,8 @@
         </div>
       </article>
           </div>
+          
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Cairo matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -745,85 +462,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"dentist":"Dentists","doctor":"Doctors & clinics","legal":"Legal & visa"};
-      var CAT_PLURAL={"dentist":"dentists","doctor":"doctors","legal":"lawyers"};
-      var LANG_LABEL={"ar":"Arabic","en":"English"};
-      var TOTAL=26;
-      var CITY_NAME="Cairo",BASE_TITLE="English-speaking doctors and dentists in Cairo",LOCAL_LANG="ar";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

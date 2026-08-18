@@ -48,6 +48,15 @@ const { CAT_ICON, CAT_PLURAL, EV_RANK, EV_LABEL } = require(path.join(ROOT, 'scr
 
 const MIN_INDEXABLE = 3;
 
+// Which child pages exist. Only the manifest knows: a pair under the word floor was never written,
+// and linking to a page that does not exist is worse than not linking.
+const { SERVICE_SLUGS } = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
+const CHILDREN = new Set();
+{
+  const f = path.join(ROOT, 'data', 'service-pair-pages.json');
+  if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => CHILDREN.add(x.city + '|' + x.service));
+}
+
 // --- the shell ---------------------------------------------------------------------------------
 // Everything a page needs, including the blocks the sweeps inject. Lifting only the style, nav and
 // footer left every generated page short of five tracked features, so _safe_write refused the
@@ -170,12 +179,35 @@ for (const slug of slugs) {
   const groups = allCats
     .map((cat) => ({ cat, rows: rows.filter((p) => p.category === cat) }))
     .sort((x, y) => y.rows.length - x.rows.length || CATS[x.cat].localeCompare(CATS[y.cat]));
-  const groupsHtml = groups.map((g) => `<section class="svc-group" data-cat="${g.cat}" id="svc-${g.cat}">
-          <h2 class="svc-group-head"><span class="svc-group-ico">${inlineIcon(CAT_ICON[g.cat])}</span>${esc(CATS[g.cat])}<span class="svc-group-n" data-total="${g.rows.length}">${g.rows.length}</span></h2>
+  // A city holding more than one service is a hub: each service shows its best-sourced few and
+  // links to its own page, which is where the whole list lives. A city holding one service is that
+  // service's page already, so it shows everything and links nowhere.
+  const single = groups.length === 1;
+  const PREVIEW = 3;
+  const childOf = (cat) => '/services/' + slug + '/' + SERVICE_SLUGS[cat];
+  const hasChild = (cat) => CHILDREN.has(slug + '|' + cat);
+  const groupsHtml = groups.map((g) => {
+    const shown = single ? g.rows : g.rows.slice(0, PREVIEW);
+    const more = g.rows.length - shown.length;
+    const head = hasChild(g.cat)
+      ? `<a href="${childOf(g.cat)}">${esc(CATS[g.cat])}</a>`
+      : esc(CATS[g.cat]);
+    return `<section class="svc-group" data-cat="${g.cat}" id="svc-${g.cat}">
+          <h2 class="svc-group-head"><span class="svc-group-ico">${inlineIcon(CAT_ICON[g.cat])}</span>${head}<span class="svc-group-n">${g.rows.length}</span></h2>
           <div class="sv-grid">
-        ${g.rows.map(card).join('\n        ')}
+        ${shown.map(card).join('\n        ')}
           </div>
-        </section>`).join('\n      ');
+          ${more > 0 ? `<p class="svc-more-link">${hasChild(g.cat)
+            ? `<a href="${childOf(g.cat)}">See all ${g.rows.length} ${esc(CAT_PLURAL[g.cat] || CATS[g.cat].toLowerCase())} in ${esc(c.name)} &rarr;</a>`
+            : `${more} more not shown here.`}</p>` : ''}
+        </section>`;
+  }).join('\n      ');
+
+  // The chips are the navigation now, and they are links rather than a filter that rewrites the
+  // page under you. Every symptom reported on the old page came out of that one closure.
+  const chipsHtml = groups.map((g) => (hasChild(g.cat)
+    ? `<a class="svc-chip" data-cat="${g.cat}" href="${childOf(g.cat)}">${esc(CATS[g.cat])}<span>${g.rows.length}</span></a>`
+    : `<a class="svc-chip" data-cat="${g.cat}" href="#svc-${g.cat}">${esc(CATS[g.cat])}<span>${g.rows.length}</span></a>`)).join('');
 
   // Every option says how many rows it holds, so the menu answers "is there anything here for me"
   // before you pick it and the page cannot promise something it does not have.
@@ -255,7 +287,15 @@ ${shell.headEnd}
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -280,19 +320,12 @@ ${shell.headEnd}
           </div>${credit}
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat">${catOptions}</select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang">${langOptions}</select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>${rows.length}</b> ${rows.length === 1 ? 'provider' : 'providers'}, grouped by service.</p>
+        ${single ? '' : `<nav class="svc-chips" aria-label="Services in ${esc(c.name)}">${chipsHtml}</nav>`}
+        <p class="sv-count">${single
+          ? `All <b>${rows.length}</b> ${rows.length === 1 ? 'provider' : 'providers'} we hold for ${esc(c.name)}.`
+          : `<b>${rows.length}</b> providers across <b>${groups.length}</b> services. Each service has its own page with the full list.`}</p>
 
       ${groupsHtml}
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in ${esc(c.name)} matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -307,85 +340,20 @@ ${shell.headEnd}
   ${FOOTER}
 ${shell.bodyEnd}
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL=${JSON.stringify(Object.fromEntries(allCats.map((x) => [x, CATS[x]])))};
-      var CAT_PLURAL=${JSON.stringify(Object.fromEntries(allCats.map((x) => [x, CAT_PLURAL[x] || CATS[x].toLowerCase()])))};
-      var LANG_LABEL=${JSON.stringify(Object.fromEntries(allLangs.map((x) => [x, LANGS[x]])))};
-      var TOTAL=${rows.length};
-      var CITY_NAME=${JSON.stringify(c.name)},BASE_TITLE=${JSON.stringify(title)},LOCAL_LANG=${JSON.stringify(LOCAL[c.country] || '')};
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -197,16 +205,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Frankfurter_Altstadt_mit_Skyline_2019.jpg" target="_blank" rel="nofollow noopener">Photo: Thomas Wolf, www.foto-tw.de (CC BY-SA 3.0 de)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (23)</option><option value="legal">Legal &amp; visa (16)</option><option value="doctor">Doctors &amp; clinics (6)</option><option value="therapy">Therapy &amp; counselling (1)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (23)</option><option value="de">German (23)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>23</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Frankfurt"><a class="svc-chip" data-cat="legal" href="/services/frankfurt/lawyers">Legal &amp; visa<span>16</span></a><a class="svc-chip" data-cat="doctor" href="/services/frankfurt/doctors">Doctors &amp; clinics<span>6</span></a><a class="svc-chip" data-cat="therapy" href="/services/frankfurt/therapists">Therapy &amp; counselling<span>1</span></a></nav>
+        <p class="sv-count"><b>23</b> providers across <b>3</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="legal" id="svc-legal">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="16">16</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><a href="/services/frankfurt/lawyers">Legal &amp; visa</a><span class="svc-group-n">16</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="acanthus legal dr hofmann hoidn partnerschaft von rechtsanwalten mbb">
         <div class="sv-head">
@@ -253,205 +256,11 @@
           <p class="sv-links"><a class="sv-go" href="https://www.advant-beiten.com/en/start" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advant%20Beiten%2C%20Mainzer%20Landstr.%2036%2C%2060325%20Frankfurt%2C%20Frankfurt%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="dolce lauda partnerschaftsgesellschaft mbb">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.dolcelauda.com" target="_blank" rel="nofollow noopener">Dolce Lauda Partnerschaftsgesellschaft Mbb</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Arndtstrasse 34, 60325, Frankfurt am Main</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.dolcelauda.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dolce%20Lauda%20Partnerschaftsgesellschaft%20Mbb%2C%20Arndtstrasse%2034%2C%2060325%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="kallan ra gmbh">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.kallan-legal.de" target="_blank" rel="nofollow noopener">Kallan Ra Gmbh</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Bockenheimer Landstrae 51, 53, 60325, Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.kallan-legal.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kallan%20Ra%20Gmbh%2C%20Bockenheimer%20Landstrae%2051%2C%2053%2C%2060325%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="kanzlei neue krame">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.kanzlei-neue-kraeme.de" target="_blank" rel="nofollow noopener">Kanzlei Neue Krame</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Neue Krame 26, 60311, Frankfurt</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.kanzlei-neue-kraeme.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kanzlei%20Neue%20Krame%2C%20Neue%20Krame%2026%2C%2060311%2C%20Frankfurt%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="livonius van rienen partmbb">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.lvr-frankfurt.com" target="_blank" rel="nofollow noopener">Livonius Van Rienen Partmbb</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Beethovenstrae 65, 60325, Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.lvr-frankfurt.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Livonius%20Van%20Rienen%20Partmbb%2C%20Beethovenstrae%2065%2C%2060325%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="metis rechtsanwalte partg mbb">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.metis-legal.de/en" target="_blank" rel="nofollow noopener">Metis Rechtsanwalte Partg Mbb</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Untermainkai 30, 60329, Frankfurt/Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.metis-legal.de/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Metis%20Rechtsanwalte%20Partg%20Mbb%2C%20Untermainkai%2030%2C%2060329%2C%20Frankfurt%2FMain%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="rechtsanwaltin ausra sezaite">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.kanzlei-sezaite.de" target="_blank" rel="nofollow noopener">Rechtsanwaltin Ausra Sezaite</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Goethestr. 21, 60313, Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, employment, family, immigration, intellectual property, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.kanzlei-sezaite.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rechtsanwaltin%20Ausra%20Sezaite%2C%20Goethestr.%2021%2C%2060313%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="rechtsanwaltin steinfeld">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.steinfeld-recht.de" target="_blank" rel="nofollow noopener">Rechtsanwaltin Steinfeld</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Windmuhlstrae 1, 60329, Frankfurt</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.steinfeld-recht.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rechtsanwaltin%20Steinfeld%2C%20Windmuhlstrae%201%2C%2060329%2C%20Frankfurt%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="rechtsanwaltskanzlei marcus w quade">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.rechtsanwalt-quade.de" target="_blank" rel="nofollow noopener">Rechtsanwaltskanzlei Marcus W Quade</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Messeturm Frankfurt 25.Etage Regus, Friedrich, Ebert, Anlage 49, 60308, Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, immigration, international&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.rechtsanwalt-quade.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rechtsanwaltskanzlei%20Marcus%20W%20Quade%2C%20Messeturm%20Frankfurt%2025.Etage%20Regus%2C%20Friedrich%2C%20Ebert%2C%20Anlage%2049%2C%2060308%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="rosinus partner rechtsanwalte partg mbb">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://rosinus-partner.com" target="_blank" rel="nofollow noopener">Rosinus Partner Rechtsanwalte Partg Mbb</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Kettenhofweg 29, 60325, Frankfurt</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://rosinus-partner.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rosinus%20Partner%20Rechtsanwalte%20Partg%20Mbb%2C%20Kettenhofweg%2029%2C%2060325%2C%20Frankfurt%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="schillling tute partnerschaft von rechtsanwalten mbb">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://schillingtute.de/en" target="_blank" rel="nofollow noopener">Schillling Tute Partnerschaft Von Rechtsanwalten Mbb</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Senckenberganlage 10, 12, 60325, Frankfurt</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://schillingtute.de/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Schillling%20Tute%20Partnerschaft%20Von%20Rechtsanwalten%20Mbb%2C%20Senckenberganlage%2010%2C%2012%2C%2060325%2C%20Frankfurt%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="simmons simmons llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.simmons-simmons.com/en/people/ckkmceswi14pc0978n3ss7aqd/boris-strauch" target="_blank" rel="nofollow noopener">Simmons Simmons Llp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Junghofstrae 9 (FOUR Frankfurt), 60315, Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.simmons-simmons.com/en/people/ckkmceswi14pc0978n3ss7aqd/boris-strauch" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Simmons%20Simmons%20Llp%2C%20Junghofstrae%209%20(FOUR%20Frankfurt)%2C%2060315%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="vectocon steuerberater rechtsanwalte gmbh">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.vectocon.de" target="_blank" rel="nofollow noopener">Vectocon Steuerberater Rechtsanwalte Gmbh</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Am Hauptbahnhof 10, 60329 Frankfurt / Main, Frankfurt</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, international, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.vectocon.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vectocon%20Steuerberater%20Rechtsanwalte%20Gmbh%2C%20Am%20Hauptbahnhof%2010%2C%2060329%20Frankfurt%20%2F%20Main%2C%20Frankfurt%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="wallasch gartner">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.wallasch-gaertner.de" target="_blank" rel="nofollow noopener">Wallasch Gartner</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Fichardstrasse 30, 60322, Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Germany/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.wallasch-gaertner.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Wallasch%20Gartner%2C%20Fichardstrasse%2030%2C%2060322%2C%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/frankfurt/lawyers">See all 16 lawyers in Frankfurt &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="6">6</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/frankfurt/doctors">Doctors &amp; clinics</a><span class="svc-group-n">6</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en" data-name="dr. christine kownatzki, american orthodontist">
         <div class="sv-head">
@@ -498,55 +307,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Frauenarztinnenpraxis%20Tsang%26%20Dornemann%2C%20Gartenstr.%20179%2C%2060596%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en" data-name="orthodontist dr. adriana weiss">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Orthodontist Dr. Adriana Weiss</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Friedberger Landstr. 406, 60389 Frankfurt am Main</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Germany, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;Orthodontics&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/germany-list-of-medical-practitionersfacilities/list-of-doctors-in-germany" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Orthodontist%20Dr.%20Adriana%20Weiss%2C%20Friedberger%20Landstr.%20406%2C%2060389%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en" data-name="orthopadie im westend">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Orthopadie im Westend</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Lindenstr. 42, 60325 Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Germany, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;Surgery&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/germany-list-of-medical-practitionersfacilities/list-of-doctors-in-germany" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Orthopadie%20im%20Westend%2C%20Lindenstr.%2042%2C%2060325%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en" data-name="praxis dr. stefan kollmannsperger, orthodontist">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Praxis Dr. Stefan Kollmannsperger, orthodontist</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Siesmayer Str. 44, 60323 Frankfurt am Main</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">German</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Germany, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;Orthodontics&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/germany-list-of-medical-practitionersfacilities/list-of-doctors-in-germany" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Praxis%20Dr.%20Stefan%20Kollmannsperger%2C%20orthodontist%2C%20Siesmayer%20Str.%2044%2C%2060323%20Frankfurt%20am%20Main%2C%20Frankfurt%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/frankfurt/doctors">See all 6 doctors in Frankfurt &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="therapy" id="svc-therapy">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="1">1</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span><a href="/services/frankfurt/therapists">Therapy &amp; counselling</a><span class="svc-group-n">1</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="de en" data-name="wachgekusst - practice for psychotherapy">
         <div class="sv-head">
@@ -564,11 +329,8 @@
         </div>
       </article>
           </div>
+          
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Frankfurt matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -700,85 +462,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
-      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers","therapy":"therapists"};
-      var LANG_LABEL={"en":"English","de":"German"};
-      var TOTAL=23;
-      var CITY_NAME="Frankfurt",BASE_TITLE="English-speaking lawyers and doctors in Frankfurt",LOCAL_LANG="de";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

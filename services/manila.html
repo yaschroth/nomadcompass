@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -197,16 +205,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Manila_Skyline_March_2020.jpg" target="_blank" rel="nofollow noopener">Photo: Lawrence Ruiz (CC BY-SA 4.0)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (24)</option><option value="doctor">Doctors &amp; clinics (23)</option><option value="therapy">Therapy &amp; counselling (1)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (24)</option><option value="tl">Tagalog (24)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>24</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Manila"><a class="svc-chip" data-cat="doctor" href="/services/manila/doctors">Doctors &amp; clinics<span>23</span></a><a class="svc-chip" data-cat="therapy" href="/services/manila/therapists">Therapy &amp; counselling<span>1</span></a></nav>
+        <p class="sv-count"><b>24</b> providers across <b>2</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="23">23</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/manila/doctors">Doctors &amp; clinics</a><span class="svc-group-n">23</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="adventist medical center manila">
         <div class="sv-head">
@@ -253,310 +256,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chinese%20General%20Hospital%2C%20286%20Blumentritt%20Street%2C%20Sta.%20Cruz%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="department of health">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Department of Health</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; E Service Road, Taguig City</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in the Philippines, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;All specialisations&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities/philippines-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Department%20of%20Health%2C%20E%20Service%20Road%2C%20Taguig%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="dr jose fabella hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Dr Jose Fabella Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Lope de Vega Street, Sta. Cruz, Manila</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Jose%20Fabella%20Hospital%2C%20Lope%20de%20Vega%20Street%2C%20Sta.%20Cruz%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="east avenue medical center">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">East Avenue Medical Center</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; East Avenue, Diliman, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=East%20Avenue%20Medical%20Center%2C%20East%20Avenue%2C%20Diliman%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="lung center of the philippines">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Lung Center of the Philippines</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Quezon Avenue, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lung%20Center%20of%20the%20Philippines%2C%20Quezon%20Avenue%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="makati medical center">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Makati Medical Center</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 2 Amorsolo Street, Legaspi Village, Makati City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Makati%20Medical%20Center%2C%202%20Amorsolo%20Street%2C%20Legaspi%20Village%2C%20Makati%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="manila doctors hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Manila Doctors Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 667 United Nations Avenue, Ermita, Manila</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Manila%20Doctors%20Hospital%2C%20667%20United%20Nations%20Avenue%2C%20Ermita%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="medical center manila (manilamed)">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Medical Center Manila (ManilaMed)</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; United Nations Avenue, Ermita, Manila</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Medical%20Center%20Manila%20(ManilaMed)%2C%20United%20Nations%20Avenue%2C%20Ermita%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="national children's hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">National Children's Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 264 E. Rodriguez, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=National%20Children's%20Hospital%2C%20264%20E.%20Rodriguez%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="philippine general hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Philippine General Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Taft Avenue, Ermita, Manila</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Philippine%20General%20Hospital%2C%20Taft%20Avenue%2C%20Ermita%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="philippine heart center">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Philippine Heart Center</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; East Avenue, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Philippine%20Heart%20Center%2C%20East%20Avenue%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="philippine orthopedic center">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Philippine Orthopedic Center</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Maria Clara corner Banawe Street, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Philippine%20Orthopedic%20Center%2C%20Maria%20Clara%20corner%20Banawe%20Street%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="research institute for tropical medicine">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Research Institute for Tropical Medicine</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Filinvest Corporate City, Alabang, Muntinlupa City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Research%20Institute%20for%20Tropical%20Medicine%2C%20Filinvest%20Corporate%20City%2C%20Alabang%2C%20Muntinlupa%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="san lazaro hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">San Lazaro Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Quiricada Street, Sta. Cruz, Manila</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=San%20Lazaro%20Hospital%2C%20Quiricada%20Street%2C%20Sta.%20Cruz%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="st luke's medical center">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">St Luke's Medical Center</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 279 E. Rodriguez Sr Boulevard, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=St%20Luke's%20Medical%20Center%2C%20279%20E.%20Rodriguez%20Sr%20Boulevard%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="st luke's medical center bgc">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">St Luke's Medical Center BGC</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 32nd Street corner Rizal Drive, Bonifacio Global City, Taguig</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=St%20Luke's%20Medical%20Center%20BGC%2C%2032nd%20Street%20corner%20Rizal%20Drive%2C%20Bonifacio%20Global%20City%2C%20Taguig%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="taguig pateros general hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Taguig Pateros General Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; E Service Road, Taguig City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Taguig%20Pateros%20General%20Hospital%2C%20E%20Service%20Road%2C%20Taguig%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="the medical city">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">The Medical City</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Ortigas Avenue, Pasig City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Medical%20City%2C%20Ortigas%20Avenue%2C%20Pasig%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="united doctors medical center">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">United Doctors Medical Center</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 6 N. Ramirez Street, Welcome Rotonda, Quezon City</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=United%20Doctors%20Medical%20Center%2C%206%20N.%20Ramirez%20Street%2C%20Welcome%20Rotonda%2C%20Quezon%20City%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="university of santo tomas hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">University of Santo Tomas Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Espana Boulevard, Sampaloc, Manila</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">In Annex 1 of the British Embassy Manila's list of medical facilities, the section whose facilities have told the embassy they have English-speaking staff. The embassy states the list is not a recommendation.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=University%20of%20Santo%20Tomas%20Hospital%2C%20Espana%20Boulevard%2C%20Sampaloc%2C%20Manila%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="tl en" data-name="ust hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">UST Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Espana Boulevard Sampaloc Manila 1008</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Tagalog</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in the Philippines, where its English-speaking staff column reads &quot;Yes&quot; and its main specialisation reads &quot;All specialisations&quot;. Rows on that list whose English column reads No are not carried here. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/philippines-list-of-medical-facilities/philippines-medical-facilities" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=UST%20Hospital%2C%20Espana%20Boulevard%20Sampaloc%20Manila%201008%2C%20Manila%2C%20Philippines" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/manila/doctors">See all 23 doctors in Manila &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="therapy" id="svc-therapy">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="1">1</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span><a href="/services/manila/therapists">Therapy &amp; counselling</a><span class="svc-group-n">1</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="tl en" data-name="national center for mental health">
         <div class="sv-head">
@@ -574,11 +278,8 @@
         </div>
       </article>
           </div>
+          
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Manila matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -710,85 +411,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"doctor":"Doctors & clinics","therapy":"Therapy & counselling"};
-      var CAT_PLURAL={"doctor":"doctors","therapy":"therapists"};
-      var LANG_LABEL={"en":"English","tl":"Tagalog"};
-      var TOTAL=24;
-      var CITY_NAME="Manila",BASE_TITLE="English-speaking doctors and therapists in Manila",LOCAL_LANG="tl";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

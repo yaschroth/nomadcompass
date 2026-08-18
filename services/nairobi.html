@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -197,16 +205,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Nairobi%27s_Central_Business_District_Landmark_Skyscrapers..jpg" target="_blank" rel="nofollow noopener">Photo: Tall Black (CC BY-SA 4.0)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (46)</option><option value="legal">Legal &amp; visa (32)</option><option value="doctor">Doctors &amp; clinics (13)</option><option value="therapy">Therapy &amp; counselling (1)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (46)</option><option value="sw">Swahili (46)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>46</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Nairobi"><a class="svc-chip" data-cat="legal" href="/services/nairobi/lawyers">Legal &amp; visa<span>32</span></a><a class="svc-chip" data-cat="doctor" href="/services/nairobi/doctors">Doctors &amp; clinics<span>13</span></a><a class="svc-chip" data-cat="therapy" href="/services/nairobi/therapists">Therapy &amp; counselling<span>1</span></a></nav>
+        <p class="sv-count"><b>46</b> providers across <b>3</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="legal" id="svc-legal">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="32">32</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><a href="/services/nairobi/lawyers">Legal &amp; visa</a><span class="svc-group-n">32</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="a k muchiri co advocates">
         <div class="sv-head">
@@ -253,445 +256,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Amit%20Gadhia%20Advocate%2C%20P.O.%20Box%201075%2C%20Indigo%20Cowork%20Space%2C%20General%20Mathenge%20Rd%2C%20Westlands%2C%2000606%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="ammlaw advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.ammlaw.co.ke" target="_blank" rel="nofollow noopener">Ammlaw Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Fourth Floor, Laiboni Centre, Lenana Road, 00100, Nairobi</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, health, immigration, intellectual property, international, maritime, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.ammlaw.co.ke" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ammlaw%20Advocates%2C%20Fourth%20Floor%2C%20Laiboni%20Centre%2C%20Lenana%20Road%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="aw kahindo company advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Aw Kahindo Company Advocates</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 14155, 00400, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Aw%20Kahindo%20Company%20Advocates%2C%2014155%2C%2000400%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="bond advocates llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.bondadvocates.com" target="_blank" rel="nofollow noopener">Bond Advocates Llp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Top Plaza, 2nd Floor, Kindaruma Road, Kilimani, P. O. Box 37551, 00100, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.bondadvocates.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bond%20Advocates%20Llp%2C%20Top%20Plaza%2C%202nd%20Floor%2C%20Kindaruma%20Road%2C%20Kilimani%2C%20P.%20O.%20Box%2037551%2C%2000100%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="d k githinji company">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">D K Githinji Company</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Standard Building Standard Street 7th Floor Door 19, P. O. Box 11541, 00400, NAIROBI</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=D%20K%20Githinji%20Company%2C%20Standard%20Building%20Standard%20Street%207th%20Floor%20Door%2019%2C%20P.%20O.%20Box%2011541%2C%2000400%2C%20NAIROBI%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="eshiwani ashubwe company advocates llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Eshiwani Ashubwe Company Advocates Llp</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Upper Hill Gardens, Suite C, 20, 3rd Ngong Avenue, 30681, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, immigration, international, maritime, real estate, tax&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Eshiwani%20Ashubwe%20Company%20Advocates%20Llp%2C%20Upper%20Hill%20Gardens%2C%20Suite%20C%2C%2020%2C%203rd%20Ngong%20Avenue%2C%2030681%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="gesumwa mayieka advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Gesumwa Mayieka Advocates</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Suite D10, 3rd Floor, Hurlingham Plaza, Hurlingham Shopping Centre, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Gesumwa%20Mayieka%20Advocates%2C%20Suite%20D10%2C%203rd%20Floor%2C%20Hurlingham%20Plaza%2C%20Hurlingham%20Shopping%20Centre%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="gikera vadgama">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.gvalawfirm.com" target="_blank" rel="nofollow noopener">Gikera Vadgama</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 56, Muthithi Road, Behind TRV Office Plaza, Westlands, P. O. Box 720, Nairobi, 00621, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, immigration, intellectual property, international, maritime, real estate, tax&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.gvalawfirm.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Gikera%20Vadgama%2C%2056%2C%20Muthithi%20Road%2C%20Behind%20TRV%20Office%20Plaza%2C%20Westlands%2C%20P.%20O.%20Box%20720%2C%20Nairobi%2C%2000621%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="karera associates advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.kareralaw.com" target="_blank" rel="nofollow noopener">Karera Associates Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; North Star Building, 2nd Floor, Suite No. 5, Lenana Road, Kilimani, Nairobi, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.kareralaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Karera%20Associates%20Advocates%2C%20North%20Star%20Building%2C%202nd%20Floor%2C%20Suite%20No.%205%2C%20Lenana%20Road%2C%20Kilimani%2C%20Nairobi%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="kieti law llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.cliffedekkerhofmeyr.com/en/about/kieti.html" target="_blank" rel="nofollow noopener">Kieti Law Llp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Merchant Square, Block D, 3rd floor, Riverside Drive, P.O. Box 22602, 00505, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, immigration, intellectual property, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.cliffedekkerhofmeyr.com/en/about/kieti.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kieti%20Law%20Llp%2C%20Merchant%20Square%2C%20Block%20D%2C%203rd%20floor%2C%20Riverside%20Drive%2C%20P.O.%20Box%2022602%2C%2000505%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="kijala and muganda advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.kmadvocates.net/" target="_blank" rel="nofollow noopener">Kijala And Muganda Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Bishop Gardens, Mezzanine Floor, 1st Ngong Avenue, Upperhill, Nairobi, P. O. Box 4227, 00100, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.kmadvocates.net/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kijala%20And%20Muganda%20Advocates%2C%20Bishop%20Gardens%2C%20Mezzanine%20Floor%2C%201st%20Ngong%20Avenue%2C%20Upperhill%2C%20Nairobi%2C%20P.%20O.%20Box%204227%2C%2000100%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="kioi co advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.kioi.co.ke" target="_blank" rel="nofollow noopener">Kioi Co Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; CMS, Africa, 7th Floor, Chania Avenue, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, immigration, intellectual property, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.kioi.co.ke" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kioi%20Co%20Advocates%2C%20CMS%2C%20Africa%2C%207th%20Floor%2C%20Chania%20Avenue%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="km associates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://coursecorrect.co.ke/" target="_blank" rel="nofollow noopener">Km Associates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; iHit Denis Pritt Road Nairobi, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, immigration, intellectual property, international, maritime, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://coursecorrect.co.ke/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Km%20Associates%2C%20iHit%20Denis%20Pritt%20Road%20Nairobi%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="ktk advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://ktk.co.ke/" target="_blank" rel="nofollow noopener">Ktk Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; KeMU Towers, 4th Floor, University Way, P.O Box 10176, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, health, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://ktk.co.ke/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ktk%20Advocates%2C%20KeMU%20Towers%2C%204th%20Floor%2C%20University%20Way%2C%20P.O%20Box%2010176%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="lak advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.lakadvocates.com" target="_blank" rel="nofollow noopener">Lak Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Wu Yi Plaza, Block A 4th Floor, Suite A8, Galana Road off Argwings Kodhek Road, Kilimani, P.O. Box 22568, 00100, 00100, </p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.lakadvocates.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lak%20Advocates%2C%20Wu%20Yi%20Plaza%2C%20Block%20A%204th%20Floor%2C%20Suite%20A8%2C%20Galana%20Road%20off%20Argwings%20Kodhek%20Road%2C%20Kilimani%2C%20P.O.%20Box%2022568%2C%2000100%2C%2000100%2C%20%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="mmtk law">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://mmtklaw.com/" target="_blank" rel="nofollow noopener">Mmtk Law</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 13726, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, immigration, intellectual property, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://mmtklaw.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mmtk%20Law%2C%2013726%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="mohamed madhani and company advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://madhanilaw.com" target="_blank" rel="nofollow noopener">Mohamed Madhani And Company Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 14th floor Nation Centre Kimathi Street, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, immigration, intellectual property, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://madhanilaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mohamed%20Madhani%20And%20Company%20Advocates%2C%2014th%20floor%20Nation%20Centre%20Kimathi%20Street%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="munyaka advocates llp rodl">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.roedl.com/about-us/locations/kenya/" target="_blank" rel="nofollow noopener">Munyaka Advocates Llp Rodl</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; P.O. Box 2087, 00606, 5th Floor, Empress Office Suites(opposite The Oval), 00606, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, immigration, intellectual property, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.roedl.com/about-us/locations/kenya/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Munyaka%20Advocates%20Llp%20Rodl%2C%20P.O.%20Box%202087%2C%2000606%2C%205th%20Floor%2C%20Empress%20Office%20Suites(opposite%20The%20Oval)%2C%2000606%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="munyao muthama kashindi advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://mmkadv.co.ke" target="_blank" rel="nofollow noopener">Munyao Muthama Kashindi Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 24482, 00100, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, health, intellectual property, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://mmkadv.co.ke" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Munyao%20Muthama%20Kashindi%20Advocates%2C%2024482%2C%2000100%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="muri mwaniki thige kageni llp advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.mmtklaw.com" target="_blank" rel="nofollow noopener">Muri Mwaniki Thige Kageni Llp Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 13726, 00100, NAIROBI</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.mmtklaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Muri%20Mwaniki%20Thige%20Kageni%20Llp%20Advocates%2C%2013726%2C%2000100%2C%20NAIROBI%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="mwale law advocates llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.mwalelegal.co.ke" target="_blank" rel="nofollow noopener">Mwale Law Advocates Llp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Ground Floor, Internet Business Centre, Plums Lane (off Ojijo Road), Parklands, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.mwalelegal.co.ke" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mwale%20Law%20Advocates%20Llp%2C%20Ground%20Floor%2C%20Internet%20Business%20Centre%2C%20Plums%20Lane%20(off%20Ojijo%20Road)%2C%20Parklands%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="ndikimi company advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.ndikimi.com" target="_blank" rel="nofollow noopener">Ndikimi Company Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 8th Floor, Western Heights, Karuna Road, Next to Sarit Centre, Westlands, Nairobi, Kenya, P.O. Box 29037, 00625, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.ndikimi.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ndikimi%20Company%20Advocates%2C%208th%20Floor%2C%20Western%20Heights%2C%20Karuna%20Road%2C%20Next%20to%20Sarit%20Centre%2C%20Westlands%2C%20Nairobi%2C%20Kenya%2C%20P.O.%20Box%2029037%2C%2000625%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="nk lex">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Nk Lex</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; P.O. Box 79647, Hughes Building, 00200, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Nk%20Lex%2C%20P.O.%20Box%2079647%2C%20Hughes%20Building%2C%2000200%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="okulo and company advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.okulo.co.ke" target="_blank" rel="nofollow noopener">Okulo And Company Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Karen Connections, 47332, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, employment, family, health, immigration, intellectual property, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.okulo.co.ke" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Okulo%20And%20Company%20Advocates%2C%20Karen%20Connections%2C%2047332%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="sigano omollo llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.soadvocates.com" target="_blank" rel="nofollow noopener">Sigano Omollo Llp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Bemuda Plaza, Block B, Ground Floor, Suite A3, Ngong Road, 00100, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.soadvocates.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sigano%20Omollo%20Llp%2C%20Bemuda%20Plaza%2C%20Block%20B%2C%20Ground%20Floor%2C%20Suite%20A3%2C%20Ngong%20Road%2C%2000100%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="tmm and partners advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://tmmadvocates.ke/" target="_blank" rel="nofollow noopener">Tmm And Partners Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 2473, 2473, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://tmmadvocates.ke/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tmm%20And%20Partners%20Advocates%2C%202473%2C%202473%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="tmm partners advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Tmm Partners Advocates</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 0721457826, 0732392933, 62017 00200, NAIROBI</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, family, immigration, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Tmm%20Partners%20Advocates%2C%200721457826%2C%200732392933%2C%2062017%2000200%2C%20NAIROBI%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="wangai nyutu advocates llp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.wangainyutuadvocates.com/#about-us" target="_blank" rel="nofollow noopener">Wangai Nyutu Advocates Llp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 3rd Floor, Flamingo Towers, Mara Road, Upperhill, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.wangainyutuadvocates.com/#about-us" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Wangai%20Nyutu%20Advocates%20Llp%2C%203rd%20Floor%2C%20Flamingo%20Towers%2C%20Mara%20Road%2C%20Upperhill%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="waruhiu kowade nganga advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://wknadvocates.co.ke" target="_blank" rel="nofollow noopener">Waruhiu Kowade Nganga Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Flamingo Tower, 3rd Floor, 1 Mara Road, Upperhill, P.O. Box 47122, 00200 Nairobi, Nairobi</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, employment, family, immigration, intellectual property, international, maritime, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://wknadvocates.co.ke" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Waruhiu%20Kowade%20Nganga%20Advocates%2C%20Flamingo%20Tower%2C%203rd%20Floor%2C%201%20Mara%20Road%2C%20Upperhill%2C%20P.O.%20Box%2047122%2C%2000200%20Nairobi%2C%20Nairobi%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="sw en" data-name="wka advocates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.wka.co.ke/" target="_blank" rel="nofollow noopener">Wka Advocates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 103430, 00101, 103430, 00101, Valley View Business Park, 6th Floor, Suite 35, City Park Drive, Off Limuru Road P. O. Box</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, immigration, intellectual property, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Kenya/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.wka.co.ke/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Wka%20Advocates%2C%20103430%2C%2000101%2C%20103430%2C%2000101%2C%20Valley%20View%20Business%20Park%2C%206th%20Floor%2C%20Suite%2035%2C%20City%20Park%20Drive%2C%20Off%20Limuru%20Road%20P.%20O.%20Box%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/nairobi/lawyers">See all 32 lawyers in Nairobi &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="13">13</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/nairobi/doctors">Doctors &amp; clinics</a><span class="svc-group-n">13</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="aar healthcare (k) ltd">
         <div class="sv-head">
@@ -738,160 +307,11 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Aga%20Khan%20University%20Hospital%20Nairobi%2C%20Third%20Parklands%20Avenue%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="avenue hospital parklands">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Avenue Hospital Parklands</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 1st Avenue, Parklands</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Avenue%20Hospital%20Parklands%2C%201st%20Avenue%2C%20Parklands%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="columbia africa healthcare">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Columbia Africa Healthcare</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Park Place, 2nd Avenue, Parklands</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Columbia%20Africa%20Healthcare%2C%20Park%20Place%2C%202nd%20Avenue%2C%20Parklands%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="coptic hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Coptic Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Ngong Road</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Coptic%20Hospital%2C%20Ngong%20Road%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="estemedical kenya">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">EsteMedical Kenya</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; The Piano Building, 171 Brookside Drive</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=EsteMedical%20Kenya%2C%20The%20Piano%20Building%2C%20171%20Brookside%20Drive%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="m p shah hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">M P Shah Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Parklands</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=M%20P%20Shah%20Hospital%2C%20Parklands%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="mater misericordiae hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Mater Misericordiae Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Dunga Road</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mater%20Misericordiae%20Hospital%2C%20Dunga%20Road%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="metropolitan hospital nairobi">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Metropolitan Hospital Nairobi</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Rabai Road</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Metropolitan%20Hospital%20Nairobi%2C%20Rabai%20Road%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="the karen hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">The Karen Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Langata Road, Karen</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Karen%20Hospital%2C%20Langata%20Road%2C%20Karen%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="the nairobi hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">The Nairobi Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Argwings Kodhek Road</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Nairobi%20Hospital%2C%20Argwings%20Kodhek%20Road%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="sw en" data-name="the nairobi womens hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">The Nairobi Womens Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Adams Arcade, Kirichwa Road, off Ngong Road</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Swahili</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Kenya, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/kenya-medical-facilities/kenya-doctors" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Nairobi%20Womens%20Hospital%2C%20Adams%20Arcade%2C%20Kirichwa%20Road%2C%20off%20Ngong%20Road%2C%20Nairobi%2C%20Kenya" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/nairobi/doctors">See all 13 doctors in Nairobi &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="therapy" id="svc-therapy">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>Therapy &amp; counselling<span class="svc-group-n" data-total="1">1</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span><a href="/services/nairobi/therapists">Therapy &amp; counselling</a><span class="svc-group-n">1</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-therapy" data-cat="therapy" data-lang="sw en" data-name="chiromo hospital group">
         <div class="sv-head">
@@ -909,11 +329,8 @@
         </div>
       </article>
           </div>
+          
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Nairobi matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -1045,85 +462,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa","therapy":"Therapy & counselling"};
-      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers","therapy":"therapists"};
-      var LANG_LABEL={"en":"English","sw":"Swahili"};
-      var TOTAL=46;
-      var CITY_NAME="Nairobi",BASE_TITLE="English-speaking lawyers and doctors in Nairobi",LOCAL_LANG="sw";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

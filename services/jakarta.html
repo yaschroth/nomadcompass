@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -197,16 +205,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Sunset_over_the_Jakarta_skyline.jpg" target="_blank" rel="nofollow noopener">Photo: ambabheg (CC BY 2.0)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (14)</option><option value="legal">Legal &amp; visa (10)</option><option value="doctor">Doctors &amp; clinics (4)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (14)</option><option value="id">Indonesian (14)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>14</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Jakarta"><a class="svc-chip" data-cat="legal" href="/services/jakarta/lawyers">Legal &amp; visa<span>10</span></a><a class="svc-chip" data-cat="doctor" href="/services/jakarta/doctors">Doctors &amp; clinics<span>4</span></a></nav>
+        <p class="sv-count"><b>14</b> providers across <b>2</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="legal" id="svc-legal">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="10">10</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><a href="/services/jakarta/lawyers">Legal &amp; visa</a><span class="svc-group-n">10</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="atd law in association with mori hamada">
         <div class="sv-head">
@@ -253,115 +256,11 @@
           <p class="sv-links"><a class="sv-go" href="https://www.armilarako.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Deheng%20Arko%20Law%2C%20Lippo%20Kuningan%2C%20Jl.%20HR.%20Rasuna%20Said%20Kav%20B%2C%2012%2C%2012940%2C%20Jakarta%20Selatan%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="dentons hprp">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://dentons.hprplawyers.com" target="_blank" rel="nofollow noopener">Dentons Hprp</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Wisma 46 BNI, 41st Floor, Jl. Sudirman Kav 1, 10220, Jakarta</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://dentons.hprplawyers.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dentons%20Hprp%2C%20Wisma%2046%20BNI%2C%2041st%20Floor%2C%20Jl.%20Sudirman%20Kav%201%2C%2010220%2C%20Jakarta%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="frans winarta partners">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://fwp.co.id/" target="_blank" rel="nofollow noopener">Frans Winarta Partners</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Kompleks Bukit Gading Mediterania (Florencia), Boulevard Bukit Gading Raya Blok A 15, 17, Kelapa Gading Permai, 14240, J</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, immigration, intellectual property, international, maritime, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://fwp.co.id/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Frans%20Winarta%20Partners%2C%20Kompleks%20Bukit%20Gading%20Mediterania%20(Florencia)%2C%20Boulevard%20Bukit%20Gading%20Raya%20Blok%20A%2015%2C%2017%2C%20Kelapa%20Gading%20Permai%2C%2014240%2C%20J%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="legalinfo lawyers">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://legalinfo.id/" target="_blank" rel="nofollow noopener">Legalinfo Lawyers</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Epicentrum Walk 5th Floor Office Suites A529 Kawasan Epincentrum Utama, Jl. H. R. Rasuna Said, 12940, South Jakarta</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://legalinfo.id/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Legalinfo%20Lawyers%2C%20Epicentrum%20Walk%205th%20Floor%20Office%20Suites%20A529%20Kawasan%20Epincentrum%20Utama%2C%20Jl.%20H.%20R.%20Rasuna%20Said%2C%2012940%2C%20South%20Jakarta%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="manullang putranto law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://putranto-alliance.com/" target="_blank" rel="nofollow noopener">Manullang Putranto Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; JL. DENPASAR RAYA BLOK C4 NO. 24, KELURAHAN KUNINGAN TIMUR, KECAMATAN SETIABUDI, 12950, Jakarta Selatan</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, employment, family, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://putranto-alliance.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Manullang%20Putranto%20Law%20Firm%2C%20JL.%20DENPASAR%20RAYA%20BLOK%20C4%20NO.%2024%2C%20KELURAHAN%20KUNINGAN%20TIMUR%2C%20KECAMATAN%20SETIABUDI%2C%2012950%2C%20Jakarta%20Selatan%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="simbolon and partners law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.simbolon-lawfirm.com/" target="_blank" rel="nofollow noopener">Simbolon And Partners Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; South Quarter Tower A, 17th Floor, Jl. R.A. Kartini No.Kavling 8, RT.10/RW.4, West Cilandak, Cilandak, South Jakarta Cit</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.simbolon-lawfirm.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Simbolon%20And%20Partners%20Law%20Firm%2C%20South%20Quarter%20Tower%20A%2C%2017th%20Floor%2C%20Jl.%20R.A.%20Kartini%20No.Kavling%208%2C%20RT.10%2FRW.4%2C%20West%20Cilandak%2C%20Cilandak%2C%20South%20Jakarta%20Cit%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="ssek law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.ssek.com" target="_blank" rel="nofollow noopener">Ssek Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Mayapada Tower I 14th Floor, Jl. Jend. Sudirman kav. 28, 12920, Jakarta</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, health, immigration, intellectual property, international, maritime, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.ssek.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ssek%20Law%20Firm%2C%20Mayapada%20Tower%20I%2014th%20Floor%2C%20Jl.%20Jend.%20Sudirman%20kav.%2028%2C%2012920%2C%20Jakarta%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="id en" data-name="suhardi somomoeljono associates">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.ssa-advocates.com" target="_blank" rel="nofollow noopener">Suhardi Somomoeljono Associates</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Plaza Asia 9th Floor, D1, Jl Jenderal Sudirman, Kav. 59, Senayan, Kebayoran Baru, 12190, South Jakarta, DKI Jakarta</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, intellectual property, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/Indonesia/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.ssa-advocates.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Suhardi%20Somomoeljono%20Associates%2C%20Plaza%20Asia%209th%20Floor%2C%20D1%2C%20Jl%20Jenderal%20Sudirman%2C%20Kav.%2059%2C%20Senayan%2C%20Kebayoran%20Baru%2C%2012190%2C%20South%20Jakarta%2C%20DKI%20Jakarta%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/jakarta/lawyers">See all 10 lawyers in Jakarta &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="4">4</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/jakarta/doctors">Doctors &amp; clinics</a><span class="svc-group-n">4</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="id en" data-name="klinik utama medika sos">
         <div class="sv-head">
@@ -408,27 +307,9 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rumah%20Sakit%20Pondok%20Indah%2C%20Jl.%20Metro%20Duta%20Kavling%20UE%2C%20Pondok%20Indah%2C%20South%20Jakarta%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="id en" data-name="sos singapore medevac">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">SOS Singapore Medevac</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; Pakubuwono House Unit UG, Jl. Pakubuwono 6 No. 70, South Jakarta</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Indonesian</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in Indonesia, marked as having English-speaking staff. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/indonesia-list-of-medical-facilities-and-funeral-directors/list-of-medical-facilities-in-indonesia" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SOS%20Singapore%20Medevac%2C%20Pakubuwono%20House%20Unit%20UG%2C%20Jl.%20Pakubuwono%206%20No.%2070%2C%20South%20Jakarta%2C%20Jakarta%2C%20Indonesia" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/jakarta/doctors">See all 4 doctors in Jakarta &rarr;</a></p>
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Jakarta matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -560,85 +441,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa"};
-      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers"};
-      var LANG_LABEL={"en":"English","id":"Indonesian"};
-      var TOTAL=14;
-      var CITY_NAME="Jakarta",BASE_TITLE="English-speaking lawyers and doctors in Jakarta",LOCAL_LANG="id";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>

@@ -163,7 +163,15 @@
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .sv-card.is-hidden { display: none; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
+    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
+      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
+    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
+    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
+    .svc-group-head a:hover { text-decoration: underline; }
+    .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
   </style>
   <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 710 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
@@ -197,16 +205,11 @@
           </div><a class="sv-city-credit" href="https://commons.wikimedia.org/wiki/File:Skyline_view_from_Seoul_City_(South_Korea).jpg" target="_blank" rel="nofollow noopener">Photo: Laurie Nevay (CC BY-SA 2.0)</a>
         </header>
 
-        <div class="sv-controls svc-controls">
-          <div class="sv-field"><label for="svcCat">Service</label><select id="svcCat"><option value="all">All services (17)</option><option value="legal">Legal &amp; visa (13)</option><option value="doctor">Doctors &amp; clinics (4)</option></select></div>
-          <div class="sv-field"><label for="svcLang">Language</label><select id="svcLang"><option value="all">Any language</option><option value="en">English (17)</option><option value="ko">Korean (17)</option></select></div>
-          <div class="sv-field"><label for="svcQ">Name</label><input type="search" id="svcQ" placeholder="Name contains&hellip;" autocomplete="off"></div>
-          <button type="button" class="sv-reset" id="svcReset">Reset</button>
-        </div>
-        <p class="sv-count" id="svcCount">All <b>17</b> providers, grouped by service.</p>
+        <nav class="svc-chips" aria-label="Services in Seoul"><a class="svc-chip" data-cat="legal" href="/services/seoul/lawyers">Legal &amp; visa<span>13</span></a><a class="svc-chip" data-cat="doctor" href="/services/seoul/doctors">Doctors &amp; clinics<span>4</span></a></nav>
+        <p class="sv-count"><b>17</b> providers across <b>2</b> services. Each service has its own page with the full list.</p>
 
       <section class="svc-group" data-cat="legal" id="svc-legal">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n" data-total="13">13</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><a href="/services/seoul/lawyers">Legal &amp; visa</a><span class="svc-group-n">13</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="attorney young hwan koo law office">
         <div class="sv-head">
@@ -253,160 +256,11 @@
           <p class="sv-links"><a class="sv-go" href="https://koruslaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Korus%20Law%2C%20%2C%201619%2C%20167%2C%20Songpa%2C%20daero%2C%20Songpa%2C%20gu%2C%2005855%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="kwon park rhee">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://suojae2024.imweb.me/" target="_blank" rel="nofollow noopener">Kwon Park Rhee</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 10th Fl., Teheran, ro 4, gil 5, Gangnam, gu, 06233, Seoul</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, personal injury, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://suojae2024.imweb.me/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kwon%20Park%20Rhee%2C%2010th%20Fl.%2C%20Teheran%2C%20ro%204%2C%20gil%205%2C%20Gangnam%2C%20gu%2C%2006233%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="law firm hanlaw">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://winbrightkim.creatorlink.net" target="_blank" rel="nofollow noopener">Law Firm Hanlaw</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 4th Fl. Seungbo Bldg., 5, Seocho, daero 49, gil, Seocho, gu, 06596, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury, real estate, tax&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://winbrightkim.creatorlink.net" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Law%20Firm%20Hanlaw%2C%204th%20Fl.%20Seungbo%20Bldg.%2C%205%2C%20Seocho%2C%20daero%2049%2C%20gil%2C%20Seocho%2C%20gu%2C%2006596%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="law office yuik">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name">Law Office Yuik</h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; #503 Salvation Army Office Building, 69, Saemunan, ro, Jongro, gu, 03175, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, employment, family, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Law%20Office%20Yuik%2C%20%23503%20Salvation%20Army%20Office%20Building%2C%2069%2C%20Saemunan%2C%20ro%2C%20Jongro%2C%20gu%2C%2003175%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="lawfirm hanbada">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://www.lawyernearme.kr" target="_blank" rel="nofollow noopener">Lawfirm Hanbada</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 6F, 212 Gangnam, daero, Seocho, gu, 06736, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;bankruptcy, corporate, criminal, employment, family, immigration, intellectual property, international, personal injury, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://www.lawyernearme.kr" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lawfirm%20Hanbada%2C%206F%2C%20212%20Gangnam%2C%20daero%2C%20Seocho%2C%20gu%2C%2006736%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="pureum law office">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.pureumlawoffice.com" target="_blank" rel="nofollow noopener">Pureum Law Office</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Yongsan, gu, Unit 608, Tower Building, 17 Seobinggo, ro, 04387, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, family, immigration, international, real estate, tax&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.pureumlawoffice.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Pureum%20Law%20Office%2C%20Yongsan%2C%20gu%2C%20Unit%20608%2C%20Tower%20Building%2C%2017%20Seobinggo%2C%20ro%2C%2004387%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="seoul law group">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://seoullawgroup.com/" target="_blank" rel="nofollow noopener">Seoul Law Group</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 8th Floor, Gangnam, daero 200, Seocho, gu, 06743, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, family, international, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://seoullawgroup.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Seoul%20Law%20Group%2C%208th%20Floor%2C%20Gangnam%2C%20daero%20200%2C%20Seocho%2C%20gu%2C%2006743%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="sijoong attorneys at law">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://sijoong.com" target="_blank" rel="nofollow noopener">Sijoong Attorneys At Law</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 15 Beobwonro, 3, gil, Suite #305, 06595, Seocho, gu, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, employment, immigration, intellectual property, international, real estate&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://sijoong.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sijoong%20Attorneys%20At%20Law%2C%2015%20Beobwonro%2C%203%2C%20gil%2C%20Suite%20%23305%2C%2006595%2C%20Seocho%2C%20gu%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="soma law group">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://en.somalaw.co.kr/" target="_blank" rel="nofollow noopener">Soma Law Group</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; Yeonmujang, 5, ga, gil 25 , Suite 414, Seongdong, gu, 04782, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;corporate, criminal, employment, family, health, immigration, intellectual property, international, maritime, personal injury&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://en.somalaw.co.kr/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Soma%20Law%20Group%2C%20Yeonmujang%2C%205%2C%20ga%2C%20gil%2025%20%2C%20Suite%20414%2C%20Seongdong%2C%20gu%2C%2004782%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="thewave ip law firm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="http://www.thewaveip.com" target="_blank" rel="nofollow noopener">Thewave Ip Law Firm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 6F, 602 Seolleung, ro, Gangnam, gu, 06097, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;intellectual property&quot;, and it is marked as having represented British nationals. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="http://www.thewaveip.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Thewave%20Ip%20Law%20Firm%2C%206F%2C%20602%20Seolleung%2C%20ro%2C%20Gangnam%2C%20gu%2C%2006097%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ko en" data-name="yusu lawfirm">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
-          <div>
-            <h3 class="sv-name"><a href="https://koreanlegaladvice.com/" target="_blank" rel="nofollow noopener">Yusu Lawfirm</a></h3>
-            <p class="sv-meta">Legal &amp; visa&nbsp;&middot; 180 Mapo, daero, Mapo, gu, 602, Seoul</p>
-          </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's Find a professional service abroad, which lists lawyers abroad and says every one of them has confirmed it can provide services in English. Its legal expertise is given as &quot;criminal, employment, family, immigration, international&quot;. The FCDO says the lists are non-exhaustive and are not recommendations.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://find-a-professional-service-abroad.service.csd.fcdo.gov.uk/find/lawyers/South%20Korea/result" target="_blank" rel="nofollow noopener">find-a-professional-service-abroad.service.csd.fcdo.gov.uk</a></p>
-          <p class="sv-links"><a class="sv-go" href="https://koreanlegaladvice.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Yusu%20Lawfirm%2C%20180%20Mapo%2C%20daero%2C%20Mapo%2C%20gu%2C%20602%2C%20Seoul%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/seoul/lawyers">See all 13 lawyers in Seoul &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="doctor" id="svc-doctor">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>Doctors &amp; clinics<span class="svc-group-n" data-total="4">4</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/seoul/doctors">Doctors &amp; clinics</a><span class="svc-group-n">4</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ko en" data-name="gangbuk samsung hospital">
         <div class="sv-head">
@@ -453,27 +307,9 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Seoul%20St%20Mary's%20Hospital%2C%20222%20Banpo-daero%2C%20Seocho-gu%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="ko en" data-name="soon chun hyang university seoul hospital">
-        <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
-          <div>
-            <h3 class="sv-name">Soon Chun Hyang University Seoul Hospital</h3>
-            <p class="sv-meta">Doctors &amp; clinics&nbsp;&middot; 59 Daesagwan-ro, Yongsan-gu</p>
           </div>
-        </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span><span class="sv-lang">Korean</span><span class="sv-lang">English</span></p>
-        <p class="sv-note">On the UK FCDO's published list of medical facilities in South Korea, where its English column reads &quot;Some&quot;. The FCDO publishes the list and states it does not endorse anyone on it.</p>
-        <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-official">Official list</span><a href="https://www.gov.uk/government/publications/south-korea-doctors/list-of-medical-facilities-in-south-korea" target="_blank" rel="nofollow noopener">gov.uk</a></p>
-          <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Soon%20Chun%20Hyang%20University%20Seoul%20Hospital%2C%2059%20Daesagwan-ro%2C%20Yongsan-gu%2C%20Seoul%2C%20South%20Korea" target="_blank" rel="nofollow noopener">Maps</a></p>
-        </div>
-      </article>
-          </div>
+          <p class="svc-more-link"><a href="/services/seoul/doctors">See all 4 doctors in Seoul &rarr;</a></p>
         </section>
-        <div class="sv-empty is-hidden" id="svcEmpty">
-          <p>No provider in Seoul matches that combination.</p>
-          <p>A provider only appears here once we can point at a source for the language it works in, so a gap means we have not found a source yet, not that nobody exists. <a href="/services">Try another city</a> or <a href="/contact">tell us about one</a>.</p>
-        </div>
       </section>
 
       <section class="svc-more">
@@ -605,85 +441,20 @@
   })();</script>
   <!-- /nav-search-js -->
   <script>
-    (function(){
-      var catSel=document.getElementById('svcCat'),langSel=document.getElementById('svcLang'),
-          q=document.getElementById('svcQ'),count=document.getElementById('svcCount'),
-          empty=document.getElementById('svcEmpty');
-      var groups=[].slice.call(document.querySelectorAll('.svc-group'));
-      var CAT_LABEL={"doctor":"Doctors & clinics","legal":"Legal & visa"};
-      var CAT_PLURAL={"doctor":"doctors","legal":"lawyers"};
-      var LANG_LABEL={"en":"English","ko":"Korean"};
-      var TOTAL=17;
-      var CITY_NAME="Seoul",BASE_TITLE="English-speaking lawyers and doctors in Seoul",LOCAL_LANG="ko";
-      var h1=document.getElementById('svcTitle');
-      function list(a){ return a.length>1 ? a.slice(0,-1).join(', ')+' and '+a[a.length-1] : (a[0]||''); }
-      // The heading is built from the rows still on screen, never from the filter alone. Ask for
-      // hairdressers on a page whose static title says "English and German-speaking doctors and
-      // lawyers" and the old heading contradicted the list under it; announcing "English and
-      // German-speaking hairdressers" instead would have been a worse answer, because the German
-      // belonged to the doctors. So the languages are counted from what is actually visible.
-      function headingLanguages(visible,lang){
-        if(lang!=='all')return [LANG_LABEL[lang]];
-        var n={};
-        visible.forEach(function(el){
-          (el.getAttribute('data-lang')||'').split(' ').forEach(function(l){ if(l)n[l]=(n[l]||0)+1; });
-        });
-        var ranked=Object.keys(n).sort(function(a,b){return n[b]-n[a];});
-        var pick=ranked.filter(function(l){ return l!==LOCAL_LANG&&n[l]/visible.length>=0.2; });
-        if(!pick.length)pick=ranked.slice(0,1);
-        return pick.slice(0,2).map(function(l){ return LANG_LABEL[l]||l; });
-      }
-      function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
-      function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase(),shown=0,visible=[];
-        groups.forEach(function(g){
-          var n=0;
-          [].slice.call(g.querySelectorAll('.sv-card')).forEach(function(el){
-            var ok=(cat==='all'||g.getAttribute('data-cat')===cat)
-              &&(lang==='all'||has(el,'data-lang',lang))
-              &&(!term||el.getAttribute('data-name').indexOf(term)>-1);
-            el.classList.toggle('is-hidden',!ok);
-            if(ok){n++;visible.push(el);}
-          });
-          // A heading with nothing under it is worse than no heading, so an empty group goes too.
-          g.classList.toggle('is-hidden',n===0);
-          g.querySelector('.svc-group-n').textContent=n;
-          shown+=n;
-        });
-        var what=cat==='all'?(shown===1?'provider':'providers'):(shown===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat]);
-        var bits='';
-        if(lang!=='all')bits+=' working in '+LANG_LABEL[lang];
-        if(term)bits+=' matching "'+term.replace(/</g,'')+'"';
-        count.innerHTML=(cat==='all'&&lang==='all'&&!term)
-          ? 'All <b>'+TOTAL+'</b> '+what+', grouped by service.'
-          : 'Showing <b>'+shown+'</b> '+what+bits+' of <b>'+TOTAL+'</b> in this city.';
-        empty.classList.toggle('is-hidden',shown>0);
-        // The heading follows the question. Unfiltered it is the page's own title, which is what
-        // the URL without parameters is indexed under and what search results should keep showing.
-        var asked=cat==='all'?'providers':CAT_PLURAL[cat];
-        if(cat==='all'&&lang==='all'&&!term) h1.textContent=BASE_TITLE;
-        else if(shown) h1.textContent=list(headingLanguages(visible,lang))+'-speaking '+asked+' in '+CITY_NAME;
-        else h1.textContent='No '+(lang==='all'?'':LANG_LABEL[lang]+'-speaking ')+asked+' listed in '+CITY_NAME+' yet';
-        document.title=h1.textContent+' | The Nomad HQ';
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
-      }
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      q.addEventListener('input',render);
-      document.getElementById('svcReset').addEventListener('click',function(){
-        catSel.value='all';langSel.value='all';q.value='';render();
-      });
-      // The question asked on the hub arrives in the URL, so this page opens on the same answer
-      // instead of dropping you into everything the city holds.
-      (function(){
-        var sp=new URLSearchParams(window.location.search),touched=false;
-        function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;touched=true;return;} } }
-        set(catSel,sp.get('cat'));set(langSel,sp.get('lang'));
-        if(touched)render();
-      })();
+    // The filter that used to live here rewrote the heading, the title and the URL on every
+    // change, and every symptom reported against this page came out of it: the heading contradicted
+    // the list, the counts followed the wrong number, the choice was lost on the click. It is gone.
+    // Each service is a page now, so the URL carries the question and the HTML carries the answer.
+    // This is only a bridge for links already out there with the old query string on them.
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var cat = p.get('cat');
+      if (!cat) return;
+      var chip = document.querySelector('.svc-chip[href^="/services/"][href*="/"][data-cat="' + cat + '"]');
+      if (chip) { window.location.replace(chip.getAttribute('href')); return; }
+      var el = document.getElementById('svc-' + cat);
+      if (el) el.scrollIntoView();
+      history.replaceState(null, '', window.location.pathname);
     })();
   </script>
 </body>
