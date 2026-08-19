@@ -121,7 +121,19 @@ function htmlIn(dir) {
   if (!fs.existsSync(abs)) return [];
   return fs.readdirSync(abs).filter((f) => f.endsWith('.html')).map((f) => (dir === '.' ? f : path.join(dir, f)));
 }
-const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog', 'blog/category' ].flatMap(htmlIn);
+// Every level under a directory, for services/<city>/<service>[/<language>].html.
+function htmlUnder(dir) {
+  const abs = dir === '.' ? ROOT : path.join(ROOT, dir);
+  if (!fs.existsSync(abs)) return [];
+  return fs.readdirSync(abs, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .flatMap((e) => htmlIn(path.join(dir, e.name)).concat(htmlUnder(path.join(dir, e.name))));
+}
+// services was missing from this list entirely, so the largest page family on the site carried a
+// search box whose resolver had never been swept onto it. The pages get it from lib/page_shell.cjs
+// now, but a sweep that cannot see a page cannot repair one either.
+const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog', 'blog/category', 'services']
+  .flatMap(htmlIn).concat(htmlUnder('services'));
 
 const formRe = /<form class="nav-search"[\s\S]*?<\/form>/;
 const jsRe = /  <!-- nav-search-js -->[\s\S]*?<!-- \/nav-search-js -->/;

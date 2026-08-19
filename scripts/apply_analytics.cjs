@@ -55,9 +55,12 @@ function htmlIn(dir) {
 function htmlUnder(dir) {
   const abs = dir === '.' ? ROOT : path.join(ROOT, dir);
   if (!fs.existsSync(abs)) return [];
+  // Every level below, not one: the directory grew a third with
+  // services/<city>/<service>/<language>.html, and a sweep that stops at two would leave those
+  // pages without consent handling while reporting a clean run.
   return fs.readdirSync(abs, { withFileTypes: true })
     .filter((e) => e.isDirectory())
-    .flatMap((e) => htmlIn(path.join(dir, e.name)));
+    .flatMap((e) => htmlIn(path.join(dir, e.name)).concat(htmlUnder(path.join(dir, e.name))));
 }
 const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'blog/category', 'about', 'accommodations', 'services']
   .flatMap(htmlIn)

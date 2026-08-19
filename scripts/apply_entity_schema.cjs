@@ -38,9 +38,11 @@ function htmlIn(dir) {
 function htmlUnder(dir) {
   const abs = path.join(ROOT, dir);
   if (!fs.existsSync(abs)) return [];
+  // Every level below, not one: the services directory is three deep now, and a page the sweep
+  // cannot see is a page without the brand graph.
   return fs.readdirSync(abs, { withFileTypes: true })
     .filter((e) => e.isDirectory())
-    .flatMap((e) => htmlIn(path.join(dir, e.name)));
+    .flatMap((e) => htmlIn(path.join(dir, e.name)).concat(htmlUnder(path.join(dir, e.name))));
 }
 const rootHtml = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html'));
 const all = [
