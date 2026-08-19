@@ -39,7 +39,9 @@ const CITY = {};
 m.exports.forEach((c) => { if (c && c.id) CITY[c.id] = { name: c.name, country: c.country, iso: iso(c.flag) }; });
 
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// Through the shared loader, or the rows arrive with a source id and no URL, and the cards link
+// to nowhere while their notes are missing the sentence the source carries.
+const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const CATS = DB._categories;
 const LANGS = DB._languages;

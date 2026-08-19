@@ -19,7 +19,9 @@
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// Through the shared loader: rows name their source by id, so a direct read gives no URL and a
+// note missing the sentence its source carries.
+const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 
 // city|normalised-name pairs that are known to be two different things.
 const ALLOW = new Set([

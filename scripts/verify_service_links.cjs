@@ -25,7 +25,9 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const JSON_OUT = process.argv.includes('--json');
 
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// Through the shared loader: the rows name their source by id and the shared sentence lives on
+// the source record, so reading the JSON directly would give a row with no URL and half a note.
+const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 const UA = 'Mozilla/5.0 (compatible; TheNomadHQ/1.0; +https://thenomadhq.com) link-verification';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

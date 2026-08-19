@@ -18,7 +18,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// The rows name their source by id and the sentence they share is stored once on that source.
+// lib/service_db.cjs puts the two back together, so everything below sees whole rows as before.
+const { db: DB, sources: SOURCES } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 const { CAT_PLURAL, EV_RANK } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
 const CATS = DB._categories;

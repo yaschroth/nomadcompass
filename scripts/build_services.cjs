@@ -32,7 +32,9 @@ m.exports.forEach((c) => { if (c && c.id) CITY[c.id] = { name: c.name, country: 
 // has the 39-symbol version cached, and a <use href="...#stethoscope"> into it renders
 // nothing. Inlining costs about 12KB across the page and cannot go stale.
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// Through the shared loader: the rows name their source by id and the shared sentence lives on
+// the source record, so reading the JSON directly would give a row with no URL and half a note.
+const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 // City photos are reused from the city pages, so their credits come from the same manifest.
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 

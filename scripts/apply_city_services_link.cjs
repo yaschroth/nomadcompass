@@ -20,7 +20,9 @@ const ROOT = path.resolve(__dirname, '..');
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// Through the shared loader: rows name their source by id, so a direct read gives no URL and a
+// note missing the sentence its source carries.
+const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 const LANGS = DB._languages;
 const CATS = DB._categories;
 

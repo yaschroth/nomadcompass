@@ -95,7 +95,9 @@ if (at('english') < 0 && at('languages') < 0 && !ROSTER) {
 }
 
 // Language names as the lists write them, to the codes the directory uses.
-const DB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-languages.json'), 'utf8'));
+// Through the shared loader: rows name their source by id, so a direct read gives no URL and a
+// note missing the sentence its source carries.
+const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 const CODE = {};
 Object.entries(DB._languages).forEach(([code, name]) => { CODE[name.toLowerCase()] = code; });
 Object.assign(CODE, { mandarin: 'zh', 'chinese (mandarin)': 'zh', cantonese: 'zh', filipino: 'tl', castilian: 'es' });
