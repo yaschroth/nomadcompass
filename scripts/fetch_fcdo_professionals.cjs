@@ -175,5 +175,10 @@ function parse(html) {
     rows.push(...more);
   }
   fs.writeFileSync(OUT, JSON.stringify({ service: SERVICE, country: COUNTRY, url: step.url, rows }, null, 1) + '\n');
-  console.log(SERVICE + ' / ' + COUNTRY + (LANG ? ' / ' + LANG : '') + ': ' + rows.length + ' providers');
+  // The results page is also written out raw. The two branches of this service return different
+// markup, and a parser written for one silently returns nothing for the other: seven countries
+// looked like empty sources when the page listed people the whole time. With the HTML on disk the
+// claim "no providers" can be checked instead of believed.
+if (step && step.html) fs.writeFileSync(OUT.replace(/.json$/, '') + '.html', step.html);
+console.log(SERVICE + ' / ' + COUNTRY + (LANG ? ' / ' + LANG : '') + ': ' + rows.length + ' providers');
 })();
