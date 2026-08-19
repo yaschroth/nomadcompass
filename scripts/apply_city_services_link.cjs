@@ -40,6 +40,20 @@ const ANCHOR = '<!-- city-seo-start -->';
 
 const list = (a) => (a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0] || '');
 
+// One link per service instead of one link for the lot. These city pages earn most of the site's
+// clicks, so the anchor text they carry is the directory's best route in, and "See all 190
+// providers in Barcelona" was the only one on offer. Links go to the service's own page where it
+// was written, and to the city page otherwise: never to something that does not exist.
+const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
+const CHILDREN = new Set();
+{
+  const f = path.join(ROOT, 'data', 'service-pair-pages.json');
+  if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => CHILDREN.add(x.city + '|' + x.service));
+}
+const serviceLink = (slug, cat) => (CHILDREN.has(slug + '|' + cat)
+  ? '/services/' + slug + '/' + M.SERVICE_SLUGS[cat]
+  : '/services/' + slug + '#svc-' + cat);
+
 let written = 0; let skippedNoAnchor = 0; let skippedNoData = 0;
 
 for (const slug of Object.keys(NAME)) {
@@ -61,9 +75,15 @@ for (const slug of Object.keys(NAME)) {
           <h2>Services in ${esc(name)} in a Language You Speak</h2>
           <p>${rows.length === 1 ? 'One provider' : rows.length + ' providers'} in ${esc(name)}, listed by the language they work in. Every language claim names the source it came from.</p>
         </div>
+        <p class="city-services-cats">${cats
+    .slice()
+    .sort((a, b) => rows.filter((p) => p.category === b).length - rows.filter((p) => p.category === a).length)
+    .map((c) => {
+      const n = rows.filter((p) => p.category === c).length;
+      return `<a class="city-services-cat" href="${serviceLink(slug, c)}">${esc(CATS[c])}<span>${n}</span></a>`;
+    }).join('')}</p>
         <p class="city-services-langs">${langNames.slice(0, 8).map((l) => `<span class="sv-lang">${esc(l)}</span>`).join('')}${langNames.length > 8 ? `<span class="sv-lang">+${langNames.length - 8}</span>` : ''}</p>
         <p class="city-services-cta"><a class="btn btn-primary" href="/services/${slug}">See ${rows.length === 1 ? 'the provider' : 'all ' + rows.length + ' providers'} in ${esc(name)} &rarr;</a></p>
-        <p class="city-services-note">Covers ${esc(list(catNames))}. <a href="/services">Browse every city in the directory</a>.</p>
       </section>
       ${END}`;
 
@@ -77,11 +97,22 @@ for (const slug of Object.keys(NAME)) {
     continue;
   }
 
-  // The block borrows .sim-head and .btn, which every city page already styles. Only the three
-  // rules it adds of its own need injecting, once.
-  if (!html.includes('.city-services-langs')) {
+  // The block borrows .sim-head and .btn, which every city page already styles. Only the rules it
+  // adds of its own need injecting. The guard tests for the newest rule, not the oldest: keyed on
+  // an older one, 287 pages that already carried the block would have kept their old stylesheet and
+  // rendered the new service chips unstyled.
+  if (html.includes('.city-services-langs {') && !html.includes('.city-services-cats {')) {
+    html = html.replace(/<style>\s*\.city-services \{[\s\S]*?<\/style>/, '');
+  }
+  if (!html.includes('.city-services-cats {')) {
     const css = `<style>
     .city-services { margin-top: var(--space-10, 4rem); }
+    .city-services-cats { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin:0 0 .9rem; }
+    a.city-services-cat:not(.btn):not(.nav-link) { display:inline-flex; align-items:center; gap:.45rem; padding:.45rem .75rem;
+      background:#fff; color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+      text-decoration:none; font-weight:700; font-size:var(--text-sm); }
+    a.city-services-cat:hover { border-color:var(--color-terracotta,#c65d3b); }
+    .city-services-cat span { font-size:var(--text-xs); font-weight:600; color:var(--color-stone); }
     .city-services-langs { display:flex; flex-wrap:wrap; gap:.35rem; justify-content:center; margin:0 0 1.25rem; }
     .city-services-langs .sv-lang { font-size:.78rem; font-weight:600; letter-spacing:.02em; padding:.25rem .55rem; border-radius:var(--radius-md,8px); background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); color:var(--color-charcoal,#3f3a34); }
     .city-services-cta { text-align:center; margin:0 0 .9rem; }
