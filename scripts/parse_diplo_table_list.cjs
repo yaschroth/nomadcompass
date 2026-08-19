@@ -81,8 +81,10 @@ const readLanguages = (cell) => {
 // rest are pulled out of the name and left to the role line.
 const TITLE_TOK = /^(Prof\.|Dr\.|Dre\.|med\.|Med\.|dent\.|Dent\.|MD|PhD|Ph\.D\.|FEBO\w*|MSc|MBA)$/;
 const KEEP_TITLE = /^(Prof\.|Dr\.|Dre\.|med\.|Med\.|dent\.|Dent\.)$/;
+// Some missions put the form of address on its own line above the name.
+const SALUTATION = /^(Herr|Frau|Mr\.?|Mrs\.?|Ms\.?|Sr\.?|Sra\.?|Sig\.?|Sig\.ra)$/i;
 const properName = (raw) => {
-  const line = raw.split('\n')[0]
+  const line = (raw.split('\n').find((l) => l.trim() && !SALUTATION.test(l.trim())) || '')
     // A parenthetical is a second given name or a note, and leaving it in makes the name look like
     // three given names, which is the shape this refuses to swap.
     .replace(/\([^)]*\)/g, ' ')
@@ -118,12 +120,65 @@ const properName = (raw) => {
   return ((front.length ? front.join(' ') + ' ' : '') + core).replace(/\s+/g, ' ').trim().slice(0, 70);
 };
 
+/**
+ * What the columns hold, worked out from the cells, for the missions that print no header row.
+ *
+ * Istanbul's list has everything Athens has, in the same order, and simply never says so. Reading
+ * it by fixed position would be a guess that breaks on the next mission; reading it by what the
+ * cells contain is the same judgement a person makes looking at the table. A column is the language
+ * column when most of its cells are language words and nothing else, and the rule is deliberately
+ * strict, because inventing a language column is the one mistake this directory cannot afford.
+ */
+const inferColumns = (dataRows) => {
+  if (!dataRows.length) return null;
+  // Scoring calls readLanguages on every cell of every column, which would otherwise fill the
+  // unknown-word report with names and addresses. Only a real read should add to it.
+  const knownBefore = new Set(unknownLangs);
+  const width = Math.max(...dataRows.map((r) => r.length));
+  const score = (test) => Array.from({ length: width }, (_, i) => {
+    const cells = dataRows.map((r) => (r[i] || '').trim()).filter(Boolean);
+    return cells.length ? cells.filter(test).length / cells.length : 0;
+  });
+  const langish = score((c) => c.length < 70 && readLanguages(c).length > 0
+    && !/\d{3}|@|Tel|Fax|Str\.|Cad\.|www\./i.test(c));
+  const telish = score((c) => /^(Tel|Fax|Mobil|E-Mail|Mob)\b|\+\d{1,3}[ .(]/i.test(c));
+  const addrish = score((c) => /\b\d{4,6}\b|Cad\.|Sok\.|Str\.|\brue\b|\bvia\b|\bcalle\b|\bav\.|No[.:]/i.test(c));
+  const best = (arr, min, taken) => {
+    let at = -1;
+    let top = min;
+    arr.forEach((v, i) => { if (v > top && !taken.includes(i)) { top = v; at = i; } });
+    return at;
+  };
+  const taken = [];
+  const cols = new Array(width).fill(null);
+  const langAt = best(langish, 0.55, taken);
+  if (langAt >= 0) { cols[langAt] = 'languages'; taken.push(langAt); }
+  const telAt = best(telish, 0.5, taken);
+  if (telAt >= 0) taken.push(telAt);
+  const addrAt = best(addrish, 0.4, taken);
+  if (addrAt >= 0) { cols[addrAt] = 'practice'; taken.push(addrAt); }
+  // The name is the first column left over, which on every list of this kind is column 0.
+  const nameAt = cols.findIndex((c, i) => !c && !taken.includes(i));
+  if (nameAt >= 0) { cols[nameAt] = 'name'; taken.push(nameAt); }
+  // Whatever is left and is not the phone column describes what the person does.
+  const specAt = cols.findIndex((c, i) => !c && !taken.includes(i));
+  if (specAt >= 0) cols[specAt] = 'specialty';
+  unknownLangs.clear(); knownBefore.forEach((w) => unknownLangs.add(w));
+  return cols.includes('name') && cols.includes('languages') ? cols : null;
+};
+
 const rows = [];
 let specialty = '';
 for (const t of html.matchAll(/<table[\s\S]*?<\/table>/g)) {
   let cols = null;
-  for (const r of t[0].matchAll(/<tr>([\s\S]*?)<\/tr>/g)) {
-    const cells = [...r[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/g)].map((c) => dec(c[1]));
+  const all = [...t[0].matchAll(/<tr>([\s\S]*?)<\/tr>/g)]
+    .map((r) => [...r[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/g)].map((c) => dec(c[1])));
+  // A table that names its columns is read by its header. One that does not is read by what its
+  // cells hold, and if that cannot find a name and a language column the table is left alone.
+  const named = all.some((cells) => cells.map((c) => (COLUMN.find(([re]) => re.test(c)) || [])[1])
+    .filter(Boolean).length >= 2 && cells.every((c) => c.length < 40));
+  if (!named) cols = inferColumns(all.filter((c) => c.filter((x) => x.trim()).length >= 3));
+  for (const cells of all) {
     if (!cells.length) continue;
     // The row above the header is the specialty this table lists. Some of them are a single cell
     // and some are one cell followed by empty ones, and reading only the first shape made two
@@ -140,11 +195,16 @@ for (const t of html.matchAll(/<table[\s\S]*?<\/table>/g)) {
     const practice = get('practice');
     const languages = readLanguages(get('languages'));
     const flat = cells.join(' ').replace(/\n/g, ' ');
+    // Athens puts the specialty in a heading above the table, Istanbul in a column beside the name.
+    // Both are the same fact and the row needs it either way, or every entry arrives with nothing
+    // to say what the person does and cannot be filed under anything.
+    const inRow = get('specialty').replace(/\n/g, ', ').replace(/\s+/g, ' ').trim();
     rows.push({
-      specialty,
+      specialty: specialty || inRow,
       name,
       // Everything under the name after the first line is what the person is, not who.
-      role: get('name').split('\n').slice(1).join(', ').replace(/\s+/g, ' ').trim(),
+      role: [get('name').split('\n').slice(1).join(', '), specialty ? inRow : '']
+        .filter(Boolean).join(', ').replace(/\s+/g, ' ').replace(/^,\s*|,\s*$/g, '').trim(),
       area: practice.split('\n').filter((l) => !/^(Tel|Fax|Mob|E-Mail|www\.|http)/i.test(l)).join(', '),
       postcode: (practice.match(/\b(\d{3} ?\d{2}|\d{5})\b/) || [])[1] || '',
       languages,
