@@ -64,6 +64,13 @@ const LANG = {
   deutch: 'de', italienenisch: 'it',
 };
 const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss').toLowerCase();
+
+// Zagreb has no languages column. It writes the claim into the name itself, one entry at a time:
+// "Dr. Ingrid Kakarigi (spricht Deutsch)", "Dr. Lena Kotrulja (spricht Englisch)". That is a
+// per-entry claim and it is worth more than the page's own heading, which offers "deutsch- bzw.
+// englischsprachige Aerzte": an either/or that says nothing about any particular doctor. Rows
+// without a note get nothing, because the heading cannot be split between them.
+const INLINE_NOTE = /\((?:spricht|spricht auch|speaks|parla|habla)\s+([^)]+)\)|\((deutschsprachig|englischsprachig|francophone|germanophone)\)/i;
 const unknownLangs = new Set();
 const readLanguages = (cell) => {
   const out = [];
@@ -91,7 +98,14 @@ const properName = (raw) => {
     .replace(/\bDr\.\s*med\.\s*dent\./gi, 'Dr. med. dent.').replace(/\bDr\.\s*med\./gi, 'Dr. med.')
     .replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/,\s*,/g, ',').replace(/,\s*$/, '').trim();
   if (!line || line.length < 4) return '';
-  if (!line.includes(',')) return line.slice(0, 70);
+  // A line with no comma is already in reading order, but some of them run straight on into what the
+  // person does: "Prof. Dr. Marko Banic Kooperationsarzt der Botschaft". The job starts where the
+  // name ends.
+  const ROLE_START = /\s+(Kooperations\w+|Facharzt|Fach[äa]rztin|Zahn[äa]rzt\w*|Chirurg\w*|Professor|Praxis|Klinik|Spezialist\w*|Leiter\w*|Ober[äa]rzt\w*)\b/i;
+  if (!line.includes(',')) {
+    const cut = line.search(ROLE_START);
+    return (cut > 5 ? line.slice(0, cut) : line).trim().slice(0, 70);
+  }
   const parts = line.split(',').map((p) => p.trim()).filter(Boolean);
   const titles = [];
   const given = [];
@@ -157,19 +171,41 @@ const inferColumns = (dataRows) => {
   if (telAt >= 0) taken.push(telAt);
   const addrAt = best(addrish, 0.4, taken);
   if (addrAt >= 0) { cols[addrAt] = 'practice'; taken.push(addrAt); }
-  // The name is the first column left over, which on every list of this kind is column 0.
-  const nameAt = cols.findIndex((c, i) => !c && !taken.includes(i));
+  // The name is the first column left over, which on most lists of this kind is column 0. Not on
+  // all of them: Zagreb puts the specialty first and the name second, and taking column 0 filed
+  // every entry under a person called "Dermatologie". Where entries carry a language note, the
+  // column holding those notes is the column holding the names, and that beats position.
+  const noteish = score((c) => INLINE_NOTE.test(c));
+  const noteAt = best(noteish, 0, taken);
+  if (noteAt >= 0) { cols[noteAt] = 'name'; taken.push(noteAt); }
+  const nameAt = cols.includes('name') ? -1 : cols.findIndex((c, i) => !c && !taken.includes(i));
   if (nameAt >= 0) { cols[nameAt] = 'name'; taken.push(nameAt); }
   // Whatever is left and is not the phone column describes what the person does.
   const specAt = cols.findIndex((c, i) => !c && !taken.includes(i));
   if (specAt >= 0) cols[specAt] = 'specialty';
   unknownLangs.clear(); knownBefore.forEach((w) => unknownLangs.add(w));
-  return cols.includes('name') && cols.includes('languages') ? cols : null;
+  if (!cols.includes('name')) return null;
+  if (cols.includes('languages')) return cols;
+  // No column, but the claim may sit inside the entries themselves. Two rows carrying it is the
+  // floor: one could be an aside, two is how the list works.
+  const noted = dataRows.filter((r) => r.some((c) => INLINE_NOTE.test(c))).length;
+  return noted >= 2 ? cols : null;
 };
 
 const rows = [];
 let specialty = '';
-for (const t of html.matchAll(/<table[\s\S]*?<\/table>/g)) {
+// Some lists put the specialty in a row of the table, some in a heading above it. Zagreb's private
+// dentists are under an h2, and reading tables alone left five of them with nothing saying they are
+// dentists. Headings and tables are walked together, in document order, so the last heading seen is
+// available as a fallback.
+let sectionHeading = '';
+const NOT_A_SPECIALTY = /befinden sich hier|navigation|inhalt|suche|kontakt|stand:|seitennavigation/i;
+for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<table[\s\S]*?<\/table>/g)) {
+  if (t[1] !== undefined) {
+    const head = dec(t[1]).replace(/\s+/g, ' ').trim();
+    if (head && head.length < 70 && !NOT_A_SPECIALTY.test(head)) sectionHeading = head;
+    continue;
+  }
   let cols = null;
   const all = [...t[0].matchAll(/<tr>([\s\S]*?)<\/tr>/g)]
     .map((r) => [...r[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/g)].map((c) => dec(c[1])));
@@ -193,14 +229,18 @@ for (const t of html.matchAll(/<table[\s\S]*?<\/table>/g)) {
     const name = properName(get('name'));
     if (!name || /^name$/i.test(name)) continue;
     const practice = get('practice');
-    const languages = readLanguages(get('languages'));
+    // The column if there is one, otherwise the entry's own parenthetical note.
+    const inline = (get('name').match(INLINE_NOTE) || [])[1] || (get('name').match(INLINE_NOTE) || [])[2] || '';
+    const languages = readLanguages(get('languages')) .length
+      ? readLanguages(get('languages'))
+      : readLanguages(inline.replace(/sprachig/i, 'sch'));
     const flat = cells.join(' ').replace(/\n/g, ' ');
     // Athens puts the specialty in a heading above the table, Istanbul in a column beside the name.
     // Both are the same fact and the row needs it either way, or every entry arrives with nothing
     // to say what the person does and cannot be filed under anything.
     const inRow = get('specialty').replace(/\n/g, ', ').replace(/\s+/g, ' ').trim();
     rows.push({
-      specialty: specialty || inRow,
+      specialty: specialty || inRow || sectionHeading,
       name,
       // Everything under the name after the first line is what the person is, not who.
       role: [get('name').split('\n').slice(1).join(', '), specialty ? inRow : '']
