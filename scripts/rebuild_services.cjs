@@ -22,12 +22,20 @@ const skipSweeps = process.argv.includes('--skip-sweeps');
 
 // Generators first, in dependency order. Sweeps second, with the schema one last. Gates at the end,
 // because a gate that runs before the last writer is only checking an intermediate state.
+// The order is a dependency graph, not a preference, and one loop in it has to be broken by hand.
+// The pair pages link to the language pages and the language pages link back to the pair pages, so
+// whichever runs first reads the other manifest from the previous run. The pair generator therefore
+// runs twice: once to publish a fresh manifest for everything downstream, and once at the end with
+// the language manifest in hand. Running the city pages before the pair pages, which is what the
+// old order did, left them linking to /services/sapporo/doctors after the similarity cap had held
+// that page back.
 const STEPS = [
   ['build', 'build_services.cjs', 'the hub, and the shell every other page lifts'],
-  ['build', 'build_service_city_pages.cjs', '287 city pages'],
-  ['build', 'build_service_pair_pages.cjs', 'city and service, and the manifest the rest read'],
+  ['build', 'build_service_pair_pages.cjs', 'decides what exists, and writes the manifest the rest read'],
   ['build', 'build_service_hubs.cjs', 'one page per service'],
   ['build', 'build_service_lang_pages.cjs', 'one page per service and language'],
+  ['build', 'build_service_pair_pages.cjs', 'again, now that the language pages exist to link to'],
+  ['build', 'build_service_city_pages.cjs', 'city pages, which link to the pages above'],
   ['build', 'apply_city_services_link.cjs', 'the links from cities/ into the directory'],
   ['sweep', 'apply_analytics.cjs', ''],
   ['sweep', 'apply_skip_link.cjs', ''],

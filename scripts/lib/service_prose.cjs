@@ -87,19 +87,25 @@ function provenance(pair) {
       'The ' + (rest.length === 1 ? 'other' : 'others') + ' come from ' +
       list(rest.map((s) => s.publisher + (s.n > 1 ? ' (' + s.n + ')' : ''))) + '.');
   }
+  // The publisher caveat, once per page rather than once per card. It used to sit in every note:
+  // six sentences repeated between 446 and 1,384 times were half of all the note text in the
+  // dataset, which is a lot of bytes to say the same thing and exactly what a search engine reads
+  // as one page duplicated.
+  const caveatOnce = [];
   const kinds = new Set(named.map((s) => s.kind));
   if (kinds.has('consular')) {
     // This used to be three sentences of explanation repeated on every consular page. It said the
     // same thing 113 times over, which is the shape a search engine reads as one page duplicated.
     // The explanation lives once on the directory page now, and each entry still quotes its own
     // mission's wording underneath.
-    out.push('A consular list is published without any guarantee of the service, in the mission own wording quoted on each entry.');
   }
   if (kinds.has('directory')) {
     const d = named.filter((s) => s.kind === 'directory').reduce((a, s) => a + s.n, 0);
     out.push(d + ' of these ' + plural(d, 'is', 'are') + ' from a commercial directory, which may sell placement and often makes one claim about a whole roster rather than about the named business. Read that tier with more caution than the rest.');
   }
-  return out.join(' ');
+  if (kinds.has('consular')) caveatOnce.push('These lists are published without a guarantee of the service and naming a provider is not a recommendation by the government that published it.');
+  if (kinds.has('directory')) caveatOnce.push('A directory listing is a weaker claim than a government one and may be paid placement.');
+  return out.concat(caveatOnce).join(' ');
 }
 
 /** What the language claim is worth, from the evidence mix. */
