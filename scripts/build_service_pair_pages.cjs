@@ -31,6 +31,7 @@ const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.c
 
 const esc = P.esc;
 const WORD_FLOOR = 220;
+const SIMILARITY_CAP = 0.55;
 // A page is a listing, not a phone book. Spain's register of sworn translators alone holds 759
 // active English speakers in Madrid, and rendering them all would be a 350KB page nobody scrolls,
 // which is the same mistake the 1.9MB hub made. The rows all stay in the data and in the counts;
@@ -123,11 +124,47 @@ function proseWordsOf(pair) {
     - boiler
     + pair.rows.reduce((a, r) => a + P.words(r.note), 0);
 }
-const WILL_EXIST = new Set(
-  M.pageList()
-    .filter((p) => p.kind === 'pair' && proseWordsOf(M.pairOf(p.city, p.category)) >= WORD_FLOOR)
-    .map((p) => p.city + '|' + p.category),
+const fiveGrams = (text) => {
+  const w = String(text).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  const g = new Set();
+  for (let i = 0; i + 4 < w.length; i++) g.add(w.slice(i, i + 5).join(' '));
+  return g;
+};
+const overlap = (a, b) => {
+  if (!a.size || !b.size) return 0;
+  let inter = 0;
+  a.forEach((x) => { if (b.has(x)) inter++; });
+  return inter / (a.size + b.size - inter);
+};
+// Everything a reader would read: the computed prose, the questions, and the providers own notes,
+// which on a small page are most of the text.
+const fingerprintOf = (pair) => fiveGrams(
+  [P.standfirst(pair), P.provenance(pair), P.claimScope(pair), P.geography(pair), P.alternatives(pair)].join(' ')
+  + ' ' + P.faq(pair).map((q) => q.q + ' ' + q.a).join(' ')
+  + ' ' + pair.rows.map((r) => r.name + ' ' + (r.area || '') + ' ' + (r.note || '')).join(' '),
 );
+// Two passes. The first decides which pages exist, because the second needs to know before it can
+// link: a page points at its siblings and at the same service nearby, and a link to a page that was
+// held back is a dead link. Deciding while rendering is what produced 172 of them.
+const decide = () => {
+  const keep = new Set();
+  const seen = [];
+  const order = M.pageList()
+    .filter((p) => p.kind === 'pair')
+    .sort((a, b) => M.pairOf(b.city, b.category).n - M.pairOf(a.city, a.category).n);
+  for (const page of order) {
+    const pair = M.pairOf(page.city, page.category);
+    if (proseWordsOf(pair) < WORD_FLOOR) continue;
+    const fp = fingerprintOf(pair);
+    let worst = 0;
+    for (const s2 of seen) { const o = overlap(fp, s2); if (o > worst) worst = o; }
+    if (worst > SIMILARITY_CAP) continue;
+    seen.push(fp);
+    keep.add(page.city + '|' + page.category);
+  }
+  return keep;
+};
+const WILL_EXIST = decide();
 // The service hubs below five cities were held back too, so the "all cities" link has to know.
 const HUBS = new Set();
 {
@@ -149,7 +186,21 @@ const written = [];
 const held = [];
 const usedTitles = new Set();
 
-for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
+// A word count is the wrong test and it let 59% of page pairs past with a five-gram overlap above
+// 0.3, the worst at 0.75. The reason is that a page with one or two providers is nine tenths this
+// generator's own sentences with different numbers in them, and those sentences counted towards the
+// floor. So a page now has to be different from the pages already accepted, not merely long enough.
+//
+// Biggest first, so the richest page in a near-identical group is the one that survives and its thin
+// echoes are the ones held back.
+const accepted = [];
+const tooSimilar = [];
+
+const ordered = M.pageList()
+  .filter((p) => p.kind === 'pair')
+  .sort((a, b) => M.pairOf(b.city, b.category).n - M.pairOf(a.city, a.category).n);
+
+for (const page of ordered) {
   const pair = M.pairOf(page.city, page.category);
   const city = M.cities[page.city];
   const cat = page.category;
@@ -169,6 +220,25 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
   const uniqueWords = proseWordsOf(pair);
   if (uniqueWords < WORD_FLOOR) {
     held.push({ url: page.url, n: pair.n, words: uniqueWords });
+    continue;
+  }
+
+  // And it has to say something the pages already accepted do not. Everything a reader would read is
+  // fingerprinted: the prose, the questions, and the providers' own notes, which on a small page are
+  // most of the text.
+  const fingerprint = fiveGrams(
+    Object.values(blocks).join(' ') + ' ' +
+    faq.map((q) => q.q + ' ' + q.a).join(' ') + ' ' +
+    pair.rows.map((r) => r.name + ' ' + (r.area || '') + ' ' + (r.note || '')).join(' '),
+  );
+  let worst = 0;
+  let twin = '';
+  for (const a of accepted) {
+    const o = overlap(fingerprint, a.fingerprint);
+    if (o > worst) { worst = o; twin = a.url; }
+  }
+  if (worst > SIMILARITY_CAP) {
+    tooSimilar.push({ url: page.url, twin, score: worst.toFixed(2), n: pair.n });
     continue;
   }
 
@@ -404,11 +474,33 @@ ${shell.bodyEnd}
   const dir = path.join(ROOT, 'services', city.id);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(ROOT, page.file), html);
+  accepted.push({ url: page.url, fingerprint });
   written.push({ url: page.url, file: page.file, kind: 'pair', city: city.id, service: cat, n: pair.n, words: uniqueWords, title, h1, indexable: true });
+}
+
+// A page that no longer qualifies is deleted, not left lying. 120 pages were held back as near
+// copies this run, and every one of them was still on disk from the run before, linked by nothing
+// and updated by nothing.
+{
+  const keep = new Set(written.map((w) => w.file));
+  let removed = 0;
+  Object.keys(M.cities).forEach((slug) => {
+    const dir = path.join(ROOT, 'services', slug);
+    if (!fs.existsSync(dir)) return;
+    fs.readdirSync(dir).filter((f) => f.endsWith('.html')).forEach((f) => {
+      if (!keep.has('services/' + slug + '/' + f)) { fs.unlinkSync(path.join(dir, f)); removed++; }
+    });
+    if (!fs.readdirSync(dir).length) fs.rmdirSync(dir);
+  });
+  if (removed) console.log('  removed ' + removed + ' page(s) that no longer qualify');
 }
 
 fs.writeFileSync(path.join(ROOT, 'data', 'service-pair-pages.json'), JSON.stringify(written, null, 1) + '\n');
 console.log(`Wrote ${written.length} city-and-service pages into services/<city>/.`);
+if (tooSimilar.length) {
+  console.log('  held back as near-copies of a bigger page (5-gram overlap over ' + SIMILARITY_CAP + '): ' + tooSimilar.length);
+  tooSimilar.slice(0, 4).forEach((t) => console.log('    ' + t.url + ' ' + t.score + ' like ' + t.twin));
+}
 if (held.length) {
   console.log(`  held on the parent, under the ${WORD_FLOOR}-word floor: ${held.length} (${held.slice(0, 4).map((h) => h.url + ' ' + h.words + 'w').join(', ')})`);
 }

@@ -89,7 +89,11 @@ function provenance(pair) {
   }
   const kinds = new Set(named.map((s) => s.kind));
   if (kinds.has('consular')) {
-    out.push('A consular list names providers who work in that country’s own language and is published without any guarantee of the service; the mission says as much in its own wording, quoted on each entry below.');
+    // This used to be three sentences of explanation repeated on every consular page. It said the
+    // same thing 113 times over, which is the shape a search engine reads as one page duplicated.
+    // The explanation lives once on the directory page now, and each entry still quotes its own
+    // mission's wording underneath.
+    out.push('A consular list is published without any guarantee of the service, in the mission own wording quoted on each entry.');
   }
   if (kinds.has('directory')) {
     const d = named.filter((s) => s.kind === 'directory').reduce((a, s) => a + s.n, 0);
@@ -107,7 +111,7 @@ function claimScope(pair) {
   const visited = ev.visited || 0;
   const parts = [];
   if (official === pair.n) {
-    parts.push('Every entry here sits on an official list, which is the strongest tier this directory carries: a government published the name because the provider works in that government’s language.');
+    parts.push('All ' + pair.n + ' sit on an official list, the strongest tier this directory carries.');
   } else if (official) {
     parts.push(official + ' of the ' + pair.n + ' sit on an official list; the remaining ' +
       (pair.n - official) + ' ' + plural(pair.n - official, 'rests', 'rest') + ' on ' + list([
@@ -118,7 +122,7 @@ function claimScope(pair) {
     parts.push('None of these sits on an official list, so treat the language claim as the provider’s or the directory’s own word.');
   }
   if (!visited) {
-    parts.push('We have not called or visited any of them, so nothing here is a recommendation from us.');
+
   }
   return parts.join(' ');
 }
