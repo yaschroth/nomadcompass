@@ -172,7 +172,10 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
   // is what turned a reader searching for German-speaking doctors in Barcelona away from the page
   // that holds eleven of them, because the heading said "English and French-speaking doctors".
   const servable = pair.nonLocal.filter(([, n]) => n >= 2);
-  const named = servable.slice(0, 4).map(([l]) => P.langName(l));
+  // Five, not four. No page in the family serves more than five languages and only three serve
+  // five, so at this cap "and 1 more language" never has to be written and no language is left
+  // unnamed in a heading. The fallback stays for the day the data grows past it.
+  const named = servable.slice(0, 5).map(([l]) => P.langName(l));
   const spare = servable.length - named.length;
   const h1 = servable.length <= 1
     ? `${P.list(langs)}-speaking ${P.catName(cat)} in ${city.name}`
