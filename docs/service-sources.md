@@ -112,3 +112,25 @@ only where the second line is a given name in ordinary case, took Paris from 15 
 
 Dead end: the Marseille consulate general publishes no names. Its page of psychologists holds a
 link away to a third-party site and nothing else, so there is nothing to cite.
+
+### FCDO, Find a professional service abroad, the translators branch (2026-08-19)
+
+Read for twenty countries in eight languages, 160 result pages. 57 rows placed in 36 cities, out
+of 192 distinct providers. It is a better source than the lawyer branch for a directory indexed by
+language, because it states the languages each provider works in and the places it covers, per
+person, rather than one claim for a whole roster.
+
+Three things it taught, all worth keeping:
+
+1. The branch had been read with the lawyers parser, whose row pattern matches nothing here, so it
+   reported "0 providers" for every country and looked like an empty source. A zero from a source
+   that ought to hold something is a bug report, not a result.
+2. 172 providers answer "entire country", "all regions" or "South west" and are not placed. Putting
+   them in the capital would invent a location the source does not give.
+3. Spain, Brazil and Malaysia are not in the service at all. Those URLs 302 to a gov.uk publication
+   instead, and the Spanish one carries no names, only instructions for searching the MAEC register
+   of sworn translators by province and language. That register is a primary source and is the next
+   thing to read for Spanish cities.
+
+One name is skipped: the service prints "S Lke Thyssen Language Services", a dropped umlaut in its
+own data. A name that belongs to nobody does not go in.
