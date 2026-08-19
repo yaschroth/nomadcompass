@@ -31,6 +31,11 @@ const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.c
 
 const esc = P.esc;
 const WORD_FLOOR = 220;
+// A page is a listing, not a phone book. Spain's register of sworn translators alone holds 759
+// active English speakers in Madrid, and rendering them all would be a 350KB page nobody scrolls,
+// which is the same mistake the 1.9MB hub made. The rows all stay in the data and in the counts;
+// the page shows the first of them and says plainly how many there are.
+const SECTION_CAP = 20;
 
 // schema.org has a type for most of these. Where it does not, the ListItem carries a name and no
 // type rather than a wrong one.
@@ -219,7 +224,7 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
   // The other half of the search result, and it was still naming the headline two languages. Every
   // language the page can serve is named here, with its count, even where the title had no room.
   const descLangs = servable.length
-    ? P.list(servable.slice(0, 6).map(([l, n]) => P.langName(l) + ' (' + n + ')'))
+    ? P.list(servable.map(([l, n]) => P.langName(l) + ' (' + n + ')'))
     : P.list(langs);
   const desc = `${pair.n} ${P.catName(cat)} in ${city.name} who work in ${descLangs}` +
     (topArea && Object.keys(pair.areas).length > 1 ? `, across ${Object.keys(pair.areas).length} postcodes` : '') +
@@ -234,8 +239,9 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
             ? esc(P.langName(s.lang)) + '-speaking ' + esc(P.catName(cat)) + ' in ' + esc(city.name)
             : 'Listed only in ' + esc(P.langName(M.LOCAL[pair.country]) || 'the local language')}<span class="svp-lang-n">${s.n}</span></h2>
           <div class="sv-grid">
-        ${s.rows.map((r) => P.card(r, { icon, showCategory: false })).join('\n        ')}
+        ${s.rows.slice(0, SECTION_CAP).map((r) => P.card(r, { icon, showCategory: false })).join('\n        ')}
           </div>
+          ${s.rows.length > SECTION_CAP ? `<p class="svp-capped">Showing ${SECTION_CAP} of ${s.rows.length}. Every entry links to the source it came from, which is searchable in full.</p>` : ''}
           ${(() => {
     // The same language elsewhere. Without this the fifteen service-and-language pages have one
     // inbound link each, from their hub, and a page nothing points at is a page we do not publish.
@@ -271,8 +277,8 @@ for (const page of M.pageList().filter((p) => p.kind === 'pair')) {
       spatialCoverage: { '@type': 'City', name: city.name, containedInPlace: { '@type': 'Country', name: city.country } },
       mainEntity: {
         '@type': 'ItemList',
-        numberOfItems: pair.n,
-        itemListElement: pair.rows.map((r, i) => {
+        numberOfItems: Math.min(pair.n, SECTION_CAP * 4),
+        itemListElement: pair.rows.slice(0, SECTION_CAP * 4).map((r, i) => {
           const item = { '@type': 'ListItem', position: i + 1, name: r.name };
           // A typed node only where the provider has a site of its own. Without one there is no
           // entity to point at, and inventing an address or a phone number is not on.
@@ -334,6 +340,7 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
     .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
     .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+    .svp-capped { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: var(--color-stone); }
     .svp-more-lang { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
     .svp-langbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-6); }
     .svp-lang { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }

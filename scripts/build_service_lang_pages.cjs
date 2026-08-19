@@ -305,6 +305,23 @@ ${shell.bodyEnd}
   }
 }
 
+// A page that no longer qualifies has to be removed, not left lying. The thresholds move as the data
+// grows, and a file on disk that no manifest claims is an orphan: nothing links to it, nothing
+// updates it, and the gate reports it on every run.
+{
+  const keep = new Set(written.map((w) => w.file));
+  const removed = [];
+  Object.values(M.SERVICE_SLUGS).forEach((slug) => {
+    const dir = path.join(ROOT, 'services', slug);
+    if (!fs.existsSync(dir)) return;
+    fs.readdirSync(dir).filter((f) => f.endsWith('.html')).forEach((f) => {
+      const rel = 'services/' + slug + '/' + f;
+      if (!keep.has(rel)) { fs.unlinkSync(path.join(dir, f)); removed.push(rel); }
+    });
+  });
+  if (removed.length) console.log('  removed ' + removed.length + ' page(s) that no longer qualify: ' + removed.join(', '));
+}
+
 fs.writeFileSync(path.join(ROOT, 'data', 'service-lang-pages.json'), JSON.stringify(written, null, 1) + '\n');
 console.log(`Wrote ${written.length} service-and-language pages: ` +
   written.sort((a, b) => b.n - a.n).map((w) => w.url.replace('/services/', '') + ' (' + w.n + ')').join(', '));

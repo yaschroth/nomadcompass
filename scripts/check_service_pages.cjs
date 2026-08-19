@@ -105,10 +105,15 @@ for (const row of pages) {
     }
 
     // The count in the standfirst has to be the count of what is rendered.
+    // A page may show fewer cards than it holds, but only if it says so: Spain's register puts 759
+    // sworn translators in Madrid and a page listing them all is a phone book. What it may not do is
+    // drop rows silently, which is what happened when providers recorded only in the local language
+    // belonged to no language section.
     const cards = (html.match(/class="sv-card /g) || []).length;
     const uniqueNames = new Set(rows.map((r) => r.name)).size;
-    if (cards < uniqueNames) {
-      note(row.url, 'renders ' + cards + ' cards for ' + uniqueNames + ' providers');
+    const saysSo = /class="svp-capped"/.test(html);
+    if (cards < uniqueNames && !saysSo) {
+      note(row.url, 'renders ' + cards + ' cards for ' + uniqueNames + ' providers and does not say it is showing a subset');
     }
   }
 
