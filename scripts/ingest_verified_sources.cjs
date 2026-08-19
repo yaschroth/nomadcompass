@@ -186,6 +186,14 @@ for (const src of manifest) {
     // Jakarta.
     const where = [r.area, r.hospital, r.detail].filter(Boolean).join(' ').trim();
     if (where.length < 8) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
+    // And it has to be an address, not a phone number. Several parsers put the contact column in
+    // the address field, and "Tel. 91 388 44 34, Mobil: 689 ..." tells a reader nothing about where
+    // to go and tells this script nothing about which city the row belongs to.
+    // A phone number is digits too, so the contact details come off first and the test runs on what
+    // is left. "Tel. 91 562 94 29, Mobil: 691 ..." then has nothing in it that looks like a place.
+    const withoutContact = where.replace(/\b(Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b[\s.:]*[^,;]*/gi, ' ').trim();
+    const looksLikeAddress = /\b\d{4,8}\b|\b(str|strasse|street|calle|carrer|rua|via|avda|avenida|av|rue|blvd|road|rd|weg|platz|plaza|piazza|lane|utca|ulica|ulice|gatan)\b\.?/i.test(withoutContact);
+    if (!looksLikeAddress) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
     const city = placeOf(where, src.city);
     if (!M.cities[city]) { stats.placedElsewhere++; continue; }
     // If the address names a town, it has to be this one.
@@ -212,8 +220,11 @@ for (const src of manifest) {
 
     // The practice name is evidence too: "Korea Dental Clinic" is a dentist even when the table it
     // sits in is headed Aerzte, and without it those rows were filed as doctors.
-    const cat = categorise([r.specialty, r.role, r.hospital, r.area, r.detail, src.categories.join(' ')]
-      .filter(Boolean).join(' '), src.categories[0]);
+    // The row has to say what the provider does. Falling back to the source's category list filed
+    // every doctor on the Madrid list as a dentist, because dentist happened to be the first
+    // category the verifier recorded for that page.
+    const ownWords = [r.specialty, r.role, r.hospital, r.detail].filter(Boolean).join(' ');
+    const cat = ownWords.trim() ? categorise(ownWords, '') : '';
     if (!cat) { stats.noCategory++; continue; }
 
     // A form of address is not part of a name.
@@ -239,10 +250,18 @@ for (const src of manifest) {
       sourceUrl: src.url,
       evidence: 'official',
       checked: CHECKED,
-      area: asciiFold(r.area || '').slice(0, 120),
+      // What goes on the card is the address, not the phone book entry that followed it.
+      area: asciiFold((r.area || '').split(/\b(?:Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b/i)[0]
+        || withoutContact).replace(/[,\s]+$/, '').slice(0, 120),
       note: bits.join(' ').replace(/\s+/g, ' ').trim(),
     };
     if (/[^\x20-\x7E]/.test(JSON.stringify(row))) { stats.noName++; continue; }
+    // Last look at what the card will actually show. A row whose address came out as a URL or as a
+    // list of treatments is a row the parser did not understand, whatever the earlier tests said.
+    if (/^https?:/i.test(row.area) || !/\d/.test(row.area) || row.area.length < 10) {
+      stats.noAddress = (stats.noAddress || 0) + 1;
+      continue;
+    }
     map.set(k, row);
     fresh.push(row);
     stats.kept++;

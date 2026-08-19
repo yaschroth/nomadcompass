@@ -90,7 +90,14 @@ const flush = () => {
   if (!block || !block.left.length) { block = null; return; }
   const left = block.left;
   const right = block.right.join(' ').replace(/\s+/g, ' ').trim();
-  const name = left[0].replace(/\s+/g, ' ').trim();
+  // "Dra. OLLEROS, Ana" is the same convention the HTML lists use: surname first, comma, given
+  // name. A reader expects it the other way round, and leaving it alone published the comma.
+  const name = (() => {
+    const raw = left[0].replace(/\s+/g, ' ').trim();
+    const m = raw.match(/^((?:Dr\.|Dra\.|Prof\.|Dipl\.[-\w]*|med\.|dent\.)\s*)*([A-ZÄÖÜÁÉÍÓÚÑ][A-ZÄÖÜÁÉÍÓÚÑ' -]{2,}),\s*([A-ZÄÖÜÁÉÍÓÚÑ][a-zäöüáéíóúñ' -]+(?:\s+[A-ZÄÖÜÁÉÍÓÚÑ][a-zäöüáéíóúñ' -]+)?)$/);
+    if (!m) return raw;
+    return ((m[1] || '').trim() + ' ' + m[3].trim() + ' ' + m[2].trim()).replace(/\s+/g, ' ').trim();
+  })();
   if (!NAME_START.test(name) || name.length < 5 || name.length > 70) { block = null; return; }
   const addr = left.slice(1).join(', ').replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/^,\s*|,\s*$/g, '');
   const langLine = (right.match(/Sprachen?\s*:?\s*([^.]{2,60})/i) || [])[1] || '';
