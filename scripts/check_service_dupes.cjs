@@ -32,6 +32,21 @@ const ALLOW = new Set([
 ]);
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// The containment test above misses the case that actually reached the site: the same person under
+// two name orders. The German embassy in Paris publishes one doctors list at a German URL and a
+// French one, and the two parsers read them as "Proisl, Oliver, Dr." and "Dr. Oliver PROISL".
+// Neither string contains the other, so 26 Paris doctors were published twice.
+//
+// The test that catches it: the same words in a different order. Titles are dropped first, because
+// one list prints them and the other does not, and accents are folded, because one list prints
+// SCHULZE-DOBOLD where the other prints Schulze-Doebold.
+const TITLE_WORD = /^(dr|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|m|maitre|mtre|herr|frau|monsieur|madame)$/;
+const words = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .toLowerCase().replace(/oe/g, 'o').replace(/ue/g, 'u').replace(/ae/g, 'a')
+  .split(/[^a-z0-9]+/).filter(Boolean).filter((w) => !TITLE_WORD.test(w));
+const wordKey = (s) => { const w = words(s); return w.length >= 2 ? w.slice().sort().join(' ') : ''; };
+
 const byCity = {};
 for (const p of DB.providers) (byCity[p.city] = byCity[p.city] || []).push(p);
 
@@ -42,7 +57,9 @@ for (const [city, rows] of Object.entries(byCity)) {
       const a = norm(rows[i].name);
       const b = norm(rows[j].name);
       if (a.length < 8 || b.length < 8) continue;
-      if (!a.includes(b) && !b.includes(a)) continue;
+      const ka = wordKey(rows[i].name);
+      const sameWords = ka && ka === wordKey(rows[j].name);
+      if (!sameWords && !a.includes(b) && !b.includes(a)) continue;
       const key = [city, a, b].sort().join('|');
       const alt = [city, b, a].join('|');
       if (ALLOW.has(key) || ALLOW.has(alt) || ALLOW.has([city, a, b].join('|'))) continue;
