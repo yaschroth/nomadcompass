@@ -1,0 +1,276 @@
+/**
+ * Reads a batch of verified consular lists into data/service-languages.json.
+ *
+ * The finding and the checking are done elsewhere, by people or by agents, and what arrives here is
+ * a manifest: which file, from which URL, published by whom, with which language claim, verified by
+ * whom. Nothing in this script decides whether a source is good. It decides only what a parser can
+ * read out of it, which city each row belongs to, and whether the row is safe to publish.
+ *
+ * Three rules do most of the work:
+ *   - A row with no language of its own may only inherit the roster claim where the manifest says
+ *     the source HAS a roster claim. On a per-entry source, an unannotated row gets nothing and is
+ *     left out. Half the mistakes in this directory would have been that one rule missing.
+ *   - The city comes from the address, not from the manifest, whenever the address names one of our
+ *     cities. A country-wide list holds Sao Paulo and Rio in one table, and the manifest can only
+ *     say which city it was found for.
+ *   - Anything that cannot be placed, categorised or named is counted and reported, never guessed.
+ *
+ * Usage: node scripts/ingest_verified_sources.cjs <manifest.json> [--preview] [--only <city>]
+ */
+const fs = require('fs');
+const path = require('path');
+const { execFileSync } = require('child_process');
+
+const ROOT = path.resolve(__dirname, '..');
+const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
+const manifestPath = process.argv[2];
+if (!manifestPath) { console.error('usage: node scripts/ingest_verified_sources.cjs <manifest.json> [--preview] [--only <city>]'); process.exit(2); }
+const PREVIEW = process.argv.includes('--preview');
+const onlyAt = process.argv.indexOf('--only');
+const ONLY = onlyAt > 0 ? process.argv[onlyAt + 1] : '';
+
+const F = path.join(ROOT, 'data', 'service-languages.json');
+const db = JSON.parse(fs.readFileSync(F, 'utf8'));
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+const CHECKED = new Date().toISOString().slice(0, 10);
+
+const CAT = [
+  [/tier|veterin|vet\b/i, 'vet'],
+  [/zahn|kiefer|dental|dentist|odonto/i, 'dentist'],
+  [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop/i, 'physio'],
+  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b/i, 'therapy'],
+  [/optiker|optometr|augenoptik/i, 'optician'],
+  [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal/i, 'legal'],
+  [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],
+  [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
+  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein/i, 'doctor'],
+];
+const categorise = (text, fallback) => {
+  const hits = CAT.filter(([re]) => re.test(text || '')).map(([, c]) => c);
+  if (hits.length > 1 && hits.includes('doctor')) return hits.find((h) => h !== 'doctor');
+  return hits[0] || fallback || '';
+};
+
+// Which of our cities an address names. A country-wide list is one table holding several cities, and
+// the manifest can only name the one it was found for.
+// Spellings the missions use that are not the name we print.
+const ALIASES = {
+  hochiminh: ['ho chi minh', 'hcmc', 'saigon'],
+  saopaulo: ['sao paulo'],
+  riodejaneiro: ['rio de janeiro'],
+  mexicocity: ['mexico, d.f.', 'ciudad de mexico', 'cdmx', 'mexico city'],
+  buenosaires: ['buenos aires'],
+  capetown: ['cape town', 'kapstadt'],
+  telaviv: ['tel aviv', 'tel-aviv'],
+  kualalumpur: ['kuala lumpur'],
+  tbilisi: ['tiflis'],
+  almaty: ['almaty', 'alma-ata'],
+  yerevan: ['jerewan', 'eriwan'],
+  seoul: ['seoul'],
+  taipei: ['taipeh'],
+  bali: ['denpasar', 'kuta', 'ubud', 'seminyak'],
+  chiangmai: ['chiang mai'],
+};
+const CITY_NAMES = Object.values(M.cities).map((c) => ({
+  id: c.id,
+  // Match on the printed name, accents folded, plus a couple of spellings missions actually use.
+  needles: [c.name, c.name.replace(/\s+/g, ''), ...(ALIASES[c.id] || [])]
+    .map((n) => String(n).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()),
+}));
+const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const placeOf = (text, fallback) => {
+  const t = fold(text);
+  if (!t) return fallback;
+  // Longest name first, so "Rio de Janeiro" wins over any city whose name is a substring of it.
+  const hit = CITY_NAMES.slice().sort((a, b) => b.needles[0].length - a.needles[0].length)
+    .find((c) => c.needles.some((n) => n.length > 3 && t.includes(n)));
+  // A country-wide list may name another of its own cities, and that is worth following. A word
+  // that happens to match a city on another continent is not: an address in Bangkok was matching
+  // Hamburg and Turin, and the row would have been published there.
+  if (!hit) return fallback;
+  const home = M.cities[fallback];
+  if (home && M.cities[hit.id] && M.cities[hit.id].country !== home.country) return fallback;
+  return hit.id;
+};
+
+/**
+ * The town an address names, if it names one at all.
+ *
+ * Requiring the target city's name in every address is too blunt: the Tbilisi list writes districts
+ * and clinics and never the city, and the rule threw away 25 correct rows. Ignoring the address is
+ * worse: the Taiwan list's third section is headed "medical facilities outside Taipei" and filed
+ * hospitals in Keelung and Taichung as Taipei.
+ *
+ * So the question is not whether the address names the city, it is whether it names a DIFFERENT
+ * one. "Keelung City", "5345433 Givataim" and "Ramla 7240627" all do, and those rows belong to
+ * their own town, not to the city the list was found for. An address with no town in it at all is
+ * left to the list's own city, which is the only claim available.
+ */
+const localityOf = (text) => {
+  const s = String(text || '');
+  const m = s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)\s+City\b/)
+    // Up to eight digits: Israeli postcodes are seven, and a six-digit cap matched nothing on that
+    // list, so every suburb in it passed as Tel Aviv.
+    || s.match(/\b\d{4,8}\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)/)
+    || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/);
+  if (!m) return '';
+  const word = m[1].trim();
+  // Words that turn up in this position and are not towns.
+  if (/^(Str|Street|Rd|Road|Ave|Avenue|Floor|Fl|Tower|Suite|Apt|Building|Clinic|Hospital|Center|Centre|Website|Web|Tel|Fax|Email|Mobile|Sec|Lane|No|Dist|District)$/i.test(word)) return '';
+  return word;
+};
+
+// A provider is a person or a practice. These are the things that keep arriving instead: the
+// mission's own address block, a job description, a department, a street.
+const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+
+const asciiFold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .replace(/[‘’]/g, "'").replace(/[“”«»„]/g, '"').replace(/[–—]/g, ', ').replace(/[°º]/g, '')
+  .replace(/[^\x20-\x7E]/g, '').replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/^[,\s]+|[,\s]+$/g, '');
+
+const TITLE_WORD = /^(dr|dra|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|mrs|ms|m|maitre|mtre|sr|sra)$/;
+const key = (s) => fold(s).replace(/ae/g, 'a').replace(/ue/g, 'u').replace(/oe/g, 'o')
+  .split(/[^a-z0-9]+/).filter(Boolean).filter((w) => !TITLE_WORD.test(w)).sort().join(' ');
+
+const seenByCity = {};
+db.providers.forEach((p) => { (seenByCity[p.city] = seenByCity[p.city] || new Map()).set(key(p.name), p); });
+
+const runParser = (script, args) => {
+  try {
+    const out = execFileSync('node', [path.join(ROOT, 'scripts', script), ...args, '--json'],
+      { encoding: 'utf8', maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'ignore'] });
+    const j = JSON.parse(out);
+    return Array.isArray(j) ? j : (j.rows || []);
+  } catch (e) { return []; }
+};
+
+// A file the manifest lists for more than one city is a country-wide list, and the manifest cannot
+// say which of its rows belongs where. Without this, the Bangkok page was read once for Bangkok and
+// once for Chiang Mai and put the same five doctors in both: a reader in Chiang Mai would have been
+// sent 700 km. On those files the address has to name the city, or the row is left out.
+const fileCount = {};
+manifest.forEach((s) => { fileCount[s.file] = (fileCount[s.file] || 0) + 1; });
+
+const fresh = [];
+const report = [];
+for (const src of manifest) {
+  if (ONLY && src.city !== ONLY) continue;
+  if (!fs.existsSync(src.file)) { report.push({ src, kept: 0, why: 'file missing' }); continue; }
+
+  // Which parser: the shape the verifier recorded, with the others tried as a fallback, and the
+  // one that finds the most languages of its own wins. A shape label is a hint, not a promise.
+  const isPdf = /\.pdf$/i.test(src.file);
+  // Only the parsers that understand a page's structure. The running-text reader was tried here
+  // once and it is not safe in a batch: on pages it does not understand it returns the embassy's own
+  // address as a provider, a job title as a name and a Phuket clinic under Bangkok. It stays a
+  // hand-driven tool for pages someone has looked at.
+  const candidates = isPdf
+    ? [['parse_diplo_pdf_list.cjs', [src.file]]]
+    : [['parse_diplo_table_list.cjs', [src.file]]];
+  let rows = [];
+  let used = '';
+  for (const [script, args] of candidates) {
+    const got = runParser(script, args);
+    const withLang = got.filter((r) => (r.languages || []).length).length;
+    const bestSoFar = rows.filter((r) => (r.languages || []).length).length;
+    if (withLang > bestSoFar || (withLang === bestSoFar && got.length > rows.length)) { rows = got; used = script; }
+  }
+  if (!rows.length) { report.push({ src, kept: 0, why: 'no parser could read it' }); continue; }
+
+  const stats = { placedElsewhere: 0, noLanguage: 0, noCategory: 0, already: 0, noName: 0, kept: 0 };
+  for (const r of rows) {
+    const text = [r.name, r.area, r.specialty, r.role, r.detail, r.languageLine].filter(Boolean).join(' ');
+    // No address, no city. The Indonesia lawyer list names thirteen firms and prints no address for
+    // any of them, and the manifest could only say the list was found while looking for Bali: those
+    // rows would have been published as being in Bali on no evidence at all. Most of them are in
+    // Jakarta.
+    const where = [r.area, r.hospital, r.detail].filter(Boolean).join(' ').trim();
+    if (where.length < 8) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
+    const city = placeOf(where, src.city);
+    if (!M.cities[city]) { stats.placedElsewhere++; continue; }
+    // If the address names a town, it has to be this one.
+    const town = localityOf(where);
+    if (town) {
+      const target = M.cities[city];
+      const names = [target.name, ...(ALIASES[city] || [])].map(fold);
+      if (!names.some((n) => fold(town).includes(n) || n.includes(fold(town)))) { stats.placedElsewhere++; continue; }
+    }
+    // The address has to name the city, always. The manifest can only say which city a list was
+    // found for, and these lists cover regions: the Taiwan list's third section is headed
+    // "medical facilities outside Taipei", and taking the manifest's word for it filed 33 hospitals
+    // in Keelung, Taoyuan, Hsinchu, Miaoli, Taichung and Kaohsiung as if they were in Taipei, under
+    // a language claim the page does not make about them.
+    if (fileCount[src.file] > 1 && city !== src.city) { stats.placedElsewhere++; continue; }
+
+    // The rule that matters: a roster claim covers every row, a per-entry source covers only the
+    // rows it annotates. Inheriting a per-entry source's claim would be inventing one.
+    let languages = (r.languages || []).slice();
+    if (!languages.length) {
+      if (src.claimType !== 'roster') { stats.noLanguage++; continue; }
+      languages = ['de'];
+    }
+
+    // The practice name is evidence too: "Korea Dental Clinic" is a dentist even when the table it
+    // sits in is headed Aerzte, and without it those rows were filed as doctors.
+    const cat = categorise([r.specialty, r.role, r.hospital, r.area, r.detail, src.categories.join(' ')]
+      .filter(Boolean).join(' '), src.categories[0]);
+    if (!cat) { stats.noCategory++; continue; }
+
+    // A form of address is not part of a name.
+    const name = asciiFold(r.name).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '');
+    const k = key(name);
+    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name)) { stats.noName++; continue; }
+    const map = (seenByCity[city] = seenByCity[city] || new Map());
+    if (map.has(k)) { stats.already++; continue; }
+
+    const bits = [`On the ${src.publisher} list${r.specialty ? ', under ' + asciiFold(r.specialty).replace(/\.$/, '') : ''}.`];
+    if (r.role) bits.push(asciiFold(r.role).replace(/\.$/, '') + '.');
+    bits.push(src.claimType === 'roster'
+      ? `The list is published as a list of German-speaking providers, which is a claim about the roster rather than a note about this entry.`
+      : `The list states the languages of each entry, and this one names ${languages.map((l) => db._languages[l] || l).join(', ')}.`);
+    if (src.statedDate) bits.push(`The list is dated ${asciiFold(src.statedDate).replace(/\s*-\s*Artikel.*$/, '')}.`);
+
+    const row = {
+      city,
+      name,
+      category: cat,
+      languages: [...new Set(languages)].sort(),
+      ...(r.url ? { url: (/^https?:/.test(r.url) ? r.url : 'http://' + r.url).replace(/[.,)]+$/, '') } : {}),
+      sourceUrl: src.url,
+      evidence: 'official',
+      checked: CHECKED,
+      area: asciiFold(r.area || '').slice(0, 120),
+      note: bits.join(' ').replace(/\s+/g, ' ').trim(),
+    };
+    if (/[^\x20-\x7E]/.test(JSON.stringify(row))) { stats.noName++; continue; }
+    map.set(k, row);
+    fresh.push(row);
+    stats.kept++;
+  }
+  report.push({ src, used, read: rows.length, ...stats });
+}
+
+report.sort((a, b) => (b.kept || 0) - (a.kept || 0));
+report.forEach((x) => {
+  console.log(String(x.kept || 0).padStart(4) + ' kept  ' + String(x.src.city).padEnd(13)
+    + String(x.src.claimType).padEnd(10) + String(x.used || x.why || '').replace('parse_diplo_', '').replace('_list.cjs', '').padEnd(8)
+    + 'read ' + String(x.read || 0).padStart(4)
+    + '  elsewhere ' + String(x.placedElsewhere || 0).padStart(3)
+    + '  no lang ' + String(x.noLanguage || 0).padStart(3)
+    + '  no cat ' + String(x.noCategory || 0).padStart(3)
+    + '  dup ' + String(x.already || 0).padStart(3)
+    + '  ' + path.basename(x.src.file));
+});
+const per = {};
+fresh.forEach((r) => { per[r.city] = (per[r.city] || 0) + 1; });
+console.log('\n' + fresh.length + ' rows to add across ' + Object.keys(per).length + ' cities: '
+  + Object.entries(per).sort((a, b) => b[1] - a[1]).map(([c, n]) => c + ' ' + n).join(', '));
+
+if (PREVIEW) {
+  fresh.slice(0, 12).forEach((r) => console.log('   ' + r.city.padEnd(13) + r.category.padEnd(11)
+    + r.name.slice(0, 30).padEnd(32) + r.languages.join(',').padEnd(12) + r.area.slice(0, 30)));
+  process.exit(0);
+}
+db.providers = db.providers.concat(fresh);
+fs.writeFileSync(F, JSON.stringify(db, null, 2) + '\n');
+console.log('total ' + db.providers.length);
