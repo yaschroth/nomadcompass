@@ -97,6 +97,17 @@ function langSections(pair) {
   // reads better, and in 484 of 540 pairs one language covers nine rows in ten.
   const langs = pair.nonLocal.filter(([, n]) => n >= 2);
   if (langs.length < 2) return null;
+  // Sections are there to separate people. Where the top two hold almost the same providers they
+  // separate nobody: Athens lists 95 doctors, 91 of them speak English and 88 of those same 91 also
+  // speak German, so the page rendered 195 cards for 95 people and showed 20 of each. One list of
+  // everyone, with the languages on each card, is both shorter and truer.
+  {
+    const [a, b] = langs;
+    const setA = new Set(pair.rows.filter((r) => r.languages.includes(a[0])).map((r) => r.name));
+    const setB = new Set(pair.rows.filter((r) => r.languages.includes(b[0])).map((r) => r.name));
+    const inter = [...setA].filter((x) => setB.has(x)).length;
+    if (inter / Math.min(setA.size, setB.size) >= 0.8) return null;
+  }
   const sections = langs.map(([l, n]) => ({
     lang: l,
     n,
@@ -174,6 +185,18 @@ const HUBS = new Set();
 const linkTo = (slug, category) => (WILL_EXIST.has(slug + '|' + category)
   ? '/services/' + slug + '/' + M.SERVICE_SLUGS[category]
   : '/services/' + slug);
+
+// The city-service-language pages, which hold the overflow this page used to cut off. Where one
+// exists, this page shows a few of that language and sends the reader to the page that has them all,
+// which is both lighter and the URL somebody would have typed.
+const CITY_LANG_PAGES = new Map();
+{
+  const f = path.join(ROOT, 'data', 'service-city-lang-pages.json');
+  if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => CITY_LANG_PAGES.set(x.city + '|' + x.service + '|' + x.language, x));
+}
+// How many cards a section shows when its overflow has a page of its own: enough to see what the
+// list looks like, few enough that the link is the obvious next move.
+const TEASER = 8;
 
 // The service-and-language pages, so a language section can point at the same language elsewhere.
 const LANG_PAGES = new Map();
@@ -309,9 +332,21 @@ for (const page of ordered) {
             ? esc(P.langName(s.lang)) + '-speaking ' + esc(P.catName(cat)) + ' in ' + esc(city.name)
             : 'Listed only in ' + esc(P.langName(M.LOCAL[pair.country]) || 'the local language')}<span class="svp-lang-n">${s.n}</span></h2>
           <div class="sv-grid">
-        ${s.rows.slice(0, SECTION_CAP).map((r) => P.card(r, { icon, showCategory: false })).join('\n        ')}
+        ${(() => {
+    const kid = s.lang ? CITY_LANG_PAGES.get(city.id + '|' + cat + '|' + s.lang) : null;
+    return s.rows.slice(0, kid ? TEASER : SECTION_CAP).map((r) => P.card(r, { icon, showCategory: false })).join('\n        ');
+  })()}
           </div>
-          ${s.rows.length > SECTION_CAP ? `<p class="svp-capped">Showing ${SECTION_CAP} of ${s.rows.length}. Every entry links to the source it came from, which is searchable in full.</p>` : ''}
+          ${(() => {
+    const kid = s.lang ? CITY_LANG_PAGES.get(city.id + '|' + cat + '|' + s.lang) : null;
+    if (kid) {
+      return `<p class="svp-capped">Showing ${Math.min(TEASER, s.rows.length)} of ${s.rows.length}. ` +
+        `<a href="${kid.url}">All ${s.rows.length} ${esc(P.langName(s.lang))}-speaking ${esc(P.catName(cat))} in ${esc(city.name)} &rarr;</a></p>`;
+    }
+    return s.rows.length > SECTION_CAP
+      ? `<p class="svp-capped">Showing ${SECTION_CAP} of ${s.rows.length}. Every entry links to the source it came from, which is searchable in full.</p>`
+      : '';
+  })()}
           ${(() => {
     // The same language elsewhere. Without this the fifteen service-and-language pages have one
     // inbound link each, from their hub, and a page nothing points at is a page we do not publish.

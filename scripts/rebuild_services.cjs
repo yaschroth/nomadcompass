@@ -34,6 +34,7 @@ const STEPS = [
   ['build', 'build_service_pair_pages.cjs', 'decides what exists, and writes the manifest the rest read'],
   ['build', 'build_service_hubs.cjs', 'one page per service'],
   ['build', 'build_service_lang_pages.cjs', 'one page per service and language'],
+  ['build', 'build_service_city_lang_pages.cjs', 'the overflow of a big language section, on a page of its own'],
   ['build', 'build_service_pair_pages.cjs', 'again, now that the language pages exist to link to'],
   ['build', 'build_service_city_pages.cjs', 'city pages, which link to the pages above'],
   ['build', 'apply_city_services_link.cjs', 'the links from cities/ into the directory'],

@@ -71,6 +71,14 @@ add('/legal-notice', '0.2', 'yearly');
   }
   // A service in one language across cities: the answer to "German-speaking doctors", which no
   // other page in the family is shaped like.
+  // One language of one service in one city: where a section held more than a page can show, the
+  // overflow has its own URL, and it is the URL somebody types.
+  const cityLangManifest = path.join(ROOT, 'data', 'service-city-lang-pages.json');
+  if (fs.existsSync(cityLangManifest)) {
+    const kids = JSON.parse(fs.readFileSync(cityLangManifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of kids.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.6', 'monthly');
+    console.log('  services: ' + kids.length + ' city-service-language pages added');
+  }
   const langManifest = path.join(ROOT, 'data', 'service-lang-pages.json');
   if (fs.existsSync(langManifest)) {
     const langs = JSON.parse(fs.readFileSync(langManifest, 'utf8')).filter((p) => p.indexable);
