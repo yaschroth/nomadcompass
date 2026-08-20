@@ -42,6 +42,8 @@ const LIMIT = Number(arg('limit', 40));
 const OLDER_THAN = Number(arg('older-than', 30));
 const ONLY = arg('only', '');
 const TODAY = new Date().toISOString().slice(0, 10);
+// One id for this run, so a partial write can replace itself instead of piling up ten copies.
+const RUN_ID = TODAY + '-' + process.pid;
 
 const daysSince = (iso) => (iso ? Math.round((Date.parse(TODAY) - Date.parse(iso)) / 86400000) : 9999);
 
@@ -115,8 +117,16 @@ const fetchText = (url) => new Promise((resolve) => {
   // Three hundred network fetches take half an hour, and the first version wrote its results at the
   // end: it died on source 162 and lost all of it. Now every source is stamped as it is read, so a
   // run that stops can be started again and picks up where it left off.
-  const save = () => {
+  const save = (partial) => {
     fs.writeFileSync(SRC_FILE, JSON.stringify(sources, null, 1) + '\n');
+    // The report goes with it. Stamping the sources but writing the findings only at the end meant
+    // that when the run died near the end, twice, every verdict it had formed was lost while the
+    // stamps said the work was done.
+    if (!partial) return;
+    const prev = fs.existsSync(REPORT) ? JSON.parse(fs.readFileSync(REPORT, 'utf8')) : { runs: [], misses: {} };
+    const runs = (prev.runs || []).filter((r) => r.id !== RUN_ID);
+    prev.runs = [{ id: RUN_ID, date: TODAY, checked: partial.length, partial: true, results: partial }, ...runs].slice(0, 10);
+    fs.writeFileSync(REPORT, JSON.stringify(prev, null, 1) + '\n');
   };
 
   for (const [id, s] of queue) {
@@ -184,7 +194,7 @@ const fetchText = (url) => new Promise((resolve) => {
     console.log('  ' + String(found).padStart(4) + '/' + String(testable).padEnd(4)
       + ' ' + verdict.padEnd(46) + (got.status || 'no response') + '  ' + id);
     if (missing.length && rate > 0) console.log('        gone: ' + missing.slice(0, 4).join(', ').slice(0, 130));
-    if (results.length % 20 === 0) save();
+    if (results.length % 20 === 0) save(results);
   }
 
   fs.writeFileSync(SRC_FILE, JSON.stringify(sources, null, 1) + '\n');
@@ -210,7 +220,8 @@ const fetchText = (url) => new Promise((resolve) => {
     });
   });
 
-  previous.runs = [{ date: TODAY, checked: results.length, results }, ...(previous.runs || [])].slice(0, 10);
+  previous.runs = [{ id: RUN_ID, date: TODAY, checked: results.length, results },
+    ...(previous.runs || []).filter((r) => r.id !== RUN_ID)].slice(0, 10);
   fs.writeFileSync(REPORT, JSON.stringify(previous, null, 1) + '\n');
 
   const twice = Object.entries(previous.misses).filter(([, n]) => n >= 2);

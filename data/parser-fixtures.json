@@ -1,0 +1,133 @@
+[
+ {
+  "name": "athens table",
+  "why": "the header-driven shape, with a Sprachen column: the case every other change must not break",
+  "file": "tests/fixtures/diplo-athens.html",
+  "parser": "parse_diplo_table_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 124,
+   "withLanguages": 121,
+   "sample": [
+    "Dr. Christian SCHLÜTER",
+    "Dr. med. Marios MATIAKIS",
+    "Christiane WULFF"
+   ]
+  }
+ },
+ {
+  "name": "istanbul inferred columns",
+  "why": "same fields, no header row: the columns are worked out from the cells",
+  "file": "tests/fixtures/diplo-istanbul.html",
+  "parser": "parse_diplo_table_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 19,
+   "withLanguages": 19,
+   "sample": [
+    "Dr. metin TELLI",
+    "Dr. Selçuk SOMER",
+    "Dr. Gülcan USAL"
+   ]
+  }
+ },
+ {
+  "name": "zagreb inline notes",
+  "why": "no language column at all; the claim is a parenthetical on the name, and the name is not in column 0",
+  "file": "tests/fixtures/diplo-zagreb.html",
+  "parser": "parse_diplo_table_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 22,
+   "withLanguages": 16,
+   "sample": [
+    "Poliklinik AVIVA",
+    "Dr. Stjepko Bućan",
+    "Dr. Darijan Tubikanec"
+   ]
+  }
+ },
+ {
+  "name": "lisbon running text",
+  "why": "headings and blocks, no table; a roster claim passed in from outside",
+  "file": "tests/fixtures/diplo-lisbon.html",
+  "parser": "parse_diplo_flat_list.cjs",
+  "args": [
+   "--roster",
+   "de"
+  ],
+  "expect": {
+   "rows": 105,
+   "withLanguages": 105,
+   "sample": [
+    "Dr. Joaquim Campos Lopes",
+    "Condominio Malveira Guincho, Lote 37i",
+    "Verschiedene"
+   ]
+  }
+ },
+ {
+  "name": "paris doctors",
+  "why": "three columns, surname first, titles after the name",
+  "file": "tests/fixtures/de_fr-docs.html",
+  "parser": "parse_diplo_fr_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 45,
+   "withLanguages": 0,
+   "sample": [
+    "Dr. Oliver PROISL",
+    "Ségolène CAMBOURNAC",
+    "Dr. Ernst-Peter ANDRESEN"
+   ]
+  }
+ },
+ {
+  "name": "paris lawyers",
+  "why": "a firm and its partners in one cell, one entry per partner",
+  "file": "tests/fixtures/de_fr-law.html",
+  "parser": "parse_diplo_fr_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 118,
+   "withLanguages": 0,
+   "sample": [
+    "Guéorgui AKOPOV",
+    "Avocats HERALD",
+    "Adrien SCHMECHEL-GAUMÉ"
+   ]
+  }
+ },
+ {
+  "name": "paris therapists",
+  "why": "names broken across a line break in the middle of the name",
+  "file": "tests/fixtures/de_fr-therapy.html",
+  "parser": "parse_diplo_fr_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 27,
+   "withLanguages": 0,
+   "sample": [
+    "Karin ADLER",
+    "Regina KOEHLER",
+    "Isabella ZIMMER"
+   ]
+  }
+ },
+ {
+  "name": "barcelona pdf",
+  "why": "two columns in a PDF, with the gutter in a different place on every page",
+  "file": "tests/fixtures/dipdf-es-dd1.pdf",
+  "parser": "parse_diplo_pdf_list.cjs",
+  "args": [],
+  "expect": {
+   "rows": 40,
+   "withLanguages": 11,
+   "sample": [
+    "Dr. Michael Holder",
+    "Katrin MÜLLER",
+    "Birte STEFFENS"
+   ]
+  }
+ }
+]

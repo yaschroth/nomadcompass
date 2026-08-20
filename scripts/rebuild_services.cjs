@@ -45,6 +45,7 @@ const STEPS = [
   ['sweep', 'apply_footer_legal.cjs', ''],
   ['sweep', 'apply_entity_schema.cjs', 'must be the last writer'],
   ['build', 'generate_sitemap.cjs', 'reads the four manifests'],
+  ['gate', 'check_parsers.cjs', 'the readers still read their frozen pages the same way'],
   ['gate', 'check_service_pages.cjs', ''],
   ['gate', 'check_service_dupes.cjs', ''],
   ['gate', 'check_provenance.cjs', ''],
