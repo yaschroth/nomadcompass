@@ -31,6 +31,10 @@ const ALLOW = new Set([
   // Two St Luke's hospitals, one on E. Rodriguez in Quezon City and one in Bonifacio Global City
   // in Taguig, both printed separately on the British Embassy Manila's list.
   'manila|stlukesmedicalcenter|stlukesmedicalcenterbgc',
+  // Two lawyers on the Hungarian Bar Association list, at different chambers on different
+  // streets: Bathory utca and Baross utca. Hungarian puts the surname first, so one is Laszlo
+  // Peter and the other Laszlo Peter Andras, and neither is the other under a longer name.
+  'budapest|drlaszlopeter|drlaszlopeterandras',
 ]);
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
