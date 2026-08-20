@@ -78,7 +78,10 @@ const fetchText = (url) => new Promise((resolve) => {
   }, (res) => {
     if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location) {
       res.resume();
-      const next = new URL(res.headers.location, url).toString();
+      // A malformed Location header used to throw here, inside a callback, which took the whole
+      // run down after 162 sources with nothing written.
+      let next = '';
+      try { next = new URL(res.headers.location, url).toString(); } catch (e) { return resolve({ status: res.statusCode, text: '', note: 'unusable redirect' }); }
       return resolve(fetchText(next).then((r) => ({ ...r, redirectedTo: next })));
     }
     const chunks = [];
@@ -109,9 +112,22 @@ const fetchText = (url) => new Promise((resolve) => {
   const results = [];
   console.log('rechecking ' + queue.length + ' of ' + Object.keys(sources).length + ' sources\n');
 
+  // Three hundred network fetches take half an hour, and the first version wrote its results at the
+  // end: it died on source 162 and lost all of it. Now every source is stamped as it is read, so a
+  // run that stops can be started again and picks up where it left off.
+  const save = () => {
+    fs.writeFileSync(SRC_FILE, JSON.stringify(sources, null, 1) + '\n');
+  };
+
   for (const [id, s] of queue) {
     const rows = rowsBySource[id] || [];
-    const got = await fetchText(s.url);
+    let got;
+    try {
+      got = await fetchText(s.url);
+    } catch (e) {
+      // One unreadable source must not end the run.
+      got = { status: 0, text: '', note: String(e && e.message ? e.message : e).slice(0, 80) };
+    }
     const haystack = ' ' + fold(got.text) + ' ';
     let missing = [];
     let found = 0;
@@ -155,6 +171,7 @@ const fetchText = (url) => new Promise((resolve) => {
     console.log('  ' + String(found).padStart(4) + '/' + String(testable).padEnd(4)
       + ' ' + verdict.padEnd(46) + (got.status || 'no response') + '  ' + id);
     if (missing.length && rate > 0) console.log('        gone: ' + missing.slice(0, 4).join(', ').slice(0, 130));
+    if (results.length % 20 === 0) save();
   }
 
   fs.writeFileSync(SRC_FILE, JSON.stringify(sources, null, 1) + '\n');
