@@ -98,7 +98,7 @@ for (const m of parts) {
     // is the abbreviation itself and not the space after it.
     // The street abbreviations are followed by a lower-case particle as often as by a capital,
     // "Av. da Boavista", so the letter after the dot cannot be required to be a capital.
-    const ADDRESS_START = /\s(?=\d{1,4}[.,]?\s)|\s?(?=(?:R|Av|Pct|Trav|Urb|Edif|Lg|Estr)\.\s?[A-Za-zÀ-ÿ])|\s(?=Rua\b|Avenida\b|Pra[cç]a\b|Praceta\b|Largo\b|Estrada\b|Alameda\b)/;
+    const ADDRESS_START = /\s(?=\d{1,4}[.,]?\s)|\s?(?=(?:R|Av|Pct|Trav|Urb|Edif|Lg|Estr|Str|Bd|V)\.\s?[A-Za-zÀ-ÿ])|\s(?=Rua\b|Avenida\b|Pra[cç]a\b|Praceta\b|Largo\b|Estrada\b|Alameda\b|Via\b|Viale\b|Corso\b|Piazza\b|Piazzale\b|Vicolo\b|Lungotevere\b|Strada\b|Bulevardul\b|Calea\b|Aleea\b|Calle\b|Carrer\b|Paseo\b|Plaza\b)/;
     const name = text.slice(0, paren && own.length ? paren.index : undefined)
       .replace(/\s*,\s*$/, '')
       .split(ADDRESS_START)[0]
@@ -125,7 +125,10 @@ for (const m of parts) {
   };
   // A line that opens with a street is the address of the entry above it, however much it looks
   // like a new one: "Rua Julio Dinis, 247-6.-Sala 13" was being published as a person.
-  const IS_ADDRESS = /^(Rua\b|R\.|Av\.|Avenida\b|Pra[cç]a\b|Praceta\b|Largo\b|Lg\.|Estrada\b|Estr\.|Alameda\b|Urb\.|Edif|Pct\.|Trav\.|\d)/;
+  // The street words of every language these lists are written in. Without the Italian ones, the
+  // Rome and Milan pages read "Via Franco Sacchetti" as a doctor: a street became a person, and the
+  // doctor above it lost the address that belonged to them.
+  const IS_ADDRESS = /^(Rua\b|R\.|Av\.|Avenida\b|Pra[cç]a\b|Praceta\b|Largo\b|Lg\.|Estrada\b|Estr\.|Alameda\b|Urb\.|Edif|Pct\.|Trav\.|Via\b|Viale\b|V\.le|Corso\b|C\.so|Piazza\b|Piazzale\b|P\.zza|Vicolo\b|Lungotevere\b|Strada\b|Str\.|Bd\.|Bulevardul\b|Calea\b|Aleea\b|Soseaua\b|Splaiul\b|Calle\b|C\/|Carrer\b|Paseo\b|Plaza\b|\d)/;
   for (const line of lines) {
     if (CONTACT.test(line)) { if (current) current.push(line); continue; }
     if (IS_ADDRESS.test(line)) { if (current) current.push(line); continue; }

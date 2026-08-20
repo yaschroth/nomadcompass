@@ -34,7 +34,9 @@ const COLUMN = [
   // lists. Reading it as a name alone threw the address away, and the ingest then refused 907 rows
   // for having no address: Milan and Rome, whose lists are headed exactly that, lost every row.
   [/^name.*\b(anschrift|adresse|address|indirizzo|direccion|direcci)/i, 'nameAddress'],
-  [/^name/i, 'name'],
+  // Not only "Name": Istanbul heads its column "Titel, Vor- und Nachname", and once its header row
+  // became visible the parser could see the languages column but not the names, and read nothing.
+  [/^name|vor-?\s*und\s*nachname|nachname|^titel\b|^nome\b|^nom\b|^cognome/i, 'name'],
   [/praxis|adresse|anschrift|kontakt/i, 'practice'],
   [/sprach|language/i, 'languages'],
   [/krankenhaus|klinik|hospital/i, 'hospital'],
@@ -218,7 +220,10 @@ for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<table[\s\S]*?<\/
     continue;
   }
   let cols = null;
-  const all = [...t[0].matchAll(/<tr>([\s\S]*?)<\/tr>/g)]
+  // A row can carry attributes, and the one that matters usually does: Rome marks its header
+  // <tr class="bab-table--head">, so a pattern requiring a bare <tr> never saw the column names and
+  // read nothing at all from a table of 51 doctors.
+  const all = [...t[0].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)]
     .map((r) => [...r[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/g)].map((c) => dec(c[1])));
   // A table that names its columns is read by its header. One that does not is read by what its
   // cells hold, and if that cannot find a name and a language column the table is left alone.

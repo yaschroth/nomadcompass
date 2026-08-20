@@ -82,7 +82,7 @@ let heading = '';
 const rows = [];
 for (const m of parts) {
   if (m[1] !== undefined) { heading = dec(m[1]).replace(/\s+/g, ' '); continue; }
-  for (const r of m[2].matchAll(/<tr>([\s\S]*?)<\/tr>/g)) {
+  for (const r of m[2].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)) {
     const cells = [...r[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((c) => dec(c[1]));
     if (!cells.length) continue;
     const flat = cells.join(' ').replace(/\n/g, ' ');
