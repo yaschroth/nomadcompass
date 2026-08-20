@@ -143,13 +143,26 @@ const fetchText = (url) => new Promise((resolve) => {
     }
     const testable = found + missing.length;
     const rate = testable ? found / testable : 0;
+
+    /**
+     * Some sources are not documents, they are search forms. Spain's register of sworn translators
+     * and the UK Foreign Office's Find a professional service abroad both answer a plain GET with an
+     * empty search page, so none of our names are on it and none of them are gone: the first full
+     * run reported 2,614 rows as missing on that basis alone. A source like that cannot be checked
+     * by fetching its URL, and saying so is the only honest verdict.
+     */
+    const searchy = /__VIEWSTATE|<form[^>]+method=["']?post/i.test(got.text)
+      || /\/(result|results|search|buscar|recherche|find)(\/|\?|$)/i.test(s.url);
+    const notCheckable = searchy && rate < 0.5;
+    if (notCheckable) sources[id].checkable = false;
     // A page that lost EVERY name has almost certainly changed shape or moved its list behind a
     // search, which is a different problem from a provider leaving, and saying so is the point.
     const verdict = got.status !== 200 ? 'unreachable'
-      : !testable ? 'nothing testable'
-        : rate === 1 ? 'all still listed'
-          : rate === 0 ? 'none found, the page has probably changed shape'
-            : 'partly drifted';
+      : notCheckable ? 'a search form, not a document: cannot be checked by fetching it'
+        : !testable ? 'nothing testable'
+          : rate === 1 ? 'all still listed'
+            : rate === 0 ? 'none found, the page has probably changed shape'
+              : 'partly drifted';
 
     sources[id].lastRecheck = TODAY;
     sources[id].lastRecheckStatus = verdict;
@@ -189,6 +202,9 @@ const fetchText = (url) => new Promise((resolve) => {
     rows.forEach((row) => {
       const k = r.id + '|' + row.name;
       if (r.verdict === 'none found, the page has probably changed shape') return; // the page, not the row
+      // Nothing was tested, so nothing can have failed, and any strike an earlier run recorded
+      // against this row came from that same mistake.
+      if (/search form/.test(r.verdict)) { delete previous.misses[k]; return; }
       if (missingSet.has(row.name)) previous.misses[k] = (previous.misses[k] || 0) + 1;
       else delete previous.misses[k];
     });
@@ -219,8 +235,13 @@ const fetchText = (url) => new Promise((resolve) => {
   const by = {};
   results.forEach((r) => { by[r.verdict] = (by[r.verdict] || 0) + 1; });
   console.log('\n' + Object.entries(by).map(([k, n]) => n + ' ' + k).join(', '));
-  const rowsAffected = results.filter((r) => r.verdict !== 'all still listed').reduce((a, r) => a + r.rows, 0);
-  console.log(results.filter((r) => r.verdict !== 'all still listed').length + ' source(s) need a person to look, '
-    + rowsAffected + ' rows behind them. Nothing was changed.');
+  const needsLook = results.filter((r) => r.verdict !== 'all still listed' && !/search form/.test(r.verdict));
+  const notCheckable = results.filter((r) => /search form/.test(r.verdict));
+  console.log(needsLook.length + ' source(s) need a person to look, '
+    + needsLook.reduce((a, r) => a + r.rows, 0) + ' rows behind them. Nothing was changed.');
+  if (notCheckable.length) {
+    console.log(notCheckable.length + ' source(s) cannot be checked by fetching a URL at all, '
+      + notCheckable.reduce((a, r) => a + r.rows, 0) + ' rows behind them: they answer a search, not a request.');
+  }
   console.log('Report: data/service-source-drift.json');
 })();
