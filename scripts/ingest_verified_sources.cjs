@@ -285,11 +285,50 @@ fresh.forEach((r) => { per[r.city] = (per[r.city] || 0) + 1; });
 console.log('\n' + fresh.length + ' rows to add across ' + Object.keys(per).length + ' cities: '
   + Object.entries(per).sort((a, b) => b[1] - a[1]).map(([c, n]) => c + ' ' + n).join(', '));
 
-if (PREVIEW) {
-  fresh.slice(0, 12).forEach((r) => console.log('   ' + r.city.padEnd(13) + r.category.padEnd(11)
-    + r.name.slice(0, 30).padEnd(32) + r.languages.join(',').padEnd(12) + r.area.slice(0, 30)));
+fresh.slice(0, 12).forEach((r) => console.log('   ' + r.city.padEnd(13) + r.category.padEnd(11)
+  + r.name.slice(0, 30).padEnd(32) + r.languages.join(',').padEnd(12) + r.area.slice(0, 30)));
+if (PREVIEW) process.exit(0);
+
+/**
+ * Nothing goes into the directory straight from a parser any more.
+ *
+ * The batch that taught this lesson wanted to add 1,015 rows across 42 cities and almost all of it
+ * was wrong: the embassy's own address as a provider, a job description as a name, a Phuket clinic
+ * under Bangkok. It was caught because I happened to read a dry run. A proposal is that dry run,
+ * written down: what would be added, and per source what was refused and for which reason, so the
+ * next person reviews a diff instead of remembering to look.
+ */
+const dir = path.join(ROOT, 'data', 'proposals');
+if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+const name = path.basename(manifestPath).replace(/\.json$/, '') + '-' + CHECKED + '.json';
+const proposalFile = path.join(dir, name);
+fs.writeFileSync(proposalFile, JSON.stringify({
+  manifest: manifestPath,
+  written: CHECKED,
+  rows: fresh,
+  perSource: report.map((x) => ({
+    city: x.src.city,
+    url: x.src.url,
+    parser: x.used || '',
+    read: x.read || 0,
+    kept: x.kept || 0,
+    refused: {
+      placedElsewhere: x.placedElsewhere || 0,
+      noAddress: x.noAddress || 0,
+      noLanguage: x.noLanguage || 0,
+      noCategory: x.noCategory || 0,
+      noName: (x.noName || []).length || 0,
+      alreadyHeld: x.already || 0,
+    },
+    why: x.why || '',
+  })),
+}, null, 1) + '\n');
+console.log('\nproposal written: data/proposals/' + name);
+
+if (!process.argv.includes('--apply')) {
+  console.log('Nothing was added. Read it, then run again with --apply to take it.');
   process.exit(0);
 }
 db.providers = db.providers.concat(fresh);
 fs.writeFileSync(F, JSON.stringify(db, null, 2) + '\n');
-console.log('total ' + db.providers.length);
+console.log('applied. total ' + db.providers.length);
