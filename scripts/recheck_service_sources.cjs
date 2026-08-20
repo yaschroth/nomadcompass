@@ -8,9 +8,9 @@
  *
  * The check deliberately uses no parser. Whether a name still appears on its source is a question
  * about the raw text, and asking it that way works on a table, a PDF and a page of prose alike,
- * and cannot be broken by a parser change. A name counts as present when its two most distinctive
- * words both appear, so "Dr. Oliver PROISL" is still found when the mission reprints him as
- * "PROISL, Oliver, Dr.".
+ * and cannot be broken by a parser change. A name counts as present when two of its three most
+ * distinctive words appear, so "Dr. Oliver PROISL" is still found when the mission reprints him as
+ * "PROISL, Oliver, Dr.", and a hospital survives the source spelling one of its words its own way.
  *
  * It reports and never repairs. A missing name can mean the person left, or that the page moved
  * its list behind a search box, and only a person can tell those apart.
@@ -60,17 +60,25 @@ const queue = Object.entries(sources)
 const rowsBySource = {};
 db.providers.forEach((p) => { if (p.source) (rowsBySource[p.source] = rowsBySource[p.source] || []).push(p); });
 
+// Both sides are folded the same way, including the umlaut transliterations. Our rows carry ASCII
+// names, so Froehlich is stored where the mission prints Froehlich with an o-umlaut, and stripping
+// only the diacritic leaves "frohlich" against "froehlich": two doctors were reported gone from
+// pages that still list them, on that difference alone.
 const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
-  .replace(/ß/g, 'ss').replace(/[^A-Za-z0-9]+/g, ' ').toLowerCase();
+  .replace(/ß/g, 'ss').toLowerCase()
+  .replace(/oe/g, 'o').replace(/ue/g, 'u').replace(/ae/g, 'a')
+  .replace(/[^a-z0-9]+/g, ' ');
 const TITLE = /^(dr|dra|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|mrs|ms|m|maitre|mtre|sr|sra|herr|frau|avv|avvocato|rechtsanwalt)$/;
-// The two longest words of a name that are not titles: distinctive enough that a chance match on a
-// long page is unlikely, short enough to survive a source reprinting the name in another order.
 // A parenthetical is what we added or what one source spelled out, and the page under test often
 // prints only the short form: "Centro Medico ABC (American British Cowdray)" was reported gone
 // because the two longest words were both inside the bracket.
+// Three words, and two of them have to match. Two words was one too few: the two longest words of
+// "Orthopaedic Institute Banjica" are the two the source spells differently, and "Banjica", which it
+// prints, was never tested. The same for a hospital the source calls Bielanski where we carry its
+// patron's full name.
 const needlesOf = (name) => fold(String(name).replace(/\([^)]*\)/g, ' ')).split(' ')
   .filter((w) => w.length >= 4 && !TITLE.test(w))
-  .sort((a, b) => b.length - a.length).slice(0, 2);
+  .sort((a, b) => b.length - a.length).slice(0, 3);
 
 const fetchText = (url) => new Promise((resolve) => {
   const lib = url.startsWith('http:') ? http : https;
@@ -147,7 +155,9 @@ const fetchText = (url) => new Promise((resolve) => {
         const needles = needlesOf(r.name);
         // A name with no distinctive word left cannot be tested either way, so it is not counted.
         if (!needles.length) return;
-        if (needles.every((n) => haystack.includes(' ' + n) || haystack.includes(n))) found += 1;
+        // Two of the three: a name survives one word the source spells its own way.
+        const hits = needles.filter((n) => haystack.includes(n)).length;
+        if (hits >= Math.min(2, needles.length)) found += 1;
         else missing.push(r.name);
       });
     }
