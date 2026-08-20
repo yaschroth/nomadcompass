@@ -15,10 +15,9 @@ require(require('path').join(__dirname, '_safe_write.cjs'));
  *
  * A page is written only where all four hold:
  *   - the language is not the local one, and at least MIN_ROWS providers work in it
- *   - it covers no more than MAX_SHARE of the pair, or the page would be its parent with a
- *     different title. Athens is the case that matters: 91 of its 95 doctors speak English, and a
- *     page for those 91 would be the doctors page again. Its parent handles that by dropping the
- *     sections instead.
+ *   - its parent does not already show them all, or the page would be its parent with a different
+ *     title. Athens is the case that matters: 91 of its 95 doctors speak English and its parent
+ *     renders every one of them in a single grid, so no page is written for those 91.
  *   - the parent city-and-service page exists, so this page has somewhere to sit
  *   - the language is one this directory names
  *
@@ -37,7 +36,31 @@ const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.c
 
 const esc = P.esc;
 const MIN_ROWS = 21;
-const MAX_SHARE = 0.70;
+
+/**
+ * Whether the parent shows this language in full, which is the only reason not to give it a page.
+ *
+ * The first rule here was a share: no page where a language covers more than 70% of its pair,
+ * because "a page for those 91 would be the doctors page again". That is true of Athens, whose
+ * parent renders all 95 doctors in one grid, and false of Budapest, whose parent renders twenty of
+ * 286 Italian-speaking lawyers and links to nothing. 266 providers sat behind a rule that was
+ * measuring the wrong thing.
+ *
+ * So the question is not what share a language holds, it is whether its parent already shows them
+ * all. A pair page renders one grid, and therefore everything, when it has fewer than two languages
+ * with two providers each, or when its top two languages hold almost the same people. Otherwise it
+ * renders sections and caps each one, and anything past that cap is invisible without a page.
+ */
+const SECTION_CAP = 20;
+const parentShowsAll = (pair) => {
+  const langs = pair.nonLocal.filter(([, n]) => n >= 2);
+  if (langs.length < 2) return true;
+  const [a, b] = langs;
+  const setA = new Set(pair.rows.filter((r) => r.languages.includes(a[0])).map((r) => r.name));
+  const setB = new Set(pair.rows.filter((r) => r.languages.includes(b[0])).map((r) => r.name));
+  const inter = [...setA].filter((x) => setB.has(x)).length;
+  return inter / Math.min(setA.size, setB.size) >= 0.8;
+};
 // A card costs about 2KB. 120 of them plus the shell is roughly 300KB, which is as much as a page
 // on a phone should ever weigh. Only two of these pages reach it, and both say so on the page.
 const CARD_BUDGET = 120;
@@ -82,7 +105,7 @@ const WILL_EXIST = (() => {
     const local = M.LOCAL[M.cities[pair.city].country];
     pair.nonLocal.forEach(([lang, count]) => {
       if (lang === local || !M.LANGS[lang]) return;
-      if (count < MIN_ROWS || count / pair.n > MAX_SHARE) return;
+      if (count < MIN_ROWS || count <= SECTION_CAP || parentShowsAll(pair)) return;
       out.add(pair.city + '|' + pair.category + '|' + lang);
     });
   });
@@ -102,9 +125,8 @@ for (const pair of Object.values(M.pairs)) {
 
   for (const [lang, count] of pair.nonLocal) {
     if (lang === local || !M.LANGS[lang]) continue;
-    if (count < MIN_ROWS) continue;
-    const share = count / pair.n;
-    if (share > MAX_SHARE) { skipped.push(`${pair.city}/${cat}/${langSlug(lang)} covers ${Math.round(share * 100)}% of the parent`); continue; }
+    if (count < MIN_ROWS || count <= SECTION_CAP) continue;
+    if (parentShowsAll(pair)) { skipped.push(`${pair.city}/${cat}/${langSlug(lang)}: the parent already shows every one of them`); continue; }
 
     const rows = pair.rows.filter((r) => r.languages.includes(lang));
     const langName = P.langName(lang);
