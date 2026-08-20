@@ -66,6 +66,29 @@ const LANG_PAGES = new Map();
   if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => LANG_PAGES.set(x.service + '|' + x.language, x));
 }
 
+/**
+ * Which pages this run will write, decided before anything is rendered.
+ *
+ * A page links to the same language in nearby cities, and it was working that out from the rules
+ * rather than from the outcome. When a pair page is held back on one pass and written on the next,
+ * the child that depends on it is never built, while another city's page has already linked to it:
+ * /services/vienna/lawyers/german was linked once and did not exist. Deciding first is how the pair
+ * generator avoids the same thing.
+ */
+const WILL_EXIST = (() => {
+  const out = new Set();
+  Object.values(M.pairs).forEach((pair) => {
+    if (!PAIRS.get(pair.city + '|' + pair.category)) return;
+    const local = M.LOCAL[M.cities[pair.city].country];
+    pair.nonLocal.forEach(([lang, count]) => {
+      if (lang === local || !M.LANGS[lang]) return;
+      if (count < MIN_ROWS || count / pair.n > MAX_SHARE) return;
+      out.add(pair.city + '|' + pair.category + '|' + lang);
+    });
+  });
+  return out;
+})();
+
 const written = [];
 const skipped = [];
 const usedTitles = new Set();
@@ -243,13 +266,13 @@ for (const pair of Object.values(M.pairs)) {
 
     const otherLangChips = alsoLangs.slice(0, 6).map(([l, n]) => {
       const kid = `/services/${city.id}/${M.SERVICE_SLUGS[cat]}/${langSlug(l)}`;
-      const target = (n >= MIN_ROWS && n / pair.n <= MAX_SHARE) ? kid : parent.url + '#lang-' + l;
+      const target = WILL_EXIST.has(city.id + '|' + cat + '|' + l) ? kid : parent.url + '#lang-' + l;
       return `<a class="svp-chip" href="${target}">${esc(P.langName(l))}<span>${n}</span></a>`;
     }).join('');
     const nearChips = near.map((x) => {
       const kid = `/services/${x.city}/${M.SERVICE_SLUGS[cat]}/${langSlug(lang)}`;
       const kidPair = M.pairOf(x.city, cat);
-      const hasKid = PAIRS.has(x.city + '|' + cat) && x.n >= MIN_ROWS && x.n / kidPair.n <= MAX_SHARE;
+      const hasKid = WILL_EXIST.has(x.city + '|' + cat + '|' + lang);
       const href = hasKid ? kid : (PAIRS.has(x.city + '|' + cat) ? '/services/' + x.city + '/' + M.SERVICE_SLUGS[cat] : '/services/' + x.city);
       return `<a class="svp-chip" href="${href}">${esc(x.name)}<span>${x.n}</span></a>`;
     }).join('');
