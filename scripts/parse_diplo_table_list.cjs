@@ -30,6 +30,10 @@ const dec = (s) => String(s || '')
 
 // What the mission calls a column, and what we call it.
 const COLUMN = [
+  // "Name und Anschrift" is one column holding two things, and it is the commonest header on these
+  // lists. Reading it as a name alone threw the address away, and the ingest then refused 907 rows
+  // for having no address: Milan and Rome, whose lists are headed exactly that, lost every row.
+  [/^name.*\b(anschrift|adresse|address|indirizzo|direccion|direcci)/i, 'nameAddress'],
   [/^name/i, 'name'],
   [/praxis|adresse|anschrift|kontakt/i, 'practice'],
   [/sprach|language/i, 'languages'],
@@ -71,13 +75,20 @@ const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/
 // englischsprachige Aerzte": an either/or that says nothing about any particular doctor. Rows
 // without a note get nothing, because the heading cannot be split between them.
 const INLINE_NOTE = /\((?:spricht|spricht auch|speaks|parla|habla)\s+([^)]+)\)|\((deutschsprachig|englischsprachig|francophone|germanophone)\)/i;
+// Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
+// "Sprachen: D / E / F / Chinesisch", and reading only the spelled-out word gave a lawyer whose one
+// language was Chinese: not merely incomplete but wrong, since it would have taken him off the
+// German page and put him on a Chinese one. The mixed line is what proves the convention: the list
+// spells out the unusual language and abbreviates the ones its readers expect.
+const LETTER = { d: 'de', e: 'en', f: 'fr', i: 'it', s: 'es', p: 'pt', n: 'nl', r: 'ru' };
 const unknownLangs = new Set();
-const readLanguages = (cell) => {
+const readLanguages = (cell, allowLetters) => {
   const out = [];
   fold(cell).split(/[,;/|]+|\band\b|\bund\b/).map((p) => p.trim()).filter(Boolean).forEach((p) => {
     const hit = Object.keys(LANG).find((k) => p.startsWith(k));
-    if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); }
-    else if (p.length > 2 && p.length < 24 && !/^\(|^[0-9]/.test(p)) unknownLangs.add(p);
+    if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
+    if (allowLetters && p.length === 1 && LETTER[p]) { if (!out.includes(LETTER[p])) out.push(LETTER[p]); return; }
+    if (p.length > 2 && p.length < 24 && !/^\(|^[0-9]/.test(p)) unknownLangs.add(p);
   });
   return out;
 };
@@ -226,14 +237,26 @@ for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<table[\s\S]*?<\/
     if (asHeader.filter(Boolean).length >= 2 && cells.every((c) => c.length < 40)) { cols = asHeader; continue; }
     if (!cols) continue;
     const get = (what) => { const i = cols.indexOf(what); return i < 0 ? '' : (cells[i] || ''); };
-    const name = properName(get('name'));
+    // Where one column holds the name and the address, the first line is the name and the rest is
+    // where to find them.
+    const joined = get('nameAddress');
+    const nameCell = joined ? joined.split('\n')[0] : get('name');
+    const addressFromName = joined ? joined.split('\n').slice(1).join('\n') : '';
+    const name = properName(nameCell);
     if (!name || /^name$/i.test(name)) continue;
-    const practice = get('practice');
+    const practice = get('practice') || addressFromName;
     // The column if there is one, otherwise the entry's own parenthetical note.
-    const inline = (get('name').match(INLINE_NOTE) || [])[1] || (get('name').match(INLINE_NOTE) || [])[2] || '';
-    const languages = readLanguages(get('languages')) .length
+    const noteSource = joined || get('name');
+    const inline = (noteSource.match(INLINE_NOTE) || [])[1] || (noteSource.match(INLINE_NOTE) || [])[2] || '';
+    // Three places a language claim can sit, in order of how plainly it is stated: a column of its
+    // own, a labelled line inside another cell ("Korrespondenzsprachen: Deutsch, Italienisch,
+    // Englisch", which is how Rome and Milan write it), or a parenthetical on the name.
+    const labelled = (cells.join('\n').match(/(?:Korrespondenz|Arbeits|Verhandlungs)?[Ss]prachen?\s*:\s*([^\n]{2,80})/) || [])[1] || '';
+    const languages = readLanguages(get('languages')).length
       ? readLanguages(get('languages'))
-      : readLanguages(inline.replace(/sprachig/i, 'sch'));
+      : (readLanguages(labelled, true).length
+        ? readLanguages(labelled, true)
+        : readLanguages(inline.replace(/sprachig/i, 'sch')));
     const flat = cells.join(' ').replace(/\n/g, ' ');
     // Athens puts the specialty in a heading above the table, Istanbul in a column beside the name.
     // Both are the same fact and the row needs it either way, or every entry arrives with nothing
@@ -243,7 +266,8 @@ for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<table[\s\S]*?<\/
       specialty: specialty || inRow || sectionHeading,
       name,
       // Everything under the name after the first line is what the person is, not who.
-      role: [get('name').split('\n').slice(1).join(', '), specialty ? inRow : '']
+      // With the address in the name cell, the lines under the name are the address, not a role.
+      role: [joined ? '' : get('name').split('\n').slice(1).join(', '), specialty ? inRow : '']
         .filter(Boolean).join(', ').replace(/\s+/g, ' ').replace(/^,\s*|,\s*$/g, '').trim(),
       area: practice.split('\n').filter((l) => !/^(Tel|Fax|Mob|E-Mail|www\.|http)/i.test(l)).join(', '),
       postcode: (practice.match(/\b(\d{3} ?\d{2}|\d{5})\b/) || [])[1] || '',

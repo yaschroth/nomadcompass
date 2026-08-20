@@ -40,7 +40,7 @@ const CAT = [
   [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop/i, 'physio'],
   [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b/i, 'therapy'],
   [/optiker|optometr|augenoptik/i, 'optician'],
-  [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal/i, 'legal'],
+  [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht/i, 'legal'],
   [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],
   [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
   [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein/i, 'doctor'],
@@ -53,8 +53,48 @@ const categorise = (text, fallback) => {
 
 // Which of our cities an address names. A country-wide list is one table holding several cities, and
 // the manifest can only name the one it was found for.
-// Spellings the missions use that are not the name we print.
+/**
+ * Spellings the sources use that are not the name we print.
+ *
+ * This is not a nicety. A consular list writes the city in its own language, so an address in Rome
+ * says Roma and one in Vienna says Wien, and the placement test compared those against "Rome" and
+ * "Vienna" and threw the row out as belonging somewhere else. 503 rows were refused that way,
+ * including every lawyer on the Rome and Milan lists.
+ */
 const ALIASES = {
+  rome: ['roma'],
+  milan: ['milano', 'mailand'],
+  florence: ['firenze', 'florenz'],
+  naples: ['napoli', 'neapel'],
+  turin: ['torino'],
+  venice: ['venezia', 'venedig'],
+  genoa: ['genova'],
+  bologna: ['bologna'],
+  lisbon: ['lisboa', 'lissabon'],
+  porto: ['oporto'],
+  seville: ['sevilla'],
+  vienna: ['wien'],
+  munich: ['munchen', 'muenchen'],
+  cologne: ['koln', 'koeln'],
+  prague: ['praha', 'prag'],
+  warsaw: ['warszawa', 'warschau'],
+  krakow: ['krakau'],
+  copenhagen: ['kobenhavn', 'kopenhagen'],
+  gothenburg: ['goteborg'],
+  brussels: ['bruxelles', 'brussel', 'brussels'],
+  antwerp: ['antwerpen', 'anvers'],
+  geneva: ['geneve', 'genf'],
+  zurich: ['zuerich'],
+  belgrade: ['beograd'],
+  bucharest: ['bucuresti', 'bukarest'],
+  athens: ['athen', 'athina'],
+  nicosia: ['lefkosia', 'lefkosa'],
+  moscow: ['moskva', 'moskau'],
+  marrakesh: ['marrakech'],
+  bogota: ['bogota'],
+  medellin: ['medellin'],
+  santiago: ['santiago de chile'],
+  dublin: ['baile atha cliath'],
   hochiminh: ['ho chi minh', 'hcmc', 'saigon'],
   saopaulo: ['sao paulo'],
   riodejaneiro: ['rio de janeiro'],
@@ -111,7 +151,10 @@ const localityOf = (text) => {
   const m = s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)\s+City\b/)
     // Up to eight digits: Israeli postcodes are seven, and a six-digit cap matched nothing on that
     // list, so every suburb in it passed as Tel Aviv.
-    || s.match(/\b\d{4,8}\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)/)
+    // A Brazilian postcode is five digits, a hyphen and three more, and requiring whitespace right
+    // after the digits missed every one of them: two Porto Alegre firms were filed under Sao Paulo
+    // because "90010-000 Canoas" did not look like a town to this.
+    || s.match(/\b\d{4,8}(?:-\d{3})?\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)/)
     || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/);
   if (!m) return '';
   const word = m[1].trim();
@@ -123,6 +166,12 @@ const localityOf = (text) => {
 // A provider is a person or a practice. These are the things that keep arriving instead: the
 // mission's own address block, a job description, a department, a street.
 const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+
+// A name made only of the words for what the business is, "Studio Legale" or "Law Office" with no
+// firm in front of it, is a name the parser failed to find. It reached the directory once and the
+// duplicate gate caught it, because it is contained in six real firms on the same page.
+const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dr|und|and|e|y|de|the)$/i;
+const isGenericName = (s) => String(s).split(/[^A-Za-zÀ-ÿ]+/).filter(Boolean).every((w) => GENERIC_WORD.test(w));
 
 const asciiFold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
   .replace(/[‘’]/g, "'").replace(/[“”«»„]/g, '"').replace(/[–—]/g, ', ').replace(/[°º]/g, '')
@@ -223,14 +272,17 @@ for (const src of manifest) {
     // The row has to say what the provider does. Falling back to the source's category list filed
     // every doctor on the Madrid list as a dentist, because dentist happened to be the first
     // category the verifier recorded for that page.
-    const ownWords = [r.specialty, r.role, r.hospital, r.detail].filter(Boolean).join(' ');
+    // The name counts too where it says what the business is: "Studio Legale", "Law Office",
+    // "Zahnarztpraxis". What must not count is the source's own category list, which is what filed
+    // every Madrid doctor as a dentist.
+    const ownWords = [r.specialty, r.role, r.hospital, r.detail, r.name].filter(Boolean).join(' ');
     const cat = ownWords.trim() ? categorise(ownWords, '') : '';
     if (!cat) { stats.noCategory++; continue; }
 
     // A form of address is not part of a name.
     const name = asciiFold(r.name).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '');
     const k = key(name);
-    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name)) { stats.noName++; continue; }
+    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name) || isGenericName(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
     if (map.has(k)) { stats.already++; continue; }
 
