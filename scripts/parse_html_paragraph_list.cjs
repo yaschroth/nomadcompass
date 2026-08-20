@@ -63,14 +63,35 @@ const languagesOf = (text) => {
 };
 
 const entries = [];
-// A paragraph or list item whose first thing is bold: that bold text is the name.
-for (const m of html.matchAll(/<(p|li)\b[^>]*>([\s\S]*?)<\/\1>/g)) {
-  const inner = m[2];
+const paragraphs = [...html.matchAll(/<(p|li)\b[^>]*>([\s\S]*?)<\/\1>/g)].map((m) => m[2]);
+
+/**
+ * Some lists put the whole entry in one paragraph, and some give the name a paragraph of its own
+ * and the address the next one. Romania's list of francophone doctors is the second kind: 28 cells,
+ * each holding a bold name, then the practice, then the street, then the phone. Reading paragraph
+ * by paragraph found the names and threw them away for having no address.
+ *
+ * So a paragraph that is nothing but a bold name takes the paragraphs after it, up to the next bold
+ * one. A paragraph that already carries its own detail keeps to itself, which is what Vienna needs:
+ * there the prose between entries must not be swept into the entry above.
+ */
+for (let i = 0; i < paragraphs.length; i++) {
+  const inner = paragraphs[i];
   const boldMatch = inner.match(/^\s*(?:<[^>]+>\s*)*?<(b|strong)\b[^>]*>([\s\S]*?)<\/\1>/);
   if (!boldMatch) continue;
   const name = strip(boldMatch[2]).replace(/[,:;]\s*$/, '');
   if (!name || name.length < 4 || name.length > 90) continue;
-  const text = strip(inner);
+  let text = strip(inner);
+  let source = inner;
+  if (text.replace(name, '').trim().length < 6) {
+    for (let j = i + 1; j < paragraphs.length && j <= i + 6; j++) {
+      if (/<(b|strong)\b/.test(paragraphs[j])) break;
+      const next = strip(paragraphs[j]);
+      if (!next) continue;
+      text += ', ' + next;
+      source += paragraphs[j];
+    }
+  }
   const rest = text.slice(name.length).replace(/^[,\s:]+/, '');
   if (rest.length < 10) continue;
   // A bold lead is also how these pages set their own headings: "Tap Water", "Financial
