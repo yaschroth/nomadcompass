@@ -213,9 +213,13 @@ let specialty = '';
 // available as a fallback.
 let sectionHeading = '';
 const NOT_A_SPECIALTY = /befinden sich hier|navigation|inhalt|suche|kontakt|stand:|seitennavigation/i;
-for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<table[\s\S]*?<\/table>/g)) {
-  if (t[1] !== undefined) {
-    const head = dec(t[1]).replace(/\s+/g, ' ').trim();
+// A bold line counts as a heading too, but only where it falls outside a table: the alternation
+// consumes a table whole, so anything bold inside one never reaches this branch. London's doctor
+// list is why. It marks every section with an h3 except the dentists, who get a <strong>, and five
+// of them were read under the psychiatry heading above them, one of them filed as a therapist.
+for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<strong[^>]*>([\s\S]*?)<\/strong>|<table[\s\S]*?<\/table>/g)) {
+  if (t[1] !== undefined || t[2] !== undefined) {
+    const head = dec(t[1] !== undefined ? t[1] : t[2]).replace(/\s+/g, ' ').trim();
     if (head && head.length < 70 && !NOT_A_SPECIALTY.test(head)) sectionHeading = head;
     continue;
   }

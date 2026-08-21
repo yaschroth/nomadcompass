@@ -43,7 +43,7 @@ const CAT = [
   [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop/i, 'physio'],
   [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b/i, 'therapy'],
   [/optiker|optometr|augenoptik/i, 'optician'],
-  [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht/i, 'legal'],
+  [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht|solicitor|barrister|advocate|\blaw\b|\bavocat\b/i, 'legal'],
   [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],
   [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
   [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein/i, 'doctor'],
@@ -329,7 +329,17 @@ for (const src of manifest) {
     // any of them, and the manifest could only say the list was found while looking for Bali: those
     // rows would have been published as being in Bali on no evidence at all. Most of them are in
     // Jakarta.
-    const where = [r.area, r.hospital, r.detail].filter(Boolean).join(' ').trim();
+    // r.role only when there is no r.area, never as well as it.
+    //
+    // Several readers put the address in role, because in a two-column table the second column is
+    // the address and in a labelled list it is what the person does. Lisbon's translator table is
+    // the plainest case: 84 rows, every one with a street in role and area empty, and all 84
+    // refused for having no address. Summed over the registry that mismatch was 1,734 rows.
+    //
+    // As a fallback rather than an addition, because appending role to a real address is what moved
+    // Canberra's one firm out of Canberra: three hundred characters of German practice areas in the
+    // string changed which town the placement read.
+    const where = [r.area || r.role, r.hospital, r.detail].filter(Boolean).join(' ').trim();
     if (where.length < 8) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
     // And it has to be an address, not a phone number. Several parsers put the contact column in
     // the address field, and "Tel. 91 388 44 34, Mobil: 689 ..." tells a reader nothing about where
@@ -337,7 +347,12 @@ for (const src of manifest) {
     // A phone number is digits too, so the contact details come off first and the test runs on what
     // is left. "Tel. 91 562 94 29, Mobil: 691 ..." then has nothing in it that looks like a place.
     const withoutContact = where.replace(/\b(Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b[\s.:]*[^,;]*/gi, ' ').trim();
-    const looksLikeAddress = /\b\d{4,8}\b|\b(str|strasse|street|calle|carrer|rua|via|avda|avenida|av|rue|blvd|road|rd|weg|platz|plaza|piazza|lane|utca|ulica|ulice|gatan)\b\.?/i.test(withoutContact);
+    // A British postcode has no run of four digits in it and a British street is as likely to be a
+    // Court or a Crescent as a Street. "1 Rutland Court, Edinburgh EH3 8EY" satisfied none of the
+    // tests below and three German-speaking Edinburgh firms were refused for having no address.
+    const ukPostcode = /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/;
+    const looksLikeAddress = /\b\d{4,8}\b|\b(str|strasse|street|calle|carrer|rua|via|avda|avenida|av|rue|blvd|road|rd|weg|platz|plaza|piazza|lane|utca|ulica|ulice|gatan|court|crescent|square|terrace|gardens|mews|quay|wharf|boulevard|parade|close|drive)\b\.?/i.test(withoutContact)
+      || ukPostcode.test(withoutContact);
     if (!looksLikeAddress) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
     const city = placeOf(where, src.city);
     // A city we cover, whether or not it holds anything yet. This is the test that lets a city get
@@ -380,6 +395,21 @@ for (const src of manifest) {
     if (!languages.length) {
       if (!/^roster/i.test(src.claimType || '')) { stats.noLanguage++; continue; }
       languages = rosterLangs;
+    }
+
+    /**
+     * A row that names only the local language has nowhere to sit in a directory organised by
+     * language. "English-speaking lawyer in Glasgow" is not a finding about Glasgow, and one such
+     * row was enough to publish a whole city page that said it. The German consulate's Scottish
+     * list records that firm's correspondence language as English, which is true and useless here.
+     *
+     * Countries whose LOCAL is null, India and Canada and Singapore among them, have no single local
+     * language to measure against and are unaffected.
+     */
+    const localLang = M.LOCAL[(M.CITY[city] || {}).country];
+    if (localLang && languages.every((l) => l === localLang)) {
+      stats.onlyLocal = (stats.onlyLocal || 0) + 1;
+      continue;
     }
 
     // The practice name is evidence too: "Korea Dental Clinic" is a dentist even when the table it
@@ -448,6 +478,7 @@ report.forEach((x) => {
     + '  elsewhere ' + String(x.placedElsewhere || 0).padStart(3)
     + '  no lang ' + String(x.noLanguage || 0).padStart(3)
     + '  no cat ' + String(x.noCategory || 0).padStart(3)
+    + '  local only ' + String(x.onlyLocal || 0).padStart(3)
     + '  no addr ' + String(x.noAddress || 0).padStart(3)
     + '  no name ' + String(x.noName || 0).padStart(3)
     + '  dup ' + String(x.already || 0).padStart(3)
@@ -488,6 +519,7 @@ fs.writeFileSync(proposalFile, JSON.stringify({
     refused: {
       placedElsewhere: x.placedElsewhere || 0,
       noAddress: x.noAddress || 0,
+      onlyLocal: x.onlyLocal || 0,
       noLanguage: x.noLanguage || 0,
       noCategory: x.noCategory || 0,
       noName: (x.noName || []).length || 0,

@@ -385,6 +385,20 @@ ${shell.bodyEnd}
   written.push({ slug, n: rows.length, indexable: isIndexable, title });
 }
 
+// A city that no longer holds a provider is deleted rather than left for a crawler to find.
+//
+// The language builder has always done this; this one never did, because until the ingest could
+// open a new city no city had ever lost its last provider. Glasgow was the first: its one row said
+// only English, in an English-speaking country, and when that rule arrived the row went and the page
+// stayed. The orphan gate caught it, which is the gate doing its job and this build not doing its.
+{
+  const keep = new Set(written.map((w) => w.slug + '.html'));
+  const gone = fs.readdirSync(OUTDIR)
+    .filter((f) => f.endsWith('.html') && !keep.has(f) && CITY[f.replace(/\.html$/, '')]);
+  gone.forEach((f) => fs.unlinkSync(path.join(OUTDIR, f)));
+  if (gone.length) console.log('  removed ' + gone.length + ' city page(s) that hold nothing now: ' + gone.join(', '));
+}
+
 console.log(`Wrote ${written.length} city pages into services/: ${indexable} indexable, ${written.length - indexable} noindex (under ${MIN_INDEXABLE} providers).`);
 console.log('  e.g. ' + written.filter((w) => w.indexable).slice(0, 4).map((w) => w.title).join(' | '));
 fs.writeFileSync(path.join(ROOT, 'data', 'service-city-pages.json'), JSON.stringify(written, null, 1) + '\n');
