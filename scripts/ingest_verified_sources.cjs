@@ -23,6 +23,7 @@ const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
+const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const manifestPath = process.argv[2];
 if (!manifestPath) { console.error('usage: node scripts/ingest_verified_sources.cjs <manifest.json> [--preview] [--only <city>]'); process.exit(2); }
 const PREVIEW = process.argv.includes('--preview');
@@ -270,6 +271,26 @@ for (const src of manifest) {
   }
   if (!rows.length) { report.push({ src, kept: 0, why: 'no parser could read it' }); continue; }
 
+  /**
+   * Which language a roster claim is a claim about.
+   *
+   * This was the literal string 'de'. Every roster source was read as a list of German speakers, and
+   * of the 97 in the registry only about half are German: three rows off the U.S. Embassy Budapest
+   * list, whose own words are "Each lawyer on the list speaks English sufficiently well", went out
+   * as German-speaking with a note on the page saying the list was published as a list of German
+   * speakers. It was not. A roster source has to declare it now, and one that does not is refused
+   * rather than guessed at.
+   */
+  const rosterLangs = [].concat(src.rosterLanguage || []).filter(Boolean);
+  if (/^roster/i.test(src.claimType || '') && !rosterLangs.length) {
+    report.push({ src, kept: 0, why: 'a roster source with no rosterLanguage: say which language the claim is about' });
+    continue;
+  }
+  if (rosterLangs.some((l) => !db._languages[l])) {
+    report.push({ src, kept: 0, why: 'rosterLanguage names a language the dataset does not have: ' + rosterLangs.join(', ') });
+    continue;
+  }
+
   const stats = { placedElsewhere: 0, noLanguage: 0, noCategory: 0, already: 0, noName: 0, kept: 0 };
   for (const r of rows) {
     const text = [r.name, r.area, r.specialty, r.role, r.detail, r.languageLine].filter(Boolean).join(' ');
@@ -292,11 +313,24 @@ for (const src of manifest) {
     // its first provider.
     if (!M.CITY[city]) { stats.placedElsewhere++; continue; }
     // If the address names a town, it has to be this one.
+    //
+    // Unless the source says otherwise. A consular list for a big city is a list for its metro area
+    // and writes the suburb, not the city: the Italian Consulate General in Sydney heads its
+    // doctors "MEDICI GENERICI - GPS - AREA METROPOLITANA (SYDNEY)" and then gives addresses in
+    // Concord and West Pennant Hills. Refusing those would throw away almost every row on it.
+    //
+    // So a manifest may set "metro": true, which says the source states its rows are in this city's
+    // metro area, and the quote for that goes in claimQuote or notes like any other claim. It only
+    // ever admits a town we do not otherwise cover: a suburb, never another city. Taipei's list,
+    // whose third section is headed "medical facilities outside Taipei", does not set it, and the
+    // rows it put in Keelung and Taichung are refused exactly as before.
     const town = localityOf(where);
     if (town) {
       const target = M.CITY[city];
       const names = [target.name, ...(ALIASES[city] || [])].map(fold);
-      if (!names.some((n) => fold(town).includes(n) || n.includes(fold(town)))) { stats.placedElsewhere++; continue; }
+      const isTarget = names.some((n) => fold(town).includes(n) || n.includes(fold(town)));
+      const elsewhereWeCover = !isTarget && !!matchCity(fold(town));
+      if (!isTarget && (elsewhereWeCover || !src.metro)) { stats.placedElsewhere++; continue; }
     }
     // The address has to name the city, always. The manifest can only say which city a list was
     // found for, and these lists cover regions: the Taiwan list's third section is headed
@@ -307,14 +341,14 @@ for (const src of manifest) {
     // names no town at all, placeOf returns the manifest's city and the two are equal by
     // construction. One Wollongong firm was accepted that way into all seven Australian cities the
     // list was filed under. The address itself has to name the city.
-    if (fileCount[src.file] > 1 && namedIn(where) !== src.city) { stats.placedElsewhere++; continue; }
+    if (fileCount[src.file] > 1 && !src.metro && namedIn(where) !== src.city) { stats.placedElsewhere++; continue; }
 
     // The rule that matters: a roster claim covers every row, a per-entry source covers only the
     // rows it annotates. Inheriting a per-entry source's claim would be inventing one.
     let languages = (r.languages || []).slice();
     if (!languages.length) {
-      if (src.claimType !== 'roster') { stats.noLanguage++; continue; }
-      languages = ['de'];
+      if (!/^roster/i.test(src.claimType || '')) { stats.noLanguage++; continue; }
+      languages = rosterLangs;
     }
 
     // The practice name is evidence too: "Korea Dental Clinic" is a dentist even when the table it
@@ -338,8 +372,8 @@ for (const src of manifest) {
 
     const bits = [`On the ${src.publisher} list${r.specialty ? ', under ' + asciiFold(r.specialty).replace(/\.$/, '') : ''}.`];
     if (r.role) bits.push(asciiFold(r.role).replace(/\.$/, '') + '.');
-    bits.push(src.claimType === 'roster'
-      ? `The list is published as a list of German-speaking providers, which is a claim about the roster rather than a note about this entry.`
+    bits.push(/^roster/i.test(src.claimType || '')
+      ? `The list is published as a list of ${P.list(rosterLangs.map((l) => db._languages[l]))}-speaking providers, which is a claim about the roster rather than a note about this entry.`
       : `The list states the languages of each entry, and this one names ${languages.map((l) => db._languages[l] || l).join(', ')}.`);
     if (src.statedDate) bits.push(`The list is dated ${asciiFold(src.statedDate).replace(/\s*-\s*Artikel.*$/, '')}.`);
 
