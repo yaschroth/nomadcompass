@@ -12,6 +12,13 @@
  * two-minute command timeout cut it off halfway, leaving the family half-built and the gates
  * unrun, which is a worse state than not having started.
  *
+ * One loop is still not fully broken, and the gate rather than the build reports it. When a category
+ * and language pair first qualifies for a page of its own, a page built earlier in the same run has
+ * already linked to it from the previous run manifest, and check_service_pages says
+ * "/services/dentists/italian: is linked 1 times and does not exist". A second run settles it,
+ * because by then every manifest agrees. Re-run before debugging it: this is expected the first time
+ * a new pair appears, and only then.
+ *
  * Usage: node scripts/rebuild_services.cjs [--skip-sweeps]
  */
 const { execFileSync } = require('child_process');

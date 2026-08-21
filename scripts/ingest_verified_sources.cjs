@@ -252,7 +252,11 @@ const asciiFold = (s) => STROKED.reduce((t, [re, r]) => t.replace(re, r), String
   .replace(/[‘’]/g, "'").replace(/[“”«»„]/g, '"').replace(/[–—]/g, ', ').replace(/[°º]/g, '')
   .replace(/[^\x20-\x7E]/g, '').replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/^[,\s]+|[,\s]+$/g, '');
 
-const TITLE_WORD = /^(dr|dra|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|mrs|ms|m|maitre|mtre|sr|sra)$/;
+// The words a list puts in front of a name, dropped before two names are compared. Every language
+// has its own set and a missing one is a duplicate waiting to happen: the Italian consulate's Madrid
+// list writes "Avv. Rafael CASAS HERRANZ" where another source had him as "Rafael CASAS HERRANZ",
+// and eighteen such pairs went in before the duplicate gate stopped them.
+const TITLE_WORD = /^(dr|dra|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|mrs|ms|m|maitre|mtre|sr|sra|avv|avvocato|avvocata|dott|dottore|dottssa|ing|arch|rag|lic|abg|abogado|abogada|mag|mgr|mtro|lcdo|lcda)$/;
 const key = (s) => fold(s).replace(/ae/g, 'a').replace(/ue/g, 'u').replace(/oe/g, 'o')
   .split(/[^a-z0-9]+/).filter(Boolean).filter((w) => !TITLE_WORD.test(w)).sort().join(' ');
 
