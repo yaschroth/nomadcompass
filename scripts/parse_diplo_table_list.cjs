@@ -253,7 +253,19 @@ for (const t of html.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>|<strong[^>]*>([\s
     const addressFromName = joined ? joined.split('\n').slice(1).join('\n') : '';
     const name = properName(nameCell);
     if (!name || /^name$/i.test(name)) continue;
-    const practice = get('practice') || addressFromName;
+    /**
+     * Which of the two candidates is the address.
+     *
+     * The practice column used to win outright, and on the Rome doctors it is the surgery hours:
+     * fifty entries came out with "Mo, Mi, Do.: 13.00 - 19.00 Uhr" where the address should be, and
+     * every one was refused for having no address while "Viale Medaglie d'Oro, 199, 00136 Roma" sat
+     * unread in the name cell two lines above. Whichever of them looks like an address is the one.
+     */
+    const streetish = (s) => /\b\d{2,8}\b/.test(String(s).replace(/\b(Tel|Telefon|Fax|Mobil|Mob|E-?Mail|www\.|http)\b[^\n]*/gi, ''))
+      && /\b(str|strasse|stra[sß]e|street|via|viale|piazza|corso|largo|rua|calle|avenida|avda|rue|road|avenue|ulica|utca|plaza)\b/i.test(String(s));
+    const practice = streetish(addressFromName) && !streetish(get('practice'))
+      ? addressFromName
+      : (get('practice') || addressFromName);
     // The column if there is one, otherwise the entry's own parenthetical note.
     const noteSource = joined || get('name');
     const inline = (noteSource.match(INLINE_NOTE) || [])[1] || (noteSource.match(INLINE_NOTE) || [])[2] || '';
