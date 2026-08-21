@@ -21,6 +21,7 @@ const READERS = [
   ['parse_diplo_pdf_list.cjs', []],
   ['parse_pdf_blocks.cjs', []],
   ['parse_pdf_blocks.cjs', ['--columns']],
+  ['parse_pdf_columns.cjs', []],
   ['parse_html_paragraph_list.cjs', []],
   ['parse_labelled_blocks.cjs', []],
   ['parse_labelled_blocks.cjs', ['--raw']],
