@@ -57,15 +57,21 @@ if (/\.pdf$/i.test(file)) {
 }
 
 // --- the German labels these lists use ------------------------------------------------------------
-const LABEL = /^\s*(Tel\.?|Telefon|Fax|Mobil|Handy|E-?Mail|Homepage|Internet|Website|Web|Spezialgebiete?|T[äa]tigkeitsschwerpunkte?|Fachgebiete?|Sprachen?|Korrespondenz(?:sprachen?)?|Anschrift|Adresse|B[üu]rozeiten|Sprechzeiten)\s*[:：]\s*(.*)$/i;
+const LABEL = /^\s*(Tel\.?|Telefon|Fax|Mobil|Handy|E-?Mail|Homepage|Internet|Website|Webseite|Web|Spezialgebiete?|T[äa]tigkeitsschwerpunkte?|Fachgebiete?|Fachbereiche?|Fachrichtungen?|Rechtsgebiete(?: und Fachbereiche)?|Sprachen?|Korrespondenz(?:sprachen?)?|Anschrift|Adresse|Postadresse|Postanschrift|B[üu]rozeiten|Sprechzeiten|Ansprechpartner(?:in)?)\s*[:：]\s*(.*)$/i;
 const FIELD = {
   tel: 'phone', telefon: 'phone', fax: 'fax', mobil: 'mobile', handy: 'mobile',
-  email: 'email', homepage: 'url', internet: 'url', website: 'url', web: 'url',
+  email: 'email', homepage: 'url', internet: 'url', website: 'url', webseite: 'url', web: 'url',
   spezialgebiet: 'practice', spezialgebiete: 'practice', tatigkeitsschwerpunkt: 'practice',
   tatigkeitsschwerpunkte: 'practice', fachgebiet: 'practice', fachgebiete: 'practice',
+  rechtsgebiete: 'practice', rechtsgebieteundfachbereiche: 'practice',
+  fachbereich: 'practice', fachbereiche: 'practice',
+  fachrichtung: 'practice', fachrichtungen: 'practice',
   sprache: 'languages', sprachen: 'languages', korrespondenz: 'languages',
   korrespondenzsprache: 'languages', korrespondenzsprachen: 'languages',
-  anschrift: 'address', adresse: 'address',
+  anschrift: 'address', adresse: 'address', postadresse: 'address', postanschrift: 'address',
+  // The named contact is a person inside the firm, and the firm is the provider. Mapped so the line
+  // is recognised as a label and does not run on into whichever value came before it.
+  ansprechpartner: 'contact', ansprechpartnerin: 'contact',
 };
 const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss').toLowerCase();
 const fieldOf = (label) => FIELD[fold(label).replace(/[^a-z]/g, '')] || '';
@@ -141,7 +147,21 @@ for (let i = 0; i < lines.length; i += 1) {
   const h = l.match(HEADING);
   if (h && isBlank(i + 1)) { close(); region = h[2].replace(/\s*\(.*\)\s*$/, '').trim(); headingFull = l; continue; }
   if (!l || FURNITURE.test(l)) continue;
-  if (isBlank(i - 1) && isBlank(i + 1) && looksLikeName(l)) {
+  /**
+   * Where an entry starts: after a blank line, on something that reads like a name, and with the
+   * entry's labels close enough behind it to prove it is one.
+   *
+   * The blank line below the name is not enough on its own. Australia isolates the firm name that
+   * way, but Canada runs the labels straight on under it, so requiring a blank below read the
+   * province as the provider and glued every firm in British Columbia into one row. Looking two
+   * lines ahead for a label covers both, and the two-line gap is what lets a name carry a subtitle:
+   * "HOLMES STEWART VON ANTAL" over "Barristers and Solicitors" over "Ansprechpartner:".
+   *
+   * It also still refuses the line under an Australian firm name, "Mr Markus Christmann" above a
+   * street, because no label follows it either.
+   */
+  const labelWithinTwo = LABEL.test(lines[i + 1] || '') || LABEL.test(lines[i + 2] || '');
+  if (isBlank(i - 1) && (isBlank(i + 1) || labelWithinTwo) && looksLikeName(l)) {
     close();
     current = { name: l, region, headingFull, lines: [] };
     continue;

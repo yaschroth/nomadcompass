@@ -36,7 +36,9 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const CHECKED = new Date().toISOString().slice(0, 10);
 
 const CAT = [
-  [/tier|veterin|vet\b/i, 'vet'],
+  // \b matters on both sides of tier: without it the Montreal law firm Neville-Warren Cloutier
+  // was filed as a vet, and Gauthier, Pelletier and Poitier were all waiting behind it.
+  [/\btier|veterin|\bvet\b/i, 'vet'],
   [/zahn|kiefer|dental|dentist|odonto/i, 'dentist'],
   [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop/i, 'physio'],
   [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b/i, 'therapy'],
@@ -182,18 +184,21 @@ const placeOf = (text, fallback) => {
  */
 const localityOf = (text) => {
   const s = String(text || '');
-  const m = s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)\s+City\b/)
+  const m =
+    // "<town>, <PROVINCE>, <postal code>", tried before the others because it is the most specific
+    // and because the patterns below mistake a North American street number for a postcode:
+    // "1200-805 West Broadway, Vancouver, BC" gave the town as West Broadway, and every Vancouver
+    // firm on the Canadian list was refused for being somewhere else. The separators are commas as
+    // often as spaces, which is what Canada writes and Australia does not.
+    s.match(/\b([A-Z][A-Za-z'’.-]+(?:\s+[A-Z][A-Za-z'’.-]+){0,2})[,\s]+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)[,\s]+[A-Z0-9]{3,4}(?:\s?[A-Z0-9]{3})?\b/)
+    || s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)\s+City\b/)
     // Up to eight digits: Israeli postcodes are seven, and a six-digit cap matched nothing on that
     // list, so every suburb in it passed as Tel Aviv.
     // A Brazilian postcode is five digits, a hyphen and three more, and requiring whitespace right
     // after the digits missed every one of them: two Porto Alegre firms were filed under Sao Paulo
     // because "90010-000 Canoas" did not look like a town to this.
     || s.match(/\b\d{4,8}(?:-\d{3})?\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)/)
-    || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/)
-    // Australia, Canada and the United States write "<suburb> <STATE> <postcode>", and the state
-    // sits between the town and the digits so none of the patterns above reach it. Without this,
-    // "North Wollongong NSW 2500" looked like an address with no town in it.
-    || s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){0,2})\s+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)\s+[A-Z0-9]{3,4}(?:\s?[A-Z0-9]{3})?\b/);
+    || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/);
   if (!m) return '';
   const word = m[1].trim();
   // Words that turn up in this position and are not towns.
