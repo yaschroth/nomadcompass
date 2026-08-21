@@ -282,9 +282,16 @@ for (const src of manifest) {
   // The block reader is offered alongside the PDF one because a consular PDF is either a grid or a
   // run of blocks and the manifest's shape label is a hint. Australia's lawyer list is blocks: the
   // grid reader found 15 entries, none with a language, and the block reader found 22 with one.
-  const candidates = isPdf
-    ? [['parse_diplo_pdf_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]]
-    : [['parse_diplo_table_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]];
+  // A manifest may name its reader. The defaults below are the ones safe to try on anything, and a
+  // source whose shape none of them fits should not be a reason to loosen them for all 310: the
+  // block reader that reads the Italian consular PDFs for Sydney also returns the disclaimer as a
+  // doctor on pages it does not understand, which is why it is opt-in per source rather than tried
+  // everywhere. The row filters still apply either way.
+  const candidates = src.parser
+    ? [[src.parser, [src.file]]]
+    : (isPdf
+      ? [['parse_diplo_pdf_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]]
+      : [['parse_diplo_table_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]]);
   let rows = [];
   let used = '';
   for (const [script, args] of candidates) {

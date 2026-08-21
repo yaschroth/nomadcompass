@@ -102,6 +102,10 @@ const rows = blocks.filter((b) => b.lines.length >= 2).map((b) => {
     .filter(Boolean).join(', ');
   return {
     heading: b.heading,
+    // The heading is what says what these people are, and the ingest reads specialty rather than
+    // heading. Without it the three Sydney GPs arrived with only a surname to categorise and were
+    // refused as uncategorised, while their section was headed MEDICI GENERICI all along.
+    specialty: b.heading,
     name: b.lines[0].replace(/[,;]\s*$/, ''),
     area: address.slice(0, 140),
     postcode: (joined.match(/\b(\d{4,5}(?:-\d{3})?)\b/) || [])[1] || '',
