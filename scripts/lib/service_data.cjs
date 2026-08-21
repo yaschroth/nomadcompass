@@ -59,7 +59,7 @@ const LOCAL = {
   // German, French or Italian.
   'United States': 'en', China: 'zh',
   Australia: 'en', 'New Zealand': 'en', Canada: null, 'United Kingdom': 'en', Ireland: 'en',
-  Denmark: 'da', Armenia: null,
+  Denmark: 'da', Armenia: null, Kazakhstan: null,
   // The site files London, Manchester and Edinburgh under "UK" and the other eleven British cities
   // under "United Kingdom". Two names for one country, which splits every country-level grouping
   // on the site and is worth fixing in cities-data.js; until then both have to be here or the first

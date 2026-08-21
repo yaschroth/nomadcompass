@@ -230,6 +230,14 @@ const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consol
 // "Dr. PALMISANO Ebertystr. 31" is a translator and a street run together; "Also available c/o
 // clinic Le Betulle in Appiano Gentile, 22070 Como" is a note about whoever was named on the line
 // before, and the town it names is Como rather than the Milan it was about to be filed under.
+// The name of the list is not one of its entries. "Anwaltsliste Kenia" is the title of the German
+// embassy's Nairobi lawyer list and was about to be published as a Nairobi lawyer, with the
+// disclaimer underneath it as its address.
+// A table's own header row, read as if it were an entry. The Italian consulate's Barcelona list
+// puts "COGNOME NOME CITTA INDIRIZZO TELEFONO" in its first row, and it arrived as a paediatric
+// dentist called ODONTOIATRA PEDIATRICA whose address was the names of the columns.
+const HEADER_ROW = /\bCOGNOME\b[^\n]*\bNOME\b|\bNAME\b[^\n]*\bADDRESS\b[^\n]*\b(TEL|PHONE)/i;
+const NAME_IS_A_LIST = /\w*liste\b|^Liste\b|^List of\b|^Elenco\b|^Lista\b/i;
 const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$/i;
 
 // A name made only of the words for what the business is, "Studio Legale" or "Law Office" with no
@@ -259,6 +267,22 @@ const asciiFold = (s) => STROKED.reduce((t, [re, r]) => t.replace(re, r), String
 const TITLE_WORD = /^(dr|dra|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|mrs|ms|m|maitre|mtre|sr|sra|avv|avvocato|avvocata|dott|dottore|dottssa|ing|arch|rag|lic|abg|abogado|abogada|mag|mgr|mtro|lcdo|lcda)$/;
 const key = (s) => fold(s).replace(/ae/g, 'a').replace(/ue/g, 'u').replace(/oe/g, 'o')
   .split(/[^a-z0-9]+/).filter(Boolean).filter((w) => !TITLE_WORD.test(w)).sort().join(' ');
+
+/**
+ * The countries our cities are in, as they are written in an address.
+ *
+ * Built from the city list rather than typed out, so it cannot drift from it. Only the ones long
+ * enough to be unambiguous: "Chile" would match "Chilewich" and two-letter forms match everything.
+ */
+// Places that turn up in these addresses and hold none of our cities, so the list above cannot know
+// them. Added one at a time as they appear: a Copenhagen list carried a firm in Torshavn.
+const ALSO_COUNTRIES = ['Faroe Islands', 'Faeroe Islands', 'Greenland', 'Liechtenstein', 'Monaco',
+  'San Marino', 'Andorra', 'Gibraltar', 'Jersey', 'Guernsey', 'Isle of Man'];
+
+const COUNTRY_NAMES = [...new Set(Object.values(M.CITY).map((c) => c.country).filter(Boolean))]
+  .filter((n) => n.length >= 5)
+  .concat(ALSO_COUNTRIES)
+  .map((name) => ({ name, re: new RegExp('\\b' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i') }));
 
 const seenByCity = {};
 db.providers.forEach((p) => { (seenByCity[p.city] = seenByCity[p.city] || new Map()).set(key(p.name), p); });
@@ -359,14 +383,45 @@ for (const src of manifest) {
     // to go and tells this script nothing about which city the row belongs to.
     // A phone number is digits too, so the contact details come off first and the test runs on what
     // is left. "Tel. 91 562 94 29, Mobil: 691 ..." then has nothing in it that looks like a place.
-    const withoutContact = where.replace(/\b(Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b[\s.:]*[^,;]*/gi, ' ').trim();
+    /**
+     * The contact details off, so that what is left can be judged as an address.
+     *
+     * This used to take everything from a contact label to the next comma, which is right for a
+     * phone number and wrong for an e-mail: an address written after one without a comma between
+     * goes with it. "Tel. 911 297 121, E-Mail: info@iwhcm.com C/ de Serrano 98 28006 Madrid" was
+     * reduced to a single comma, and a Madrid doctor with a perfectly good address was refused for
+     * having none. An e-mail and a web address are one token each; only a phone number runs on.
+     */
+    const withoutContact = where
+      .replace(/[\w.+-]+@[\w.-]+\.\w{2,}/g, ' ')
+      .replace(/\b(?:https?:\/\/|www\.)\S+/gi, ' ')
+      .replace(/\b(Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|Cellulare|Phone)\b[\s.:]*[+(\d][\d\s()\/.+-]*/gi, ' ')
+      .replace(/\b(E-?Mail|Email|Web|Website|Homepage|Sito)\b\s*[:.]?/gi, ' ')
+      .replace(/\s{2,}/g, ' ').trim();
     // A British postcode has no run of four digits in it and a British street is as likely to be a
     // Court or a Crescent as a Street. "1 Rutland Court, Edinburgh EH3 8EY" satisfied none of the
     // tests below and three German-speaking Edinburgh firms were refused for having no address.
     const ukPostcode = /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/;
     const looksLikeAddress = /\b\d{4,8}\b|\b(str|strasse|street|calle|carrer|rua|via|avda|avenida|av|rue|blvd|road|rd|weg|platz|plaza|piazza|lane|utca|ulica|ulice|gatan|court|crescent|square|terrace|gardens|mews|quay|wharf|boulevard|parade|close|drive)\b\.?/i.test(withoutContact)
-      || ukPostcode.test(withoutContact);
+      || ukPostcode.test(withoutContact)
+      // Or it simply names one of our cities and nothing else. The freelance translators on the
+      // German embassy's Portuguese list have no office: their entry is a name, the word Lisboa and
+      // a mobile number. The city is the whole of what the source knows about where they are, and it
+      // is also the only thing placement uses, so refusing it was refusing the evidence itself.
+      || !!matchCity(fold(withoutContact));
     if (!looksLikeAddress) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
+    /**
+     * An address that names a country is in that country.
+     *
+     * A Copenhagen manifest, a firm in "110 Torshavn, Faroe Islands", and no town the placement
+     * recognises: the row fell back to the city the manifest named and was about to be published as
+     * a Copenhagen law firm 1,300 km away. The country is right there in the address, so read it.
+     * Only checked when it disagrees, and the city's own country is never a reason to refuse.
+     */
+    const here = (M.CITY[src.city] || {}).country;
+    const elsewhereCountry = COUNTRY_NAMES.find((c) => c.re.test(where) && c.name !== here);
+    if (here && elsewhereCountry) { stats.placedElsewhere++; continue; }
+
     const city = placeOf(where, src.city);
     // A city we cover, whether or not it holds anything yet. This is the test that lets a city get
     // its first provider.
@@ -444,7 +499,8 @@ for (const src of manifest) {
     const name = asciiFold(r.name).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
       .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim();
     const k = key(name);
-    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || isGenericName(name)) { stats.noName++; continue; }
+    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
+      || HEADER_ROW.test(where) || isGenericName(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
     if (map.has(k)) { stats.already++; continue; }
 
@@ -465,8 +521,11 @@ for (const src of manifest) {
       evidence: 'official',
       checked: CHECKED,
       // What goes on the card is the address, not the phone book entry that followed it.
+      // Trimmed at both ends, not just the right. A reader that finds an empty cell before the
+      // address leaves the punctuation behind it, and ";, , Facharzt fur Haut- und
+      // Geschlechtskrankheiten" went out with the semicolon and two commas still on the front.
       area: asciiFold((r.area || '').split(/\b(?:Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b/i)[0]
-        || withoutContact).replace(/[,\s]+$/, '').slice(0, 120),
+        || withoutContact).replace(/^[;,.\s]+/, '').replace(/[,;\s]+$/, '').slice(0, 120),
       note: bits.join(' ').replace(/\s+/g, ' ').trim(),
     };
     if (/[^\x20-\x7E]/.test(JSON.stringify(row))) { stats.noName++; continue; }
