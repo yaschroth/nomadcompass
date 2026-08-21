@@ -291,8 +291,11 @@ for (const page of ordered) {
   const tokens = {
     n: pair.n,
     city: city.name,
-    service: P.catName(cat),
-    Service: P.catName(cat).replace(/^./, (c) => c.toUpperCase()),
+    // A page holding one provider is about one provider, so the word for what they are is
+    // singular everywhere on it. Fixing the token rather than the fifteen skeletons is what makes
+    // that true of all of them: 109 pages read "1 German-speaking lawyers in Darwin".
+    service: pair.n === 1 ? P.singular(cat) : P.catName(cat),
+    Service: (pair.n === 1 ? P.singular(cat) : P.catName(cat)).replace(/^./, (c) => c.toUpperCase()),
     singular: P.singular(cat),
     lang1: langs[0],
     lang2: langs[1] || '',

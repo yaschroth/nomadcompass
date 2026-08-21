@@ -104,22 +104,11 @@ function card(p) {
 // English is the thing these lists set out to record. Thailand's rows carry English 84 times and
 // Thai 50, so Bangkok came out billed as "Thai and German-speaking". A country's own language is a
 // plain fact and belongs in a table.
-const LOCAL = {
-  Thailand: 'th', Spain: 'es', India: null, Italy: 'it', Vietnam: 'vi', Georgia: 'ka',
-  Lithuania: 'lt', Indonesia: 'id', France: 'fr', UAE: 'ar', Portugal: 'pt', Mexico: 'es',
-  Poland: 'pl', Colombia: 'es', Egypt: 'ar', 'South Africa': 'af', Serbia: 'sr',
-  Philippines: 'tl', Argentina: 'es', Cambodia: 'km', Slovenia: 'sl', 'Czech Republic': 'cs',
-  Morocco: 'ar', Latvia: 'lv', Estonia: 'et', Croatia: 'hr', Kenya: 'sw', Hungary: 'hu',
-  Japan: 'ja', Taiwan: 'zh', Singapore: null, Brazil: 'pt', Chile: 'es', Netherlands: 'nl',
-  Malaysia: 'ms', Germany: 'de', Greece: 'el', Belgium: 'nl', 'Sri Lanka': 'si', Bulgaria: 'bg',
-  Turkey: 'tr', Romania: 'ro', 'South Korea': 'ko', Peru: 'es', Austria: 'de',
-  // English is the local language here, so the pages lead on the foreign one the lists record.
-  'United States': 'en', China: 'zh',
-  Albania: 'sq', Bolivia: 'es', Ecuador: 'es', Jordan: 'ar', Norway: 'no', Switzerland: 'de',
-  'Costa Rica': 'es', Ethiopia: null, Guatemala: 'es', Israel: 'he', Laos: null,
-  Montenegro: null, Myanmar: 'my', Nepal: 'ne', 'North Macedonia': null, Oman: 'ar',
-  Sweden: 'sv', Tanzania: 'sw', Tunisia: 'ar', Uruguay: 'es', Uzbekistan: null,
-};
+// One table, in service_data, rather than a copy here. The two were identical to the entry when
+// this replaced the copy, which is the best moment to merge them: adding Australia to one and not
+// the other stopped the build, and the next divergence would have been a wrong title rather than a
+// stopped build.
+const { LOCAL } = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 // A country in the data with no entry here would silently keep its own language in every title, so
 // say so loudly instead.
 {
@@ -150,6 +139,9 @@ function headlineCategories(rows) {
 }
 
 const list = (arr) => (arr.length > 1 ? arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1] : arr[0] || '');
+// "Therapists" -> "therapist", "Pharmacies" -> "pharmacy". The same rule service_prose uses, applied
+// to the printed category name rather than to its key, because that is what this file holds.
+const singularOf = (s) => String(s).replace(/ies$/, 'y').replace(/s$/, '');
 
 const bySlug = {};
 DB.providers.forEach((p) => { (bySlug[p.city] = bySlug[p.city] || []).push(p); });
@@ -183,14 +175,17 @@ for (const slug of slugs) {
   // A page that indexes everything has to say so; the narrow headings belong on the narrow pages.
   // A city with one service is a narrow page, so it keeps the specific heading.
   const isHub = allCats.length > 1;
+  // One provider, one word for what they are. A city page that is not a hub holds one category, so
+  // there is exactly one word to make agree.
+  const catWords = rows.length === 1 ? cats.map(singularOf) : cats;
   const heading = isHub
     ? `Services in ${c.name} in a language you speak`
-    : `${list(langs)}-speaking ${list(cats)} in ${c.name}`;
+    : `${list(langs)}-speaking ${list(catWords)} in ${c.name}`;
   // The meta title is deliberately a different string from the h1, and carries the numbers a search
   // result can use.
   const title = isHub
     ? `${c.name} services by language: ${rows.length} providers across ${allCats.length} services`
-    : `${rows.length} ${list(langs)}-speaking ${list(cats)} in ${c.name}, each with its source`;
+    : `${rows.length} ${list(langs)}-speaking ${list(catWords)} in ${c.name}, each with its source`;
   const desc = isHub
     ? `${rows.length} providers in ${c.name} across ${allCats.length} services, indexed by the language they work in: ` +
       `${foreign.slice(0, 4).map(([l, n]) => LANGS[l] + ' ' + n).join(', ')}. Every language claim names its source.`

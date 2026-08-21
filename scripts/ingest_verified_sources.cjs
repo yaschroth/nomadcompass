@@ -111,25 +111,58 @@ const ALIASES = {
   bali: ['denpasar', 'kuta', 'ubud', 'seminyak'],
   chiangmai: ['chiang mai'],
 };
-const CITY_NAMES = Object.values(M.cities).map((c) => ({
+/**
+ * Every city the site covers, not every city this directory already holds.
+ *
+ * M.cities is built from the rows, so it names the 295 cities that already have a provider. Reading
+ * the place test off it made the first row for a city unreachable: an address in Sydney matched no
+ * city, fell back to the manifest, and the same test then refused it. Australia's whole lawyer list
+ * was rejected 27 rows out of 29 that way, and it is why 415 of the 710 cities had stayed empty
+ * however many sources were read. M.CITY is the site's own list of cities and is the right question.
+ */
+const CITY_NAMES = Object.values(M.CITY).map((c) => ({
   id: c.id,
   // Match on the printed name, accents folded, plus a couple of spellings missions actually use.
   needles: [c.name, c.name.replace(/\s+/g, ''), ...(ALIASES[c.id] || [])]
     .map((n) => String(n).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()),
 }));
 const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const matchCity = (t) => CITY_NAMES.slice().sort((a, b) => b.needles[0].length - a.needles[0].length)
+  .find((c) => c.needles.some((n) => n.length > 3 && t.includes(n)));
+
+/**
+ * Which of our cities an address names, or nothing if it names none.
+ *
+ * The town at the end of an address outranks a city name anywhere in it, because streets are named
+ * after cities. "Level 9, 231 Adelaide Terrace, Perth WA 6000" is in Perth, and scanning the whole
+ * string put it in Adelaide, which is 2,100 km away; "2/37 Canberra Avenue, Forrest ACT" only
+ * reached Canberra by way of the street. Reading the locality first gets both right for the same
+ * reason.
+ */
+const namedIn = (text) => {
+  const town = localityOf(text);
+  if (town) {
+    const byTown = matchCity(fold(town));
+    if (byTown) return byTown.id;
+    // The address names a town and it is not one of ours. Whatever else the string contains is a
+    // street or a landmark, not where this provider is.
+    return '';
+  }
+  const hit = matchCity(fold(text));
+  return hit ? hit.id : '';
+};
+
 const placeOf = (text, fallback) => {
   const t = fold(text);
   if (!t) return fallback;
-  // Longest name first, so "Rio de Janeiro" wins over any city whose name is a substring of it.
-  const hit = CITY_NAMES.slice().sort((a, b) => b.needles[0].length - a.needles[0].length)
-    .find((c) => c.needles.some((n) => n.length > 3 && t.includes(n)));
+  const named = namedIn(text);
+  const hit = named ? CITY_NAMES.find((c) => c.id === named) : null;
   // A country-wide list may name another of its own cities, and that is worth following. A word
   // that happens to match a city on another continent is not: an address in Bangkok was matching
   // Hamburg and Turin, and the row would have been published there.
   if (!hit) return fallback;
-  const home = M.cities[fallback];
-  if (home && M.cities[hit.id] && M.cities[hit.id].country !== home.country) return fallback;
+  const home = M.CITY[fallback];
+  if (home && M.CITY[hit.id] && M.CITY[hit.id].country !== home.country) return fallback;
   return hit.id;
 };
 
@@ -155,10 +188,18 @@ const localityOf = (text) => {
     // after the digits missed every one of them: two Porto Alegre firms were filed under Sao Paulo
     // because "90010-000 Canoas" did not look like a town to this.
     || s.match(/\b\d{4,8}(?:-\d{3})?\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)/)
-    || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/);
+    || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/)
+    // Australia, Canada and the United States write "<suburb> <STATE> <postcode>", and the state
+    // sits between the town and the digits so none of the patterns above reach it. Without this,
+    // "North Wollongong NSW 2500" looked like an address with no town in it.
+    || s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){0,2})\s+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)\s+[A-Z0-9]{3,4}(?:\s?[A-Z0-9]{3})?\b/);
   if (!m) return '';
   const word = m[1].trim();
   // Words that turn up in this position and are not towns.
+  // A state or province code is not a town. "201 Elizabeth Street, Sydney, NSW 2000" puts a comma
+  // where the pattern expects the town, so the town came out as NSW and a Sydney firm was placed
+  // nowhere. Returning nothing here sends the address back to be read whole, which finds Sydney.
+  if (/^(ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)$/.test(word)) return '';
   if (/^(Str|Street|Rd|Road|Ave|Avenue|Floor|Fl|Tower|Suite|Apt|Building|Clinic|Hospital|Center|Centre|Website|Web|Tel|Fax|Email|Mobile|Sec|Lane|No|Dist|District)$/i.test(word)) return '';
   return word;
 };
@@ -213,9 +254,12 @@ for (const src of manifest) {
   // once and it is not safe in a batch: on pages it does not understand it returns the embassy's own
   // address as a provider, a job title as a name and a Phuket clinic under Bangkok. It stays a
   // hand-driven tool for pages someone has looked at.
+  // The block reader is offered alongside the PDF one because a consular PDF is either a grid or a
+  // run of blocks and the manifest's shape label is a hint. Australia's lawyer list is blocks: the
+  // grid reader found 15 entries, none with a language, and the block reader found 22 with one.
   const candidates = isPdf
-    ? [['parse_diplo_pdf_list.cjs', [src.file]]]
-    : [['parse_diplo_table_list.cjs', [src.file]]];
+    ? [['parse_diplo_pdf_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]]
+    : [['parse_diplo_table_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]];
   let rows = [];
   let used = '';
   for (const [script, args] of candidates) {
@@ -244,11 +288,13 @@ for (const src of manifest) {
     const looksLikeAddress = /\b\d{4,8}\b|\b(str|strasse|street|calle|carrer|rua|via|avda|avenida|av|rue|blvd|road|rd|weg|platz|plaza|piazza|lane|utca|ulica|ulice|gatan)\b\.?/i.test(withoutContact);
     if (!looksLikeAddress) { stats.noAddress = (stats.noAddress || 0) + 1; continue; }
     const city = placeOf(where, src.city);
-    if (!M.cities[city]) { stats.placedElsewhere++; continue; }
+    // A city we cover, whether or not it holds anything yet. This is the test that lets a city get
+    // its first provider.
+    if (!M.CITY[city]) { stats.placedElsewhere++; continue; }
     // If the address names a town, it has to be this one.
     const town = localityOf(where);
     if (town) {
-      const target = M.cities[city];
+      const target = M.CITY[city];
       const names = [target.name, ...(ALIASES[city] || [])].map(fold);
       if (!names.some((n) => fold(town).includes(n) || n.includes(fold(town)))) { stats.placedElsewhere++; continue; }
     }
@@ -257,7 +303,11 @@ for (const src of manifest) {
     // "medical facilities outside Taipei", and taking the manifest's word for it filed 33 hospitals
     // in Keelung, Taoyuan, Hsinchu, Miaoli, Taichung and Kaohsiung as if they were in Taipei, under
     // a language claim the page does not make about them.
-    if (fileCount[src.file] > 1 && city !== src.city) { stats.placedElsewhere++; continue; }
+    // Comparing the placed city with the manifest's was not the test it reads as: where the address
+    // names no town at all, placeOf returns the manifest's city and the two are equal by
+    // construction. One Wollongong firm was accepted that way into all seven Australian cities the
+    // list was filed under. The address itself has to name the city.
+    if (fileCount[src.file] > 1 && namedIn(where) !== src.city) { stats.placedElsewhere++; continue; }
 
     // The rule that matters: a roster claim covers every row, a per-entry source covers only the
     // rows it annotates. Inheriting a per-entry source's claim would be inventing one.
@@ -329,6 +379,8 @@ report.forEach((x) => {
     + '  elsewhere ' + String(x.placedElsewhere || 0).padStart(3)
     + '  no lang ' + String(x.noLanguage || 0).padStart(3)
     + '  no cat ' + String(x.noCategory || 0).padStart(3)
+    + '  no addr ' + String(x.noAddress || 0).padStart(3)
+    + '  no name ' + String(x.noName || 0).padStart(3)
     + '  dup ' + String(x.already || 0).padStart(3)
     + '  ' + path.basename(x.src.file));
 });

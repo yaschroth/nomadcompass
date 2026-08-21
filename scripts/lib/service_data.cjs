@@ -54,7 +54,11 @@ const LOCAL = {
   Malaysia: 'ms', Germany: 'de', Greece: 'el', Belgium: 'nl', 'Sri Lanka': 'si', Bulgaria: 'bg',
   Turkey: 'tr', Romania: 'ro', 'South Korea': 'ko', Peru: 'es', Austria: 'de',
   // English is the local language here, so the pages lead on the foreign one the lists record.
+  // These four are where that matters most: a directory of English speakers in Sydney would be a
+  // directory of Sydney, and every row we hold for them comes off a consular list that names
+  // German, French or Italian.
   'United States': 'en', China: 'zh',
+  Australia: 'en', 'New Zealand': 'en', Canada: null, 'United Kingdom': 'en', Ireland: 'en',
   Albania: 'sq', Bolivia: 'es', Ecuador: 'es', Jordan: 'ar', Norway: 'no', Switzerland: 'de',
   'Costa Rica': 'es', Ethiopia: null, Guatemala: 'es', Israel: 'he', Laos: null,
   Montenegro: null, Myanmar: 'my', Nepal: 'ne', 'North Macedonia': null, Oman: 'ar',

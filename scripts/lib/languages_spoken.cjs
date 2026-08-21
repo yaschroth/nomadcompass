@@ -1,0 +1,73 @@
+/**
+ * The words a consular list uses for a language, and how to read a line of them.
+ *
+ * Every mission writes the claim in its own language, so the same fact arrives as "Deutsch und
+ * Englisch", "German and English" or "allemand, anglais" depending on who published the list. This
+ * lexicon started inside the table reader, where it grew every time a list used a word it had not
+ * seen. It lives here now because the block reader needs the same words: a second copy would drift,
+ * and the language a row is filed under is the one thing on this site that must not.
+ *
+ * An unknown word is collected rather than guessed. It is a gap in the lexicon, not a fact about the
+ * provider, and the caller decides whether to report it.
+ */
+const LANG = {
+  deutsch: 'de', german: 'de', allemand: 'de', tedesco: 'de', aleman: 'de',
+  englisch: 'en', english: 'en', anglais: 'en', inglese: 'en', ingles: 'en',
+  griechisch: 'el', greek: 'el', ellinika: 'el',
+  franz: 'fr', french: 'fr', francais: 'fr', francese: 'fr', frances: 'fr',
+  italienisch: 'it', italian: 'it', italiano: 'it', italien: 'it',
+  spanisch: 'es', spanish: 'es', span: 'es', espagnol: 'es', spagnolo: 'es',
+  portugiesisch: 'pt', portuguese: 'pt', portugais: 'pt',
+  russisch: 'ru', russian: 'ru', russe: 'ru',
+  niederl: 'nl', dutch: 'nl', hollandisch: 'nl',
+  polnisch: 'pl', polish: 'pl', polonais: 'pl',
+  tuerkisch: 'tr', turkisch: 'tr', turkish: 'tr',
+  arabisch: 'ar', arabic: 'ar', arabe: 'ar',
+  kroatisch: 'hr', croatian: 'hr', serbisch: 'sr', serbian: 'sr',
+  bulgarisch: 'bg', rumaenisch: 'ro', rumanisch: 'ro', romanian: 'ro',
+  schwedisch: 'sv', swedish: 'sv', daenisch: 'da', danisch: 'da', danish: 'da',
+  norwegisch: 'no', norwegian: 'no', finnisch: 'fi', finnish: 'fi',
+  tschechisch: 'cs', czech: 'cs', ungarisch: 'hu', hungarian: 'hu',
+  hebraeisch: 'he', hebraisch: 'he', hebrew: 'he',
+  japanisch: 'ja', japanese: 'ja', chinesisch: 'zh', chinese: 'zh', mandarin: 'zh',
+  koreanisch: 'ko', korean: 'ko', thai: 'th', vietnamesisch: 'vi', vietnamese: 'vi',
+  hindi: 'hi', persisch: 'fa', persian: 'fa', farsi: 'fa',
+  albanisch: 'sq', albanian: 'sq', ukrainisch: 'uk', ukrainian: 'uk',
+  slowakisch: 'sk', slovak: 'sk', slowenisch: 'sl', slovenian: 'sl',
+  indonesisch: 'id', indonesian: 'id', malaiisch: 'ms', malay: 'ms',
+  singhalesisch: 'si', sinhala: 'si', tamilisch: 'ta', tamil: 'ta',
+  suaheli: 'sw', swahili: 'sw', afrikaans: 'af',
+  // Two spellings the Athens list gets wrong. Both are unambiguous, and dropping a language because
+  // the mission mistyped it would understate what the doctor speaks.
+  deutch: 'de', italienenisch: 'it',
+};
+
+// Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
+// "Sprachen: D / E / F / Chinesisch", and reading only the spelled-out word gave a lawyer whose one
+// language was Chinese: not merely incomplete but wrong, since it would have taken him off the
+// German page and put him on a Chinese one. The mixed line is what proves the convention: the list
+// spells out the unusual language and abbreviates the ones its readers expect.
+const LETTER = { d: 'de', e: 'en', f: 'fr', i: 'it', s: 'es', p: 'pt', n: 'nl', r: 'ru' };
+
+const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss').toLowerCase();
+
+/**
+ * Reads one line of a language claim into codes.
+ *
+ * `allowLetters` is for a line under an explicit language label, where a lone "D" means German. It
+ * is off by default because in free text a lone letter is an initial.
+ * `unknown` is an optional Set that collects words the lexicon does not hold.
+ */
+const readLanguages = (line, allowLetters, unknown) => {
+  const out = [];
+  fold(line).split(/[,;/|+&]+|\band\b|\bund\b|\bou\b|\boder\b|\be\b/).map((p) => p.trim()).filter(Boolean)
+    .forEach((p) => {
+      const hit = Object.keys(LANG).find((k) => p.startsWith(k));
+      if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
+      if (allowLetters && p.length === 1 && LETTER[p]) { if (!out.includes(LETTER[p])) out.push(LETTER[p]); return; }
+      if (unknown && p.length > 2 && p.length < 24 && !/^\(|^[0-9]/.test(p)) unknown.add(p);
+    });
+  return out;
+};
+
+module.exports = { LANG, LETTER, fold, readLanguages };
