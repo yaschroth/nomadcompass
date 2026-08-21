@@ -15,7 +15,9 @@
  * One loop is still not fully broken, and the gate rather than the build reports it. When a category
  * and language pair first qualifies for a page of its own, a page built earlier in the same run has
  * already linked to it from the previous run manifest, and check_service_pages says
- * "/services/dentists/italian: is linked 1 times and does not exist". A second run settles it,
+ * "/services/dentists/italian: is linked 1 times and does not exist". The hub counts on services.html
+ * lag the same way, by one run, because build_services writes them from the manifest the hub builder
+ * produced last time. A second run settles both,
  * because by then every manifest agrees. Re-run before debugging it: this is expected the first time
  * a new pair appears, and only then.
  *
