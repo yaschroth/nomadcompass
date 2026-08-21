@@ -48,7 +48,16 @@ const CAT = [
   [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
   [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein/i, 'doctor'],
 ];
+/**
+ * What a translation agency translates is not what it is.
+ *
+ * "Uebersetzungen: Ingenieurwesen, Politik, Wirtschaft, Medizin u. Tiermedizin, Pharmazeutik" is a
+ * list of subjects, and Tiermedizin is veterinary medicine, so a Porto translation agency called
+ * Ad-Verbum was filed as a vet. Everything after that label describes the work, not the worker.
+ */
+const SUBJECT_LIST = /(?:[üu]bersetzung|traduç|traducc|traduzion|translation)\w*\s*:/i;
 const categorise = (text, fallback) => {
+  if (SUBJECT_LIST.test(text || '')) return 'translator';
   const hits = CAT.filter(([re]) => re.test(text || '')).map(([, c]) => c);
   if (hits.length > 1 && hits.includes('doctor')) return hits.find((h) => h !== 'doctor');
   return hits[0] || fallback || '';
@@ -190,7 +199,7 @@ const localityOf = (text) => {
     // "1200-805 West Broadway, Vancouver, BC" gave the town as West Broadway, and every Vancouver
     // firm on the Canadian list was refused for being somewhere else. The separators are commas as
     // often as spaces, which is what Canada writes and Australia does not.
-    s.match(/\b([A-Z][A-Za-z'’.-]+(?:\s+[A-Z][A-Za-z'’.-]+){0,2})[,\s]+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)[,\s]+[A-Z0-9]{3,4}(?:\s?[A-Z0-9]{3})?\b/)
+    s.match(/\b([A-Z][A-Za-z'’.-]+(?:\s+[A-Z][A-Za-z'’.-]+){0,2})[,\s]+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU|AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WV|WI|WY|DC)[,\s]+[A-Z0-9]{3,5}(?:\s?[A-Z0-9]{3})?\b/)
     || s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)\s+City\b/)
     // Up to eight digits: Israeli postcodes are seven, and a six-digit cap matched nothing on that
     // list, so every suburb in it passed as Tel Aviv.
@@ -215,7 +224,7 @@ const localityOf = (text) => {
 // A professional body is not a professional. Every one of these lists closes by naming the bar
 // association or the medical council to complain to, and reading the whole registry through put the
 // Anwaltskammer der Republik Armenien on the site as a Yerevan law firm.
-const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Medical Association|Medical Council|Chamber of|Kammer)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Medical Association|Medical Council|Chamber of|Kammer|Academy|Akademie|Law School|School of Law|Faculty of)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
 
 // The address glued onto the end of the name, and the sentence that carries on from the entry above.
 // "Dr. PALMISANO Ebertystr. 31" is a translator and a street run together; "Also available c/o
