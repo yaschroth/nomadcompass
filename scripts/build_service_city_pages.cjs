@@ -211,7 +211,10 @@ for (const slug of slugs) {
   const childOf = (cat) => '/services/' + slug + '/' + SERVICE_SLUGS[cat];
   const hasChild = (cat) => CHILDREN.has(slug + '|' + cat);
   const groupsHtml = groups.map((g) => {
-    const shown = single ? g.rows : g.rows.slice(0, PREVIEW);
+    // A service with no page of its own has nowhere else to be read, so this page shows all of it.
+    // Bangkok holds four hairdressers, its hairdressers page was held back under the word floor,
+    // and the fourth appeared nowhere on the site: "3 shown, 1 more not shown here" and no link.
+    const shown = (single || !hasChild(g.cat)) ? g.rows : g.rows.slice(0, PREVIEW);
     const more = g.rows.length - shown.length;
     const head = hasChild(g.cat)
       ? `<a href="${childOf(g.cat)}">${esc(CATS[g.cat])}</a>`

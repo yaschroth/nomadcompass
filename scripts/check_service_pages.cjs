@@ -111,7 +111,8 @@ for (const row of pages) {
     // belonged to no language section.
     const cards = (html.match(/class="sv-card /g) || []).length;
     const uniqueNames = new Set(rows.map((r) => r.name)).size;
-    const saysSo = /class="svp-capped"/.test(html);
+    // A page of a series says it too, in the pager that names which page it is and links the rest.
+    const saysSo = /class="svp-capped|class="svp-pager/.test(html);
     if (cards < uniqueNames && !saysSo) {
       note(row.url, 'renders ' + cards + ' cards for ' + uniqueNames + ' providers and does not say it is showing a subset');
     }

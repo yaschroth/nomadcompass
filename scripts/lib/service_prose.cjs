@@ -24,6 +24,12 @@ const list = (a) => (a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.le
 const plural = (n, one, many) => (n === 1 ? one : (many || one + 's'));
 const count = (n) => (n === 1 ? 'one' : n === 2 ? 'two' : n === 3 ? 'three' : n === 4 ? 'four' : n === 5 ? 'five' : n === 6 ? 'six' : String(n));
 const langName = (l) => M.LANGS[l] || l;
+
+// "an English claim", but "a Ukrainian claim": the article follows the sound, and Ukrainian is the
+// one name of the 53 whose spelling and sound disagree about it. Written out because a rule that
+// only reads the first letter got it wrong, and 64 pages said "a English-speaking doctor".
+const SOUNDS_CONSONANT = new Set(['Ukrainian']);
+const an = (word) => (/^[AEIOU]/.test(word) && !SOUNDS_CONSONANT.has(word) ? 'an ' : 'a ') + word;
 const catName = (c) => CAT_PLURAL[c] || c;
 const singular = (c) => catName(c).replace(/ies$/, 'y').replace(/s$/, '');
 
@@ -263,6 +269,6 @@ function card(p, opts) {
 }
 module.exports = {
   esc, card, mapsUrl,
-  words, list, plural, count, langName, catName, singular, niceDate, publisherOf,
+  words, list, plural, count, langName, an, catName, singular, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,
 };

@@ -62,8 +62,25 @@ const parentShowsAll = (pair) => {
   return inter / Math.min(setA.size, setB.size) >= 0.8;
 };
 // A card costs about 2KB. 120 of them plus the shell is roughly 300KB, which is as much as a page
-// on a phone should ever weigh. Only two of these pages reach it, and both say so on the page.
+// on a phone should ever weigh. Three lists run past it, and each carries the rest over a series
+// rather than stopping at the budget and pointing at the source.
 const CARD_BUDGET = 120;
+
+/**
+ * The page numbers a pager shows: both ends, a window around where the reader stands, and a 0 for
+ * every gap between them. Madrid's five fit whole; the shape only matters if a list grows past seven,
+ * and a pager that grew a row per page would be the same phone book the cap was avoiding.
+ */
+function pageWindow(cur, total) {
+  if (total <= 7) return Array.from({ length: total }, (unused, i) => i + 1);
+  const want = new Set([1, total, cur - 1, cur, cur + 1]);
+  if (cur <= 4) [2, 3, 4, 5].forEach((n) => want.add(n));
+  if (cur > total - 4) [total - 4, total - 3, total - 2, total - 1].forEach((n) => want.add(n));
+  const ns = [...want].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+  const out = [];
+  ns.forEach((n, i) => { if (i && n - ns[i - 1] > 1) out.push(0); out.push(n); });
+  return out;
+}
 
 const SCHEMA_TYPE = {
   doctor: 'Physician', dentist: 'Dentist', vet: 'VeterinaryCare', physio: 'MedicalBusiness',
@@ -162,7 +179,7 @@ for (const pair of Object.values(M.pairs)) {
       : `These come from ${srcTop.length} sources. ${P.list(srcTop.slice(0, 3).map((s) => s.publisher + ' (' + s.n + ')'))}` +
         `${srcTop.length > 3 ? ` and ${srcTop.length - 3} more` : ''} between them, and every card links to the one it came from.`;
 
-    const claim = `Every row here carries a ${langName} claim from its source: ` +
+    const claim = `Every row here carries ${P.an(langName)} claim from its source: ` +
       `${rows.filter((r) => r.evidence === 'official').length} of ${rows.length} from an official list, ` +
       `${rows.filter((r) => r.evidence === 'self-declared').length} self-declared and ` +
       `${rows.filter((r) => r.evidence === 'directory').length} from a directory. ` +
@@ -180,8 +197,20 @@ for (const pair of Object.values(M.pairs)) {
       ? `The nearest ${langName}-speaking ${P.catName(cat)} outside ${city.name} are in ${P.list(near.slice(0, 3).map((x) => x.name + ' (' + x.n + ', ' + x.km + ' km)'))}.`
       : `We hold no ${langName}-speaking ${P.catName(cat)} in any city near ${city.name}, so this page is the whole of what we have for that combination.`;
 
-    const capped = rows.length > CARD_BUDGET;
-    const shown = capped ? rows.slice(0, CARD_BUDGET) : rows;
+    /**
+     * A list longer than one page gets the rest of its pages rather than a cap.
+     *
+     * Measured: 5,639 of 6,195 providers appear on some page, and 555 of the 556 that do not sit
+     * behind the cap on exactly two lists, Madrid's English translators and Budapest's Italian
+     * lawyers. Telling a reader that the rest are "on the source" is honest but it is not the job.
+     * A card costs about 2KB, so the page count follows from the budget rather than from taste.
+     *
+     * Everything that names the list rather than the slice is settled before the loop opens. The
+     * title comes from a pool that remembers what it has handed out, so drawing it inside the loop
+     * gave every page a different one: Madrid's five went out as five unrelated titles for one list,
+     * the last of them having exhausted the pool and fallen through to the last resort.
+     */
+    const pageCount = Math.max(1, Math.ceil(rows.length / CARD_BUDGET));
 
     const faq = [
       {
@@ -227,6 +256,31 @@ for (const pair of Object.values(M.pairs)) {
       (srcTop.length > 1 ? `, from ${srcTop.length} sources` : `, from ${srcTop[0].publisher}`) +
       `.${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed.slice(0, 5))}.` : ''} Every claim links to where it came from.`;
 
+    // --- one page per slice of the list ---------------------------------------------------------
+    // The body below stays at this indent on purpose. It is one page's worth of template and the
+    // markup lives inside a literal, so shifting the code would shift the HTML it writes.
+    for (let pageNo = 1; pageNo <= pageCount; pageNo += 1) {
+    const shown = rows.slice((pageNo - 1) * CARD_BUDGET, pageNo * CARD_BUDGET);
+    const first = (pageNo - 1) * CARD_BUDGET + 1;
+    const last = first + shown.length - 1;
+    const pageUrl = pageNo === 1 ? url : url + '/' + pageNo;
+    const pageFile = pageNo === 1 ? file : file.replace(/\.html$/, '/' + pageNo + '.html');
+    const ofN = ', page ' + pageNo + ' of ' + pageCount;
+    // The title is drawn from a pool so that it is not the h1 over again, and a page of a series
+    // keeps that draw and adds its number to it.
+    const pageTitle = pageNo === 1 ? title : title + ofN;
+    const pageH1 = pageNo === 1 ? h1 : h1 + ofN;
+    // A language two or more of these providers also work in has to be in the description of every
+    // page of the series. Leaving it to the first hid French from four of Madrid's five.
+    const pageDesc = pageNo === 1 ? desc
+      : `Entries ${first} to ${last} of the ${rows.length} ${P.catName(cat)} in ${city.name} whose ` +
+        `${langName} is stated by the list that names them.` +
+        `${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed.slice(0, 5))}.` : ''}` +
+        ` Page ${pageNo} of ${pageCount}, and every claim links to where it came from.`;
+    // The standfirst opens with the count, so a page of the series opens with its range and reads
+    // straight on into it rather than saying 519 twice in one sentence.
+    const pageStand = pageNo === 1 ? standfirst : `Entries ${first} to ${last} of the ` + standfirst;
+
     // --- listing --------------------------------------------------------------------------------
     const icon = inlineIcon(CAT_ICON[cat]);
     const cards = shown.map((r) => P.card(r, { icon, showCategory: false })).join('\n        ');
@@ -243,13 +297,15 @@ for (const pair of Object.values(M.pairs)) {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: BASE + c[1] }))
-          .concat([{ '@type': 'ListItem', position: crumbs.length + 1, name: langName, item: BASE + url }]),
+          .concat([{ '@type': 'ListItem', position: crumbs.length + 1, name: langName, item: BASE + url }])
+          .concat(pageNo > 1 ? [{ '@type': 'ListItem', position: crumbs.length + 2, name: 'Page ' + pageNo, item: BASE + pageUrl }] : []),
       },
       {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        name: h1,
-        url: BASE + url,
+        name: pageH1,
+        url: BASE + pageUrl,
+        isPartOf: pageCount > 1 ? { '@type': 'CollectionPage', name: h1, url: BASE + url } : undefined,
         inLanguage: 'en',
         dateModified: checked[checked.length - 1] || undefined,
         spatialCoverage: { '@type': 'City', name: city.name, containedInPlace: { '@type': 'Country', name: city.country } },
@@ -272,7 +328,9 @@ for (const pair of Object.values(M.pairs)) {
         },
       },
     ];
-    if (faq.length >= 2) {
+    // The same three answers on five URLs are not five FAQs, so only the first page carries the
+    // markup. A reader still gets to read them on every page.
+    if (faq.length >= 2 && pageNo === 1) {
       ld.push({
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -299,20 +357,36 @@ for (const pair of Object.values(M.pairs)) {
       return `<a class="svp-chip" href="${href}">${esc(x.name)}<span>${x.n}</span></a>`;
     }).join('');
 
+    // A list too long for one page gets a pager, not a grey line of underlined numbers. It is built
+    // from the same bordered chip the language and city links use, so it belongs to the page.
+    const pgHref = (n) => (n === 1 ? url : url + '/' + n);
+    const pager = pageCount < 2 ? '' : `<nav class="svp-pager" aria-label="Pages of this list">
+        <p class="svp-pager-count">Page ${pageNo} of ${pageCount} &middot; showing ${first} to ${last} of ${rows.length}</p>
+        <ul>
+          ${pageNo > 1 ? `<li><a class="svp-pg svp-pg-step" rel="prev" href="${pgHref(pageNo - 1)}">&lsaquo; Previous</a></li>` : ''}
+          ${pageWindow(pageNo, pageCount).map((n) => n === 0
+            ? '<li><span class="svp-pg-gap">&hellip;</span></li>'
+            : n === pageNo
+              ? `<li><span class="svp-pg svp-pg-now" aria-current="page">${n}</span></li>`
+              : `<li><a class="svp-pg" href="${pgHref(n)}">${n}</a></li>`).join('\n          ')}
+          ${pageNo < pageCount ? `<li><a class="svp-pg svp-pg-step" rel="next" href="${pgHref(pageNo + 1)}">Next &rsaquo;</a></li>` : ''}
+        </ul>
+      </nav>`;
+
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 ${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${esc(title)} | The Nomad HQ</title>
-  <meta name="description" content="${esc(desc)}">
-  <link rel="canonical" href="${BASE}${url}">
-  <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta property="og:title" content="${esc(title)} | The Nomad HQ">
-  <meta property="og:description" content="${esc(desc)}">
+  <title>${esc(pageTitle)} | The Nomad HQ</title>
+  <meta name="description" content="${esc(pageDesc)}">
+  <link rel="canonical" href="${BASE}${pageUrl}">
+${pageNo > 1 ? `  <link rel="prev" href="${BASE}${pgHref(pageNo - 1)}">\n` : ''}${pageNo < pageCount ? `  <link rel="next" href="${BASE}${pgHref(pageNo + 1)}">\n` : ''}  <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta property="og:title" content="${esc(pageTitle)} | The Nomad HQ">
+  <meta property="og:description" content="${esc(pageDesc)}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="${BASE}${url}">
+  <meta property="og:url" content="${BASE}${pageUrl}">
   <meta property="og:image" content="${BASE}/assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
@@ -329,7 +403,16 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
     .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
     .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
-    .svp-capped { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: var(--color-stone); }
+    .svp-pager { margin: var(--space-6) 0 0; }
+    .svp-pager-count { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--color-stone); }
+    .svp-pager ul { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; list-style: none; margin: 0; padding: 0; }
+    .svp-pg { display: inline-flex; align-items: center; justify-content: center; min-width: 2.4rem; height: 2.4rem;
+      padding: 0 .7rem; font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums;
+      border: 1px solid var(--color-sand-dark, #e3d9c6); border-radius: var(--radius-md, 8px); background: #fff; }
+    a.svp-pg:not(.btn):not(.nav-link) { color: var(--color-ink); text-decoration: none; }
+    a.svp-pg:hover { border-color: var(--color-terracotta, #c65d3b); color: var(--color-terracotta, #c65d3b); }
+    .svp-pg-now { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+    .svp-pg-gap { display: inline-flex; justify-content: center; min-width: 1.4rem; color: var(--color-stone); }
     .svp-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -351,17 +434,17 @@ ${shell.headEnd}
   ${shell.nav}
   <main class="svp-page" id="main-content">
     <div class="container">
-      <p class="svp-crumbs">${crumbs.map((c) => `<a href="${c[1]}">${esc(c[0])}</a>`).join(' &rsaquo; ')} &rsaquo; ${esc(langName)}</p>
+      <p class="svp-crumbs">${crumbs.map((c) => `<a href="${c[1]}">${esc(c[0])}</a>`).join(' &rsaquo; ')} &rsaquo; ${pageNo === 1 ? esc(langName) : `<a href="${url}">${esc(langName)}</a> &rsaquo; Page ${pageNo}`}</p>
       <header class="svp-head">
-        <h1>${esc(h1)}</h1>
-        <p class="svp-stand">${esc(standfirst)}</p>
+        <h1>${esc(pageH1)}</h1>
+        <p class="svp-stand">${esc(pageStand)}</p>
       </header>
       ${ymyl}
 
       <div class="sv-grid">
         ${cards}
       </div>
-      ${capped ? `<p class="svp-capped">Showing ${CARD_BUDGET} of ${rows.length}. The rest are on the source this page draws from, which is searchable in full and linked on every card.</p>` : ''}
+      ${pager}
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -385,14 +468,16 @@ ${shell.bodyEnd}
 </body>
 </html>`;
 
-    shell.assertComplete(html, url);
-    const dir = path.join(ROOT, 'services', city.id, M.SERVICE_SLUGS[cat]);
+    shell.assertComplete(html, pageUrl);
+    const dir = path.dirname(path.join(ROOT, pageFile));
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(ROOT, file), html);
+    fs.writeFileSync(path.join(ROOT, pageFile), html);
     written.push({
-      url, file, kind: 'city-lang', city: city.id, service: cat, language: lang,
+      url: pageUrl, file: pageFile, kind: 'city-lang', city: city.id, service: cat, language: lang,
+      page: pageNo, pages: pageCount,
       n: rows.length, shown: shown.length, parent: parent.url, title, h1, indexable: true,
     });
+    }
   }
 }
 
@@ -415,9 +500,17 @@ ${shell.bodyEnd}
 }
 
 fs.writeFileSync(path.join(ROOT, 'data', 'service-city-lang-pages.json'), JSON.stringify(written, null, 1) + '\n');
-const totalRows = written.reduce((a, w) => a + w.n, 0);
+// n is the length of the whole list, so it counts once per list rather than once per page of one:
+// summed over every row it reported 5,163 providers across the three series where there are 2,407.
+const lists = written.filter((w) => w.page === 1);
+const totalRows = lists.reduce((a, w) => a + w.n, 0);
 const totalShown = written.reduce((a, w) => a + w.shown, 0);
-console.log(`Wrote ${written.length} city-service-language pages holding ${totalRows} providers, ${totalShown} of them on the page.`);
+const series = lists.filter((w) => w.pages > 1);
+console.log(`Wrote ${written.length} pages over ${lists.length} city-service-language lists, holding ${totalRows} providers, ${totalShown} of them on the page.`);
+if (series.length) {
+  console.log('  too long for one page, so carried over a series: ' +
+    series.map((w) => w.url.replace('/services/', '') + ' (' + w.n + ' over ' + w.pages + ')').join(', '));
+}
 if (skipped.length) {
   console.log('  not written, the language covers too much of its parent to be a different page: ' + skipped.length);
   skipped.slice(0, 4).forEach((s) => console.log('    ' + s));

@@ -154,7 +154,7 @@ for (const [cat, svc] of Object.entries(M.services)) {
       },
       {
         q: `Does a listing mean the ${P.singular(cat)} speaks ${langName} personally?`,
-        a: `Not always. Some sources name a practice whose staff include a ${langName} speaker rather than the named person, and each card quotes the wording its source used.`,
+        a: `Not always. Some sources name a practice whose staff include ${P.an(langName)} speaker rather than the named person, and each card quotes the wording its source used.`,
       },
     ];
 

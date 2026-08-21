@@ -59,7 +59,7 @@ const SKELETONS_ONE_LANGUAGE = [
   (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}`,
   (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}, each with its source`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}, ${t.n} listed and checked ${t.month}`,
-  (t) => `Where to find a ${t.lang1}-speaking ${t.singular} in ${t.city}: ${t.n} listed`,
+  (t) => `Where to find ${P.an(t.lang1)}-speaking ${t.singular} in ${t.city}: ${t.n} listed`,
   (t) => `${t.n} ${t.service} in ${t.city} who work in ${t.lang1}, with a source for each`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}: ${t.n} names and where they came from`,
   (t) => `${t.Service} in ${t.city} for ${t.lang1} speakers, ${t.n} with a cited source`,
@@ -192,7 +192,13 @@ const linkTo = (slug, category) => (WILL_EXIST.has(slug + '|' + category)
 const CITY_LANG_PAGES = new Map();
 {
   const f = path.join(ROOT, 'data', 'service-city-lang-pages.json');
-  if (fs.existsSync(f)) JSON.parse(fs.readFileSync(f, 'utf8')).forEach((x) => CITY_LANG_PAGES.set(x.city + '|' + x.service + '|' + x.language, x));
+  // A list too long for one page writes a row per page of itself, all three keyed alike, so the
+  // last one won and this page sent readers to page 5 of Madrid's English translators. The first
+  // page is the one somebody types and the only one that opens the series.
+  if (fs.existsSync(f)) {
+    JSON.parse(fs.readFileSync(f, 'utf8')).filter((x) => (x.page || 1) === 1)
+      .forEach((x) => CITY_LANG_PAGES.set(x.city + '|' + x.service + '|' + x.language, x));
+  }
 }
 // How many cards a section shows when its overflow has a page of its own: enough to see what the
 // list looks like, few enough that the link is the obvious next move.
