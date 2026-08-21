@@ -207,15 +207,34 @@ const localityOf = (text) => {
 
 // A provider is a person or a practice. These are the things that keep arriving instead: the
 // mission's own address block, a job description, a department, a street.
-const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+// A professional body is not a professional. Every one of these lists closes by naming the bar
+// association or the medical council to complain to, and reading the whole registry through put the
+// Anwaltskammer der Republik Armenien on the site as a Yerevan law firm.
+const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Medical Association|Medical Council|Chamber of|Kammer)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+
+// The address glued onto the end of the name, and the sentence that carries on from the entry above.
+// "Dr. PALMISANO Ebertystr. 31" is a translator and a street run together; "Also available c/o
+// clinic Le Betulle in Appiano Gentile, 22070 Como" is a note about whoever was named on the line
+// before, and the town it names is Como rather than the Milan it was about to be filed under.
+const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$/i;
 
 // A name made only of the words for what the business is, "Studio Legale" or "Law Office" with no
 // firm in front of it, is a name the parser failed to find. It reached the directory once and the
 // duplicate gate caught it, because it is contained in six real firms on the same page.
-const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dr|und|and|e|y|de|the)$/i;
+// Reading the whole registry through added the second half of this: "SPECIALIZED HOSPITALS", which
+// is a section heading, and "Dental hygienist", which is a job rather than anybody who holds it.
+const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dr|und|and|e|y|de|the|specialized|specialised|hospital|hospitals|hygienist|hygienists|doctor|doctors|dentist|dentists|physician|physicians|lawyer|lawyers|attorney|attorneys|translator|translators|interpreter|interpreters|general|specialist|specialists|also|available|other|others)$/i;
 const isGenericName = (s) => String(s).split(/[^A-Za-zÀ-ÿ]+/).filter(Boolean).every((w) => GENERIC_WORD.test(w));
 
-const asciiFold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
+/**
+ * A letter with a stroke through it is one letter, not a letter plus an accent, so NFD leaves it
+ * whole and the "drop anything not printable ASCII" step then deletes it outright. Rocławski came
+ * out as Rocawski and Jarosław as Jarosaw: not a name with the accents taken off, a name with a
+ * letter missing. These are the ones the consular lists actually contain.
+ */
+const STROKED = [[/[łŁ]/g, 'l'], [/[øØ]/g, 'o'], [/[đĐ]/g, 'd'], [/[ıİ]/g, 'i'], [/[æÆ]/g, 'ae'],
+  [/[œŒ]/g, 'oe'], [/[åÅ]/g, 'aa'], [/[þÞ]/g, 'th'], [/[ðÐ]/g, 'd'], [/[ħĦ]/g, 'h']];
+const asciiFold = (s) => STROKED.reduce((t, [re, r]) => t.replace(re, r), String(s || '')).normalize('NFD').replace(/[̀-ͯ]/g, '')
   .replace(/[‘’]/g, "'").replace(/[“”«»„]/g, '"').replace(/[–—]/g, ', ').replace(/[°º]/g, '')
   .replace(/[^\x20-\x7E]/g, '').replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/^[,\s]+|[,\s]+$/g, '');
 
@@ -363,10 +382,14 @@ for (const src of manifest) {
     const cat = ownWords.trim() ? categorise(ownWords, '') : '';
     if (!cat) { stats.noCategory++; continue; }
 
-    // A form of address is not part of a name.
-    const name = asciiFold(r.name).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '');
+    // A form of address is not part of a name. Nor is a dash and a lower-case phrase after it, which
+    // is what the entry does rather than who it is: the Polish list for Berlin writes "Rechtsanwalt
+    // Jaroslaw Delekta - prawo cywilne", and the practice area belongs in the note with the rest of
+    // the detail rather than on the card as part of his name.
+    const name = asciiFold(r.name).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
+      .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim();
     const k = key(name);
-    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name) || isGenericName(name)) { stats.noName++; continue; }
+    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || isGenericName(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
     if (map.has(k)) { stats.already++; continue; }
 

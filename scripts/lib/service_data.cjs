@@ -59,6 +59,7 @@ const LOCAL = {
   // German, French or Italian.
   'United States': 'en', China: 'zh',
   Australia: 'en', 'New Zealand': 'en', Canada: null, 'United Kingdom': 'en', Ireland: 'en',
+  Denmark: 'da', Armenia: null,
   Albania: 'sq', Bolivia: 'es', Ecuador: 'es', Jordan: 'ar', Norway: 'no', Switzerland: 'de',
   'Costa Rica': 'es', Ethiopia: null, Guatemala: 'es', Israel: 'he', Laos: null,
   Montenegro: null, Myanmar: 'my', Nepal: 'ne', 'North Macedonia': null, Oman: 'ar',
