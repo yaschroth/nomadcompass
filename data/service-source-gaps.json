@@ -70,6 +70,40 @@
    "found": "A roster list of sworn translators working into and out of German, fourteen of whose entries a reader can see, filed in the registry under Santiago.",
    "why": "The list covers the whole of Chile and writes its addresses as \"<street> <number>, <town>\" with no postcode, which is a shape localityOf does not recognise, so every row falls back to the city the manifest names. Seven of the fourteen are in comunas of Santiago (Providencia, Nunoa, Las Condes, Vitacura, Recoleta) and belong there. The rest are in Vina del Mar, Curico, Los Angeles, Temuco and San Pedro de la Paz, between 100 and 670 km away, and would have gone out as Santiago providers. Telling a comuna of Santiago from a town in the south needs a list of comunas that we do not hold, so the whole source waits rather than half of it going out wrong.",
    "wouldChange": "Not what this entry said on 2026-08-23, which was to teach localityOf to read a town after the last comma where there is no postcode. That was tried and measured on 2026-08-23 and it is wrong: outside Europe the last piece of an address is a district far more often than a town. It read Silom as a town rather than Bangkok, Tay Ho rather than Hanoi, El Poblado rather than Medellin, Vake rather than Tbilisi, and it read \"Tepic 139, Roma Sur\" in Mexico City as Rome. 320 published rows would have been refused as being in the wrong city, 9 of them rows this ingest wrote. There is no way to tell a district from a town by shape, only by gazetteer. So what would change the answer is a list of place names that says which is which, for Chile a list of the comunas of Greater Santiago, and nothing short of that. Until then this source stays out."
+  },
+  {
+   "country": "any",
+   "sendingCountry": "Switzerland (EDA/FDFA, eda.admin.ch)",
+   "checked": "2026-08-23",
+   "looked": [
+    "https://www.eda.admin.ch/countries/czech-republic/de/home/dienstleistungen/arzt-anwalt.html",
+    "https://www.eda.admin.ch/countries/ireland/en/home/services/legal-medical-practitioner.html"
+   ],
+   "found": "The page exists and was read. It is headed \"Vertrauensarzt und Vertrauensanwalt\" and gives the embassy's trusted law firm (UEPA advokati, Prague 8) plus two more (PRK Partners, Roedl & Partner) with street addresses, and three hospitals that treat foreign patients. Real providers, real addresses, last updated 24.01.2025.",
+   "why": "It makes no claim about language, which is the only thing this directory indexes. The page says the embassy gives no legal advice and that these firms may be contacted, \"alle Angaben sind unverbindlich und ohne Gewaehr\". It never says the lawyers work in German, French or Italian, and the German wording is the German edition of a site that also has French and Italian editions rather than a statement about the firms. It closes by pointing readers at the German, French or Italian embassy websites for more, which is a source telling us it is not the one making the claim. Publishing these as German-speaking lawyers would be inventing the finding.\n\nThe 403 that blocked the first attempt is solved and worth recording: eda.admin.ch refuses a plain fetch, curl with a browser user agent, and Apify's RAG browser alike, but apify/website-content-crawler with crawlerType playwright:firefox through the RESIDENTIAL proxy group with apifyProxyCountry CH returns 200. That route is free and works for any WAF like it.",
+   "wouldChange": "A Swiss page for some country that does state a working language. The Czech one is the shape the FDFA uses and it does not, so the seam is probably dead for this directory whatever the country. Check one more of a different shape before spending anything on it, and note that the German and English editions of several country pages return the site-wide navigation or a 404 rather than a list, so the country and the edition both have to be right."
+  },
+  {
+   "country": "any",
+   "sendingCountry": "The Netherlands (nederlandwereldwijd.nl)",
+   "checked": "2026-08-23",
+   "looked": [
+    "https://www.nederlandwereldwijd.nl/tolken-vertalers/portugal"
+   ],
+   "found": "A per-country list of interpreters and translators compiled by the Dutch embassy, with an explicit per-entry language pair on every row (\"Vertaler (Nederlands-Portugees-Nederlands)\"), which is the strongest kind of claim there is. Fetches cleanly with a browser user agent.",
+   "why": "The entries carry a telephone, a mobile and an e-mail and NO address, so no row can be placed in a city and the address gate refuses all of them. The same shape as the Italian consulate translator list for Sydney. Country slugs are Dutch and do not follow the English name: /tolken-vertalers/spanje is a 404, so each country has to be found rather than guessed.",
+   "wouldChange": "A way to place a provider that publishes no address. Everything else about these lists is ideal, and the lawyer lists (/advocaten-<country>) may carry offices where the translator lists do not; only Thailand has been read."
+  },
+  {
+   "country": "Ireland",
+   "sendingCountry": "Belgium (diplomatie.belgium.be)",
+   "checked": "2026-08-23",
+   "looked": [
+    "https://ireland.diplomatie.belgium.be/en/consular-services"
+   ],
+   "found": "Nothing. The Dublin post publishes passports, civil status, nationality, legalisation and notarial competence, and no list of lawyers, doctors or translators.",
+   "why": "Belgium has a country site per post on a clean subdomain, but what each post publishes is up to the post. Four of them carry lists and are already read (Portugal, Hungary, South Africa, Thailand); the paths differ between them, so there is no pattern to enumerate. Dublin was tried because it would have been the first list for a city that holds one provider.",
+   "wouldChange": "Nothing systematic. Belgian posts have to be checked one at a time, at a low hit rate."
   }
  ]
 }
