@@ -24,6 +24,7 @@ const { execFileSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
+const T = require(path.join(ROOT, 'scripts', 'lib', 'service_text.cjs'));
 const manifestPath = process.argv[2];
 if (!manifestPath) { console.error('usage: node scripts/ingest_verified_sources.cjs <manifest.json> [--preview] [--only <city>]'); process.exit(2); }
 const PREVIEW = process.argv.includes('--preview');
@@ -139,8 +140,24 @@ const CITY_NAMES = Object.values(M.CITY).map((c) => ({
     .map((n) => String(n).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()),
 }));
 const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+/**
+ * A city's name has to be a word of the text, not a run of letters inside a longer one.
+ *
+ * "2700 Wiener Neustadt" holds "Wien" the way "Romania" holds "Roma", and a firm 50 km down the
+ * road from Vienna was about to be published as a Vienna lawyer for it. Bounded on both sides by
+ * something that is not a letter, which still lets "Berlin-Mitte" and "Frankfurt am Main" name
+ * their own cities.
+ */
+const nameWord = (t, n) => {
+  for (let i = t.indexOf(n); i >= 0; i = t.indexOf(n, i + 1)) {
+    const before = i === 0 ? '' : t[i - 1];
+    const after = t[i + n.length] || '';
+    if (!/[a-z]/.test(before) && !/[a-z]/.test(after)) return true;
+  }
+  return false;
+};
 const matchCity = (t) => CITY_NAMES.slice().sort((a, b) => b.needles[0].length - a.needles[0].length)
-  .find((c) => c.needles.some((n) => n.length > 3 && t.includes(n)));
+  .find((c) => c.needles.some((n) => n.length > 3 && nameWord(t, n)));
 
 /**
  * Which of our cities an address names, or nothing if it names none.
@@ -224,7 +241,7 @@ const localityOf = (text) => {
 // A professional body is not a professional. Every one of these lists closes by naming the bar
 // association or the medical council to complain to, and reading the whole registry through put the
 // Anwaltskammer der Republik Armenien on the site as a Yerevan law firm.
-const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Medical Association|Medical Council|Chamber of|Kammer|Academy|Akademie|Law School|School of Law|Faculty of)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Medical Association|Medical Council|Chamber of|\w*kammer|Academy|Akademie|Law School|School of Law|Faculty of|Universit(?:y|e|é|à|a|ät|ae)|Ambasad\w*|Ambasciata|Cancelleria|Consolare)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
 
 // The address glued onto the end of the name, and the sentence that carries on from the entry above.
 // "Dr. PALMISANO Ebertystr. 31" is a translator and a street run together; "Also available c/o
@@ -236,9 +253,46 @@ const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consol
 // A table's own header row, read as if it were an entry. The Italian consulate's Barcelona list
 // puts "COGNOME NOME CITTA INDIRIZZO TELEFONO" in its first row, and it arrived as a paediatric
 // dentist called ODONTOIATRA PEDIATRICA whose address was the names of the columns.
-const HEADER_ROW = /\bCOGNOME\b[^\n]*\bNOME\b|\bNAME\b[^\n]*\bADDRESS\b[^\n]*\b(TEL|PHONE)/i;
+const HEADER_ROW = /\bCOGNOME\b[^\n]*\bNOME\b|\bNAME\b[^\n]*\bADDRESS\b[^\n]*\b(TEL|PHONE)|\bNome\b[^\n]*\bIndirizzo\b|\bSpecializzazione\b[^\n]*\bNome\b/i;
 const NAME_IS_A_LIST = /\w*liste\b|^Liste\b|^List of\b|^Elenco\b|^Lista\b/i;
+
+// The name of a place is a heading, not somebody in it. The U.S. consulate's Chiang Mai list sets
+// its sections by province and "CHIANG MAI" and "KAMPHAENG PHET" arrived as providers; a name that
+// is one of our cities and nothing else is the heading the entries below it sit under. "Bangkok
+// Hospital" keeps its place, because a city plus a word is a business and a city alone is not.
+const isOnlyAPlace = (n) => {
+  const c = matchCity(fold(n));
+  return !!c && c.needles.some((x) => fold(n) === x);
+};
 const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$/i;
+
+/**
+ * A title is not part of a name, wherever in the name it sits.
+ *
+ * The German-Italian lawyer lists put both countries' titles around the person: "Michael RA und
+ * Avv. Dr. BUSE", "Federico Avv. und RA MAGGIANI", "Cora RAin Dr. STEINRINGER". A leading form of
+ * address came off already; these sit in the middle and went out on the card as part of the name.
+ * The conjunction goes with them where all it joined was two titles, and stays where it joins two
+ * people, because "Rossi e Bianchi" is a firm of two.
+ *
+ * From the second word on and never the last, because a profession in front of a person is a title
+ * and the same word behind a firm is its name: "Tinzl & Frank Rechtsanwalte" is what that firm is
+ * called, and taking the last word off it made a second Innsbruck row for a firm already listed.
+ * Never the first either. Stripping a leading "Dr." would rename several hundred people already
+ * published with it, and would leave "Dr. Smith" one word long and refuse it for not being a name.
+ */
+// Written the way the lists write them, and matched that way. "RA" is how a German list abbreviates
+// Rechtsanwalt, and it is also a Korean surname: case is the whole of what tells them apart.
+const NAME_TITLE = /^(?:RA|RAin|Avv|Avvocat[oa]|Dott|Dr|Dres|Rechtsanw\w*|Mag|med)\.?$/;
+// A German list abbreviates und to u., which is how "Doris Avv. u. RAin REICHEL" kept a lone
+// "u." on the card after the two titles either side of it came off.
+const NAME_JOINER = /^(?:und|u\.?|and|e|y|et)$/i;
+const withoutTitles = (n) => {
+  const w = n.split(/\s+/);
+  return w.filter((x, i) => i === 0 || i === w.length - 1 || (!NAME_TITLE.test(x)
+    && !(NAME_JOINER.test(x) && (NAME_TITLE.test(w[i - 1] || '') || NAME_TITLE.test(w[i + 1] || ''))))).join(' ');
+};
+
 
 // A name made only of the words for what the business is, "Studio Legale" or "Law Office" with no
 // firm in front of it, is a name the parser failed to find. It reached the directory once and the
@@ -254,7 +308,8 @@ const isGenericName = (s) => String(s).split(/[^A-Za-zÀ-ÿ]+/).filter(Boolean).
  * out as Rocawski and Jarosław as Jarosaw: not a name with the accents taken off, a name with a
  * letter missing. These are the ones the consular lists actually contain.
  */
-const STROKED = [[/[łŁ]/g, 'l'], [/[øØ]/g, 'o'], [/[đĐ]/g, 'd'], [/[ıİ]/g, 'i'], [/[æÆ]/g, 'ae'],
+const STROKED = [[/ß/g, 'ss'], [/ẞ/g, 'SS'],
+  [/[łŁ]/g, 'l'], [/[øØ]/g, 'o'], [/[đĐ]/g, 'd'], [/[ıİ]/g, 'i'], [/[æÆ]/g, 'ae'],
   [/[œŒ]/g, 'oe'], [/[åÅ]/g, 'aa'], [/[þÞ]/g, 'th'], [/[ðÐ]/g, 'd'], [/[ħĦ]/g, 'h']];
 const asciiFold = (s) => STROKED.reduce((t, [re, r]) => t.replace(re, r), String(s || '')).normalize('NFD').replace(/[̀-ͯ]/g, '')
   .replace(/[‘’]/g, "'").replace(/[“”«»„]/g, '"').replace(/[–—]/g, ', ').replace(/[°º]/g, '')
@@ -442,7 +497,7 @@ for (const src of manifest) {
     if (town) {
       const target = M.CITY[city];
       const names = [target.name, ...(ALIASES[city] || [])].map(fold);
-      const isTarget = names.some((n) => fold(town).includes(n) || n.includes(fold(town)));
+      const isTarget = names.some((n) => nameWord(fold(town), n) || nameWord(n, fold(town)));
       const elsewhereWeCover = !isTarget && !!matchCity(fold(town));
       if (!isTarget && (elsewhereWeCover || !src.metro)) { stats.placedElsewhere++; continue; }
     }
@@ -488,19 +543,45 @@ for (const src of manifest) {
     // The name counts too where it says what the business is: "Studio Legale", "Law Office",
     // "Zahnarztpraxis". What must not count is the source's own category list, which is what filed
     // every Madrid doctor as a dentist.
+    //
+    // Unless the source names one profession and only one. A list of a single profession does not
+    // repeat it on every row: the German embassy's Rome translator list groups its 72 entries by
+    // where they live ("Rom und Umbebung - Roma e dintorni") and by what they translate
+    // ("Recht, Finanz u.a."), and 44 of them were refused for not saying what the page heading
+    // says. The Madrid mistake was taking the FIRST of several categories a verifier recorded.
+    // Where the verifier recorded exactly one, there is no first to pick wrong.
+    //
+    // A fallback and not an override, because a verifier can record less than a list holds. The
+    // German embassy's Bogota list is filed as doctors and has a Zahnmedizin section in it, and six
+    // dentists, two psychotherapists and a physiotherapist on it say so themselves. Where the row
+    // has a word of its own, that word still wins.
+    //
+    // Except on a translator list, where it does not, because a translator's entry says what they
+    // translate and every one of those subjects is the name of another profession. "Alles,
+    // spezialisiert in medizinischen Texten" published Rolf Platiel as a doctor in Rome, and
+    // "EXPRESSAO, Lda., Recht, Finanzwesen" put Susana Peixoto among the lawyers of Porto. It is
+    // the rule SUBJECT_LIST already applies to an agency that writes "Uebersetzungen:" with a
+    // colon, and a page published as a list of translators is better evidence than the colon.
+    const sole = (src.categories || []).length === 1 ? src.categories[0] : '';
     const ownWords = [r.specialty, r.role, r.hospital, r.detail, r.name].filter(Boolean).join(' ');
-    const cat = ownWords.trim() ? categorise(ownWords, '') : '';
+    const own = ownWords.trim() ? categorise(ownWords, '') : '';
+    const cat = sole === 'translator' ? sole : (own || sole);
     if (!cat) { stats.noCategory++; continue; }
 
     // A form of address is not part of a name. Nor is a dash and a lower-case phrase after it, which
     // is what the entry does rather than who it is: the Polish list for Berlin writes "Rechtsanwalt
     // Jaroslaw Delekta - prawo cywilne", and the practice area belongs in the note with the rest of
     // the detail rather than on the card as part of his name.
-    const name = asciiFold(r.name).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
-      .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim();
+    // A footnote marker is not part of a name. The German embassy Rome list stars the translators
+    // who are sworn before a court, and forty cards were about to read "Christine ALBRECHT*" and
+    // "Alessandra RIDOLFI *" as though the star were a letter of the name.
+    const name = withoutTitles(asciiFold(T.unentity(r.name).replace(/\*/g, ' ')).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
+      .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim());
     const k = key(name);
-    if (!k || k.split(' ').length < 2 || /[:(\[]|,$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
-      || HEADER_ROW.test(where) || isGenericName(name)) { stats.noName++; continue; }
+    // A bracket on either side of the name and not only an opening one: "Upadlosc i restrukturyzacja)"
+    // is the tail of a practice-area list. A name that ends in "&" is a firm the reader cut in half.
+    if (!k || k.split(' ').length < 2 || /[:()\[\]]|[,&]$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
+      || HEADER_ROW.test(where) || HEADER_ROW.test(name) || isGenericName(name) || isOnlyAPlace(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
     if (map.has(k)) { stats.already++; continue; }
 
@@ -524,8 +605,8 @@ for (const src of manifest) {
       // Trimmed at both ends, not just the right. A reader that finds an empty cell before the
       // address leaves the punctuation behind it, and ";, , Facharzt fur Haut- und
       // Geschlechtskrankheiten" went out with the semicolon and two commas still on the front.
-      area: asciiFold((r.area || '').split(/\b(?:Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b/i)[0]
-        || withoutContact).replace(/^[;,.\s]+/, '').replace(/[,;\s]+$/, '').slice(0, 120),
+      area: T.tidyAddress(asciiFold((r.area || '').split(/\b(?:Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b/i)[0]
+        || withoutContact), 120),
       note: bits.join(' ').replace(/\s+/g, ' ').trim(),
     };
     if (/[^\x20-\x7E]/.test(JSON.stringify(row))) { stats.noName++; continue; }
@@ -535,6 +616,7 @@ for (const src of manifest) {
       stats.noAddress = (stats.noAddress || 0) + 1;
       continue;
     }
+    if (T.RUN_TOGETHER.test(row.area)) { stats.twoInOne = (stats.twoInOne || 0) + 1; continue; }
     map.set(k, row);
     fresh.push(row);
     stats.kept++;
@@ -552,6 +634,7 @@ report.forEach((x) => {
     + '  no cat ' + String(x.noCategory || 0).padStart(3)
     + '  local only ' + String(x.onlyLocal || 0).padStart(3)
     + '  no addr ' + String(x.noAddress || 0).padStart(3)
+    + '  two-in-one ' + String(x.twoInOne || 0).padStart(3)
     + '  no name ' + String(x.noName || 0).padStart(3)
     + '  dup ' + String(x.already || 0).padStart(3)
     + '  ' + path.basename(x.src.file));
@@ -591,6 +674,7 @@ fs.writeFileSync(proposalFile, JSON.stringify({
     refused: {
       placedElsewhere: x.placedElsewhere || 0,
       noAddress: x.noAddress || 0,
+      twoInOne: x.twoInOne || 0,
       onlyLocal: x.onlyLocal || 0,
       noLanguage: x.noLanguage || 0,
       noCategory: x.noCategory || 0,
