@@ -40,6 +40,17 @@ const LANG = {
   // Two spellings the Athens list gets wrong. Both are unambiguous, and dropping a language because
   // the mission mistyped it would understate what the doctor speaks.
   deutch: 'de', italienenisch: 'it',
+  // Swedish, because the Swedish missions write the claim in Swedish and none of it was readable:
+  // "Svensk- och engelsktalande advokater i Tyskland" annotates each of its lawyers "(svenska,
+  // engelska)" and the lexicon matched not one of them. Two Swedish words already worked by
+  // accident, spanska through the span- key and italienska through italien-, which is the kind of
+  // luck that hides a gap.
+  svenska: 'sv', svensk: 'sv', engelska: 'en', engelsk: 'en', tyska: 'de', tysk: 'de',
+  franska: 'fr', finska: 'fi', norska: 'no', danska: 'da', ryska: 'ru', polska: 'pl',
+  nederlandska: 'nl', hollandska: 'nl', portugisiska: 'pt', grekiska: 'el', turkiska: 'tr',
+  arabiska: 'ar', kinesiska: 'zh', japanska: 'ja', koreanska: 'ko', ungerska: 'hu',
+  tjeckiska: 'cs', rumanska: 'ro', estniska: 'et', lettiska: 'lv', litauiska: 'lt',
+  isländska: 'is', islandska: 'is', hebreiska: 'he', persiska: 'fa', thailandska: 'th',
 };
 
 // Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
@@ -60,7 +71,20 @@ const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/
  */
 const readLanguages = (line, allowLetters, unknown) => {
   const out = [];
-  fold(line).split(/[,;/|+&]+|\band\b|\bund\b|\bou\b|\boder\b|\be\b/).map((p) => p.trim()).filter(Boolean)
+  // A bracket is not part of a word. The Swedish list for Germany puts its languages in parentheses
+  // and this file's PDF reader renders the closing one as a backslash, so the parts arrived as
+  // "(svenska" and "engelska\" and startsWith matched neither. "och" is Swedish for and.
+  const bare = (p) => p.replace(/^[("'[\\\s]+/, '').replace(/[)"'\]\\\s.]+$/, '');
+  // The label in front of the claim, which is not one of the languages. Without this the example in
+  // the comment above did not work: "Sprachen: D / E / F" gave French alone, because the first part
+  // was "sprachen: d" rather than "d" and a two-word part is not a letter.
+  const said = fold(line).replace(/^\s*[a-zà-ÿ ]{4,30}:\s*/, '');
+  // A lone "e" is Italian for and, which is why it separates parts. Under a label where single
+  // letters are the convention it is English instead, so it cannot also be the separator there.
+  const parts = allowLetters
+    ? said.split(/[,;/|+&]+|\band\b|\bund\b|\boch\b|\bou\b|\boder\b/)
+    : said.split(/[,;/|+&]+|\band\b|\bund\b|\boch\b|\bou\b|\boder\b|\be\b/);
+  parts.map((p) => bare(p.trim())).filter(Boolean)
     .forEach((p) => {
       const hit = Object.keys(LANG).find((k) => p.startsWith(k));
       if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
