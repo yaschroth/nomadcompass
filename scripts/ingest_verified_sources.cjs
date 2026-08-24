@@ -355,12 +355,27 @@ const runParser = (script, args) => {
 // say which of its rows belongs where. Without this, the Bangkok page was read once for Bangkok and
 // once for Chiang Mai and put the same five doctors in both: a reader in Chiang Mai would have been
 // sent 700 km. On those files the address has to name the city, or the row is left out.
+/**
+ * A source may be held back, and the reason belongs in the registry rather than in the name of a
+ * file in somebody's scratchpad.
+ *
+ * Two of those decisions were real and both lived only as the filename "registry-minus-taipei.json".
+ * Rebuilding the manifest from the registry on 2026-08-24 quietly undid one of them and produced ten
+ * rows from the Taipei list, whose third section is a set of hospitals it makes no language claim
+ * about. A held source is skipped and said out loud, so it cannot be undone by accident and cannot
+ * be dropped in silence either.
+ */
+const held = manifest.filter((x) => x.hold);
+const manifestRows = manifest.filter((x) => !x.hold);
+held.forEach((x) => console.log('held back  ' + String(x.city).padEnd(13) + String(x.hold).slice(0, 92)));
+if (held.length) console.log('');
+
 const fileCount = {};
-manifest.forEach((s) => { fileCount[s.file] = (fileCount[s.file] || 0) + 1; });
+manifestRows.forEach((s) => { fileCount[s.file] = (fileCount[s.file] || 0) + 1; });
 
 const fresh = [];
 const report = [];
-for (const src of manifest) {
+for (const src of manifestRows) {
   if (ONLY && src.city !== ONLY) continue;
   if (!fs.existsSync(src.file)) { report.push({ src, kept: 0, why: 'file missing' }); continue; }
 
