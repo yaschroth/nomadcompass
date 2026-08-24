@@ -93,14 +93,54 @@ lines.forEach((l) => {
   per.forEach((cells, i) => columns[i].push(cells.join(' ')));
 });
 
-const LABEL = /^\s*(Address|Adress|Addresse|Telephone|Telefon|Tel|Phone|Mobile|Mobil|Fax|E-?mail|Epost|Website|Web|Services|Legal practice areas|Practice|Languages|Language|Contact|Spr[åa]k)\s*[:.]/i;
+const LABEL = /^\s*(Address|Adress|Addresse|Telephone|Telefon|Tel|Phone|Mobile|Mobil|Fax|E-?mail|Epost|Website|Web|Services|Legal practice areas|Practice Areas|Practice|Languages|Language|Point of [Cc]ontact|Contact person|Contact|Spr[åa]k)\s*[:.]/i;
 const labelOf = (l) => { const m = l.match(LABEL); return m ? m[1].toLowerCase().replace(/[^a-z]/g, '') : ''; };
 const valueOf = (l) => l.replace(LABEL, '').trim();
 const HEADING = /^(LIST OF|F[öo]rteckning|Disclaimer|Please note|Lawyers list|Advokatlista|Namn|Name)\b/i;
 const BULLET = /^\s*[•·*\-–]\s+/;
 
+/**
+ * A rule between entries says where one ends, and says it better than anything inferred.
+ *
+ * The US embassy's Madrid list draws a line of dashes between firms, and its first line is the firm:
+ * "Abogados Duguech & Dip", then the website, then a point of contact, then Address. Anchoring on
+ * the ADDRESS label instead took the line directly above it, so 46 Madrid firms went in named after
+ * whoever answers the telephone, or after their own web address. Where a separator exists it decides,
+ * and the address anchor is for lists that have none.
+ */
+const SEPARATOR = /^[-–—_=*]{3,}$/;
+
 const blocks = [];
 columns.forEach((col) => {
+  const ruled = col.filter((l) => SEPARATOR.test(l.trim())).length >= 3;
+  if (ruled) {
+    let buf = [];
+    const take = () => {
+      const lines = buf.filter((l) => l && !SEPARATOR.test(l));
+      buf = [];
+      if (lines.length < 2) return;
+      /**
+       * The name is the last thing said before the first labelled field, not the first thing in the
+       * block.
+       *
+       * Everything above the first rule belongs to the same buffer as the first firm: the Madrid
+       * list opens with a paragraph and a run of province names, and reading downwards found those
+       * instead, gave them Abogados Duguech & Dip's address and lost the firm. Reading up from the
+       * first label finds the firm every time, past its own web address, which is what sits between
+       * the two.
+       */
+      const first = lines.findIndex((l) => labelOf(l));
+      const before = (first < 0 ? lines : lines.slice(0, first))
+        .filter((l) => !HEADING.test(l) && !BULLET.test(l) && !/^(https?:|www\.)/i.test(l)
+          && l.length <= 70 && !/:$/.test(l));
+      const name = before[before.length - 1];
+      if (!name) return;
+      blocks.push({ name, lines: lines.slice(first < 0 ? 0 : first) });
+    };
+    col.forEach((raw) => { const l = raw.trim(); if (SEPARATOR.test(l)) take(); else buf.push(l); });
+    take();
+    return;
+  }
   let cur = null;
   for (let i = 0; i < col.length; i += 1) {
     const l = col[i].trim();

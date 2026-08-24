@@ -268,7 +268,10 @@ const isOnlyAPlace = (n) => {
 // segments is a list of subjects. Sweden's Indian list put a run of practice areas where a name
 // belongs and it read "customs and Matrimonial Disputes- Alimony/Divorce/Family Law/Guardianship
 // and", with the lawyer it describes, Pritpal Singh Nijjar, sitting inside the address underneath.
-const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$|\b(and|und|och|et)\s*$|(?:\/[^/\s]+){2,}/i;
+// A web address in a name is a line the reader took from the wrong place. The US embassy's Madrid
+// list prints the firm's website under its name, and one entry came out as "Solicitors
+// www.scornik-gerstein.com" with the firm itself, Scornik Gerstein, on the line above.
+const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$|\b(and|und|och|et)\s*$|(?:\/[^/\s]+){2,}|\bwww\.|https?:/i;
 
 /**
  * A title is not part of a name, wherever in the name it sits.

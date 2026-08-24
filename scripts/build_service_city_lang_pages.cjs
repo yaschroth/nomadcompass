@@ -250,11 +250,18 @@ for (const pair of Object.values(M.pairs)) {
     // one language, but a reader searching for a second one that half this list also speaks should
     // find it from the search result rather than after opening the page: that is the same failure
     // the pair pages had, arriving from a different direction, and the gate checks for it.
+    // Every language two or more of these providers work in, and not the first five of them.
+    //
+    // The gate on this family exists because a reader searching for German-speaking doctors in
+    // Barcelona was shown a title about English and French and never opened the page holding
+    // eleven of them. Capping the list at five did the same thing further down: Madrid's English
+    // page serves two Dutch speakers and two Arabic, and said neither. A long description is a
+    // smaller cost than a page that hides what it holds.
     const alsoNamed = Object.entries(alsoCount).filter(([, n]) => n >= 2)
       .sort((a, b) => b[1] - a[1]).map(([l, n]) => P.langName(l) + ' (' + n + ')');
     const desc = `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the list that names them` +
       (srcTop.length > 1 ? `, from ${srcTop.length} sources` : `, from ${srcTop[0].publisher}`) +
-      `.${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed.slice(0, 5))}.` : ''} Every claim links to where it came from.`;
+      `.${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : ''} Every claim links to where it came from.`;
 
     // --- one page per slice of the list ---------------------------------------------------------
     // The body below stays at this indent on purpose. It is one page's worth of template and the
@@ -275,7 +282,7 @@ for (const pair of Object.values(M.pairs)) {
     const pageDesc = pageNo === 1 ? desc
       : `Entries ${first} to ${last} of the ${rows.length} ${P.catName(cat)} in ${city.name} whose ` +
         `${langName} is stated by the list that names them.` +
-        `${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed.slice(0, 5))}.` : ''}` +
+        `${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : ''}` +
         ` Page ${pageNo} of ${pageCount}, and every claim links to where it came from.`;
     // The standfirst opens with the count, so a page of the series opens with its range and reads
     // straight on into it rather than saying 519 twice in one sentence.
