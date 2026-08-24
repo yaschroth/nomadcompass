@@ -21,6 +21,16 @@
  * because by then every manifest agrees. Re-run before debugging it: this is expected the first time
  * a new pair appears, and only then.
  *
+ * The link check is a gate here and it goes over the network, which no other step does. It earns
+ * that with --new-only: it fetches the links this data change added and nothing else, so a rebuild
+ * that changed no rows spends no time on it. The standing rule was to run it after every data
+ * change and it was easy to forget, and for a while impossible to keep, because a full sweep of all
+ * two thousand links ran for hours. A full sweep is still worth doing now and then, by hand:
+ *   node scripts/verify_service_links.cjs --all
+ *
+ * A network that is down does not fail the run. Only DEAD does, which means a server answered with
+ * a 4xx or 5xx; being blocked, timing out or failing to resolve are reported and not judged.
+ *
  * Usage: node scripts/rebuild_services.cjs [--skip-sweeps]
  */
 const { execFileSync } = require('child_process');
@@ -59,6 +69,7 @@ const STEPS = [
   ['gate', 'check_service_dupes.cjs', ''],
   ['gate', 'check_provenance.cjs', ''],
   ['gate', 'check_site_numbers.cjs', ''],
+  ['gate', 'verify_service_links.cjs --new-only', 'fetches the links a data change added, and only those'],
 ];
 
 let failed = 0;
@@ -70,7 +81,8 @@ for (const [kind, script, why] of STEPS) {
   let out = '';
   let ok = true;
   try {
-    out = execFileSync('node', [path.join(ROOT, 'scripts', script)], {
+    const [file, ...args] = script.split(' ');
+    out = execFileSync('node', [path.join(ROOT, 'scripts', file), ...args], {
       encoding: 'utf8', cwd: ROOT, maxBuffer: 1 << 26,
     });
   } catch (e) {
