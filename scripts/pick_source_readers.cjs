@@ -27,6 +27,10 @@ const READERS = [
   ['parse_labelled_blocks.cjs', ['--raw']],
   ['parse_xlsx_list.cjs', []],
   ['parse_docx_list.cjs', []],
+  // Written on 2026-08-24 for shapes nothing here could read: a three-column table whose lines
+  // are records, and stacks of labelled blocks side by side.
+  ['parse_pdf_table_columns.cjs', []],
+  ['parse_pdf_column_blocks.cjs', []],
 ];
 
 const run = (script, file, extra) => {

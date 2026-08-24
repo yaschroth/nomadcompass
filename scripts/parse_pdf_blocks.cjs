@@ -118,7 +118,17 @@ const rows = blocks.filter((b) => b.lines.length >= 2).map((b) => {
   // entry came back with nowhere to go.
   // A bullet is a note about the firm, not part of where it is. They are merged into the entry
   // above so their language claim can be read, and they have no business in the address.
-  const address = b.lines.slice(1).filter((l) => !OPENS_WITH_BULLET.test(l))
+  /**
+   * Some lists put the name and the address on one line with a dash between them.
+   *
+   * The US embassy's Italian list writes "Stephen EUFRATE – Via Michelangelo Buonarroti 16, 54033
+   * Carrara. Tel/Fax: 0585/73606." and taking the whole line as the name left the address to be
+   * found among the sentences below it, which produced a telephone number and half a sentence about
+   * Pisa University. The dash needs space on both sides, so Jean-Pierre keeps his name.
+   */
+  const SPLIT_LINE = /^(.{3,60}?)\s+[–—-]\s+(.+)$/;
+  const head = (b.lines[0].match(SPLIT_LINE) || [])[2];
+  const address = (head ? [head] : []).concat(b.lines.slice(1)).filter((l) => !OPENS_WITH_BULLET.test(l))
     .map((l) => l.split(/\b(?:tel|telefon|telefono|phone|fax|mobil|cell|e-?mail|www\.|http)\b/i)[0].replace(/[,;\s]+$/, ''))
     .filter(Boolean).join(', ');
   return {
@@ -127,16 +137,25 @@ const rows = blocks.filter((b) => b.lines.length >= 2).map((b) => {
     // heading. Without it the three Sydney GPs arrived with only a surname to categorise and were
     // refused as uncategorised, while their section was headed MEDICI GENERICI all along.
     specialty: b.heading,
-    name: b.lines[0].replace(/[,;]\s*$/, ''),
+    name: (b.lines[0].match(SPLIT_LINE) || [, b.lines[0]])[1].replace(/[,;]\s*$/, ''),
     area: address.slice(0, 140),
     postcode: (joined.match(/\b(\d{4,5}(?:-\d{3})?)\b/) || [])[1] || '',
     phone: (joined.match(/(?:tel|telefon|phone)[.:\s]*([+\d][\d\s()\/.-]{6,})/i) || [])[1] || '',
     email: (joined.match(/[\w.+-]+@[\w.-]+\.\w{2,}/) || [])[0] || '',
-    // A block may say what its people speak in a sentence rather than a list: Sweden's Indian list
-    // writes "The firm has English and Hindi speaking staff" in a bullet under the address. Only a
-    // sentence carrying a speaking verb is read, so a practice area that mentions English law is
-    // not mistaken for a claim about the staff.
-    languages: L.readLanguagesProse(joined),
+    /**
+     * What this block says its people speak, however it says it.
+     *
+     * A labelled list first, because it is unambiguous: the US embassy's Italian list closes each
+     * entry with "Languages: English, Italian." in the middle of ordinary prose, and the prose
+     * reader below sees nothing there because nobody in that sentence speaks, they simply are.
+     * Otherwise the sentence, which is how Sweden's Indian list puts it: "The firm has English and
+     * Hindi speaking staff". A sentence is only read where it carries a speaking verb, so a practice
+     * area that mentions English law is not mistaken for a claim about the staff.
+     */
+    languages: (() => {
+      const said = joined.match(/\bLanguages?\s*:\s*([^.;]{2,90})/i);
+      return said ? L.readLanguages(said[1]) : L.readLanguagesProse(joined);
+    })(),
     url: (joined.match(/\b((?:https?:\/\/|www\.)[^\s,;)]+)/) || [])[1] || '',
     lines: b.lines,
   };

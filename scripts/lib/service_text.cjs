@@ -81,12 +81,18 @@ const withoutNameInFront = (t) => {
  * The leading "00" of an international call is not one of the three. It reads as a dialling prefix
  * and it is also how Rome writes its postcode, and "Via Emilio Longoni 69, 00155" lost the 00155.
  * A number dialled that way is nine digits and more, so the digit count already covers it.
+ *
+ * Nor is a ZIP+4. "Chicago, Illinois 60602-4213" is nine digits by that count and it is a postcode,
+ * so the one shape American post uses is named here rather than left to arithmetic.
  */
+const ZIP_PLUS_FOUR = /^\d{5}-\d{4}$/;
 const withoutTrailingPhone = (t) => {
   const m = t.match(/,?\s*(?:\b([A-Za-z][A-Za-z.]{1,12})\s*:\s*)?(\(?(?:\+|00)?[\d\s()\/.+-]{6,})(?:\s*\([^)]*\))?\s*$/);
   if (!m) return t;
-  const digits = (m[2].match(/\d/g) || []).length;
-  return (m[1] || /^\(?\+/.test(m[2].trim()) || digits >= 9) ? t.slice(0, t.length - m[0].length) : t;
+  const run = m[2].trim();
+  if (ZIP_PLUS_FOUR.test(run)) return t;
+  const digits = (run.match(/\d/g) || []).length;
+  return (m[1] || /^\(?\+/.test(run) || digits >= 9) ? t.slice(0, t.length - m[0].length) : t;
 };
 
 // A label with nothing behind it, left where a reader found the cell empty: an address that ends
@@ -112,6 +118,7 @@ const DANGLING_LABEL = /[,;]?\s*\b(?:Internet|Webseite|Website|Web|Homepage|Sito
 const RUN_TOGETHER = /[\w.+-]+@[\w.-]+\.\w{2,}|\+\s?\d[\d\s()\/.-]{6,}|\b(?:Address|Anschrift|Indirizzo|Contact Person|Kontakt|T|Tel|Phone|Telefon|Fax|Mob|Mobil|Portable|Courriel)\b\s*[:.](?=[\s,])|\b(?:0049|00\d\d)\s?\d{2,}/i;
 
 const trim = (t) => t.replace(/^[;,.\s]+/, '').replace(/[,;\s]+$/, '');
+
 
 /**
  * Everything above, in the one order they work in.
