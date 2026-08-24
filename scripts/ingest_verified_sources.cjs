@@ -264,7 +264,11 @@ const isOnlyAPlace = (n) => {
   const c = matchCity(fold(n));
   return !!c && c.needles.some((x) => fold(n) === x);
 };
-const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$/i;
+// A name that trails off into a conjunction is half of something, and one built of slash-separated
+// segments is a list of subjects. Sweden's Indian list put a run of practice areas where a name
+// belongs and it read "customs and Matrimonial Disputes- Alimony/Divorce/Family Law/Guardianship
+// and", with the lawyer it describes, Pritpal Singh Nijjar, sitting inside the address underneath.
+const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$|\b(and|und|och|et)\s*$|(?:\/[^/\s]+){2,}/i;
 
 /**
  * A title is not part of a name, wherever in the name it sits.

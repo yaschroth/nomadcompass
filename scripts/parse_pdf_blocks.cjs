@@ -18,6 +18,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execFileSync } = require('child_process');
+const L = require(path.join(__dirname, 'lib', 'languages_spoken.cjs'));
 
 const file = process.argv[2];
 if (!file) { console.error('usage: node scripts/parse_pdf_blocks.cjs <file.pdf> [--columns] [--json]'); process.exit(2); }
@@ -91,13 +92,33 @@ for (const raw of lines) {
 }
 flush();
 
+/**
+ * A block that opens with a bullet belongs to the entry above it.
+ *
+ * Sweden's Indian list sets each firm as a block and then its notes as bullets after a blank line,
+ * and a blank line is what ends an entry here, so the one thing worth having ended up in a block of
+ * its own: "All our staff and lawyers speak fluent English", "The firm has English and Hindi
+ * speaking staff". Sixteen such blocks, every one separated from the firm it describes. Only a block
+ * that STARTS with a bullet moves, and only onto a block that exists, so a page that begins with one
+ * is left where it is rather than attached to nothing.
+ */
+const OPENS_WITH_BULLET = /^[•·▪‣]\s*\S/;
+for (let i = blocks.length - 1; i > 0; i -= 1) {
+  if (!OPENS_WITH_BULLET.test(blocks[i].lines[0] || '')) continue;
+  if (blocks[i - 1].heading !== blocks[i].heading) continue;
+  blocks[i - 1].lines = blocks[i - 1].lines.concat(blocks[i].lines);
+  blocks.splice(i, 1);
+}
+
 const CONTACT = /\b(tel|telefon|telefono|phone|fax|mobil|cell|e-?mail|www\.|http)\b/i;
 const rows = blocks.filter((b) => b.lines.length >= 2).map((b) => {
   const joined = b.lines.join(' ');
   // The address and the phone are often one line: "Au 190, 2880 KIRCHBERG, tel: ..., e-mail: ...".
   // Dropping any line that mentions a phone therefore dropped the address with it, and every Vienna
   // entry came back with nowhere to go.
-  const address = b.lines.slice(1)
+  // A bullet is a note about the firm, not part of where it is. They are merged into the entry
+  // above so their language claim can be read, and they have no business in the address.
+  const address = b.lines.slice(1).filter((l) => !OPENS_WITH_BULLET.test(l))
     .map((l) => l.split(/\b(?:tel|telefon|telefono|phone|fax|mobil|cell|e-?mail|www\.|http)\b/i)[0].replace(/[,;\s]+$/, ''))
     .filter(Boolean).join(', ');
   return {
@@ -111,6 +132,11 @@ const rows = blocks.filter((b) => b.lines.length >= 2).map((b) => {
     postcode: (joined.match(/\b(\d{4,5}(?:-\d{3})?)\b/) || [])[1] || '',
     phone: (joined.match(/(?:tel|telefon|phone)[.:\s]*([+\d][\d\s()\/.-]{6,})/i) || [])[1] || '',
     email: (joined.match(/[\w.+-]+@[\w.-]+\.\w{2,}/) || [])[0] || '',
+    // A block may say what its people speak in a sentence rather than a list: Sweden's Indian list
+    // writes "The firm has English and Hindi speaking staff" in a bullet under the address. Only a
+    // sentence carrying a speaking verb is read, so a practice area that mentions English law is
+    // not mistaken for a claim about the staff.
+    languages: L.readLanguagesProse(joined),
     url: (joined.match(/\b((?:https?:\/\/|www\.)[^\s,;)]+)/) || [])[1] || '',
     lines: b.lines,
   };

@@ -58,6 +58,8 @@ const LANG = {
   khmer: 'km', cambodian: 'km', marathi: 'mr', telugu: 'te', kannada: 'kn', malayalam: 'ml',
   gujarati: 'gu', urdu: 'ur', punjab: 'pa', assamese: 'as', odia: 'or', oriya: 'or',
   lao: 'lo', burmese: 'my', tagalog: 'tl', filipino: 'tl', bahasa: 'id',
+  // As the Swedish list for India spells it, twice.
+  telegu: 'te',
 };
 
 // Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
@@ -93,7 +95,9 @@ const readLanguages = (line, allowLetters, unknown) => {
     : said.split(/[,;/|+&]+|\band\b|\bund\b|\boch\b|\bou\b|\boder\b|\be\b/);
   parts.map((p) => bare(p.trim())).filter(Boolean)
     .forEach((p) => {
-      const hit = Object.keys(LANG).find((k) => p.startsWith(k));
+      // The longest key that fits, for the same reason as in readLanguagesProse below: "Malayalam"
+      // begins with "malay" and the first match in insertion order is the wrong language.
+      const hit = Object.keys(LANG).filter((k) => p.startsWith(k)).sort((a, b) => b.length - a.length)[0];
       if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
       if (allowLetters && p.length === 1 && LETTER[p]) { if (!out.includes(LETTER[p])) out.push(LETTER[p]); return; }
       if (unknown && p.length > 2 && p.length < 24 && !/^\(|^[0-9]/.test(p)) unknown.add(p);
@@ -123,7 +127,15 @@ const readLanguagesProse = (text, unknown) => {
     if (!SPEAKS.test(sentence)) return;
     const words = fold(sentence).split(/[^a-z]+/).filter(Boolean);
     words.forEach((w) => {
-      const hit = Object.keys(LANG).find((k) => w === k || (k.length > 4 && w.startsWith(k)));
+      /**
+       * The longest key that fits, not the first one found.
+       *
+       * "Malayalam" begins with "malay", and taking the first match in insertion order filed a
+       * Bangalore firm as speaking Malay, which is a different language spoken 3,000 km away. Where
+       * one language's name is the start of another's, only length tells them apart.
+       */
+      const hit = Object.keys(LANG).filter((k) => w === k || (k.length > 4 && w.startsWith(k)))
+        .sort((a, b) => b.length - a.length)[0];
       if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
       if (unknown && w.length > 4 && /\w(ese|ish|ian|ali|abic|ench|erman)$/.test(w)) unknown.add(w);
     });
