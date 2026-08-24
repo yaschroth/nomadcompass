@@ -101,6 +101,18 @@ const ROLE = /^(Rechtsanw|Rechtanw|Advokat|advokat|Fachanw|Notar|Attorney|Avocat
 const HEADER = /^(NAMN|NAME|ADRESS|ADDRESS|TEL)\b/i;
 
 /**
+ * What this reader is not for, refused rather than left to be discovered.
+ *
+ * Sweden uses the same three columns for Cambodia and puts something else in them: not a name, an
+ * address and a telephone, but two independent stacks of labelled blocks, each firm giving its own
+ * "Address:", "Telephone:", "Email:", "Services:", "Languages:". Pointed at that, this reader
+ * produced five rows pairing the left column's firms with the right column's addresses, which is
+ * the exact failure it was written to prevent. A field label in the first column is what tells the
+ * two apart: in a table the first column holds names and roles and every label lives in the last.
+ */
+const FIELD_LABEL = /^(Address|Adress|Telephone|Telefon|Phone|E-?mail|Website|Services|Languages)\s*:/i;
+
+/**
  * A qualification on its own line is the rest of the name above it, not a name of its own.
  *
  * "Dr. Thomas Kaiser-Stockmann" is followed by "LL.M." and only then by his role, so looking for the
@@ -133,6 +145,14 @@ for (let i = 0; i < rowsOfCols.length; i += 1) {
   const own = rowsOfCols[i][0];
   if (own && CITY_HEAD.test(own) && !HEADER.test(own) && !rowsOfCols[i].slice(1).some(Boolean)) city = own;
   cityAt[i] = city;
+}
+
+const labelsInFirstColumn = rowsOfCols.filter((c) => c[0] && FIELD_LABEL.test(c[0])).length;
+if (labelsInFirstColumn >= 3) {
+  console.error("This file puts its field labels in the first column, so it is a stack of labelled");
+  console.error("blocks rather than a name/address/contact table, and this reader would pair each");
+  console.error("entry with the wrong one. Use a labelled-block reader instead.");
+  process.exit(1);
 }
 
 const rows = [];
