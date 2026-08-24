@@ -51,6 +51,13 @@ const LANG = {
   arabiska: 'ar', kinesiska: 'zh', japanska: 'ja', koreanska: 'ko', ungerska: 'hu',
   tjeckiska: 'cs', rumanska: 'ro', estniska: 'et', lettiska: 'lv', litauiska: 'lt',
   isländska: 'is', islandska: 'is', hebreiska: 'he', persiska: 'fa', thailandska: 'th',
+  // South and Southeast Asian languages the Swedish lists for India, Nepal and Cambodia name, and
+  // which nothing in this directory could read: "The staff also speak Punjabi, Tamil, Bengali",
+  // "communicating in English, Nepali and Hindi", "Languages: English, French, Chinese & Khmer".
+  punjabi: 'pa', panjabi: 'pa', bengali: 'bn', bangla: 'bn', nepali: 'ne', nepalese: 'ne',
+  khmer: 'km', cambodian: 'km', marathi: 'mr', telugu: 'te', kannada: 'kn', malayalam: 'ml',
+  gujarati: 'gu', urdu: 'ur', punjab: 'pa', assamese: 'as', odia: 'or', oriya: 'or',
+  lao: 'lo', burmese: 'my', tagalog: 'tl', filipino: 'tl', bahasa: 'id',
 };
 
 // Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
@@ -94,4 +101,34 @@ const readLanguages = (line, allowLetters, unknown) => {
   return out;
 };
 
-module.exports = { LANG, LETTER, fold, readLanguages };
+/**
+ * Reads a language claim out of a sentence, where readLanguages needs a list.
+ *
+ * Most missions write "Sprachen: Deutsch, Englisch" and readLanguages splits that on the commas.
+ * Some write prose instead, and the Swedish lists for India and Nepal are the reason this exists:
+ * "All our staff and lawyers speak fluent English", "The firm has English and Hindi speaking staff",
+ * "The staff also speak Punjabi, Tamil, Bengali and also some foreign languages like German". Split
+ * on commas and not one of those parts begins with a language.
+ *
+ * Scanning a whole page for language words would invent claims, because "English law", "the French
+ * company" and "Indian Law Institute" are not statements about anybody's staff. So only a sentence
+ * that says somebody speaks is read at all, and inside such a sentence a language word counts
+ * wherever it appears. That is the difference between a claim and a coincidence.
+ */
+const SPEAKS = /\b(speaks?|spoken|speaking|fluent|fluency|conversant|communicat\w*|talar|spricht|sprechen|parle|parla|habla)\b/i;
+
+const readLanguagesProse = (text, unknown) => {
+  const out = [];
+  String(text || '').split(/(?<=[.;:!?])\s+|\n|•/).forEach((sentence) => {
+    if (!SPEAKS.test(sentence)) return;
+    const words = fold(sentence).split(/[^a-z]+/).filter(Boolean);
+    words.forEach((w) => {
+      const hit = Object.keys(LANG).find((k) => w === k || (k.length > 4 && w.startsWith(k)));
+      if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
+      if (unknown && w.length > 4 && /\w(ese|ish|ian|ali|abic|ench|erman)$/.test(w)) unknown.add(w);
+    });
+  });
+  return out;
+};
+
+module.exports = { LANG, LETTER, fold, readLanguages, readLanguagesProse, SPEAKS };
