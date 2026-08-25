@@ -256,6 +256,29 @@ const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consol
 const HEADER_ROW = /\bCOGNOME\b[^\n]*\bNOME\b|\bNAME\b[^\n]*\bADDRESS\b[^\n]*\b(TEL|PHONE)|\bNome\b[^\n]*\bIndirizzo\b|\bSpecializzazione\b[^\n]*\bNome\b/i;
 const NAME_IS_A_LIST = /\w*liste\b|^Liste\b|^List of\b|^Elenco\b|^Lista\b/i;
 
+/**
+ * A name that opens with a street word is an address the reader found where the name should be.
+ *
+ * "C/ Provenca 278, 1 bis 1", "Paseo de Gracia, 76", "Avenida Marques de Sotelo, 4" all reached a
+ * proposal from the German consulate's Barcelona lists, where the firm is set in a column the reader
+ * does not reach. The existing test looked for a German street word with a number after it and none
+ * of the Romance ones.
+ *
+ * Only at the start and only with a house number behind it, because a firm may perfectly well be
+ * called after a street: "Studio Legale Via Veneto" and "Avenue Legal Group" keep their names, and
+ * "Via Veneto 12" and "C/ Provenca 278" do not.
+ */
+const STREET_WORD = /^(?:c\/|av\.|avda\.?|bvd\.?|ul\.|str\.|(?:calle|carrer|avenida|avinguda|paseo|passeig|plaza|pla[çc]a|via|viale|piazza|corso|rua|rue|boulevard|avenue|street|ulica|stra[sß]{1,2}e)\b)/i;
+const NAME_OPENS_WITH_A_STREET = (n) => STREET_WORD.test(n) && /\d/.test(n);
+
+/**
+ * A heading that names a profession and a place is a section, not a provider: "Kanzleien in Stara
+ * Zagora". So is a line that opens with the name of a field the entry was supposed to fill in.
+ */
+const NAME_IS_A_SECTION = /^(Kanzleien|Rechtsanw[äa]lte|Anw[äa]lte|[ÄA]rzte|[ÜU]bersetzer|Dolmetscher|Notare|Lawyers|Doctors|Attorneys|Translators|Dentists)\s+in\s+/i
+  || null;
+const NAME_IS_A_FIELD = /^(Fachrichtung|Fachgebiet|Spezialgebiet|Arbeitsgebiet|Sprachen|Sprachkenntnisse|Adresse|Anschrift|Kontakt|Kontaktdaten|Telefon|Bezeichnung)\b/i;
+
 // The name of a place is a heading, not somebody in it. The U.S. consulate's Chiang Mai list sets
 // its sections by province and "CHIANG MAI" and "KAMPHAENG PHET" arrived as providers; a name that
 // is one of our cities and nothing else is the heading the entries below it sit under. "Bangkok
@@ -342,6 +365,9 @@ const NAME_RUNS_ON = [
   // The punctuation has to be allowed to run: the German embassy Madrid writes "Tel.:" with both,
   // and matching only one of them left the word on three names.
   /\s(?:Tel|Telephone|Phone|Fax|E-?mail|Website|Web|Mobile|Handy)[.:\s]*$/i,
+  // The label of the field the address came from, left on the end of the name: the US embassy
+  // Nairobi list gave "B M Musau & Co., Advocates LLP Adresse W".
+  /\s(?:Adresse|Anschrift|Address|Kontakt|Kontaktdaten)\b.*$/i,
   // The street, joined to the surname by a dash with no space in front of it. The US consulate in
   // Florence writes "Giorgio MASINA- Via dei Termini 6, Siena" on one line.
   /-\s*(?:Via|Viale|Piazza|Corso|Vicolo|Rue|Calle|Carrer|Rua|Str)\b/i,
@@ -366,7 +392,7 @@ const upToTheJoin = (n) => {
 // medical list with one, "ALLERGISTS", "PEDIATRIC DENTISTS", "SPEECH, LANGUAGE, HEARING
 // PATHOLOGISTS", and sixteen of those headings came through as providers with the whole section's
 // doctors run into the address behind them.
-const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dentistry|dr|und|and|e|y|de|the|specialized|specialised|hospital|hospitals|hygienist|hygienists|doctor|doctors|dentist|dentists|physician|physicians|lawyer|lawyers|attorney|attorneys|translator|translators|interpreter|interpreters|general|specialist|specialists|also|available|other|others|messieurs|mesdames|monsieur|madame|docteur|docteurs|les|allergist|allergists|dermatologist|dermatologists|nephrologist|nephrologists|neurologist|neurologists|op?hthalmologist|op?hthalmologists|orthop[ae]dist|orthop[ae]dists|p[ae]diatrician|p[ae]diatricians|p[ae]diatric|physiotherapist|physiotherapists|psychiatrist|psychiatrists|psychologist|psychologists|pulmonologist|pulmonologists|cardiologist|cardiologists|gyn[ae]cologist|gyn[ae]cologists|urologist|urologists|endocrinologist|endocrinologists|oncologist|oncologists|radiologist|radiologists|surgeon|surgeons|pathologist|pathologists|acupuncture|speech|language|hearing|plastic|reconstructive)$/i;
+const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dentistry|dr|und|and|e|y|de|the|specialized|specialised|hospital|hospitals|hygienist|hygienists|doctor|doctors|dentist|dentists|physician|physicians|lawyer|lawyers|attorney|attorneys|translator|translators|interpreter|interpreters|general|specialist|specialists|also|available|other|others|messieurs|mesdames|monsieur|madame|docteur|docteurs|les|allergist|allergists|dermatologist|dermatologists|nephrologist|nephrologists|neurologist|neurologists|op?hthalmologist|op?hthalmologists|orthop[ae]dist|orthop[ae]dists|p[ae]diatrician|p[ae]diatricians|p[ae]diatric|physiotherapist|physiotherapists|psychiatrist|psychiatrists|psychologist|psychologists|pulmonologist|pulmonologists|cardiologist|cardiologists|gyn[ae]cologist|gyn[ae]cologists|urologist|urologists|endocrinologist|endocrinologists|oncologist|oncologists|radiologist|radiologists|surgeon|surgeons|pathologist|pathologists|acupuncture|speech|language|hearing|plastic|reconstructive|chirurgie|chirurgisch\w*|orthop[äa]d\w*|innere|allgemeinmedizin|zahnmedizin|kinderheilkunde|augenheilkunde|psychotherapie|physiotherapie|dermatologie|kardiologie|neurologie|urologie|gyn[äa]kologie|radiologie|onkologie|hno)$/i;
 const isGenericName = (s) => String(s).split(/[^A-Za-zÀ-ÿ]+/).filter(Boolean).every((w) => GENERIC_WORD.test(w));
 
 /**
@@ -408,6 +434,32 @@ const COUNTRY_NAMES = [...new Set(Object.values(M.CITY).map((c) => c.country).fi
 
 const seenByCity = {};
 db.providers.forEach((p) => { (seenByCity[p.city] = seenByCity[p.city] || new Map()).set(key(p.name), p); });
+
+/**
+ * What the duplicate gate would call the same business, so that this script does not keep proposing
+ * it. The gate calls two names the same when one contains the other, and merging a pair by keeping
+ * the shorter name therefore made the longer one look new on the next run: eighteen rows merged on
+ * 2026-08-24 came straight back the next morning, and would have come back every morning after.
+ */
+const flat = (s) => fold(s).replace(/[^a-z0-9]/g, '');
+const flatByCity = {};
+db.providers.forEach((p) => { (flatByCity[p.city] = flatByCity[p.city] || []).push(flat(p.name)); });
+const gateWouldMerge = (city, name) => {
+  const a = flat(name);
+  if (a.length < 8) return false;
+  return (flatByCity[city] || []).some((b) => b.length >= 8 && (a.includes(b) || b.includes(a)));
+};
+
+/**
+ * And what this script has already taken from this very source, wherever it ended up.
+ *
+ * Three rows were moved by hand out of Buenos Aires and into Montevideo and Asuncion, where their
+ * addresses say they are, and the city-keyed check above cannot see them any more: Buenos Aires no
+ * longer holds them, so they read as new. The source and the name together identify a row wherever
+ * it was filed.
+ */
+const takenFromSource = new Set();
+db.providers.forEach((p) => { if (p.sourceUrl) takenFromSource.add(p.sourceUrl + '|' + key(p.name)); });
 
 const runParser = (script, args) => {
   try {
@@ -668,9 +720,10 @@ for (const src of manifestRows) {
     // A bracket on either side of the name and not only an opening one: "Upadlosc i restrukturyzacja)"
     // is the tail of a practice-area list. A name that ends in "&" is a firm the reader cut in half.
     if (!k || k.split(' ').length < 2 || /[:()\[\]]|[,&]$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
-      || HEADER_ROW.test(where) || HEADER_ROW.test(name) || isGenericName(name) || isOnlyAPlace(name) || NAME_IS_A_FRAGMENT(name)) { stats.noName++; continue; }
+      || HEADER_ROW.test(where) || HEADER_ROW.test(name) || isGenericName(name) || isOnlyAPlace(name) || NAME_IS_A_FRAGMENT(name)
+      || NAME_OPENS_WITH_A_STREET(name) || NAME_IS_A_SECTION.test(name) || NAME_IS_A_FIELD.test(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
-    if (map.has(k)) { stats.already++; continue; }
+    if (map.has(k) || gateWouldMerge(city, name) || takenFromSource.has(src.url + '|' + k)) { stats.already++; continue; }
 
     const bits = [`On the ${src.publisher} list${r.specialty ? ', under ' + asciiFold(r.specialty).replace(/\.$/, '') : ''}.`];
     if (r.role) bits.push(asciiFold(r.role).replace(/\.$/, '') + '.');

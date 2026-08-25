@@ -26,15 +26,12 @@ const strip = (s) => String(s)
   .replace(/&quot;|&(l|r)dquo;/g, '"').replace(/&#\d+;/g, ' ')
   .replace(/\s+/g, ' ').trim();
 
-const LANG = {
-  english: 'en', german: 'de', deutsch: 'de', french: 'fr', spanish: 'es', italian: 'it',
-  russian: 'ru', hungarian: 'hu', czech: 'cs', slovak: 'sk', polish: 'pl', dutch: 'nl',
-  portuguese: 'pt', arabic: 'ar', turkish: 'tr', hebrew: 'he', persian: 'fa', farsi: 'fa',
-  chinese: 'zh', mandarin: 'zh', japanese: 'ja', korean: 'ko', greek: 'el', romanian: 'ro',
-  croatian: 'hr', serbian: 'sr', bosnian: 'bs', slovenian: 'sl', bulgarian: 'bg', ukrainian: 'uk',
-  swedish: 'sv', norwegian: 'no', danish: 'da', finnish: 'fi', hindi: 'hi', urdu: 'ur',
-  swahili: 'sw', albanian: 'sq', armenian: 'hy', georgian: 'ka', thai: 'th', vietnamese: 'vi',
-};
+// This was a second copy of the lexicon and it had drifted, which is what the shared one says a
+// second copy does: it held Bosnian and Armenian, neither of which is one of the 56 codes the
+// dataset holds, so a row claiming either was refused outright, and it held none of the French,
+// Italian or Spanish words for a language.
+const L = require(require('path').join(__dirname, 'lib', 'languages_spoken.cjs'));
+const LANG = L.LANG;
 const PROFICIENCY = /\b(fluent|fluently|native|mother tongue|adequate|good|basic|spoken|speaks?|proficient|working knowledge)\b/i;
 
 /**
@@ -46,6 +43,24 @@ const PROFICIENCY = /\b(fluent|fluently|native|mother tongue|adequate|good|basic
  * reading a language out of it would invent a claim.
  */
 const languagesOf = (text) => {
+  /**
+   * Two shapes are unmistakable wherever in the entry they appear, so they are looked for first and
+   * over the whole of it rather than over the closing clause.
+   *
+   * A label and a list, because the mission wrote the label and meant it. And the claim written as a
+   * question the entry answers: the US embassy Buenos Aires gives every doctor a field reading
+   * "English-speaking: Yes", where the language is in the LABEL and the value is a yes, so the tail
+   * rule below looked at "Yes" and found no language in it. All 106 of its entries were refused for
+   * claiming nothing, by a list that claims something for every one of them.
+   */
+  const labelled = text.match(L.CLAIM_INLINE_RE);
+  if (labelled) {
+    const got = L.readLanguages(labelled[1], false);
+    if (got.length) return got;
+  }
+  const answered = L.readSpeakingAnswer(text);
+  if (answered) return answered;
+
   const tail = text.slice(-120);
   const clause = (tail.split(/[;.]\s*/).filter(Boolean).pop() || '').trim();
   if (!clause || clause.length > 90) return [];

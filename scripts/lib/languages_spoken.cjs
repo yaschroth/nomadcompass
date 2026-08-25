@@ -60,6 +60,47 @@ const LANG = {
   lao: 'lo', burmese: 'my', tagalog: 'tl', filipino: 'tl', bahasa: 'id',
   // As the Swedish list for India spells it, twice.
   telegu: 'te',
+  /**
+   * French, Italian and Spanish, because each mission writes the claim in its own language and this
+   * lexicon had grown by whatever the German and British lists happened to say.
+   *
+   * Measured 2026-08-25: of the language names a French post uses it could read nine and not the
+   * other 26, so "Dr Hiroshi Yamakawa (francais, anglais, japonais)" came out as French and English
+   * with the Japanese dropped. Italian was 4 of 23 and Spanish 5 of 25. France, Italy and Spain
+   * between them are 73 of the 337 sources in the registry.
+   *
+   * Basque is left out on purpose: eu is not one of the 56 codes the dataset holds, and a code the
+   * dataset does not hold makes the build refuse the row outright.
+   */
+  neerlandais: 'nl', olandese: 'nl', holandes: 'nl',
+  tcheque: 'cs', ceco: 'cs', checo: 'cs',
+  slovaque: 'sk', slovacco: 'sk', eslovaco: 'sk',
+  hongrois: 'hu', ungherese: 'hu', hungaro: 'hu',
+  roumain: 'ro', rumeno: 'ro', rumano: 'ro',
+  bulgare: 'bg', bulgaro: 'bg',
+  grec: 'el', greco: 'el', griego: 'el',
+  turc: 'tr', turco: 'tr',
+  arabo: 'ar',
+  hebreu: 'he', ebraico: 'he', hebreo: 'he',
+  japonais: 'ja', giapponese: 'ja', japones: 'ja',
+  chinois: 'zh', cinese: 'zh', chino: 'zh',
+  coreen: 'ko', coreano: 'ko',
+  vietnamien: 'vi', vietnamita: 'vi',
+  persan: 'fa', persiano: 'fa', persa: 'fa',
+  suedois: 'sv', svedese: 'sv', sueco: 'sv',
+  norvegien: 'no', norvegese: 'no', noruego: 'no',
+  danois: 'da', danese: 'da', danes: 'da',
+  finnois: 'fi', finlandese: 'fi', finlandes: 'fi',
+  croate: 'hr', croato: 'hr', croata: 'hr',
+  serbe: 'sr', serbo: 'sr', serbio: 'sr',
+  ukrainien: 'uk', ucraino: 'uk', ucraniano: 'uk',
+  albanais: 'sq', albanese: 'sq', albanes: 'sq',
+  indonesien: 'id', indonesiano: 'id',
+  malais: 'ms', malese: 'ms', malayo: 'ms',
+  portugues: 'pt', portoghese: 'pt',
+  ruso: 'ru', russo: 'ru',
+  catalan: 'ca', catalano: 'ca', catala: 'ca',
+  polacco: 'pl', polaco: 'pl',
 };
 
 /**
@@ -82,7 +123,7 @@ const ABBREV = {
   tschech: 'cs', ungar: 'hu', rum: 'ro', turk: 'tr', tuerk: 'tr', arab: 'ar',
   chin: 'zh', jap: 'ja', kor: 'ko', hebr: 'he', schwed: 'sv', norw: 'no',
   dan: 'da', daen: 'da', finn: 'fi', kroat: 'hr', serb: 'sr', slowak: 'sk',
-  slowen: 'sl', ukr: 'uk', span: 'es', franz: 'fr', esp: 'es',
+  slowen: 'sl', ukr: 'uk', span: 'es', spa: 'es', franz: 'fr', esp: 'es',
 };
 
 // Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
@@ -179,4 +220,126 @@ const readLanguagesProse = (text, unknown) => {
   return out;
 };
 
-module.exports = { LANG, LETTER, fold, readLanguages, readLanguagesProse, SPEAKS };
+/**
+ * The words a list uses to introduce a language claim, in every language a mission publishes in.
+ *
+ * This is here because it was in nine places and each of them held a different, smaller set. Only
+ * two readers knew "Korrespondenzsprachen", none knew "Sprachkenntnisse", which is how the German
+ * embassy Warsaw labels all 51 of its doctors, and none knew "Langues pratiquees", which is how the
+ * French consulate Milan labels 56 of its 65 lawyers. 940 rows were read and thrown away for
+ * stating no language on sources whose verifier had confirmed that every entry states one.
+ *
+ * A label the readers do not know is not a missing language, it is a missing word, and a missing
+ * word here is silent: the row simply goes out with nothing, or is refused as claiming nothing.
+ */
+const CLAIM_LABEL = '(?:Sprachkenntnisse|Sprachen|Sprache|Korrespondenzsprachen|Korrespondenzsprache'
+  + '|Korrespondenz|Arbeitssprachen|Arbeitssprache|Muttersprache|Fremdsprachen|Fremdsprache'
+  + '|Languages? spoken|Spoken languages?|Languages?|Speaks|Spricht'
+  + '|Langues pratiqu[ée]es|Langues|Langue|Idiomas?|Lingue|Lingua|Lingu[ií]stica'
+  + '|J[eę]zyki|Spr[åa]k|Spr[åa]kkunskaper|Talar)';
+const CLAIM_LABEL_RE = new RegExp('^\\s*' + CLAIM_LABEL + '\\s*[:：]\\s*(.+)$', 'i');
+// The same label met inside a line rather than at the start of one, which is where a PDF that sets
+// the whole entry on one line puts it.
+/**
+ * The value may hold full stops, because that is where the abbreviations are.
+ *
+ * Stopping the capture at the first one is the obvious reading and it is wrong: the German embassy
+ * Lisbon writes "Korrespondenzsprachen: Deu., Port., Franz., Eng., Spa." and the capture came back
+ * as "Deu", so seven Porto and Lisbon lawyers went out claiming French alone when their own entry
+ * names five languages.
+ *
+ * What ends the claim is a sentence, not a full stop: a full stop, a space and a capitalised word
+ * with another word behind it. "Port.," has no space after the abbreviation and does not end it;
+ * "Italian. The office is open" does.
+ */
+const CLAIM_INLINE_RE = new RegExp('\\b' + CLAIM_LABEL + '\\s*[:：]\\s*([^;\\n]{2,140})', 'i');
+const untilTheNextSentence = (s) => String(s).split(/\.\s+(?=[A-Z][a-z]{2,}\s)/)[0];
+
+/**
+ * The claim written as a question the entry answers.
+ *
+ * The US embassy Buenos Aires gives each doctor a field reading "English-speaking: Yes", and the
+ * FCDO's lists do the same in a column of their own. The language is in the LABEL and the value is
+ * a yes, so a reader looking for a language in the value finds nothing at all: 106 Buenos Aires
+ * rows were refused for claiming no language by a page that claims one for every entry.
+ *
+ * A No is a claim too, and the answer to it is to read nothing rather than to read the language.
+ */
+const SPEAKING_ANSWER = /\b([A-Za-zÀ-ÿ]{4,20})[-\s]speaking\s*[:?]?\s*(yes|no|ja|nein|si|sí|no|oui|non)\b/gi;
+const AFFIRMATIVE = /^(yes|ja|si|sí|oui)$/i;
+const codeOf = (word) => {
+  const w = fold(word);
+  const hit = Object.keys(LANG).filter((k) => w === k || w.startsWith(k)).sort((a, b) => b.length - a.length)[0];
+  return hit ? LANG[hit] : '';
+};
+/**
+ * Returns null where the page does not use this shape at all, so the caller can go on looking, and
+ * an array where it does. An empty array from a page that uses it is an answer: this entry was
+ * asked whether it speaks English and said no.
+ */
+const readSpeakingAnswer = (text) => {
+  const answers = [...String(text || '').matchAll(SPEAKING_ANSWER)];
+  if (!answers.length) return null;
+  const out = [];
+  for (const m of answers) {
+    if (!AFFIRMATIVE.test(m[2])) continue;
+    const c = codeOf(m[1]);
+    if (c && !out.includes(c)) out.push(c);
+  }
+  return out;
+};
+
+/**
+ * A language claim in brackets, and the two ways of getting it wrong.
+ *
+ * The French embassy Tokyo writes "Dr Hiroshi Yamakawa (francais, anglais, japonais)" and the German
+ * missions write "(deutsch- und englischsprachig)", sometimes with a job title inside the same
+ * brackets, so the test cannot be that the whole bracket is languages.
+ *
+ * It cannot be "contains a language word" either, because the word for a country begins with the
+ * word for its language and these pages are full of countries: "Rechtsanwalt (Deutschland)",
+ * "zugelassen in (Spanien)". Read as a language list those give German and Spanish on no evidence.
+ * The countries are named here and taken out before the claim is read.
+ */
+// The Romance names for Greece and Turkey are here because the Romance names for Greek and Turkish
+// are so short that the country begins with the language: grece, grecia, turquie, turchia, turquia.
+const COUNTRY_WORD = /^(deutschland|osterreich|oesterreich|schweiz|frankreich|spanien|portugal|niederlande|england|grossbritannien|belgien|polen|ungarn|griechenland|turkei|tuerkei|russland|japan|china|korea|brasilien|argentinien|mexiko|kolumbien|chile|indien|thailand|vietnam|usa|eu|grece|grecia|turquie|turchia|turquia)$/;
+const BRACKETED = /\(([^()]{2,120})\)|\/([^/\n]{3,120})\//g;
+const readBracketed = (text, unknown) => {
+  const out = [];
+  for (const b of String(text || '').match(BRACKETED) || []) {
+    const kept = b.slice(1, -1).split(/[,;/|+&]|\bund\b|\band\b|\bou\b|\be\b/i)
+      .filter((p) => !COUNTRY_WORD.test(fold(p).replace(/[^a-z]/g, '')))
+      .join(', ');
+    readLanguages(kept, false, unknown).forEach((c) => { if (!out.includes(c)) out.push(c); });
+  }
+  return out;
+};
+
+/**
+ * Every kind of claim this directory knows how to read, tried in the order of how much they prove.
+ *
+ * A labelled list is the strongest: the mission wrote the label and meant it. "English-speaking:
+ * Yes" is as strong and only looks different. A sentence that says somebody speaks is weaker but
+ * still a claim. Anything else is not read, because a language word in prose that does not say
+ * anybody speaks it is a coincidence: "English law", "the French company", "Indian Law Institute".
+ */
+const readClaim = (text, unknown) => {
+  const s = String(text || '');
+  const inline = s.match(CLAIM_INLINE_RE);
+  if (inline) {
+    const got = readLanguages(untilTheNextSentence(inline[1]), false, unknown);
+    if (got.length) return got;
+  }
+  // Asked and answered: whatever the answer was, it is the answer, and prose must not overrule it.
+  const answered = readSpeakingAnswer(s);
+  if (answered) return answered;
+  const bracketed = readBracketed(s, unknown);
+  if (bracketed.length) return bracketed;
+  return readLanguagesProse(s, unknown);
+};
+
+module.exports = {
+  LANG, LETTER, ABBREV, fold, readLanguages, readLanguagesProse, SPEAKS,
+  CLAIM_LABEL, CLAIM_LABEL_RE, CLAIM_INLINE_RE, readSpeakingAnswer, readBracketed, readClaim,
+};

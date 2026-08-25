@@ -103,8 +103,18 @@ flush();
  * is left where it is rather than attached to nothing.
  */
 const OPENS_WITH_BULLET = /^[•·▪‣]\s*\S/;
+/**
+ * So does a block that opens by announcing itself as the entry's contact details.
+ *
+ * The German embassy Warsaw sets the doctor's name, a blank line, then "Kontaktdaten der Aerzte"
+ * over the address, the telephone and "Sprachkenntnisse: Englisch, Deutsch und Russisch". The blank
+ * line ends the entry, so all 51 of its language claims sat in a block with no name in it and the
+ * entries above them went out claiming nothing. The heading names no provider and cannot be one.
+ */
+const OPENS_WITH_CONTACT_HEADING = /^(Kontaktdaten|Kontakt|Contact details?|Coordonn[ée]es|Datos de contacto|Contatti|Dane kontaktowe)\b/i;
 for (let i = blocks.length - 1; i > 0; i -= 1) {
-  if (!OPENS_WITH_BULLET.test(blocks[i].lines[0] || '')) continue;
+  const first = blocks[i].lines[0] || '';
+  if (!OPENS_WITH_BULLET.test(first) && !OPENS_WITH_CONTACT_HEADING.test(first)) continue;
   if (blocks[i - 1].heading !== blocks[i].heading) continue;
   blocks[i - 1].lines = blocks[i - 1].lines.concat(blocks[i].lines);
   blocks.splice(i, 1);
@@ -151,11 +161,12 @@ const rows = blocks.filter((b) => b.lines.length >= 2).map((b) => {
      * Otherwise the sentence, which is how Sweden's Indian list puts it: "The firm has English and
      * Hindi speaking staff". A sentence is only read where it carries a speaking verb, so a practice
      * area that mentions English law is not mistaken for a claim about the staff.
+     *
+     * The label used to be the English one alone, which is why this reader found nothing on the
+     * German embassy Warsaw's 51 doctors ("Sprachkenntnisse:") or the French consulate Milan's 56
+     * lawyers ("Langues pratiquees :"). L.readClaim knows what every mission calls it.
      */
-    languages: (() => {
-      const said = joined.match(/\bLanguages?\s*:\s*([^.;]{2,90})/i);
-      return said ? L.readLanguages(said[1]) : L.readLanguagesProse(joined);
-    })(),
+    languages: L.readClaim(joined),
     url: (joined.match(/\b((?:https?:\/\/|www\.)[^\s,;)]+)/) || [])[1] || '',
     lines: b.lines,
   };
