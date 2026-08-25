@@ -260,7 +260,7 @@ ${shell.headTop}
     /* --color-cream is pure #fff, so white cards on the page background did not read as
        separate objects. The listing sits on sand (the token is literally documented as
        "Cards, sections") and the cards stay white, which is what gives them an edge. */
-    .sv-canvas { background:var(--color-sand,#f6f1e7); border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-canvas { background:var(--color-sand,#f6f1e7); border-top:1px solid #C9B896; }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2.5rem var(--space-4,1rem) 4rem; }
     .sv-controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 8px 24px rgba(15,23,42,.05); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -341,28 +341,28 @@ ${shell.headTop}
     .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
     a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
       gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
-      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px); text-decoration:none;
+      border:1px solid #C9B896; border-radius:var(--radius-md,8px); text-decoration:none;
       transition:border-color .15s, box-shadow .15s; }
     a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 3px 12px rgba(15,23,42,.07); }
-    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:#EFE8D9;
-      border-right:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:var(--color-sand-dark,#E3D9C6);
+      border-right:1px solid #C9B896; }
     .sv-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
     .sv-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
     /* Sand on both flanks and white in the middle, so the card reads as the thing itself between two
        cells of chrome. The stat cell was a third, near-white tint and looked grubby rather than
        deliberate. */
     .sv-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
-      width:5.8rem; padding:.5rem .7rem; background:#EFE8D9;
-      border-left:1px solid var(--color-sand-dark,#e3d9c6); }
+      width:5.8rem; padding:.5rem .7rem; background:var(--color-sand-dark,#E3D9C6);
+      border-left:1px solid #C9B896; }
     .sv-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
       font-variant-numeric:tabular-nums; }
-    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:#4B5563; white-space:nowrap;
       font-variant-numeric:tabular-nums; }
     .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
     /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
        standing next to a taller one grows its tray rather than opening a hole in the middle. */
     .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
-      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px);
+      border:1px solid #C9B896; border-radius:var(--radius-md,8px);
       box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
     .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
@@ -378,25 +378,25 @@ ${shell.headTop}
     /* The count is a tile in the corner of the identity row, not a line of its own between the name
        and the languages, where it used to float with nothing to hold it. */
     .sv-ix-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
-      min-width:3.15rem; padding:.3rem .42rem; background:#EFE8D9;
+      min-width:3.15rem; padding:.3rem .42rem; background:var(--color-sand-dark,#E3D9C6);
       border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-sm,4px); }
     .sv-ix-n { font-size:1.05rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
       font-variant-numeric:tabular-nums; }
     .sv-ix-unit { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
-      letter-spacing:.05em; color:var(--color-stone); }
+      letter-spacing:.05em; color:#4B5563; }
     /* The languages get a tray of their own, and a line saying what they are. */
-    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:#EFE8D9;
-      border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:var(--color-sand-dark,#E3D9C6);
+      border-top:1px solid #C9B896; }
     .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
-      letter-spacing:.11em; color:var(--color-stone); }
+      letter-spacing:.11em; color:#4B5563; }
     .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
     .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
     /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
        chip: no border, no white ground, just the number. */
-    .sv-ix .sv-lang-more { background:transparent; border:0; color:var(--color-stone); font-weight:600;
+    .sv-ix .sv-lang-more { background:transparent; border:0; color:#4B5563; font-weight:600;
       padding-left:.15rem; }
     @media (prefers-reduced-motion:reduce) { .sv-ix, a.sv-hub { transition:none; } .sv-ix:hover { transform:none; } }
-    .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid #C9B896; }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
     .sv-tiers { list-style:none; padding:0; margin:0 0 1rem; }
