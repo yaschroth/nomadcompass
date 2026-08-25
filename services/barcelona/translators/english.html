@@ -118,27 +118,68 @@
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 2rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
-    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.7rem; }
-    a.sv-hub:not(.btn):not(.nav-link) { display:flex; align-items:center; gap:.6rem; padding:.7rem .85rem; background:#fff;
-      color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); text-decoration:none; }
-    a.sv-hub:hover { border-color:var(--color-terracotta,#c65d3b); }
-    .sv-hub svg { width:18px; height:18px; color:var(--color-terracotta-dark,#a8492c); flex:0 0 auto; }
-    .sv-hub-name { font-weight:700; font-size:var(--text-sm); }
-    .sv-hub-n { margin-left:auto; font-size:var(--text-xs); color:var(--color-stone); }
-    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
-    .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+    /* Both card families are compartmented: a hairline between facts of different kinds, and a
+       fixed width on the cell that holds a number, so a long label can never push a count onto a
+       second line and leave one card taller than the rest of its row. Numbers are tabular so that
+       they line up down a column, which is what this page is really a table of. */
+    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px); text-decoration:none;
+      transition:border-color .15s, box-shadow .15s; }
+    a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 3px 12px rgba(15,23,42,.07); }
+    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:#EFE8D9;
+      border-right:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sv-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* Sand on both flanks and white in the middle, so the card reads as the thing itself between two
+       cells of chrome. The stat cell was a third, near-white tint and looked grubby rather than
+       deliberate. */
+    .sv-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#EFE8D9;
+      border-left:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
+    /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
+       standing next to a taller one grows its tray rather than opening a hole in the middle. */
+    .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px);
       box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
-    .sv-ix:hover { border-color:var(--color-terracotta,#c65d3b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
-    .sv-ix-top { display:flex; align-items:center; gap:.6rem; }
-    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2; }
+    /* A minimum height on the identity row so a one-line city and a two-line one sit their count
+       tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
+    .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
+      gap:.62rem; padding:.9rem 1rem .95rem; min-height:4.6rem; }
+    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
     .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
       letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
-    .sv-ix-count { font-size:var(--text-sm); color:var(--color-terracotta-dark,#a8492c); font-weight:600; }
+    /* The count is a tile in the corner of the identity row, not a line of its own between the name
+       and the languages, where it used to float with nothing to hold it. */
+    .sv-ix-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.15rem; padding:.3rem .42rem; background:#EFE8D9;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-sm,4px); }
+    .sv-ix-n { font-size:1.05rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-unit { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    /* The languages get a tray of their own, and a line saying what they are. */
+    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:#EFE8D9;
+      border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
     .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
-    .sv-ix .sv-lang-more { background:var(--color-sand,#f2e9da); color:var(--color-stone); }
+    .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
+       chip: no border, no white ground, just the number. */
+    .sv-ix .sv-lang-more { background:transparent; border:0; color:var(--color-stone); font-weight:600;
+      padding-left:.15rem; }
+    @media (prefers-reduced-motion:reduce) { .sv-ix, a.sv-hub { transition:none; } .sv-ix:hover { transform:none; } }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
@@ -203,7 +244,7 @@
       <div class="sv-grid">
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ada oliveras puigarnau">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ada OLIVERAS PUIGARNAU</h3>
             <p class="sv-meta">Carrer de les Sitges, 3 08001 BARCELONA</p>
@@ -218,7 +259,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alba gonzalez fuentes">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alba GONZALEZ FUENTES</h3>
             <p class="sv-meta">Carrer del Torrent de l'Olla, 143 08012 BARCELONA</p>
@@ -233,7 +274,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alejandra devoto carnicero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alejandra DEVOTO CARNICERO</h3>
             <p class="sv-meta">C/ ESCUDELLERS BLANCS, 3 BIS - 3, 2 08002 BARCELONA</p>
@@ -248,7 +289,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alexia garcia blasco">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alexia GARCIA BLASCO</h3>
             <p class="sv-meta">Passeig Manuel Girona, 86 11 08034 BARCELONA</p>
@@ -263,7 +304,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alicia alejo ibanez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alicia ALEJO IBANEZ</h3>
             <p class="sv-meta">C/ Vinyar, 3-5, 3, 2 08016 BARCELONA</p>
@@ -278,7 +319,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana maria colomer kammuller">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Maria COLOMER KAMMULLER</h3>
             <p class="sv-meta">C/ BALMES, 432 - 8 B 08022 BARCELONA</p>
@@ -293,7 +334,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana mellado nunez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana MELLADO NUNEZ</h3>
             <p class="sv-meta">C/ PI I MARGALL, 82-84, 1-3 08025 BARCELONA</p>
@@ -308,7 +349,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="beatriz acedo gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Beatriz ACEDO GOMEZ</h3>
             <p class="sv-meta">C/ MAIOR DEL RECTORET, 151 08017 BARCELONA</p>
@@ -323,7 +364,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="beatriz tarrega martin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Beatriz TARREGA MARTIN</h3>
             <p class="sv-meta">C/ Rambla Badal, 94 - 1, 3 08014 BARCELONA</p>
@@ -338,7 +379,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="berta villaescusa gabaldon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Berta VILLAESCUSA GABALDON</h3>
             <p class="sv-meta">C/ ENTENCA, 5 - PRINCIPAL, 2 08015 BARCELONA</p>
@@ -353,7 +394,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="brenda helen oldham de vidal">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Brenda Helen OLDHAM DE VIDAL</h3>
             <p class="sv-meta">C/ CALVET, 68-70 - 2, 2 08021 BARCELONA</p>
@@ -368,7 +409,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carolina lopez garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carolina LOPEZ GARCIA</h3>
             <p class="sv-meta">Pl. Las Navas, 7 08004 BARCELONA</p>
@@ -383,7 +424,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="catalina garcia-escudero marquez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Catalina GARCIA-ESCUDERO MARQUEZ</h3>
             <p class="sv-meta">C/ CAVALLERS, 64 - 5 B1 08034 BARCELONA</p>
@@ -398,7 +439,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="coco cubells enento">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Coco CUBELLS ENENTO</h3>
             <p class="sv-meta">C/ Rocafort, 92 1 2 08015 BARCELONA</p>
@@ -413,7 +454,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina bonet egea">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina BONET EGEA</h3>
             <p class="sv-meta">Passeig Zona Franca, 211 - esc. C, 1, 1 08038 BARCELONA</p>
@@ -428,7 +469,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina julia payeras">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina JULIA PAYERAS</h3>
             <p class="sv-meta">Av. Diagonal 380 08037 BARCELONA</p>
@@ -443,7 +484,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina montoya martinez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina MONTOYA MARTINEZ</h3>
             <p class="sv-meta">Nou de la Rambla, 190, 4.2 08004 BARCELONA</p>
@@ -458,7 +499,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina paz vega">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina PAZ VEGA</h3>
             <p class="sv-meta">Travesia de Dalt, 72 - 5, 2 08024 BARCELONA</p>
@@ -473,7 +514,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina rivela padreda">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina RIVELA PADREDA</h3>
             <p class="sv-meta">Rambla de Catalunya, 33 - 3 08007 Barcelona</p>
@@ -488,7 +529,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="daniel jorda tormo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Daniel JORDA TORMO</h3>
             <p class="sv-meta">C/ Sardenya, 209, 2-1 08013 BARCELONA</p>
@@ -503,7 +544,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="diarmuid rory magourty">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Diarmuid Rory MAGOURTY</h3>
             <p class="sv-meta">C/ Cartagena, 293 bis - 6, 1 08025 BARCELONA</p>
@@ -518,7 +559,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elisa palain lorenz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elisa PALAIN LORENZ</h3>
             <p class="sv-meta">Paseo de San Juan, 27 - 3, 2 08010 BARCELONA</p>
@@ -533,7 +574,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elisenda-agnes pallares mestre">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elisenda-Agnes PALLARES MESTRE</h3>
             <p class="sv-meta">Pza. Ventura Gassol, 3 - 3, 2 08023 BARCELONA</p>
@@ -548,7 +589,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="emiliano figueroa otero-pizarro">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Emiliano FIGUEROA OTERO-PIZARRO</h3>
             <p class="sv-meta">c/ Rosari 11, 2 3 08017 BARCELONA</p>
@@ -563,7 +604,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="emma bernal lloret">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Emma BERNAL LLORET</h3>
             <p class="sv-meta">Gran Via Carlos III, 45 - 4, 2 08028 BARCELONA</p>
@@ -578,7 +619,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="enric enrich muls">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Enric ENRICH MULS</h3>
             <p class="sv-meta">C/ JOSEP TARRADELLAS, 155, 2-2 08029 BARCELONA</p>
@@ -593,7 +634,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es de fr en it pt" data-name="enrique munoz latorre">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Enrique MUNOZ LATORRE</h3>
             <p class="sv-meta">C/ CALABRIA, 160 - 2, 2 08015 BARCELONA</p>
@@ -608,7 +649,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="eulalia vidal jubert">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Eulalia VIDAL JUBERT</h3>
             <p class="sv-meta">Plaza Pep Ventura, 1 - AT. 1 08017 BARCELONA</p>
@@ -623,7 +664,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="eva reyes de una">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Eva REYES DE UNA</h3>
             <p class="sv-meta">C/ Reina Amalia,15-4-4 08001 BARCELONA</p>
@@ -638,7 +679,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="francesca guim segurado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Francesca GUIM SEGURADO</h3>
             <p class="sv-meta">C/ Rabi Ruben. 2 4-1 08004 BARCELONA</p>
@@ -653,7 +694,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="francisco javier buendia guasch">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Francisco Javier BUENDIA GUASCH</h3>
             <p class="sv-meta">C/ SANTA MONICA, 2 - ENTLO. 1 08001 BARCELONA</p>
@@ -668,7 +709,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="gema guijo jimenez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Gema GUIJO JIMENEZ</h3>
             <p class="sv-meta">C/ Reig i Bonet, 21 - 1, 1 08024 BARCELONA</p>
@@ -683,7 +724,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="gerardo h. denis brons">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Gerardo H. DENIS BRONS</h3>
             <p class="sv-meta">C/ JOCS FLORALS, 162, SA 3 08014 BARCELONA</p>
@@ -698,7 +739,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="iker fernandez jauregui">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Iker FERNANDEZ JAUREGUI</h3>
             <p class="sv-meta">Carrer del Perill 25-27 Principal 1 08012 BARCELONA</p>
@@ -713,7 +754,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="irene eleta mogollon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Irene ELETA MOGOLLON</h3>
             <p class="sv-meta">C/ Bruc, 78 08009 BARCELONA</p>
@@ -728,7 +769,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="isabel monteagudo robledo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Isabel MONTEAGUDO ROBLEDO</h3>
             <p class="sv-meta">C/ Gran de Gracia, 256, pl-2 08012 BARCELONA</p>
@@ -743,7 +784,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jaime bermudez escamilla">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jaime BERMUDEZ ESCAMILLA</h3>
             <p class="sv-meta">C/Pi I MARGALL, 82 1-3 08025 BARCELONA</p>
@@ -758,7 +799,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jessica de hoyos aguilar">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jessica DE HOYOS AGUILAR</h3>
             <p class="sv-meta">Llanca, 56 - entresuelo 3 08015 BARCELONA</p>
@@ -773,7 +814,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jordi lopez sancho">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jordi LOPEZ SANCHO</h3>
             <p class="sv-meta">C/ Bruc 6, 1 - 2 B 08010 BARCELONA</p>
@@ -788,7 +829,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jose miguel molina llop">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jose Miguel MOLINA LLOP</h3>
             <p class="sv-meta">C/ ENAMORADOS, 62 - ATICO 1 08013 BARCELONA</p>
@@ -803,7 +844,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jose picazo zamora">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jose PICAZO ZAMORA</h3>
             <p class="sv-meta">C/ Napols, 217 - at. 2 08013 BARCELONA</p>
@@ -818,7 +859,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jose vicente fernandez falcon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jose Vicente FERNANDEZ FALCON</h3>
             <p class="sv-meta">C/ Regas, 8 - 5, 3 08006 BARCELONA</p>
@@ -833,7 +874,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="josep anton monfort tort">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Josep Anton MONFORT TORT</h3>
             <p class="sv-meta">Ronda Sant Pere, 50, 5-2 08010 BARCELONA</p>
@@ -848,7 +889,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="ca en es fr it pt" data-name="josep penarroja fa">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Josep PENARROJA FA</h3>
             <p class="sv-meta">GRAN VIA DE LES CORTS CATALANES, 594 - SOBREATICO, 2 08007 BARCELONA</p>
@@ -863,7 +904,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="katya ximenez de olaso serna">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Katya XIMENEZ DE OLASO SERNA</h3>
             <p class="sv-meta">C/ ROGER DE FLOR, 69 - SOBREATICO, 1 08013 BARCELONA</p>
@@ -878,7 +919,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laia figueras canut">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laia FIGUERAS CANUT</h3>
             <p class="sv-meta">Avda. Meridiana, 560 - 4 2 08030 BARCELONA</p>
@@ -893,7 +934,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura lamas reyes">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura LAMAS REYES</h3>
             <p class="sv-meta">Avda. Diagonal, 400 5 5 08037 BARCELONA</p>
@@ -908,7 +949,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura rangel roca">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura RANGEL ROCA</h3>
             <p class="sv-meta">C/ Magalhaes, 64 - 3, 3 08004 BARCELONA</p>
@@ -923,7 +964,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura redondo mendoza">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura REDONDO MENDOZA</h3>
             <p class="sv-meta">C/ Santa Ursula 4, 2-1 08031 BARCELONA</p>
@@ -938,7 +979,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="lorenzo gallego borghini">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Lorenzo GALLEGO BORGHINI</h3>
             <p class="sv-meta">C/ Ruiz de Padron, 3 08026 BARCELONA</p>
@@ -953,7 +994,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="luis alfonso duran moya">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Luis Alfonso DURAN MOYA</h3>
             <p class="sv-meta">C/Corcega, 329 (P Gracia/Diagonal) 08037 BARCELONA</p>
@@ -968,7 +1009,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="luis perez vidal">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Luis PEREZ VIDAL</h3>
             <p class="sv-meta">C/ MARTI, 12- 3, 1 08024 BARCELONA</p>
@@ -983,7 +1024,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="margarita domenech vinas">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Margarita DOMENECH VINAS</h3>
             <p class="sv-meta">C/ MADRAZO, 33 - 4, 4 08006 BARCELONA</p>
@@ -998,7 +1039,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria angeles reyes barranquero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Angeles REYES BARRANQUERO</h3>
             <p class="sv-meta">Carrer de Bailen 102, 4-2 08009 BARCELONA</p>
@@ -1013,7 +1054,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria asuncion renau rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Asuncion RENAU RODRIGUEZ</h3>
             <p class="sv-meta">C. Escorial, 1, 1 1 08024 BARCELONA</p>
@@ -1028,7 +1069,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria blanca grifols ochogavias">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Blanca GRIFOLS OCHOGAVIAS</h3>
             <p class="sv-meta">C/ Aribau, 168 - 1, 1 08036 BARCELONA</p>
@@ -1043,7 +1084,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria carmen sanchez garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Carmen SANCHEZ GARCIA</h3>
             <p class="sv-meta">C/ Pujades, 183 - 1, 2 08005 BARCELONA</p>
@@ -1058,7 +1099,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria claudia infantes villafranca">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Claudia INFANTES VILLAFRANCA</h3>
             <p class="sv-meta">C/ San Juan de Malta, 205-207, 42 08018 BARCELONA</p>
@@ -1073,7 +1114,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria de la cinta fernandez de la rosa">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria de la Cinta FERNANDEZ DE LA ROSA</h3>
             <p class="sv-meta">C/ Ferran Turne, 8-10, 3, 3 08027 BARCELONA</p>
@@ -1088,7 +1129,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria del carmen de la calle y gomez-plana">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria del Carmen DE LA CALLE Y GOMEZ-PLANA</h3>
             <p class="sv-meta">C/ Valencia, 21 4-3 08015 BARCELONA</p>
@@ -1103,7 +1144,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria dolores giralt caceres">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Dolores GIRALT CACERES</h3>
             <p class="sv-meta">Ronda de Sant Pere, n 52 Atico 08010 633 843 193 BARCELONA</p>
@@ -1118,7 +1159,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria eloisa moyano prados">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Eloisa MOYANO PRADOS</h3>
             <p class="sv-meta">Rambla de Catalunya, 62, 5 1 B 08007 BARCELONA</p>
@@ -1133,7 +1174,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria encina pena merayo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Encina PENA MERAYO</h3>
             <p class="sv-meta">C/ SANT PERE MES BAIX, 39 - 2, 1 08003 BARCELONA</p>
@@ -1148,7 +1189,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="maria isabel llasat botija">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Isabel LLASAT BOTIJA</h3>
             <p class="sv-meta">C/ LUIS ANTUNEZ, 6 08006 BARCELONA</p>
@@ -1163,7 +1204,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria jose centelles cuart">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Jose CENTELLES CUART</h3>
             <p class="sv-meta">Placa Francesc Macia, n 5 08021 BARCELONA</p>
@@ -1178,7 +1219,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria luisa aguado martinez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Luisa AGUADO MARTINEZ</h3>
             <p class="sv-meta">C/ Balmes, 436-8 D 08022 BARCELONA</p>
@@ -1193,7 +1234,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="en es fr" data-name="maria luisa martinez vinuales">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Luisa MARTINEZ VINUALES</h3>
             <p class="sv-meta">GRAN VIA DE LAS CORTES CATALANAS, 498 - 4, 2 08015 BARCELONA</p>
@@ -1208,7 +1249,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es de fr en pt" data-name="maria pilar calbet rebollo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Pilar CALBET REBOLLO</h3>
             <p class="sv-meta">C/ ta de Gironella 4, 3 1 08017 BARCELONA</p>
@@ -1223,7 +1264,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria raquel montero puerto">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Raquel MONTERO PUERTO</h3>
             <p class="sv-meta">C/ Juegos Florales, 77 bis - 2 08014 BARCELONA</p>
@@ -1238,7 +1279,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marina jane sanchez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marina JANE SANCHEZ</h3>
             <p class="sv-meta">C/ Felip II, 23 - 2, 3 08027 BARCELONA</p>
@@ -1253,7 +1294,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="mario alberto jimenez salado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Mario Alberto JIMENEZ SALADO</h3>
             <p class="sv-meta">C/ Consell de Cent, 85, 2-1 08015 BARCELONA</p>
@@ -1268,7 +1309,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="mario trigo cortijo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Mario TRIGO CORTIJO</h3>
             <p class="sv-meta">C/ De la Cera, 28 - 3, 2 08001 BARCELONA</p>
@@ -1283,7 +1324,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta delshorts gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta DELSHORTS GOMEZ</h3>
             <p class="sv-meta">C/ Joan Guell, 5 - 4, 2 08028 BARCELONA</p>
@@ -1298,7 +1339,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta iglesias gato">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta IGLESIAS GATO</h3>
             <p class="sv-meta">C/ Ramon Turro 168-170 1, 2 08005 BARCELONA</p>
@@ -1313,7 +1354,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="marta tusquets trias de bes">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta TUSQUETS TRIAS DE BES</h3>
             <p class="sv-meta">C/ BALMES, 213 - 6 1 08006 BARCELONA</p>
@@ -1328,7 +1369,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta valenti gavalda">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta VALENTI GAVALDA</h3>
             <p class="sv-meta">C/ Font del Remei, 40 - 2, 1 08023 BARCELONA</p>
@@ -1343,7 +1384,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta varela mendez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta VARELA MENDEZ</h3>
             <p class="sv-meta">c/ La Pobla de Lillet 12-14 Escalera Derecha 3 3 08028 BARCELONA</p>
@@ -1358,7 +1399,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maya busque vallespi">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maya BUSQUE VALLESPI</h3>
             <p class="sv-meta">Espronceda, 38, 1o 2a 08005 BARCELONA</p>
@@ -1373,7 +1414,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="melissa arcos percy">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Melissa ARCOS PERCY</h3>
             <p class="sv-meta">C/ AVENIR, 3 - 2, 1 08006 BARCELONA</p>
@@ -1388,7 +1429,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="meritxell calero garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Meritxell CALERO GARCIA</h3>
             <p class="sv-meta">C/ Frederic Mompou, 13 - 4, 2 08005 BARCELONA</p>
@@ -1403,7 +1444,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="miguel angel abadias carbajo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Miguel Angel ABADIAS CARBAJO</h3>
             <p class="sv-meta">c/ Bilbao, 125 - 4 A 08018 BARCELONA</p>
@@ -1418,7 +1459,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="miguel parra durban">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Miguel PARRA DURBAN</h3>
             <p class="sv-meta">C/ GRECO, 10 3 2 08031 BARCELONA</p>
@@ -1433,7 +1474,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="miriam andreu orbaneja">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Miriam ANDREU ORBANEJA</h3>
             <p class="sv-meta">C/ MARE DE DEU DE PORT, 407 - 15 B 08038 BARCELONA</p>
@@ -1448,7 +1489,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="montserrat guiu iniesta">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Montserrat GUIU INIESTA</h3>
             <p class="sv-meta">C/ CORCEGA, 176 - SOBREATICO 2 08036 BARCELONA</p>
@@ -1463,7 +1504,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="natalia fernandez gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Natalia FERNANDEZ GONZALEZ</h3>
             <p class="sv-meta">C/ Cartella, 133, 3 - 3 08031 BARCELONA</p>
@@ -1478,7 +1519,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en ru" data-name="natalia inness ramos">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Natalia INNESS RAMOS</h3>
             <p class="sv-meta">C/ VIA AUGUSTA, 124 - ATICO 2 08006 BARCELONA</p>
@@ -1493,7 +1534,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nicholas george charles colomina">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nicholas George CHARLES COLOMINA</h3>
             <p class="sv-meta">C/ Cartella, 133 - 3, 3 08031 BARCELONA</p>
@@ -1508,7 +1549,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nieves borras vicente">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nieves BORRAS VICENTE</h3>
             <p class="sv-meta">C/ Francesc Alegre, 7 - 1, 1 08024 BARCELONA</p>
@@ -1523,7 +1564,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nuria fernandez ferrer">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nuria FERNANDEZ FERRER</h3>
             <p class="sv-meta">Gran Via Corts Catalanes, 1003 - 4, 4 08020 BARCELONA</p>
@@ -1538,7 +1579,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="olga carrascal guillen">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Olga CARRASCAL GUILLEN</h3>
             <p class="sv-meta">P MARE DE DEU DEL COLL, 116 - BAIXOS 08023 BARCELONA</p>
@@ -1553,7 +1594,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en it ru" data-name="oriol carbonell curell">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Oriol CARBONELL CURELL</h3>
             <p class="sv-meta">C/ HOMER, 8 - 3, 2 08023 BARCELONA</p>
@@ -1568,7 +1609,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="pablo baeza centurion">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Pablo BAEZA CENTURION</h3>
             <p class="sv-meta">Av. Gaudi, 16, 6-3 08025 BARCELONA</p>
@@ -1583,7 +1624,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="pablo salas vazquez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Pablo SALAS VAZQUEZ</h3>
             <p class="sv-meta">C/ VENT, 40 - ESC. A - 1, 4 08031 BARCELONA</p>
@@ -1598,7 +1639,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="paola tormo gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Paola TORMO GOMEZ</h3>
             <p class="sv-meta">C/ JONCAR, 47-51, 1, 1 08005 BARCELONA</p>
@@ -1613,7 +1654,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="patricia gomez jurado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Patricia GOMEZ JURADO</h3>
             <p class="sv-meta">C /CARRER BOLIVIA 115, 1--1 08018 BARCELONA</p>
@@ -1628,7 +1669,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="rafel garrido oliete">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Rafel GARRIDO OLIETE</h3>
             <p class="sv-meta">C/ GRAN VIA CORTS CATALANES, 610 - 4, 2 08007 BARCELONA</p>
@@ -1643,7 +1684,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="raquel garcia martinez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Raquel GARCIA MARTINEZ</h3>
             <p class="sv-meta">Carrer Sicilia 216-218, 64 08013 BARCELONA</p>
@@ -1658,7 +1699,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="rocio otero ortiz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Rocio OTERO ORTIZ</h3>
             <p class="sv-meta">Rambla Guipuzcoa, 92 esc. izq, 9, 2 08020 BARCELONA</p>
@@ -1673,7 +1714,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="rosa gregori garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Rosa GREGORI GARCIA</h3>
             <p class="sv-meta">Carrer Rossello 350, 4-2, esc. D 08025 BARCELONA</p>
@@ -1688,7 +1729,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="rosa maria corrales gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Rosa Maria CORRALES GONZALEZ</h3>
             <p class="sv-meta">C/ Pere Pau 24, 1 08032 BARCELONA</p>
@@ -1703,7 +1744,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sandra burdalo mila">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sandra BURDALO MILA</h3>
             <p class="sv-meta">C/. Fraternitat, n 31, 2 2 08012 BARCELONA</p>
@@ -1718,7 +1759,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara chine segura">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara CHINE SEGURA</h3>
             <p class="sv-meta">C/ ESCULTOR CANET, 25 - 3 - 2 08028 BARCELONA</p>
@@ -1733,7 +1774,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara duran arana">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara DURAN ARANA</h3>
             <p class="sv-meta">C/ Benet Mateu, 49-51 3 B 08034 BARCELONA</p>
@@ -1748,7 +1789,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara suarez dominguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara SUAREZ DOMINGUEZ</h3>
             <p class="sv-meta">Carrer de Floridablanca, 53, ppal 2. 08015 BARCELONA</p>
@@ -1763,7 +1804,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sarah bringold gil">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sarah BRINGOLD GIL</h3>
             <p class="sv-meta">C/ Bonavista, 20, 2-3 08012 BARCELONA</p>
@@ -1778,7 +1819,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="silvia serratosa fransi">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Silvia SERRATOSA FRANSI</h3>
             <p class="sv-meta">C/ FRANCESC TARREGA, 9 BIS - ATIC 1 08027 BARCELONA</p>
@@ -1793,7 +1834,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="silvia serres soler">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Silvia SERRES SOLER</h3>
             <p class="sv-meta">C/ OSIO, 18-20, 2, 4 08034 BARCELONA</p>
@@ -1808,7 +1849,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sonia jimeno ramirez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sonia JIMENO RAMIREZ</h3>
             <p class="sv-meta">C/ MALLORCA, 600 - 3, 2 08026 BARCELONA</p>
@@ -1823,7 +1864,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="susana solsona gallardo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Susana SOLSONA GALLARDO</h3>
             <p class="sv-meta">C/ Muntaner 112, entresuelo 2a 08036 BARCELONA</p>
@@ -1838,7 +1879,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="teodora gambetta aragones">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Teodora GAMBETTA ARAGONES</h3>
             <p class="sv-meta">C/ ESCORIAL, 29-31 - ESC. C, ATIC., 2 08024 BARCELONA</p>
@@ -1853,7 +1894,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="teresa ernestina paradinas duro">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Teresa Ernestina PARADINAS DURO</h3>
             <p class="sv-meta">C/ Marmella, 2 A, Atico 2 08023 BARCELONA</p>
@@ -1868,7 +1909,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="victor blanes pico">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Victor BLANES PICO</h3>
             <p class="sv-meta">C/ L' Escorial, 16 1, 1 08024 BARCELONA</p>
@@ -1883,7 +1924,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="victor hugo garcia lopez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Victor Hugo GARCIA LOPEZ</h3>
             <p class="sv-meta">C/ Galileu, 333 - 6, 3 08028 BARCELONA</p>
@@ -1898,7 +1939,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="virginia alonso llano">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Virginia ALONSO LLANO</h3>
             <p class="sv-meta">C/ Bailen, 159 - 4, 2 08025 BARCELONA</p>
@@ -1913,7 +1954,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es de en" data-name="wilhelm topfer">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Wilhelm TOPFER</h3>
             <p class="sv-meta">TRAVESERA DE LES CORTS, 272 - B - 6, 2 08014 BARCELONA</p>
@@ -1928,7 +1969,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="wilson jacobo richetti veras">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Wilson Jacobo RICHETTI VERAS</h3>
             <p class="sv-meta">C/ Vallhonrat, 2, bis - 2, 2 08004 BARCELONA</p>
@@ -1943,7 +1984,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es fr en" data-name="xavier garcia elena">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Xavier GARCIA ELENA</h3>
             <p class="sv-meta">C/ Balmes, 200, 7 5 08006 BARCELONA</p>
@@ -1958,7 +1999,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="yvonne fernandez samitier">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Yvonne FERNANDEZ SAMITIER</h3>
             <p class="sv-meta">C/ Castillejos, 387 bis 22 08025 BARCELONA</p>

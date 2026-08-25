@@ -118,27 +118,68 @@
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 2rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
-    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.7rem; }
-    a.sv-hub:not(.btn):not(.nav-link) { display:flex; align-items:center; gap:.6rem; padding:.7rem .85rem; background:#fff;
-      color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); text-decoration:none; }
-    a.sv-hub:hover { border-color:var(--color-terracotta,#c65d3b); }
-    .sv-hub svg { width:18px; height:18px; color:var(--color-terracotta-dark,#a8492c); flex:0 0 auto; }
-    .sv-hub-name { font-weight:700; font-size:var(--text-sm); }
-    .sv-hub-n { margin-left:auto; font-size:var(--text-xs); color:var(--color-stone); }
-    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
-    .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+    /* Both card families are compartmented: a hairline between facts of different kinds, and a
+       fixed width on the cell that holds a number, so a long label can never push a count onto a
+       second line and leave one card taller than the rest of its row. Numbers are tabular so that
+       they line up down a column, which is what this page is really a table of. */
+    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px); text-decoration:none;
+      transition:border-color .15s, box-shadow .15s; }
+    a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 3px 12px rgba(15,23,42,.07); }
+    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:#EFE8D9;
+      border-right:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sv-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* Sand on both flanks and white in the middle, so the card reads as the thing itself between two
+       cells of chrome. The stat cell was a third, near-white tint and looked grubby rather than
+       deliberate. */
+    .sv-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#EFE8D9;
+      border-left:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
+    /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
+       standing next to a taller one grows its tray rather than opening a hole in the middle. */
+    .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px);
       box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
-    .sv-ix:hover { border-color:var(--color-terracotta,#c65d3b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
-    .sv-ix-top { display:flex; align-items:center; gap:.6rem; }
-    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2; }
+    /* A minimum height on the identity row so a one-line city and a two-line one sit their count
+       tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
+    .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
+      gap:.62rem; padding:.9rem 1rem .95rem; min-height:4.6rem; }
+    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
     .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
       letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
-    .sv-ix-count { font-size:var(--text-sm); color:var(--color-terracotta-dark,#a8492c); font-weight:600; }
+    /* The count is a tile in the corner of the identity row, not a line of its own between the name
+       and the languages, where it used to float with nothing to hold it. */
+    .sv-ix-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.15rem; padding:.3rem .42rem; background:#EFE8D9;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-sm,4px); }
+    .sv-ix-n { font-size:1.05rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-unit { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    /* The languages get a tray of their own, and a line saying what they are. */
+    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:#EFE8D9;
+      border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
     .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
-    .sv-ix .sv-lang-more { background:var(--color-sand,#f2e9da); color:var(--color-stone); }
+    .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
+       chip: no border, no white ground, just the number. */
+    .sv-ix .sv-lang-more { background:transparent; border:0; color:var(--color-stone); font-weight:600;
+      padding-left:.15rem; }
+    @media (prefers-reduced-motion:reduce) { .sv-ix, a.sv-hub { transition:none; } .sv-ix:hover { transform:none; } }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
@@ -203,7 +244,7 @@
       <div class="sv-grid">
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alicia rita rueda acedo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alicia Rita RUEDA ACEDO</h3>
             <p class="sv-meta">C/ CLAUDIO GUERIN, 7 - 7 B 41005 SEVILLA</p>
@@ -218,7 +259,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana gutierrez gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana GUTIERREZ GONZALEZ</h3>
             <p class="sv-meta">Calle Juan Sebastian Elcano 21, 1 C 41011 SEVILLA</p>
@@ -233,7 +274,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana maria palomares munoz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Maria PALOMARES MUNOZ</h3>
             <p class="sv-meta">C/ SEBASTIAN ELCANO, 30, 3B 41011 SEVILLA</p>
@@ -248,7 +289,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="berta carmen narvaez gonzalez-orejas">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Berta Carmen NARVAEZ GONZALEZ-OREJAS</h3>
             <p class="sv-meta">C/ Jose Recuerda Rubio, 1 portal 3, 1-A 41018 SEVILLA</p>
@@ -263,7 +304,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carmen cuellar arjona">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carmen CUELLAR ARJONA</h3>
             <p class="sv-meta">C/ Esperanza, 6 - 2 F 41008 SEVILLA</p>
@@ -278,7 +319,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="concepcion gonzalo munoz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Concepcion GONZALO MUNOZ</h3>
             <p class="sv-meta">Avda. Paseo de Europa, 6 - 2, 3 41012 SEVILLA</p>
@@ -293,7 +334,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="coral ivy hunt gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Coral Ivy HUNT GOMEZ</h3>
             <p class="sv-meta">C/ Costa de la Luz, 11 - bajo B 41005 SEVILLA</p>
@@ -308,7 +349,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="david baines">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">David BAINES</h3>
             <p class="sv-meta">C/ Lira, 26 2 Izq 41003 SEVILLA</p>
@@ -323,7 +364,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="dolores guerrero rosado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Dolores GUERRERO ROSADO</h3>
             <p class="sv-meta">C/ Doctor Madrazo Osuna, 7. Bloque 3, 4 B 41020 SEVILLA</p>
@@ -338,7 +379,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elisa alonso jimenez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elisa ALONSO JIMENEZ</h3>
             <p class="sv-meta">C/ MALVALOCA, 3 -4 A 41013 SEVILLA</p>
@@ -353,7 +394,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elisa palma sanchez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elisa PALMA SANCHEZ</h3>
             <p class="sv-meta">C/ Amor de Dios, 25 - 4 D 41002 SEVILLA</p>
@@ -368,7 +409,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="fatima fernandez-palacios parejo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Fatima FERNANDEZ-PALACIOS PAREJO</h3>
             <p class="sv-meta">C/ Juan Pablos N1 3 Izq. 41013 SEVILLA</p>
@@ -383,7 +424,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="francisco javier vigier moreno">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Francisco Javier VIGIER MORENO</h3>
             <p class="sv-meta">C/ Juan Sebastian Elcano, 30, 3B 41011 CADIZ SEVILLA</p>
@@ -398,7 +439,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="idalino rocha gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Idalino ROCHA GONZALEZ</h3>
             <p class="sv-meta">C/ Fedra 3, bajo b 41009 SEVILLA</p>
@@ -413,7 +454,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="igor zubicaray diaz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Igor ZUBICARAY DIAZ</h3>
             <p class="sv-meta">C/ Celinda, 3 - 1 A 41004 SEVILLA</p>
@@ -428,7 +469,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="irene marquez linares">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Irene MARQUEZ LINARES</h3>
             <p class="sv-meta">AVDA.Bellavista, 56, 2 41001 SEVILLA</p>
@@ -443,7 +484,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="isabel maria rueda rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Isabel Maria RUEDA RODRIGUEZ</h3>
             <p class="sv-meta">C/. Florencio Quintero 22, 4 A 41009 SEVILLA</p>
@@ -458,7 +499,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jose puente gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jose PUENTE GONZALEZ</h3>
             <p class="sv-meta">AVDA. REPUBLICA ARGENTINA, 46 - 8 DCHA. 41011 SEVILLA</p>
@@ -473,7 +514,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="julia lobato patricio">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Julia LOBATO PATRICIO</h3>
             <p class="sv-meta">C/ Cardenal Spinola, 15, 3 41002 SEVILLA</p>
@@ -488,7 +529,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="lucia lopez charlo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Lucia LOPEZ CHARLO</h3>
             <p class="sv-meta">C/ DOCTOR JOSE MARIA BEDOYA, 1 41004 SEVILLA</p>
@@ -503,7 +544,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria cruz garcia ferrera">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Cruz GARCIA FERRERA</h3>
             <p class="sv-meta">C/ SAN VICENTE DE PAUL, 10 - D-6 C 41010 SEVILLA</p>
@@ -518,7 +559,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria del carmen perez balado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria del Carmen PEREZ BALADO</h3>
             <p class="sv-meta">C/ DINASTIA MUSICOS PALATIN, 5 - 3 B 41008 SEVILLA</p>
@@ -533,7 +574,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria del carmen soria summers">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria del Carmen SORIA SUMMERS</h3>
             <p class="sv-meta">Avda. La Calesera 29, 4C 41006 SEVILLA</p>
@@ -548,7 +589,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria del pilar molina exposito">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria del Pilar MOLINA EXPOSITO</h3>
             <p class="sv-meta">C/ ARJONA, 20 41001 SEVILLA</p>
@@ -563,7 +604,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria gema salmoral fernandez-cuartero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Gema SALMORAL FERNANDEZ-CUARTERO</h3>
             <p class="sv-meta">Pza. Ponce de Leon, 11 - P4 - 1 D 41003 SEVILLA</p>
@@ -578,7 +619,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria isabel jimenez heras">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Isabel JIMENEZ HERAS</h3>
             <p class="sv-meta">C/ DR. ANTONIO CORTES LLADO, 11 - ESC. IZDA. - 4 C 41004 SEVILLA</p>
@@ -593,7 +634,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria isabel olalla villar">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Isabel OLALLA VILLAR</h3>
             <p class="sv-meta">C/ Rodrigo de Triana 12 Esc 2 2 A 41010 SEVILLA</p>
@@ -608,7 +649,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria jose rodriguez ruiz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Jose RODRIGUEZ RUIZ</h3>
             <p class="sv-meta">C/ MADRE ISABEL MORENO, 4 - 7 C 41005 SEVILLA</p>
@@ -623,7 +664,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria josefa mena alcolea">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Josefa MENA ALCOLEA</h3>
             <p class="sv-meta">C/ Antonio Susillo, 17-2Izq 41002 SEVIILA SEVILLA</p>
@@ -638,7 +679,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="mariana relinque barranca">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Mariana RELINQUE BARRANCA</h3>
             <p class="sv-meta">C/ Hispano Aviacion, 2 Bl. 5 7  B 41011 Los Remedios SEVILLA</p>
@@ -653,7 +694,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta manuela chavez gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta Manuela CHAVEZ GONZALEZ</h3>
             <p class="sv-meta">C/ La Moraleja, 10 - 1 A 41020 SEVILLA</p>
@@ -668,7 +709,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="patricia gotor sanchez-luengo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Patricia GOTOR SANCHEZ-LUENGO</h3>
             <p class="sv-meta">AVDA. VILLAS DE CUBA, 13, 2, 9 C 41007 SEVILLA</p>
@@ -683,7 +724,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ramon galindo almohalla">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ramon GALINDO ALMOHALLA</h3>
             <p class="sv-meta">C/ Tormes 2 bloque 9 3C 41008 SEVILLA</p>
@@ -698,7 +739,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sandra gutierrez palacios">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sandra GUTIERREZ PALACIOS</h3>
             <p class="sv-meta">Avda. Republica Argentina, 26 bis -4 C 41011 SEVILLA</p>
@@ -713,7 +754,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="virginia perez nieto">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Virginia PEREZ NIETO</h3>
             <p class="sv-meta">Urbanizable Jardin 27, bloque 6 Piso 5 b Santa Clara 41007 SEVILLA</p>

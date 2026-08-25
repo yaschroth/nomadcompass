@@ -116,27 +116,68 @@
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 2rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
-    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.7rem; }
-    a.sv-hub:not(.btn):not(.nav-link) { display:flex; align-items:center; gap:.6rem; padding:.7rem .85rem; background:#fff;
-      color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); text-decoration:none; }
-    a.sv-hub:hover { border-color:var(--color-terracotta,#c65d3b); }
-    .sv-hub svg { width:18px; height:18px; color:var(--color-terracotta-dark,#a8492c); flex:0 0 auto; }
-    .sv-hub-name { font-weight:700; font-size:var(--text-sm); }
-    .sv-hub-n { margin-left:auto; font-size:var(--text-xs); color:var(--color-stone); }
-    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
-    .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+    /* Both card families are compartmented: a hairline between facts of different kinds, and a
+       fixed width on the cell that holds a number, so a long label can never push a count onto a
+       second line and leave one card taller than the rest of its row. Numbers are tabular so that
+       they line up down a column, which is what this page is really a table of. */
+    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px); text-decoration:none;
+      transition:border-color .15s, box-shadow .15s; }
+    a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 3px 12px rgba(15,23,42,.07); }
+    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:#EFE8D9;
+      border-right:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sv-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* Sand on both flanks and white in the middle, so the card reads as the thing itself between two
+       cells of chrome. The stat cell was a third, near-white tint and looked grubby rather than
+       deliberate. */
+    .sv-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#EFE8D9;
+      border-left:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
+    /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
+       standing next to a taller one grows its tray rather than opening a hole in the middle. */
+    .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px);
       box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
-    .sv-ix:hover { border-color:var(--color-terracotta,#c65d3b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
-    .sv-ix-top { display:flex; align-items:center; gap:.6rem; }
-    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2; }
+    /* A minimum height on the identity row so a one-line city and a two-line one sit their count
+       tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
+    .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
+      gap:.62rem; padding:.9rem 1rem .95rem; min-height:4.6rem; }
+    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
     .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
       letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
-    .sv-ix-count { font-size:var(--text-sm); color:var(--color-terracotta-dark,#a8492c); font-weight:600; }
+    /* The count is a tile in the corner of the identity row, not a line of its own between the name
+       and the languages, where it used to float with nothing to hold it. */
+    .sv-ix-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.15rem; padding:.3rem .42rem; background:#EFE8D9;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-sm,4px); }
+    .sv-ix-n { font-size:1.05rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-unit { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    /* The languages get a tray of their own, and a line saying what they are. */
+    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:#EFE8D9;
+      border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
     .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
-    .sv-ix .sv-lang-more { background:var(--color-sand,#f2e9da); color:var(--color-stone); }
+    .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
+       chip: no border, no white ground, just the number. */
+    .sv-ix .sv-lang-more { background:transparent; border:0; color:var(--color-stone); font-weight:600;
+      padding-left:.15rem; }
+    @media (prefers-reduced-motion:reduce) { .sv-ix, a.sv-hub { transition:none; } .sv-ix:hover { transform:none; } }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
@@ -292,11 +333,11 @@
           <p class="svc-more-link"><a href="/services/lisbon/lawyers">See all 38 lawyers in Lisbon &rarr;</a></p>
         </section>
       <section class="svc-group" data-cat="translator" id="svc-translator">
-          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span><a href="/services/lisbon/translators">Translators &amp; interpreters</a><span class="svc-group-n">20</span></h2>
+          <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span><a href="/services/lisbon/translators">Translators &amp; interpreters</a><span class="svc-group-n">20</span></h2>
           <div class="sv-grid">
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="de pt" data-name="ana paula correia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Paula Correia</h3>
             <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; Lisboa and Oeiras</p>
@@ -311,7 +352,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="de pt" data-name="angelika buch">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Angelika Buch</h3>
             <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; Rua Fialho de Almeida, 14-1. Esq., 1070-129</p>
@@ -326,7 +367,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="de pt" data-name="anne gisela brunke">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Anne Gisela Brunke</h3>
             <p class="sv-meta">Translators &amp; interpreters&nbsp;&middot; Av. das Forcas Armadas, 59-7A, 1600-077</p>

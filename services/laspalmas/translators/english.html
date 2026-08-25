@@ -118,27 +118,68 @@
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 2rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
-    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.7rem; }
-    a.sv-hub:not(.btn):not(.nav-link) { display:flex; align-items:center; gap:.6rem; padding:.7rem .85rem; background:#fff;
-      color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); text-decoration:none; }
-    a.sv-hub:hover { border-color:var(--color-terracotta,#c65d3b); }
-    .sv-hub svg { width:18px; height:18px; color:var(--color-terracotta-dark,#a8492c); flex:0 0 auto; }
-    .sv-hub-name { font-weight:700; font-size:var(--text-sm); }
-    .sv-hub-n { margin-left:auto; font-size:var(--text-xs); color:var(--color-stone); }
-    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
-    .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+    /* Both card families are compartmented: a hairline between facts of different kinds, and a
+       fixed width on the cell that holds a number, so a long label can never push a count onto a
+       second line and leave one card taller than the rest of its row. Numbers are tabular so that
+       they line up down a column, which is what this page is really a table of. */
+    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px); text-decoration:none;
+      transition:border-color .15s, box-shadow .15s; }
+    a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 3px 12px rgba(15,23,42,.07); }
+    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:#EFE8D9;
+      border-right:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sv-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* Sand on both flanks and white in the middle, so the card reads as the thing itself between two
+       cells of chrome. The stat cell was a third, near-white tint and looked grubby rather than
+       deliberate. */
+    .sv-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#EFE8D9;
+      border-left:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
+    /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
+       standing next to a taller one grows its tray rather than opening a hole in the middle. */
+    .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px);
       box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
-    .sv-ix:hover { border-color:var(--color-terracotta,#c65d3b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
-    .sv-ix-top { display:flex; align-items:center; gap:.6rem; }
-    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2; }
+    /* A minimum height on the identity row so a one-line city and a two-line one sit their count
+       tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
+    .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
+      gap:.62rem; padding:.9rem 1rem .95rem; min-height:4.6rem; }
+    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
     .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
       letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
-    .sv-ix-count { font-size:var(--text-sm); color:var(--color-terracotta-dark,#a8492c); font-weight:600; }
+    /* The count is a tile in the corner of the identity row, not a line of its own between the name
+       and the languages, where it used to float with nothing to hold it. */
+    .sv-ix-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.15rem; padding:.3rem .42rem; background:#EFE8D9;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-sm,4px); }
+    .sv-ix-n { font-size:1.05rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-unit { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    /* The languages get a tray of their own, and a line saying what they are. */
+    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:#EFE8D9;
+      border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
     .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
-    .sv-ix .sv-lang-more { background:var(--color-sand,#f2e9da); color:var(--color-stone); }
+    .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
+       chip: no border, no white ground, just the number. */
+    .sv-ix .sv-lang-more { background:transparent; border:0; color:var(--color-stone); font-weight:600;
+      padding-left:.15rem; }
+    @media (prefers-reduced-motion:reduce) { .sv-ix, a.sv-hub { transition:none; } .sv-ix:hover { transform:none; } }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
@@ -203,7 +244,7 @@
       <div class="sv-grid">
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="adriel garcia del pino">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Adriel GARCIA DEL PINO</h3>
             <p class="sv-meta">C/ Taliarte, 7 - 1 35009 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -218,7 +259,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alejandro sanchez sanabria">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alejandro SANCHEZ SANABRIA</h3>
             <p class="sv-meta">c/ Puerto Rico, 4 3 D 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -233,7 +274,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alexis espinosa navarro">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alexis ESPINOSA NAVARRO</h3>
             <p class="sv-meta">C/ Gustavo J. Navarro Nieto, 3 - 9, pta. 38 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -248,7 +289,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alicia naranjo perez-zamora">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alicia NARANJO PEREZ-ZAMORA</h3>
             <p class="sv-meta">C/ Luis Doreste Silva, 22B 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -263,7 +304,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana elena rovaris castellano">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Elena ROVARIS CASTELLANO</h3>
             <p class="sv-meta">C/ Garcia del Castillo 4 35011 LAS PALMAS</p>
@@ -278,7 +319,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana maria rodriguez prado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Maria RODRIGUEZ PRADO</h3>
             <p class="sv-meta">C/ Venegas, 12 - 3 C 35003 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -293,7 +334,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana vanesa hidalgo del rosario">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Vanesa HIDALGO DEL ROSARIO</h3>
             <p class="sv-meta">C/ Duero, 5 35015 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -308,7 +349,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ariadna pages naranjo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ariadna PAGES NARANJO</h3>
             <p class="sv-meta">Avda. de Escaleritas, 56-C, 4 D 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -323,7 +364,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="arminda suarez padron">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Arminda SUAREZ PADRON</h3>
             <p class="sv-meta">C/ Juan de Mayorga, 9 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -338,7 +379,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="aroa erika alamo hernandez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Aroa Erika ALAMO HERNANDEZ</h3>
             <p class="sv-meta">C/ Faro, 126 - 2 35009 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -353,7 +394,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="barbara naranjo gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Barbara NARANJO GONZALEZ</h3>
             <p class="sv-meta">C/ Sor Simona, 43 - 2 D 35012 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -368,7 +409,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="beatriz santana perera">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Beatriz SANTANA PERERA</h3>
             <p class="sv-meta">C/ Carvajal, 18 - 4 B 35005 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -383,7 +424,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="berenice cabrera rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Berenice CABRERA RODRIGUEZ</h3>
             <p class="sv-meta">C/ Olof Palme, 23, 2 Izq 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -398,7 +439,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="blanca aragoncillo cascon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Blanca ARAGONCILLO CASCON</h3>
             <p class="sv-meta">C/ Juan Manuel Duran Gonzalez, 35 - 1 G 35007 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -413,7 +454,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carlos martin cabrera">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carlos MARTIN CABRERA</h3>
             <p class="sv-meta">C/ Dr. Ponce Arias, 19 - bajo 35005 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -428,7 +469,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carlos perez botella">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carlos PEREZ BOTELLA</h3>
             <p class="sv-meta">C/ Senador Castillo Olivares, 10 - 4 35003 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -443,7 +484,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carmen belen ojeda garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carmen Belen OJEDA GARCIA</h3>
             <p class="sv-meta">C/ El Labrador, 32 35018 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -458,7 +499,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carolina castellano ortega">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carolina CASTELLANO ORTEGA</h3>
             <p class="sv-meta">C/ PORTUGAL, 79 - 2 B 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -473,7 +514,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carolina navarro marrero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carolina NAVARRO MARRERO</h3>
             <p class="sv-meta">C/ Mariana Pineda, 34 - 4 A 35007 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -488,7 +529,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="claudia borrego marrero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Claudia BORREGO MARRERO</h3>
             <p class="sv-meta">Avda.Federico Garcia Lorca, 25 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -503,7 +544,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina sanchez bustamante">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina SANCHEZ BUSTAMANTE</h3>
             <p class="sv-meta">C/ Leon y Castillo, 228 - 6 Z 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -518,7 +559,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina villar fabelo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina VILLAR FABELO</h3>
             <p class="sv-meta">C/ Canalejas, 92 - 3 C 35003 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -533,7 +574,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="dacil maria parada rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Dacil Maria PARADA RODRIGUEZ</h3>
             <p class="sv-meta">C/ Pintor Juan Guillermo, 8 - 2 D 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -548,7 +589,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="dacil sanchez gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Dacil SANCHEZ GONZALEZ</h3>
             <p class="sv-meta">C/ Padre Claret, 20 - 1 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -563,7 +604,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="daida del pilar romero moran">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Daida del Pilar ROMERO MORAN</h3>
             <p class="sv-meta">Paseo de las Canteras, 87 - 1 C 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -578,7 +619,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="daniel guil merino">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Daniel GUIL MERINO</h3>
             <p class="sv-meta">C/ Pedro Quevedo y Quevedo, 29 - 2 dcha. 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -593,7 +634,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="daniel santana marrero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Daniel SANTANA MARRERO</h3>
             <p class="sv-meta">C/ Ingeniero Salinas, 80 1 izquierda 35006 Las Palmas de Gran Canaria LAS PALMAS</p>
@@ -608,7 +649,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="dionisio lorenzo lorenzo villegas">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Dionisio Lorenzo LORENZO VILLEGAS</h3>
             <p class="sv-meta">C/Cayetana Manrique, 58- 4H 35010 LAS PALMAS</p>
@@ -623,7 +664,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="eleazar santana santana">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Eleazar SANTANA SANTANA</h3>
             <p class="sv-meta">C/ Dr. Manuel de la Nuez, 67 35014 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -638,7 +679,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elena cabrera cruz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elena CABRERA CRUZ</h3>
             <p class="sv-meta">Ctra. A Marzagan, 30 - 8 35017 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -653,7 +694,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elena garcia fernandez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elena GARCIA FERNANDEZ</h3>
             <p class="sv-meta">C/. Faro, 90 1 izquierda 35009 LAS PALMAS</p>
@@ -668,7 +709,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elena maria sanchez martin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elena Maria SANCHEZ MARTIN</h3>
             <p class="sv-meta">C/ Lomo la Plana, 8 portal 1, 1D 35019 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -683,7 +724,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="elisabet sanchez leon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Elisabet SANCHEZ LEON</h3>
             <p class="sv-meta">C/ El Salvador, 29 - 2 B 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -698,7 +739,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="esperanza de la torre acosta">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Esperanza DE LA TORRE ACOSTA</h3>
             <p class="sv-meta">Avda. Juan XXIII, 11 - 12-3 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -713,7 +754,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="estefania messeguer gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Estefania MESSEGUER GOMEZ</h3>
             <p class="sv-meta">C/ Cebrian, 2, 2C 35003 LAS PALMAS</p>
@@ -728,7 +769,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="eugenia maria gonzalez betancor">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Eugenia Maria GONZALEZ BETANCOR</h3>
             <p class="sv-meta">C/ Horno de Cal, 4, portal A, 6C 35019 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -743,7 +784,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="eva larranaga echeberria">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Eva LARRANAGA ECHEBERRIA</h3>
             <p class="sv-meta">C/ Mesa y Lopez, 54 - pta. 201 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -758,7 +799,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="gema sebastian garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Gema SEBASTIAN GARCIA</h3>
             <p class="sv-meta">C/ Victor Hugo, 43 - 2 35006 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -773,7 +814,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="guiomar suarez benitez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Guiomar SUAREZ BENITEZ</h3>
             <p class="sv-meta">C/ Republica Dominicana, 33 - 6 C dcha. 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -788,7 +829,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="haridian rodriguez martin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Haridian RODRIGUEZ MARTIN</h3>
             <p class="sv-meta">C/ Valle de Tinamar, 3 fase, n 12 - 1 B 35017 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -803,7 +844,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ibai aramburuzabala arrieta">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ibai ARAMBURUZABALA ARRIETA</h3>
             <p class="sv-meta">C/ANTONIO CARDONA, 10 35017 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -818,7 +859,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="idaira hernandez acosta">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Idaira HERNANDEZ ACOSTA</h3>
             <p class="sv-meta">C/ Senador Castillo Olivares, 2 35003 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -833,7 +874,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="irantzu luzuriaga villamandos">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Irantzu LUZURIAGA VILLAMANDOS</h3>
             <p class="sv-meta">C/ Aguadulce 55 2 C 35004 LAS PALMAS</p>
@@ -848,7 +889,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jana rodriguez jorge">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jana RODRIGUEZ JORGE</h3>
             <p class="sv-meta">C/ Dolores de la Rocha, 17 - 2 35001 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -863,7 +904,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="javier santana betancor">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Javier SANTANA BETANCOR</h3>
             <p class="sv-meta">C/ Sagasta, 23 - 5 , 2 35008 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -878,7 +919,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jessica crespo fernandez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jessica CRESPO FERNANDEZ</h3>
             <p class="sv-meta">C/ Luis Antunez, n 25, 3 izquierda. 35006 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -893,7 +934,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jessika elizabeth suarez vera">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jessika Elizabeth SUAREZ VERA</h3>
             <p class="sv-meta">c/ Cirilo Moreno, 49 - 3 35007 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -908,7 +949,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jesus jonas rodriguez perez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jesus Jonas RODRIGUEZ PEREZ</h3>
             <p class="sv-meta">C/ Luis Suarez Suarez, 67 - 1 35018 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -923,7 +964,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jose luis lagartos ruano">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jose Luis LAGARTOS RUANO</h3>
             <p class="sv-meta">C/ DR. GRAU BASSAS, 27 35007 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -938,7 +979,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jose manuel rodriguez herrera">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jose Manuel RODRIGUEZ HERRERA</h3>
             <p class="sv-meta">C/ Concejal Garcia Feo, 24 - 2 K 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -953,7 +994,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="josefina isabel dunn james">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Josefina Isabel DUNN JAMES</h3>
             <p class="sv-meta">C/ Salvador Manrique de Lara n 11-4B 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -968,7 +1009,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="julio alberto alonso santana">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Julio Alberto ALONSO SANTANA</h3>
             <p class="sv-meta">C/ Llano de los Naranjos, 27 35018 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -983,7 +1024,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="julio alejandro espla marin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Julio Alejandro ESPLA MARIN</h3>
             <p class="sv-meta">Avda. Pintor Felo Monzon, 21 - 3 C - P.3 35019 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -998,7 +1039,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="karishma ashok vaswani vaswani">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Karishma Ashok VASWANI VASWANI</h3>
             <p class="sv-meta">C/ Nestor de la Torre, 31, 10 D 35006 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1013,7 +1054,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura vega martin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura VEGA MARTIN</h3>
             <p class="sv-meta">C/ Juan Rejon, 35 4 35008 LAS PALMAS</p>
@@ -1028,7 +1069,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="leire ruiz de munain sanchez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Leire RUIZ DE MUNAIN SANCHEZ</h3>
             <p class="sv-meta">C/ Tte. Coronel Castillo Olivares, 12 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1043,7 +1084,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="lena esther concepcion ramirez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Lena Esther CONCEPCION RAMIREZ</h3>
             <p class="sv-meta">C/ Francisco Gourie, 18 - 3 D 35002 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1058,7 +1099,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="leticia torres martin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Leticia TORRES MARTIN</h3>
             <p class="sv-meta">C/ Hoya del Pedregal, 14 35018 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1073,7 +1114,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="liliana elisa vega moreno">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Liliana Elisa VEGA MORENO</h3>
             <p class="sv-meta">C/ LUIS DORESTE SILVA, 16 - 2, 4 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1088,7 +1129,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="lisbeth ramirez gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Lisbeth RAMIREZ GOMEZ</h3>
             <p class="sv-meta">Paseo San Antonio, 25 35014 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1103,7 +1144,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="magec borges gil">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Magec BORGES GIL</h3>
             <p class="sv-meta">C/ Capitan E. Lopez Orduna, 23 35014 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1118,7 +1159,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="margarita dolores falcon deniz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Margarita Dolores FALCON DENIZ</h3>
             <p class="sv-meta">C/ San Nicolas, 2 - 2 A 35002 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1133,7 +1174,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria aide morales fonte">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Aide MORALES FONTE</h3>
             <p class="sv-meta">Avda. Cesar Manrique, 1 - portal 9 - 35018 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1148,7 +1189,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria de los angeles suarez gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria de los Angeles SUAREZ GONZALEZ</h3>
             <p class="sv-meta">C/ Juan Millares Carlo, portal 11 - 9, A 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1163,7 +1204,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria elena reveron afonso">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Elena REVERON AFONSO</h3>
             <p class="sv-meta">Pza. Parroco Manuel Guedes, 1 - 3 A 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1178,7 +1219,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria elena suarez hernandez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Elena SUAREZ HERNANDEZ</h3>
             <p class="sv-meta">C/ Doctor Sventenius, 4 - 2 izda. 35016 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1193,7 +1234,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria gonzalez lahoz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria GONZALEZ LAHOZ</h3>
             <p class="sv-meta">C/ Republica Dominicana, 25 - 6 G 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1208,7 +1249,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria helena santana dominguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Helena SANTANA DOMINGUEZ</h3>
             <p class="sv-meta">C/ La Naval, 69 - 2 35008 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1223,7 +1264,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria imelda puiggari bravo de laguna">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Imelda PUIGGARI BRAVO DE LAGUNA</h3>
             <p class="sv-meta">C/ ESPIRITU SANTO, 17 35001 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1238,7 +1279,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria samara gonzalez bernal">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Samara GONZALEZ BERNAL</h3>
             <p class="sv-meta">VERGARA N 60, 1 D 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1253,7 +1294,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria scherezade rodriguez perez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Scherezade RODRIGUEZ PEREZ</h3>
             <p class="sv-meta">Doctor Llorente Matos, 4 35011 LAS PALMAS</p>
@@ -1268,7 +1309,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria teresa viera oliver">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Teresa VIERA OLIVER</h3>
             <p class="sv-meta">C/. Lomo del Rincon, 4 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1283,7 +1324,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta gonzalez-cutre alfaro">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta GONZALEZ-CUTRE ALFARO</h3>
             <p class="sv-meta">C/ Mesa y Lopez, 54 - 5 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1298,7 +1339,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta isabel enriquez alonso">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta Isabel ENRIQUEZ ALONSO</h3>
             <p class="sv-meta">C/ Alcalde Jose Ramirez Bethencourt, 7 - 4 A 35003 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1313,7 +1354,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="michel rene bega gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Michel Rene BEGA GONZALEZ</h3>
             <p class="sv-meta">C/ Carvajal, 66 - 2 planta 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1328,7 +1369,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="miguel angel gonzalez reyes">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Miguel Angel GONZALEZ REYES</h3>
             <p class="sv-meta">C/ JUAN DE SIBERIO, 8 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1343,7 +1384,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="minerva victoria gonzalez quintana">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Minerva Victoria GONZALEZ QUINTANA</h3>
             <p class="sv-meta">C/ El Granadillar, 7 - San Jose del Alamo 35018 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1358,7 +1399,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="monica fumero purrinos">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Monica FUMERO PURRINOS</h3>
             <p class="sv-meta">C/ Garcilaso De la Vega n2-2 A 35005 SANTA CRUZ DE TENERIFE TENERIFE</p>
@@ -1373,7 +1414,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nadia luna lopez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nadia LUNA LOPEZ</h3>
             <p class="sv-meta">C/ Carvajal, 3 - 1 D - portal 1 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1388,7 +1429,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="naira rodriguez fleitas">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Naira RODRIGUEZ FLEITAS</h3>
             <p class="sv-meta">C/ Lectoral Feo Ramos, 14 - 1 C 35001 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1403,7 +1444,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nayra alonso sanchez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nayra ALONSO SANCHEZ</h3>
             <p class="sv-meta">Calle Pavia 47, 1 A 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1418,7 +1459,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nerea fajardo izarra">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nerea FAJARDO IZARRA</h3>
             <p class="sv-meta">C/ Aguadulce, 13 - 3 B 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1433,7 +1474,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nidia victoria sancho herrera">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nidia Victoria SANCHO HERRERA</h3>
             <p class="sv-meta">C/ Republica Dominicana, 7 - 8 D 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1448,7 +1489,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="noelia maria sapena gil">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Noelia Maria SAPENA GIL</h3>
             <p class="sv-meta">C/ Fray Cristobal Caballero, 9 - 3 D 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1463,7 +1504,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="olga valverde gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Olga VALVERDE GOMEZ</h3>
             <p class="sv-meta">C/ Castillejos, 35 4 B 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1478,7 +1519,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="omayra isabel abreut deniz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Omayra Isabel ABREUT DENIZ</h3>
             <p class="sv-meta">C/ Mesana, 53 35009 PLAYA HONDA, San Bartolome LAS PALMAS</p>
@@ -1493,7 +1534,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="paloma jimenez pastor">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Paloma JIMENEZ PASTOR</h3>
             <p class="sv-meta">Avda. Mesa y Lopez,70-7 K 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1508,7 +1549,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="patricia maria guerrero pendon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Patricia Maria GUERRERO PENDON</h3>
             <p class="sv-meta">c/ Juan Manuel Duran, 44, 2 A 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1523,7 +1564,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="raquel judith santana falcon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Raquel Judith SANTANA FALCON</h3>
             <p class="sv-meta">C/ Puebla, 69 35016 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1538,7 +1579,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="rebeca del carmen curbelo jimenez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Rebeca del Carmen CURBELO JIMENEZ</h3>
             <p class="sv-meta">C/ Guillermo Santana Rivero, 37 - 1 A 35012 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1553,7 +1594,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ruben jacobo mendez suarez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ruben Jacobo MENDEZ SUAREZ</h3>
             <p class="sv-meta">Carretera de Chile 89 Portal C 4 A 35019 LAS PALAMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1568,7 +1609,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ruth zenaida yuste alonso">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ruth Zenaida YUSTE ALONSO</h3>
             <p class="sv-meta">C/ Concejal Garcia Feo, 20 - 4 F 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1583,7 +1624,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara gonzalvo gonzalez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara GONZALVO GONZALEZ</h3>
             <p class="sv-meta">C/ Luis Doreste Silva, 81- 3 C 35004 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1598,7 +1639,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara maria santana pineiro">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara Maria SANTANA PINEIRO</h3>
             <p class="sv-meta">C/ Vigilante Garcia Cabello, 9 1 B 35004 LAS PALMAS</p>
@@ -1613,7 +1654,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara veronica lopez woodcock">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara Veronica LOPEZ WOODCOCK</h3>
             <p class="sv-meta">C/ Doctor Alfonso Chiscano Diaz, 8 - portal G, 1 C 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1628,7 +1669,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sita ferreiro monzon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sita FERREIRO MONZON</h3>
             <p class="sv-meta">C/ Pablo Penaguilas 16 1 Dcha 35012 LAS PALMAS</p>
@@ -1643,7 +1684,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="tamara del pino fumero dominguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Tamara del Pino FUMERO DOMINGUEZ</h3>
             <p class="sv-meta">c/ Padre Cueto, 14 - 2 B 35008 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1658,7 +1699,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="tania del pilar perez yanez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Tania del Pilar PEREZ YANEZ</h3>
             <p class="sv-meta">Urb. 3 Carabelas, 13 - 9 A 35013 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1673,7 +1714,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="tatiana maria betancor falcon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Tatiana Maria BETANCOR FALCON</h3>
             <p class="sv-meta">Avda. Escaleritas, 39 B - 3 D 35011 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1688,7 +1729,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="victor manuel rebollo rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Victor Manuel REBOLLO RODRIGUEZ</h3>
             <p class="sv-meta">C/ Obispo Rabadan, 30 - 4 B 35003 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1703,7 +1744,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="virginia maria nuez rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Virginia Maria NUEZ RODRIGUEZ</h3>
             <p class="sv-meta">C/ Lujan Perez, 94 2 Izq. 35009 LAS PALMAS</p>
@@ -1718,7 +1759,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="yaiza gara alvarez suarez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Yaiza Gara ALVAREZ SUAREZ</h3>
             <p class="sv-meta">C/ Presidente Alvear, 6 - 3 B 35006 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1733,7 +1774,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="yaiza morales saez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Yaiza MORALES SAEZ</h3>
             <p class="sv-meta">C/ Isla de Cuba, 42 - 4 A 35007 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1748,7 +1789,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ylenia del cristo umpierrez negrin">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ylenia del Cristo UMPIERREZ NEGRIN</h3>
             <p class="sv-meta">Urbanizacion Las Torres, bloque 25- 2 A2 35010 LAS PALMAS</p>
@@ -1763,7 +1804,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="zenaida guacimara tejera sosa">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Zenaida Guacimara TEJERA SOSA</h3>
             <p class="sv-meta">C/ Camilo Jose Cela, 82 - bajo dcha. 35017 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>
@@ -1778,7 +1819,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="zenaida val nunez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Zenaida VAL NUNEZ</h3>
             <p class="sv-meta">C/ Costa Rica, 3 - 1 C 35010 LAS PALMAS DE GRAN CANARIA LAS PALMAS</p>

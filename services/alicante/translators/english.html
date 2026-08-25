@@ -118,27 +118,68 @@
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 2rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
-    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.7rem; }
-    a.sv-hub:not(.btn):not(.nav-link) { display:flex; align-items:center; gap:.6rem; padding:.7rem .85rem; background:#fff;
-      color:var(--color-ink); border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); text-decoration:none; }
-    a.sv-hub:hover { border-color:var(--color-terracotta,#c65d3b); }
-    .sv-hub svg { width:18px; height:18px; color:var(--color-terracotta-dark,#a8492c); flex:0 0 auto; }
-    .sv-hub-name { font-weight:700; font-size:var(--text-sm); }
-    .sv-hub-n { margin-left:auto; font-size:var(--text-xs); color:var(--color-stone); }
-    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; }
-    .sv-ix { display:flex; flex-direction:column; gap:.55rem; padding:1.1rem 1.15rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px);
+    /* Both card families are compartmented: a hairline between facts of different kinds, and a
+       fixed width on the cell that holds a number, so a long label can never push a count onto a
+       second line and leave one card taller than the rest of its row. Numbers are tabular so that
+       they line up down a column, which is what this page is really a table of. */
+    .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px); text-decoration:none;
+      transition:border-color .15s, box-shadow .15s; }
+    a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 3px 12px rgba(15,23,42,.07); }
+    .sv-hub-ico { display:grid; place-items:center; width:2.9rem; background:#EFE8D9;
+      border-right:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sv-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* Sand on both flanks and white in the middle, so the card reads as the thing itself between two
+       cells of chrome. The stat cell was a third, near-white tint and looked grubby rather than
+       deliberate. */
+    .sv-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#EFE8D9;
+      border-left:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
+    /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
+       standing next to a taller one grows its tray rather than opening a hole in the middle. */
+    .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
+      border:1px solid #DCCFB6; border-radius:var(--radius-md,8px);
       box-shadow:0 1px 2px rgba(15,23,42,.04); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
-    .sv-ix:hover { border-color:var(--color-terracotta,#c65d3b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
+    .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 18px rgba(15,23,42,.09); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
-    .sv-ix-top { display:flex; align-items:center; gap:.6rem; }
-    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2; }
+    /* A minimum height on the identity row so a one-line city and a two-line one sit their count
+       tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
+    .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
+      gap:.62rem; padding:.9rem 1rem .95rem; min-height:4.6rem; }
+    .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
     .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
       letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
-    .sv-ix-count { font-size:var(--text-sm); color:var(--color-terracotta-dark,#a8492c); font-weight:600; }
+    /* The count is a tile in the corner of the identity row, not a line of its own between the name
+       and the languages, where it used to float with nothing to hold it. */
+    .sv-ix-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.15rem; padding:.3rem .42rem; background:#EFE8D9;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-sm,4px); }
+    .sv-ix-n { font-size:1.05rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sv-ix-unit { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    /* The languages get a tray of their own, and a line saying what they are. */
+    .sv-ix-tray { display:block; padding:.7rem 1rem .85rem; background:#EFE8D9;
+      border-top:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
     .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
-    .sv-ix .sv-lang-more { background:var(--color-sand,#f2e9da); color:var(--color-stone); }
+    .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
+       chip: no border, no white ground, just the number. */
+    .sv-ix .sv-lang-more { background:transparent; border:0; color:var(--color-stone); font-weight:600;
+      padding-left:.15rem; }
+    @media (prefers-reduced-motion:reduce) { .sv-ix, a.sv-hub { transition:none; } .sv-ix:hover { transform:none; } }
     .sv-method { max-width:760px; margin:3rem auto 0; padding-top:1.75rem; border-top:1px solid var(--color-sand-dark,#e3d9c6); }
     .sv-method h2 { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--color-ink); margin:0 0 .8rem; }
     .sv-method p { font-size:.92rem; line-height:1.7; color:var(--color-charcoal); margin:0 0 .9rem; }
@@ -203,7 +244,7 @@
       <div class="sv-grid">
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="alessandra patti">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Alessandra PATTI</h3>
             <p class="sv-meta">C/ Alcalde Suarez Llanos, 20 - 3 C 03013 ALICANTE</p>
@@ -218,7 +259,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana isabel hernandez portugues">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana Isabel HERNANDEZ PORTUGUES</h3>
             <p class="sv-meta">Avda. Doctor Jimenez Diaz, 11 - 7 D - esc. 10 03005 ALICANTE</p>
@@ -233,7 +274,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="ana orts salido">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Ana ORTS SALIDO</h3>
             <p class="sv-meta">Plaza de los Luceros, n 7, 1. Izda. 03003 ALICANTE</p>
@@ -248,7 +289,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="andrea herrero pujol">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Andrea HERRERO PUJOL</h3>
             <p class="sv-meta">Avda. Federico Soto, 6 - 5 izda. 03001 ALICANTE</p>
@@ -263,7 +304,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="angela mira conejero">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Angela MIRA CONEJERO</h3>
             <p class="sv-meta">C/ Hondon de las Nieves, 2 - 2 A 03005 ALICANTE</p>
@@ -278,7 +319,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="antonio aguilella asensi">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Antonio AGUILELLA ASENSI</h3>
             <p class="sv-meta">C/ San Jose 6 3 03002 ALICANTE</p>
@@ -293,7 +334,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="aranzazu estan carvajal">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Aranzazu ESTAN CARVAJAL</h3>
             <p class="sv-meta">Av. de Elche, 100 - portal 21 - 6 A 03008 ALICANTE</p>
@@ -308,7 +349,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="beatriz alvarez santamaria">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Beatriz ALVAREZ SANTAMARIA</h3>
             <p class="sv-meta">Gta. Rodolfo Llopis, 3 5 D 03010 ALICANTE</p>
@@ -323,7 +364,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="beatriz garcia cisneros">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Beatriz GARCIA CISNEROS</h3>
             <p class="sv-meta">C/ Rafael Asin, 20-1 D 03010 ALICANTE</p>
@@ -338,7 +379,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="blanca martin cilleros">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Blanca MARTIN CILLEROS</h3>
             <p class="sv-meta">C/ Serrano, 4 3 E 03003 ALICANTE</p>
@@ -353,7 +394,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="carmen marco garcia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Carmen MARCO GARCIA</h3>
             <p class="sv-meta">C/ Roma, 170 03009 ALICANTE</p>
@@ -368,7 +409,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="celia maria molina sarrio">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Celia Maria MOLINA SARRIO</h3>
             <p class="sv-meta">C/ JOSE LLOPIS DIEZ, 3 - 2 B 03015 ALICANTE</p>
@@ -383,7 +424,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="cristina garcia lopez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Cristina GARCIA LOPEZ</h3>
             <p class="sv-meta">Virgen del Socorro, 67 - Esc. Izq. 2 A 03002 ALICANTE</p>
@@ -398,7 +439,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="delia hidalgo bricio">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Delia HIDALGO BRICIO</h3>
             <p class="sv-meta">C/ Segura, 12 Bajo Dcha 03004 ALICANTE</p>
@@ -413,7 +454,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="francisco jose arcos die">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Francisco Jose ARCOS DIE</h3>
             <p class="sv-meta">Avda. Eusebio Sempere, 11-3-1-4 03003 ALICANTE</p>
@@ -428,7 +469,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="gemma miravalles jabon">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Gemma MIRAVALLES JABON</h3>
             <p class="sv-meta">C/ Primitivo Perez, 17 3 Pta 10 03010 ALICANTE</p>
@@ -443,7 +484,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="hector federico marquez gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Hector Federico MARQUEZ GOMEZ</h3>
             <p class="sv-meta">C/ Almoradi, 18 - esc. 5 - 6 D 03010 ALICANTE</p>
@@ -458,7 +499,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="hector garcia gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Hector GARCIA GOMEZ</h3>
             <p class="sv-meta">Avda. Antonio Ramos Carratala, 90-3 03015 ALICANTE</p>
@@ -473,7 +514,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="irean navas alejo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Irean NAVAS ALEJO</h3>
             <p class="sv-meta">C/San Agatangelo, 30 - 2 dcha. 03007 ALICANTE</p>
@@ -488,7 +529,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="irene gonzalez murillo">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Irene GONZALEZ MURILLO</h3>
             <p class="sv-meta">C/ C/Italia, 27 esc.1 at .4 03003 ALICANTE</p>
@@ -503,7 +544,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="irene sampablo gisbert">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Irene SAMPABLO GISBERT</h3>
             <p class="sv-meta">C/ Lliber, 11 7 A 03007 ALICANTE</p>
@@ -518,7 +559,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="isabel maria navarro marco">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Isabel Maria NAVARRO MARCO</h3>
             <p class="sv-meta">C/ Concejal Lorenzo Llaneras, 13 - 4A, Bloq. 1 03005 ALICANTE</p>
@@ -533,7 +574,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jana palomino lozano">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jana PALOMINO LOZANO</h3>
             <p class="sv-meta">C/ Martin Luther KIng, 2 B 13-2 1 A 03010 ALICANTE</p>
@@ -548,7 +589,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="jorge gimeno robles">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Jorge GIMENO ROBLES</h3>
             <p class="sv-meta">C/ Colon n 24, 4 03001 ALICANTE</p>
@@ -563,7 +604,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="juan miguel ortega herraez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Juan Miguel ORTEGA HERRAEZ</h3>
             <p class="sv-meta">C/ ACTOR ARTURO LLEDO, 38 - I - 2 A 03008 ALICANTE</p>
@@ -578,7 +619,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="julia martinez ferrer">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Julia MARTINEZ FERRER</h3>
             <p class="sv-meta">C/Pardo Gimeno, 50- 3E 03007 ALICANTE</p>
@@ -593,7 +634,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura garcia cisneros">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura GARCIA CISNEROS</h3>
             <p class="sv-meta">C/ Rafael Asin, 20 - 1 A 03010 ALICANTE</p>
@@ -608,7 +649,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura hernandez maldonado">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura HERNANDEZ MALDONADO</h3>
             <p class="sv-meta">Avda. de Loring, 6 - 7 O 03003 ALICANTE</p>
@@ -623,7 +664,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura mora gomez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura MORA GOMEZ</h3>
             <p class="sv-meta">C/ P. Recaredo de los Rios, 44 - bloq. 4 - 5 C 03005 ALICANTE</p>
@@ -638,7 +679,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="laura padilla saez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Laura PADILLA SAEZ</h3>
             <p class="sv-meta">C/ Monsenor Romero, 4 Esc. Dcha 5 A 03010 ALICANTE</p>
@@ -653,7 +694,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="lorena jimenez diaz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Lorena JIMENEZ DIAZ</h3>
             <p class="sv-meta">C/ Auso y Monzo, 7 - 4 D 03006 ALICANTE</p>
@@ -668,7 +709,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="lucia candela gutierrez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Lucia CANDELA GUTIERREZ</h3>
             <p class="sv-meta">C/ Bono Guarner, 21 - P. 19 Q 03005 ALICANTE</p>
@@ -683,7 +724,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="luis carlos perez perez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Luis Carlos PEREZ PEREZ</h3>
             <p class="sv-meta">C/ Pintor Aparicio, 34, entresuelo izquierda, 03003 ALICANTE</p>
@@ -698,7 +739,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria nazareth mansilla moreno">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Nazareth MANSILLA MORENO</h3>
             <p class="sv-meta">C/ Ecuador, 13 03008 ALICANTE</p>
@@ -713,7 +754,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria sonsoles arroyo planelles">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Sonsoles ARROYO PLANELLES</h3>
             <p class="sv-meta">C/ ITALIA, 4 03003 ALICANTE</p>
@@ -728,7 +769,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="maria teresa del rey ubeda">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Maria Teresa DEL REY UBEDA</h3>
             <p class="sv-meta">C/ San Agatangelo, 15 - 2 dcha. 03007 ALICANTE</p>
@@ -743,7 +784,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marina garcia masia">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marina GARCIA MASIA</h3>
             <p class="sv-meta">Avda. Benito Perez Galdos, 49 - esc. 4 - 3 G 03005 ALICANTE</p>
@@ -758,7 +799,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta frias rodriguez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta FRIAS RODRIGUEZ</h3>
             <p class="sv-meta">C/ Ingeniero Sanchiz Pujalte, 17 - 4 A 03010 ALICANTE</p>
@@ -773,7 +814,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marta selva gallego">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marta SELVA GALLEGO</h3>
             <p class="sv-meta">C/ Oscar Espla, 35 - E 5, 4 I 03007 ALICANTE</p>
@@ -788,7 +829,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="marthina sara pettersson cevallos">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Marthina Sara PETTERSSON CEVALLOS</h3>
             <p class="sv-meta">C/ Alcalde Agatangelo Soler, 4 - C - 1P 03015 ALICANTE</p>
@@ -803,7 +844,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="monica mayor palomares">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Monica MAYOR PALOMARES</h3>
             <p class="sv-meta">C/ Doce Puentes, 6 7 D 03008 ALICANTE</p>
@@ -818,7 +859,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="natalia martinez madrigal">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Natalia MARTINEZ MADRIGAL</h3>
             <p class="sv-meta">C/ Guillen de Castro, 1 - esc. 2 - 5 A 03007 ALICANTE</p>
@@ -833,7 +874,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="nerea rosa barros">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Nerea ROSA BARROS</h3>
             <p class="sv-meta">C/ General Espartero, 123 - esc. izda. 1 Dcha 03012 ALICANTE</p>
@@ -848,7 +889,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="noelia berna vicente">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Noelia BERNA VICENTE</h3>
             <p class="sv-meta">C/ Peru 14, escalera 5, 5 C 03008 ALICANTE</p>
@@ -863,7 +904,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="pablo arribas bulnes">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Pablo ARRIBAS BULNES</h3>
             <p class="sv-meta">Avda. Eusebio Sempere, 5- Esc. 2- 4 A 03003 ALICANTE</p>
@@ -878,7 +919,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="paloma gomez fabra">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Paloma GOMEZ FABRA</h3>
             <p class="sv-meta">Avda. Aguilera, 6 - 2 dcha. 03006 ALICANTE</p>
@@ -893,7 +934,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="raquel martinez motos">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Raquel MARTINEZ MOTOS</h3>
             <p class="sv-meta">C/ Actor Arutro Lledo, 38 03008 ALICANTE</p>
@@ -908,7 +949,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="raul gutierrez ruiz">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Raul GUTIERREZ RUIZ</h3>
             <p class="sv-meta">C/ JOSE LUIS LASSALETTA, 17 - 7- 3- 6 03008 ALICANTE</p>
@@ -923,7 +964,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="sara mojica aracil">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Sara MOJICA ARACIL</h3>
             <p class="sv-meta">C/ Tucuman, 30 - 1 03005 ALICANTE</p>
@@ -938,7 +979,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="teresa marta sala balboa">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Teresa Marta SALA BALBOA</h3>
             <p class="sv-meta">C/ Medico Pascual Perez, 30 - 8 D 03001 ALICANTE</p>
@@ -953,7 +994,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="veronica del carmen oliver molina">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Veronica del Carmen OLIVER MOLINA</h3>
             <p class="sv-meta">C/ MAESTRO GAZTAMBIDE, 15 - 2 A 03002 ALICANTE</p>
@@ -968,7 +1009,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="veronica gomez huerga">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Veronica GOMEZ HUERGA</h3>
             <p class="sv-meta">Avda. Orihuela, 29 B - 2D 03007 ALICANTE</p>
@@ -983,7 +1024,7 @@
       </article>
         <article class="sv-card sv-c-translator" data-cat="translator" data-lang="es en" data-name="veronica gonzalez perez">
         <div class="sv-head">
-          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg></span>
+          <span class="sv-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span>
           <div>
             <h3 class="sv-name">Veronica GONZALEZ PEREZ</h3>
             <p class="sv-meta">Av. Estacion, 27 Entlo. D 03003 ALICANTE</p>

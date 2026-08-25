@@ -29,8 +29,10 @@ const NAMES = [
   // blog footer
   'compass', 'coffee',
   // /services provider categories (legal reuses 'scale' above).
+  // 'languages' was named by service_labels.cjs and never built, so the translator category, which
+  // is the second largest on the site, had an empty space where its icon goes.
   'stethoscope', 'paw-print', 'brain', 'bone', 'glasses', 'scissors', 'wrench', 'dumbbell',
-  'calculator', 'key',
+  'calculator', 'key', 'languages',
 ];
 
 // Lucide has no tooth (only bluetooth), and dentistry was standing in with 'smile', which reads
