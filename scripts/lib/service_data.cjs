@@ -69,6 +69,9 @@ const LOCAL = {
   'Costa Rica': 'es', Ethiopia: null, Guatemala: 'es', Israel: 'he', Laos: null,
   Montenegro: null, Myanmar: 'my', Nepal: 'ne', 'North Macedonia': null, Oman: 'ar',
   Sweden: 'sv', Tanzania: 'sw', Tunisia: 'ar', Uruguay: 'es', Uzbekistan: null,
+  // Paraguay's other official language is Guarani, and this map holds the one a claim in it says
+  // nothing useful about. Spanish is that one.
+  Paraguay: 'es',
 };
 
 // A country with no entry would silently keep its own language in every heading it drives, and this

@@ -241,7 +241,7 @@ const localityOf = (text) => {
 // A professional body is not a professional. Every one of these lists closes by naming the bar
 // association or the medical council to complain to, and reading the whole registry through put the
 // Anwaltskammer der Republik Armenien on the site as a Yerevan law firm.
-const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Medical Association|Medical Council|Chamber of|\w*kammer|Academy|Akademie|Law School|School of Law|Faculty of|Universit(?:y|e|é|à|a|ät|ae)|Ambasad\w*|Ambasciata|Cancelleria|Consolare)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
+const NOT_A_PROVIDER = /\b(Botschaft|Embassy|Ambassade|Konsulat|Consulate|Consolato|Generalkonsulat|Department|Abteilung|Executive|Marketing|Sekretariat|Praktische|Fach[äa]rzt|Notfall|Ext\b|Hotline|Sprechstunde|Auswaertiges|Auswärtiges)\b|\b(Anwaltskammer|Rechtsanwaltskammer|Bar Association|Law Society|Legal Aid|Legal Services Commission|Ordine degli|Colegio de Abogados|Ordre des avocats|Barreau\b|Ordem dos|\bkomora\b|Medical Association|Medical Council|Chamber of|\w*kammer|Academy|Akademie|Law School|School of Law|Faculty of|Universit(?:y|e|é|à|a|ät|ae)|Ambasad\w*|Ambasciata|Cancelleria|Consolare)\b|^\d|\b(Road|Rd\.|Street|Soi|Avenue|Ave\.|Strasse|Str\.)\b|@|^Tel/i;
 
 // The address glued onto the end of the name, and the sentence that carries on from the entry above.
 // "Dr. PALMISANO Ebertystr. 31" is a translator and a street run together; "Also available c/o
@@ -271,7 +271,24 @@ const isOnlyAPlace = (n) => {
 // A web address in a name is a line the reader took from the wrong place. The US embassy's Madrid
 // list prints the firm's website under its name, and one entry came out as "Solicitors
 // www.scornik-gerstein.com" with the firm itself, Scornik Gerstein, on the line above.
-const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|\d\s*$|\b(and|und|och|et)\s*$|(?:\/[^/\s]+){2,}|\bwww\.|https?:/i;
+// "Do not have international offices" is what three Greek firms answered in the column the reader
+// took the name from. A name does not begin with a verb of denial.
+const NAME_IS_NOT_A_NAME = /\b\w{3,}(str|gasse|weg|platz|allee)\.?\s*\d|\bc\/o\b|^(also|auch|anche|aussi|additionally|siehe|vedi|see)\b|^(do|does|did)\s+not\b|^(none|no)\b|\d\s*$|\b(and|und|och|et)\s*$|(?:\/[^/\s]+){2,}|\bwww\.|https?:/i;
+
+/**
+ * The tail of somebody else's sentence, taken as a name.
+ *
+ * A reader that loses the start of an entry hands over whatever it did find: "constructions & real
+ * estate, litigation.", "law, inheritance law and administrative law", "and insurance, as well as
+ * global mobility". Ten rows in one batch.
+ *
+ * A small letter at the front is the giveaway, and on its own it is not enough, because a brand can
+ * be written that way: "healthPi Medical Center" and "straitly.legal" are both real and both already
+ * published. What no brand does is carry a comma or run to four words, so the test is a small letter
+ * AND one of those. An ampersand at the front is a fragment either way.
+ */
+const NAME_IS_A_FRAGMENT = (n) => /^&/.test(n)
+  || (/^[a-z]/.test(n) && (/,/.test(n) || n.split(/\s+/).length > 3));
 
 /**
  * A title is not part of a name, wherever in the name it sits.
@@ -301,12 +318,55 @@ const withoutTitles = (n) => {
 };
 
 
+/**
+ * Where a name stops, when the reader ran it into whatever came next.
+ *
+ * A refusal would be the wrong answer here: what is in front of the join is a perfectly good name
+ * and the source is a good one. Cutting keeps the row and keeps it right.
+ *
+ * All three were read off one proposal. The US Embassy Budapest sets the telephone number on the
+ * same line as the practice, so eight rows were about to be published as "Dr. Rose Private Hospital
+ * +36-1-37" and "Medicover +36 1 465 3131 Primary C". The Warsaw attorney list runs the street on:
+ * "Anna Jedrzejczak ul. J. Lewartowsk". And the Krakow doctor list opens a sentence about the
+ * practice straight after the name, "VITA MEDICAL Die Arzte", where no German name has a Die in the
+ * middle of it.
+ */
+const NAME_RUNS_ON = [
+  /[+(]?\d[\d\s()/.+-]{6,}/,          // a telephone number
+  /\sul\.\s/,                         // ulica: the Polish for street
+  /\s(?:Die|Der|Das)\s+[A-Z]/,        // a German sentence starting after the name
+  // The label of whatever came next, left behind once the number itself has been cut. The US Embassy
+  // Athens writes "ALLERGISTS                    Tel: 210-610-0880" on one line, so the rule above
+  // takes the number and this one takes the label. The colon has to be allowed for: without it the
+  // name kept the word and 29 rows went out as "Dr. Mikel Aramberri Tel".
+  // The punctuation has to be allowed to run: the German embassy Madrid writes "Tel.:" with both,
+  // and matching only one of them left the word on three names.
+  /\s(?:Tel|Telephone|Phone|Fax|E-?mail|Website|Web|Mobile|Handy)[.:\s]*$/i,
+  // The street, joined to the surname by a dash with no space in front of it. The US consulate in
+  // Florence writes "Giorgio MASINA- Via dei Termini 6, Siena" on one line.
+  /-\s*(?:Via|Viale|Piazza|Corso|Vicolo|Rue|Calle|Carrer|Rua|Str)\b/i,
+  // The same join with nothing but a space: "CASINI, Carla Via Marsala, 11, Florence". A street
+  // word, a street name and a house number is an address and cannot be the rest of anybody's name.
+  /\s(?:Via|Viale|Piazza|Corso|Vicolo|Rue|Calle|Rua)\s+[A-Z][A-Za-z']+,\s*\d/,
+];
+const upToTheJoin = (n) => {
+  let out = n;
+  NAME_RUNS_ON.forEach((re) => { const m = out.match(re); if (m && m.index > 2) out = out.slice(0, m.index); });
+  // A slash or a plus at the end is what is left of the contact detail the cut took off:
+  // "Maitre Jose BARBOSA / +".
+  return out.replace(/[\s,;:/+-]+$/, '');
+};
+
 // A name made only of the words for what the business is, "Studio Legale" or "Law Office" with no
 // firm in front of it, is a name the parser failed to find. It reached the directory once and the
 // duplicate gate caught it, because it is contained in six real firms on the same page.
 // Reading the whole registry through added the second half of this: "SPECIALIZED HOSPITALS", which
 // is a section heading, and "Dental hygienist", which is a job rather than anybody who holds it.
-const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dr|und|and|e|y|de|the|specialized|specialised|hospital|hospitals|hygienist|hygienists|doctor|doctors|dentist|dentists|physician|physicians|lawyer|lawyers|attorney|attorneys|translator|translators|interpreter|interpreters|general|specialist|specialists|also|available|other|others)$/i;
+// The second half of this is the specialisms. The US Embassy Athens heads each section of its
+// medical list with one, "ALLERGISTS", "PEDIATRIC DENTISTS", "SPEECH, LANGUAGE, HEARING
+// PATHOLOGISTS", and sixteen of those headings came through as providers with the whole section's
+// doctors run into the address behind them.
+const GENERIC_WORD = /^(studio|legale|legal|law|office|offices|firm|avvocat[oi]|avvocata|abogad[oa]s?|notai[oa]|notar|notary|rechtsanwal\w*|kanzlei|anwaltskanzlei|praxis|clinic|clinica|klinik|centro|center|centre|medical|dental|dentistry|dr|und|and|e|y|de|the|specialized|specialised|hospital|hospitals|hygienist|hygienists|doctor|doctors|dentist|dentists|physician|physicians|lawyer|lawyers|attorney|attorneys|translator|translators|interpreter|interpreters|general|specialist|specialists|also|available|other|others|messieurs|mesdames|monsieur|madame|docteur|docteurs|les|allergist|allergists|dermatologist|dermatologists|nephrologist|nephrologists|neurologist|neurologists|op?hthalmologist|op?hthalmologists|orthop[ae]dist|orthop[ae]dists|p[ae]diatrician|p[ae]diatricians|p[ae]diatric|physiotherapist|physiotherapists|psychiatrist|psychiatrists|psychologist|psychologists|pulmonologist|pulmonologists|cardiologist|cardiologists|gyn[ae]cologist|gyn[ae]cologists|urologist|urologists|endocrinologist|endocrinologists|oncologist|oncologists|radiologist|radiologists|surgeon|surgeons|pathologist|pathologists|acupuncture|speech|language|hearing|plastic|reconstructive)$/i;
 const isGenericName = (s) => String(s).split(/[^A-Za-zÀ-ÿ]+/).filter(Boolean).every((w) => GENERIC_WORD.test(w));
 
 /**
@@ -401,8 +461,13 @@ for (const src of manifestRows) {
   // block reader that reads the Italian consular PDFs for Sydney also returns the disclaimer as a
   // doctor on pages it does not understand, which is why it is opt-in per source rather than tried
   // everywhere. The row filters still apply either way.
+  // parserArgs matters as much as the parser. pick_source_readers.cjs has always been able to record
+  // one, "parse_pdf_blocks.cjs --columns", and this line dropped it, so the ingest would have run a
+  // different reader from the one that was scored. It is also the only way to tell the spreadsheet
+  // reader which row is the header, which two Budapest lists need and which it cannot guess: they
+  // open with a merged band title and the columns are named at row 9.
   const candidates = src.parser
-    ? [[src.parser, [src.file]]]
+    ? [[src.parser, [src.file, ...(src.parserArgs || [])]]]
     : (isPdf
       ? [['parse_diplo_pdf_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]]
       : [['parse_diplo_table_list.cjs', [src.file]], ['parse_diplo_block_list.cjs', [src.file]]]);
@@ -597,13 +662,13 @@ for (const src of manifestRows) {
     // A footnote marker is not part of a name. The German embassy Rome list stars the translators
     // who are sworn before a court, and forty cards were about to read "Christine ALBRECHT*" and
     // "Alessandra RIDOLFI *" as though the star were a letter of the name.
-    const name = withoutTitles(asciiFold(T.unentity(r.name).replace(/\*/g, ' ')).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
-      .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim());
+    const name = upToTheJoin(withoutTitles(asciiFold(T.unentity(r.name).replace(/\*/g, ' ')).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
+      .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim()));
     const k = key(name);
     // A bracket on either side of the name and not only an opening one: "Upadlosc i restrukturyzacja)"
     // is the tail of a practice-area list. A name that ends in "&" is a firm the reader cut in half.
     if (!k || k.split(' ').length < 2 || /[:()\[\]]|[,&]$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
-      || HEADER_ROW.test(where) || HEADER_ROW.test(name) || isGenericName(name) || isOnlyAPlace(name)) { stats.noName++; continue; }
+      || HEADER_ROW.test(where) || HEADER_ROW.test(name) || isGenericName(name) || isOnlyAPlace(name) || NAME_IS_A_FRAGMENT(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
     if (map.has(k)) { stats.already++; continue; }
 

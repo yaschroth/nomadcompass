@@ -62,6 +62,29 @@ const LANG = {
   telegu: 'te',
 };
 
+/**
+ * The abbreviations, read only where the source wrote the full stop that marks one.
+ *
+ * The German Embassy Lisbon annotates every doctor "(engl., franz.)" or "(deutsch, port., engl.)",
+ * and of those the lexicon above could read only franz. and deutsch: forty entries came out as
+ * French-speaking with English missing, which is worse than incomplete, because it takes a doctor
+ * off the English page and leaves him on the French one alone.
+ *
+ * A prefix rule would read these without a table - "engl." is the start of "englisch" - and it also
+ * reads "Tel." as Telugu, which is on every second line of every one of these lists. So the
+ * abbreviations are named, and only a part that ends in a full stop is looked up here at all. Each
+ * one below has been seen in a source; this is not a list of what German could abbreviate.
+ */
+const ABBREV = {
+  dt: 'de', dtsch: 'de', deu: 'de', ted: 'de',
+  engl: 'en', eng: 'en', ingl: 'en', angl: 'en',
+  ital: 'it', port: 'pt', russ: 'ru', griech: 'el', niederl: 'nl', poln: 'pl',
+  tschech: 'cs', ungar: 'hu', rum: 'ro', turk: 'tr', tuerk: 'tr', arab: 'ar',
+  chin: 'zh', jap: 'ja', kor: 'ko', hebr: 'he', schwed: 'sv', norw: 'no',
+  dan: 'da', daen: 'da', finn: 'fi', kroat: 'hr', serb: 'sr', slowak: 'sk',
+  slowen: 'sl', ukr: 'uk', span: 'es', franz: 'fr', esp: 'es',
+};
+
 // Under a German "Sprachen:" label a bare letter is that language's German initial. Milan writes
 // "Sprachen: D / E / F / Chinesisch", and reading only the spelled-out word gave a lawyer whose one
 // language was Chinese: not merely incomplete but wrong, since it would have taken him off the
@@ -93,12 +116,25 @@ const readLanguages = (line, allowLetters, unknown) => {
   const parts = allowLetters
     ? said.split(/[,;/|+&]+|\band\b|\bund\b|\boch\b|\bou\b|\boder\b/)
     : said.split(/[,;/|+&]+|\band\b|\bund\b|\boch\b|\bou\b|\boder\b|\be\b/);
-  parts.map((p) => bare(p.trim())).filter(Boolean)
-    .forEach((p) => {
+  // Whether the source wrote a full stop is the only thing that says a part is an abbreviation, and
+  // bare() takes it off, so it is noted before that happens.
+  parts.map((p) => ({ p: bare(p.trim()), raw: p }))
+    .filter((x) => x.p)
+    .forEach(({ p, raw }) => {
+      // Every abbreviation inside the part, not only the part itself. Lisbon writes three of them
+      // between two commas, "(port, franz., engl. dt.)", and reading the part as a whole finds
+      // French and stops. A full stop is still what marks one, so "Tel." is looked up and missed
+      // rather than read as Telugu.
+      (raw.match(/[a-zà-ÿ]{2,8}\./g) || []).forEach((tok) => {
+        const a = ABBREV[tok.slice(0, -1)];
+        if (a && !out.includes(a)) out.push(a);
+      });
+      const abbreviated = /\.\s*$/.test(raw);
       // The longest key that fits, for the same reason as in readLanguagesProse below: "Malayalam"
       // begins with "malay" and the first match in insertion order is the wrong language.
       const hit = Object.keys(LANG).filter((k) => p.startsWith(k)).sort((a, b) => b.length - a.length)[0];
       if (hit) { if (!out.includes(LANG[hit])) out.push(LANG[hit]); return; }
+      if (abbreviated && ABBREV[p]) { if (!out.includes(ABBREV[p])) out.push(ABBREV[p]); return; }
       if (allowLetters && p.length === 1 && LETTER[p]) { if (!out.includes(LETTER[p])) out.push(LETTER[p]); return; }
       if (unknown && p.length > 2 && p.length < 24 && !/^\(|^[0-9]/.test(p)) unknown.add(p);
     });

@@ -193,5 +193,205 @@
     "Consolato Generale d’Italia - Level 19, 44 Market Str"
    ]
   }
+ },
+ {
+  "name": "milan rows, brackets",
+  "why": "a headerless table used for layout: the name and address in one cell, the specialty and a bracketed language claim in the next",
+  "file": "tests/fixtures/rows-milan-doctors.html",
+  "parser": "parse_html_row_entries.cjs",
+  "args": [],
+  "expect": {
+   "rows": 65,
+   "withLanguages": 28,
+   "sample": [
+    "Milan Medical Center srl",
+    "Clinica de Marchi",
+    "Dr. Birgit Hendrich"
+   ]
+  }
+ },
+ {
+  "name": "budapest rows, slashes",
+  "why": "the same shape with section headings for the specialty and the claim written between slashes rather than brackets",
+  "file": "tests/fixtures/rows-budapest-doctors.html",
+  "parser": "parse_html_row_entries.cjs",
+  "args": [],
+  "expect": {
+   "rows": 32,
+   "withLanguages": 22,
+   "sample": [
+    "Dr. Zoller, Rezső",
+    "Dr. Timár, Tibor",
+    "Zentralinstitut für Traumatologie/Orthopädie, Baleseti Kórház"
+   ]
+  }
+ },
+ {
+  "name": "austria stacked labels",
+  "why": "labels on their own line above their value, and one entry whose Sprachkenntnisse is empty",
+  "file": "tests/fixtures/stacked-at-berlin-law.html",
+  "parser": "parse_stacked_labels.cjs",
+  "args": [],
+  "expect": {
+   "rows": 4,
+   "withLanguages": 3,
+   "sample": [
+    "Maximilian Carl Gerold PREIMESBERGER",
+    "Dr. Max WIELAND",
+    "Vincent FEURSTEIN"
+   ]
+  }
+ },
+ {
+  "name": "french notoriete, Langues",
+  "why": "per-entry Langues lines, and a firm name under a person name that must not start a new entry",
+  "file": "tests/fixtures/frnot-cz-law.html",
+  "parser": "parse_fr_notoriete.cjs",
+  "args": [],
+  "expect": {
+   "rows": 18,
+   "withLanguages": 17,
+   "sample": [
+    "Eliska BARTHELEMY",
+    "Lucie MARTIN-NEŠPOROVÁ",
+    "Michal HLOUŠEK"
+   ]
+  }
+ },
+ {
+  "name": "french notoriete, roster",
+  "why": "a long roster list with no per-entry claim, where the capitalised surname is the only entry boundary",
+  "file": "tests/fixtures/frnot-es-hub.html",
+  "parser": "parse_fr_notoriete.cjs",
+  "args": [],
+  "expect": {
+   "rows": 284,
+   "withLanguages": 0,
+   "sample": [
+    "Me. CHABANEIX Luis",
+    "Dr. DUROUX Clément Jean",
+    "San Sebastian, GIPUZKOA"
+   ]
+  }
+ },
+ {
+  "name": "docx table, prague",
+  "why": "a Word table whose second column holds the practice areas and the languages together",
+  "file": "tests/fixtures/docx-cz-prague-law.docx",
+  "parser": "parse_docx_rows.cjs",
+  "args": [],
+  "expect": {
+   "rows": 18,
+   "withLanguages": 18,
+   "sample": [
+    "JUDr. Allnutt, Markéta",
+    "LN Law Office Prague, Lucie MARTIN NESPOROVA",
+    "JUDr. Veronika Střížová"
+   ]
+  }
+ },
+ {
+  "name": "docx blocks, nairobi",
+  "why": "a Word document of numbered blocks with English labels",
+  "file": "tests/fixtures/docx-ke-nairobi-law.docx",
+  "parser": "parse_docx_rows.cjs",
+  "args": [],
+  "expect": {
+   "rows": 17,
+   "withLanguages": 15,
+   "sample": [
+    "Achapa & Associates Advocates",
+    "TripleOKLaw LLP",
+    "Sabaya & Associates Company Advocates (Sheila Sabaya)"
+   ]
+  }
+ },
+ {
+  "name": "stacked labels, no colon",
+  "why": "the same stacked shape written without colons, where the name sits under a Bezeichnung label instead of over a role",
+  "file": "tests/fixtures/stacked-telaviv-doctors.html",
+  "parser": "parse_stacked_labels.cjs",
+  "args": [],
+  "expect": {
+   "rows": 27,
+   "withLanguages": 27,
+   "sample": [
+    "Dr. Naftali Abrahamy",
+    "Lurje, Elina",
+    "Dr. Marit Rivka Yefet-Hauschildt"
+   ]
+  }
+ },
+ {
+  "name": "bold run, underlined heads",
+  "why": "entries that run on with no separator, where a bold paragraph is the name and an underlined one the section, and the town is letter-spaced",
+  "file": "tests/fixtures/bold-zagreb-law.html",
+  "parser": "parse_diplo_bold_run.cjs",
+  "args": [],
+  "expect": {
+   "rows": 20,
+   "withLanguages": 18,
+   "sample": [
+    "Hrvatska odvjetnička komora",
+    "JAGAR & GREBENAR",
+    "ODVJETNIČKI URED LUKA MRKIĆ"
+   ]
+  }
+ },
+ {
+  "name": "bold run, soft breaks",
+  "why": "the same shape with the whole entry inside one paragraph, its lines separated by br and its heading underlined without being bold",
+  "file": "tests/fixtures/bold-stockholm-doctors.html",
+  "parser": "parse_diplo_bold_run.cjs",
+  "args": [],
+  "expect": {
+   "rows": 11,
+   "withLanguages": 11,
+   "sample": [
+    "Dr. Judith Bimberg",
+    "Dr. med. Angela Marré-Lippitz",
+    "Erik Lennartsson"
+   ]
+  }
+ },
+ {
+  "name": "stacked labels, accordion",
+  "why": "the ministry address-list markup, where the label is an h4 and the value the div under it",
+  "file": "tests/fixtures/stacked-warsaw-law.html",
+  "parser": "parse_stacked_labels.cjs",
+  "args": [],
+  "expect": {
+   "rows": 21,
+   "withLanguages": 20,
+   "sample": [
+    "Amerek-Krajewska, Krajewski Adwokacka Spółka Partnerska",
+    "Rechtsanwalt Tymoteusz Juszczak",
+    "Paweł Żerański i Współnicy sp. k. Kancelaria Prawnicza sp.k."
+   ]
+  }
+ },
+ {
+  "name": "french reader refuses",
+  "why": "the guard that keeps the French reader off a page it would otherwise find surnames in: a German table for Athens must read as nothing",
+  "file": "tests/fixtures/diplo-athens.html",
+  "parser": "parse_fr_notoriete.cjs",
+  "args": [],
+  "expect": {
+   "rows": 0,
+   "withLanguages": 0,
+   "sample": []
+  }
+ },
+ {
+  "name": "bold reader refuses",
+  "why": "the guard that keeps the German bold-run reader off a French page, where it found 382 entries against the 284 a reader of that page finds",
+  "file": "tests/fixtures/frnot-es-hub.html",
+  "parser": "parse_diplo_bold_run.cjs",
+  "args": [],
+  "expect": {
+   "rows": 0,
+   "withLanguages": 0,
+   "sample": []
+  }
  }
 ]
