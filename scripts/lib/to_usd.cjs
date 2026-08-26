@@ -165,7 +165,9 @@ function makeConverter(rates, opts) {
     // Leftover ways of writing dollars, now that the local figures are gone. Strip a trailing "USD"
     // off a figure that already has a sign before turning bare "USD 180-400" into "$180-400",
     // otherwise the later rule reaches into "$1,770-2,450 USD" and signs only the far end.
-    t = t.replace(new RegExp('(' + MONEY + ')\\s*USD\\b', 'g'), (m, fig) => fig);
+    // "$3,700 USD" says the unit twice. Counted as a hit so a page carrying only this still gets
+    // written: 630 of them across 131 files were left redundant when the count ignored it.
+    t = t.replace(new RegExp('(' + MONEY + ')\\s*USD\\b', 'g'), (m, fig) => { hits += 1; return fig; });
     t = t.replace(new RegExp('\\bUSD\\s?(' + N + ')(' + CONN + ')(' + N + ')', 'g'),
       (m, a, conn, b) => '$' + a + (/to/i.test(conn) ? ' to $' : '-') + b);
     t = t.replace(new RegExp('(' + N + ')(' + CONN + ')(' + N + ')\\s?USD\\b', 'g'),

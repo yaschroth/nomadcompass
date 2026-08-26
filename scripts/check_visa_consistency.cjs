@@ -89,8 +89,18 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).sort()) {
   }
 }
 
+// Two figures in one country are not automatically a contradiction. These were checked and the
+// pages are describing DIFFERENT schemes, so forcing them to agree would make the site wrong.
+const DIFFERENT_SCHEMES = {
+  France: 'no nomad visa exists. Annecy describes the long-stay visiteur visa, Paris and Toulouse '
+    + 'the Profession Liberale visa. Different permits, different floors.',
+  Lithuania: 'Kaunas describes the ordinary temporary residence permit, Klaipeda the National Visa D '
+    + 'for remote work. The 447% gap is two schemes, not one scheme stated twice.',
+};
+
 const disagree = [];
 for (const [country, rows] of perCountry) {
+  if (DIFFERENT_SCHEMES[country]) continue;
   if (rows.length < 2) continue;
   const lo = Math.min(...rows.map((r) => r.usd));
   const hi = Math.max(...rows.map((r) => r.usd));
@@ -115,6 +125,9 @@ for (const d of show) {
 if (!process.argv.includes('--all') && disagree.length > show.length) {
   console.log('\n  ... and ' + (disagree.length - show.length) + ' more countries (--all)');
 }
+
+console.log('\n  not counted, checked and legitimately different:');
+Object.entries(DIFFERENT_SCHEMES).forEach(([c, why]) => console.log('    ' + c + ': ' + why));
 
 console.log('\n  This does not fail the build. Fixing a threshold needs the current primary source');
 console.log('  per country, and in several of these the CITY PAGES are newer than the tool.');

@@ -112,6 +112,33 @@ for (const f of pages) {
   });
 }
 
+// --- 1b. Every other page. /nomad-visas.html is not a city page and not the data file, so nothing
+// was reading it, and its Croatia row described the threshold as "About EUR 2,540 a month". Same
+// for 657 accommodation pages and six blog guides. A rule checked on one directory is not enforced.
+const SKIP_TOP = new Set(['cities', 'node_modules', 'scripts', 'data', 'assets', 'images', 'styles',
+  'ui-ux-pro-max-skill']);
+const walkHtml = (dir, rel) => {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (e.name.startsWith('.')) continue;
+    const p = path.join(dir, e.name);
+    const r = rel ? rel + '/' + e.name : e.name;
+    if (e.isDirectory()) {
+      if (!rel && SKIP_TOP.has(e.name)) continue;
+      walkHtml(p, r);
+      continue;
+    }
+    if (!e.name.endsWith('.html')) continue;
+    const html = fs.readFileSync(p, 'utf8');
+    for (const m of html.match(EM) || []) errors.push(r + ': em-dash  ' + around(html, m));
+    mapTextNodes(html, (text) => {
+      if (!/\d/.test(text)) return text;
+      for (const m of prices(text)) bodyIssues.push(r + ': not USD  "' + around(text, m) + '"');
+      return text;
+    });
+  }
+};
+walkHtml(ROOT, '');
+
 // --- 2. The file the generator writes those tiles from.
 const DATA = path.join(ROOT, 'data', 'category-descriptions.json');
 if (fs.existsSync(DATA)) {
