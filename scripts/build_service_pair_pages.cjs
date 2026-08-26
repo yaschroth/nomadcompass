@@ -452,13 +452,13 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
   ${shell.style}
   <style>
 ${H.css}
-    .svp-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
+    .svp-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
     .svp-capped { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: var(--color-stone); }
     .svp-more-lang { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
     
-    .svp-lang { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svp-lang { margin: 0 0 var(--space-12); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
     .svp-lang h2 { display: flex; align-items: center; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.45rem;
-      margin: 0 0 var(--space-4); padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+      margin: 0 0 var(--space-6); padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svp-lang-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm); font-weight: 700; color: var(--color-stone); }
     .svp-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }

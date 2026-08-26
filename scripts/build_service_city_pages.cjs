@@ -291,9 +291,9 @@ ${shell.headEnd}
   <style>
     /* This page is one city, so it opens on the listing rather than on a full-height photo. */
 ${H.css}
-    .svc-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
+    .svc-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
     .svc-head { margin: 0 0 var(--space-6); }
-    .svc-facets-h { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--color-ink); margin: 0 0 .7rem; }
+    .svc-facets-h { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--color-ink); margin: 0 0 var(--space-5); }
     .svc-facets { margin: var(--space-5) 0 0; }
     .svc-more { margin: var(--space-8) 0 0; padding: var(--space-6); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); }
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
@@ -301,9 +301,9 @@ ${H.css}
     .svc-more p:last-child { margin-bottom: 0; }
     /* The filter sits with the listing, not in the header: it acts on what is below it. */
     .svc-controls { justify-content: flex-start; margin: 0 0 var(--space-2); }
-    .svc-group { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
+    .svc-group { margin: 0 0 var(--space-12); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
     .svc-group.is-hidden { display: none; }
-    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-4);
+    .svc-group-head { display: flex; align-items: center; gap: .6rem; margin: 0 0 var(--space-6);
       font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--color-ink);
       padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svc-group-ico { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;

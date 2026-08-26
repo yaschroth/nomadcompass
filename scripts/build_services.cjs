@@ -268,7 +268,7 @@ ${shell.headTop}
     .sv-field select, .sv-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:180px; }
     .sv-field-city input { min-width:240px; }
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
-    .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 .8rem; } .sv-count b { color:var(--color-ink); }
+    .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 1.5rem; } .sv-count b { color:var(--color-ink); }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.15rem; }
     .sv-city { margin:0 0 3.5rem; }
     .sv-city.is-hidden { display:none; }
@@ -332,8 +332,8 @@ ${shell.headTop}
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
-    .sv-hubs { margin:0 0 2rem; }
-    .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .8rem; }
+    .sv-hubs { margin:0 0 3rem; }
+    .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 1.5rem; }
     /* Both card families are compartmented: a hairline between facts of different kinds, and a
        fixed width on the cell that holds a number, so a long label can never push a count onto a
        second line and leave one card taller than the rest of its row. Numbers are tabular so that

@@ -237,9 +237,9 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
   <style>
 ${H.css}
     .svl-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
-    .svl-country { margin: 0 0 var(--space-7); }
+    .svl-country { margin: 0 0 var(--space-12); }
     .svl-country h2 { display: flex; align-items: baseline; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.3rem;
-      margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+      margin: 0 0 var(--space-6); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svl-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
 ${B.css}

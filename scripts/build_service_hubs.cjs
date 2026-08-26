@@ -167,10 +167,10 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
 ${H.css}
     .svh-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
     .svh-langs { margin: 0 0 var(--space-8); }
-    .svh-langs h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 0 var(--space-3); }
-    .svh-country { margin: 0 0 var(--space-7); }
+    .svh-langs h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 0 var(--space-5); }
+    .svh-country { margin: 0 0 var(--space-12); }
     .svh-country h2 { display: flex; align-items: baseline; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.3rem;
-      margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
+      margin: 0 0 var(--space-6); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svh-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
 ${B.css}

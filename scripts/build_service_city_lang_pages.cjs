@@ -408,7 +408,7 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
   ${shell.style}
   <style>
 ${H.css}
-    .svp-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
+    .svp-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
     .svp-pager { margin: var(--space-6) 0 0; }
     .svp-pager-count { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--color-stone); }
     .svp-pager ul { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; list-style: none; margin: 0; padding: 0; }

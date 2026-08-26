@@ -69,6 +69,8 @@ const STEPS = [
   ['gate', 'check_service_dupes.cjs', ''],
   ['gate', 'check_provenance.cjs', ''],
   ['gate', 'check_site_numbers.cjs', ''],
+  ['gate', 'check_css_tokens.cjs', 'a var() with no definition and no fallback drops the whole declaration'],
+  ['gate', 'check_prose_style.cjs', 'no em-dashes, and every price in USD'],
   ['gate', 'verify_service_links.cjs --new-only', 'fetches the links a data change added, and only those'],
 ];
 
