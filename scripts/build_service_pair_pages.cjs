@@ -25,6 +25,7 @@ const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
+const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -371,9 +372,9 @@ for (const page of ordered) {
 
   // --- linking --------------------------------------------------------------------------------
   const siblings = city.services.filter((c) => c !== cat).slice(0, 9);
-  const siblingChips = siblings.map((c) => `<a class="svp-chip" href="${linkTo(city.id, c)}">${esc(P.catName(c).replace(/^./, (x) => x.toUpperCase()))}<span>${M.pairOf(city.id, c).n}</span></a>`).join('');
+  const siblingChips = siblings.map((c) => B.chip({ href: linkTo(city.id, c), label: P.catName(c).replace(/^./, (x) => x.toUpperCase()), n: M.pairOf(city.id, c).n })).join('');
   const near = M.nearest(city.id, cat, 6);
-  const nearChips = near.map((x) => `<a class="svp-chip" href="${linkTo(x.city, cat)}">${esc(x.name)}<span>${x.n}</span></a>`).join('');
+  const nearChips = near.map((x) => B.chip({ href: linkTo(x.city, cat), label: x.name, n: x.n })).join('');
 
   // --- structured data ------------------------------------------------------------------------
   const ld = [
@@ -456,7 +457,7 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
     .svp-capped { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: var(--color-stone); }
     .svp-more-lang { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
-    .svp-langbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-6); }
+    
     .svp-lang { margin: 0 0 var(--space-8); scroll-margin-top: calc(var(--nav-height,64px) + 1rem); }
     .svp-lang h2 { display: flex; align-items: center; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.45rem;
       margin: 0 0 var(--space-4); padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
@@ -464,12 +465,8 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
-    .svp-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: var(--space-4) 0 var(--space-6); }
-    a.svp-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
-      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
-      border-radius: var(--radius-md, 8px); padding: .4rem .7rem; text-decoration: none; }
-    .svp-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svp-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svp-chips, .svp-langbar { margin: var(--space-4) 0 var(--space-6); }
+${B.css}
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
     .ymyl-note { font-size: var(--text-sm); color: var(--color-stone); border-left: 3px solid var(--color-sand-dark, #e3d9c6); padding-left: .9rem; margin: var(--space-5) 0; }
@@ -486,8 +483,8 @@ ${shell.headEnd}
         <h1>${esc(h1)}</h1>
         <p class="svp-stand">${esc(blocks.standfirst)}${sections ? ' Each language has its own list below, so anyone who works in two appears in both.' : ''}</p>
       </header>
-      ${sections ? `<nav class="svp-langbar" aria-label="Languages on this page">` +
-        sections.map((sec) => `<a class="svp-chip" href="#lang-${sec.lang || 'other'}">${esc(sec.lang ? P.langName(sec.lang) : 'Local language only')}<span>${sec.n}</span></a>`).join('') +
+      ${sections ? `<nav class="svp-langbar sb-chips" aria-label="Languages on this page">` +
+        sections.map((sec) => B.chip({ href: '#lang-' + (sec.lang || 'other'), label: sec.lang ? P.langName(sec.lang) : 'Local language only', n: sec.n })).join('') +
         `</nav>` : ''}
       ${ymyl}
 
@@ -500,8 +497,8 @@ ${shell.headEnd}
         ${blocks.geography ? `<h2>Where in ${esc(city.name)}</h2>\n        <p>${esc(blocks.geography)}</p>` : ''}
         <h2>If none of these fits</h2>
         <p>${esc(blocks.alternatives)}</p>
-        ${siblingChips ? `<h2>Other services in ${esc(city.name)}</h2>\n        <div class="svp-chips">${siblingChips}</div>` : ''}
-        ${nearChips ? `<h2>${esc(P.catName(cat).replace(/^./, (x) => x.toUpperCase()))} in nearby cities</h2>\n        <div class="svp-chips">${nearChips}</div>\n        <p>${HUBS.has(cat) ? `<a href="/services/${M.SERVICE_SLUGS[cat]}">All ${M.services[cat].cities.length} cities where we list ${esc(P.catName(cat))}</a> or ` : ''}<a href="/services/${city.id}">everything we list in ${esc(city.name)}</a>.</p>` : ''}
+        ${siblingChips ? `<h2>Other services in ${esc(city.name)}</h2>\n        <div class="svp-chips sb-chips">${siblingChips}</div>` : ''}
+        ${nearChips ? `<h2>${esc(P.catName(cat).replace(/^./, (x) => x.toUpperCase()))} in nearby cities</h2>\n        <div class="svp-chips sb-chips">${nearChips}</div>\n        <p>${HUBS.has(cat) ? `<a href="/services/${M.SERVICE_SLUGS[cat]}">All ${M.services[cat].cities.length} cities where we list ${esc(P.catName(cat))}</a> or ` : ''}<a href="/services/${city.id}">everything we list in ${esc(city.name)}</a>.</p>` : ''}
         <h2>Questions</h2>
         <dl class="svp-faq">
 ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a) + '</dd>').join('\n')}

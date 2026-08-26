@@ -26,6 +26,7 @@ const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
+const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -165,10 +166,10 @@ for (const [cat, svc] of Object.entries(M.services)) {
 
     const countryBlocks = countries.map((country) => `<section class="svl-country">
           <h2>${esc(country)}<span class="svl-n">${byCountry[country].reduce((s, x) => s + x.n, 0)} in ${byCountry[country].length} ${byCountry[country].length === 1 ? 'city' : 'cities'}</span></h2>
-          <div class="svl-cities">
-        ${byCountry[country].map((c) => `<a class="svl-city" href="${linkTo(c.slug, cat)}">
-              <span class="svl-city-name">${esc(c.name)}<span class="svl-city-n">${c.n}</span></span>
-              <span class="svl-city-sub">${c.n} of ${c.total} ${esc(label)} we list there</span>
+          <div class="sb-grid">
+        ${byCountry[country].map((c) => `<a class="sb-card" href="${linkTo(c.slug, cat)}">
+              ${B.cardHead({ name: c.name, n: c.n, unit: langName })}
+              ${B.tray(`Of all ${label} here`, B.shareBar(c.n, c.total))}
             </a>`).join('\n        ')}
           </div>
         </section>`).join('\n      ');
@@ -248,13 +249,7 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
       margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svl-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
-    .svl-cities { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .7rem; }
-    a.svl-city:not(.btn):not(.nav-link) { display: block; padding: .7rem .85rem; background: #fff; color: var(--color-ink);
-      border: 1px solid var(--color-sand-dark, #e3d9c6); border-radius: var(--radius-md, 8px); text-decoration: none; }
-    a.svl-city:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svl-city-name { display: flex; align-items: baseline; gap: .5rem; font-weight: 700; }
-    .svl-city-n { margin-left: auto; font-size: var(--text-xs); color: var(--color-terracotta-dark, #a8492c); }
-    .svl-city-sub { display: block; margin-top: .2rem; font-size: var(--text-xs); color: var(--color-stone); }
+${B.css}
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }

@@ -198,26 +198,83 @@
       border-radius: 12px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); }
     .svh-ico svg { width: 24px; height: 24px; }
     .svh-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
-    .svh-langs { margin: 0 0 var(--space-7); }
+    .svh-langs { margin: 0 0 var(--space-8); }
     .svh-langs h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 0 var(--space-3); }
-    .svh-langs-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
-    a.svh-lang:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem .75rem;
-      background: #fff; color: var(--color-ink); border: 1px solid var(--color-sand-dark, #e3d9c6);
-      border-radius: var(--radius-md, 8px); text-decoration: none; font-weight: 700; font-size: var(--text-sm); }
-    a.svh-lang:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svh-lang span { font-size: var(--text-xs); font-weight: 600; color: var(--color-stone); }
     .svh-country { margin: 0 0 var(--space-7); }
     .svh-country h2 { display: flex; align-items: baseline; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.3rem;
       margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svh-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
-    .svh-cities { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .7rem; }
-    a.svh-city:not(.btn):not(.nav-link) { display: block; padding: .7rem .85rem; background: #fff; color: var(--color-ink);
-      border: 1px solid var(--color-sand-dark, #e3d9c6); border-radius: var(--radius-md, 8px); text-decoration: none; }
-    a.svh-city:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svh-city-name { display: flex; align-items: baseline; gap: .5rem; font-weight: 700; }
-    .svh-city-n { margin-left: auto; font-size: var(--text-xs); color: var(--color-stone); }
-    .svh-city-langs { display: block; margin-top: .2rem; font-size: var(--text-xs); color: var(--color-stone); }
+
+    /* ---- the compartmented card, shared with .sv-ix on /services ---- */
+    .sb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:1rem; align-items:start; }
+    a.sb-card:not(.btn):not(.nav-link) { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden;
+      background:#fff; color:var(--color-ink); text-decoration:none;
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
+      transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-card:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    /* A floor on the identity row so a one-line name and a two-line one sit their count tiles at the
+       same height across a row: "Santiago de Compostela" used to push its own down. */
+    .sb-head { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.62rem;
+      padding:.85rem .95rem .9rem; min-height:3.9rem; }
+    .sb-name { font-family:'DM Serif Display',serif; font-size:1.08rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
+    .sb-sub { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
+    /* The count is a tile in the corner of the identity row, not a number trailing the name. */
+    .sb-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.05rem; padding:.3rem .42rem; background:#fff;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    .sb-count b { font-size:1.02rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sb-count small { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    .sb-tray { display:block; padding:.65rem .95rem .8rem; background:#fff; border-top:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-eyebrow { display:block; margin:0 0 .4rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
+    .sb-tray-text { display:block; font-size:var(--text-xs); color:var(--color-stone); line-height:1.45; }
+    /* A ratio the reader would otherwise have to work out. Madrid holds 146 of the 763 translators
+       we list there and Alicante 40 of 120, which is 19% against 33%: the same two numbers, a
+       different answer. The bar is the comparison; the figures under it are the evidence. */
+    .sb-bar { display:block; height:5px; margin:0 0 .38rem; border-radius:3px;
+      background:var(--color-sand,#f2ece0); overflow:hidden; }
+    .sb-bar i { display:block; height:100%; background:var(--color-terracotta,#c0392b); }
+    .sb-figs { display:flex; align-items:baseline; justify-content:space-between; gap:.5rem;
+      font-size:var(--text-xs); color:var(--color-stone); }
+    .sb-figs b { font-weight:700; color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sb-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
+    /* A language and its count are two cells of one chip, so the eye can run down the numbers. */
+    .sb-lang { display:inline-flex; align-items:stretch; overflow:hidden; background:#fff;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); font-size:.72rem; line-height:1; }
+    .sb-lang i { font-style:normal; padding:.26rem .4rem; font-weight:700; color:var(--color-ink); }
+    .sb-lang b { padding:.26rem .38rem; font-weight:700; color:var(--color-stone);
+      border-left:1px solid var(--color-sand-dark,#E3D9C6); font-variant-numeric:tabular-nums; }
+    /* "+3" counts the languages that did not fit. It is not a language, so it does not wear their
+       chip: no border, no ground. It does take their height, because a lone "+1" wrapping onto a
+       line of its own otherwise reads as something dropped rather than something meant. */
+    .sb-lang-more { display:inline-flex; align-items:center; padding:.26rem .1rem .26rem .25rem;
+      font-size:.72rem; line-height:1; font-weight:600; color:var(--color-stone); }
+
+    /* ---- the compartmented chip, shared with .sv-hub on /services ---- */
+    .sb-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin:0; padding:0; list-style:none; }
+    a.sb-chip:not(.btn):not(.nav-link), span.sb-chip, li.sb-chip, button.sb-chip { display:inline-grid;
+      grid-template-columns:auto auto; align-items:stretch; gap:0; padding:0; overflow:hidden;
+      background:#fff; color:var(--color-ink); text-decoration:none; font-family:inherit;
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
+      transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-chip:hover, button.sb-chip:hover { border-color:var(--color-terracotta,#c0392b);
+      box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-1px); }
+    .sb-chip-label { align-self:center; padding:.44rem .68rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* A <li> is a label, not a link. Wearing the same shadow as the chips below it made the
+       language counts look clickable, which they are not. */
+    li.sb-chip { box-shadow:none; border-color:var(--color-sand-dark,#E3D9C6); }
+    .sb-chip-n { display:flex; align-items:center; padding:.44rem .6rem; background:#fff;
+      border-left:1px solid var(--color-sand-dark,#E3D9C6); font-size:.72rem; font-weight:700; color:var(--color-stone);
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
+      a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
+    }
     .svh-foot { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svh-foot p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
   </style>
@@ -244,477 +301,477 @@
 
       <nav class="svh-langs" aria-label="By language">
         <h2>Pick a language</h2>
-        <div class="svh-langs-grid"><a class="svh-lang" href="/services/translators/french">French<span>428</span></a><a class="svh-lang" href="/services/translators/italian">Italian<span>117</span></a><a class="svh-lang" href="/services/translators/arabic">Arabic<span>36</span></a><a class="svh-lang" href="/services/translators/russian">Russian<span>33</span></a><a class="svh-lang" href="/services/translators/portuguese">Portuguese<span>29</span></a><a class="svh-lang" href="/services/translators/spanish">Spanish<span>25</span></a><a class="svh-lang" href="/services/translators/chinese">Chinese<span>18</span></a><a class="svh-lang" href="/services/translators/swedish">Swedish<span>9</span></a><a class="svh-lang" href="/services/translators/dutch">Dutch<span>8</span></a></div>
+        <div class="sb-chips"><a class="sb-chip" href="/services/translators/french"><span class="sb-chip-label">French</span><span class="sb-chip-n">428</span></a><a class="sb-chip" href="/services/translators/italian"><span class="sb-chip-label">Italian</span><span class="sb-chip-n">117</span></a><a class="sb-chip" href="/services/translators/arabic"><span class="sb-chip-label">Arabic</span><span class="sb-chip-n">36</span></a><a class="sb-chip" href="/services/translators/russian"><span class="sb-chip-label">Russian</span><span class="sb-chip-n">33</span></a><a class="sb-chip" href="/services/translators/portuguese"><span class="sb-chip-label">Portuguese</span><span class="sb-chip-n">29</span></a><a class="sb-chip" href="/services/translators/spanish"><span class="sb-chip-label">Spanish</span><span class="sb-chip-n">25</span></a><a class="sb-chip" href="/services/translators/chinese"><span class="sb-chip-label">Chinese</span><span class="sb-chip-n">18</span></a><a class="sb-chip" href="/services/translators/swedish"><span class="sb-chip-label">Swedish</span><span class="sb-chip-n">9</span></a><a class="sb-chip" href="/services/translators/dutch"><span class="sb-chip-label">Dutch</span><span class="sb-chip-n">8</span></a></div>
       </nav>
 
       <section class="svh-country">
           <h2>Spain<span class="svh-n">1887 in 25 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/madrid/translators">
-              <span class="svh-city-name">Madrid<span class="svh-city-n">763</span></span>
-              <span class="svh-city-langs">English 519, French 146, German 62</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/madrid/translators">
+              <span class="sb-head"><span class="sb-name">Madrid</span><span class="sb-count"><b>763</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>519</b></span><span class="sb-lang"><i>French</i><b>146</b></span><span class="sb-lang"><i>German</i><b>62</b></span><span class="sb-lang-more">+5</span></span></span>
             </a>
-        <a class="svh-city" href="/services/barcelona/translators">
-              <span class="svh-city-name">Barcelona<span class="svh-city-n">220</span></span>
-              <span class="svh-city-langs">English 118, French 58, German 34</span>
+        <a class="sb-card" href="/services/barcelona/translators">
+              <span class="sb-head"><span class="sb-name">Barcelona</span><span class="sb-count"><b>220</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>118</b></span><span class="sb-lang"><i>French</i><b>58</b></span><span class="sb-lang"><i>German</i><b>34</b></span><span class="sb-lang-more">+6</span></span></span>
             </a>
-        <a class="svh-city" href="/services/granadaspain/translators">
-              <span class="svh-city-name">Granada<span class="svh-city-n">140</span></span>
-              <span class="svh-city-langs">English 86, French 33, German 17</span>
+        <a class="sb-card" href="/services/granadaspain/translators">
+              <span class="sb-head"><span class="sb-name">Granada</span><span class="sb-count"><b>140</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>86</b></span><span class="sb-lang"><i>French</i><b>33</b></span><span class="sb-lang"><i>German</i><b>17</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
-        <a class="svh-city" href="/services/laspalmas/translators">
-              <span class="svh-city-name">Las Palmas<span class="svh-city-n">137</span></span>
-              <span class="svh-city-langs">English 106, German 18, French 13</span>
+        <a class="sb-card" href="/services/laspalmas/translators">
+              <span class="sb-head"><span class="sb-name">Las Palmas</span><span class="sb-count"><b>137</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>106</b></span><span class="sb-lang"><i>German</i><b>18</b></span><span class="sb-lang"><i>French</i><b>13</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/alicante/translators">
-              <span class="svh-city-name">Alicante<span class="svh-city-n">120</span></span>
-              <span class="svh-city-langs">English 53, French 40, German 25</span>
+        <a class="sb-card" href="/services/alicante/translators">
+              <span class="sb-head"><span class="sb-name">Alicante</span><span class="sb-count"><b>120</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>53</b></span><span class="sb-lang"><i>French</i><b>40</b></span><span class="sb-lang"><i>German</i><b>25</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/seville/translators">
-              <span class="svh-city-name">Seville<span class="svh-city-n">61</span></span>
-              <span class="svh-city-langs">English 35, French 18, German 4</span>
+        <a class="sb-card" href="/services/seville/translators">
+              <span class="sb-head"><span class="sb-name">Seville</span><span class="sb-count"><b>61</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>35</b></span><span class="sb-lang"><i>French</i><b>18</b></span><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang-more">+3</span></span></span>
             </a>
-        <a class="svh-city" href="/services/valencia/translators">
-              <span class="svh-city-name">Valencia<span class="svh-city-n">54</span></span>
-              <span class="svh-city-langs">English 25, French 17, German 11</span>
+        <a class="sb-card" href="/services/valencia/translators">
+              <span class="sb-head"><span class="sb-name">Valencia</span><span class="sb-count"><b>54</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>25</b></span><span class="sb-lang"><i>French</i><b>17</b></span><span class="sb-lang"><i>German</i><b>11</b></span><span class="sb-lang-more">+4</span></span></span>
             </a>
-        <a class="svh-city" href="/services/palma/translators">
-              <span class="svh-city-name">Palma de Mallorca<span class="svh-city-n">53</span></span>
-              <span class="svh-city-langs">English 33, German 12, French 8</span>
+        <a class="sb-card" href="/services/palma/translators">
+              <span class="sb-head"><span class="sb-name">Palma de Mallorca</span><span class="sb-count"><b>53</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>33</b></span><span class="sb-lang"><i>German</i><b>12</b></span><span class="sb-lang"><i>French</i><b>8</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/malaga/translators">
-              <span class="svh-city-name">Málaga<span class="svh-city-n">51</span></span>
-              <span class="svh-city-langs">English 31, French 14, German 7</span>
+        <a class="sb-card" href="/services/malaga/translators">
+              <span class="sb-head"><span class="sb-name">Málaga</span><span class="sb-count"><b>51</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>31</b></span><span class="sb-lang"><i>French</i><b>14</b></span><span class="sb-lang"><i>German</i><b>7</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
-        <a class="svh-city" href="/services/zaragoza/translators">
-              <span class="svh-city-name">Zaragoza<span class="svh-city-n">41</span></span>
-              <span class="svh-city-langs">English 27, French 12, German 3</span>
+        <a class="sb-card" href="/services/zaragoza/translators">
+              <span class="sb-head"><span class="sb-name">Zaragoza</span><span class="sb-count"><b>41</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>27</b></span><span class="sb-lang"><i>French</i><b>12</b></span><span class="sb-lang"><i>German</i><b>3</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/santiagodecompostela/translators">
-              <span class="svh-city-name">Santiago de Compostela<span class="svh-city-n">29</span></span>
-              <span class="svh-city-langs">English 24, French 4, Portuguese 1</span>
+        <a class="sb-card" href="/services/santiagodecompostela/translators">
+              <span class="sb-head"><span class="sb-name">Santiago de Compostela</span><span class="sb-count"><b>29</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>24</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/gijon/translators">
-              <span class="svh-city-name">Gijón<span class="svh-city-n">26</span></span>
-              <span class="svh-city-langs">English 20, French 6</span>
+        <a class="sb-card" href="/services/gijon/translators">
+              <span class="sb-head"><span class="sb-name">Gijón</span><span class="sb-count"><b>26</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>20</b></span><span class="sb-lang"><i>French</i><b>6</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/tenerife/translators">
-              <span class="svh-city-name">Tenerife<span class="svh-city-n">26</span></span>
-              <span class="svh-city-langs">English 18, French 4, German 4</span>
+        <a class="sb-card" href="/services/tenerife/translators">
+              <span class="sb-head"><span class="sb-name">Tenerife</span><span class="sb-count"><b>26</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>18</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang"><i>German</i><b>4</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/salamanca/translators">
-              <span class="svh-city-name">Salamanca<span class="svh-city-n">21</span></span>
-              <span class="svh-city-langs">English 8, French 7, German 6</span>
+        <a class="sb-card" href="/services/salamanca/translators">
+              <span class="sb-head"><span class="sb-name">Salamanca</span><span class="sb-count"><b>21</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span><span class="sb-lang"><i>French</i><b>7</b></span><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/bilbao/translators">
-              <span class="svh-city-name">Bilbao<span class="svh-city-n">20</span></span>
-              <span class="svh-city-langs">French 10, English 10, German 2</span>
+        <a class="sb-card" href="/services/bilbao/translators">
+              <span class="sb-head"><span class="sb-name">Bilbao</span><span class="sb-count"><b>20</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>French</i><b>10</b></span><span class="sb-lang"><i>English</i><b>10</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/marbella/translators">
-              <span class="svh-city-name">Marbella<span class="svh-city-n">19</span></span>
-              <span class="svh-city-langs">English 10, German 6, French 3</span>
+        <a class="sb-card" href="/services/marbella/translators">
+              <span class="sb-head"><span class="sb-name">Marbella</span><span class="sb-count"><b>19</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>10</b></span><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang"><i>French</i><b>3</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/sansebastian/translators">
-              <span class="svh-city-name">San Sebastián<span class="svh-city-n">18</span></span>
-              <span class="svh-city-langs">English 13, German 4, Arabic 1</span>
+        <a class="sb-card" href="/services/sansebastian/translators">
+              <span class="sb-head"><span class="sb-name">San Sebastián</span><span class="sb-count"><b>18</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>13</b></span><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/fuerteventura/translators">
-              <span class="svh-city-name">Fuerteventura<span class="svh-city-n">16</span></span>
-              <span class="svh-city-langs">English 12, French 2, Arabic 1</span>
+        <a class="sb-card" href="/services/fuerteventura/translators">
+              <span class="sb-head"><span class="sb-name">Fuerteventura</span><span class="sb-count"><b>16</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>12</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/cadiz/translators">
-              <span class="svh-city-name">Cádiz<span class="svh-city-n">14</span></span>
-              <span class="svh-city-langs">English 11, German 1, Arabic 1</span>
+        <a class="sb-card" href="/services/cadiz/translators">
+              <span class="sb-head"><span class="sb-name">Cádiz</span><span class="sb-count"><b>14</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>11</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/toledo">
-              <span class="svh-city-name">Toledo<span class="svh-city-n">14</span></span>
-              <span class="svh-city-langs">English 14</span>
+        <a class="sb-card" href="/services/toledo">
+              <span class="sb-head"><span class="sb-name">Toledo</span><span class="sb-count"><b>14</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>14</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/caceres">
-              <span class="svh-city-name">Cáceres<span class="svh-city-n">11</span></span>
-              <span class="svh-city-langs">English 8, French 2, Portuguese 1</span>
+        <a class="sb-card" href="/services/caceres">
+              <span class="sb-head"><span class="sb-name">Cáceres</span><span class="sb-count"><b>11</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/ibiza/translators">
-              <span class="svh-city-name">Ibiza<span class="svh-city-n">10</span></span>
-              <span class="svh-city-langs">English 6, French 2, German 2</span>
+        <a class="sb-card" href="/services/ibiza/translators">
+              <span class="sb-head"><span class="sb-name">Ibiza</span><span class="sb-count"><b>10</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>6</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/ronda">
-              <span class="svh-city-name">Ronda<span class="svh-city-n">10</span></span>
-              <span class="svh-city-langs">English 10</span>
+        <a class="sb-card" href="/services/ronda">
+              <span class="sb-head"><span class="sb-name">Ronda</span><span class="sb-count"><b>10</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>10</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/segovia">
-              <span class="svh-city-name">Segovia<span class="svh-city-n">8</span></span>
-              <span class="svh-city-langs">English 8</span>
+        <a class="sb-card" href="/services/segovia">
+              <span class="sb-head"><span class="sb-name">Segovia</span><span class="sb-count"><b>8</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/girona/translators">
-              <span class="svh-city-name">Girona<span class="svh-city-n">5</span></span>
-              <span class="svh-city-langs">English 3, German 1, French 1</span>
+        <a class="sb-card" href="/services/girona/translators">
+              <span class="sb-head"><span class="sb-name">Girona</span><span class="sb-count"><b>5</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Italy<span class="svh-n">62 in 9 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/rome/translators">
-              <span class="svh-city-name">Rome<span class="svh-city-n">48</span></span>
-              <span class="svh-city-langs">German 48, English 1, Spanish 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/rome/translators">
+              <span class="sb-head"><span class="sb-name">Rome</span><span class="sb-count"><b>48</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>48</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/milan/translators">
-              <span class="svh-city-name">Milan<span class="svh-city-n">6</span></span>
-              <span class="svh-city-langs">German 6, English 5, Spanish 2</span>
+        <a class="sb-card" href="/services/milan/translators">
+              <span class="sb-head"><span class="sb-name">Milan</span><span class="sb-count"><b>6</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang"><i>English</i><b>5</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
-        <a class="svh-city" href="/services/florence/translators">
-              <span class="svh-city-name">Florence<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">English 2, German 2, Spanish 1</span>
+        <a class="sb-card" href="/services/florence/translators">
+              <span class="sb-head"><span class="sb-name">Florence</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/bari/translators">
-              <span class="svh-city-name">Bari<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1, German 1</span>
+        <a class="sb-card" href="/services/bari/translators">
+              <span class="sb-head"><span class="sb-name">Bari</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/catania/translators">
-              <span class="svh-city-name">Catania<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1</span>
+        <a class="sb-card" href="/services/catania/translators">
+              <span class="sb-head"><span class="sb-name">Catania</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/genoa/translators">
-              <span class="svh-city-name">Genoa<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1, English 1</span>
+        <a class="sb-card" href="/services/genoa/translators">
+              <span class="sb-head"><span class="sb-name">Genoa</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/naples">
-              <span class="svh-city-name">Naples<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1, German 1</span>
+        <a class="sb-card" href="/services/naples">
+              <span class="sb-head"><span class="sb-name">Naples</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/siena">
-              <span class="svh-city-name">Siena<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1</span>
+        <a class="sb-card" href="/services/siena">
+              <span class="sb-head"><span class="sb-name">Siena</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/turin/translators">
-              <span class="svh-city-name">Turin<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1, English 1, Spanish 1</span>
+        <a class="sb-card" href="/services/turin/translators">
+              <span class="sb-head"><span class="sb-name">Turin</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Portugal<span class="svh-n">39 in 6 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/lisbon/translators">
-              <span class="svh-city-name">Lisbon<span class="svh-city-n">20</span></span>
-              <span class="svh-city-langs">German 20, English 4, French 4</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/lisbon/translators">
+              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>20</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>20</b></span><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang-more">+22</span></span></span>
             </a>
-        <a class="svh-city" href="/services/porto/translators">
-              <span class="svh-city-name">Porto<span class="svh-city-n">14</span></span>
-              <span class="svh-city-langs">German 14, English 2, French 2</span>
+        <a class="sb-card" href="/services/porto/translators">
+              <span class="sb-head"><span class="sb-name">Porto</span><span class="sb-count"><b>14</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>14</b></span><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang-more">+20</span></span></span>
             </a>
-        <a class="svh-city" href="/services/braga/translators">
-              <span class="svh-city-name">Braga<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">German 2, English 1, French 1</span>
+        <a class="sb-card" href="/services/braga/translators">
+              <span class="sb-head"><span class="sb-name">Braga</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/aveiro/translators">
-              <span class="svh-city-name">Aveiro<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1, Arabic 1</span>
+        <a class="sb-card" href="/services/aveiro/translators">
+              <span class="sb-head"><span class="sb-name">Aveiro</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+20</span></span></span>
             </a>
-        <a class="svh-city" href="/services/cascais/translators">
-              <span class="svh-city-name">Cascais<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1</span>
+        <a class="sb-card" href="/services/cascais/translators">
+              <span class="sb-head"><span class="sb-name">Cascais</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/coimbra/translators">
-              <span class="svh-city-name">Coimbra<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, German 1, French 1</span>
+        <a class="sb-card" href="/services/coimbra/translators">
+              <span class="sb-head"><span class="sb-name">Coimbra</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Austria<span class="svh-n">25 in 4 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/vienna/translators">
-              <span class="svh-city-name">Vienna<span class="svh-city-n">10</span></span>
-              <span class="svh-city-langs">Italian 10</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/vienna/translators">
+              <span class="sb-head"><span class="sb-name">Vienna</span><span class="sb-count"><b>10</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>10</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/innsbruck/translators">
-              <span class="svh-city-name">Innsbruck<span class="svh-city-n">7</span></span>
-              <span class="svh-city-langs">Italian 7</span>
+        <a class="sb-card" href="/services/innsbruck/translators">
+              <span class="sb-head"><span class="sb-name">Innsbruck</span><span class="sb-count"><b>7</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>7</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/graz/translators">
-              <span class="svh-city-name">Graz<span class="svh-city-n">6</span></span>
-              <span class="svh-city-langs">Italian 6</span>
+        <a class="sb-card" href="/services/graz/translators">
+              <span class="sb-head"><span class="sb-name">Graz</span><span class="sb-count"><b>6</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>6</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/salzburg/translators">
-              <span class="svh-city-name">Salzburg<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">Italian 2</span>
+        <a class="sb-card" href="/services/salzburg/translators">
+              <span class="sb-head"><span class="sb-name">Salzburg</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>2</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Hungary<span class="svh-n">11 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/budapest/translators">
-              <span class="svh-city-name">Budapest<span class="svh-city-n">11</span></span>
-              <span class="svh-city-langs">Italian 7, German 5</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/budapest/translators">
+              <span class="sb-head"><span class="sb-name">Budapest</span><span class="sb-count"><b>11</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>7</b></span><span class="sb-lang"><i>German</i><b>5</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Germany<span class="svh-n">9 in 5 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/berlin/translators">
-              <span class="svh-city-name">Berlin<span class="svh-city-n">5</span></span>
-              <span class="svh-city-langs">English 3, Italian 2, Spanish 2</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/berlin/translators">
+              <span class="sb-head"><span class="sb-name">Berlin</span><span class="sb-count"><b>5</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Italian</i><b>2</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/dresden">
-              <span class="svh-city-name">Dresden<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1</span>
+        <a class="sb-card" href="/services/dresden">
+              <span class="sb-head"><span class="sb-name">Dresden</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/hamburg/translators">
-              <span class="svh-city-name">Hamburg<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1</span>
+        <a class="sb-card" href="/services/hamburg/translators">
+              <span class="sb-head"><span class="sb-name">Hamburg</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/heidelberg">
-              <span class="svh-city-name">Heidelberg<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1</span>
+        <a class="sb-card" href="/services/heidelberg">
+              <span class="sb-head"><span class="sb-name">Heidelberg</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/leipzig">
-              <span class="svh-city-name">Leipzig<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1</span>
+        <a class="sb-card" href="/services/leipzig">
+              <span class="sb-head"><span class="sb-name">Leipzig</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Ireland<span class="svh-n">9 in 2 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/dublin/translators">
-              <span class="svh-city-name">Dublin<span class="svh-city-n">8</span></span>
-              <span class="svh-city-langs">German 8</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/dublin/translators">
+              <span class="sb-head"><span class="sb-name">Dublin</span><span class="sb-count"><b>8</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>8</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/galway">
-              <span class="svh-city-name">Galway<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1</span>
+        <a class="sb-card" href="/services/galway">
+              <span class="sb-head"><span class="sb-name">Galway</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>South Korea<span class="svh-n">8 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/seoul/translators">
-              <span class="svh-city-name">Seoul<span class="svh-city-n">8</span></span>
-              <span class="svh-city-langs">German 8</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/seoul/translators">
+              <span class="sb-head"><span class="sb-name">Seoul</span><span class="sb-count"><b>8</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>8</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Turkey<span class="svh-n">8 in 3 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/istanbul/translators">
-              <span class="svh-city-name">Istanbul<span class="svh-city-n">3</span></span>
-              <span class="svh-city-langs">English 3, Spanish 2, French 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/istanbul/translators">
+              <span class="sb-head"><span class="sb-name">Istanbul</span><span class="sb-count"><b>3</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+6</span></span></span>
             </a>
-        <a class="svh-city" href="/services/izmir/translators">
-              <span class="svh-city-name">Izmir<span class="svh-city-n">3</span></span>
-              <span class="svh-city-langs">English 3, Russian 2, German 2</span>
+        <a class="sb-card" href="/services/izmir/translators">
+              <span class="sb-head"><span class="sb-name">Izmir</span><span class="sb-count"><b>3</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+15</span></span></span>
             </a>
-        <a class="svh-city" href="/services/antalya">
-              <span class="svh-city-name">Antalya<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">English 2, German 2, Russian 1</span>
+        <a class="sb-card" href="/services/antalya">
+              <span class="sb-head"><span class="sb-name">Antalya</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>Russian</i><b>1</b></span><span class="sb-lang-more">+15</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Mexico<span class="svh-n">6 in 3 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/mexicocity/translators">
-              <span class="svh-city-name">Mexico City<span class="svh-city-n">4</span></span>
-              <span class="svh-city-langs">English 4, French 3, Portuguese 2</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/mexicocity/translators">
+              <span class="sb-head"><span class="sb-name">Mexico City</span><span class="sb-count"><b>4</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>French</i><b>3</b></span><span class="sb-lang"><i>Portuguese</i><b>2</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/guanajuato">
-              <span class="svh-city-name">Guanajuato<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, French 1, Portuguese 1</span>
+        <a class="sb-card" href="/services/guanajuato">
+              <span class="sb-head"><span class="sb-name">Guanajuato</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/queretaro/translators">
-              <span class="svh-city-name">Querétaro<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, French 1, Portuguese 1</span>
+        <a class="sb-card" href="/services/queretaro/translators">
+              <span class="sb-head"><span class="sb-name">Querétaro</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Argentina<span class="svh-n">5 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/buenosaires/translators">
-              <span class="svh-city-name">Buenos Aires<span class="svh-city-n">5</span></span>
-              <span class="svh-city-langs">English 5, Portuguese 2, German 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/buenosaires/translators">
+              <span class="sb-head"><span class="sb-name">Buenos Aires</span><span class="sb-count"><b>5</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>5</b></span><span class="sb-lang"><i>Portuguese</i><b>2</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Croatia<span class="svh-n">5 in 3 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/zagreb/translators">
-              <span class="svh-city-name">Zagreb<span class="svh-city-n">3</span></span>
-              <span class="svh-city-langs">English 3, Italian 3, Serbian 2</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/zagreb/translators">
+              <span class="sb-head"><span class="sb-name">Zagreb</span><span class="sb-count"><b>3</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Italian</i><b>3</b></span><span class="sb-lang"><i>Serbian</i><b>2</b></span><span class="sb-lang-more">+6</span></span></span>
             </a>
-        <a class="svh-city" href="/services/pula/translators">
-              <span class="svh-city-name">Pula<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Italian 1, German 1</span>
+        <a class="sb-card" href="/services/pula/translators">
+              <span class="sb-head"><span class="sb-name">Pula</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Italian</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/rovinj">
-              <span class="svh-city-name">Rovinj<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Italian 1</span>
+        <a class="sb-card" href="/services/rovinj">
+              <span class="sb-head"><span class="sb-name">Rovinj</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Czech Republic<span class="svh-n">5 in 2 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/prague/translators">
-              <span class="svh-city-name">Prague<span class="svh-city-n">4</span></span>
-              <span class="svh-city-langs">German 4, Slovak 1, English 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/prague/translators">
+              <span class="sb-head"><span class="sb-name">Prague</span><span class="sb-count"><b>4</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang"><i>Slovak</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
             </a>
-        <a class="svh-city" href="/services/brno">
-              <span class="svh-city-name">Brno<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1</span>
+        <a class="sb-card" href="/services/brno">
+              <span class="sb-head"><span class="sb-name">Brno</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>France<span class="svh-n">4 in 3 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/paris/translators">
-              <span class="svh-city-name">Paris<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">English 2, Italian 2, Arabic 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/paris/translators">
+              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>Italian</i><b>2</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+22</span></span></span>
             </a>
-        <a class="svh-city" href="/services/bordeaux">
-              <span class="svh-city-name">Bordeaux<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, German 1</span>
+        <a class="sb-card" href="/services/bordeaux">
+              <span class="sb-head"><span class="sb-name">Bordeaux</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/lyon/translators">
-              <span class="svh-city-name">Lyon<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Arabic 1, Danish 1</span>
+        <a class="sb-card" href="/services/lyon/translators">
+              <span class="sb-head"><span class="sb-name">Lyon</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang"><i>Danish</i><b>1</b></span><span class="sb-lang-more">+22</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Colombia<span class="svh-n">2 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/bogota/translators">
-              <span class="svh-city-name">Bogotá<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">English 2</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/bogota/translators">
+              <span class="sb-head"><span class="sb-name">Bogotá</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Japan<span class="svh-n">2 in 2 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/fukuoka">
-              <span class="svh-city-name">Fukuoka<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, German 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/fukuoka">
+              <span class="sb-head"><span class="sb-name">Fukuoka</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/tokyo">
-              <span class="svh-city-name">Tokyo<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1</span>
+        <a class="sb-card" href="/services/tokyo">
+              <span class="sb-head"><span class="sb-name">Tokyo</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Peru<span class="svh-n">2 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/lima/translators">
-              <span class="svh-city-name">Lima<span class="svh-city-n">2</span></span>
-              <span class="svh-city-langs">German 2</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/lima/translators">
+              <span class="sb-head"><span class="sb-name">Lima</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>2</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Poland<span class="svh-n">2 in 2 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/gdansk/translators">
-              <span class="svh-city-name">Gdańsk<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, German 1, French 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/gdansk/translators">
+              <span class="sb-head"><span class="sb-name">Gdańsk</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
-        <a class="svh-city" href="/services/warsaw/translators">
-              <span class="svh-city-name">Warsaw<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Russian 1, Ukrainian 1</span>
+        <a class="sb-card" href="/services/warsaw/translators">
+              <span class="sb-head"><span class="sb-name">Warsaw</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Russian</i><b>1</b></span><span class="sb-lang"><i>Ukrainian</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Vietnam<span class="svh-n">2 in 2 cities</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/danang/translators">
-              <span class="svh-city-name">Da Nang<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Korean 1, Chinese 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/danang/translators">
+              <span class="sb-head"><span class="sb-name">Da Nang</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Korean</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span>
             </a>
-        <a class="svh-city" href="/services/hoian">
-              <span class="svh-city-name">Hoi An<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Korean 1, Chinese 1</span>
+        <a class="sb-card" href="/services/hoian">
+              <span class="sb-head"><span class="sb-name">Hoi An</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Korean</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Greece<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/crete">
-              <span class="svh-city-name">Crete<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, German 1, French 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/crete">
+              <span class="sb-head"><span class="sb-name">Crete</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>India<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/newdelhi/translators">
-              <span class="svh-city-name">New Delhi<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Hindi 1, Urdu 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/newdelhi/translators">
+              <span class="sb-head"><span class="sb-name">New Delhi</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Hindi</i><b>1</b></span><span class="sb-lang"><i>Urdu</i><b>1</b></span><span class="sb-lang-more">+31</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Malaysia<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/kualalumpur/translators">
-              <span class="svh-city-name">Kuala Lumpur<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/kualalumpur/translators">
+              <span class="sb-head"><span class="sb-name">Kuala Lumpur</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Netherlands<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/amsterdam/translators">
-              <span class="svh-city-name">Amsterdam<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Spanish 1, Chinese 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/amsterdam/translators">
+              <span class="sb-head"><span class="sb-name">Amsterdam</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Switzerland<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/zurich/translators">
-              <span class="svh-city-name">Zurich<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">Italian 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/zurich/translators">
+              <span class="sb-head"><span class="sb-name">Zurich</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Taiwan<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/taipei">
-              <span class="svh-city-name">Taipei<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/taipei">
+              <span class="sb-head"><span class="sb-name">Taipei</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Thailand<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/bangkok/translators">
-              <span class="svh-city-name">Bangkok<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">English 1, Chinese 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/bangkok/translators">
+              <span class="sb-head"><span class="sb-name">Bangkok</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>
       <section class="svh-country">
           <h2>UAE<span class="svh-n">1 in 1 city</span></h2>
-          <div class="svh-cities">
-        <a class="svh-city" href="/services/dubai/translators">
-              <span class="svh-city-name">Dubai<span class="svh-city-n">1</span></span>
-              <span class="svh-city-langs">German 1, English 1</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/dubai/translators">
+              <span class="sb-head"><span class="sb-name">Dubai</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
             </a>
           </div>
         </section>

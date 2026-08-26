@@ -20,6 +20,7 @@ const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
+const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -88,20 +89,25 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
     if (!fs.existsSync(f)) return [];
     return JSON.parse(fs.readFileSync(f, 'utf8')).filter((x) => x.service === cat).sort((a, b) => b.n - a.n);
   })();
-  const langChips = LANGS_FOR.map((x) => `<a class="svh-lang" href="${x.url}">${esc(P.langName(x.language))}<span>${x.n}</span></a>`).join('');
+  const langChips = LANGS_FOR.map((x) => B.chip({ href: x.url, label: P.langName(x.language), n: x.n })).join('');
 
   const countryBlocks = countries.map((country) => {
     const slugs = byCountry[country].slice().sort((a, b) => rowsFor(b).n - rowsFor(a).n || M.cities[a].name.localeCompare(M.cities[b].name));
     const total = slugs.reduce((s, x) => s + rowsFor(x).n, 0);
     return `<section class="svh-country">
           <h2>${esc(country)}<span class="svh-n">${total} in ${slugs.length} ${slugs.length === 1 ? 'city' : 'cities'}</span></h2>
-          <div class="svh-cities">
+          <div class="sb-grid">
         ${slugs.map((slug) => {
     const p = rowsFor(slug);
-    const langs = p.nonLocal.filter(([, n]) => n >= 1).slice(0, 3).map(([l, n]) => P.langName(l) + ' ' + n);
-    return `<a class="svh-city" href="${linkFor(slug)}">
-              <span class="svh-city-name">${esc(M.cities[slug].name)}<span class="svh-city-n">${p.n}</span></span>
-              <span class="svh-city-langs">${esc(langs.join(', ') || 'language recorded on the page')}</span>
+    // A language and its count are two cells of a chip now, so the numbers line up down the column
+    // instead of being buried mid-sentence in "English 519, French 146, German 62".
+    const pairs = p.nonLocal.filter(([, n]) => n >= 1).map(([l, n]) => [P.langName(l), n]);
+    const tray = pairs.length
+      ? B.tray('Works in', B.langChips(pairs))
+      : B.tray('Works in', '<span class="sb-tray-text">Language recorded on the page</span>');
+    return `<a class="sb-card" href="${linkFor(slug)}">
+              ${B.cardHead({ name: M.cities[slug].name, n: p.n, unit: 'listed' })}
+              ${tray}
             </a>`;
   }).join('\n        ')}
           </div>
@@ -167,26 +173,14 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
       border-radius: 12px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); }
     .svh-ico svg { width: 24px; height: 24px; }
     .svh-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
-    .svh-langs { margin: 0 0 var(--space-7); }
+    .svh-langs { margin: 0 0 var(--space-8); }
     .svh-langs h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 0 var(--space-3); }
-    .svh-langs-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
-    a.svh-lang:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem .75rem;
-      background: #fff; color: var(--color-ink); border: 1px solid var(--color-sand-dark, #e3d9c6);
-      border-radius: var(--radius-md, 8px); text-decoration: none; font-weight: 700; font-size: var(--text-sm); }
-    a.svh-lang:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svh-lang span { font-size: var(--text-xs); font-weight: 600; color: var(--color-stone); }
     .svh-country { margin: 0 0 var(--space-7); }
     .svh-country h2 { display: flex; align-items: baseline; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.3rem;
       margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svh-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
-    .svh-cities { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .7rem; }
-    a.svh-city:not(.btn):not(.nav-link) { display: block; padding: .7rem .85rem; background: #fff; color: var(--color-ink);
-      border: 1px solid var(--color-sand-dark, #e3d9c6); border-radius: var(--radius-md, 8px); text-decoration: none; }
-    a.svh-city:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svh-city-name { display: flex; align-items: baseline; gap: .5rem; font-weight: 700; }
-    .svh-city-n { margin-left: auto; font-size: var(--text-xs); color: var(--color-stone); }
-    .svh-city-langs { display: block; margin-top: .2rem; font-size: var(--text-xs); color: var(--color-stone); }
+${B.css}
     .svh-foot { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svh-foot p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
   </style>
@@ -205,7 +199,7 @@ ${shell.headEnd}
 
       ${langChips ? `<nav class="svh-langs" aria-label="By language">
         <h2>Pick a language</h2>
-        <div class="svh-langs-grid">${langChips}</div>
+        <div class="sb-chips">${langChips}</div>
       </nav>` : ''}
 
       ${countryBlocks}

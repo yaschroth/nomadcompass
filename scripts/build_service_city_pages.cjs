@@ -64,6 +64,7 @@ const CHILDREN = new Set();
 // footer left every generated page short of five tracked features, so _safe_write refused the
 // second run and the family was being built with --force, guard off. See scripts/lib/page_shell.cjs.
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const { style: STYLE, nav: NAV, footer: FOOTER } = shell;
 
 const mapsUrl = (p) => 'https://www.google.com/maps/search/?api=1&query=' +
@@ -228,8 +229,8 @@ for (const slug of slugs) {
   // The chips are the navigation now, and they are links rather than a filter that rewrites the
   // page under you. Every symptom reported on the old page came out of that one closure.
   const chipsHtml = groups.map((g) => (hasChild(g.cat)
-    ? `<a class="svc-chip" data-cat="${g.cat}" href="${childOf(g.cat)}">${esc(CATS[g.cat])}<span>${g.rows.length}</span></a>`
-    : `<a class="svc-chip" data-cat="${g.cat}" href="#svc-${g.cat}">${esc(CATS[g.cat])}<span>${g.rows.length}</span></a>`)).join('');
+    ? B.chip({ href: childOf(g.cat), label: CATS[g.cat], n: g.rows.length, cls: 'svc-chip', attrs: `data-cat="${g.cat}"` })
+    : B.chip({ href: '#svc-' + g.cat, label: CATS[g.cat], n: g.rows.length, cls: 'svc-chip', attrs: `data-cat="${g.cat}"` }))).join('');
 
   // Every option says how many rows it holds, so the menu answers "is there anything here for me"
   // before you pick it and the page cannot promise something it does not have.
@@ -289,9 +290,7 @@ ${shell.headEnd}
     .svc-head { max-width: 62ch; margin: 0 0 var(--space-6); }
     .svc-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
     .svc-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
-    .svc-facets { display: flex; flex-wrap: wrap; gap: .5rem; margin: var(--space-5) 0 0; padding: 0; list-style: none; }
-    .svc-facets li b { margin-left: .4rem; font-weight: 700; color: var(--color-terracotta-dark, #a8492c); }
-    .svc-facets li { display: inline-flex; align-items: baseline; font-size: var(--text-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-charcoal); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); padding: .4rem .7rem; }
+    .svc-facets { margin: var(--space-5) 0 0; }
     .svc-more { margin: var(--space-8) 0 0; padding: var(--space-6); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); }
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
@@ -308,12 +307,8 @@ ${shell.headEnd}
     .svc-group-ico svg { width: 17px; height: 17px; }
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
-    .svc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 var(--space-5); }
-    a.svc-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
-      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
-      border-radius: var(--radius-md, 8px); padding: .45rem .75rem; text-decoration: none; }
-    .svc-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svc-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+${B.css}
+    .svc-chips { margin: 0 0 var(--space-5); }
     .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
     .svc-group-head a:hover { text-decoration: underline; }
     .svc-more-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
@@ -328,10 +323,10 @@ ${shell.headEnd}
       <header class="svc-head">
         <h1 id="svcTitle">${esc(heading)}</h1>
         <p>${esc(rows.length === 1 ? 'One provider' : rows.length + ' providers')} in ${esc(c.name)}, ${esc(c.country)}${isHub ? `, across ${allCats.length} services` : ''}, listed by the language they work in rather than by rating. Every language claim on this page names the source it came from.</p>
-        <ul class="svc-facets">
+        <ul class="svc-facets sb-chips">
           ${foreign.length
-    ? foreign.map(([l, n]) => `<li>${esc(LANGS[l])}<b>${n}</b></li>`).join('\n          ')
-    : allLangs.map((l) => `<li>${esc(LANGS[l])}<b>${langCount[l]}</b></li>`).join('\n          ')}
+    ? foreign.map(([l, n]) => `<li class="sb-chip"><span class="sb-chip-label">${esc(LANGS[l])}</span><span class="sb-chip-n">${n}</span></li>`).join('\n          ')
+    : allLangs.map((l) => `<li class="sb-chip"><span class="sb-chip-label">${esc(LANGS[l])}</span><span class="sb-chip-n">${langCount[l]}</span></li>`).join('\n          ')}
         </ul>
       </header>
 
@@ -342,7 +337,7 @@ ${shell.headEnd}
           </div>${credit}
         </header>
 
-        ${single ? '' : `<nav class="svc-chips" aria-label="Services in ${esc(c.name)}">${chipsHtml}</nav>`}
+        ${single ? '' : `<nav class="svc-chips sb-chips" aria-label="Services in ${esc(c.name)}">${chipsHtml}</nav>`}
         <p class="sv-count">${single
           ? `All <b>${rows.length}</b> ${rows.length === 1 ? 'provider' : 'providers'} we hold for ${esc(c.name)}.`
           : `<b>${rows.length}</b> providers across <b>${groups.length}</b> services. Each service has its own page with the full list.`}</p>

@@ -204,13 +204,76 @@
       margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svl-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
-    .svl-cities { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .7rem; }
-    a.svl-city:not(.btn):not(.nav-link) { display: block; padding: .7rem .85rem; background: #fff; color: var(--color-ink);
-      border: 1px solid var(--color-sand-dark, #e3d9c6); border-radius: var(--radius-md, 8px); text-decoration: none; }
-    a.svl-city:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svl-city-name { display: flex; align-items: baseline; gap: .5rem; font-weight: 700; }
-    .svl-city-n { margin-left: auto; font-size: var(--text-xs); color: var(--color-terracotta-dark, #a8492c); }
-    .svl-city-sub { display: block; margin-top: .2rem; font-size: var(--text-xs); color: var(--color-stone); }
+
+    /* ---- the compartmented card, shared with .sv-ix on /services ---- */
+    .sb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:1rem; align-items:start; }
+    a.sb-card:not(.btn):not(.nav-link) { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden;
+      background:#fff; color:var(--color-ink); text-decoration:none;
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
+      transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-card:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    /* A floor on the identity row so a one-line name and a two-line one sit their count tiles at the
+       same height across a row: "Santiago de Compostela" used to push its own down. */
+    .sb-head { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.62rem;
+      padding:.85rem .95rem .9rem; min-height:3.9rem; }
+    .sb-name { font-family:'DM Serif Display',serif; font-size:1.08rem; color:var(--color-ink); line-height:1.2;
+      min-width:0; overflow-wrap:anywhere; }
+    .sb-sub { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
+    /* The count is a tile in the corner of the identity row, not a number trailing the name. */
+    .sb-count { display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-width:3.05rem; padding:.3rem .42rem; background:#fff;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    .sb-count b { font-size:1.02rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sb-count small { margin-top:.12rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--color-stone); }
+    .sb-tray { display:block; padding:.65rem .95rem .8rem; background:#fff; border-top:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-eyebrow { display:block; margin:0 0 .4rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
+    .sb-tray-text { display:block; font-size:var(--text-xs); color:var(--color-stone); line-height:1.45; }
+    /* A ratio the reader would otherwise have to work out. Madrid holds 146 of the 763 translators
+       we list there and Alicante 40 of 120, which is 19% against 33%: the same two numbers, a
+       different answer. The bar is the comparison; the figures under it are the evidence. */
+    .sb-bar { display:block; height:5px; margin:0 0 .38rem; border-radius:3px;
+      background:var(--color-sand,#f2ece0); overflow:hidden; }
+    .sb-bar i { display:block; height:100%; background:var(--color-terracotta,#c0392b); }
+    .sb-figs { display:flex; align-items:baseline; justify-content:space-between; gap:.5rem;
+      font-size:var(--text-xs); color:var(--color-stone); }
+    .sb-figs b { font-weight:700; color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sb-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
+    /* A language and its count are two cells of one chip, so the eye can run down the numbers. */
+    .sb-lang { display:inline-flex; align-items:stretch; overflow:hidden; background:#fff;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); font-size:.72rem; line-height:1; }
+    .sb-lang i { font-style:normal; padding:.26rem .4rem; font-weight:700; color:var(--color-ink); }
+    .sb-lang b { padding:.26rem .38rem; font-weight:700; color:var(--color-stone);
+      border-left:1px solid var(--color-sand-dark,#E3D9C6); font-variant-numeric:tabular-nums; }
+    /* "+3" counts the languages that did not fit. It is not a language, so it does not wear their
+       chip: no border, no ground. It does take their height, because a lone "+1" wrapping onto a
+       line of its own otherwise reads as something dropped rather than something meant. */
+    .sb-lang-more { display:inline-flex; align-items:center; padding:.26rem .1rem .26rem .25rem;
+      font-size:.72rem; line-height:1; font-weight:600; color:var(--color-stone); }
+
+    /* ---- the compartmented chip, shared with .sv-hub on /services ---- */
+    .sb-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin:0; padding:0; list-style:none; }
+    a.sb-chip:not(.btn):not(.nav-link), span.sb-chip, li.sb-chip, button.sb-chip { display:inline-grid;
+      grid-template-columns:auto auto; align-items:stretch; gap:0; padding:0; overflow:hidden;
+      background:#fff; color:var(--color-ink); text-decoration:none; font-family:inherit;
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
+      transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-chip:hover, button.sb-chip:hover { border-color:var(--color-terracotta,#c0392b);
+      box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-1px); }
+    .sb-chip-label { align-self:center; padding:.44rem .68rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* A <li> is a label, not a link. Wearing the same shadow as the chips below it made the
+       language counts look clickable, which they are not. */
+    li.sb-chip { box-shadow:none; border-color:var(--color-sand-dark,#E3D9C6); }
+    .sb-chip-n { display:flex; align-items:center; padding:.44rem .6rem; background:#fff;
+      border-left:1px solid var(--color-sand-dark,#E3D9C6); font-size:.72rem; font-weight:700; color:var(--color-stone);
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
+      a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
+    }
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -240,351 +303,351 @@
 
       <section class="svl-country">
           <h2>Greece<span class="svl-n">88 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/athens/doctors">
-              <span class="svl-city-name">Athens<span class="svl-city-n">88</span></span>
-              <span class="svl-city-sub">88 of 95 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/athens/doctors">
+              <span class="sb-head"><span class="sb-name">Athens</span><span class="sb-count"><b>88</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:93%"></i></span><span class="sb-figs"><span><b>88</b> of 95</span><span>93%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Spain<span class="svl-n">56 in 10 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/barcelona/doctors">
-              <span class="svl-city-name">Barcelona<span class="svl-city-n">16</span></span>
-              <span class="svl-city-sub">16 of 40 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/barcelona/doctors">
+              <span class="sb-head"><span class="sb-name">Barcelona</span><span class="sb-count"><b>16</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:40%"></i></span><span class="sb-figs"><span><b>16</b> of 40</span><span>40%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/madrid/doctors">
-              <span class="svl-city-name">Madrid<span class="svl-city-n">12</span></span>
-              <span class="svl-city-sub">12 of 32 doctors we list there</span>
+        <a class="sb-card" href="/services/madrid/doctors">
+              <span class="sb-head"><span class="sb-name">Madrid</span><span class="sb-count"><b>12</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:38%"></i></span><span class="sb-figs"><span><b>12</b> of 32</span><span>38%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/tenerife/doctors">
-              <span class="svl-city-name">Tenerife<span class="svl-city-n">11</span></span>
-              <span class="svl-city-sub">11 of 13 doctors we list there</span>
+        <a class="sb-card" href="/services/tenerife/doctors">
+              <span class="sb-head"><span class="sb-name">Tenerife</span><span class="sb-count"><b>11</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:85%"></i></span><span class="sb-figs"><span><b>11</b> of 13</span><span>85%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/marbella/doctors">
-              <span class="svl-city-name">Marbella<span class="svl-city-n">6</span></span>
-              <span class="svl-city-sub">6 of 8 doctors we list there</span>
+        <a class="sb-card" href="/services/marbella/doctors">
+              <span class="sb-head"><span class="sb-name">Marbella</span><span class="sb-count"><b>6</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:75%"></i></span><span class="sb-figs"><span><b>6</b> of 8</span><span>75%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/valencia/doctors">
-              <span class="svl-city-name">Valencia<span class="svl-city-n">3</span></span>
-              <span class="svl-city-sub">3 of 8 doctors we list there</span>
+        <a class="sb-card" href="/services/valencia/doctors">
+              <span class="sb-head"><span class="sb-name">Valencia</span><span class="sb-count"><b>3</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:38%"></i></span><span class="sb-figs"><span><b>3</b> of 8</span><span>38%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/fuerteventura/doctors">
-              <span class="svl-city-name">Fuerteventura<span class="svl-city-n">2</span></span>
-              <span class="svl-city-sub">2 of 4 doctors we list there</span>
+        <a class="sb-card" href="/services/fuerteventura/doctors">
+              <span class="sb-head"><span class="sb-name">Fuerteventura</span><span class="sb-count"><b>2</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>2</b> of 4</span><span>50%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/malaga/doctors">
-              <span class="svl-city-name">Málaga<span class="svl-city-n">2</span></span>
-              <span class="svl-city-sub">2 of 2 doctors we list there</span>
+        <a class="sb-card" href="/services/malaga/doctors">
+              <span class="sb-head"><span class="sb-name">Málaga</span><span class="sb-count"><b>2</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>2</b> of 2</span><span>100%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/seville/doctors">
-              <span class="svl-city-name">Seville<span class="svl-city-n">2</span></span>
-              <span class="svl-city-sub">2 of 2 doctors we list there</span>
+        <a class="sb-card" href="/services/seville/doctors">
+              <span class="sb-head"><span class="sb-name">Seville</span><span class="sb-count"><b>2</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>2</b> of 2</span><span>100%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/granadaspain/doctors">
-              <span class="svl-city-name">Granada<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 9 doctors we list there</span>
+        <a class="sb-card" href="/services/granadaspain/doctors">
+              <span class="sb-head"><span class="sb-name">Granada</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>1</b> of 9</span><span>11%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/laspalmas/doctors">
-              <span class="svl-city-name">Las Palmas<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 4 doctors we list there</span>
+        <a class="sb-card" href="/services/laspalmas/doctors">
+              <span class="sb-head"><span class="sb-name">Las Palmas</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Italy<span class="svl-n">29 in 3 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/rome/doctors">
-              <span class="svl-city-name">Rome<span class="svl-city-n">23</span></span>
-              <span class="svl-city-sub">23 of 49 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/rome/doctors">
+              <span class="sb-head"><span class="sb-name">Rome</span><span class="sb-count"><b>23</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:47%"></i></span><span class="sb-figs"><span><b>23</b> of 49</span><span>47%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/milan/doctors">
-              <span class="svl-city-name">Milan<span class="svl-city-n">5</span></span>
-              <span class="svl-city-sub">5 of 10 doctors we list there</span>
+        <a class="sb-card" href="/services/milan/doctors">
+              <span class="sb-head"><span class="sb-name">Milan</span><span class="sb-count"><b>5</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>5</b> of 10</span><span>50%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/florence/doctors">
-              <span class="svl-city-name">Florence<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 4 doctors we list there</span>
+        <a class="sb-card" href="/services/florence/doctors">
+              <span class="sb-head"><span class="sb-name">Florence</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Croatia<span class="svl-n">25 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/zagreb/doctors">
-              <span class="svl-city-name">Zagreb<span class="svl-city-n">25</span></span>
-              <span class="svl-city-sub">25 of 44 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/zagreb/doctors">
+              <span class="sb-head"><span class="sb-name">Zagreb</span><span class="sb-count"><b>25</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:57%"></i></span><span class="sb-figs"><span><b>25</b> of 44</span><span>57%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Thailand<span class="svl-n">23 in 2 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/bangkok/doctors">
-              <span class="svl-city-name">Bangkok<span class="svl-city-n">19</span></span>
-              <span class="svl-city-sub">19 of 35 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/bangkok/doctors">
+              <span class="sb-head"><span class="sb-name">Bangkok</span><span class="sb-count"><b>19</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:54%"></i></span><span class="sb-figs"><span><b>19</b> of 35</span><span>54%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/chiangmai/doctors">
-              <span class="svl-city-name">Chiang Mai<span class="svl-city-n">4</span></span>
-              <span class="svl-city-sub">4 of 12 doctors we list there</span>
+        <a class="sb-card" href="/services/chiangmai/doctors">
+              <span class="sb-head"><span class="sb-name">Chiang Mai</span><span class="sb-count"><b>4</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>4</b> of 12</span><span>33%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Portugal<span class="svl-n">19 in 4 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/lisbon/doctors">
-              <span class="svl-city-name">Lisbon<span class="svl-city-n">7</span></span>
-              <span class="svl-city-sub">7 of 19 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/lisbon/doctors">
+              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>7</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:37%"></i></span><span class="sb-figs"><span><b>7</b> of 19</span><span>37%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/cascais/doctors">
-              <span class="svl-city-name">Cascais<span class="svl-city-n">6</span></span>
-              <span class="svl-city-sub">6 of 6 doctors we list there</span>
+        <a class="sb-card" href="/services/cascais/doctors">
+              <span class="sb-head"><span class="sb-name">Cascais</span><span class="sb-count"><b>6</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>6</b> of 6</span><span>100%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/porto/doctors">
-              <span class="svl-city-name">Porto<span class="svl-city-n">4</span></span>
-              <span class="svl-city-sub">4 of 8 doctors we list there</span>
+        <a class="sb-card" href="/services/porto/doctors">
+              <span class="sb-head"><span class="sb-name">Porto</span><span class="sb-count"><b>4</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>4</b> of 8</span><span>50%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/coimbra/doctors">
-              <span class="svl-city-name">Coimbra<span class="svl-city-n">2</span></span>
-              <span class="svl-city-sub">2 of 2 doctors we list there</span>
+        <a class="sb-card" href="/services/coimbra/doctors">
+              <span class="sb-head"><span class="sb-name">Coimbra</span><span class="sb-count"><b>2</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>2</b> of 2</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>France<span class="svl-n">18 in 2 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/paris/doctors">
-              <span class="svl-city-name">Paris<span class="svl-city-n">17</span></span>
-              <span class="svl-city-sub">17 of 30 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/paris/doctors">
+              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>17</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:57%"></i></span><span class="sb-figs"><span><b>17</b> of 30</span><span>57%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/strasbourg">
-              <span class="svl-city-name">Strasbourg<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 1 doctors we list there</span>
+        <a class="sb-card" href="/services/strasbourg">
+              <span class="sb-head"><span class="sb-name">Strasbourg</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Hungary<span class="svl-n">18 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/budapest/doctors">
-              <span class="svl-city-name">Budapest<span class="svl-city-n">18</span></span>
-              <span class="svl-city-sub">18 of 72 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/budapest/doctors">
+              <span class="sb-head"><span class="sb-name">Budapest</span><span class="sb-count"><b>18</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>18</b> of 72</span><span>25%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Turkey<span class="svl-n">16 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/istanbul/doctors">
-              <span class="svl-city-name">Istanbul<span class="svl-city-n">16</span></span>
-              <span class="svl-city-sub">16 of 20 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/istanbul/doctors">
+              <span class="sb-head"><span class="sb-name">Istanbul</span><span class="sb-count"><b>16</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:80%"></i></span><span class="sb-figs"><span><b>16</b> of 20</span><span>80%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>South Africa<span class="svl-n">12 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/capetown/doctors">
-              <span class="svl-city-name">Cape Town<span class="svl-city-n">12</span></span>
-              <span class="svl-city-sub">12 of 16 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/capetown/doctors">
+              <span class="sb-head"><span class="sb-name">Cape Town</span><span class="sb-count"><b>12</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:75%"></i></span><span class="sb-figs"><span><b>12</b> of 16</span><span>75%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>UK<span class="svl-n">9 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/london/doctors">
-              <span class="svl-city-name">London<span class="svl-city-n">9</span></span>
-              <span class="svl-city-sub">9 of 9 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/london/doctors">
+              <span class="sb-head"><span class="sb-name">London</span><span class="sb-count"><b>9</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>9</b> of 9</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Lithuania<span class="svl-n">8 in 2 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/vilnius/doctors">
-              <span class="svl-city-name">Vilnius<span class="svl-city-n">7</span></span>
-              <span class="svl-city-sub">7 of 19 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/vilnius/doctors">
+              <span class="sb-head"><span class="sb-name">Vilnius</span><span class="sb-count"><b>7</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:37%"></i></span><span class="sb-figs"><span><b>7</b> of 19</span><span>37%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/klaipeda">
-              <span class="svl-city-name">Klaipėda<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 2 doctors we list there</span>
+        <a class="sb-card" href="/services/klaipeda">
+              <span class="sb-head"><span class="sb-name">Klaipėda</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Slovenia<span class="svl-n">7 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/ljubljana/doctors">
-              <span class="svl-city-name">Ljubljana<span class="svl-city-n">7</span></span>
-              <span class="svl-city-sub">7 of 15 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/ljubljana/doctors">
+              <span class="sb-head"><span class="sb-name">Ljubljana</span><span class="sb-count"><b>7</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:47%"></i></span><span class="sb-figs"><span><b>7</b> of 15</span><span>47%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>South Korea<span class="svl-n">6 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/seoul/doctors">
-              <span class="svl-city-name">Seoul<span class="svl-city-n">6</span></span>
-              <span class="svl-city-sub">6 of 18 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/seoul/doctors">
+              <span class="sb-head"><span class="sb-name">Seoul</span><span class="sb-count"><b>6</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>6</b> of 18</span><span>33%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Canada<span class="svl-n">5 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/toronto/doctors">
-              <span class="svl-city-name">Toronto<span class="svl-city-n">5</span></span>
-              <span class="svl-city-sub">5 of 5 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/toronto/doctors">
+              <span class="sb-head"><span class="sb-name">Toronto</span><span class="sb-count"><b>5</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>5</b> of 5</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Latvia<span class="svl-n">5 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/riga/doctors">
-              <span class="svl-city-name">Riga<span class="svl-city-n">5</span></span>
-              <span class="svl-city-sub">5 of 14 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/riga/doctors">
+              <span class="sb-head"><span class="sb-name">Riga</span><span class="sb-count"><b>5</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:36%"></i></span><span class="sb-figs"><span><b>5</b> of 14</span><span>36%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Taiwan<span class="svl-n">5 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/taipei/doctors">
-              <span class="svl-city-name">Taipei<span class="svl-city-n">5</span></span>
-              <span class="svl-city-sub">5 of 8 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/taipei/doctors">
+              <span class="sb-head"><span class="sb-name">Taipei</span><span class="sb-count"><b>5</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:63%"></i></span><span class="sb-figs"><span><b>5</b> of 8</span><span>63%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>United States<span class="svl-n">5 in 2 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/newyork/doctors">
-              <span class="svl-city-name">New York<span class="svl-city-n">3</span></span>
-              <span class="svl-city-sub">3 of 3 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/newyork/doctors">
+              <span class="sb-head"><span class="sb-name">New York</span><span class="sb-count"><b>3</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/sanfrancisco/doctors">
-              <span class="svl-city-name">San Francisco<span class="svl-city-n">2</span></span>
-              <span class="svl-city-sub">2 of 2 doctors we list there</span>
+        <a class="sb-card" href="/services/sanfrancisco/doctors">
+              <span class="sb-head"><span class="sb-name">San Francisco</span><span class="sb-count"><b>2</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>2</b> of 2</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Peru<span class="svl-n">4 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/lima/doctors">
-              <span class="svl-city-name">Lima<span class="svl-city-n">4</span></span>
-              <span class="svl-city-sub">4 of 7 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/lima/doctors">
+              <span class="sb-head"><span class="sb-name">Lima</span><span class="sb-count"><b>4</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:57%"></i></span><span class="sb-figs"><span><b>4</b> of 7</span><span>57%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Poland<span class="svl-n">4 in 2 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/warsaw/doctors">
-              <span class="svl-city-name">Warsaw<span class="svl-city-n">3</span></span>
-              <span class="svl-city-sub">3 of 17 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/warsaw/doctors">
+              <span class="sb-head"><span class="sb-name">Warsaw</span><span class="sb-count"><b>3</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:18%"></i></span><span class="sb-figs"><span><b>3</b> of 17</span><span>18%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/krakow/doctors">
-              <span class="svl-city-name">Krakow<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 5 doctors we list there</span>
+        <a class="sb-card" href="/services/krakow/doctors">
+              <span class="sb-head"><span class="sb-name">Krakow</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:20%"></i></span><span class="sb-figs"><span><b>1</b> of 5</span><span>20%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Israel<span class="svl-n">3 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/telaviv/doctors">
-              <span class="svl-city-name">Tel Aviv<span class="svl-city-n">3</span></span>
-              <span class="svl-city-sub">3 of 5 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/telaviv/doctors">
+              <span class="sb-head"><span class="sb-name">Tel Aviv</span><span class="sb-count"><b>3</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:60%"></i></span><span class="sb-figs"><span><b>3</b> of 5</span><span>60%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Colombia<span class="svl-n">2 in 2 cities</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/bogota/doctors">
-              <span class="svl-city-name">Bogotá<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 7 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/bogota/doctors">
+              <span class="sb-head"><span class="sb-name">Bogotá</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:14%"></i></span><span class="sb-figs"><span><b>1</b> of 7</span><span>14%</span></span></span>
             </a>
-        <a class="svl-city" href="/services/medellin/doctors">
-              <span class="svl-city-name">Medellín<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 6 doctors we list there</span>
+        <a class="sb-card" href="/services/medellin/doctors">
+              <span class="sb-head"><span class="sb-name">Medellín</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Argentina<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/buenosaires/doctors">
-              <span class="svl-city-name">Buenos Aires<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 11 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/buenosaires/doctors">
+              <span class="sb-head"><span class="sb-name">Buenos Aires</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:9%"></i></span><span class="sb-figs"><span><b>1</b> of 11</span><span>9%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Belgium<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/brussels/doctors">
-              <span class="svl-city-name">Brussels<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 5 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/brussels/doctors">
+              <span class="sb-head"><span class="sb-name">Brussels</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:20%"></i></span><span class="sb-figs"><span><b>1</b> of 5</span><span>20%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Chile<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/santiago/doctors">
-              <span class="svl-city-name">Santiago<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 7 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/santiago/doctors">
+              <span class="sb-head"><span class="sb-name">Santiago</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:14%"></i></span><span class="sb-figs"><span><b>1</b> of 7</span><span>14%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Czech Republic<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/prague/doctors">
-              <span class="svl-city-name">Prague<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 10 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/prague/doctors">
+              <span class="sb-head"><span class="sb-name">Prague</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:10%"></i></span><span class="sb-figs"><span><b>1</b> of 10</span><span>10%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Estonia<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/tallinn/doctors">
-              <span class="svl-city-name">Tallinn<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 15 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/tallinn/doctors">
+              <span class="sb-head"><span class="sb-name">Tallinn</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:7%"></i></span><span class="sb-figs"><span><b>1</b> of 15</span><span>7%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Georgia<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/kutaisi">
-              <span class="svl-city-name">Kutaisi<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 1 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/kutaisi">
+              <span class="sb-head"><span class="sb-name">Kutaisi</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Sweden<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/stockholm/doctors">
-              <span class="svl-city-name">Stockholm<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 1 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/stockholm/doctors">
+              <span class="sb-head"><span class="sb-name">Stockholm</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
             </a>
           </div>
         </section>
       <section class="svl-country">
           <h2>UAE<span class="svl-n">1 in 1 city</span></h2>
-          <div class="svl-cities">
-        <a class="svl-city" href="/services/dubai/doctors">
-              <span class="svl-city-name">Dubai<span class="svl-city-n">1</span></span>
-              <span class="svl-city-sub">1 of 19 doctors we list there</span>
+          <div class="sb-grid">
+        <a class="sb-card" href="/services/dubai/doctors">
+              <span class="sb-head"><span class="sb-name">Dubai</span><span class="sb-count"><b>1</b><small>German</small></span></span>
+              <span class="sb-tray"><span class="sb-eyebrow">Of all doctors here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>1</b> of 19</span><span>5%</span></span></span>
             </a>
           </div>
         </section>

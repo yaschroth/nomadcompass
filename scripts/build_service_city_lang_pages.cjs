@@ -30,6 +30,7 @@ const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
+const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -354,14 +355,14 @@ for (const pair of Object.values(M.pairs)) {
     const otherLangChips = alsoLangs.slice(0, 6).map(([l, n]) => {
       const kid = `/services/${city.id}/${M.SERVICE_SLUGS[cat]}/${langSlug(l)}`;
       const target = WILL_EXIST.has(city.id + '|' + cat + '|' + l) ? kid : parent.url + '#lang-' + l;
-      return `<a class="svp-chip" href="${target}">${esc(P.langName(l))}<span>${n}</span></a>`;
+      return B.chip({ href: target, label: P.langName(l), n });
     }).join('');
     const nearChips = near.map((x) => {
       const kid = `/services/${x.city}/${M.SERVICE_SLUGS[cat]}/${langSlug(lang)}`;
       const kidPair = M.pairOf(x.city, cat);
       const hasKid = WILL_EXIST.has(x.city + '|' + cat + '|' + lang);
       const href = hasKid ? kid : (PAIRS.has(x.city + '|' + cat) ? '/services/' + x.city + '/' + M.SERVICE_SLUGS[cat] : '/services/' + x.city);
-      return `<a class="svp-chip" href="${href}">${esc(x.name)}<span>${x.n}</span></a>`;
+      return B.chip({ href, label: x.name, n: x.n });
     }).join('');
 
     // A list too long for one page gets a pager, not a grey line of underlined numbers. It is built
@@ -423,12 +424,8 @@ ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).repl
     .svp-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
-    .svp-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: var(--space-4) 0 var(--space-6); }
-    a.svp-chip:not(.btn):not(.nav-link) { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--text-sm); font-weight: 600;
-      color: var(--color-ink); background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6);
-      border-radius: var(--radius-md, 8px); padding: .4rem .7rem; text-decoration: none; }
-    .svp-chip:hover { border-color: var(--color-terracotta, #c65d3b); }
-    .svp-chip span { font-size: var(--text-xs); color: var(--color-stone); }
+    .svp-chips { margin: var(--space-4) 0 var(--space-6); }
+${B.css}
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
     .svp-up { margin: var(--space-4) 0 0; font-size: var(--text-sm); font-weight: 600; }
@@ -460,8 +457,8 @@ ${shell.headEnd}
         ${geography ? `<h2>Where in ${esc(city.name)}</h2>\n        <p>${esc(geography)}</p>` : ''}
         <h2>If none of these fits</h2>
         <p>${esc(alternatives)}</p>
-        ${otherLangChips ? `<h2>Other languages for ${esc(P.catName(cat))} in ${esc(city.name)}</h2>\n        <div class="svp-chips">${otherLangChips}</div>` : ''}
-        ${nearChips ? `<h2>${esc(langName)}-speaking ${esc(P.catName(cat))} nearby</h2>\n        <div class="svp-chips">${nearChips}</div>` : ''}
+        ${otherLangChips ? `<h2>Other languages for ${esc(P.catName(cat))} in ${esc(city.name)}</h2>\n        <div class="svp-chips sb-chips">${otherLangChips}</div>` : ''}
+        ${nearChips ? `<h2>${esc(langName)}-speaking ${esc(P.catName(cat))} nearby</h2>\n        <div class="svp-chips sb-chips">${nearChips}</div>` : ''}
         <p class="svp-up"><a href="${parent.url}">All ${pair.n} ${esc(P.catName(cat))} in ${esc(city.name)}</a>${hub ? ` &middot; <a href="${hub.url}">${esc(langName)}-speaking ${esc(P.catName(cat))} in every city we cover</a>` : ''}</p>
         <h2>Questions</h2>
         <dl class="svp-faq">
