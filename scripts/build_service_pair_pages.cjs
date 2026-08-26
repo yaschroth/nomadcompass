@@ -26,6 +26,8 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
+const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -449,12 +451,8 @@ ${shell.headTop}
 ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).replace(/</g, '\\u003c') + '</script>').join('\n')}
   ${shell.style}
   <style>
-    .svp-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
-    .svp-crumbs { font-size: var(--text-sm); color: var(--color-stone); margin: 0 0 var(--space-4); }
-    .svp-crumbs a { color: var(--color-stone); }
-    .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
-    .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
-    .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+${H.css}
+    .svp-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
     .svp-capped { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: var(--color-stone); }
     .svp-more-lang { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
     
@@ -476,13 +474,21 @@ ${shell.headEnd}
 <body>
   ${shell.bodyStart}
   ${shell.nav}
-  <main class="svp-page" id="main-content">
-    <div class="container">
-      <p class="svp-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/${city.id}">${esc(city.name)}</a> &rsaquo; ${esc(P.catName(cat))}</p>
-      <header class="svp-head">
-        <h1>${esc(h1)}</h1>
-        <p class="svp-stand">${esc(blocks.standfirst)}${sections ? ' Each language has its own list below, so anyone who works in two appears in both.' : ''}</p>
-      </header>
+  <main id="main-content">
+    ${H.hero({
+    crumbs: `<a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/${city.id}">${esc(city.name)}</a> &rsaquo; ${esc(P.catName(cat))}`,
+    eyebrow: `${city.iso ? `<img src="/assets/flags/${city.iso}.svg" alt="" width="20" height="15">` : ''}${esc(city.name)}, ${esc(city.country)}`,
+    h1,
+    sub: blocks.standfirst + (sections ? ' Each language has its own list below, so anyone who works in two appears in both.' : ''),
+    stats: [
+      [pair.n.toLocaleString('en-US'), pair.n === 1 ? P.singular(cat) : P.catName(cat)],
+      [servable.length, servable.length === 1 ? 'language' : 'languages'],
+    ],
+    image: fs.existsSync(path.join(ROOT, 'images', 'cities', city.id + '.webp'))
+      ? H.cityImage(city.id, city.name, ATTR[city.id] || {})
+      : H.sectionImage(),
+  })}
+    <div class="svp-page container">
       ${sections ? `<nav class="svp-langbar sb-chips" aria-label="Languages on this page">` +
         sections.map((sec) => B.chip({ href: '#lang-' + (sec.lang || 'other'), label: sec.lang ? P.langName(sec.lang) : 'Local language only', n: sec.n })).join('') +
         `</nav>` : ''}

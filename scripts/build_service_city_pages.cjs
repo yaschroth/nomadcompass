@@ -65,6 +65,7 @@ const CHILDREN = new Set();
 // second run and the family was being built with --force, guard off. See scripts/lib/page_shell.cjs.
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const { style: STYLE, nav: NAV, footer: FOOTER } = shell;
 
 const mapsUrl = (p) => 'https://www.google.com/maps/search/?api=1&query=' +
@@ -250,6 +251,11 @@ for (const slug of slugs) {
     ? `<a class="sv-city-credit" href="${esc(a.sourcePageUrl || '#')}" target="_blank" rel="nofollow noopener">Photo: ${esc(a.author)} (${esc(a.license || '')})</a>`
     : '';
   const flag = c.iso ? `<img class="sv-city-flag" src="/assets/flags/${c.iso}.svg" alt="" width="26" height="20">` : '';
+  const flagHero = c.iso ? `<img src="/assets/flags/${c.iso}.svg" alt="" width="20" height="15">` : '';
+  // The city's own photograph, the same one /cities/<slug> opens with, rather than a stock street.
+  const heroImage = fs.existsSync(path.join(ROOT, 'images', 'cities', slug + '.webp'))
+    ? H.cityImage(slug, c.name, a)
+    : H.sectionImage();
 
   const crumbLd = {
     '@context': 'https://schema.org',
@@ -284,12 +290,10 @@ ${shell.headTop}
 ${shell.headEnd}
   <style>
     /* This page is one city, so it opens on the listing rather than on a full-height photo. */
-    .svc-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
-    .svc-crumbs { font-size: var(--text-sm); color: var(--color-stone); margin: 0 0 var(--space-4); }
-    .svc-crumbs a { color: var(--color-stone); }
-    .svc-head { max-width: 62ch; margin: 0 0 var(--space-6); }
-    .svc-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
-    .svc-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+${H.css}
+    .svc-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
+    .svc-head { margin: 0 0 var(--space-6); }
+    .svc-facets-h { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--color-ink); margin: 0 0 .7rem; }
     .svc-facets { margin: var(--space-5) 0 0; }
     .svc-more { margin: var(--space-8) 0 0; padding: var(--space-6); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); }
     .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
@@ -317,12 +321,22 @@ ${B.css}
 <body>
   ${shell.bodyStart}
   ${NAV}
-  <main class="svc-page">
-    <div class="container">
-      <p class="svc-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; ${esc(c.name)}</p>
+  <main>
+    ${H.hero({
+    crumbs: `<a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; ${esc(c.name)}`,
+    eyebrow: `${flagHero}${esc(c.country)}`,
+    h1: heading,
+    sub: `${rows.length === 1 ? 'One provider' : rows.length + ' providers'} in ${c.name}, listed by the language they work in rather than by rating. Every language claim on this page names the source it came from.`,
+    stats: [
+      [rows.length.toLocaleString('en-US'), rows.length === 1 ? 'provider' : 'providers'],
+      ...(isHub ? [[allCats.length, allCats.length === 1 ? 'service' : 'services']] : []),
+      [allLangs.length, allLangs.length === 1 ? 'language' : 'languages'],
+    ],
+    image: heroImage,
+  })}
+    <div class="svc-page container">
       <header class="svc-head">
-        <h1 id="svcTitle">${esc(heading)}</h1>
-        <p>${esc(rows.length === 1 ? 'One provider' : rows.length + ' providers')} in ${esc(c.name)}, ${esc(c.country)}${isHub ? `, across ${allCats.length} services` : ''}, listed by the language they work in rather than by rating. Every language claim on this page names the source it came from.</p>
+        <h2 class="svc-facets-h">Languages spoken in ${esc(c.name)}</h2>
         <ul class="svc-facets sb-chips">
           ${foreign.length
     ? foreign.map(([l, n]) => `<li class="sb-chip"><span class="sb-chip-label">${esc(LANGS[l])}</span><span class="sb-chip-n">${n}</span></li>`).join('\n          ')
@@ -331,12 +345,6 @@ ${B.css}
       </header>
 
       <section class="sv-city">
-        <header class="sv-city-band">${img}
-          <div class="sv-city-band-in">${flag}<h2>${esc(c.name)}<span>${esc(c.country)}</span></h2>
-            <p class="sv-city-count">${rows.length} provider${rows.length === 1 ? '' : 's'}</p>
-          </div>${credit}
-        </header>
-
         ${single ? '' : `<nav class="svc-chips sb-chips" aria-label="Services in ${esc(c.name)}">${chipsHtml}</nav>`}
         <p class="sv-count">${single
           ? `All <b>${rows.length}</b> ${rows.length === 1 ? 'provider' : 'providers'} we hold for ${esc(c.name)}.`

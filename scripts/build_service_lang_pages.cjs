@@ -27,6 +27,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -234,16 +235,8 @@ ${shell.headTop}
 ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).replace(/</g, '\\u003c') + '</script>').join('\n')}
   ${shell.style}
   <style>
-    .svl-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
-    .svl-crumbs { font-size: var(--text-sm); color: var(--color-stone); margin: 0 0 var(--space-4); }
-    .svl-crumbs a { color: var(--color-stone); }
-    .svl-head { max-width: 64ch; margin: 0 0 var(--space-6); }
-    .svl-head h1 { display: flex; align-items: center; gap: .7rem; font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
-    .svl-ico { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; flex: 0 0 auto;
-      border-radius: 12px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); }
-    .svl-ico svg { width: 24px; height: 24px; }
-    .svl-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+${H.css}
+    .svl-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
     .svl-country { margin: 0 0 var(--space-7); }
     .svl-country h2 { display: flex; align-items: baseline; gap: .6rem; font-family: 'DM Serif Display', serif; font-size: 1.3rem;
       margin: 0 0 var(--space-3); padding-bottom: .5rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
@@ -261,13 +254,21 @@ ${shell.headEnd}
 <body>
   ${shell.bodyStart}
   ${shell.nav}
-  <main class="svl-page" id="main-content">
-    <div class="container">
-      <p class="svl-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/${M.SERVICE_SLUGS[cat]}">${esc(Label)}</a> &rsaquo; ${esc(langName)}</p>
-      <header class="svl-head">
-        <h1><span class="svl-ico">${inlineIcon(CAT_ICON[cat])}</span>${esc(h1)}</h1>
-        <p>${esc(standfirst)}</p>
-      </header>
+  <main id="main-content">
+    ${H.hero({
+    crumbs: `<a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/${M.SERVICE_SLUGS[cat]}">${esc(Label)}</a> &rsaquo; ${esc(langName)}`,
+    eyebrow: `${inlineIcon(CAT_ICON[cat])}${esc(langName)}-speaking ${esc(label)}`,
+    h1,
+    sub: standfirst,
+    stats: [
+      [v.rows.length.toLocaleString('en-US'), label],
+      [v.cities.size, v.cities.size === 1 ? 'city' : 'cities'],
+      [countries.length, countries.length === 1 ? 'country' : 'countries'],
+    ],
+    image: H.sectionImage(),
+    size: 'full',
+  })}
+    <div class="svl-page container">
 
       ${countryBlocks}
 

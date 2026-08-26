@@ -21,6 +21,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -163,16 +164,8 @@ ${shell.headTop}
 ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).replace(/</g, '\\u003c') + '</script>').join('\n')}
   ${shell.style}
   <style>
-    .svh-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
-    .svh-crumbs { font-size: var(--text-sm); color: var(--color-stone); margin: 0 0 var(--space-4); }
-    .svh-crumbs a { color: var(--color-stone); }
-    .svh-head { max-width: 62ch; margin: 0 0 var(--space-6); }
-    .svh-head h1 { display: flex; align-items: center; gap: .7rem; font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
-    .svh-ico { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; flex: 0 0 auto;
-      border-radius: 12px; background: #fff; border: 1px solid var(--color-sand-dark, #e3d9c6); color: var(--color-terracotta-dark, #a8492c); }
-    .svh-ico svg { width: 24px; height: 24px; }
-    .svh-head p { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+${H.css}
+    .svh-page { padding-top: var(--space-8); padding-bottom: var(--space-10); }
     .svh-langs { margin: 0 0 var(--space-8); }
     .svh-langs h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin: 0 0 var(--space-3); }
     .svh-country { margin: 0 0 var(--space-7); }
@@ -189,13 +182,22 @@ ${shell.headEnd}
 <body>
   ${shell.bodyStart}
   ${shell.nav}
-  <main class="svh-page" id="main-content">
-    <div class="container">
-      <p class="svh-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; ${esc(Label)}</p>
-      <header class="svh-head">
-        <h1><span class="svh-ico">${inlineIcon(CAT_ICON[cat])}</span>${esc(h1)}</h1>
-        <p>${esc(standfirst)}</p>
-      </header>
+  <main id="main-content">
+    ${H.hero({
+    crumbs: `<a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; ${esc(Label)}`,
+    eyebrow: `${inlineIcon(CAT_ICON[cat])}${esc(Label)} worldwide`,
+    h1,
+    sub: standfirst,
+    stats: [
+      [svc.n.toLocaleString('en-US'), label],
+      [svc.cities.length, svc.cities.length === 1 ? 'city' : 'cities'],
+      [countries.length, countries.length === 1 ? 'country' : 'countries'],
+      [topLangs.length ? Object.keys(langTotals).length : 0, 'languages'],
+    ],
+    image: H.sectionImage(),
+    size: 'full',
+  })}
+    <div class="svh-page container">
 
       ${langChips ? `<nav class="svh-langs" aria-label="By language">
         <h2>Pick a language</h2>

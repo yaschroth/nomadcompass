@@ -31,6 +31,8 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
+const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
@@ -405,12 +407,8 @@ ${pageNo > 1 ? `  <link rel="prev" href="${BASE}${pgHref(pageNo - 1)}">\n` : ''}
 ${ld.map((x) => '  <script type="application/ld+json">' + JSON.stringify(x).replace(/</g, '\\u003c') + '</script>').join('\n')}
   ${shell.style}
   <style>
-    .svp-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
-    .svp-crumbs { font-size: var(--text-sm); color: var(--color-stone); margin: 0 0 var(--space-4); }
-    .svp-crumbs a { color: var(--color-stone); }
-    .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
-    .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
-    .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+${H.css}
+    .svp-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
     .svp-pager { margin: var(--space-6) 0 0; }
     .svp-pager-count { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--color-stone); }
     .svp-pager ul { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; list-style: none; margin: 0; padding: 0; }
@@ -436,13 +434,21 @@ ${shell.headEnd}
 <body>
   ${shell.bodyStart}
   ${shell.nav}
-  <main class="svp-page" id="main-content">
-    <div class="container">
-      <p class="svp-crumbs">${crumbs.map((c) => `<a href="${c[1]}">${esc(c[0])}</a>`).join(' &rsaquo; ')} &rsaquo; ${pageNo === 1 ? esc(langName) : `<a href="${url}">${esc(langName)}</a> &rsaquo; Page ${pageNo}`}</p>
-      <header class="svp-head">
-        <h1>${esc(pageH1)}</h1>
-        <p class="svp-stand">${esc(pageStand)}</p>
-      </header>
+  <main id="main-content">
+    ${H.hero({
+    crumbs: `${crumbs.map((c) => `<a href="${c[1]}">${esc(c[0])}</a>`).join(' &rsaquo; ')} &rsaquo; ${pageNo === 1 ? esc(langName) : `<a href="${url}">${esc(langName)}</a> &rsaquo; Page ${pageNo}`}`,
+    eyebrow: `${city.iso ? `<img src="/assets/flags/${city.iso}.svg" alt="" width="20" height="15">` : ''}${esc(langName)}-speaking in ${esc(city.name)}`,
+    h1: pageH1,
+    sub: pageStand,
+    stats: [
+      [rows.length.toLocaleString('en-US'), rows.length === 1 ? P.singular(cat) : P.catName(cat)],
+      ...(pageCount > 1 ? [[pageCount, pageCount === 1 ? 'page' : 'pages']] : []),
+    ],
+    image: fs.existsSync(path.join(ROOT, 'images', 'cities', city.id + '.webp'))
+      ? H.cityImage(city.id, city.name, ATTR[city.id] || {})
+      : H.sectionImage(),
+  })}
+    <div class="svp-page container">
       ${ymyl}
 
       <div class="sv-grid">

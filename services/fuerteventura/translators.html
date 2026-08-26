@@ -189,12 +189,80 @@
     @media (max-width:640px) { .sv-field select, .sv-field input { min-width:0; width:100%; } .sv-field { width:100%; } }
   </style>
   <style>
-    .svp-page { padding: calc(var(--nav-height,64px) + var(--space-6)) 0 var(--space-10); }
-    .svp-crumbs { font-size: var(--text-sm); color: var(--color-stone); margin: 0 0 var(--space-4); }
-    .svp-crumbs a { color: var(--color-stone); }
-    .svp-head { max-width: 64ch; margin: 0 0 var(--space-6); }
-    .svp-head h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.12; margin: 0 0 var(--space-3); text-wrap: balance; }
-    .svp-stand { font-size: var(--text-lg); color: var(--color-charcoal); line-height: 1.6; margin: 0; }
+
+    .sv-hero { position:relative; width:100%; display:flex; align-items:flex-end; overflow:hidden;
+      min-height:clamp(480px, 72vh, 700px); }
+    .sv-hero-full { min-height:100vh; }
+    .sv-hero-pic { display:contents; }
+    .sv-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    /* Light wash at the top so the dark nav stays legible over a bright photograph. */
+    .sv-hero::before { content:''; position:absolute; top:0; left:0; right:0; z-index:1; pointer-events:none;
+      height:calc(var(--nav-height,64px) + 44px);
+      background:linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.4) 55%, transparent); }
+    /* The darkening covers the whole photograph, not just the block the text sits in. Scoped to the
+       content's own height it left the breadcrumb and the eyebrow on bare photograph, and the
+       services hero is a lit street at night: white 12px type on a shop sign is unreadable.
+       This is the gradient /cities/<city> uses, at inset 0, for the same reason. */
+    /* The scrim belongs to the TEXT BLOCK, not to the hero box.
+       Covering the whole hero was the obvious thing and it was wrong twice over. Calibrated for a
+       100vh hero it left the breadcrumb on bare sky: 1.62:1 over Lisbon's haze, 1.02:1 over
+       Madrid's. Turned up until those passed, it buried the photograph, and a hero whose picture
+       you cannot see is not the thing that was asked for.
+       On the block it tracks the text wherever the text goes, so a four-line title carries its own
+       darkening up with it instead of climbing out of a fixed ramp. The block also carries
+       nav-height + 2.5rem of padding above the breadcrumb, so the gradient can fade to .42 at its
+       own top edge, which is soft against the photograph, and still be about .72 where the
+       breadcrumb actually sits, 15% lower down. Measured on both skies. Madrid's white sky is the
+       binding case and came to 4.53:1 at .70 there, which is over the line by 0.03 and no use
+       across 329 cities whose skies vary; .76 puts it near 5. */
+    /*
+       The last two stops exist only to kill the edge: ending the ramp at .42 put a visible step
+       across the photograph where the block began. .16 meets what the ::after whisper is already
+       doing there, so the two blend. Neither stop is anywhere near the text. */
+    .sv-hero-in { position:relative; z-index:1; width:100%; color:#fff;
+      padding:calc(var(--nav-height,64px) + 2.5rem) 0 2.4rem;
+      background:linear-gradient(to top, rgba(15,23,42,.96) 0%, rgba(15,23,42,.86) 65%,
+        rgba(15,23,42,.76) 82%, rgba(15,23,42,.42) 93%, rgba(15,23,42,.16) 100%); }
+    /* A whisper over the rest of the picture, so the top of the frame is not brighter than the nav. */
+    .sv-hero::after { content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+      background:linear-gradient(to top, transparent 55%, rgba(15,23,42,.22) 100%); }
+    .sv-hero-full .sv-hero-in { padding:calc(var(--nav-height,64px) + 3rem) 0 3rem; }
+    /* No max-width of its own. The hero used to cap at 1040 while the page below it used the site
+       container, so the h1 started 115px to the right of the chips underneath it. */
+    .sv-hero-crumbs { font-size:var(--text-sm); color:rgba(255,255,255,.8); margin:0 0 .7rem;
+      text-shadow:0 1px 10px rgba(0,0,0,.4); }
+    .sv-hero-crumbs a { color:rgba(255,255,255,.86); text-decoration:none; }
+    .sv-hero-crumbs a:hover { color:#fff; text-decoration:underline; }
+    .sv-hero-eyebrow { display:inline-flex; align-items:center; gap:.45rem; margin:0 0 .7rem;
+      font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em;
+      /* #ff8863, which /services uses, measures 3.67:1 on the brightest pixel of this photograph
+         and 12px uppercase is small text, so it needed 4.5:1 and did not have it. #ffb199 measures
+         4.92:1 on the same pixel. A text-shadow does not count toward contrast. */
+      color:#ffb199; text-shadow:0 1px 10px rgba(0,0,0,.35); }
+    .sv-hero-eyebrow img { border-radius:2px; box-shadow:0 0 0 1px rgba(255,255,255,.35); }
+    .sv-hero-eyebrow svg { width:16px; height:16px; }
+    .sv-hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(1.9rem,4.6vw,3.1rem); line-height:1.08;
+      margin:0 0 .8rem; color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.4); text-wrap:balance; max-width:22ch; }
+    .sv-hero-full h1 { font-size:clamp(2.1rem,5.5vw,3.5rem); }
+    .sv-hero-sub { font-size:var(--text-lg); color:rgba(255,255,255,.9); line-height:1.6; margin:0;
+      max-width:56ch; text-shadow:0 1px 12px rgba(0,0,0,.35); }
+    /* The figures the page is built on, in the same strip position the city pages use. */
+    .sv-hero-stats { display:flex; flex-wrap:wrap; gap:1.6rem; margin:1.5rem 0 0; }
+    .sv-hero-stat { display:flex; flex-direction:column; }
+    .sv-hero-stat b { font-family:'DM Serif Display',serif; font-size:var(--text-xl); font-weight:400;
+      color:#fff; line-height:1.2; font-variant-numeric:tabular-nums; text-shadow:0 1px 12px rgba(0,0,0,.35); }
+    /* .5 measures 4.33:1 where the strip actually sits. .62 measures 5.62:1 there. */
+    .sv-hero-stat small { margin-top:2px; font-size:.6875rem; text-transform:uppercase; letter-spacing:.06em;
+      color:rgba(255,255,255,.62); }
+    .sv-hero a.hero-credit { position:absolute; right:.7rem; bottom:.5rem; z-index:2; font-size:.66rem;
+      color:rgba(255,255,255,.92); text-decoration:none; background:rgba(15,23,42,.45);
+      border-radius:6px; padding:.15rem .45rem; }
+    .sv-hero a.hero-credit:hover { color:#fff; background:rgba(15,23,42,.72); text-decoration:underline; }
+    @media (max-width:640px) {
+      .sv-hero-stats { gap:.9rem 1.3rem; }
+      .sv-hero h1 { max-width:none; }
+    }
+    .svp-page { padding-top: var(--space-7); padding-bottom: var(--space-10); }
     .svp-capped { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: var(--color-stone); }
     .svp-more-lang { margin: var(--space-3) 0 0; font-size: var(--text-sm); font-weight: 600; }
     
@@ -293,13 +361,19 @@
     </div><div class="nav-mobile" id="navMobile"><ul class="nav-mobile-links"><li><a href="/" class="nav-mobile-link">Home</a></li><li class="nav-mobile-group"><span class="nav-mobile-label">Tools</span><a href="/route" class="nav-mobile-sub">Route Planner</a><a href="/best-weather" class="nav-mobile-sub">Best Weather by Month</a><a href="/visa" class="nav-mobile-sub">Visa Finder</a><a href="/nomad-visas" class="nav-mobile-sub">Nomad Visa Finder</a><a href="/geoarbitrage" class="nav-mobile-sub">Geoarbitrage Calculator</a><a href="/salary" class="nav-mobile-sub">Salary Calculator</a><a href="/cost-of-living-index" class="nav-mobile-sub">Cost of Living Index</a><a href="/timezones" class="nav-mobile-sub">Time Zone Finder</a><a href="/compare" class="nav-mobile-sub">Compare Cities</a><a href="/wheel" class="nav-mobile-sub">Decision Wheel</a><a href="/map" class="nav-mobile-sub">World Map</a><a href="/tier-list" class="nav-mobile-sub">Tier List</a><a href="/tier-list/maker" class="nav-mobile-sub">Tier List Maker</a></li><li><a href="/cities" class="nav-mobile-link">Cities</a></li><li><a href="/services" class="nav-mobile-link active">Services</a></li><li><a href="/best" class="nav-mobile-link">Rankings</a></li><li><a href="/blog" class="nav-mobile-link">Blog</a></li></ul>
       </div></nav>
   <script>(function(){var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),mm=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');mm.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>
-  <main class="svp-page" id="main-content">
-    <div class="container">
-      <p class="svp-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/fuerteventura">Fuerteventura</a> &rsaquo; translators</p>
-      <header class="svp-head">
+  <main id="main-content">
+    <header class="sv-hero">
+      <picture class="sv-hero-pic"><source media="(max-width:640px)" srcset="/images/cities/fuerteventura-m.webp"><source media="(max-width:1100px)" srcset="/images/cities/fuerteventura-t.webp"><img class="sv-hero-img" src="/images/cities/fuerteventura.webp" alt="Aerial view of Jandia Beach and Playa del Matorral, Fuerteventura, with turquoise Atlantic water and the Morro Jable lighthouse" fetchpriority="high" decoding="async" width="1920" height="1275"></picture>
+      <div class="sv-hero-in"><div class="container">
+        <p class="sv-hero-crumbs"><a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/fuerteventura">Fuerteventura</a> &rsaquo; translators</p>
+        <span class="sv-hero-eyebrow"><img src="/assets/flags/es.svg" alt="" width="20" height="15">Fuerteventura, Spain</span>
         <h1>Translators in Fuerteventura who work in English and French</h1>
-        <p class="svp-stand">16 translators in Fuerteventura whose working language is recorded somewhere we can point at. Listed by language: 12 in English, 2 in French, 1 in Arabic. Last checked on 19 August 2026. Each language has its own list below, so anyone who works in two appears in both.</p>
-      </header>
+        <p class="sv-hero-sub">16 translators in Fuerteventura whose working language is recorded somewhere we can point at. Listed by language: 12 in English, 2 in French, 1 in Arabic. Last checked on 19 August 2026. Each language has its own list below, so anyone who works in two appears in both.</p>
+        <div class="sv-hero-stats"><div class="sv-hero-stat"><b>16</b><small>translators</small></div><div class="sv-hero-stat"><b>2</b><small>languages</small></div></div>
+      </div></div>
+      <a class="hero-credit" href="https://commons.wikimedia.org/wiki/File:Aerial_view_of_Jandia_Beach_and_Playa_del_Matorral_on_Fuerteventura,_Canary_Islands_(51122763322).jpg" target="_blank" rel="nofollow noopener">Photo: dronepicr (CC BY 2.0)</a>
+    </header>
+    <div class="svp-page container">
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">12</span></a><a class="sb-chip" href="#lang-fr"><span class="sb-chip-label">French</span><span class="sb-chip-n">2</span></a><a class="sb-chip" href="#lang-other"><span class="sb-chip-label">Local language only</span><span class="sb-chip-n">2</span></a></nav>
       
 
