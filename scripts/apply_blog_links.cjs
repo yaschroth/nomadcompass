@@ -14,6 +14,8 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 
 // Per-post curated links: [href, label]. City guide first, then rankings + tier lists + a tool.
 const MAP = {
+  'chania-digital-nomad-guide': [['/cities/chania', 'Chania city guide'], ['/best/best-cities-for-nature-and-outdoors', 'Best for nature ranking'], ['/tier-list/nature', 'Nature tier list'], ['/best/best-digital-nomad-cities-in-europe', 'Best nomad cities in Europe'], ['/tier-list/europe', 'Europe tier list']],
+  'dali-china-digital-nomad-guide': [['/cities/dali', 'Dali city guide'], ['/best/cheapest-cities-for-digital-nomads', 'Cheapest cities ranking'], ['/tier-list/tight-budget', 'Tight-budget tier list'], ['/best/best-digital-nomad-cities-in-asia', 'Best nomad cities in Asia'], ['/tier-list/asia', 'Asia tier list']],
   'busan-digital-nomad-guide': [['/cities/busan', 'Busan city guide'], ['/best/best-digital-nomad-cities-in-asia', 'Best nomad cities in Asia'], ['/tier-list/asia', 'Asia tier list'], ['/best/best-cities-for-fast-wifi', 'Best for WiFi ranking'], ['/tier-list/wifi', 'WiFi tier list']],
   'fukuoka-digital-nomad-guide': [['/cities/fukuoka', 'Fukuoka city guide'], ['/best/safest-cities-for-digital-nomads', 'Safest cities ranking'], ['/tier-list/safety', 'Safety tier list'], ['/best/best-digital-nomad-cities-in-asia', 'Best nomad cities in Asia'], ['/tier-list/asia', 'Asia tier list']],
   'bodrum-digital-nomad-guide': [['/cities/bodrum', 'Bodrum city guide'], ['/best/best-cities-for-year-round-weather', 'Best year-round weather ranking'], ['/tier-list/climate', 'Climate tier list'], ['/best/best-cities-for-digital-nomad-visas', 'Best for nomad visas ranking'], ['/tier-list/visa', 'Visa access tier list']],

@@ -14,6 +14,8 @@ Status legend: 🔴 needs work · 🟡 partial / follow-ups open · ✅ meets th
 | best-european-cities-nomads | The Best European Cities for Digital Nomads in 2026 | 🟡 | Year in title, keep current. |
 | budapest-nomad-guide | Budapest: Europe's Most Underrated Nomad Destination | 🟡 | |
 | cape-town-nomad-guide | Cape Town: Sun, Surf, and Startups for Remote Workers | 🟡 | |
+| chania-digital-nomad-guide | Chania Digital Nomad Guide: Crete Costs and Coworking | ✅ | 86 impressions, pos 9.7. Names Workhub, which is itself a clicked query. Leads with the 14-25 Mbps problem. |
+| dali-china-digital-nomad-guide | Dali Digital Nomad Guide: China at $800 a Month | ✅ | 107 impressions, pos 13.4. Opens on the Great Firewall, which is the fact that decides the city. |
 | digital-nomad-guide-lisbon | The Ultimate Digital Nomad Guide to Lisbon in 2026 | 🟡 | Year in title, keep current. |
 | digital-nomad-tax-guide | Digital Nomad Tax Guide: What You Need to Know in 2026 | 🟡 | YMYL, needs disclaimer + citations reviewed. Reference article. |
 | digital-nomads-tbilisi-georgia | Why Digital Nomads Are Flocking to Tbilisi, Georgia | 🟡 | GSC: ranks pos ~60-82 for "tbilisi digital nomad" (page 6+). |
@@ -39,6 +41,16 @@ sitewide brand graph. None have been through the full style-guide pass (voice au
 repetition check baseline, per-article image uniqueness), hence 🟡.
 
 ## Change history
+
+- **2026-08-26 (third batch)**: Chania (86 impressions, pos 9.7) and Dali (107, pos 13.4). Both
+  lead with the constraint rather than the scenery: Chania's 14-25 Mbps and the Workhub membership
+  that solves it, Dali's Great Firewall and the VPN you must install before you land. Chania names
+  Workhub deliberately, since "workhub chania" is itself a query that has earned us a click.
+  Also shipped: scripts/check_visa_consistency.cjs, after the Spanish guides turned up 21 city
+  pages carrying 15 different figures for one national visa. Nine countries disagree with
+  themselves. It reports rather than fixes, because in Mexico, Romania, Croatia and Colombia the
+  city pages look NEWER than /nomad-visas, and normalising to the tool would make the site worse.
+  26 articles, 0 FAIL, 0 WARN.
 
 - **2026-08-26 (second batch)**: Five more city guides from page-level GSC demand: Busan (173
   impressions, pos 8.3), Bodrum (148, 7.6), Gijon (131, best CTR of any city page), Fukuoka (105,
