@@ -47,10 +47,23 @@ let index = fs.readFileSync(path.join(ROOT, 'blog.html'), 'utf8');
 const missing = articles.filter((a) => !new RegExp('blog/' + a.slug + '"').test(index));
 missing.sort((a, b) => (b.published || '').localeCompare(a.published || ''));
 
+// A card is 600x400. A Pexels og:image carries its crop in the query string; one of our own city
+// heroes has a purpose-made -card.webp beside it, which is a quarter of the bytes at the size the
+// card actually renders. Serving the 1920px hero into a thumbnail is waste nobody sees.
+const cardImage = (src) => {
+  const local = src.match(/\/images\/cities\/([a-z0-9-]+)\.webp$/);
+  if (local) {
+    const variant = '/images/cities/' + local[1] + '-card.webp';
+    if (fs.existsSync(path.join(ROOT, variant.slice(1)))) return variant;
+    return '/images/cities/' + local[1] + '.webp';
+  }
+  return src.replace(/w=1200&h=630/, 'w=600&h=400');
+};
+
 const card = (a) => `        <!-- ${a.title} -->
         <article class="article-card" data-category="${categorySlug(a.section)}">
           <img
-            src="${a.image.replace(/w=1200&h=630/, 'w=600&h=400')}"
+            src="${cardImage(a.image)}"
             alt="${esc(a.alt || a.title)}"
             class="article-card-image"
           >

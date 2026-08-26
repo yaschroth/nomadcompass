@@ -21,6 +21,11 @@ Status legend: 🔴 needs work · 🟡 partial / follow-ups open · ✅ meets th
 | las-palmas-digital-nomad-guide | Las Palmas Digital Nomad Guide: Costs, Visas, Districts | ✅ | Written 2026-08-26 against GSC demand: 171 impressions on "digital nomad guide las palmas" at pos 19-25 with no guide behind it. |
 | praia-cape-verde-digital-nomad-guide | Praia Digital Nomad Guide: Cape Verde Costs and Visas | ✅ | 158 impressions across praia/boa vista queries landing on the country page. Honest about community 2/10. |
 | dresden-digital-nomad-guide | Dresden Digital Nomad Guide: Rent, Wifi and Visa Routes | ✅ | 87 impressions, top query is "digital nomad accommodation dresden", so the article leads with accommodation. |
+| busan-digital-nomad-guide | Busan Digital Nomad Guide: Costs, Wifi and the Visa | ✅ | 173 impressions, pos 8.3, no article behind the city page. Wifi 9 vs English 4 is the trade. |
+| bodrum-digital-nomad-guide | Bodrum Digital Nomad Guide: Internet, Costs and Season | ✅ | 148 impressions, pos 7.6. Leads with the 11 Mbps citywide average, which is the deciding fact. |
+| fukuoka-digital-nomad-guide | Fukuoka Digital Nomad Guide: Japan's Cheapest Big City | ✅ | 105 impressions, pos 8.1. Only city in our data scoring 10 for safety. |
+| gijon-digital-nomad-guide | Gijon Digital Nomad Guide: Costs, Cider and Green Spain | ✅ | 131 impressions, best CTR of any city page. Headings varied to clear the 1.5% stuffing cap. |
+| sarajevo-digital-nomad-guide | Sarajevo Digital Nomad Guide: Europe's Cheapest Capital | ✅ | 89 impressions, pos 8.7. Winter air quality (4/10) stated in the lead, not buried. |
 | canggu-cost-of-living-guide | Canggu Cost of Living 2026: What Bali Really Costs Now | ✅ | Cost angle, deliberately distinct from best-coworking-spaces-bali. Year in title, keep current. |
 | medellin-vs-chiang-mai | Medellín vs Chiang Mai: Which City Wins for Nomads in 2026? | 🟡 | Comparison intent, table early. |
 | mexico-city-nomad-guide | Mexico City: The New Nomad Capital of Latin America | 🟡 | |
@@ -34,6 +39,23 @@ sitewide brand graph. None have been through the full style-guide pass (voice au
 repetition check baseline, per-article image uniqueness), hence 🟡.
 
 ## Change history
+
+- **2026-08-26 (second batch)**: Five more city guides from page-level GSC demand: Busan (173
+  impressions, pos 8.3), Bodrum (148, 7.6), Gijon (131, best CTR of any city page), Fukuoka (105,
+  8.1) and Sarajevo (89, 8.7). All were city pages ranking on page one with no article behind them.
+  Each leads with the number that actually decides the city: Bodrum's 11 Mbps citywide average,
+  Fukuoka's perfect safety score, Sarajevo's winter air quality of 4/10, Busan's English 4 against
+  wifi 9.
+  Fixed while writing: our own Spanish city pages carried SEVEN different figures for one national
+  visa income floor, from EUR 2,160 to EUR 2,850. The Las Palmas article published earlier that day
+  had the stale one. Both it and the new Gijon guide now describe the rule (twice the minimum wage,
+  about $3,100 at the 2026 rate) rather than quoting a number that silently ages. THE TEN CITY PAGES
+  ARE STILL INCONSISTENT and need a pass.
+  check_repetition caught "in Gijon" at 1.99% across 14 headings; varied the heading forms
+  (possessive, reordering, Asturias) rather than dropping the anchor, since 5.0.5 requires it.
+  apply_blog_index.cjs now prefers the -card.webp variant for blog.html cards instead of serving a
+  1920px hero into a 600x400 slot.
+  24 articles, 0 FAIL, 0 WARN, repetition clean.
 
 - **2026-08-26**: Four new city guides, chosen from Search Console rather than by guesswork:
   Las Palmas, Praia (Cape Verde), Dresden and Canggu. Each targets queries where a city page
