@@ -72,7 +72,7 @@ for (const file of files) {
   else if (!types.includes('FAQPage')) WARN('FAQ section present but no FAQPage JSON-LD');
 
   // internal links inside the article body
-  const internal = new Set([...article.matchAll(/href="(\/(?:blog|cities|wheel|rentals|about)\/?[^"#]*)"/g)]
+  const internal = new Set([...article.matchAll(/href="(\/(?:blog|cities|services|best|wheel|rentals|about|compare|timezones|route|map|salary|geoarbitrage|nomad-visas|visa|tier-list|cost-of-living-index|best-weather)\/?[^"#]*)"/g)]
     .map((m) => m[1]).filter((h) => h !== `/blog/${slug}`));
   if (internal.size < 3) WARN(`${internal.size} internal links in body (target 3-5)`);
 

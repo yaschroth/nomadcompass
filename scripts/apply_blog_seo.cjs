@@ -138,7 +138,10 @@ for (const file of files) {
       if (wordCount) upgraded.wordCount = wordCount;
 
       const json = JSON.stringify(upgraded, null, 2).replace(/\n/g, '\n  ');
-      html = html.replace(ldRe, `<script type="application/ld+json">\n  ${json}\n  </script>`);
+      // Function replacements, not strings. In a replacement STRING, "$1,500" inside the JSON is
+      // read as capture group 1 followed by ",500", so any article whose meta description quotes a
+      // price wrote itself a corrupt BlogPosting block. Canggu's "$1,500 to $2,500" did exactly that.
+      html = html.replace(ldRe, () => `<script type="application/ld+json">\n  ${json}\n  </script>`);
 
       // BreadcrumbList
       if (!/"BreadcrumbList"/.test(html)) {
@@ -154,7 +157,7 @@ for (const file of files) {
         const cjson = JSON.stringify(crumb, null, 2).replace(/\n/g, '\n  ');
         html = html.replace(
           /(<script type="application\/ld\+json">[\s\S]*?<\/script>)/,
-          `$1\n\n  <script type="application/ld+json">\n  ${cjson}\n  </script>`
+          (_, keep) => `${keep}\n\n  <script type="application/ld+json">\n  ${cjson}\n  </script>`
         );
       }
 
@@ -165,7 +168,7 @@ for (const file of files) {
           const fjson = JSON.stringify(faq, null, 2).replace(/\n/g, '\n  ');
           html = html.replace(
             /<\/head>/i,
-            `  <script type="application/ld+json">\n  ${fjson}\n  </script>\n</head>`
+            () => `  <script type="application/ld+json">\n  ${fjson}\n  </script>\n</head>`
           );
           ldNote = `ok +FAQPage(${faq.mainEntity.length})`;
         }

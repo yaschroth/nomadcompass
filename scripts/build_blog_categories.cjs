@@ -8,6 +8,34 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
  */
 const fs = require('fs');
 const path = require('path');
+// The analytics, consent, skip-link and brand-graph blocks are owned by the sweeps and are
+// lifted from a live page rather than restated here. Without them _safe_write refuses the write,
+// which is how this generator came to be blocked.
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
+
+// Travelpayouts and the affiliate click tracker are blog-family blocks that page_shell does not
+// carry (the service pages have neither). Both are marker-delimited and owned by their own sweeps,
+// so they are lifted from a page that already has them rather than restated here, which is what
+// _safe_write was refusing the write over.
+const liftBlock = (html, name) => {
+  const i = html.indexOf('<!-- ' + name + ' -->');
+  const j = html.indexOf('<!-- /' + name + ' -->');
+  return i >= 0 && j > i ? html.slice(i, j + name.length + 9) : '';
+};
+const AFF_DONOR = (() => {
+  // ROOT is declared further down, so resolve it here rather than reaching forward to it.
+  const root = path.resolve(__dirname, '..');
+  for (const f of ['blog/category/city-guides.html', 'blog.html', 'blog/budapest-nomad-guide.html']) {
+    const p = path.join(root, f);
+    if (!fs.existsSync(p)) continue;
+    const html = fs.readFileSync(p, 'utf8');
+    const tp = liftBlock(html, 'travelpayouts');
+    const at = liftBlock(html, 'aff-track');
+    if (tp && at) return tp + '\n  ' + at;
+  }
+  console.error('build_blog_categories: no page carries both affiliate blocks; run the sweeps first');
+  return '';
+})();
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -83,6 +111,7 @@ for (const cat of CATS) {
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(cat.h1)} for Digital Nomads: Guides & Articles | The Nomad HQ</title>
@@ -134,9 +163,11 @@ for (const cat of CATS) {
     .bc-related-links a { display:inline-block; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:999px; padding:.4rem .9rem; font-weight:600; font-size:.9rem; color:var(--color-charcoal,#334155); text-decoration:none; }
     .bc-related-links a:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
   </style>
+${shell.headEnd}
 </head>
 <body>
-  ${nav('Blog')}
+  ${shell.bodyStart}
+  ${shell.nav}
   <main>
     <header class="bc-header"><div class="container">
       <nav class="bc-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog">Blog</a><span>/</span>${esc(cat.h1)}</nav>
@@ -154,6 +185,8 @@ ${cards}
     </div>
   </main>
   ${FOOTER}
+  ${AFF_DONOR}
+${shell.bodyEnd}
 </body>
 </html>`;
   fs.writeFileSync(path.join(ROOT, 'blog', 'category', cat.slug + '.html'), html);
