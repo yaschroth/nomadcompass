@@ -20,7 +20,6 @@ const NAV = `<!-- Sticky in-page section nav (jump links) -->
         <a href="#where-to-stay">Stay</a>
         <a href="#coworking">Coworking</a>
         <a href="#where-to-eat">Eat</a>
-        <a href="#reviews">Reviews</a>
         <a href="#faq">FAQ</a>
       </div>
     </nav>
@@ -35,7 +34,6 @@ const JS = `  <!-- city-toc-js: highlight the active section in the sticky jump 
 // [anchor substring, replacement] pairs; each anchor must occur exactly once per page.
 const idEdits = [
   ['<section class="categories-section">', '<section class="categories-section" id="scores">'],
-  ['<section class="voting-section">', '<section class="voting-section" id="reviews">'],
   ['<h2>Cost of Living', '<h2 id="cost-of-living">Cost of Living'],
   ['<h2>Best Coworking Spaces', '<h2 id="coworking">Best Coworking Spaces'],
   ['<h2>Visas', '<h2 id="visas">Visas'],

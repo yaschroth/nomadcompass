@@ -27251,19 +27251,6 @@ function generateCityPage(city) {
       </div>
     </section>
 
-    <!-- Community Voting -->
-    <section class="voting-section">
-      <div class="container">
-        <div class="section-header">
-          <h2>What Do Nomads Say?</h2>
-          <p>Vote on how accurate these scores are based on your experience</p>
-        </div>
-        <div class="voting-grid" id="votingGrid"></div>
-        <div class="voting-login-prompt" id="votingLoginPrompt" style="display: none;">
-          <p>Sign up to vote and help other nomads make better decisions.</p>
-        </div>
-      </div>
-    </section>
 
     <!-- Related Cities -->
     <section class="related-section">

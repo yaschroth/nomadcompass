@@ -198,6 +198,11 @@ function makeConverter(rates, opts) {
       (m, fig) => { hits += 1; return fig; });
 
     t = t.replace(/\$\s*\$/g, '$');
+    // One house style for a dash-joined range. The site had both, 4,763 written "$800-1,200" and
+    // 894 written "$800-$1,200", often two sentences apart, and this converter emits the first.
+    // A range joined by the word "to" keeps both signs, because "$800 to 1,200" reads wrong.
+    t = t.replace(/(\$[\d,]+(?:\.\d+)?)\s?-\s?\$([\d,]+(?:\.\d+)?)/g,
+      (m, lo, hi) => { hits += 1; return lo + '-' + hi; });
     t = t.replace(/\$(\d+)\.(\d)\b/g, (m, a, b) => '$' + a + '.' + b + '0');
     // In HTML the run of spaces after a newline is indentation, not a typo. Collapsing it would
     // reflow every file the sweep touches and bury the real change in the diff.
