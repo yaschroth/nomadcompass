@@ -296,7 +296,7 @@ ${H.css}
     .svc-facets-h { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--color-ink); margin: 0 0 var(--space-5); }
     .svc-facets { margin: var(--space-5) 0 0; }
     .svc-more { margin: var(--space-8) 0 0; padding: var(--space-6); background: #fff; border: 1px solid var(--color-sand-dark); border-radius: var(--radius-md, 8px); }
-    .svc-more h2 { margin: 0 0 var(--space-3); font-size: var(--text-xl); }
+    .svc-more h2 { margin: 0 0 var(--space-5); font-size: var(--text-xl); }
     .svc-more p { margin: 0 0 var(--space-3); color: var(--color-charcoal); }
     .svc-more p:last-child { margin-bottom: 0; }
     /* The filter sits with the listing, not in the header: it acts on what is below it. */

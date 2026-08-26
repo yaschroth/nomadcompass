@@ -244,8 +244,9 @@ ${H.css}
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
 ${B.css}
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
-    .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
+    .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
+    .svl-faq { margin: 0 0 var(--space-5); }
     .svl-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svl-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
   </style>

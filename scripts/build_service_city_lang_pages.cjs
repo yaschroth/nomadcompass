@@ -420,7 +420,7 @@ ${H.css}
     .svp-pg-now { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
     .svp-pg-gap { display: inline-flex; justify-content: center; min-width: 1.4rem; color: var(--color-stone); }
     .svp-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
-    .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
+    .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
     .svp-chips { margin: var(--space-4) 0 var(--space-6); }
 ${B.css}

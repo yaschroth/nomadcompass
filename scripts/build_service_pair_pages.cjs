@@ -461,10 +461,11 @@ ${H.css}
       margin: 0 0 var(--space-6); padding-bottom: .6rem; border-bottom: 1px solid var(--color-sand-dark, #e3d9c6); }
     .svp-lang-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm); font-weight: 700; color: var(--color-stone); }
     .svp-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
-    .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-6) 0 var(--space-3); }
+    .svp-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
     .svp-chips, .svp-langbar { margin: var(--space-4) 0 var(--space-6); }
 ${B.css}
+    .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
     .ymyl-note { font-size: var(--text-sm); color: var(--color-stone); border-left: 3px solid var(--color-sand-dark, #e3d9c6); padding-left: .9rem; margin: var(--space-5) 0; }

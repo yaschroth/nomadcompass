@@ -86,7 +86,13 @@ const css = `
       font-size:.72rem; line-height:1; font-weight:600; color:var(--color-stone); }
 
     /* ---- the compartmented chip, shared with .sv-hub on /services ---- */
-    .sb-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin:0; padding:0; list-style:none; }
+    /* No margin here. The list resets exist for the one chip row that is a <ul> (the language
+       facets on a city page); putting them on .sb-chips put "margin:0" later in the cascade than
+       every family's own rule at the same specificity, so .svp-chips, .svp-langbar and .svc-chips
+       all silently lost their spacing and butted straight into whatever followed. Margin is the
+       family's business. */
+    .sb-chips { display:flex; flex-wrap:wrap; gap:.5rem; }
+    ul.sb-chips { padding:0; list-style:none; }
     a.sb-chip:not(.btn):not(.nav-link), span.sb-chip, li.sb-chip, button.sb-chip { display:inline-grid;
       grid-template-columns:auto auto; align-items:stretch; gap:0; padding:0; overflow:hidden;
       background:#fff; color:var(--color-ink); text-decoration:none; font-family:inherit;
