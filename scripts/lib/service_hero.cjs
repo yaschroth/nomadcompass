@@ -11,14 +11,11 @@
  * they carry /assets/services-hero.webp, the image their parent /services already uses. Putting
  * Madrid on a page about 84 cities would be prettier and would be a lie.
  *
- * Two heights, one design:
- *
- *   full   100vh, the site's own convention, for a page that is an index and nothing else: the
- *          service hubs and the service-and-language pages list cities, not providers.
- *   band   clamp(340px, 58vh, 520px), for the three families that put provider listings on the
- *          page. Someone arriving from "english speaking dentist lisbon" wants the dentists, and
- *          a full screen of photograph before the first one is a worse page for them. Same
- *          photograph, same gradient, same type, less of it.
+ * All of them are 100vh. `size` no longer changes the height, only the type: 'full' is for a page
+ * that is an index and nothing else (the service hubs, the service-and-language pages), whose h1
+ * is a short phrase and can be set large. The default is for the three families that carry
+ * provider listings, whose h1 is a long sentence naming a city, a service and up to six languages,
+ * and which needs the smaller size to stay to three lines.
  *
  * Usage:  const H = require('./lib/service_hero.cjs');
  *         ... <style> ${H.css} </style>
@@ -29,9 +26,13 @@ const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const css = `
+    /* Every hero fills the screen, as /cities/<city> and /services do. The listing families were
+       on a shorter band so the providers would start higher; measured, that gave 72% of the
+       viewport on one page and 88% on another, because the band's max was under the content's own
+       height and the hero simply grew to fit. Two thirds of a screen and seven eighths of a screen
+       do not read as a decision, they read as a mistake, so they are all 100vh now. */
     .sv-hero { position:relative; width:100%; display:flex; align-items:flex-end; overflow:hidden;
-      min-height:clamp(480px, 72vh, 700px); }
-    .sv-hero-full { min-height:100vh; }
+      min-height:100vh; }
     .sv-hero-pic { display:contents; }
     .sv-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
     /* Light wash at the top so the dark nav stays legible over a bright photograph. */
