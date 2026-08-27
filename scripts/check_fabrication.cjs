@@ -49,7 +49,11 @@ const CLAIMS = [
 // Naming a platform anywhere in the sentence is not enough, and neither is a bare capitalised word:
 // "suites on Gran Via ... rated 9.9" names a street, not a source. The attribution has to follow the
 // figure. Either a known platform, or "on/by/from <Proper Noun>" within a short distance of it.
-const PLATFORM = /\b(?:google|booking(?:\.com)?|tripadvisor|thefork|holiwise|yelp|airbnb|trustpilot|coworker(?:\.com)?|foursquare|hostelworld|agoda|expedia|guests)\b/i;
+const PLATFORM = /\b(?:google|booking(?:\.com)?|tripadvisor|thefork|holiwise|yelp|airbnb|trustpilot|coworker(?:\.com)?|opentable|justdial|the coworking spaces|foursquare|hostelworld|agoda|expedia|guests|members)\b/i;
+
+// A hotel's star class is a category, not a review score: "a polished 4.5-star hotel" and "four-star
+// boutique hotel" are describing what kind of place it is. Only a rating OF something gets checked.
+const STAR_CLASS = /\b\d(?:\.\d)?-star\s+(?:hotel|boutique|resort|property|aparthotel|restaurant)\b/i;
 const attributed = (sentence, match) => {
   const at = sentence.indexOf(match);
   const after = sentence.slice(at + match.length, at + match.length + 40);
@@ -97,6 +101,7 @@ const walk = (dir, rel) => {
             for (const [re, what] of CLAIMS) {
               const m = s.match(re);
               if (!m) continue;
+              if (STAR_CLASS.test(s)) continue;
               if (!NEVER_OK.test(m[0]) && attributed(s, m[0])) continue;
               pageHits.push(r + ': ' + what + ' with no source  "' + s.trim().replace(/\s+/g, ' ').slice(0, 120) + '"');
             }
