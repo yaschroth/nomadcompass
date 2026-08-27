@@ -121,8 +121,10 @@
        second line and leave one card taller than the rest of its row. Numbers are tabular so that
        they line up down a column, which is what this page is really a table of. */
     .sv-hubs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* Same reason as the city cards below: at one width "Translators & interpreters" wraps to a
+       second line and stands 6px taller than the other nine. The row is reserved so it cannot. */
     a.sv-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
-      gap:0; padding:0; overflow:hidden; background:#fff; color:var(--color-ink);
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
       border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
       box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
     a.sv-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
@@ -140,10 +142,13 @@
       font-variant-numeric:tabular-nums; }
     .sv-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
       font-variant-numeric:tabular-nums; }
-    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:start; }
+    /* stretch, not start. With align-items:start every card sized to its own content, so a city
+       whose languages wrapped to a second chip row stood 33px taller than its neighbours and the
+       grid came out ragged. Stretch makes each card fill its row; the tray below takes the slack. */
+    .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:stretch; }
     /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
        standing next to a taller one grows its tray rather than opening a hole in the middle. */
-    .sv-ix { display:grid; grid-template-rows:auto auto; gap:0; padding:0; overflow:hidden; background:#fff;
+    .sv-ix { display:grid; grid-template-rows:auto 1fr; gap:0; padding:0; overflow:hidden; background:#fff;
       border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
       box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
     .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
@@ -151,10 +156,15 @@
     /* A minimum height on the identity row so a one-line city and a two-line one sit their count
        tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
     .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
-      gap:.62rem; padding:.9rem 1rem .95rem; min-height:4.6rem; }
+      gap:.62rem; padding:.9rem 1rem .95rem; min-height:5.7rem; }
     .sv-ix-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
     .sv-ix-name { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--color-ink); line-height:1.2;
       min-width:0; overflow-wrap:anywhere; }
+    /* Nothing here shrinks a name to keep it on one line. Sizing by character count was tried and
+       is not sound: the column width moves with the viewport, so the same name fits at 1280px and
+       wraps at 874px, where three columns are at their narrowest. At that width "Belo Horizonte"
+       wraps, and no character threshold catches that without shrinking names that never needed it.
+       The head reserves two lines instead, so a name may wrap without changing the card's height. */
     .sv-ix-country { display:block; font-family:var(--font-sans,system-ui); font-size:var(--text-xs); font-weight:600;
       letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); margin-top:.15rem; }
     /* The count is a tile in the corner of the identity row, not a line of its own between the name
@@ -171,7 +181,13 @@
       border-top:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-ix-eyebrow { display:block; margin:0 0 .42rem; font-size:.6rem; font-weight:700; text-transform:uppercase;
       letter-spacing:.11em; color:var(--color-stone); }
-    .sv-ix-langs { display:flex; flex-wrap:wrap; gap:.3rem; }
+    /* Two chip rows' worth of height, always. Stretching alone only levels a card against others
+       in ITS row, so a row where nothing wrapped still came out shorter than the row below it.
+       Reserving the second row makes every card the same height across the whole grid, and a city
+       with one row of languages simply has space under them. 62px is measured, not guessed: it is
+       the tallest chip block on the page, two 29px chips with the .3rem gap between them. 73 of the
+       329 cities need it. An earlier 3.05rem was short of that and left the grid in two heights. */
+    .sv-ix-langs { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
     .sv-ix .sv-lang { background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
     /* "+2" is a count of the languages that did not fit, not a language, so it does not wear their
        chip: no border, no white ground, just the number. */
@@ -600,7 +616,7 @@
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
