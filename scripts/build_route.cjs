@@ -22,11 +22,23 @@ const CLIMATE = require(path.join(ROOT, 'assets', 'city-climate.js'));
 const META = require(path.join(ROOT, 'scripts', 'lib', 'country-meta.cjs'));
 const CITY_TZ = require(path.join(ROOT, 'assets', 'city-tz.js'));
 
-// [id, name, country, iso, lat, lng, cost, score, ianaZone]
-const DATA = m.exports.filter((c) => c && c.id && typeof c.lat === 'number' && typeof c.lng === 'number').map((c) => [
-  c.id, c.name, c.country, iso(c.flag), c.lat, c.lng, typeof c.costPerMonth === 'number' ? c.costPerMonth : 0, nomadScore(c),
-  CITY_TZ[c.id] || 'UTC',
-]);
+// [id, name, country, iso, lat, lng, cost, score, ianaZone, flightCode, airportKm]
+// Airports, so a leg can name the route it actually is. Before this the planner drew a great-circle
+// line between two city centroids and could say how far it was, but not what you would search for.
+// searchCode is the IATA metropolitan code where one exists, because a New York leg wants NYC (JFK,
+// Newark and LaGuardia together) rather than whichever field is nearest the city hall.
+const AIR = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'city-airports.json'), 'utf8')).airports;
+const DATA = m.exports.filter((c) => c && c.id && typeof c.lat === 'number' && typeof c.lng === 'number').map((c) => {
+  const a = AIR[c.id] || null;
+  return [
+    c.id, c.name, c.country, iso(c.flag), c.lat, c.lng, typeof c.costPerMonth === 'number' ? c.costPerMonth : 0, nomadScore(c),
+    CITY_TZ[c.id] || 'UTC',
+    a ? (a.searchCode || a.iata) : '',
+    a ? a.km : 0,
+  ];
+});
+const missingAir = DATA.filter((d) => !d[9]).length;
+if (missingAir) console.log('  note: ' + missingAir + ' cities have no airport, so their legs show no fare row');
 const DEFAULT_ROUTE = ['lisbon', 'barcelona', 'medellin', 'bali'].filter((id) => DATA.some((d) => d[0] === id));
 // country -> [plugTypes, schengen]; only ship entries for countries we actually use
 const USED_META = {};
@@ -145,6 +157,17 @@ const html = `<!DOCTYPE html>
     .rt-wx-nodata { margin:.85rem 0 0; font-size:.82rem; color:var(--color-stone); }
     .rt-sc-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.6rem .9rem; margin:.85rem 0 0; }
     .rt-fact { font-size:.82rem; color:var(--color-charcoal); line-height:1.3; }
+    .rt-fare { display:flex; align-items:center; flex-wrap:wrap; gap:.4rem; }
+    .rt-fare-in { display:inline-flex; align-items:center; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:8px; background:#fff; padding:0 .1rem 0 .45rem; }
+    .rt-fare-in:focus-within { border-color:var(--color-terracotta,#c0392b); }
+    .rt-fare-cur { font-size:.82rem; color:var(--color-stone,#64748b); }
+    .rt-fare-in input { width:5.2rem; border:0; padding:.28rem .35rem; font:inherit; font-size:.85rem; color:var(--color-ink,#0f172a); background:transparent; -moz-appearance:textfield; appearance:textfield; }
+    .rt-fare-in input:focus { outline:none; }
+    .rt-fare-in input::-webkit-outer-spin-button, .rt-fare-in input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+    .rt-fare-find { font-size:.78rem; font-weight:600; color:var(--color-terracotta,#c0392b); text-decoration:none; white-space:nowrap; }
+    .rt-fare-find:hover { text-decoration:underline; }
+    .rt-fare-none { color:var(--color-stone,#64748b); font-style:italic; }
+    .rt-budget-note { font-size:.78rem; color:var(--color-stone,#64748b); line-height:1.5; margin:.45rem 0 0; }
     .rt-fact .fk { display:block; font-size:.66rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--color-stone); margin:0 0 .18rem; }
     .rt-fact .rt-fv { color:var(--color-ink); font-weight:600; } .rt-fact .rt-fmuted { color:var(--color-stone); font-weight:400; }
     .rt-chip { display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-weight:700; padding:2px 9px; border-radius:999px; }
@@ -296,6 +319,13 @@ const html = `<!DOCTYPE html>
         for(var mo=0;mo<12;mo++){if(peak[mo]){mult.push(0.15);lab.push('Peak');}else if(low[mo]){mult.push(-0.10);lab.push('Low');}else{mult.push(0);lab.push('Shoulder');}}
         return seasonCache[id]={mult:mult,lab:lab};}
       function adjCost(id,mo){var c=byId[id][6];return c*(1+seasonInfo(id).mult[mo]);}
+
+      // Aviasales search deep link: ORIGIN + DDMM + DESTINATION + passengers, so LIS1403BCN1 is
+      // Lisbon to Barcelona on 14 March for one. marker is our Travelpayouts partner id, the same
+      // one every other travel link on the site carries.
+      function flightSearchUrl(from,to,when){var d=new Date(when);
+        var dd=String(d.getUTCDate()).padStart(2,'0'),mm=String(d.getUTCMonth()+1).padStart(2,'0');
+        return 'https://www.aviasales.com/search/'+from+dd+mm+to+'1?marker=557916';}
       function weatherVerdict(id,mo){var cl=CLIMATE[id];if(!cl||cl.h[mo]==null)return {txt:'No climate data',emo:''};
         var hi=cl.h[mo],lo=cl.l[mo],r=cl.r[mo]==null?40:cl.r[mo];var temp;
         if(hi>=32)temp='Hot';else if(hi>=25)temp='Warm';else if(hi>=18)temp='Mild';else if(hi>=10)temp='Cool';else temp='Cold';
@@ -312,7 +342,7 @@ const html = `<!DOCTYPE html>
         var start=parseStart();var cur=start;var stops=[];
         route.forEach(function(r,i){var c=byId[r.id];var nights=Math.max(1,r.nights||1);var arr=cur,dep=addDaysUTC(cur,nights);
           var midMo=new Date(arr+(dep-arr)/2).getUTCMonth();
-          stops.push({id:r.id,c:c,nights:nights,arr:arr,dep:dep,mo:midMo});cur=dep;});
+          stops.push({id:r.id,c:c,nights:nights,arr:arr,dep:dep,mo:midMo,fare:r.fare});cur=dep;});
         return {start:start,end:cur,stops:stops};}
 
       function render(){
@@ -334,12 +364,20 @@ const html = `<!DOCTYPE html>
         }).join('');}
 
         renderResults();
-        try{var u=new URL(window.location);if(route.length)u.searchParams.set('route',route.map(function(r){return r.id+':'+r.nights;}).join(','));else u.searchParams.delete('route');u.searchParams.set('start',ymd(parseStart()));if(!route.length)u.searchParams.delete('start');history.replaceState(null,'',u);}catch(e){}
+        syncUrl();
+      }
+
+      function refreshTotals(){renderResults(true);}
+
+      function syncUrl(){
+        try{var u=new URL(window.location);if(route.length)u.searchParams.set('route',route.map(function(r){return r.id+':'+r.nights+(r.fare!=null?':'+r.fare:'');}).join(','));else u.searchParams.delete('route');u.searchParams.set('start',ymd(parseStart()));if(!route.length)u.searchParams.delete('start');history.replaceState(null,'',u);}catch(e){}
       }
 
       var PAL=['#c0392b','#c4622e','#9e7b1e','#2f7d5a','#3d6493','#7d5ba6','#b23c6e','#2f7d7d'];
       function tbar(lo,hi){var min=-5,max=40,sp=max-min;var l=Math.max(0,Math.min(100,(lo-min)/sp*100));var r=Math.max(0,Math.min(100,(hi-min)/sp*100));var w=Math.max(8,r-l);if(l+w>100)l=100-w;return '<div class="rt-tbar"><span class="rt-tbar-win" style="left:'+l.toFixed(0)+'%;width:'+w.toFixed(0)+'%"></span></div>';}
-      function renderResults(){
+      // keepStops leaves the stop cards alone. They hold the fare inputs, and replacing their HTML
+      // while someone is typing in one drops the focus after the first digit.
+      function renderResults(keepStops){
         var showEls=['rtSummaryCard','rtBudgetCard','rtStopsCard','rtPackCard'];
         var t=build();
         if(!t.stops.length){showEls.forEach(function(id){document.getElementById(id).hidden=true;});document.getElementById('rtSchCard').hidden=true;return;}
@@ -367,15 +405,27 @@ const html = `<!DOCTYPE html>
         var bh='';order.forEach(function(k){var mm=months[k];bh+='<div class="rt-budget-mo"><div class="rt-budget-head"><b>'+MON[mm.M]+' '+mm.y+'</b><span class="mt">'+money(mm.tot)+'</span></div>';
           mm.lines.forEach(function(l){var sc=l.seas==='Peak'?'rt-seas-peak':l.seas==='Low'?'rt-seas-low':'rt-seas-shoulder';var sb=l.seas?'<span class="seas '+sc+'">'+l.seas+'</span>':'';
             bh+='<div class="rt-budget-line"><span>'+l.name+' &middot; '+l.nights+'n'+sb+'</span><span>'+money(l.cost)+'</span></div>';});bh+='</div>';});
-        bh+='<div class="rt-budget-total"><span><b>Total trip cost</b><br><small style="color:var(--color-stone)">'+money(grand/totalNights)+'/day average</small></span><span class="rt-total-big">'+money(grand)+'</span></div>';
+        // Flights sit outside the month-by-month living costs: a fare is paid once, usually well
+        // before the month it belongs to, so folding it into a monthly column would misrepresent both.
+        var fares=0,fareN=0,legs=0;
+        t.stops.forEach(function(s,i){if(i===0)return;legs++;if(s.fare!=null){fares+=s.fare;fareN++;}});
+        if(legs){
+          bh+='<div class="rt-budget-mo rt-budget-flights"><div class="rt-budget-head"><b>Flights</b><span class="mt">'+(fareN?money(fares):'not added yet')+'</span></div>';
+          t.stops.forEach(function(s,i){if(i===0)return;var p=t.stops[i-1];
+            bh+='<div class="rt-budget-line"><span>'+p.c[1]+' &rarr; '+s.c[1]+'</span><span>'+(s.fare!=null?money(s.fare):'<span class="rt-fare-none">add below</span>')+'</span></div>';});
+          if(fareN<legs)bh+='<div class="rt-budget-note">'+(legs-fareN)+' of '+legs+' legs have no fare yet, so the total is short by whatever those tickets cost. Each stop card has a field and a link to search that exact route.</div>';
+          bh+='</div>';
+        }
+        var grandAll=grand+fares;
+        bh+='<div class="rt-budget-total"><span><b>Total trip cost</b><br><small style="color:var(--color-stone)">'+money(grandAll/totalNights)+'/day average'+(fareN?', flights included':'')+'</small></span><span class="rt-total-big">'+money(grandAll)+'</span></div>';
         document.getElementById('rtBudget').innerHTML=bh;
 
         // ---- stats grid (comfort, distance, flights, co2) ----
         var dist=0,co2=0;for(var i=1;i<t.stops.length;i++){var dd=haversine(t.stops[i-1].c,t.stops[i].c);dist+=dd;co2+=dd*0.15;}
         var cw=0,cwN=0;t.stops.forEach(function(s){var c=comfort(s.id,s.mo);if(c!=null){cw+=c*s.nights;cwN+=s.nights;}});
         var comfortPct=cwN?Math.round(cw/cwN):null;
-        var stats=[['Total budget',money(grand),'is-hl'],['Avg / day',money(grand/totalNights),''],['Total nights',totalNights,''],
-          ['Flights',(t.stops.length-1)+'',''],['Flight distance',Math.round(dist).toLocaleString('en-US')+' <small>km</small>',''],
+        var stats=[['Total budget',money(grandAll),'is-hl'],['Avg / day',money(grandAll/totalNights),''],['Total nights',totalNights,''],
+          ['Flights',fareN?money(fares)+' <small>('+fareN+'/'+legs+')</small>':(legs+' legs'),''],['Flight distance',Math.round(dist).toLocaleString('en-US')+' <small>km</small>',''],
           ['Flight CO2','~'+Math.round(co2).toLocaleString('en-US')+' <small>kg</small>',''],
           ['Weather comfort',comfortPct==null?'n/a':comfortPct+'<small>/100</small>','']];
         document.getElementById('rtStats').innerHTML=stats.map(function(s){return '<div class="rt-stat '+s[2]+'"><p class="k">'+s[0]+'</p><div class="v">'+s[1]+'</div></div>';}).join('');
@@ -398,9 +448,19 @@ const html = `<!DOCTYPE html>
           facts.push('<div class="rt-fact"><span class="fk">Daylight</span><span class="rt-fv">'+dl.toFixed(1)+' h</span></div>');
           facts.push('<div class="rt-fact"><span class="fk">Est. cost</span><span class="rt-fv">'+money(adjCost(s.id,s.mo))+'<span class="rt-fmuted">/mo</span></span></div>');
           if(i>0){var p=t.stops[i-1];var dd=haversine(p.c,c);var ft=dd/750+1;var tzd=Math.round((offOf(c[8],s.arr)-offOf(p.c[8],s.arr))*10)/10;
-            facts.push('<div class="rt-fact"><span class="fk">Flight in</span><span class="rt-fv">'+Math.round(dd).toLocaleString('en-US')+' km</span>, ~'+ft.toFixed(1)+'h from '+p.c[1]+'</div>');
+            var fromA=p.c[9],toA=c[9];var routeLbl=(fromA&&toA)?(fromA+' &rarr; '+toA+' &middot; '):'';
+            facts.push('<div class="rt-fact"><span class="fk">Flight in</span><span class="rt-fv">'+routeLbl+Math.round(dd).toLocaleString('en-US')+' km</span>, ~'+ft.toFixed(1)+'h from '+p.c[1]+'</div>');
             var jl=tzd===0?'Same time zone':(Math.abs(tzd)+'h '+(tzd>0?'ahead':'behind')+', ~'+Math.max(1,Math.ceil(Math.abs(tzd)/1.5))+'d jet-lag');
-            facts.push('<div class="rt-fact"><span class="fk">Time shift</span><span class="rt-fv">'+jl+'</span></div>');}
+            facts.push('<div class="rt-fact"><span class="fk">Time shift</span><span class="rt-fv">'+jl+'</span></div>');
+            // The fare is typed in, never estimated. A ticket price turns on the date, the airline
+            // and when you look, so a guessed figure would be worse than an empty field. The link
+            // carries the real airports and the real arrival date, so the number is one click away.
+            facts.push('<div class="rt-fact rt-fare"><span class="fk">Flight cost</span>'
+              +'<span class="rt-fare-in"><span class="rt-fare-cur">$</span>'
+              +'<input type="number" min="0" max="100000" step="1" inputmode="numeric" data-fare="'+i+'"'
+              +' value="'+(s.fare!=null?s.fare:'')+'" placeholder="add" aria-label="Flight cost into '+c[1]+' in US dollars"></span>'
+              +(fromA&&toA?' <a class="rt-fare-find" target="_blank" rel="sponsored nofollow noopener" href="'+flightSearchUrl(fromA,toA,s.arr)+'">Find fares &rarr;</a>':'')
+              +'</div>');}
           var warn='';var badMo=bestMonths(s.id);
           if(badMo && badMo.worst.indexOf(s.mo)>=0 && badMo.best.length)warn='<div class="rt-warn">'+MON[s.mo]+' is one of '+c[1]+"'s tougher months for weather. Better: "+badMo.best.map(function(x){return MON[x];}).join(', ')+'.</div>';
           sd+='<div class="rt-stopcard" style="--acc:'+acc+'"><div class="rt-sc-accent"></div><div class="rt-sc-body">'
@@ -408,7 +468,7 @@ const html = `<!DOCTYPE html>
             +'<span class="rt-sc-name">'+flag+'<a href="/cities/'+s.id+'" style="color:inherit;text-decoration:none;">'+c[1]+'</a> <small>&middot; '+c[2]+'</small></span>'
             +'<span class="rt-sc-dates"><b>'+fmt(s.arr)+' &ndash; '+fmt(s.dep)+'</b><br>'+s.nights+' nights</span></div>'
             +wx+'<div class="rt-sc-facts">'+facts.join('')+'</div>'+warn+'</div></div>';});
-        document.getElementById('rtStopDetails').innerHTML=sd;
+        if(!keepStops)document.getElementById('rtStopDetails').innerHTML=sd;
 
         // ---- packing ----
         renderPacking(t);
@@ -462,6 +522,14 @@ const html = `<!DOCTYPE html>
         else if(t.dataset.up!=null){var i=+t.dataset.up;if(i>0){var s=route.splice(i,1)[0];route.splice(i-1,0,s);render();}}
         else if(t.dataset.down!=null){var i=+t.dataset.down;if(i<route.length-1){var s=route.splice(i,1)[0];route.splice(i+1,0,s);render();}}});
       list.addEventListener('input',function(e){var t=e.target;if(t.dataset.nights!=null){var v=parseInt(t.value,10);if(v>=1&&v<=365){route[+t.dataset.nights].nights=v;render();}}});
+      // Fares live in the stop cards, which a full render rebuilds, so re-rendering here would pull
+      // the focus out of the field after the first digit. Update the totals in place instead.
+      document.getElementById('rtStopDetails').addEventListener('input',function(e){
+        var t=e.target;if(t.dataset.fare==null)return;
+        var i=+t.dataset.fare,raw=t.value.trim();
+        var v=raw===''?null:parseInt(raw,10);
+        route[i].fare=(v!=null&&v>=0&&v<=100000)?v:null;
+        refreshTotals();syncUrl();});
       addInput.addEventListener('change',function(){var v=addInput.value.trim().toLowerCase();if(!v)return;var hit=CITIES.find(function(c){return c[1].toLowerCase()===v;})||CITIES.find(function(c){return c[1].toLowerCase().indexOf(v)===0;});if(hit){add(hit[0]);addInput.value='';}});
       startInput.addEventListener('change',render);
       document.getElementById('rtClear').addEventListener('click',function(){route=[];render();});
@@ -482,7 +550,11 @@ const html = `<!DOCTYPE html>
         var sp=new URLSearchParams(window.location.search);
         var startP=sp.get('start');if(startP&&/^\\d{4}-\\d{2}-\\d{2}$/.test(startP))startInput.value=startP;else{var d=new Date(parseStart());startInput.value=ymd(parseStart());}
         var p=sp.get('route');
-        if(p){p.split(',').forEach(function(tok){var parts=tok.split(':');var id=parts[0];var n=parseInt(parts[1],10);if(byId[id]&&!route.some(function(r){return r.id===id;}))route.push({id:id,nights:(n>=1&&n<=365)?n:14});});}
+        // "id:nights" gained an optional third part, "id:nights:fare", for the flight INTO that stop.
+        // Older share links have two parts and still parse, so every link anyone has already sent
+        // keeps working and simply carries no fares.
+        if(p){p.split(',').forEach(function(tok){var parts=tok.split(':');var id=parts[0];var n=parseInt(parts[1],10);var f=parseInt(parts[2],10);
+          if(byId[id]&&!route.some(function(r){return r.id===id;}))route.push({id:id,nights:(n>=1&&n<=365)?n:14,fare:(f>=0&&f<=100000)?f:null});});}
         if(!route.length)route=DEFAULT_ROUTE.map(function(id){return {id:id,nights:14};});
         render();
       })();
