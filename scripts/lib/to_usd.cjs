@@ -63,7 +63,13 @@ const LONG_UNIT = { mo: 'month', mth: 'month', wk: 'week', yr: 'year' };
 // The yen sign is written for both the Japanese yen and the Chinese yuan, so it is resolved by the
 // caller from the city's country rather than guessed here.
 const SYMBOL = { '\u20ac': 'EUR', '\u00a3': 'GBP', '\u20a4': 'GBP', '\u20b9': 'INR', '\u0e3f': 'THB', '\u20a9': 'KRW', '\u20bd': 'RUB' };
-const SYMS = '[\u20ac\u00a3\u20a4\u20b9\u0e3f\u20a9\u20bd\u00a5]';
+// A symbol written as an HTML entity is a different string to the regex and the same money to the
+// reader. 72 euro prices on Lisbon, Porto and two blog guides outlived both the sweep and the gate
+// for exactly that reason: neither looks for "&euro;", and there is no "\u20ac" in those files to find.
+// Listed here rather than pre-decoded so the replacement keeps working on raw HTML.
+const ENTITY = { '&euro;': 'EUR', '&pound;': 'GBP', '&yen;': null, '&#8364;': 'EUR', '&#163;': 'GBP', '&#165;': null };
+const symCode = (s, yenCode) => (s in ENTITY ? ENTITY[s] || yenCode : SYMBOL[s] || yenCode);
+const SYMS = '(?:[\u20ac\u00a3\u20a4\u20b9\u0e3f\u20a9\u20bd\u00a5]|&(?:euro|pound|yen|#8364|#163|#165);)';
 const SYM_RE = new RegExp('(' + SYMS + ')\\s?(' + N + ')(?:(' + RCONN + ')(?:' + SYMS + '\\s?)?(' + N + '))?', 'g');
 
 // Prices written as a word rather than a code or a symbol. Every one of these resolves to a single
@@ -142,7 +148,7 @@ function makeConverter(rates, opts) {
     });
 
     t = t.replace(SYM_RE, (m, sym, a, conn, b) => {
-      const code = SYMBOL[sym] || yenCode;
+      const code = symCode(sym, yenCode);
       if (!code) return m;
       const out = pair(code, a, conn, b);
       if (out === null) return m;

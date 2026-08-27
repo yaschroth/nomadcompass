@@ -94,10 +94,15 @@ function assertComplete(html, label) {
  * shipped that way until this existed. Pass the label the page belongs under ('Blog', 'Cities',
  * ...), or nothing to highlight none of them.
  */
+// The four places a label can sit: the desktop bar, the desktop Tools dropdown, the mobile list and
+// the mobile sub-list. /tier-list and the other tools live only in the dropdown, so a version that
+// knew about the top bar alone could not mark them at all.
+const LINK = 'class="nav-(?:link|drop-link|mobile-link|mobile-sub)';
+
 function navFor(active) {
-  const cleared = nav.replace(/(class="nav-(?:mobile-)?link) active"/g, '$1"');
+  const cleared = nav.replace(new RegExp('(' + LINK + ') active"', 'g'), '$1"');
   if (!active) return cleared;
-  const re = new RegExp('(class="nav-(?:mobile-)?link)(">' + active + '<)', 'g');
+  const re = new RegExp('(' + LINK + ')(">' + active + '<)', 'g');
   const out = cleared.replace(re, '$1 active$2');
   if (out === cleared) {
     console.error('page_shell: no nav item labelled "' + active + '". Check the label against the nav in services.html.');

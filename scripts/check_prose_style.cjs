@@ -55,9 +55,23 @@ const notesOf = (html) => {
   try { return JSON.parse(html.slice(i, j + 1)); } catch (e) { return null; }
 };
 
+// A currency symbol written as an HTML entity is invisible to a regex looking for the character.
+// Six live pages quoted the Portuguese and Spanish visa floors as "&euro;3,680 per month" and the
+// gate called the site clean: "euro" only matches when the NAME follows the number, and the symbol
+// class never sees a "€" because there is not one in the file. Decode first, then match.
+const ENTITY = {
+  '&euro;': '€', '&pound;': '£', '&yen;': '¥', '&cent;': '¢',
+  '&#8364;': '€', '&#163;': '£', '&#165;': '¥', '&#x20AC;': '€',
+};
+const decodeCcy = (t) => t.replace(/&(?:euro|pound|yen|cent|#8364|#163|#165|#x20AC);/gi,
+  (m) => ENTITY[m.toLowerCase()] || ENTITY[m] || m);
+
+// Matches come from the decoded text, so the haystack has to be decoded too or indexOf misses and
+// every report quotes the first 32 characters of the paragraph instead of the price.
 const around = (s, m) => {
-  const i = s.indexOf(m);
-  return s.slice(Math.max(0, i - 32), i + m.length + 24).replace(/\s+/g, ' ').trim();
+  const d = decodeCcy(s);
+  const i = d.indexOf(m);
+  return d.slice(Math.max(0, i - 32), i + m.length + 24).replace(/\s+/g, ' ').trim();
 };
 
 // "appears on the 20 yuan note" is not a price, it is a description of the banknote itself.
@@ -71,10 +85,12 @@ const isBanknote = (s, m) => new RegExp(m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const { RATE_TALK, mapTextNodes } = require(path.join(__dirname, 'lib', 'to_usd.cjs'));
 const rateSentences = (s) => s.split(/(?<=[.!?])\s+/).filter((x) => RATE_TALK.test(x));
 
+
 const prices = (s) => {
-  const exempt = rateSentences(s);
-  return (s.match(CCY) || [])
-    .filter((m) => !isBanknote(s, m))
+  const t = decodeCcy(s);
+  const exempt = rateSentences(t);
+  return (t.match(CCY) || [])
+    .filter((m) => !isBanknote(t, m))
     .filter((m) => !exempt.some((x) => x.includes(m)));
 };
 

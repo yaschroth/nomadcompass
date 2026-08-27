@@ -131,3 +131,41 @@ Object.entries(DIFFERENT_SCHEMES).forEach(([c, why]) => console.log('    ' + c +
 
 console.log('\n  This does not fail the build. Fixing a threshold needs the current primary source');
 console.log('  per country, and in several of these the CITY PAGES are newer than the tool.');
+
+// --- The tool against its own prose.
+//
+// /nomad-visas holds 41 rows of data and three sentences summarising them, and only the rows are
+// maintained. After apply_visa_thresholds corrected seven countries, the summary still said the
+// popular European options run "$2,800 to $4,000 a month" when its own rows said $3,280 to $4,240,
+// and still named Brazil and Montenegro as asking "well under $1,500" at $1,500 and $2,070. A
+// summary that contradicts the table beneath it is worse than no summary, so this recomputes every
+// band the prose claims and reports the ones that no longer hold.
+const bands = [...visaHtml.matchAll(/\$([\d,]+) to \$([\d,]+) a month/g)]
+  .map((m) => [Number(m[1].replace(/,/g, '')), Number(m[2].replace(/,/g, ''))]);
+const amounts = [...authority.values()].map((r) => r.usd).filter((v) => v > 0).sort((a, b) => a - b);
+const proseIssues = [];
+for (const [lo, hi] of bands) {
+  const inside = amounts.filter((v) => v >= lo && v <= hi);
+  // A band is a claim about where a group of countries sits. If nothing in the table lands on
+  // either edge, the edge was written for figures that have since moved.
+  const onLo = amounts.some((v) => Math.abs(v - lo) / lo <= 0.02);
+  const onHi = amounts.some((v) => Math.abs(v - hi) / hi <= 0.02);
+  if (!inside.length || !onLo || !onHi) {
+    proseIssues.push('$' + lo.toLocaleString('en-US') + ' to $' + hi.toLocaleString('en-US')
+      + ': ' + (inside.length ? inside.length + ' rows inside, but no row sits on the '
+        + [!onLo && 'lower', !onHi && 'upper'].filter(Boolean).join(' or ') + ' edge'
+        : 'no row in the table falls in this range'));
+  }
+}
+// Countries the prose names as "well under $X" that are not.
+for (const m of visaHtml.matchAll(/well under \$([\d,]+) a month: ([^.]+)\./g)) {
+  const cap = Number(m[1].replace(/,/g, ''));
+  for (const name of m[2].split(/,| and /).map((s) => s.replace(/\s+at \$[\d,]+/, '').trim()).filter(Boolean)) {
+    const r = authority.get(name);
+    if (r && r.usd >= cap) proseIssues.push(name + ' is named as under $' + cap.toLocaleString('en-US') + ' but its row says $' + r.usd.toLocaleString('en-US'));
+  }
+}
+
+console.log('\n  /nomad-visas prose vs its own 41 rows:');
+if (!proseIssues.length) console.log('    every band and every named country matches the table.');
+else proseIssues.forEach((p) => console.log('    ' + p));
