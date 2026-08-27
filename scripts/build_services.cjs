@@ -135,7 +135,7 @@ function citySection(slug) {
 // recorded one impression for in three months. It is an index now: one card per city, linking to
 // services/<city>, which is the page shaped like what people actually search for. citySection is
 // kept because build_service_city_pages.cjs renders the same band on each city page.
-function cityIndexCard(slug) {
+function cityIndexCard(slug, i) {
   const rows = providers.filter((p) => p.city === slug);
   const c = CITY[slug];
   const langs = [...new Set(rows.flatMap((p) => p.languages))].sort((a, b) => LANGS[a].localeCompare(LANGS[b]));
@@ -158,18 +158,34 @@ function cityIndexCard(slug) {
    * identity row rather than a third line between the two.
    */
   const unit = rows.length === 1 ? 'provider' : 'providers';
-  // A photograph on every card, not only the featured eight. Lazy, so the browser fetches the dozen
-  // on screen rather than all 329, which is how /cities already carries 710 of these.
+  /**
+   * A photograph on every card, but only the first COLLAPSE_AT of them are an <img> in the HTML.
+   *
+   * loading="lazy" is not enough, and this was measured rather than assumed. With all 329 images in
+   * the markup the browser asked for all 329, and 421 requests in total, whether the grid was
+   * collapsed by CSS or not: the preload scanner reaches them long before any rule hides them.
+   * Emitting the rest as a src on a placeholder and building the <img> when the grid opens takes
+   * the same page to 24 images and 116 requests.
+   *
+   * Only the photograph waits. Every card's name, country, provider count and languages are in the
+   * HTML for all 329, so nothing a crawler or an answer engine reads sits behind the button.
+   */
   const a = ATTR[slug] || {};
-  const pic = fs.existsSync(path.join(ROOT, 'images', 'cities', slug + '-card.webp'))
-    ? `<span class="sv-ix-pic"><img src="/images/cities/${slug}-card.webp" alt="${esc(a.alt || c.name)}" width="600" height="400" loading="lazy" decoding="async"></span>`
-    : '<span class="sv-ix-pic sv-ix-pic-none"></span>';
+  const hasPic = fs.existsSync(path.join(ROOT, 'images', 'cities', slug + '-card.webp'));
+  const pic = !hasPic
+    ? '<span class="sv-ix-pic sv-ix-pic-none"></span>'
+    : i < COLLAPSE_AT
+      ? `<span class="sv-ix-pic"><img src="/images/cities/${slug}-card.webp" alt="${esc(a.alt || c.name)}" width="600" height="400" loading="lazy" decoding="async"></span>`
+      : `<span class="sv-ix-pic" data-src="/images/cities/${slug}-card.webp" data-alt="${esc(a.alt || c.name)}"></span>`;
   return `<a class="sv-ix" href="/services/${slug}" data-city="${slug}" data-n="${rows.length}" data-cats="${cats.join(' ')}" data-langs="${langs.join(' ')}" data-name="${esc((c.name + ' ' + c.country).toLowerCase())}">
         ${pic}
         <span class="sv-ix-head">${flag}<span class="sv-ix-name">${esc(c.name)}<span class="sv-ix-country">${esc(c.country)}</span></span><span class="sv-ix-count" data-total-n="${rows.length}" data-total-u="${unit}"><b class="sv-ix-n">${rows.length}</b><small class="sv-ix-unit">${unit}</small></span></span>
         <span class="sv-ix-tray"><span class="sv-ix-eyebrow">Works in</span><span class="sv-ix-langs">${shown.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('')}${rest > 0 ? `<span class="sv-lang sv-lang-more">+${rest}</span>` : ''}</span></span>
       </a>`;
 }
+// Two rows on a wide screen, six on a phone. Beyond this the cards are still written into the
+// page; it is their photographs that wait.
+const COLLAPSE_AT = 24;
 const cityIndex = usedCities.map(cityIndexCard).join('\n      ');
 
 // The service hubs were reachable from almost nowhere: /services/hairdressers had one inbound link
@@ -208,62 +224,6 @@ usedCities.forEach((slug) => {
 });
 
 /**
- * The eight cities the directory actually knows well, with their photographs.
- *
- * Coverage here is wildly uneven and the A-Z grid hides that completely: Madrid holds 952
- * providers, the median city holds five, and 67 hold exactly one. Every tile looking identical
- * made the page read as a spreadsheet of equals, which is both duller and less true than what
- * the data says. This band says it out loud before the grid begins.
- *
- * Ranked honestly by provider count, which makes the band all-European. That is the shape of the
- * dataset today rather than a curatorial choice, and picking cities for geographic spread would
- * be inventing a balance the directory does not have.
- */
-const FEATURED = usedCities
-  .map((slug) => {
-    const rows = providers.filter((p) => p.city === slug);
-    return {
-      slug,
-      n: rows.length,
-      langs: new Set(rows.flatMap((p) => p.languages)).size,
-      cats: new Set(rows.map((p) => p.category)).size,
-    };
-  })
-  .sort((a, b) => b.n - a.n)
-  .slice(0, 8);
-
-const FEATURED_CARDS = FEATURED.map((f) => {
-  const c = CITY[f.slug];
-  const a = ATTR[f.slug] || {};
-  const flag = c.iso ? `<img class="sv-ft-flag" src="/assets/flags/${c.iso}.svg" alt="" width="22" height="16" loading="lazy">` : '';
-  return `<a class="sv-ft" href="/services/${f.slug}">
-          <span class="sv-ft-pic"><img src="/images/cities/${f.slug}-card.webp" alt="${esc(a.alt || c.name)}" width="600" height="400" loading="lazy" decoding="async"></span>
-          <span class="sv-ft-body">
-            <span class="sv-ft-name">${flag}${esc(c.name)}<small>${esc(c.country)}</small></span>
-            <span class="sv-ft-n"><b>${f.n.toLocaleString('en-US')}</b><small>providers</small></span>
-            <span class="sv-ft-meta">${f.langs} languages &middot; ${f.cats} ${f.cats === 1 ? 'service' : 'services'}</span>
-          </span>
-        </a>`;
-}).join('\n        ');
-
-// CC BY and CC BY-SA both require naming the photographer wherever the photograph is shown. Eight
-// cards is few enough to credit them all in one line rather than crowd each card with a byline.
-const FEATURED_CREDIT = (() => {
-  const seen = new Map();
-  FEATURED.forEach((f) => {
-    const a = ATTR[f.slug];
-    if (!a || !a.author) return;
-    const label = a.author + (a.license ? ' (' + a.license + ')' : '');
-    if (!seen.has(label)) seen.set(label, a.sourcePageUrl || '');
-  });
-  if (!seen.size) return '';
-  const parts = [...seen].map(([label, url]) => url
-    ? `<a href="${esc(url)}" target="_blank" rel="nofollow noopener">${esc(label)}</a>`
-    : esc(label));
-  return `<p class="sv-ft-credit">Photos: ${parts.join(', ')}.</p>`;
-})();
-
-/**
  * Browse by language, which the page has never offered despite language being the whole premise.
  * Until now it linked only to cities and to service hubs, so the one axis a reader arrives with
  * ("I need someone who speaks Portuguese") was the one axis with no entry point.
@@ -273,16 +233,22 @@ const FEATURED_CREDIT = (() => {
 /**
  * A flag per language, where one country obviously owns it.
  *
- * Deliberately incomplete. Arabic is spoken across two dozen countries and picking one of their
- * flags to stand for the language would be a political statement rather than a label, so it gets
- * none. Russian has no flag in assets/flags because no Russian city is in the dataset. Both simply
- * render as the language name, and the tile is built to look right without one.
+ * Russian had no flag only because no Russian city is in the directory, so assets/flags/ru.svg was
+ * simply missing; it is there now.
+ *
+ * Arabic is the one that cannot have a flag, and the directory's own data is why. Its 191 providers
+ * sit in 16 countries: Morocco leads with 45, and SPAIN is second with 34. These are consular and
+ * diaspora listings, so no national flag describes them, and flying Morocco's over a set that is a
+ * quarter Moroccan would be worse than flying none. It gets a script badge instead, which labels
+ * the language rather than claiming a country.
  */
 const LANG_FLAG = {
-  de: 'de', fr: 'fr', es: 'es', it: 'it', pt: 'pt', sv: 'se', zh: 'cn', pl: 'pl', nl: 'nl',
-  ja: 'jp', vi: 'vn', el: 'gr', da: 'dk', th: 'th', hr: 'hr', id: 'id', ko: 'kr', cs: 'cz',
-  hu: 'hu', ro: 'ro',
+  de: 'de', fr: 'fr', es: 'es', it: 'it', pt: 'pt', ru: 'ru', sv: 'se', zh: 'cn', pl: 'pl',
+  nl: 'nl', ja: 'jp', vi: 'vn', el: 'gr', da: 'dk', th: 'th', hr: 'hr', id: 'id', ko: 'kr',
+  cs: 'cz', hu: 'hu', ro: 'ro',
 };
+// Sized and shaped like the flags so the row of tiles still lines up.
+const LANG_MARK = { ar: 'ع' };
 
 const LANGUAGE_TILES = (() => {
   const f = path.join(ROOT, 'data', 'service-language-pages.json');
@@ -296,7 +262,9 @@ const LANGUAGE_TILES = (() => {
       const fl = LANG_FLAG[l.language];
       const flag = fl && fs.existsSync(path.join(ROOT, 'assets', 'flags', fl + '.svg'))
         ? `<img class="sv-lg-flag" src="/assets/flags/${fl}.svg" alt="" width="20" height="15" loading="lazy">`
-        : '';
+        : LANG_MARK[l.language]
+          ? `<span class="sv-lg-mark" aria-hidden="true">${LANG_MARK[l.language]}</span>`
+          : '';
       return `<a class="sv-lg" href="${l.url}"><span class="sv-lg-name">${flag}${esc(l.label)}</span><span class="sv-lg-stat"><b>${l.n.toLocaleString('en-US')}</b><small>${l.cities.toLocaleString('en-US')} ${l.cities === 1 ? 'city' : 'cities'}</small></span></a>`;
     })
     .join('');
@@ -378,42 +346,22 @@ ${shell.headTop}
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 1.5rem; } .sv-count b { color:var(--color-ink); }
 
-    /* The featured band. Photographs only here, not on all 329 tiles: eight images a reader can
-       take in, against a long index that stays fast and scannable. */
-    .sv-ft-sec { margin:0 0 3rem; }
-    .sv-ft-sec h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .3rem; }
-    .sv-ft-sec .sv-ft-lede { font-size:.92rem; line-height:1.6; color:var(--color-charcoal,#334155); margin:0 0 1.35rem; max-width:62ch; }
-    .sv-ft-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:1rem; }
-    a.sv-ft:not(.btn):not(.nav-link) { display:flex; flex-direction:column; overflow:hidden; text-decoration:none;
-      background:#fff; color:var(--color-ink); border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
-      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
-      transition:border-color .15s, box-shadow .15s, transform .15s; }
-    a.sv-ft:hover { border-color:var(--color-terracotta,#c0392b); transform:translateY(-2px);
-      box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); }
-    .sv-ft-pic { display:block; height:124px; overflow:hidden; background:var(--color-sand,#f6f1e7); }
-    .sv-ft-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
-    a.sv-ft:hover .sv-ft-pic img { transform:scale(1.045); }
-    .sv-ft-body { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.2rem .7rem;
-      align-items:center; padding:.75rem .9rem .85rem; }
-    .sv-ft-name { grid-column:1; font-family:'DM Serif Display',serif; font-size:1.08rem; line-height:1.2;
-      display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; min-width:0; }
-    .sv-ft-name small { flex:0 0 100%; font-family:var(--font-sans,system-ui); font-size:var(--text-xs);
-      font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); }
-    .sv-ft-flag { border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ft-n { grid-column:2; grid-row:1; display:flex; flex-direction:column; align-items:flex-end; }
-    .sv-ft-n b { font-size:1.15rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
-      font-variant-numeric:tabular-nums; }
-    .sv-ft-n small { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--color-stone); }
-    .sv-ft-meta { grid-column:1/-1; font-size:.75rem; color:var(--color-stone); padding-top:.35rem;
-      border-top:1px solid var(--color-sand,#f0e9dc); margin-top:.35rem; }
-    .sv-ft-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:.9rem 0 0; }
     /* 329 thumbnails cannot each carry a byline, but CC BY still requires the photographer to be
        named somewhere the image is used, so this points at the page that does it per city. */
     .sv-grid-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:1.4rem 0 0; text-align:center; }
-    /* The credit is a citation, not a call to action. base.css paints links terracotta and beats a
-       single class, so this needs the element in the selector to stay quiet. */
-    .sv-ft-credit a, .sv-ft-credit a:visited { color:var(--color-stone); text-decoration:underline; text-decoration-color:var(--color-sand-dark,#E3D9C6); }
-    .sv-ft-credit a:hover { color:var(--color-terracotta,#c0392b); }
+
+    /* The grid ships all 329 cards so crawlers and answer engines see every city, but only shows
+       the first two rows until asked. Hidden cards are display:none, so their photographs are never
+       fetched: that is the whole point, and it is worth more than lazy loading alone. Any filter
+       clears the collapse, because a search that quietly hid two thirds of its own matches would be
+       worse than a slow page. */
+    #svGrid[data-collapsed] .sv-ix:nth-of-type(n+25) { display:none; }
+    .sv-more { display:block; margin:1.6rem auto 0; padding:.7rem 1.4rem; font:inherit; font-size:.88rem;
+      font-weight:700; color:var(--color-ink,#0f172a); background:#fff; cursor:pointer;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:999px;
+      transition:border-color .15s, color .15s; }
+    .sv-more:hover { border-color:var(--color-terracotta,#c0392b); color:var(--color-terracotta,#c0392b); }
+    .sv-more[hidden] { display:none; }
 
     /* Browse by language, styled as a sibling of the service hubs rather than a new idea.
        NOT .sv-langs: that class already belongs to the chip bar on a provider card, is declared
@@ -434,11 +382,14 @@ ${shell.headTop}
     .sv-lg-name { align-self:center; display:flex; align-items:center; gap:.45rem; padding:.6rem .8rem;
       font-weight:700; font-size:var(--text-sm); line-height:1.25; }
     .sv-lg-flag { flex:0 0 auto; border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); }
+    .sv-lg-mark { flex:0 0 auto; width:20px; height:15px; display:grid; place-items:center;
+      border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); background:var(--color-sand,#f6f1e7);
+      font-size:.72rem; line-height:1; color:var(--color-terracotta-dark,#a03325); }
     .sv-lg-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
       width:5.1rem; padding:.45rem .7rem; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-lg-stat b { font-size:.98rem; font-weight:800; line-height:1.15; color:var(--color-ink); font-variant-numeric:tabular-nums; }
     .sv-lg-stat small { font-size:.64rem; font-weight:600; color:var(--color-stone); white-space:nowrap; font-variant-numeric:tabular-nums; }
-    @media (prefers-reduced-motion:reduce) { a.sv-ft, a.sv-lg { transition:none; } a.sv-ft:hover, a.sv-lg:hover { transform:none; } a.sv-ft:hover .sv-ft-pic img { transform:none; } }
+    @media (prefers-reduced-motion:reduce) { a.sv-lg { transition:none; } a.sv-lg:hover { transform:none; } }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.15rem; }
     .sv-city { margin:0 0 3.5rem; }
     .sv-city.is-hidden { display:none; }
@@ -630,18 +581,12 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
         <p class="sv-lg-lede">The language is usually what you arrive knowing. These are the ones the directory covers across enough cities to be worth a page of their own.</p>
         <div class="sv-lgs-grid">${LANGUAGE_TILES}</div>
       </nav>` : ''}
-      <section class="sv-ft-sec" id="deepest" aria-label="Cities with the deepest coverage">
-        <h2>Where the directory goes deepest</h2>
-        <p class="sv-ft-lede">Coverage is uneven, and pretending otherwise would not help you. These eight cities hold the most providers we have sourced; most of the ${nCities} below hold a handful, and 67 hold exactly one.</p>
-        <div class="sv-ft-grid">
-        ${FEATURED_CARDS}
-        </div>
-        ${FEATURED_CREDIT}
-      </section>
       <p class="sv-count" id="svCount">Showing all <b>${nCities}</b> cities, <b>${providers.length}</b> providers in total.</p>
-      <div id="svGrid" class="sv-ix-grid">
+      <div id="svGrid" class="sv-ix-grid" data-collapsed>
       ${cityIndex}
       </div>
+      <button type="button" class="sv-more" id="svMore">Show all <b>${nCities}</b> cities</button>
+      <noscript><style>#svGrid[data-collapsed] .sv-ix { display:grid; } .sv-more { display:none; }</style></noscript>
       <p class="sv-grid-credit">City photographs come from Wikimedia Commons under CC BY or CC BY-SA. Each one names its photographer and licence on that city's own page.</p>
       <div class="sv-empty is-hidden" id="svEmpty">
         <p>Nothing matches that combination yet.</p>
@@ -668,6 +613,27 @@ ${shell.bodyEnd}
   <script>
     (function(){
       var grid=document.getElementById('svGrid'),count=document.getElementById('svCount'),empty=document.getElementById('svEmpty');
+      var more=document.getElementById('svMore');
+      /**
+       * Open the grid: show the cards past the fold and build the photographs they were shipped
+       * without. The <img> elements are made here rather than written into the page because a
+       * lazy <img> in the markup is fetched whatever CSS says about it, which was measured.
+       */
+      function expand(){
+        if(!grid.hasAttribute('data-collapsed'))return;
+        grid.removeAttribute('data-collapsed');
+        if(more)more.hidden=true;
+        var waiting=grid.querySelectorAll('.sv-ix-pic[data-src]');
+        for(var i=0;i<waiting.length;i++){
+          var box=waiting[i],img=document.createElement('img');
+          img.src=box.getAttribute('data-src');
+          img.alt=box.getAttribute('data-alt')||'';
+          img.width=600;img.height=400;img.loading='lazy';img.decoding='async';
+          box.removeAttribute('data-src');box.removeAttribute('data-alt');
+          box.appendChild(img);
+        }
+      }
+      if(more)more.addEventListener('click',expand);
       var q=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang');
       var CITY_SLUG=${JSON.stringify(cityLookup)};
       var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
@@ -679,6 +645,8 @@ ${shell.bodyEnd}
       function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
       function render(){
         var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase();
+        // Any filter at all reveals the whole grid first, so the results are the results.
+        if(cat!=='all'||lang!=='all'||term)expand();
         var shown=0,rows=0;
         cards.forEach(function(el){
           var slug=el.getAttribute('data-city'),k=COUNTS[slug];

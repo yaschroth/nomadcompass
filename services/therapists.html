@@ -55,42 +55,22 @@
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 1.5rem; } .sv-count b { color:var(--color-ink); }
 
-    /* The featured band. Photographs only here, not on all 329 tiles: eight images a reader can
-       take in, against a long index that stays fast and scannable. */
-    .sv-ft-sec { margin:0 0 3rem; }
-    .sv-ft-sec h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .3rem; }
-    .sv-ft-sec .sv-ft-lede { font-size:.92rem; line-height:1.6; color:var(--color-charcoal,#334155); margin:0 0 1.35rem; max-width:62ch; }
-    .sv-ft-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:1rem; }
-    a.sv-ft:not(.btn):not(.nav-link) { display:flex; flex-direction:column; overflow:hidden; text-decoration:none;
-      background:#fff; color:var(--color-ink); border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
-      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
-      transition:border-color .15s, box-shadow .15s, transform .15s; }
-    a.sv-ft:hover { border-color:var(--color-terracotta,#c0392b); transform:translateY(-2px);
-      box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); }
-    .sv-ft-pic { display:block; height:124px; overflow:hidden; background:var(--color-sand,#f6f1e7); }
-    .sv-ft-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
-    a.sv-ft:hover .sv-ft-pic img { transform:scale(1.045); }
-    .sv-ft-body { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.2rem .7rem;
-      align-items:center; padding:.75rem .9rem .85rem; }
-    .sv-ft-name { grid-column:1; font-family:'DM Serif Display',serif; font-size:1.08rem; line-height:1.2;
-      display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; min-width:0; }
-    .sv-ft-name small { flex:0 0 100%; font-family:var(--font-sans,system-ui); font-size:var(--text-xs);
-      font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); }
-    .sv-ft-flag { border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
-    .sv-ft-n { grid-column:2; grid-row:1; display:flex; flex-direction:column; align-items:flex-end; }
-    .sv-ft-n b { font-size:1.15rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
-      font-variant-numeric:tabular-nums; }
-    .sv-ft-n small { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--color-stone); }
-    .sv-ft-meta { grid-column:1/-1; font-size:.75rem; color:var(--color-stone); padding-top:.35rem;
-      border-top:1px solid var(--color-sand,#f0e9dc); margin-top:.35rem; }
-    .sv-ft-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:.9rem 0 0; }
     /* 329 thumbnails cannot each carry a byline, but CC BY still requires the photographer to be
        named somewhere the image is used, so this points at the page that does it per city. */
     .sv-grid-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:1.4rem 0 0; text-align:center; }
-    /* The credit is a citation, not a call to action. base.css paints links terracotta and beats a
-       single class, so this needs the element in the selector to stay quiet. */
-    .sv-ft-credit a, .sv-ft-credit a:visited { color:var(--color-stone); text-decoration:underline; text-decoration-color:var(--color-sand-dark,#E3D9C6); }
-    .sv-ft-credit a:hover { color:var(--color-terracotta,#c0392b); }
+
+    /* The grid ships all 329 cards so crawlers and answer engines see every city, but only shows
+       the first two rows until asked. Hidden cards are display:none, so their photographs are never
+       fetched: that is the whole point, and it is worth more than lazy loading alone. Any filter
+       clears the collapse, because a search that quietly hid two thirds of its own matches would be
+       worse than a slow page. */
+    #svGrid[data-collapsed] .sv-ix:nth-of-type(n+25) { display:none; }
+    .sv-more { display:block; margin:1.6rem auto 0; padding:.7rem 1.4rem; font:inherit; font-size:.88rem;
+      font-weight:700; color:var(--color-ink,#0f172a); background:#fff; cursor:pointer;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:999px;
+      transition:border-color .15s, color .15s; }
+    .sv-more:hover { border-color:var(--color-terracotta,#c0392b); color:var(--color-terracotta,#c0392b); }
+    .sv-more[hidden] { display:none; }
 
     /* Browse by language, styled as a sibling of the service hubs rather than a new idea.
        NOT .sv-langs: that class already belongs to the chip bar on a provider card, is declared
@@ -111,11 +91,14 @@
     .sv-lg-name { align-self:center; display:flex; align-items:center; gap:.45rem; padding:.6rem .8rem;
       font-weight:700; font-size:var(--text-sm); line-height:1.25; }
     .sv-lg-flag { flex:0 0 auto; border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); }
+    .sv-lg-mark { flex:0 0 auto; width:20px; height:15px; display:grid; place-items:center;
+      border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); background:var(--color-sand,#f6f1e7);
+      font-size:.72rem; line-height:1; color:var(--color-terracotta-dark,#a03325); }
     .sv-lg-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
       width:5.1rem; padding:.45rem .7rem; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-lg-stat b { font-size:.98rem; font-weight:800; line-height:1.15; color:var(--color-ink); font-variant-numeric:tabular-nums; }
     .sv-lg-stat small { font-size:.64rem; font-weight:600; color:var(--color-stone); white-space:nowrap; font-variant-numeric:tabular-nums; }
-    @media (prefers-reduced-motion:reduce) { a.sv-ft, a.sv-lg { transition:none; } a.sv-ft:hover, a.sv-lg:hover { transform:none; } a.sv-ft:hover .sv-ft-pic img { transform:none; } }
+    @media (prefers-reduced-motion:reduce) { a.sv-lg { transition:none; } a.sv-lg:hover { transform:none; } }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.15rem; }
     .sv-city { margin:0 0 3.5rem; }
     .sv-city.is-hidden { display:none; }
