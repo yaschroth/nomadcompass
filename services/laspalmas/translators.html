@@ -44,11 +44,9 @@
     /* --color-cream is pure #fff, so white cards on the page background did not read as
        separate objects. The listing sits on sand (the token is literally documented as
        "Cards, sections") and the cards stay white, which is what gives them an edge. */
-    /* Sand, not white. The cards are white and the ground was white too, so 329 tiles were
-       separated only by a hairline and the whole page read as one flat sheet. Giving the ground a
-       colour is the cheapest thing on this page and the one that changes it most: the cards
-       become objects sitting on something. */
-    .sv-canvas { background:var(--color-sand,#f6f1e7); border-top:1px solid var(--color-sand-dark,#E3D9C6); }
+    /* White. The sand ground was tried and the owner preferred white; with a photograph on every
+       card the tiles no longer need a coloured ground to read as objects. */
+    .sv-canvas { background:#fff; border-top:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2.5rem var(--space-4,1rem) 4rem; }
     .sv-controls { margin:0 0 2rem; display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid #E0D5C2; border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -56,17 +54,6 @@
     .sv-field select, .sv-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:180px; }
     .sv-field-city input { min-width:240px; }
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
-    /* The stat band. These four numbers are what the directory has to show for itself and they
-       used to be a grey sentence that read like a status message. The filter rewrites the first
-       two, so both keep their <b>. */
-    .sv-stats { display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem 2.4rem;
-      margin:2.6rem 0 1.6rem; padding:1.15rem 1rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-md,8px); }
-    .sv-stat { display:flex; flex-direction:column; align-items:center; min-width:6.5rem; }
-    .sv-stat b { font-family:'DM Serif Display',serif; font-size:1.85rem; line-height:1.05;
-      color:var(--color-ink); font-variant-numeric:tabular-nums; }
-    .sv-stat small { margin-top:.2rem; font-size:.66rem; font-weight:700; text-transform:uppercase;
-      letter-spacing:.11em; color:var(--color-stone); }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 1.5rem; } .sv-count b { color:var(--color-ink); }
 
     /* The featured band. Photographs only here, not on all 329 tiles: eight images a reader can
@@ -98,6 +85,9 @@
     .sv-ft-meta { grid-column:1/-1; font-size:.75rem; color:var(--color-stone); padding-top:.35rem;
       border-top:1px solid var(--color-sand,#f0e9dc); margin-top:.35rem; }
     .sv-ft-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:.9rem 0 0; }
+    /* 329 thumbnails cannot each carry a byline, but CC BY still requires the photographer to be
+       named somewhere the image is used, so this points at the page that does it per city. */
+    .sv-grid-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:1.4rem 0 0; text-align:center; }
     /* The credit is a citation, not a call to action. base.css paints links terracotta and beats a
        single class, so this needs the element in the selector to stay quiet. */
     .sv-ft-credit a, .sv-ft-credit a:visited { color:var(--color-stone); text-decoration:underline; text-decoration-color:var(--color-sand-dark,#E3D9C6); }
@@ -117,7 +107,11 @@
       transition:border-color .15s, box-shadow .15s, transform .15s; }
     a.sv-lg:hover { border-color:var(--color-terracotta,#c0392b); transform:translateY(-2px);
       box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); }
-    .sv-lg-name { align-self:center; padding:.6rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* The flag sits with the name and the row keeps its height whether or not there is one, so
+       Arabic and Russian line up with the twenty that have flags. */
+    .sv-lg-name { align-self:center; display:flex; align-items:center; gap:.45rem; padding:.6rem .8rem;
+      font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sv-lg-flag { flex:0 0 auto; border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); }
     .sv-lg-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
       width:5.1rem; padding:.45rem .7rem; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-lg-stat b { font-size:.98rem; font-weight:800; line-height:1.15; color:var(--color-ink); font-variant-numeric:tabular-nums; }
@@ -220,11 +214,19 @@
     .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:stretch; }
     /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
        standing next to a taller one grows its tray rather than opening a hole in the middle. */
-    .sv-ix { display:grid; grid-template-rows:auto 1fr; gap:0; padding:0; overflow:hidden; background:#fff;
+    .sv-ix { display:grid; grid-template-rows:auto auto 1fr; gap:0; padding:0; overflow:hidden; background:#fff;
       border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
       box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
     .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
+    /* The photo band. A fixed height, so a card with a photograph is exactly as tall as one whose
+       image is missing, and the grid stays on one height the way it has to. */
+    .sv-ix-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sv-ix-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    .sv-ix:hover .sv-ix-pic img { transform:scale(1.045); }
+    @media (prefers-reduced-motion:reduce) { .sv-ix:hover .sv-ix-pic img { transform:none; } }
+
     /* A minimum height on the identity row so a one-line city and a two-line one sit their count
        tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
     .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;

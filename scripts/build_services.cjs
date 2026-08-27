@@ -158,7 +158,14 @@ function cityIndexCard(slug) {
    * identity row rather than a third line between the two.
    */
   const unit = rows.length === 1 ? 'provider' : 'providers';
+  // A photograph on every card, not only the featured eight. Lazy, so the browser fetches the dozen
+  // on screen rather than all 329, which is how /cities already carries 710 of these.
+  const a = ATTR[slug] || {};
+  const pic = fs.existsSync(path.join(ROOT, 'images', 'cities', slug + '-card.webp'))
+    ? `<span class="sv-ix-pic"><img src="/images/cities/${slug}-card.webp" alt="${esc(a.alt || c.name)}" width="600" height="400" loading="lazy" decoding="async"></span>`
+    : '<span class="sv-ix-pic sv-ix-pic-none"></span>';
   return `<a class="sv-ix" href="/services/${slug}" data-city="${slug}" data-n="${rows.length}" data-cats="${cats.join(' ')}" data-langs="${langs.join(' ')}" data-name="${esc((c.name + ' ' + c.country).toLowerCase())}">
+        ${pic}
         <span class="sv-ix-head">${flag}<span class="sv-ix-name">${esc(c.name)}<span class="sv-ix-country">${esc(c.country)}</span></span><span class="sv-ix-count" data-total-n="${rows.length}" data-total-u="${unit}"><b class="sv-ix-n">${rows.length}</b><small class="sv-ix-unit">${unit}</small></span></span>
         <span class="sv-ix-tray"><span class="sv-ix-eyebrow">Works in</span><span class="sv-ix-langs">${shown.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('')}${rest > 0 ? `<span class="sv-lang sv-lang-more">+${rest}</span>` : ''}</span></span>
       </a>`;
@@ -263,6 +270,20 @@ const FEATURED_CREDIT = (() => {
  *
  * Tiles are written only for languages that have a landing page, so this cannot link into a 404.
  */
+/**
+ * A flag per language, where one country obviously owns it.
+ *
+ * Deliberately incomplete. Arabic is spoken across two dozen countries and picking one of their
+ * flags to stand for the language would be a political statement rather than a label, so it gets
+ * none. Russian has no flag in assets/flags because no Russian city is in the dataset. Both simply
+ * render as the language name, and the tile is built to look right without one.
+ */
+const LANG_FLAG = {
+  de: 'de', fr: 'fr', es: 'es', it: 'it', pt: 'pt', sv: 'se', zh: 'cn', pl: 'pl', nl: 'nl',
+  ja: 'jp', vi: 'vn', el: 'gr', da: 'dk', th: 'th', hr: 'hr', id: 'id', ko: 'kr', cs: 'cz',
+  hu: 'hu', ro: 'ro',
+};
+
 const LANGUAGE_TILES = (() => {
   const f = path.join(ROOT, 'data', 'service-language-pages.json');
   if (!fs.existsSync(f)) return '';
@@ -271,7 +292,13 @@ const LANGUAGE_TILES = (() => {
     // grid. Sorting by cities while displaying providers put 2,813 third and looked like an error.
     // Same order as the service tiles above, which rank by their own headline number too.
     .sort((a, b) => b.n - a.n || b.cities - a.cities)
-    .map((l) => `<a class="sv-lg" href="${l.url}"><span class="sv-lg-name">${esc(l.label)}</span><span class="sv-lg-stat"><b>${l.n.toLocaleString('en-US')}</b><small>${l.cities.toLocaleString('en-US')} ${l.cities === 1 ? 'city' : 'cities'}</small></span></a>`)
+    .map((l) => {
+      const fl = LANG_FLAG[l.language];
+      const flag = fl && fs.existsSync(path.join(ROOT, 'assets', 'flags', fl + '.svg'))
+        ? `<img class="sv-lg-flag" src="/assets/flags/${fl}.svg" alt="" width="20" height="15" loading="lazy">`
+        : '';
+      return `<a class="sv-lg" href="${l.url}"><span class="sv-lg-name">${flag}${esc(l.label)}</span><span class="sv-lg-stat"><b>${l.n.toLocaleString('en-US')}</b><small>${l.cities.toLocaleString('en-US')} ${l.cities === 1 ? 'city' : 'cities'}</small></span></a>`;
+    })
     .join('');
 })();
 
@@ -339,11 +366,9 @@ ${shell.headTop}
     /* --color-cream is pure #fff, so white cards on the page background did not read as
        separate objects. The listing sits on sand (the token is literally documented as
        "Cards, sections") and the cards stay white, which is what gives them an edge. */
-    /* Sand, not white. The cards are white and the ground was white too, so 329 tiles were
-       separated only by a hairline and the whole page read as one flat sheet. Giving the ground a
-       colour is the cheapest thing on this page and the one that changes it most: the cards
-       become objects sitting on something. */
-    .sv-canvas { background:var(--color-sand,#f6f1e7); border-top:1px solid var(--color-sand-dark,#E3D9C6); }
+    /* White. The sand ground was tried and the owner preferred white; with a photograph on every
+       card the tiles no longer need a coloured ground to read as objects. */
+    .sv-canvas { background:#fff; border-top:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2.5rem var(--space-4,1rem) 4rem; }
     .sv-controls { margin:0 0 2rem; display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid #E0D5C2; border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -351,17 +376,6 @@ ${shell.headTop}
     .sv-field select, .sv-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:180px; }
     .sv-field-city input { min-width:240px; }
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
-    /* The stat band. These four numbers are what the directory has to show for itself and they
-       used to be a grey sentence that read like a status message. The filter rewrites the first
-       two, so both keep their <b>. */
-    .sv-stats { display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem 2.4rem;
-      margin:2.6rem 0 1.6rem; padding:1.15rem 1rem; background:#fff;
-      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-md,8px); }
-    .sv-stat { display:flex; flex-direction:column; align-items:center; min-width:6.5rem; }
-    .sv-stat b { font-family:'DM Serif Display',serif; font-size:1.85rem; line-height:1.05;
-      color:var(--color-ink); font-variant-numeric:tabular-nums; }
-    .sv-stat small { margin-top:.2rem; font-size:.66rem; font-weight:700; text-transform:uppercase;
-      letter-spacing:.11em; color:var(--color-stone); }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 1.5rem; } .sv-count b { color:var(--color-ink); }
 
     /* The featured band. Photographs only here, not on all 329 tiles: eight images a reader can
@@ -393,6 +407,9 @@ ${shell.headTop}
     .sv-ft-meta { grid-column:1/-1; font-size:.75rem; color:var(--color-stone); padding-top:.35rem;
       border-top:1px solid var(--color-sand,#f0e9dc); margin-top:.35rem; }
     .sv-ft-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:.9rem 0 0; }
+    /* 329 thumbnails cannot each carry a byline, but CC BY still requires the photographer to be
+       named somewhere the image is used, so this points at the page that does it per city. */
+    .sv-grid-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:1.4rem 0 0; text-align:center; }
     /* The credit is a citation, not a call to action. base.css paints links terracotta and beats a
        single class, so this needs the element in the selector to stay quiet. */
     .sv-ft-credit a, .sv-ft-credit a:visited { color:var(--color-stone); text-decoration:underline; text-decoration-color:var(--color-sand-dark,#E3D9C6); }
@@ -412,7 +429,11 @@ ${shell.headTop}
       transition:border-color .15s, box-shadow .15s, transform .15s; }
     a.sv-lg:hover { border-color:var(--color-terracotta,#c0392b); transform:translateY(-2px);
       box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); }
-    .sv-lg-name { align-self:center; padding:.6rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    /* The flag sits with the name and the row keeps its height whether or not there is one, so
+       Arabic and Russian line up with the twenty that have flags. */
+    .sv-lg-name { align-self:center; display:flex; align-items:center; gap:.45rem; padding:.6rem .8rem;
+      font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sv-lg-flag { flex:0 0 auto; border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); }
     .sv-lg-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
       width:5.1rem; padding:.45rem .7rem; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-lg-stat b { font-size:.98rem; font-weight:800; line-height:1.15; color:var(--color-ink); font-variant-numeric:tabular-nums; }
@@ -515,11 +536,19 @@ ${shell.headTop}
     .sv-ix-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:1rem; align-items:stretch; }
     /* Two rows: the identity keeps its own height and the tray takes whatever is left, so a card
        standing next to a taller one grows its tray rather than opening a hole in the middle. */
-    .sv-ix { display:grid; grid-template-rows:auto 1fr; gap:0; padding:0; overflow:hidden; background:#fff;
+    .sv-ix { display:grid; grid-template-rows:auto auto 1fr; gap:0; padding:0; overflow:hidden; background:#fff;
       border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
       box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); text-decoration:none; transition:border-color .15s, box-shadow .15s, transform .15s; }
     .sv-ix:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
     .sv-ix.is-hidden { display:none; }
+    /* The photo band. A fixed height, so a card with a photograph is exactly as tall as one whose
+       image is missing, and the grid stays on one height the way it has to. */
+    .sv-ix-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sv-ix-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    .sv-ix:hover .sv-ix-pic img { transform:scale(1.045); }
+    @media (prefers-reduced-motion:reduce) { .sv-ix:hover .sv-ix-pic img { transform:none; } }
+
     /* A minimum height on the identity row so a one-line city and a two-line one sit their count
        tiles at the same place across a row of cards: "Aix-en-Provence" used to push its own down. */
     .sv-ix-head { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center;
@@ -592,12 +621,6 @@ ${shell.headEnd}
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
-      <div class="sv-stats">
-        <span class="sv-stat"><b>${providers.length.toLocaleString('en-US')}</b><small>providers</small></span>
-        <span class="sv-stat"><b>${nCities}</b><small>cities</small></span>
-        <span class="sv-stat"><b>${nCats}</b><small>service types</small></span>
-        <span class="sv-stat"><b>${nLangs}</b><small>languages</small></span>
-      </div>
       <nav class="sv-hubs" id="by-service" aria-label="Browse by service">
         <h2>Browse by service</h2>
         <div class="sv-hubs-grid">${SERVICE_HUBS}</div>
@@ -619,6 +642,7 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
       <div id="svGrid" class="sv-ix-grid">
       ${cityIndex}
       </div>
+      <p class="sv-grid-credit">City photographs come from Wikimedia Commons under CC BY or CC BY-SA. Each one names its photographer and licence on that city's own page.</p>
       <div class="sv-empty is-hidden" id="svEmpty">
         <p>Nothing matches that combination yet.</p>
         <p>This directory is early and deliberately small: a provider only appears once we can point at a source for the language it works in. If you know one that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
