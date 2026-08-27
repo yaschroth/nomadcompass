@@ -26,6 +26,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
@@ -338,8 +339,30 @@ for (const page of ordered) {
   // --- listing --------------------------------------------------------------------------------
   const icon = inlineIcon(CAT_ICON[cat]);
   const sections = langSections(pair);
+  // Whether every provider this page counts is actually on it. A section is cut short either
+  // because a city-and-language child page exists to hold the rest, or because it is over the cap.
+  // The filter is only offered when nothing is cut, so a tally can never describe a preview.
+  // The number of CARDS the page renders, which on a sectioned page is more than the number of
+  // providers: someone who speaks two of the languages is listed under both.
+  const rendered = sections ? sections.reduce((n, s) => n + s.rows.length, 0) : pair.rows.length;
+  const complete = !sections || sections.every((s) => {
+    const kid = s.lang ? CITY_LANG_PAGES.get(city.id + '|' + cat + '|' + s.lang) : null;
+    return !kid && s.rows.length <= SECTION_CAP;
+  });
+  // Every language on the page, for the menu, with the number of providers behind each.
+  const LANG_FILTER = (() => {
+    const n = {};
+    // The local language is on nearly every row, so as the first item in the menu it is a choice
+    // that changes nothing: Alicante's lawyers are 32 of 32 Spanish. It stays out, the way it stays
+    // out of the hub's menu and the headline.
+    const localHere = M.LOCAL[city.country];
+    pair.rows.forEach((r) => r.languages.forEach((l) => { if (l !== localHere) n[l] = (n[l] || 0) + 1; }));
+    return Object.entries(n)
+      .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
+      .map(([l, c]) => [l, P.langName(l) + ' (' + c + ')']);
+  })();
   const listing = sections
-    ? sections.map((s) => `<section class="svp-lang" id="lang-${s.lang || 'other'}">
+    ? sections.map((s) => `<section class="svp-lang sf-group" id="lang-${s.lang || 'other'}">
           <h2>${s.lang
             ? esc(P.langName(s.lang)) + '-speaking ' + esc(P.catName(cat)) + ' in ' + esc(city.name)
             : 'Listed only in ' + esc(P.langName(M.LOCAL[pair.country]) || 'the local language')}<span class="svp-lang-n">${s.n}</span></h2>
@@ -465,6 +488,7 @@ ${H.css}
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
     .svp-chips, .svp-langbar { margin: var(--space-4) 0 var(--space-6); }
 ${B.css}
+${F.css}
     .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
@@ -495,7 +519,19 @@ ${shell.headEnd}
         `</nav>` : ''}
       ${ymyl}
 
+      ${F.bar({
+    id: 'svp',
+    complete,
+    fields: [
+      { key: 'q', search: true, label: 'Name', placeholder: `Search ${pair.rows.length} listings…` },
+      { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
+    ],
+  })}
+      ${complete ? F.count({ id: 'svp', total: rendered, noun: 'listing', nounPlural: 'listings' }) : ''}
+
       ${listing}
+
+      ${complete ? F.empty({ id: 'svp', what: `This page holds every ${esc(P.catName(cat).replace(/s$/, ''))} in ${esc(city.name)} whose working language we can trace to a published source.` }) : ''}
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -513,6 +549,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>
     </div>
   </main>
+  ${complete ? F.js({ id: 'svp', noun: 'listing', nounPlural: 'listings' }) : ''}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

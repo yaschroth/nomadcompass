@@ -65,6 +65,7 @@ const CHILDREN = new Set();
 // second run and the family was being built with --force, guard off. See scripts/lib/page_shell.cjs.
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const { style: STYLE, nav: NAV, footer: FOOTER } = shell;
 
@@ -78,7 +79,7 @@ function card(p) {
     ? `<a href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
     : esc(p.name);
   const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+  return `<article class="sv-card sf-item sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${inlineIcon(CAT_ICON[p.category])}</span>
           <div>
@@ -207,6 +208,21 @@ for (const slug of slugs) {
   const PREVIEW = 3;
   const childOf = (cat) => '/services/' + slug + '/' + SERVICE_SLUGS[cat];
   const hasChild = (cat) => CHILDREN.has(slug + '|' + cat);
+  // Whether this page holds every provider it counts. Where a service has a page of its own, this
+  // one shows three of it and links there, and a filter over three cards of 763 would report a
+  // tally about a preview. 123 of the 329 cities are in that state and get no filter; the child
+  // page they point at has one.
+  const complete = groups.every((g) => single || !hasChild(g.cat));
+  const LANG_FILTER = (() => {
+    const n = {};
+    // The city's own language sits on nearly every row, so it is not a choice. Same reason the
+    // headline is worked out without it.
+    const localHere = LOCAL[c.country];
+    rows.forEach((r) => r.languages.forEach((l) => { if (LANGS[l] && l !== localHere) n[l] = (n[l] || 0) + 1; }));
+    return Object.entries(n)
+      .sort((a, b) => b[1] - a[1] || LANGS[a[0]].localeCompare(LANGS[b[0]]))
+      .map(([l, c]) => [l, LANGS[l] + ' (' + c + ')']);
+  })();
   const groupsHtml = groups.map((g) => {
     // A service with no page of its own has nowhere else to be read, so this page shows all of it.
     // Bangkok holds four hairdressers, its hairdressers page was held back under the word floor,
@@ -216,7 +232,7 @@ for (const slug of slugs) {
     const head = hasChild(g.cat)
       ? `<a href="${childOf(g.cat)}">${esc(CATS[g.cat])}</a>`
       : esc(CATS[g.cat]);
-    return `<section class="svc-group" data-cat="${g.cat}" id="svc-${g.cat}">
+    return `<section class="svc-group sf-group" data-cat="${g.cat}" id="svc-${g.cat}">
           <h2 class="svc-group-head"><span class="svc-group-ico">${inlineIcon(CAT_ICON[g.cat])}</span>${head}<span class="svc-group-n">${g.rows.length}</span></h2>
           <div class="sv-grid">
         ${shown.map(card).join('\n        ')}
@@ -312,6 +328,7 @@ ${H.css}
     .svc-group-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-sm);
       font-weight: 700; color: var(--color-stone); }
 ${B.css}
+${F.css}
     .svc-chips { margin: 0 0 var(--space-5); }
     .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
     .svc-group-head a:hover { text-decoration: underline; }
@@ -350,7 +367,21 @@ ${B.css}
           ? `All <b>${rows.length}</b> ${rows.length === 1 ? 'provider' : 'providers'} we hold for ${esc(c.name)}.`
           : `<b>${rows.length}</b> providers across <b>${groups.length}</b> services. Each service has its own page with the full list.`}</p>
 
+        ${F.bar({
+    id: 'svc',
+    complete,
+    items: rows.length,
+    fields: [
+      { key: 'q', search: true, label: 'Name', placeholder: `Search ${rows.length} listings…` },
+      { key: 'cat', label: 'Service', any: 'Any service', options: groups.map((g) => [g.cat, CATS[g.cat]]) },
+      { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
+    ],
+  })}
+        ${complete ? F.count({ id: 'svc', total: rows.length, noun: 'listing', nounPlural: 'listings' }) : ''}
+
       ${groupsHtml}
+
+        ${complete ? F.empty({ id: 'svc', what: `This page holds every provider in ${esc(c.name)} whose working language we can trace to a published source.` }) : ''}
       </section>
 
       <section class="svc-more">
@@ -362,6 +393,7 @@ ${B.css}
       </section>
     </div>
   </main>
+  ${complete ? F.js({ id: 'svc', noun: 'listing', nounPlural: 'listings' }) : ''}
   ${FOOTER}
 ${shell.bodyEnd}
   <script>

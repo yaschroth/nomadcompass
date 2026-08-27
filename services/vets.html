@@ -475,6 +475,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svh-foot { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svh-foot p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
   </style>
@@ -507,67 +537,80 @@
 
       
 
-      <section class="svh-country">
+      <div class="sf-bar" id="svhBar">
+        <div class="sf-field sf-field-q"><label for="svh-q">City or country</label><input type="search" id="svh-q" data-sf="q" placeholder="Type a city or country…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svh-langs">Language</label><select id="svh-langs" data-sf="langs"><option value="all">Any language</option><option value="en">English (17)</option><option value="de">German (4)</option><option value="ru">Russian (4)</option><option value="fr">French (2)</option><option value="it">Italian (1)</option><option value="ja">Japanese (1)</option></select></div>
+        <div class="sf-field"><label for="svh-country">Country</label><select id="svh-country" data-sf="country"><option value="all">Any country</option><option value="lithuania">Lithuania</option><option value="georgia">Georgia</option><option value="portugal">Portugal</option><option value="thailand">Thailand</option><option value="vietnam">Vietnam</option><option value="croatia">Croatia</option><option value="germany">Germany</option><option value="greece">Greece</option><option value="mexico">Mexico</option><option value="slovenia">Slovenia</option></select></div>
+        <button type="button" class="sf-reset" id="svhReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svhCount" role="status" aria-live="polite">Showing all <b>11</b> cities.</p>
+
+      <section class="svh-country sf-group">
           <h2>Lithuania<span class="svh-n">4 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/vilnius/vets"><span class="sb-pic"><img src="/images/cities/vilnius-card.webp" alt="Panoramic view of Vilnius showing the Neris River, old town with orange-tiled rooftops, and modern Snipiskes business district skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/lt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vilnius<span class="sb-sub">Lithuania</span></span><span class="sb-count"><b>4</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/vilnius/vets" data-name="vilnius lithuania" data-country="lithuania" data-langs="en ru de"><span class="sb-pic"><img src="/images/cities/vilnius-card.webp" alt="Panoramic view of Vilnius showing the Neris River, old town with orange-tiled rooftops, and modern Snipiskes business district skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/lt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vilnius<span class="sb-sub">Lithuania</span></span><span class="sb-count"><b>4</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Georgia<span class="svh-n">3 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/tbilisi"><span class="sb-pic"><img src="/images/cities/tbilisi-card.webp" alt="Aerial view of Tbilisi old town with Kura River, Peace Bridge, and Sameba Cathedral" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ge.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tbilisi<span class="sb-sub">Georgia</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/tbilisi" data-name="tbilisi georgia" data-country="georgia" data-langs="en ru"><span class="sb-pic"><img src="/images/cities/tbilisi-card.webp" alt="Aerial view of Tbilisi old town with Kura River, Peace Bridge, and Sameba Cathedral" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ge.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tbilisi<span class="sb-sub">Georgia</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Portugal<span class="svh-n">3 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/lisbon/vets"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/lisbon/vets" data-name="lisbon portugal" data-country="portugal" data-langs="en"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Thailand<span class="svh-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/chiangmai"><span class="sb-pic"><img src="/images/cities/chiangmai-card.webp" alt="Golden chedi and ceremonial umbrella of Wat Phra That Doi Suthep against a clear blue sky, Chiang Mai, Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Chiang Mai<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>Japanese</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/chiangmai" data-name="chiang mai thailand" data-country="thailand" data-langs="en ja"><span class="sb-pic"><img src="/images/cities/chiangmai-card.webp" alt="Golden chedi and ceremonial umbrella of Wat Phra That Doi Suthep against a clear blue sky, Chiang Mai, Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Chiang Mai<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>Japanese</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Vietnam<span class="svh-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/danang"><span class="sb-pic"><img src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hanoi"><span class="sb-pic"><img src="/images/cities/hanoi-card.webp" alt="Hoan Kiem Lake with red Huc Bridge and Ngoc Son Temple, Hanoi" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hanoi<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/danang" data-name="da nang vietnam" data-country="vietnam" data-langs="en"><span class="sb-pic"><img src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hanoi" data-name="hanoi vietnam" data-country="vietnam" data-langs="en fr"><span class="sb-pic"><img src="/images/cities/hanoi-card.webp" alt="Hoan Kiem Lake with red Huc Bridge and Ngoc Son Temple, Hanoi" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hanoi<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Croatia<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/zagreb/vets"><span class="sb-pic"><img src="/images/cities/zagreb-card.webp" alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/zagreb/vets" data-name="zagreb croatia" data-country="croatia" data-langs="de"><span class="sb-pic"><img src="/images/cities/zagreb-card.webp" alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Germany<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/berlin/vets"><span class="sb-pic"><img src="/images/cities/berlin-card.webp" alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/berlin/vets" data-name="berlin germany" data-country="germany" data-langs="it"><span class="sb-pic"><img src="/images/cities/berlin-card.webp" alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Greece<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/athens"><span class="sb-pic"><img src="/images/cities/athens-card.webp" alt="Acropolis of Athens with the Parthenon and Odeon of Herodes Atticus viewed from Philopappos Hill" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Athens<span class="sb-sub">Greece</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/athens" data-name="athens greece" data-country="greece" data-langs="de en"><span class="sb-pic"><img src="/images/cities/athens-card.webp" alt="Acropolis of Athens with the Parthenon and Odeon of Herodes Atticus viewed from Philopappos Hill" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Athens<span class="sb-sub">Greece</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Mexico<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/mexicocity"><span class="sb-pic"><img src="/images/cities/mexicocity-card.webp" alt="Mexico City skyline with Reforma skyscrapers and Chapultepec park" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/mx.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Mexico City<span class="sb-sub">Mexico</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/mexicocity" data-name="mexico city mexico" data-country="mexico" data-langs="en"><span class="sb-pic"><img src="/images/cities/mexicocity-card.webp" alt="Mexico City skyline with Reforma skyscrapers and Chapultepec park" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/mx.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Mexico City<span class="sb-sub">Mexico</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
           </div>
         </section>
-      <section class="svh-country">
+      <section class="svh-country sf-group">
           <h2>Slovenia<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/ljubljana/vets"><span class="sb-pic"><img src="/images/cities/ljubljana-card.webp" alt="Preseren Square and Franciscan Church in Ljubljana, Slovenia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/si.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ljubljana<span class="sb-sub">Slovenia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/ljubljana/vets" data-name="ljubljana slovenia" data-country="slovenia" data-langs="de en fr"><span class="sb-pic"><img src="/images/cities/ljubljana-card.webp" alt="Preseren Square and Franciscan Church in Ljubljana, Slovenia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/si.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ljubljana<span class="sb-sub">Slovenia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
           </div>
         </section>
+
+      <div class="sf-empty is-hidden" id="svhEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page lists every city where we hold at least one vet with a sourced working language. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <section class="svh-foot">
         <p>Every city above links to the vets we hold for it, and every entry there names the source its language claim came from. We have not called or visited any of them, so treat each one as a claim someone else made.</p>
@@ -586,6 +629,71 @@
     if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
   q.forEach(function(el){io.observe(el);});
 })();</script>
+  <script>
+    (function(){
+      var bar=document.getElementById('svhBar');
+      if(!bar)return;
+      var out=document.getElementById('svhCount'),blank=document.getElementById('svhEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'city':'cities')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'cities'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svhReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

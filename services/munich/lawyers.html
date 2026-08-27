@@ -480,6 +480,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
@@ -514,10 +544,17 @@
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">19</span></a><a class="sb-chip" href="#lang-pl"><span class="sb-chip-label">Polish</span><span class="sb-chip-n">14</span></a><a class="sb-chip" href="#lang-other"><span class="sb-chip-label">Local language only</span><span class="sb-chip-n">1</span></a></nav>
       <p class="ymyl-note">This is a directory, not legal or financial advice. Being listed here says nothing about the quality or the price of the work, and we take no fee from anyone on this page.</p>
 
-      <section class="svp-lang" id="lang-en">
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 34 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Language</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (19)</option><option value="pl">Polish (14)</option><option value="it">Italian (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>34</b> listings.</p>
+
+      <section class="svp-lang sf-group" id="lang-en">
           <h2>English-speaking lawyers in Munich<span class="svp-lang-n">19</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="astraia fachanwalte">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="astraia fachanwalte">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.astraia.legal/andrea-hellmann.html" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Astraia%20Fachanwalte%2C%20Stadtlohnerstrasse%2010%2C%2080687%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="barba partner rechtsanwalte partgmbb">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="barba partner rechtsanwalte partgmbb">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.barba-legal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Barba%20Partner%20Rechtsanwalte%20Partgmbb%2C%20Maximilianstr.%2013%2C%2080539%2C%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="beukelmann muller partner">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="beukelmann muller partner">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.bm-partner.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Beukelmann%20Muller%20Partner%2C%20Sendlinger%20Strasse%2019%2C%2080331%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="duerr rechtsanwalt">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="duerr rechtsanwalt">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><a class="sv-go" href="https://kanzlei-duerr.de/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Duerr%20Rechtsanwalt%2C%20Friedenheimer%20Brucke%2020%2C%2080639%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="dvm rechtsanwalte">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="dvm rechtsanwalte">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.dvm.legal" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dvm%20Rechtsanwalte%2C%20Altheimer%20Eck%2013%2C%2080331%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="fachanwalt fur strafrecht kampf">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="fachanwalt fur strafrecht kampf">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.kanzlei-kaempf.net" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Fachanwalt%20Fur%20Strafrecht%20Kampf%2C%20Pettenkoferstrasse%2010a%2C%2080336%2C%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="falch partner partg mbb">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="falch partner partg mbb">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.falch-partner.de/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Falch%20Partner%20Partg%20Mbb%2C%20Sendlinger%20Str.%2047%2C%2080331%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="haider rechtsanwalte">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="haider rechtsanwalte">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><a class="sv-go" href="https://haider.legal" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Haider%20Rechtsanwalte%2C%20Erzgieereistr.%202%2C%2080335%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="helck legal">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="helck legal">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +689,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.helck-legal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Helck%20Legal%2C%20Ludwigstr.%208%2C%2080539%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="heussen rechtsanwaltsgesellschaft mbh">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="heussen rechtsanwaltsgesellschaft mbh">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +704,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.heussen-law.de/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Heussen%20Rechtsanwaltsgesellschaft%20Mbh%2C%20Brienner%20Str.%209%2C%20Amiraplatz%2C%2080333%2C%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="hw h hertslet wolfer heintz">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="hw h hertslet wolfer heintz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +719,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.hwh.eu" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hw%20H%20Hertslet%20Wolfer%20Heintz%2C%20Maximilianstrasse%202%2C%2080539%2C%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="kanzlei kress">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="kanzlei kress">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +734,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.ra-kress.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kanzlei%20Kress%2C%20Adamstrasse%204%2C%2080636%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="katarina bennet">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="katarina bennet">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -712,7 +749,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.wernerlaw.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Katarina%20Bennet%2C%2080333%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="kleeberg rechtsanwaltsgesellschaft mbh">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="kleeberg rechtsanwaltsgesellschaft mbh">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -727,7 +764,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.kleeberg.de/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kleeberg%20Rechtsanwaltsgesellschaft%20Mbh%2C%20Augustenstrasse%2010%2C%2080333%2C%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="noerr partnerschaftsgesellschaft mbb">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="noerr partnerschaftsgesellschaft mbb">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -742,7 +779,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.noerr.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Noerr%20Partnerschaftsgesellschaft%20Mbb%2C%20Brienner%20Strasse%2028%2C%2080333%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="rt partner rechtsanwaltsgesellschaft mbh">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="rt partner rechtsanwaltsgesellschaft mbh">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -757,7 +794,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.rtpartner.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rt%20Partner%20Rechtsanwaltsgesellschaft%20Mbh%2C%20Goethestr.%2074%2C%2080336%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="skw schwarz">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="skw schwarz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -772,7 +809,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.skwschwarz.de/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Skw%20Schwarz%2C%20Wittelsbacherplatz%201%2C%2080333%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="stetter rechtsanwalte">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="stetter rechtsanwalte">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -787,7 +824,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.stetterlegal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Stetter%20Rechtsanwalte%2C%20Amiraplatz%203%2C%20Im%20Luitpoldblock%2C%2080333%2C%20Munich%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en" data-name="tschaidse collegen">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en" data-name="tschaidse collegen">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -806,10 +843,10 @@
           
           
         </section>
-        <section class="svp-lang" id="lang-pl">
+        <section class="svp-lang sf-group" id="lang-pl">
           <h2>Polish-speaking lawyers in Munich<span class="svp-lang-n">14</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="anna maria miller">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="anna maria miller">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -824,7 +861,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Anna%20Maria%20Miller%2C%20Mauerkircherstr.%204%2C%2081679%20Munchen%2C%20T%3A%20%2B49%20(0)%2089%2020%2096%2009%2057%2C%20F%3A%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="bronska renata">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="bronska renata">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -839,7 +876,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Bronska%20Renata%2C%20Schloss%20Seefeld%2C%20Schlosshof%204%2C%2082229%20Seefeld%20(bei%20Munchen)%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="czech-grollmann anja">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="czech-grollmann anja">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -854,7 +891,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Czech-Grollmann%20Anja%2C%20Nymphenburger%20Str.%2020%2C%2080335%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="demacker izabela sylwia">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="demacker izabela sylwia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -869,7 +906,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Demacker%20Izabela%20Sylwia%2C%20Mullerstr.%2040%2C%2080469%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="dudek ilona">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="dudek ilona">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -884,7 +921,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dudek%20Ilona%2C%20Oskar-von-Miller-Ring%2031%2C%2080333%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="groborz olaf">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="groborz olaf">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -899,7 +936,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Groborz%20Olaf%2C%20Donnersbergerstr.%2046%2C%2080634%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="jungling, roman">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="jungling, roman">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -914,7 +951,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Jungling%2C%20Roman%2C%20Sudweg%2018%2C%2090763%20Furth%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="kroll margo magorzata">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="kroll margo magorzata">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -929,7 +966,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kroll%20Margo%20Magorzata%2C%20Nymphenburger-Str.%20154%2C%2080634%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="kroll margo malgorzata">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="kroll margo malgorzata">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -944,7 +981,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Kroll%20Margo%20Malgorzata%2C%20Nymphenburger-Str.%20154%2C%2080634%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="krystyna borowska-wunsch">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="krystyna borowska-wunsch">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -959,7 +996,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Krystyna%20Borowska-Wunsch%2C%20Schulstr.%2010%2C%2080634%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="lipecka diana">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="lipecka diana">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -974,7 +1011,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lipecka%20Diana%2C%20Liebigstrasse%2039%20c%2Fo%20Maucher%20Jenkins%2C%2080538%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="motkowski christoph">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="motkowski christoph">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -989,7 +1026,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Motkowski%20Christoph%2C%20Herzog-Wilhelm-Str.%2021%2C%2080331%20Munchen%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="pazur maciej">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="pazur maciej">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1004,7 +1041,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Pazur%20Maciej%2C%20Trappentreustr.%2042%2C%2080339%20Munchen%2C%20kom%2C%20Munich%2C%20Germany" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pl" data-name="przibylla alexander">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pl" data-name="przibylla alexander">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1023,10 +1060,10 @@
           
           <p class="svp-more-lang"><a href="/services/lawyers/polish">Polish-speaking lawyers in 14 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-other">
+        <section class="svp-lang sf-group" id="lang-other">
           <h2>Listed only in German<span class="svp-lang-n">1</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="it" data-name="notare krick u. birnstiel">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="it" data-name="notare krick u. birnstiel">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1045,6 +1082,11 @@
           
           
         </section>
+
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every lawyer in Munich whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -1071,6 +1113,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

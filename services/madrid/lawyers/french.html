@@ -483,6 +483,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
     .svp-up { margin: var(--space-4) 0 0; font-size: var(--text-sm); font-weight: 600; }
@@ -516,8 +546,15 @@
     <div class="svp-page container">
       <p class="ymyl-note">This is a directory, not legal or financial advice. Being listed here says nothing about the quality or the price of the work, and we take no fee from anyone on this page.</p>
 
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 52 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Also speaks</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (29)</option><option value="de">German (22)</option><option value="it">Italian (9)</option><option value="ar">Arabic (4)</option><option value="pt">Portuguese (4)</option><option value="nl">Dutch (2)</option><option value="ru">Russian (2)</option><option value="zh">Chinese (1)</option><option value="ja">Japanese (1)</option><option value="no">Norwegian (1)</option><option value="pl">Polish (1)</option><option value="ro">Romanian (1)</option><option value="sv">Swedish (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>52</b> listings.</p>
+
       <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar de en es fr ru" data-name="abogados &amp; asesores s.l.p.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar de en es fr ru" data-name="abogados &amp; asesores s.l.p.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.abogados-y-asesores.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=ABOGADOS%20%26%20ASESORES%20S.L.P.%2C%20Sieger%2C%20Dr.%20jur.%20Tina%20Clarissa%2C%20c%20%2FVelazquez%2C%2027%2C%201%20ext.%20izq%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es fr it zh" data-name="adarve abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en es fr it zh" data-name="adarve abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Adarve%20Abogados%2C%20Guzman%20el%20Bueno%20133%20Edif%20Germania%204%20planta%2C%2028003%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="aguillaume guillermo">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="aguillaume guillermo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=AGUILLAUME%20Guillermo%2C%20C%2FFuencarral%2C%20139%20-%202%20B%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es fr it" data-name="alliantia estudio juridico tributario, s.l.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en es fr it" data-name="alliantia estudio juridico tributario, s.l.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Alliantia%20Estudio%20Juridico%20Tributario%2C%20S.L.%2C%20Avenida%20de%20Concha%20Espina%2C%2039%20B%20Madrid%2028016%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr it" data-name="araoz y rueda abogados, s.l.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr it" data-name="araoz y rueda abogados, s.l.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Araoz%20y%20Rueda%20Abogados%2C%20S.L.%2C%20Paseo%20de%20la%20Castellana%20164%2C%2028046%20Madrid%203%202024%20Update%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="ayuso horta azucena">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="ayuso horta azucena">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=AYUSO%20HORTA%20Azucena%2C%20C%2FGoya%20n%2083%20-%207%20Dcha%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es fr" data-name="azancot y asociados abogados, s. l.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en es fr" data-name="azancot y asociados abogados, s. l.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Azancot%20y%20Asociados%20Abogados%2C%20S.%20L.%2C%20c%2F%20General%20Pardinas%2C%2092%20Piso%201%205%2C%2028006%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="b. cremades &amp; asociados, s. l.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="b. cremades &amp; asociados, s. l.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=B.%20Cremades%20%26%20Asociados%2C%20S.%20L.%2C%20Calle%20Goya%2018%2C%202%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="b. cremades y asociados, s.l.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="b. cremades y asociados, s.l.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +689,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.cremades.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=B.%20CREMADES%20Y%20ASOCIADOS%2C%20S.L.%2C%20Cremades%2C%20Prof.%20Dr.%20Bernardo%2C%20c%2FGoya%2C%2018%20-%202%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="becker-cid, chantal">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="becker-cid, chantal">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +704,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=BECKER-CID%2C%20Chantal%2C%20c%2FAyala%2C%204%20-%203%20izq%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="byrd florence">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="byrd florence">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +719,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=BYRD%20Florence%2C%20C%2FAlcala%2C%2054%20-%204%20Izquierda%2C%2028014%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="castellana legal abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="castellana legal abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +734,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.c-legal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CASTELLANA%20LEGAL%20ABOGADOS%2C%20Andreu%20Bleckmann%2C%20Marcos%2C%20c%2FAlonso%20Cano%2077%2C%201%20B%2C%2028003%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es fr it" data-name="chabaneix associates criminal law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en es fr it" data-name="chabaneix associates criminal law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -712,7 +749,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chabaneix%20Associates%20Criminal%20Law%20Firm%2C%20Calle%20Nunez%20de%20Balboa%20n%2059%2C%20Oficina%204%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="chabaneix luis">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="chabaneix luis">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -727,7 +764,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CHABANEIX%20Luis%2C%20C%2FNunez%20de%20Balboa%2C%2059%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="chastelain de belleroche hugo">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="chastelain de belleroche hugo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -742,7 +779,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CHASTELAIN%20DE%20BELLEROCHE%20Hugo%2C%2028016%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar de en es fr" data-name="cms albinana &amp; suarez de lezo">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar de en es fr" data-name="cms albinana &amp; suarez de lezo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -757,7 +794,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.cms.law" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CMS%20Albinana%20%26%20Suarez%20de%20Lezo%2C%20de%20Dios%20Martinez%2C%20Luis%20Miguel%2C%20Paseo%20de%20Recoletos%2C%207-9%2C%2028004%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="cremades bernardo">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="cremades bernardo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -772,7 +809,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CREMADES%20Bernardo%2C%20C%2FGoya%2C%2018%20-%202%20planta%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr it ja nl pt" data-name="cuatrecasas, goncalves pereira">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr it ja nl pt" data-name="cuatrecasas, goncalves pereira">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -787,7 +824,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Cuatrecasas%2C%20Goncalves%20Pereira%2C%20Calle%20Almagro%209%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="cueto alvarez de sotomayor maria del mar">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="cueto alvarez de sotomayor maria del mar">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -802,7 +839,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CUETO%20ALVAREZ%20DE%20SOTOMAYOR%20Maria%20del%20Mar%2C%20C%2FLoriga%2C%2019%2C%20chalet%2C%2028002%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="de la vega churruca rafael">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="de la vega churruca rafael">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -817,7 +854,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=De%20La%20VEGA%20CHURRUCA%20Rafael%2C%20C%2FArgensola%2C%2019%20bajo%20drch.%2C%2028004%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="diez zearsolo itziar">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="diez zearsolo itziar">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -832,7 +869,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=DIEZ%20ZEARSOLO%20Itziar%2C%20C%2FIbiza%20n%201%20-%20Piso%201%20D%2C%2028009%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="duc dodon alexis">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="duc dodon alexis">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -847,7 +884,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=DUC%20DODON%20Alexis%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="ecovis, v.carstenn-lichterfelde abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="ecovis, v.carstenn-lichterfelde abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -862,7 +899,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.carstenn-abogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=ECOVIS%2C%20v.CARSTENN-LICHTERFELDE%20Abogados%2C%20Carstenn-Lichterfelde%2C%20Fernando%2C%20c%2FJose%20Abascal%2C%2049%20dupl.%2C%204%2C%2028003%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="escuredo hogan dionisio">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="escuredo hogan dionisio">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -877,7 +914,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=ESCUREDO%20HOGAN%20Dionisio%2C%2028036%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="estudio juridico almagro, abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="estudio juridico almagro, abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -892,7 +929,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Estudio%20Juridico%20Almagro%2C%20Abogados%2C%20Paseo%20de%20la%20Castellana%2C%20151%2C%20bis%2C%201%20Planta%2C%2028046%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="fernandez garcia jose luis">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="fernandez garcia jose luis">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -907,7 +944,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=FERNANDEZ%20GARCIA%20Jose%20Luis%2C%20C%2FSanta%20Engracia%2C%2038%20-%201%20dcha%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="firion anne-sophie">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="firion anne-sophie">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -922,7 +959,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=FIRION%20Anne-Sophie%2C%20C%2FFernando%20El%20Santo%2C%2024%201%20D%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="fruhbeck abogados, s.l.p.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="fruhbeck abogados, s.l.p.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -937,7 +974,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.fruhbeck.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=FRUHBECK%20ABOGADOS%2C%20S.L.P.%2C%20Fruhbeck%20Olmedo%2C%20Dr.Guillermo%2C%20c%2FMarques%20de%20Riscal%2C%2011%20-%205%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="gillard jean">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="gillard jean">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -952,7 +989,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=GILLARD%20Jean%2C%20C%2F%20Monte%20Esquinza%2C%2028%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr it nl pt" data-name="gomez-acebo &amp; pombo, s.l.p.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr it nl pt" data-name="gomez-acebo &amp; pombo, s.l.p.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -967,7 +1004,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Gomez-Acebo%20%26%20Pombo%2C%20S.L.P.%2C%20Paseo%20de%20la%20Castellana%20216%2C%2028046%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="harling katia">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="harling katia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -982,7 +1019,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=HARLING%20Katia%2C%20C%2FRodriguez%20Marin%2C%2088-2%20E%2C%2028016%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr it" data-name="ilex tax legal s.l.p.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr it" data-name="ilex tax legal s.l.p.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -997,7 +1034,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ilex%20Tax%20Legal%20S.L.P.%2C%20Calle%20Serrano%20110%2C%203D%2C%2028006%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr it no ru sv" data-name="jlca &amp; as lawyers">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr it no ru sv" data-name="jlca &amp; as lawyers">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1012,7 +1049,7 @@
           <p class="sv-links"><a class="sv-go" href="https://eur03.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.jlcalawyers.com%2F&amp;amp;data=05%7C01%7Ctone.gyberg%40mfa.no%7C3cd4594dd6fc41078ad508da6f1f781d%7Cbb0f0b4e45254e4bba501e7775a8fd2e%7C0%7C0%7C637944478209862110%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;amp;sdata=Pa3vT%2FbCeoIxSsqAHpXxkOVQngBkKt87zmwTB9ajvuQ%3D&amp;amp;reserved=0" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=JLCA%20%26%20As%20Lawyers%2C%20Calle%20Velazquez%2C%2034%2C%207%26ordf%3B%20planta%2C%2028006%20Madrid.%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="llobet paul">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="llobet paul">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1027,7 +1064,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=LLOBET%20Paul%2C%2028009%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="lozano schindhelm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="lozano schindhelm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1042,7 +1079,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=LOZANO%20SCHINDHELM%2C%20Aguado%2C%20Mercedes%2C%20Buschel%2C%20Dr.%20Isabel%2C%20Luis%20Bravo%2C%20c%2FVelazquez%2C%20126%2C%2028006%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="mariscal abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="mariscal abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1057,7 +1094,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.mariscal-abogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mariscal%20Abogados%2C%20Calle%20Conde%20de%20Aranda%201%2C%202%20izq.%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar de en es fr ro" data-name="martinez sanz abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar de en es fr ro" data-name="martinez sanz abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1072,7 +1109,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Martinez%20Sanz%20Abogados%2C%20Paseo%20General%20Martinez%20Campos%2042%2C%20Bajo%201%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pl" data-name="monereo meyer and abogados, marinel-lo">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pl" data-name="monereo meyer and abogados, marinel-lo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1087,7 +1124,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Monereo%20Meyer%20and%20Abogados%2C%20Marinel-lo%2C%20Calle%20Agustin%20de%20Foxa%2C%204%2C%2028036%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="montesa kaijser carlos">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="montesa kaijser carlos">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1102,7 +1139,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=MONTESA%20KAIJSER%20Carlos%2C%20C%2FMaudes%2C%208%2C%2028003%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es fr" data-name="rafael de la vega de churruca">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en es fr" data-name="rafael de la vega de churruca">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1117,7 +1154,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.delavegaabogado.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rafael%20de%20la%20Vega%20de%20Churruca%2C%20Calle%20Argensola%2C%2019%20Bajo%20Derecha.%2028004%20Madrid%2C%20Spain%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en es fr" data-name="rivero &amp; gustafson abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en es fr" data-name="rivero &amp; gustafson abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1132,7 +1169,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rivero%20%26%20Gustafson%20Abogados%2C%20Avenida%20de%20Burgos%2021%2C%20Piso%2011%2C%2028036%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="roca grau bruno">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="roca grau bruno">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1147,7 +1184,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=ROCA%20GRAU%20Bruno%2C%20C%2F%20Castello%2082%2C%206%20Izda%2C%2028006%20Madrid%20-%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="sagardoy abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="sagardoy abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1162,7 +1199,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sagardoy%20Abogados%2C%20Calle%20Tutor%2C%2027%2C%2028008%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en es fr pt" data-name="sagardoy legal &amp; expat, s.l.p.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en es fr pt" data-name="sagardoy legal &amp; expat, s.l.p.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1177,7 +1214,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Sagardoy%20Legal%20%26%20Expat%2C%20S.L.P.%2C%20Velazquez%20109%2C%202%20Izq%2C%2028006%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="sanchez isla antonio">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="sanchez isla antonio">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1192,7 +1229,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SANCHEZ%20ISLA%20Antonio%2C%20C%2FMalcampo%2C%202%20-%201%20C%2C%2028002%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="sanchez jean marc">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="sanchez jean marc">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1207,7 +1244,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SANCHEZ%20Jean%20Marc%2C%2028003%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="sanchez jean-noel">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="sanchez jean-noel">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1222,7 +1259,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=SANCHEZ%20Jean-Noel%2C%2028001%20MadridC%2F%20General%20Diaz%20Portier%2037%201%20B%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr it" data-name="schiller abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr it" data-name="schiller abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1237,7 +1274,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Schiller%20Abogados%2C%20Paseo%20de%20la%20Castellana%20137%2C%20Edificio%20Cuzco%20III%2C%2012-C%2C%2028046%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="villacorta carlos">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="villacorta carlos">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1252,7 +1289,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=VILLACORTA%20Carlos%2C%2028001%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="wiegner &amp; andreu">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="wiegner &amp; andreu">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1267,7 +1304,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Wiegner%20%26%20Andreu%2C%20Fernandez%20de%20la%20Hoz%2027%2C%204%20centro%20izquierda%2C%2028010%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="winkels abogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr" data-name="winkels abogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1282,7 +1319,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Winkels%20Abogados%2C%20Velazquez%2C%2026%2C%203%20izquierda%2C%2028001%20Madrid%20Plaza%20de%20la%20Escandalera%203%2C%2033003%20Oviedo%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr es" data-name="winter david">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr es" data-name="winter david">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1297,6 +1334,10 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=WINTER%20David%2C%2028006%20Madrid%2C%20Madrid%2C%20Spain" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+      </div>
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every French-speaking lawyer we can source in Madrid. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
       </div>
       
 
@@ -1325,6 +1366,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

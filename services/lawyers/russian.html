@@ -474,6 +474,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -508,92 +538,104 @@
     </header>
     <div class="svl-page container">
 
-      <section class="svl-country">
+      <div class="sf-bar" id="svlBar">
+        <div class="sf-field sf-field-q"><label for="svl-q">City or country</label><input type="search" id="svl-q" data-sf="q" placeholder="Type a city or country…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svl-country">Country</label><select id="svl-country" data-sf="country"><option value="all">Any country</option><option value="armenia">Armenia</option><option value="spain">Spain</option><option value="czech-republic">Czech Republic</option><option value="kazakhstan">Kazakhstan</option><option value="poland">Poland</option><option value="argentina">Argentina</option><option value="austria">Austria</option><option value="denmark">Denmark</option><option value="georgia">Georgia</option><option value="hungary">Hungary</option><option value="indonesia">Indonesia</option><option value="italy">Italy</option><option value="singapore">Singapore</option><option value="slovenia">Slovenia</option></select></div>
+        <button type="button" class="sf-reset" id="svlReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svlCount" role="status" aria-live="polite">Showing all <b>16</b> cities.</p>
+
+      <section class="svl-country sf-group">
           <h2>Armenia<span class="svl-n">4 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/yerevan/lawyers"><span class="sb-pic"><img src="/images/cities/yerevan-card.webp" alt="Yerevan skyline with snow-capped Mount Ararat in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/am.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Yerevan<span class="sb-sub">Armenia</span></span><span class="sb-count"><b>4</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>4</b> of 4</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/yerevan/lawyers" data-name="yerevan armenia" data-country="armenia"><span class="sb-pic"><img src="/images/cities/yerevan-card.webp" alt="Yerevan skyline with snow-capped Mount Ararat in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/am.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Yerevan<span class="sb-sub">Armenia</span></span><span class="sb-count"><b>4</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>4</b> of 4</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Spain<span class="svl-n">4 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/madrid/lawyers"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>2</b> of 122</span><span>2%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/alicante/lawyers"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:4%"></i></span><span class="sb-figs"><span><b>1</b> of 27</span><span>4%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/barcelona/lawyers"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 109</span><span>1%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/madrid/lawyers" data-name="madrid spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>2</b> of 122</span><span>2%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/alicante/lawyers" data-name="alicante spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:4%"></i></span><span class="sb-figs"><span><b>1</b> of 27</span><span>4%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/barcelona/lawyers" data-name="barcelona spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 109</span><span>1%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Czech Republic<span class="svl-n">3 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/prague/lawyers"><span class="sb-pic"><img src="/images/cities/prague-card.webp" alt="Prague Castle and St. Vitus Cathedral above the Vltava River at dawn" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Prague<span class="sb-sub">Czech Republic</span></span><span class="sb-count"><b>3</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>3</b> of 27</span><span>11%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/prague/lawyers" data-name="prague czech republic" data-country="czech-republic"><span class="sb-pic"><img src="/images/cities/prague-card.webp" alt="Prague Castle and St. Vitus Cathedral above the Vltava River at dawn" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Prague<span class="sb-sub">Czech Republic</span></span><span class="sb-count"><b>3</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>3</b> of 27</span><span>11%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Kazakhstan<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/almaty"><span class="sb-pic"><img src="/images/cities/almaty-card.webp" alt="The modern Almaty skyline of mid-rise apartment blocks and glass towers seen from the Kok-Tobe hill, with the foothills of the Tian Shan mountains fading into the haze behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Almaty<span class="sb-sub">Kazakhstan</span></span><span class="sb-count"><b>2</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/almaty" data-name="almaty kazakhstan" data-country="kazakhstan"><span class="sb-pic"><img src="/images/cities/almaty-card.webp" alt="The modern Almaty skyline of mid-rise apartment blocks and glass towers seen from the Kok-Tobe hill, with the foothills of the Tian Shan mountains fading into the haze behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Almaty<span class="sb-sub">Kazakhstan</span></span><span class="sb-count"><b>2</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Poland<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/warsaw/lawyers"><span class="sb-pic"><img src="/images/cities/warsaw-card.webp" alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>2</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>2</b> of 39</span><span>5%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/warsaw/lawyers" data-name="warsaw poland" data-country="poland"><span class="sb-pic"><img src="/images/cities/warsaw-card.webp" alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>2</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>2</b> of 39</span><span>5%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Argentina<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/buenosaires/lawyers"><span class="sb-pic"><img src="/images/cities/buenosaires-card.webp" alt="Buenos Aires skyline daytime view of Puerto Madero business district skyscrapers under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Buenos Aires<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>1</b> of 21</span><span>5%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/buenosaires/lawyers" data-name="buenos aires argentina" data-country="argentina"><span class="sb-pic"><img src="/images/cities/buenosaires-card.webp" alt="Buenos Aires skyline daytime view of Puerto Madero business district skyscrapers under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Buenos Aires<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>1</b> of 21</span><span>5%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Austria<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/vienna/lawyers"><span class="sb-pic"><img src="/images/cities/vienna-card.webp" alt="Vienna cityscape panorama viewed from the south tower of Stephansdom, showing the iconic tiled roof and city stretching to the horizon" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vienna<span class="sb-sub">Austria</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 92</span><span>1%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/vienna/lawyers" data-name="vienna austria" data-country="austria"><span class="sb-pic"><img src="/images/cities/vienna-card.webp" alt="Vienna cityscape panorama viewed from the south tower of Stephansdom, showing the iconic tiled roof and city stretching to the horizon" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vienna<span class="sb-sub">Austria</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 92</span><span>1%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Denmark<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/copenhagen"><span class="sb-pic"><img src="/images/cities/copenhagen-card.webp" alt="Nyhavn canal with colourful historic buildings and sailing boats, Copenhagen" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Copenhagen<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/copenhagen" data-name="copenhagen denmark" data-country="denmark"><span class="sb-pic"><img src="/images/cities/copenhagen-card.webp" alt="Nyhavn canal with colourful historic buildings and sailing boats, Copenhagen" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Copenhagen<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Georgia<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/tbilisi/lawyers"><span class="sb-pic"><img src="/images/cities/tbilisi-card.webp" alt="Aerial view of Tbilisi old town with Kura River, Peace Bridge, and Sameba Cathedral" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ge.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tbilisi<span class="sb-sub">Georgia</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:8%"></i></span><span class="sb-figs"><span><b>1</b> of 12</span><span>8%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/tbilisi/lawyers" data-name="tbilisi georgia" data-country="georgia"><span class="sb-pic"><img src="/images/cities/tbilisi-card.webp" alt="Aerial view of Tbilisi old town with Kura River, Peace Bridge, and Sameba Cathedral" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ge.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tbilisi<span class="sb-sub">Georgia</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:8%"></i></span><span class="sb-figs"><span><b>1</b> of 12</span><span>8%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Hungary<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/budapest/lawyers"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 326</span><span>0%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/budapest/lawyers" data-name="budapest hungary" data-country="hungary"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 326</span><span>0%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Indonesia<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/bali/lawyers"><span class="sb-pic"><img src="/images/cities/bali-card.webp" alt="Balinese shrine on volcanic rocks at Canggu beach with surfers and black sand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/id.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bali (Canggu)<span class="sb-sub">Indonesia</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:20%"></i></span><span class="sb-figs"><span><b>1</b> of 5</span><span>20%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/bali/lawyers" data-name="bali (canggu) indonesia" data-country="indonesia"><span class="sb-pic"><img src="/images/cities/bali-card.webp" alt="Balinese shrine on volcanic rocks at Canggu beach with surfers and black sand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/id.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bali (Canggu)<span class="sb-sub">Indonesia</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:20%"></i></span><span class="sb-figs"><span><b>1</b> of 5</span><span>20%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Italy<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/florence/lawyers"><span class="sb-pic"><img src="/images/cities/florence-card.webp" alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 58</span><span>2%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/florence/lawyers" data-name="florence italy" data-country="italy"><span class="sb-pic"><img src="/images/cities/florence-card.webp" alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 58</span><span>2%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Singapore<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/singapore/lawyers"><span class="sb-pic"><img src="/images/cities/singapore-card.webp" alt="Singapore Marina Bay at dusk with Marina Bay Sands and CBD skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/sg.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Singapore<span class="sb-sub">Singapore</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:6%"></i></span><span class="sb-figs"><span><b>1</b> of 17</span><span>6%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/singapore/lawyers" data-name="singapore singapore" data-country="singapore"><span class="sb-pic"><img src="/images/cities/singapore-card.webp" alt="Singapore Marina Bay at dusk with Marina Bay Sands and CBD skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/sg.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Singapore<span class="sb-sub">Singapore</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:6%"></i></span><span class="sb-figs"><span><b>1</b> of 17</span><span>6%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Slovenia<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/ljubljana/lawyers"><span class="sb-pic"><img src="/images/cities/ljubljana-card.webp" alt="Preseren Square and Franciscan Church in Ljubljana, Slovenia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/si.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ljubljana<span class="sb-sub">Slovenia</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:7%"></i></span><span class="sb-figs"><span><b>1</b> of 15</span><span>7%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/ljubljana/lawyers" data-name="ljubljana slovenia" data-country="slovenia"><span class="sb-pic"><img src="/images/cities/ljubljana-card.webp" alt="Preseren Square and Franciscan Church in Ljubljana, Slovenia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/si.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ljubljana<span class="sb-sub">Slovenia</span></span><span class="sb-count"><b>1</b><small>Russian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:7%"></i></span><span class="sb-figs"><span><b>1</b> of 15</span><span>7%</span></span></span></a>
           </div>
         </section>
+
+      <div class="sf-empty is-hidden" id="svlEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page lists every city where we can point at a source saying a lawyer works in Russian. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svl-prose">
         <h2>Where these came from</h2>
@@ -625,6 +667,71 @@
     if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
   q.forEach(function(el){io.observe(el);});
 })();</script>
+  <script>
+    (function(){
+      var bar=document.getElementById('svlBar');
+      if(!bar)return;
+      var out=document.getElementById('svlCount'),blank=document.getElementById('svlEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'city':'cities')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'cities'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svlReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

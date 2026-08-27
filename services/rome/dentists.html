@@ -480,6 +480,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
@@ -514,10 +544,17 @@
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-de"><span class="sb-chip-label">German</span><span class="sb-chip-n">9</span></a><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">2</span></a></nav>
       <p class="ymyl-note">This is a directory, not medical advice. A language claim says nothing about clinical quality, and in an emergency use the local emergency number rather than this page.</p>
 
-      <section class="svp-lang" id="lang-de">
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 11 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Language</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="de">German (9)</option><option value="en">English (2)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>11</b> listings.</p>
+
+      <section class="svp-lang sf-group" id="lang-de">
           <h2>German-speaking dentists in Rome<span class="svp-lang-n">9</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="chirassi, dr. med. dent. claudia">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="chirassi, dr. med. dent. claudia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chirassi%2C%20Dr.%20med.%20dent.%20Claudia%2C%20Via%20Raimondo%20da%20Capua%2012%2C%2000153%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="corona, tommaso henry">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="corona, tommaso henry">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Corona%2C%20Tommaso%20Henry%2C%20Via%20Flaminia%2C%20259%2C%2000196%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="frasca, dr. med. dent. stefano">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="frasca, dr. med. dent. stefano">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Frasca%2C%20Dr.%20med.%20dent.%20Stefano%2C%20Via%20Quintino%20Varo%2046%2C%2000174%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="giovannini, dres. med. dent. paolo und marc david">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="giovannini, dres. med. dent. paolo und marc david">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Giovannini%2C%20Dres.%20med.%20dent.%20Paolo%20und%20Marc%20David%2C%20Via%20Archelao%20di%20Mileto%2C%2059%2C%2000124%20Casal%20Palocco%20(RM)%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="de" data-name="girelli manuela">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="de" data-name="girelli manuela">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=GIRELLI%20Manuela%2C%20Viale%20Tito%20Livio%2C%2047%2C%2000136%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="hornstein, dr. med. dent. wolfgang">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="hornstein, dr. med. dent. wolfgang">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hornstein%2C%20Dr.%20med.%20dent.%20Wolfgang%2C%20Via%20Giovanni%20Paisiello%2C%2026%2C%2000198%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="leccisotti, dr. med. dent. silvia">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="leccisotti, dr. med. dent. silvia">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Leccisotti%2C%20Dr.%20med.%20dent.%20Silvia%2C%20Viale%20Regina%20Elena%2C%20287B%2C%2000161%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="schmitz, dr. med. dr. med. dent. michael">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="schmitz, dr. med. dr. med. dent. michael">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Schmitz%2C%20Dr.%20med.%20Dr.%20med.%20dent.%20Michael%2C%20Via%20Paolo%20Marcuri%2C%204-6%2C%2000193%20Roma%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="signore, dr. med. dent antonio">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="it de" data-name="signore, dr. med. dent antonio">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -656,10 +693,10 @@
           
           <p class="svp-more-lang"><a href="/services/dentists/german">German-speaking dentists in 27 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-en">
+        <section class="svp-lang sf-group" id="lang-en">
           <h2>English-speaking dentists in Rome<span class="svp-lang-n">2</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="cicero, emanuele">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="en" data-name="cicero, emanuele">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -674,7 +711,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CICERO%2C%20Emanuele%2C%20Office%3A%20Via%20dei%20Portoghesi%2018%2C%2000186%20Rome%2C%20Website%3A%20emanuelecicero.com%2C%20Rome%2C%20Italy" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-dentist" data-cat="dentist" data-lang="en" data-name="giancotti, aldo">
+        <article class="sv-card sf-item sv-c-dentist" data-cat="dentist" data-lang="en" data-name="giancotti, aldo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span>
           <div>
@@ -693,6 +730,11 @@
           
           
         </section>
+
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every dentist in Rome whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -719,6 +761,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

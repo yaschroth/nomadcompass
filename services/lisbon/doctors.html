@@ -480,6 +480,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
@@ -514,10 +544,17 @@
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">9</span></a><a class="sb-chip" href="#lang-fr"><span class="sb-chip-label">French</span><span class="sb-chip-n">8</span></a><a class="sb-chip" href="#lang-de"><span class="sb-chip-label">German</span><span class="sb-chip-n">7</span></a><a class="sb-chip" href="#lang-es"><span class="sb-chip-label">Spanish</span><span class="sb-chip-n">3</span></a></nav>
       <p class="ymyl-note">This is a directory, not medical advice. A language claim says nothing about clinical quality, and in an emergency use the local emergency number rather than this page.</p>
 
-      <section class="svp-lang" id="lang-en">
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 19 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Language</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (9)</option><option value="fr">French (8)</option><option value="de">German (7)</option><option value="es">Spanish (3)</option><option value="it">Italian (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>27</b> listings.</p>
+
+      <section class="svp-lang sf-group" id="lang-en">
           <h2>English-speaking doctors in Lisbon<span class="svp-lang-n">9</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="clinica europa">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="clinica europa">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Europa%2C%20Rua%20de%20Catembe%20165%2C%20Carcavelos%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="cuf contact form">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="cuf contact form">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=CUF%20Contact%20Form%2C%20Rua%20Mario%20Botas%20(Parque%20das%20Nacoes)%2C%201998-018%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="dr. micaela helena seemann monteiro">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="dr. micaela helena seemann monteiro">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Micaela%20Helena%20Seemann%20Monteiro%2C%20Clinica%20CUF%20Belem%2C%20Rua%20Manuel%20Maria%20Viana%204%2C%201300-383%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Miguel%20Christian%20Janetschek%20da%20Cruz%2C%20REDELAB%20Saude%20-%20Areeiro%20Praca%20Francisco%20Sa%20Carneiro%2C%201%201000-159%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="hospital cuf descobertas">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="hospital cuf descobertas">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20CUF%20Descobertas%2C%20Rua%20Mario%20Botas%2C%20Parque%20das%20Nacoes%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="hospital da luz lisboa">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="hospital da luz lisboa">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20da%20Luz%20Lisboa%2C%20Avenida%20Lusiada%2C%20100%2C%201500-650%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="hospital lusiadas parque das nacoes">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="hospital lusiadas parque das nacoes">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hospital%20Lusiadas%20Parque%20das%20Nacoes%2C%20Avenida%20D.%20Joao%20III%2C%20Edificio%20Mythos%2C%20Parque%20das%20Nacoes%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="joaquim chaves saude (clinica de miraflores)">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="pt en" data-name="joaquim chaves saude (clinica de miraflores)">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Joaquim%20Chaves%20Saude%20(Clinica%20de%20Miraflores)%2C%20Av.%20General%20Norton%20de%20Matos%2071%20R%2FC%2C%20Alges%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr pt" data-name="alegria medical centre">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr pt" data-name="alegria medical centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -656,10 +693,10 @@
           
           
         </section>
-        <section class="svp-lang" id="lang-fr">
+        <section class="svp-lang sf-group" id="lang-fr">
           <h2>French-speaking doctors in Lisbon<span class="svp-lang-n">8</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr dominique langin">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr dominique langin">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -674,7 +711,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Dominique%20Langin%2C%20Centre%20Medical%20Alegria%2C%20Praca%20da%20Alegria%2C%2066%2C%203%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr gabrielle celin">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr gabrielle celin">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -689,7 +726,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Gabrielle%20Celin%2C%20Hospital%20da%20Luz%20Torres%20de%20Lisboa%2C%20Rua%20Tomas%20da%20Fonseca%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr louis arthur da silva">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr louis arthur da silva">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -704,7 +741,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Louis%20Arthur%20da%20Silva%2C%20Rua%20Castilho%2C%2013%20D%2C%206%20E%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr louis teulieres">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr louis teulieres">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -719,7 +756,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Louis%20Teulieres%2C%20Clinica%20Medica%20Internacional%20de%20Lisboa%2C%20Av.%20Sidonio%20Pais%2014%20r%2Fc%20Esq%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr silvia bacalhau">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dr silvia bacalhau">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -734,7 +771,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr%20Silvia%20Bacalhau%2C%20Alegria%20Medical%20Center%2C%20Rua%20Mario%20Botas%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -749,7 +786,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Miguel%20Christian%20Janetschek%20da%20Cruz%2C%20REDELAB%20Saude%20-%20Areeiro%20Praca%20Francisco%20Sa%20Carneiro%2C%201%201000-159%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dra sofia figueiredo">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr pt" data-name="dra sofia figueiredo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -764,7 +801,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dra%20Sofia%20Figueiredo%2C%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr pt" data-name="alegria medical centre">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr pt" data-name="alegria medical centre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -783,10 +820,10 @@
           
           <p class="svp-more-lang"><a href="/services/doctors/french">French-speaking doctors in 27 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-de">
+        <section class="svp-lang sf-group" id="lang-de">
           <h2>German-speaking doctors in Lisbon<span class="svp-lang-n">7</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de" data-name="clinica dentaria de miraflores">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de" data-name="clinica dentaria de miraflores">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -801,7 +838,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Clinica%20Dentaria%20de%20Miraflores%2C%20Largo%20Maria%20Leonor%2C%20Loja%208%20Miraflores%201495-144%20Alges%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de" data-name="consultorio dr.ivone dias">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de" data-name="consultorio dr.ivone dias">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -816,7 +853,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Consultorio%20Dr.Ivone%20Dias%2C%20Rua%20Nova%20do%20Almada%2018%201200-289%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="dr. micaela helena seemann monteiro">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="dr. micaela helena seemann monteiro">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -831,7 +868,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Micaela%20Helena%20Seemann%20Monteiro%2C%20Clinica%20CUF%20Belem%2C%20Rua%20Manuel%20Maria%20Viana%204%2C%201300-383%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de" data-name="dr. micaela seemann monteiro">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de" data-name="dr. micaela seemann monteiro">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -846,7 +883,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Micaela%20Seemann%20Monteiro%2C%20c%2Fo%20Clinica%20de%20Santa%20Maria%20de%20Belem%20Rua%20Manuel%20Maria%20Viana%201300-383%20Lisboa%20Mobil%3A%2091%20944%2091%2090%20seemann.monteiro%40gmail.co%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de" data-name="dr.marco franzreb corbelletti">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de" data-name="dr.marco franzreb corbelletti">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -861,7 +898,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.drmarcofranzreb.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Marco%20Franzreb%20Corbelletti%2C%20Inst.Medico%20e%20Dentario%20R.Rodrigues%20Sampaio%2C%2052-2.%201150-280%20Lisboa%20(Hausbesuche)%20Praxis%3A%20213%20520%20275%20Mobil%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -876,7 +913,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Miguel%20Christian%20Janetschek%20da%20Cruz%2C%20REDELAB%20Saude%20-%20Areeiro%20Praca%20Francisco%20Sa%20Carneiro%2C%201%201000-159%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="hospital da luz lisboa">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="hospital da luz lisboa">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -895,10 +932,10 @@
           
           <p class="svp-more-lang"><a href="/services/doctors/german">German-speaking doctors in 49 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-es">
+        <section class="svp-lang sf-group" id="lang-es">
           <h2>Spanish-speaking doctors in Lisbon<span class="svp-lang-n">3</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="dr. micaela helena seemann monteiro">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="dr. micaela helena seemann monteiro">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -913,7 +950,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Micaela%20Helena%20Seemann%20Monteiro%2C%20Clinica%20CUF%20Belem%2C%20Rua%20Manuel%20Maria%20Viana%204%2C%201300-383%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es fr it pt" data-name="dr.miguel christian janetschek da cruz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -928,7 +965,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Miguel%20Christian%20Janetschek%20da%20Cruz%2C%20REDELAB%20Saude%20-%20Areeiro%20Praca%20Francisco%20Sa%20Carneiro%2C%201%201000-159%20Lisboa%2C%20Lisbon%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="hospital da luz lisboa">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en es pt" data-name="hospital da luz lisboa">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -947,6 +984,11 @@
           
           <p class="svp-more-lang"><a href="/services/doctors/spanish">Spanish-speaking doctors in 5 other cities &rarr;</a></p>
         </section>
+
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every doctor in Lisbon whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -973,6 +1015,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

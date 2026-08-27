@@ -27,6 +27,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
@@ -168,7 +169,7 @@ for (const [cat, svc] of Object.entries(M.services)) {
     // One counter for the page, so the photographs that ship in the HTML are the tiles a reader
     // reaches first rather than the first few of every country block.
     let tileIndex = 0;
-    const countryBlocks = countries.map((country) => `<section class="svl-country">
+    const countryBlocks = countries.map((country) => `<section class="svl-country sf-group">
           <h2>${esc(country)}<span class="svl-n">${byCountry[country].reduce((s, x) => s + x.n, 0)} in ${byCountry[country].length} ${byCountry[country].length === 1 ? 'city' : 'cities'}</span></h2>
           <div class="sb-grid">
         ${byCountry[country].map((c) => B.cityTile({
@@ -254,6 +255,7 @@ ${H.css}
     .svl-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
 ${B.css}
+${F.css}
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -282,7 +284,19 @@ ${shell.headEnd}
   })}
     <div class="svl-page container">
 
+      ${F.bar({
+    id: 'svl',
+    items: cityRows.length,
+    fields: [
+      { key: 'q', search: true, label: 'City or country', placeholder: 'Type a city or country…' },
+      { key: 'country', label: 'Country', any: 'Any country', options: countries.map((c) => [B.slugify(c), c]) },
+    ],
+  })}
+      ${F.count({ id: 'svl', total: cityRows.length, noun: 'city', nounPlural: 'cities' })}
+
       ${countryBlocks}
+
+      ${F.empty({ id: 'svl', what: `This page lists every city where we can point at a source saying a ${label.replace(/s$/, '')} works in ${langName}.` })}
 
       <div class="svl-prose">
         <h2>Where these came from</h2>
@@ -298,6 +312,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
     </div>
   </main>
   ${B.revealJs}
+  ${F.js({ id: 'svl', noun: 'city', nounPlural: 'cities' })}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

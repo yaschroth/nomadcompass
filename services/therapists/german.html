@@ -474,6 +474,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -508,93 +538,105 @@
     </header>
     <div class="svl-page container">
 
-      <section class="svl-country">
+      <div class="sf-bar" id="svlBar">
+        <div class="sf-field sf-field-q"><label for="svl-q">City or country</label><input type="search" id="svl-q" data-sf="q" placeholder="Type a city or country…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svl-country">Country</label><select id="svl-country" data-sf="country"><option value="all">Any country</option><option value="france">France</option><option value="italy">Italy</option><option value="spain">Spain</option><option value="portugal">Portugal</option><option value="greece">Greece</option><option value="uk">UK</option><option value="united-states">United States</option><option value="canada">Canada</option><option value="croatia">Croatia</option><option value="hungary">Hungary</option><option value="ireland">Ireland</option><option value="israel">Israel</option><option value="sweden">Sweden</option></select></div>
+        <button type="button" class="sf-reset" id="svlReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svlCount" role="status" aria-live="polite">Showing all <b>22</b> cities.</p>
+
+      <section class="svl-country sf-group">
           <h2>France<span class="svl-n">20 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/paris/therapists"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>20</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:37%"></i></span><span class="sb-figs"><span><b>20</b> of 54</span><span>37%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/paris/therapists" data-name="paris france" data-country="france"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>20</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:37%"></i></span><span class="sb-figs"><span><b>20</b> of 54</span><span>37%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Italy<span class="svl-n">15 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/rome/therapists"><span class="sb-pic"><img src="/images/cities/rome-card.webp" alt="Panoramic view of the Roman Forum and Colosseum from the Vittoriano monument in Rome" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rome<span class="sb-sub">Italy</span></span><span class="sb-count"><b>8</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:62%"></i></span><span class="sb-figs"><span><b>8</b> of 13</span><span>62%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/milan/therapists"><span class="sb-pic"><img src="/images/cities/milan-card.webp" alt="Piazza del Duomo with Milan Cathedral and Galleria Vittorio Emanuele II entrance, Milan, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Milan<span class="sb-sub">Italy</span></span><span class="sb-count"><b>6</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:60%"></i></span><span class="sb-figs"><span><b>6</b> of 10</span><span>60%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/florence/therapists"><span class="sb-pic"><img src="/images/cities/florence-card.webp" alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/rome/therapists" data-name="rome italy" data-country="italy"><span class="sb-pic"><img src="/images/cities/rome-card.webp" alt="Panoramic view of the Roman Forum and Colosseum from the Vittoriano monument in Rome" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rome<span class="sb-sub">Italy</span></span><span class="sb-count"><b>8</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:62%"></i></span><span class="sb-figs"><span><b>8</b> of 13</span><span>62%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/milan/therapists" data-name="milan italy" data-country="italy"><span class="sb-pic"><img src="/images/cities/milan-card.webp" alt="Piazza del Duomo with Milan Cathedral and Galleria Vittorio Emanuele II entrance, Milan, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Milan<span class="sb-sub">Italy</span></span><span class="sb-count"><b>6</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:60%"></i></span><span class="sb-figs"><span><b>6</b> of 10</span><span>60%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/florence/therapists" data-name="florence italy" data-country="italy"><span class="sb-pic"><img src="/images/cities/florence-card.webp" alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Spain<span class="svl-n">14 in 5 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/barcelona/therapists"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>9</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:69%"></i></span><span class="sb-figs"><span><b>9</b> of 13</span><span>69%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/madrid/therapists"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:14%"></i></span><span class="sb-figs"><span><b>2</b> of 14</span><span>14%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/granadaspain/therapists"><span class="sb-pic"><img src="/images/cities/granadaspain-card.webp" alt="Alhambra palace complex with Sierra Nevada mountains behind, Granada, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Granada<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/marbella"><span class="sb-pic"><img src="/images/cities/marbella-card.webp" alt="Luxury yachts moored at Puerto Banus marina, Marbella, Spain, under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Marbella<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/seville"><span class="sb-pic"><img src="/images/cities/seville-card.webp" alt="Plaza de España in Seville, Spain, ornate baroque semicircular palace with canal and rowing boat under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Seville<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/barcelona/therapists" data-name="barcelona spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>9</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:69%"></i></span><span class="sb-figs"><span><b>9</b> of 13</span><span>69%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/madrid/therapists" data-name="madrid spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:14%"></i></span><span class="sb-figs"><span><b>2</b> of 14</span><span>14%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/granadaspain/therapists" data-name="granada spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/granadaspain-card.webp" alt="Alhambra palace complex with Sierra Nevada mountains behind, Granada, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Granada<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/marbella" data-name="marbella spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/marbella-card.webp" alt="Luxury yachts moored at Puerto Banus marina, Marbella, Spain, under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Marbella<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/seville" data-name="seville spain" data-country="spain"><span class="sb-pic"><img src="/images/cities/seville-card.webp" alt="Plaza de España in Seville, Spain, ornate baroque semicircular palace with canal and rowing boat under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Seville<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Portugal<span class="svl-n">12 in 4 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/lisbon/therapists"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>7</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>7</b> of 7</span><span>100%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/cascais/therapists"><span class="sb-pic"><img src="/images/cities/cascais-card.webp" alt="Santa Marta Lighthouse and Casa de Santa Maria overlooking the rocky coastline of Cascais, Portugal" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cascais<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>3</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/porto/therapists"><span class="sb-pic"><img src="/images/cities/porto-card.webp" alt="Porto's Ribeira waterfront with rabelo boats on the Douro River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/sintra/therapists"><span class="sb-pic"><img src="/images/cities/sintra-card.webp" alt="The colourful red-and-yellow romantic Pena Palace perched on a forested hilltop above the green wooded hills of Sintra under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sintra<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/lisbon/therapists" data-name="lisbon portugal" data-country="portugal"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>7</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>7</b> of 7</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/cascais/therapists" data-name="cascais portugal" data-country="portugal"><span class="sb-pic"><img src="/images/cities/cascais-card.webp" alt="Santa Marta Lighthouse and Casa de Santa Maria overlooking the rocky coastline of Cascais, Portugal" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cascais<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>3</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/porto/therapists" data-name="porto portugal" data-country="portugal"><span class="sb-pic"><img src="/images/cities/porto-card.webp" alt="Porto's Ribeira waterfront with rabelo boats on the Douro River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/sintra/therapists" data-name="sintra portugal" data-country="portugal"><span class="sb-pic"><img src="/images/cities/sintra-card.webp" alt="The colourful red-and-yellow romantic Pena Palace perched on a forested hilltop above the green wooded hills of Sintra under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sintra<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Greece<span class="svl-n">9 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/athens/therapists"><span class="sb-pic"><img src="/images/cities/athens-card.webp" alt="Acropolis of Athens with the Parthenon and Odeon of Herodes Atticus viewed from Philopappos Hill" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Athens<span class="sb-sub">Greece</span></span><span class="sb-count"><b>9</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>9</b> of 9</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/athens/therapists" data-name="athens greece" data-country="greece"><span class="sb-pic"><img src="/images/cities/athens-card.webp" alt="Acropolis of Athens with the Parthenon and Odeon of Herodes Atticus viewed from Philopappos Hill" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Athens<span class="sb-sub">Greece</span></span><span class="sb-count"><b>9</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>9</b> of 9</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>UK<span class="svl-n">5 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/london/therapists"><span class="sb-pic"><img src="/images/cities/london-card.webp" alt="City of London skyline with the Walkie Talkie, Gherkin, and River Thames on a bright day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gb.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">London<span class="sb-sub">UK</span></span><span class="sb-count"><b>5</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>5</b> of 5</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/london/therapists" data-name="london uk" data-country="uk"><span class="sb-pic"><img src="/images/cities/london-card.webp" alt="City of London skyline with the Walkie Talkie, Gherkin, and River Thames on a bright day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gb.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">London<span class="sb-sub">UK</span></span><span class="sb-count"><b>5</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>5</b> of 5</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>United States<span class="svl-n">3 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/newyork/therapists"><span class="sb-pic"><img src="/images/cities/newyork-card.webp" alt="Lower Manhattan skyline with One World Trade Center viewed from Governors Island" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/us.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New York<span class="sb-sub">United States</span></span><span class="sb-count"><b>3</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/newyork/therapists" data-name="new york united states" data-country="united-states"><span class="sb-pic"><img src="/images/cities/newyork-card.webp" alt="Lower Manhattan skyline with One World Trade Center viewed from Governors Island" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/us.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New York<span class="sb-sub">United States</span></span><span class="sb-count"><b>3</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Canada<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/toronto"><span class="sb-pic"><img src="/images/cities/toronto-card.webp" alt="Toronto skyline with CN Tower from Trillium Park on a clear sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ca.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Toronto<span class="sb-sub">Canada</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/toronto" data-name="toronto canada" data-country="canada"><span class="sb-pic"><img src="/images/cities/toronto-card.webp" alt="Toronto skyline with CN Tower from Trillium Park on a clear sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ca.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Toronto<span class="sb-sub">Canada</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Croatia<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/zagreb/therapists"><span class="sb-pic"><img src="/images/cities/zagreb-card.webp" alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/zagreb/therapists" data-name="zagreb croatia" data-country="croatia"><span class="sb-pic"><img src="/images/cities/zagreb-card.webp" alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Hungary<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/budapest/therapists"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/budapest/therapists" data-name="budapest hungary" data-country="hungary"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Ireland<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/dublin"><span class="sb-pic"><img src="/images/cities/dublin-card.webp" alt="Samuel Beckett Bridge spanning the River Liffey with Dublin Docklands skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ie.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dublin<span class="sb-sub">Ireland</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/dublin" data-name="dublin ireland" data-country="ireland"><span class="sb-pic"><img src="/images/cities/dublin-card.webp" alt="Samuel Beckett Bridge spanning the River Liffey with Dublin Docklands skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ie.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dublin<span class="sb-sub">Ireland</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Israel<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/telaviv/therapists"><span class="sb-pic"><img src="/images/cities/telaviv-card.webp" alt="Tel Aviv beach and skyline on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/il.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tel Aviv<span class="sb-sub">Israel</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/telaviv/therapists" data-name="tel aviv israel" data-country="israel"><span class="sb-pic"><img src="/images/cities/telaviv-card.webp" alt="Tel Aviv beach and skyline on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/il.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tel Aviv<span class="sb-sub">Israel</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
-      <section class="svl-country">
+      <section class="svl-country sf-group">
           <h2>Sweden<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/stockholm"><span class="sb-pic"><img src="/images/cities/stockholm-card.webp" alt="Aerial view of Stockholm showing Gamla Stan old town island surrounded by waterways" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/se.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Stockholm<span class="sb-sub">Sweden</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/stockholm" data-name="stockholm sweden" data-country="sweden"><span class="sb-pic"><img src="/images/cities/stockholm-card.webp" alt="Aerial view of Stockholm showing Gamla Stan old town island surrounded by waterways" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/se.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Stockholm<span class="sb-sub">Sweden</span></span><span class="sb-count"><b>1</b><small>German</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all therapists here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
+
+      <div class="sf-empty is-hidden" id="svlEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page lists every city where we can point at a source saying a therapist works in German. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svl-prose">
         <h2>Where these came from</h2>
@@ -626,6 +668,71 @@
     if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
   q.forEach(function(el){io.observe(el);});
 })();</script>
+  <script>
+    (function(){
+      var bar=document.getElementById('svlBar');
+      if(!bar)return;
+      var out=document.getElementById('svlCount'),blank=document.getElementById('svlEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'city':'cities')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'cities'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svlReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

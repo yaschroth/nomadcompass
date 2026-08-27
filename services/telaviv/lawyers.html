@@ -480,6 +480,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
@@ -514,10 +544,17 @@
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-de"><span class="sb-chip-label">German</span><span class="sb-chip-n">20</span></a><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">19</span></a></nav>
       <p class="ymyl-note">This is a directory, not legal or financial advice. Being listed here says nothing about the quality or the price of the work, and we take no fee from anyone on this page.</p>
 
-      <section class="svp-lang" id="lang-de">
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 34 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Language</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="de">German (20)</option><option value="en">English (19)</option><option value="cs">Czech (1)</option><option value="fr">French (1)</option><option value="it">Italian (1)</option><option value="sk">Slovak (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>39</b> listings.</p>
+
+      <section class="svp-lang sf-group" id="lang-de">
           <h2>German-speaking lawyers in Tel Aviv<span class="svp-lang-n">20</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="adi zalk">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="adi zalk">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.hh-law.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Adi%20ZALK%2C%206%20Kaufman%20St.%2C%20main%40hh-law.co.il%2C%20Web%3A%20www.hh-law.co.il%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="amit stein">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="amit stein">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.amitstein.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Amit%20STEIN%2C%202%2C%20Yaakov%20Rozen%20St.%2C%20%2C%20Ramat%20Gan%2C%20Homepage%3A%20www.amitstein.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="amos hacmun">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="amos hacmun">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.hh-law.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Amos%20Hacmun%2C%206%20Kaufman%20St.%2C%20Web%3A%20www.hh-law.co.il%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="boris belkin">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="boris belkin">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Boris%20BELKIN%2C%2028%2F100%2C%20Rager%20Ave.%2C%20P.O.%20Box%20927%2C%20Beer%20Sheva%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="chaya lev">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="chaya lev">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.lmg-law.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chaya%20Lev%2C%20HaArba'a%20Towers%2C%20Northern%20Tower%2C%2034th%20Floor%2C%2028%20HaArba'a%20Street%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="dan assan">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="dan assan">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.danassan.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dan%20ASSAN%2C%20Montefiore%20St.%2039%2C%20%2C%206520108%20Tel%20Aviv%2C%20Website%3A%20www.danassan.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="david page">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="david page">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.davidpagelaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=David%20PAGE%2C%2054%20Shiloh%20Street%2C%209450554%2C%20Jerusalem%2C%20Tax%3A%2002-591%206213%2C%20Internet%3A%20www.davidpagelaw.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. eli murlakov">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. eli murlakov">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><a class="sv-go" href="http://mu-law.com/de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Eli%20MURLAKOV%2C%20Advocate%20%26%20Notary%2C%2029%2C%20Hamered%20Street%2C%20%2C%20Website%3A%20http%3A%2F%2Fmu-law.com%2Fde%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. inbal steinitz">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. inbal steinitz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +689,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.LipaMeir.Co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Inbal%20Steinitz%2C%202%2C%20Weitzman%20St.%2C%20Bet%20Amot%20Hashkaot%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. judith taic">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. judith taic">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +704,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.law-intax.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Judith%20TAIC%2C%20Sharbat%20House%2C%209th%20floor%2C%204%20Kaufmann%20St.%2C%20Internet%3A%20www.law-intax.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. jur. gabriel miller">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. jur. gabriel miller">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +719,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.kanzlei-miller.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20jur.%20Gabriel%20MILLER%2C%2028%2C%20Bloch%20Street%2C%20Website%3A%20www.kanzlei-miller.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. yuval hen">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="dr. yuval hen">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +734,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.henadvoc.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Yuval%20HEN%2C%20Museum%20Tower%2C%204%2C%20Berkowitz%20Street%2C%20Website%3A%20www.henadvoc.com%2C%20(s.a.%20unter%20%22Haifa%20und%20Nordisrael%22)%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="cs de en fr it sk" data-name="iva ashkenazy">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="cs de en fr it sk" data-name="iva ashkenazy">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -712,7 +749,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.ashkenazy-law.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Iva%20ASHKENAZY%2C%20Ha'hashmonaim%20St%20119%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="joshua m. deutsch">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="joshua m. deutsch">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -727,7 +764,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Joshua%20M.%20DEUTSCH%2C%20Laskov%20St.%207%2C%20%2C%206473607%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="jossy gellis">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="jossy gellis">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -742,7 +779,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.gellisobrasky.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Jossy%20GELLIS%2C%2020%20Lincoln%20Street%2020%2C%206712412%20Tel%20Aviv%2C%20Website%3A%20www.gellisobrasky.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="michael kempinski advocate &amp; notary">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="michael kempinski advocate &amp; notary">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -757,7 +794,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Michael%20KEMPINSKI%20Advocate%20%26%20Notary%2C%20Moshe%20Sharet%20St.%2054%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="ron klagsbald">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="ron klagsbald">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -772,7 +809,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ron%20KLAGSBALD%2C%202%2C%20Weizman%20Street%20(17%20th%20floor)%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="rotem aviv pappe">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="rotem aviv pappe">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -787,7 +824,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rotem%20AVIV%20PAPPE%2C%20Menachem%20Begin%20Rd.%2C%2053%2C%2021st%20Floor%2C%20%2C%20Sonol%20Tower%2C%20%2C%2067137%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="steinmetz shg law">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="steinmetz shg law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -802,7 +839,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.shg-law.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Steinmetz%20SHG%20Law%2C%20Rubinstein%20Tower%2C%20Ecke%2037%20Menachem%20Road%2C%20Internet%3A%20www.shg-law.co.il%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de" data-name="weber &amp; co.">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de" data-name="weber &amp; co.">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -821,10 +858,10 @@
           
           <p class="svp-more-lang"><a href="/services/lawyers/german">German-speaking lawyers in 77 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-en">
+        <section class="svp-lang sf-group" id="lang-en">
           <h2>English-speaking lawyers in Tel Aviv<span class="svp-lang-n">19</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="aharoni rahav law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="aharoni rahav law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -839,7 +876,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.aharonilaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Aharoni%20Rahav%20Law%20Firm%2C%2010%20Harav%20Herzog%20St%2C%206291509%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="amit stein">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="amit stein">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -854,7 +891,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.amitstein.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Amit%20STEIN%2C%202%2C%20Yaakov%20Rozen%20St.%2C%20%2C%20Ramat%20Gan%2C%20Homepage%3A%20www.amitstein.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="barnea jaffa lande">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="barnea jaffa lande">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -869,7 +906,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.barlaw.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Barnea%20Jaffa%20Lande%2C%2058%20Harakevet%20St%2C%206777016%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="cwalsh law offices">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="cwalsh law offices">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -884,7 +921,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.cwalshlaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Cwalsh%20Law%20Offices%2C%204%20Dolev%20Street%2C%20Tel%20Aviv%2C%204366204%2C%20Raanana%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="dan assan">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="dan assan">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -899,7 +936,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.danassan.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dan%20ASSAN%2C%20Montefiore%20St.%2039%2C%20%2C%206520108%20Tel%20Aviv%2C%20Website%3A%20www.danassan.com%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="de frece">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="de frece">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -914,7 +951,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=De%20Frece%2C%2044%20Begin%20Road%2C%206618360%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="decker pex levi">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="decker pex levi">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -929,7 +966,7 @@
           <p class="sv-links"><a class="sv-go" href="https://lawoffice.org.il/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Decker%20Pex%20Levi%2C%2010%20Yad%20Harutzim%2C%20150%20Menachem%20Begin%2C%209342148%2C%20Jerusalem%20%5C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="derri rifer co law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="derri rifer co law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -944,7 +981,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.drlawfirm.co.il/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Derri%20Rifer%20Co%20Law%20Firm%2C%2028%20Ha'arba'a%20St%2C%20Tel%20Aviv%2C%20Yafo%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="eli shimony law office">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="eli shimony law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -959,7 +996,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.eshimony-law.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Eli%20Shimony%20Law%20Office%2C%2028%20Ha'arba'a%20St.%2C%20North%20Tower%2C%20Floor%2013th.%2C%206473925%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="heskia hacmun law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="heskia hacmun law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -974,7 +1011,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.hh-law.co.il/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Heskia%20Hacmun%20Law%20Firm%2C%206%20Kaufman%20Str.%2C%206801298%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="ilan yacobovitch family law">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="ilan yacobovitch family law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -989,7 +1026,7 @@
           <p class="sv-links"><a class="sv-go" href="https://ilanyac-law.co.il/en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ilan%20Yacobovitch%20Family%20Law%2C%2023%20Begin%20Road%2C%206618356%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="cs de en fr it sk" data-name="iva ashkenazy">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="cs de en fr it sk" data-name="iva ashkenazy">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1004,7 +1041,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.ashkenazy-law.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Iva%20ASHKENAZY%2C%20Ha'hashmonaim%20St%20119%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="joshua m. deutsch">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="joshua m. deutsch">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1019,7 +1056,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Joshua%20M.%20DEUTSCH%2C%20Laskov%20St.%207%2C%20%2C%206473607%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="ran cohen rochverger law offices">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="ran cohen rochverger law offices">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1034,7 +1071,7 @@
           <p class="sv-links"><a class="sv-go" href="https://rancr-law.co.il/en/home-en/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ran%20Cohen%20Rochverger%20Law%20Offices%2C%20Berkovitch%204%2C%20Museum%20Tower%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="ran tirosh co law offices">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="ran tirosh co law offices">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1049,7 +1086,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ran%20Tirosh%20Co%20Law%20Offices%2C%20Rothschild%20boulevard%2015%2C%2015%2C%206688118%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="roni hareli law office and notary">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="roni hareli law office and notary">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1064,7 +1101,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.ronilaw.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Roni%20Hareli%20Law%20Office%20And%20Notary%2C%20BERKOVITS%204%20ST.%2C%20MUSEUM%20TOWER%2C%20FLOOR%206%2C%206423860%2C%20TEL%20AVIV%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en he" data-name="rotem aviv pappe">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en he" data-name="rotem aviv pappe">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1079,7 +1116,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rotem%20AVIV%20PAPPE%2C%20Menachem%20Begin%20Rd.%2C%2053%2C%2021st%20Floor%2C%20%2C%20Sonol%20Tower%2C%20%2C%2067137%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="shai roda adv">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="shai roda adv">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1094,7 +1131,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.criminallaw.co.il" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Shai%20Roda%20Adv%2C%208%20Shaul%20Hamelech%20Blvd%2C%206473307%2C%20Tel%20Aviv%2C%20Tel%20Aviv%2C%20Israel" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="he en" data-name="yoram fay law office">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="he en" data-name="yoram fay law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1113,6 +1150,11 @@
           
           
         </section>
+
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every lawyer in Tel Aviv whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -1139,6 +1181,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

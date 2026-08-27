@@ -21,6 +21,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
@@ -92,13 +93,20 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   })();
   const langChips = LANGS_FOR.map((x) => B.chip({ href: x.url, label: P.langName(x.language), n: x.n })).join('');
 
+  // The filter's language menu is every non-local language actually recorded for this service, not
+  // only the six named in the standfirst: a menu that stops at six is a filter that cannot find the
+  // seventh.
+  const LANG_FILTER = Object.entries(langTotals)
+    .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
+    .map(([l, n]) => [l, P.langName(l) + ' (' + n + ')']);
+
   // One counter for the page, so the photographs that ship in the HTML are the tiles a reader
   // reaches first rather than the first few of every country block.
   let tileIndex = 0;
   const countryBlocks = countries.map((country) => {
     const slugs = byCountry[country].slice().sort((a, b) => rowsFor(b).n - rowsFor(a).n || M.cities[a].name.localeCompare(M.cities[b].name));
     const total = slugs.reduce((s, x) => s + rowsFor(x).n, 0);
-    return `<section class="svh-country">
+    return `<section class="svh-country sf-group">
           <h2>${esc(country)}<span class="svh-n">${total} in ${slugs.length} ${slugs.length === 1 ? 'city' : 'cities'}</span></h2>
           <div class="sb-grid">
         ${slugs.map((slug) => {
@@ -116,6 +124,7 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
       unit: 'listed',
       index: tileIndex++,
       eyebrow: 'Works in',
+      data: { langs: p.nonLocal.map(([l]) => l) },
       trayInner: pairs.length ? B.langChips(pairs) : '<span class="sb-tray-text">Language recorded on the page</span>',
     });
   }).join('\n        ')}
@@ -182,6 +191,7 @@ ${H.css}
     .svh-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
 ${B.css}
+${F.css}
     .svh-foot { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svh-foot p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
   </style>
@@ -212,7 +222,20 @@ ${shell.headEnd}
         <div class="sb-chips">${langChips}</div>
       </nav>` : ''}
 
+      ${F.bar({
+    id: 'svh',
+    items: svc.cities.length,
+    fields: [
+      { key: 'q', search: true, label: 'City or country', placeholder: 'Type a city or country…' },
+      { key: 'langs', label: 'Language', any: 'Any language', options: LANG_FILTER },
+      { key: 'country', label: 'Country', any: 'Any country', options: countries.map((c) => [B.slugify(c), c]) },
+    ],
+  })}
+      ${F.count({ id: 'svh', total: svc.cities.length, noun: 'city', nounPlural: 'cities' })}
+
       ${countryBlocks}
+
+      ${F.empty({ id: 'svh', what: `This page lists every city where we hold at least one ${esc(label.replace(/s$/, ''))} with a sourced working language.` })}
 
       <section class="svh-foot">
         <p>Every city above links to the ${esc(label)} we hold for it, and every entry there names the source its language claim came from. We have not called or visited any of them, so treat each one as a claim someone else made.</p>
@@ -221,6 +244,7 @@ ${shell.headEnd}
     </div>
   </main>
   ${B.revealJs}
+  ${F.js({ id: 'svh', noun: 'city', nounPlural: 'cities' })}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

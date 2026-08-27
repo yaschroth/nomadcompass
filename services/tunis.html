@@ -488,6 +488,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svc-chips { margin: 0 0 var(--space-5); }
     .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
     .svc-group-head a:hover { text-decoration: underline; }
@@ -529,10 +559,18 @@
         
         <p class="sv-count">All <b>12</b> providers we hold for Tunis.</p>
 
-      <section class="svc-group" data-cat="legal" id="svc-legal">
+        <div class="sf-bar" id="svcBar">
+        <div class="sf-field sf-field-q"><label for="svc-q">Name</label><input type="search" id="svc-q" data-sf="q" placeholder="Search 12 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svc-cat">Service</label><select id="svc-cat" data-sf="cat"><option value="all">Any service</option><option value="legal">Legal &amp; visa</option></select></div>
+        <div class="sf-field"><label for="svc-lang">Language</label><select id="svc-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (12)</option></select></div>
+        <button type="button" class="sf-reset" id="svcReset">Reset</button>
+      </div>
+        <p class="sf-count" id="svcCount" role="status" aria-live="polite">Showing all <b>12</b> listings.</p>
+
+      <section class="svc-group sf-group" data-cat="legal" id="svc-legal">
           <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n">12</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="adly bellagha associates">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="adly bellagha associates">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +585,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Adly%20Bellagha%20Associates%2C%20126%20rue%20Radhia%20Haddad%2C%201000%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="chafter raouadi law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="chafter raouadi law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +600,7 @@
           <p class="sv-links"><a class="sv-go" href="https://chafterlegal.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Chafter%20Raouadi%20Law%20Firm%2C%207%2C%20Rue%20Hooker%20Dolittle%2C%20Le%20Belvedere%2C%201002%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="dachraoui law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="dachraoui law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +615,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.dachraouilawoffice.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dachraoui%20Law%20Firm%2C%2039%20Avenue%20du%20Japon%2C%20Appartement%20A%203%2C%202%2C%203eme%20etage%2C%20Montplaisir%201073%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="ghachem legal adviser">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="ghachem legal adviser">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +630,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ghachem%20Legal%20Adviser%2C%2025%20avenue%20youssef%20rouissi%20manar%202%2C%202092%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="hajer ben slimane">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="hajer ben slimane">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +645,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hajer%20Ben%20Slimane%2C%205%20Rue%20des%20sports%20Menzah%2C%201004%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="halouani avocats">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="halouani avocats">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +660,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Halouani%20Avocats%2C%2021%20Rue%20d'Iraq%2C%20Immeuble%20Galaxy%20Bloc%20B%2C%201002%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="ismael mrad">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="ismael mrad">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +675,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ismael%20Mrad%2C%2013%2C%20avenue%20Alain%20Savary%2C%201002%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="jusititia avocatie conseil">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="jusititia avocatie conseil">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +690,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Jusititia%20Avocatie%20Conseil%2C%20RUE%20LAC%20VICTORIA.%20IMM%20LAC%20DES%20CYGNES%2C%20AP%20A5%2C%201053%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="maitre afif gaigi">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="maitre afif gaigi">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +705,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maitre%20Afif%20Gaigi%2C%20Immeuble%20%22La%20Nationale%22%2C2nd%20Floor%2C%202%2C%20Avenue%20de%20France%20(opposite%20the%20French%20Embassy)%2C%201000%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="mamlouk lawyers">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="mamlouk lawyers">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +720,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mamlouk%20Lawyers%2C%2026%20rue%20mohieddine%20klibi%20Manar2%2C%202092%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="mounir baatour">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="mounir baatour">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +735,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mounir%20Baatour%2C%207%20rue%20Fatma%20el%20Fehrya%2C%20Mutuelleville%2C%201082%2C%20Tunis%2C%20Tunis%2C%20Tunisia" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="rachid gaied attorney and counsellor at law">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="rachid gaied attorney and counsellor at law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -715,6 +753,11 @@
           </div>
           
         </section>
+
+        <div class="sf-empty is-hidden" id="svcEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every provider in Tunis whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <section class="svc-more">
@@ -726,6 +769,71 @@
       </section>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svcBar');
+      if(!bar)return;
+      var out=document.getElementById('svcCount'),blank=document.getElementById('svcEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svcReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

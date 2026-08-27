@@ -480,6 +480,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq { margin: 0 0 var(--space-5); }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
@@ -514,10 +544,17 @@
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">17</span></a><a class="sb-chip" href="#lang-de"><span class="sb-chip-label">German</span><span class="sb-chip-n">12</span></a><a class="sb-chip" href="#lang-fr"><span class="sb-chip-label">French</span><span class="sb-chip-n">9</span></a><a class="sb-chip" href="#lang-es"><span class="sb-chip-label">Spanish</span><span class="sb-chip-n">4</span></a></nav>
       <p class="ymyl-note">This is a directory, not legal or financial advice. Being listed here says nothing about the quality or the price of the work, and we take no fee from anyone on this page.</p>
 
-      <section class="svp-lang" id="lang-en">
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 21 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Language</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (17)</option><option value="de">German (12)</option><option value="fr">French (9)</option><option value="es">Spanish (4)</option><option value="it">Italian (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>42</b> listings.</p>
+
+      <section class="svp-lang sf-group" id="lang-en">
           <h2>English-speaking lawyers in Porto<span class="svp-lang-n">17</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="abir nashef advogado">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="abir nashef advogado">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Abir%20Nashef%20Advogado%2C%20Av.%20Marechal%20Gomes%20da%20Costa%2C%20630%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="alex himmel">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="alex himmel">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Alex%20Himmel%2C%20Rua%20Formosa%2C%20447-1.Esq.%2C%204000-253%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.lencastreadvogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Conde%20Lencastre%2C%20Av.da%20Boavista%2C%20280-5.Esq.%2FCentro%2C%204050-113%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="antonio vilar">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="antonio vilar">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Vilar%2C%20Rua%20Julio%20Dinis%2C%20N.242%2C%202.andar%2C%20Sala%20206%2C%204050-318%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="carlos pinto de abreu associados sociedade de advogados sp rl">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="carlos pinto de abreu associados sociedade de advogados sp rl">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.carlospintodeabreu.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Carlos%20Pinto%20De%20Abreu%20Associados%20Sociedade%20De%20Advogados%20Sp%20Rl%2C%20Rua%20D.%20Joao%20IV%2C%20399%2C%203.%20Andar%2C%20Sala%2015%2C%204000%2C%20302%20Porto%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="carlos pinto de abreu e associados sociedade de advogados sp rl">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="carlos pinto de abreu e associados sociedade de advogados sp rl">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><a class="sv-go" href="https://carlospintodeabreu.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Carlos%20Pinto%20De%20Abreu%20E%20Associados%20Sociedade%20De%20Advogados%20Sp%20Rl%2C%20Rua%20D%20Joao%20IV%2C%20399%2C%203%20SL15%2C%204000%2C%20302%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="defesa legal portugal law office ferraz e aguiar soares sociedade de advogados sp rl">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="defesa legal portugal law office ferraz e aguiar soares sociedade de advogados sp rl">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.defesalegal.pt/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Defesa%20Legal%20Portugal%20Law%20Office%20Ferraz%20E%20Aguiar%20Soares%20Sociedade%20De%20Advogados%20Sp%20Rl%2C%20Rua%20Rainha%20D.%20Estefania%2C%20246%2C%205.%20S14%2C%204150%2C%20303%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en pt" data-name="dr.alexander rathenau">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en pt" data-name="dr.alexander rathenau">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.anwalt-portugal.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Alexander%20Rathenau%2C%20Advogado%20(PT)%20und%20Rechtsanwalt%20(DE)%2C%20Rua%20D.Joao%20IV%2C%20399-2-Sala%2010%2C%204000-302%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="fernando jorge silva">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="fernando jorge silva">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +689,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Fernando%20Jorge%20Silva%2C%20Rua%20de%20Guerra%20Junqueiro%20296%2C%204150%2C%20386%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="fpra advogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="fpra advogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +704,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Fpra%20Advogados%2C%20Rua%20Sao%20Joao%20de%20Brito%2C%20610%2C%201%20andar%2C%20sala%2014%2C%204100%2C%20453%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="isabel dias machado law office">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="isabel dias machado law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +719,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.isabeldiasmachado.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Isabel%20Dias%20Machado%20Law%20Office%2C%20Rua%20Ramalho%20Ortigao%2C%2034%2C%20sobreloja%2C%20salas%206%20e%207%2C%204000%2C%20407%20Porto%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +734,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mafalda%20Miranda%20Blom%2C%20Rua%20Sa%20da%20Bandeira%2C%20n%20651%2C%201%2C%20Esq.%2C%204000-437%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -712,7 +749,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maria%20de%20Fatima%20Dias%20Pinto%2C%20Rua%20de%20Fez%2C%201082%2C%204150-327%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="pt en" data-name="mc rs lawyers">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="pt en" data-name="mc rs lawyers">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -727,7 +764,7 @@
           <p class="sv-links"><a class="sv-go" href="https://mcrslawyers.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mc%20Rs%20Lawyers%2C%20Rua%20Joao%20Grave%2C%20n%20125%2C%201%2C%20sala%2014%2C%204150%2C%20428%2C%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -742,7 +779,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Miguel%20Kramer%2C%20Business%20Center%20Atria%2C%20Av.da%20Boavista%2C%202609%2C%204100-135%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="plmj advogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="plmj advogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -757,7 +794,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.plmj.com/pt/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=PLMJ%20Advogados%2C%20Porto%20Office%20Park%2FTorre%20A-8.Piso%2C%20Av.%20de%20Sidonio%20Pais%2C%20153%2C%204100-467%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr it pt" data-name="thomas g. p. prete">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr it pt" data-name="thomas g. p. prete">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -776,10 +813,10 @@
           
           
         </section>
-        <section class="svp-lang" id="lang-de">
+        <section class="svp-lang sf-group" id="lang-de">
           <h2>German-speaking lawyers in Porto<span class="svp-lang-n">12</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="alex himmel">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="alex himmel">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -794,7 +831,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Alex%20Himmel%2C%20Rua%20Formosa%2C%20447-1.Esq.%2C%204000-253%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -809,7 +846,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.lencastreadvogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Conde%20Lencastre%2C%20Av.da%20Boavista%2C%20280-5.Esq.%2FCentro%2C%204050-113%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="antonio vilar">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="antonio vilar">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -824,7 +861,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Vilar%2C%20Rua%20Julio%20Dinis%2C%20N.242%2C%202.andar%2C%20Sala%20206%2C%204050-318%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en pt" data-name="dr.alexander rathenau">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en pt" data-name="dr.alexander rathenau">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -839,7 +876,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.anwalt-portugal.de" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Alexander%20Rathenau%2C%20Advogado%20(PT)%20und%20Rechtsanwalt%20(DE)%2C%20Rua%20D.Joao%20IV%2C%20399-2-Sala%2010%2C%204000-302%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de pt" data-name="ines wollmann">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de pt" data-name="ines wollmann">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -854,7 +891,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ines%20Wollmann%2C%20Foz%20do%20Douro%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de pt" data-name="jorge leao">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de pt" data-name="jorge leao">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -869,7 +906,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Jorge%20Leao%2C%20Avenida%20da%20Boavista%201681%2C%207%2C%20S.1%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de pt" data-name="lencastre advogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de pt" data-name="lencastre advogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -884,7 +921,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Lencastre%20Advogados%2C%20Avenida%20da%20Boavista%2C%20280%2C%205%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -899,7 +936,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mafalda%20Miranda%20Blom%2C%20Rua%20Sa%20da%20Bandeira%2C%20n%20651%2C%201%2C%20Esq.%2C%204000-437%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -914,7 +951,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maria%20de%20Fatima%20Dias%20Pinto%2C%20Rua%20de%20Fez%2C%201082%2C%204150-327%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -929,7 +966,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Miguel%20Kramer%2C%20Business%20Center%20Atria%2C%20Av.da%20Boavista%2C%202609%2C%204100-135%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="plmj advogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="plmj advogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -944,7 +981,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.plmj.com/pt/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=PLMJ%20Advogados%2C%20Porto%20Office%20Park%2FTorre%20A-8.Piso%2C%20Av.%20de%20Sidonio%20Pais%2C%20153%2C%204100-467%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr it pt" data-name="thomas g. p. prete">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr it pt" data-name="thomas g. p. prete">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -963,10 +1000,10 @@
           
           <p class="svp-more-lang"><a href="/services/lawyers/german">German-speaking lawyers in 77 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-fr">
+        <section class="svp-lang sf-group" id="lang-fr">
           <h2>French-speaking lawyers in Porto<span class="svp-lang-n">9</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="alex himmel">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="alex himmel">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -981,7 +1018,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Alex%20Himmel%2C%20Rua%20Formosa%2C%20447-1.Esq.%2C%204000-253%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -996,7 +1033,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.lencastreadvogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Conde%20Lencastre%2C%20Av.da%20Boavista%2C%20280-5.Esq.%2FCentro%2C%204050-113%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="antonio vilar">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="antonio vilar">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1011,7 +1048,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Vilar%2C%20Rua%20Julio%20Dinis%2C%20N.242%2C%202.andar%2C%20Sala%20206%2C%204050-318%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1026,7 +1063,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mafalda%20Miranda%20Blom%2C%20Rua%20Sa%20da%20Bandeira%2C%20n%20651%2C%201%2C%20Esq.%2C%204000-437%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="fr pt" data-name="maitre sandrine farinho">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="fr pt" data-name="maitre sandrine farinho">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1041,7 +1078,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maitre%20Sandrine%20Farinho%2C%20Rua%20Anibal%20Guerreiro%2024%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1056,7 +1093,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maria%20de%20Fatima%20Dias%20Pinto%2C%20Rua%20de%20Fez%2C%201082%2C%204150-327%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1071,7 +1108,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Miguel%20Kramer%2C%20Business%20Center%20Atria%2C%20Av.da%20Boavista%2C%202609%2C%204100-135%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="plmj advogados">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr pt" data-name="plmj advogados">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1086,7 +1123,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.plmj.com/pt/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=PLMJ%20Advogados%2C%20Porto%20Office%20Park%2FTorre%20A-8.Piso%2C%20Av.%20de%20Sidonio%20Pais%2C%20153%2C%204100-467%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en fr it pt" data-name="thomas g. p. prete">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en fr it pt" data-name="thomas g. p. prete">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1105,10 +1142,10 @@
           
           <p class="svp-more-lang"><a href="/services/lawyers/french">French-speaking lawyers in 63 other cities &rarr;</a></p>
         </section>
-        <section class="svp-lang" id="lang-es">
+        <section class="svp-lang sf-group" id="lang-es">
           <h2>Spanish-speaking lawyers in Porto<span class="svp-lang-n">4</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="antonio conde lencastre">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1123,7 +1160,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.lencastreadvogados.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Antonio%20Conde%20Lencastre%2C%20Av.da%20Boavista%2C%20280-5.Esq.%2FCentro%2C%204050-113%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="mafalda miranda blom">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1138,7 +1175,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Mafalda%20Miranda%20Blom%2C%20Rua%20Sa%20da%20Bandeira%2C%20n%20651%2C%201%2C%20Esq.%2C%204000-437%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="maria de fatima dias pinto">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1153,7 +1190,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Maria%20de%20Fatima%20Dias%20Pinto%2C%20Rua%20de%20Fez%2C%201082%2C%204150-327%20Porto%2C%20Porto%2C%20Portugal" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="de en es fr pt" data-name="miguel kramer">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1172,6 +1209,11 @@
           
           <p class="svp-more-lang"><a href="/services/lawyers/spanish">Spanish-speaking lawyers in 15 other cities &rarr;</a></p>
         </section>
+
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every lawyer in Porto whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -1198,6 +1240,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

@@ -30,6 +30,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 // inlineIcon rather than icon(): same reason as /services, the shared sprite is a second request
@@ -213,7 +214,7 @@ for (const [lang, v] of Object.entries(rowsByLang)) {
   // Tile order across the whole page, not within a country, so the eager photographs are the ones
   // a reader actually reaches first.
   let tileIndex = 0;
-  const countryBlocks = countries.map((country) => `<section class="svg-country">
+  const countryBlocks = countries.map((country) => `<section class="svg-country sf-group">
           <h3>${esc(country)}<span class="svg-n">${byCountry[country].reduce((s, x) => s + x.n, 0)} in ${byCountry[country].length} ${byCountry[country].length === 1 ? 'city' : 'cities'}</span></h3>
           <div class="sb-grid">
         ${byCountry[country].map((c) => B.cityTile({
@@ -227,6 +228,7 @@ for (const [lang, v] of Object.entries(rowsByLang)) {
     index: tileIndex++,
     eyebrow: 'Services here',
     trayInner: B.tagChips(c.cats.map((x) => P.catName(x).replace(/^./, (y) => y.toUpperCase())), 3),
+    data: { cats: c.cats },
   })).join('\n        ')}
           </div>
         </section>`).join('\n      ');
@@ -301,6 +303,7 @@ ${H.css}
     .svg-n { margin-left: auto; font-family: var(--font-sans, system-ui); font-size: var(--text-xs); font-weight: 700;
       letter-spacing: .04em; text-transform: uppercase; color: var(--color-stone); }
 ${B.css}
+${F.css}
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -339,7 +342,18 @@ ${shell.headEnd}
       <section class="svg-sec">
         <h2>By city</h2>
         <p class="svg-lede">Every city with at least one provider who works in ${esc(langName)}, grouped by country.</p>
+        ${F.bar({
+    id: 'svg',
+    items: cityRows.length,
+    fields: [
+      { key: 'q', search: true, label: 'City or country', placeholder: 'Type a city or country…' },
+      { key: 'cats', label: 'Service', any: 'Any service', options: catRows.map((c) => [c.cat, P.catName(c.cat).replace(/^./, (x) => x.toUpperCase())]) },
+      { key: 'country', label: 'Country', any: 'Any country', options: countries.map((c) => [B.slugify(c), c]) },
+    ],
+  })}
+        ${F.count({ id: 'svg', total: cityRows.length, noun: 'city', nounPlural: 'cities' })}
         ${countryBlocks}
+        ${F.empty({ id: 'svg', what: `This page lists every city where a published source says a provider works in ${langName}.` })}
       </section>
 
       <div class="svg-prose">
@@ -356,6 +370,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
     </div>
   </main>
   ${B.revealJs}
+  ${F.js({ id: 'svg', noun: 'city', nounPlural: 'cities' })}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

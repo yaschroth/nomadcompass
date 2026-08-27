@@ -242,17 +242,27 @@ const EAGER_TILES = 24;
  * `index` is the tile's position on the whole page, not within its country block, so the eager
  * photographs are the ones actually reached first.
  */
-const cityTile = ({ href, slug, name, country, iso, n, unit, index = 0, eyebrow, trayInner }) => {
+const cityTile = ({ href, slug, name, country, iso, n, unit, index = 0, eyebrow, trayInner, data }) => {
   const a = CITY_PHOTOS.attrib[slug] || {};
   const band = CITY_PHOTOS.present.has(slug)
     ? pic({ slug, alt: a.alt || name, eager: index < EAGER_TILES })
     : '<span class="sb-pic"></span>';
-  return `<a class="sb-card sb-card-pic" href="${href}">`
+  // What service_filter.cjs reads. data-name carries the country as well as the city, so typing
+  // "portugal" on a page listing 75 countries narrows to Portugal without a second control.
+  const attrs = Object.entries(data || {})
+    .map(([k, v]) => ` data-${k}="${esc(Array.isArray(v) ? v.join(' ') : v)}"`).join('');
+  return `<a class="sb-card sb-card-pic sf-item" href="${href}"`
+    + ` data-name="${esc((name + ' ' + (country || '')).toLowerCase())}"`
+    + ` data-country="${esc(slugify(country || ''))}"${attrs}>`
     + band
     + cardHeadFlag({ iso, name, sub: country, n, unit })
     + tray(eyebrow, trayInner)
     + `</a>`;
 };
+
+/** A value safe to put in an attribute and match against a <select>. */
+const slugify = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /**
  * The photograph band at the top of a city tile.
@@ -310,4 +320,4 @@ const revealJs = `<script>(function(){
   q.forEach(function(el){io.observe(el);});
 })();</script>`;
 
-module.exports = { css, chip, cardHead, cardHeadFlag, tray, langChips, tagChips, shareBar, pic, hub, cityTile, revealJs, EAGER_TILES, esc };
+module.exports = { css, chip, cardHead, cardHeadFlag, tray, langChips, tagChips, shareBar, pic, hub, cityTile, revealJs, EAGER_TILES, slugify, esc };

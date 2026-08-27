@@ -488,6 +488,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svc-chips { margin: 0 0 var(--space-5); }
     .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
     .svc-group-head a:hover { text-decoration: underline; }
@@ -529,10 +559,18 @@
         
         <p class="sv-count">All <b>33</b> providers we hold for Oslo.</p>
 
-      <section class="svc-group" data-cat="legal" id="svc-legal">
+        <div class="sf-bar" id="svcBar">
+        <div class="sf-field sf-field-q"><label for="svc-q">Name</label><input type="search" id="svc-q" data-sf="q" placeholder="Search 33 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svc-cat">Service</label><select id="svc-cat" data-sf="cat"><option value="all">Any service</option><option value="legal">Legal &amp; visa</option></select></div>
+        <div class="sf-field"><label for="svc-lang">Language</label><select id="svc-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (33)</option></select></div>
+        <button type="button" class="sf-reset" id="svcReset">Reset</button>
+      </div>
+        <p class="sf-count" id="svcCount" role="status" aria-live="polite">Showing all <b>33</b> listings.</p>
+
+      <section class="svc-group sf-group" data-cat="legal" id="svc-legal">
           <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n">33</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokat paal berg helland">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokat paal berg helland">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +585,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokat%20Paal%20Berg%20Helland%2C%20Skanseveien%202%20F%2C%201086%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokat pal valheim">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokat pal valheim">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +600,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokat%20Pal%20Valheim%2C%20Solheimgata%202%20B%2C%200267%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokat signe blekastad as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokat signe blekastad as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +615,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokat%20Signe%20Blekastad%20As%2C%20C%20J%20Hambros%20plass%207%2C%200164%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatene i oslo">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatene i oslo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +630,7 @@
           <p class="sv-links"><a class="sv-go" href="http://advokateneioslo.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatene%20I%20Oslo%2C%20Pb%20214%20Homansbyen%2C%200323%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirma elden">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirma elden">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +645,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.elden.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirma%20Elden%2C%20St%20Olavs%20gate%2025%2C%200129%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirma knut boye">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirma knut boye">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +660,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.ba2advokatene.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirma%20Knut%20Boye%2C%20Bygdy%20Alle%202%2C%200257%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet aasen as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet aasen as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +675,7 @@
           <p class="sv-links"><a class="sv-go" href="https://aasen.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Aasen%20As%2C%20Stortorvet%205%2C%200155%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet andenaes da">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet andenaes da">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +690,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.aav.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Andenaes%20Da%2C%20Grensen%2016%2C%200159%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet arntzen as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet arntzen as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +705,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.arntzen.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Arntzen%20As%2C%20Ruselkkveien%2030%2C%200251%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet braekhus">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet braekhus">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +720,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.advokatbraekhus.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Braekhus%2C%20C.%20J.%20Hambros%20plass%202C%2C%200111%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet bull as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet bull as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +735,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.bull.no/en/people/andre-carlsen" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Bull%20As%2C%20Postboks%206604%20St%20Olavs%20plass%2C%200129%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet haavind as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet haavind as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -712,7 +750,7 @@
           <p class="sv-links"><a class="sv-go" href="https://haavind.no/en/people/lene-kristin-henno/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Haavind%20As%2C%20Haakon%20VIIs%20gate%2010%2C%200161%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet hjort as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet hjort as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -727,7 +765,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.hjort.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Hjort%20As%2C%20Universitetsgata%201%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet ness lundin">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet ness lundin">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -742,7 +780,7 @@
           <p class="sv-links"><a class="sv-go" href="https://nesslundin.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Ness%20Lundin%2C%20Universitetsgata%208%2C%200164%2C%20OSLO%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet selmer as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet selmer as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -757,7 +795,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.selmer.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Selmer%20As%2C%20Ruselkkveien%2014%2C%200251%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet staff as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet staff as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -772,7 +810,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.advokat-staff.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Staff%20As%2C%20Kristian%20Augusts%20gate%207a%2C%200164%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet storrvik">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet storrvik">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -787,7 +825,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.storrvik.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Storrvik%2C%20C.%20J.%20Hambros%20plass%202C%2C%200164%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet sylte">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet sylte">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -802,7 +840,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.advokatsylte.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Sylte%2C%20House%20of%20Business%2C%20Hoffsveien%201%20a%2C%2001275%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet ulset">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet ulset">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -817,7 +855,7 @@
           <p class="sv-links"><a class="sv-go" href="https://advokatulset.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Ulset%2C%20C%20J%20Hambros%20Plass%202c%2C%200164%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet unneland">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet unneland">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -832,7 +870,7 @@
           <p class="sv-links"><a class="sv-go" href="https://advu.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Unneland%2C%20Postboks%20474%20Bedriftssenteret%2C%201414%20Trollasen%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet verito as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="advokatfirmaet verito as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -847,7 +885,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.verito.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Advokatfirmaet%20Verito%20As%2C%20Beddingen%208%2C%200280%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="barneadvokatene as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="barneadvokatene as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -862,7 +900,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Barneadvokatene%20As%2C%20Slemdalsveien%2072%2C%20Postboks%20156%20Vinderen%2C%200319%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="codex advokat oslo as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="codex advokat oslo as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -877,7 +915,7 @@
           <p class="sv-links"><a class="sv-go" href="https://codex.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Codex%20Advokat%20Oslo%20As%2C%20Akersgata%2051%2C%200180%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="djerv advokatfirma as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="djerv advokatfirma as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -892,7 +930,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.djerv.as" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Djerv%20Advokatfirma%20As%2C%20BEDDINGEN%208%2C%200250%2C%20OSLO%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="elden advokatfirma as elden law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="elden advokatfirma as elden law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -907,7 +945,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.elden.no/en" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Elden%20Advokatfirma%20As%20Elden%20Law%20Firm%2C%20St.%20Olavs%20gate%2025%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="flemmen co">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="flemmen co">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -922,7 +960,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.flemmenco.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Flemmen%20Co%2C%20Oscars%20gate%2030%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="humlen helle advokater as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="humlen helle advokater as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -937,7 +975,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.humlenoghelle.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Humlen%20Helle%20Advokater%20As%2C%20C.J.%20Hambros%20plass%202%20C%2C%200164%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="javelin advokatfirma as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="javelin advokatfirma as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -952,7 +990,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.javelin.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Javelin%20Advokatfirma%20As%2C%20Fridtjof%20Nansens%20plass%207%2C%200160%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="langseth advokatfirma da">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="langseth advokatfirma da">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -967,7 +1005,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.langsethadvokat.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Langseth%20Advokatfirma%20Da%2C%20Haakon%20VIIs%20gate%202%2C%20Postboks1371%20Vika%2C%200114%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="matrix advokater">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="matrix advokater">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -982,7 +1020,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.matrix-advokater.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Matrix%20Advokater%2C%20St.%20Olavs%20gate%2025%2C%200129%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="reinholdt advokatfirma as">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="reinholdt advokatfirma as">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -997,7 +1035,7 @@
           <p class="sv-links"><a class="sv-go" href="https://reinholdt.no" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Reinholdt%20Advokatfirma%20As%2C%20Haakon%20Vii's%20Gate%206%2C%200161%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="rime advokatfirma da">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="rime advokatfirma da">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1012,7 +1050,7 @@
           <p class="sv-links"><a class="sv-go" href="https://rime.no/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Rime%20Advokatfirma%20Da%2C%20Tollbugata%2027%2C%200157%2C%20Oslo%2C%20Oslo%2C%20Norway" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="en" data-name="ro sommernes advokatfirma">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="en" data-name="ro sommernes advokatfirma">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -1030,6 +1068,11 @@
           </div>
           
         </section>
+
+        <div class="sf-empty is-hidden" id="svcEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every provider in Oslo whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <section class="svc-more">
@@ -1041,6 +1084,71 @@
       </section>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svcBar');
+      if(!bar)return;
+      var out=document.getElementById('svcCount'),blank=document.getElementById('svcEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svcReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

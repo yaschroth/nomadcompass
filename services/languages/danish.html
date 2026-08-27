@@ -477,6 +477,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -525,54 +555,65 @@
       <section class="svg-sec">
         <h2>By city</h2>
         <p class="svg-lede">Every city with at least one provider who works in Danish, grouped by country.</p>
-        <section class="svg-country">
+        <div class="sf-bar" id="svgBar">
+        <div class="sf-field sf-field-q"><label for="svg-q">City or country</label><input type="search" id="svg-q" data-sf="q" placeholder="Type a city or country…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svg-cats">Service</label><select id="svg-cats" data-sf="cats"><option value="all">Any service</option><option value="legal">Lawyers</option><option value="translator">Translators</option><option value="doctor">Doctors</option></select></div>
+        <div class="sf-field"><label for="svg-country">Country</label><select id="svg-country" data-sf="country"><option value="all">Any country</option><option value="denmark">Denmark</option><option value="germany">Germany</option><option value="portugal">Portugal</option><option value="france">France</option><option value="spain">Spain</option><option value="thailand">Thailand</option><option value="uae">UAE</option></select></div>
+        <button type="button" class="sf-reset" id="svgReset">Reset</button>
+      </div>
+        <p class="sf-count" id="svgCount" role="status" aria-live="polite">Showing all <b>13</b> cities.</p>
+        <section class="svg-country sf-group">
           <h3>Denmark<span class="svg-n">7 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/copenhagen"><span class="sb-pic"><img src="/images/cities/copenhagen-card.webp" alt="Nyhavn canal with colourful historic buildings and sailing boats, Copenhagen" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Copenhagen<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>6</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/aarhus"><span class="sb-pic"><img src="/images/cities/aarhus-card.webp" alt="View from Aarhus Cathedral bell tower over the city rooftops, green copper spires, and harbor beyond" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aarhus<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/copenhagen" data-name="copenhagen denmark" data-country="denmark" data-cats="legal"><span class="sb-pic"><img src="/images/cities/copenhagen-card.webp" alt="Nyhavn canal with colourful historic buildings and sailing boats, Copenhagen" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Copenhagen<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>6</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/aarhus" data-name="aarhus denmark" data-country="denmark" data-cats="legal"><span class="sb-pic"><img src="/images/cities/aarhus-card.webp" alt="View from Aarhus Cathedral bell tower over the city rooftops, green copper spires, and harbor beyond" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aarhus<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Germany<span class="svg-n">4 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/berlin/lawyers"><span class="sb-pic"><img src="/images/cities/berlin-card.webp" alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>2</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hamburg/lawyers"><span class="sb-pic"><img src="/images/cities/hamburg-card.webp" alt="Hamburg skyline with Rathaus and church spires reflected across the Binnenalster lake at dusk" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hamburg<span class="sb-sub">Germany</span></span><span class="sb-count"><b>2</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/berlin/lawyers" data-name="berlin germany" data-country="germany" data-cats="legal"><span class="sb-pic"><img src="/images/cities/berlin-card.webp" alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>2</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hamburg/lawyers" data-name="hamburg germany" data-country="germany" data-cats="legal"><span class="sb-pic"><img src="/images/cities/hamburg-card.webp" alt="Hamburg skyline with Rathaus and church spires reflected across the Binnenalster lake at dusk" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hamburg<span class="sb-sub">Germany</span></span><span class="sb-count"><b>2</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Portugal<span class="svg-n">3 in 3 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/aveiro/translators"><span class="sb-pic"><img src="/images/cities/aveiro-card.webp" alt="A brightly painted yellow-and-red moliceiro boat carrying visitors along a canal in Aveiro, Portugal, with a ribbon-covered footbridge and Art Nouveau buildings behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aveiro<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/lisbon/translators"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/porto/translators"><span class="sb-pic"><img src="/images/cities/porto-card.webp" alt="Porto's Ribeira waterfront with rabelo boats on the Douro River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/aveiro/translators" data-name="aveiro portugal" data-country="portugal" data-cats="translator"><span class="sb-pic"><img src="/images/cities/aveiro-card.webp" alt="A brightly painted yellow-and-red moliceiro boat carrying visitors along a canal in Aveiro, Portugal, with a ribbon-covered footbridge and Art Nouveau buildings behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aveiro<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/lisbon/translators" data-name="lisbon portugal" data-country="portugal" data-cats="translator"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/porto/translators" data-name="porto portugal" data-country="portugal" data-cats="translator"><span class="sb-pic"><img src="/images/cities/porto-card.webp" alt="Porto's Ribeira waterfront with rabelo boats on the Douro River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>France<span class="svg-n">2 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/lyon/translators"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/paris/translators"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/lyon/translators" data-name="lyon france" data-country="france" data-cats="translator"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/paris/translators" data-name="paris france" data-country="france" data-cats="translator"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Spain<span class="svg-n">2 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/alicante/lawyers"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/barcelona/lawyers"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/alicante/lawyers" data-name="alicante spain" data-country="spain" data-cats="legal"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/barcelona/lawyers" data-name="barcelona spain" data-country="spain" data-cats="legal"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Thailand<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/bangkok/lawyers"><span class="sb-pic"><img src="/images/cities/bangkok-card.webp" alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/bangkok/lawyers" data-name="bangkok thailand" data-country="thailand" data-cats="legal"><span class="sb-pic"><img src="/images/cities/bangkok-card.webp" alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>UAE<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/dubai/doctors"><span class="sb-pic"><img src="/images/cities/dubai-card.webp" alt="Aerial view of Dubai skyline with Burj Khalifa towering over the city" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ae.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dubai<span class="sb-sub">UAE</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/dubai/doctors" data-name="dubai uae" data-country="uae" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/dubai-card.webp" alt="Aerial view of Dubai skyline with Burj Khalifa towering over the city" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ae.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dubai<span class="sb-sub">UAE</span></span><span class="sb-count"><b>1</b><small>Danish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
+        <div class="sf-empty is-hidden" id="svgEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page lists every city where a published source says a provider works in Danish. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <div class="svg-prose">
@@ -605,6 +646,71 @@
     if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
   q.forEach(function(el){io.observe(el);});
 })();</script>
+  <script>
+    (function(){
+      var bar=document.getElementById('svgBar');
+      if(!bar)return;
+      var out=document.getElementById('svgCount'),blank=document.getElementById('svgEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'city':'cities')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'cities'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svgReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

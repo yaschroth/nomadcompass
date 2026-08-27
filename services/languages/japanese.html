@@ -477,6 +477,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -527,86 +557,97 @@
       <section class="svg-sec">
         <h2>By city</h2>
         <p class="svg-lede">Every city with at least one provider who works in Japanese, grouped by country.</p>
-        <section class="svg-country">
+        <div class="sf-bar" id="svgBar">
+        <div class="sf-field sf-field-q"><label for="svg-q">City or country</label><input type="search" id="svg-q" data-sf="q" placeholder="Type a city or country…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svg-cats">Service</label><select id="svg-cats" data-sf="cats"><option value="all">Any service</option><option value="legal">Lawyers</option><option value="doctor">Doctors</option><option value="translator">Translators</option><option value="therapy">Therapists</option><option value="vet">Vets</option></select></div>
+        <div class="sf-field"><label for="svg-country">Country</label><select id="svg-country" data-sf="country"><option value="all">Any country</option><option value="japan">Japan</option><option value="thailand">Thailand</option><option value="turkey">Turkey</option><option value="france">France</option><option value="vietnam">Vietnam</option><option value="cambodia">Cambodia</option><option value="india">India</option><option value="malaysia">Malaysia</option><option value="singapore">Singapore</option><option value="spain">Spain</option><option value="taiwan">Taiwan</option></select></div>
+        <button type="button" class="sf-reset" id="svgReset">Reset</button>
+      </div>
+        <p class="sf-count" id="svgCount" role="status" aria-live="polite">Showing all <b>25</b> cities.</p>
+        <section class="svg-country sf-group">
           <h3>Japan<span class="svg-n">67 in 10 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/tokyo/doctors"><span class="sb-pic"><img src="/images/cities/tokyo-card.webp" alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>33</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Therapists</span><span class="sb-tag">Lawyers</span><span class="sb-tag-more">+1</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/osaka"><span class="sb-pic"><img src="/images/cities/osaka-card.webp" alt="Osaka Castle outer moat with stone walls and turret reflected in water, modern Business Park skyscrapers in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Osaka<span class="sb-sub">Japan</span></span><span class="sb-count"><b>8</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/fukuoka/lawyers"><span class="sb-pic"><img src="/images/cities/fukuoka-card.webp" alt="Fukuoka Tower and Seaside Momochi beach skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Fukuoka<span class="sb-sub">Japan</span></span><span class="sb-count"><b>6</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/sapporo"><span class="sb-pic"><img src="/images/cities/sapporo-card.webp" alt="Sapporo TV Tower rising above Odori Park on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sapporo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>5</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hiroshima/therapists"><span class="sb-pic"><img src="/images/cities/hiroshima-card.webp" alt="Atomic Bomb Dome and Motoyasu River with Hiroshima skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hiroshima<span class="sb-sub">Japan</span></span><span class="sb-count"><b>4</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Therapists</span><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/nagoya/doctors"><span class="sb-pic"><img src="/images/cities/nagoya-card.webp" alt="Nagoya Castle keep with golden shachihoko, Nagoya, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Nagoya<span class="sb-sub">Japan</span></span><span class="sb-count"><b>4</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/kobe"><span class="sb-pic"><img src="/images/cities/kobe-card.webp" alt="The harbour and Meriken Park of Kobe, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kobe<span class="sb-sub">Japan</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/kyoto/doctors"><span class="sb-pic"><img src="/images/cities/kyoto-card.webp" alt="Kinkaku-ji Golden Pavilion reflected in Kyoko-chi pond on a sunny day, Kyoto, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kyoto<span class="sb-sub">Japan</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/sendai"><span class="sb-pic"><img src="/images/cities/sendai-card.webp" alt="Downtown Sendai cityscape seen from the rooftop of Sendai Station on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sendai<span class="sb-sub">Japan</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/naha"><span class="sb-pic"><img src="/images/cities/naha-card.webp" alt="The city of Naha and the ocean viewed from Shuri Castle Park, Okinawa, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Naha<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/tokyo/doctors" data-name="tokyo japan" data-country="japan" data-cats="doctor therapy legal translator"><span class="sb-pic"><img src="/images/cities/tokyo-card.webp" alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>33</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Therapists</span><span class="sb-tag">Lawyers</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/osaka" data-name="osaka japan" data-country="japan" data-cats="doctor legal"><span class="sb-pic"><img src="/images/cities/osaka-card.webp" alt="Osaka Castle outer moat with stone walls and turret reflected in water, modern Business Park skyscrapers in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Osaka<span class="sb-sub">Japan</span></span><span class="sb-count"><b>8</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/fukuoka/lawyers" data-name="fukuoka japan" data-country="japan" data-cats="legal translator"><span class="sb-pic"><img src="/images/cities/fukuoka-card.webp" alt="Fukuoka Tower and Seaside Momochi beach skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Fukuoka<span class="sb-sub">Japan</span></span><span class="sb-count"><b>6</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/sapporo" data-name="sapporo japan" data-country="japan" data-cats="doctor legal"><span class="sb-pic"><img src="/images/cities/sapporo-card.webp" alt="Sapporo TV Tower rising above Odori Park on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sapporo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>5</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hiroshima/therapists" data-name="hiroshima japan" data-country="japan" data-cats="therapy legal"><span class="sb-pic"><img src="/images/cities/hiroshima-card.webp" alt="Atomic Bomb Dome and Motoyasu River with Hiroshima skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hiroshima<span class="sb-sub">Japan</span></span><span class="sb-count"><b>4</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Therapists</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/nagoya/doctors" data-name="nagoya japan" data-country="japan" data-cats="doctor legal"><span class="sb-pic"><img src="/images/cities/nagoya-card.webp" alt="Nagoya Castle keep with golden shachihoko, Nagoya, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Nagoya<span class="sb-sub">Japan</span></span><span class="sb-count"><b>4</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/kobe" data-name="kobe japan" data-country="japan" data-cats="legal"><span class="sb-pic"><img src="/images/cities/kobe-card.webp" alt="The harbour and Meriken Park of Kobe, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kobe<span class="sb-sub">Japan</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/kyoto/doctors" data-name="kyoto japan" data-country="japan" data-cats="doctor legal"><span class="sb-pic"><img src="/images/cities/kyoto-card.webp" alt="Kinkaku-ji Golden Pavilion reflected in Kyoko-chi pond on a sunny day, Kyoto, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kyoto<span class="sb-sub">Japan</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/sendai" data-name="sendai japan" data-country="japan" data-cats="legal"><span class="sb-pic"><img src="/images/cities/sendai-card.webp" alt="Downtown Sendai cityscape seen from the rooftop of Sendai Station on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sendai<span class="sb-sub">Japan</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/naha" data-name="naha japan" data-country="japan" data-cats="legal"><span class="sb-pic"><img src="/images/cities/naha-card.webp" alt="The city of Naha and the ocean viewed from Shuri Castle Park, Okinawa, Japan" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Naha<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Thailand<span class="svg-n">7 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/chiangmai/doctors"><span class="sb-pic"><img src="/images/cities/chiangmai-card.webp" alt="Golden chedi and ceremonial umbrella of Wat Phra That Doi Suthep against a clear blue sky, Chiang Mai, Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Chiang Mai<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>5</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Vets</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/bangkok/doctors"><span class="sb-pic"><img src="/images/cities/bangkok-card.webp" alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/chiangmai/doctors" data-name="chiang mai thailand" data-country="thailand" data-cats="doctor vet"><span class="sb-pic"><img src="/images/cities/chiangmai-card.webp" alt="Golden chedi and ceremonial umbrella of Wat Phra That Doi Suthep against a clear blue sky, Chiang Mai, Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Chiang Mai<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>5</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Vets</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/bangkok/doctors" data-name="bangkok thailand" data-country="thailand" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/bangkok-card.webp" alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>2</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Turkey<span class="svg-n">3 in 3 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/antalya"><span class="sb-pic"><img src="/images/cities/antalya-card.webp" alt="Antalya old harbour with limestone cliffs, turquoise Mediterranean water, and Taurus Mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Antalya<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/istanbul/translators"><span class="sb-pic"><img src="/images/cities/istanbul-card.webp" alt="Aerial view of Istanbul showing the Blue Mosque, Hagia Sophia, and the Bosphorus strait" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Istanbul<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/izmir/translators"><span class="sb-pic"><img src="/images/cities/izmir-card.webp" alt="Panoramic view of Izmir cityscape with the Gulf of Izmir and terracotta rooftops" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Izmir<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/antalya" data-name="antalya turkey" data-country="turkey" data-cats="translator"><span class="sb-pic"><img src="/images/cities/antalya-card.webp" alt="Antalya old harbour with limestone cliffs, turquoise Mediterranean water, and Taurus Mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Antalya<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/istanbul/translators" data-name="istanbul turkey" data-country="turkey" data-cats="translator"><span class="sb-pic"><img src="/images/cities/istanbul-card.webp" alt="Aerial view of Istanbul showing the Blue Mosque, Hagia Sophia, and the Bosphorus strait" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Istanbul<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/izmir/translators" data-name="izmir turkey" data-country="turkey" data-cats="translator"><span class="sb-pic"><img src="/images/cities/izmir-card.webp" alt="Panoramic view of Izmir cityscape with the Gulf of Izmir and terracotta rooftops" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Izmir<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>France<span class="svg-n">2 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/lyon/translators"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/paris/translators"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/lyon/translators" data-name="lyon france" data-country="france" data-cats="translator"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/paris/translators" data-name="paris france" data-country="france" data-cats="translator"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Vietnam<span class="svg-n">2 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/danang/doctors"><span class="sb-pic"><img src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hochiminhcity/doctors"><span class="sb-pic"><img src="/images/cities/hochiminhcity-card.webp" alt="Ho Chi Minh City skyline with Bitexco Financial Tower at dusk" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ho Chi Minh City<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/danang/doctors" data-name="da nang vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hochiminhcity/doctors" data-name="ho chi minh city vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/hochiminhcity-card.webp" alt="Ho Chi Minh City skyline with Bitexco Financial Tower at dusk" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ho Chi Minh City<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Cambodia<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/phnompenh/doctors"><span class="sb-pic"><img src="/images/cities/phnompenh-card.webp" alt="Aerial view of Phnom Penh skyline with the Royal Palace in the foreground and modern high-rises behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kh.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phnom Penh<span class="sb-sub">Cambodia</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/phnompenh/doctors" data-name="phnom penh cambodia" data-country="cambodia" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/phnompenh-card.webp" alt="Aerial view of Phnom Penh skyline with the Royal Palace in the foreground and modern high-rises behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kh.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phnom Penh<span class="sb-sub">Cambodia</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>India<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/newdelhi/translators"><span class="sb-pic"><img src="/images/cities/newdelhi-card.webp" alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/newdelhi/translators" data-name="new delhi india" data-country="india" data-cats="translator"><span class="sb-pic"><img src="/images/cities/newdelhi-card.webp" alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Malaysia<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/kualalumpur/doctors"><span class="sb-pic"><img src="/images/cities/kualalumpur-card.webp" alt="Kuala Lumpur skyline with Petronas Twin Towers and KL Tower under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/my.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kuala Lumpur<span class="sb-sub">Malaysia</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/kualalumpur/doctors" data-name="kuala lumpur malaysia" data-country="malaysia" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/kualalumpur-card.webp" alt="Kuala Lumpur skyline with Petronas Twin Towers and KL Tower under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/my.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kuala Lumpur<span class="sb-sub">Malaysia</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Singapore<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/singapore/lawyers"><span class="sb-pic"><img src="/images/cities/singapore-card.webp" alt="Singapore Marina Bay at dusk with Marina Bay Sands and CBD skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/sg.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Singapore<span class="sb-sub">Singapore</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/singapore/lawyers" data-name="singapore singapore" data-country="singapore" data-cats="legal"><span class="sb-pic"><img src="/images/cities/singapore-card.webp" alt="Singapore Marina Bay at dusk with Marina Bay Sands and CBD skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/sg.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Singapore<span class="sb-sub">Singapore</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Spain<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/madrid/lawyers"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/madrid/lawyers" data-name="madrid spain" data-country="spain" data-cats="legal"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Taiwan<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/taipei/lawyers"><span class="sb-pic" data-src="/images/cities/taipei-card.webp" data-alt="Taipei 101 tower dominating the city skyline at golden hour with mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tw.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Taipei<span class="sb-sub">Taiwan</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/taipei/lawyers" data-name="taipei taiwan" data-country="taiwan" data-cats="legal"><span class="sb-pic" data-src="/images/cities/taipei-card.webp" data-alt="Taipei 101 tower dominating the city skyline at golden hour with mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tw.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Taipei<span class="sb-sub">Taiwan</span></span><span class="sb-count"><b>1</b><small>Japanese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
+        <div class="sf-empty is-hidden" id="svgEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page lists every city where a published source says a provider works in Japanese. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <div class="svg-prose">
@@ -639,6 +680,71 @@
     if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
   q.forEach(function(el){io.observe(el);});
 })();</script>
+  <script>
+    (function(){
+      var bar=document.getElementById('svgBar');
+      if(!bar)return;
+      var out=document.getElementById('svgCount'),blank=document.getElementById('svgEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'city':'cities')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'cities'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svgReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

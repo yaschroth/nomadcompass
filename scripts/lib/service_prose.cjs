@@ -251,7 +251,7 @@ function card(p, opts) {
     : esc(p.name);
   const meta = [o.showCategory === false ? '' : esc(M.CATS[p.category]), p.area ? esc(p.area) : '']
     .filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+  return `<article class="sv-card sf-item sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${o.icon || ''}</span>
           <div>

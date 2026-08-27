@@ -477,6 +477,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -527,49 +557,60 @@
       <section class="svg-sec">
         <h2>By city</h2>
         <p class="svg-lede">Every city with at least one provider who works in Vietnamese, grouped by country.</p>
-        <section class="svg-country">
+        <div class="sf-bar" id="svgBar">
+        <div class="sf-field sf-field-q"><label for="svg-q">City or country</label><input type="search" id="svg-q" data-sf="q" placeholder="Type a city or country…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svg-cats">Service</label><select id="svg-cats" data-sf="cats"><option value="all">Any service</option><option value="doctor">Doctors</option><option value="legal">Lawyers</option><option value="translator">Translators</option><option value="therapy">Therapists</option><option value="vet">Vets</option></select></div>
+        <div class="sf-field"><label for="svg-country">Country</label><select id="svg-country" data-sf="country"><option value="all">Any country</option><option value="vietnam">Vietnam</option><option value="hungary">Hungary</option><option value="india">India</option><option value="japan">Japan</option><option value="poland">Poland</option></select></div>
+        <button type="button" class="sf-reset" id="svgReset">Reset</button>
+      </div>
+        <p class="sf-count" id="svgCount" role="status" aria-live="polite">Showing all <b>18</b> cities.</p>
+        <section class="svg-country sf-group">
           <h3>Vietnam<span class="svg-n">48 in 14 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/hochiminhcity/doctors"><span class="sb-pic"><img src="/images/cities/hochiminhcity-card.webp" alt="Ho Chi Minh City skyline with Bitexco Financial Tower at dusk" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ho Chi Minh City<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>13</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hanoi/doctors"><span class="sb-pic"><img src="/images/cities/hanoi-card.webp" alt="Hoan Kiem Lake with red Huc Bridge and Ngoc Son Temple, Hanoi" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hanoi<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>12</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Vets</span><span class="sb-tag">Lawyers</span><span class="sb-tag-more">+1</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/danang/doctors"><span class="sb-pic"><img src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>5</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/haiphong"><span class="sb-pic"><img src="/images/cities/haiphong-card.webp" alt="The Hai Phong skyline in Vietnam seen across the Cam River, with the red arch of Hoang Van Thu Bridge and port cranes below tall white clouds." width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hai Phong<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>3</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/nhatrang"><span class="sb-pic"><img src="/images/cities/nhatrang-card.webp" alt="Aerial panorama of Nha Trang city, beach, and bay with mountains in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Nha Trang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>3</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/halong"><span class="sb-pic"><img src="/images/cities/halong-card.webp" alt="The karst islands of Ha Long Bay, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ha Long<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>2</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hoian/doctors"><span class="sb-pic"><img src="/images/cities/hoian-card.webp" alt="Hoi An Ancient Town riverfront along the Thu Bon River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hoi An<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>2</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Translators</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/vungtau"><span class="sb-pic"><img src="/images/cities/vungtau-card.webp" alt="Elevated view over Front Beach in Vung Tau, Vietnam, with colourful fishing boats moored in the bay below the green slopes of Small Mountain." width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vung Tau<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>2</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/cantho"><span class="sb-pic"><img src="/images/cities/cantho-card.webp" alt="Can Tho Bridge cable-stayed over the Mekong River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Can Tho<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hagiang"><span class="sb-pic"><img src="/images/cities/hagiang-card.webp" alt="The Nho Que river and Tu San canyon near Ha Giang, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ha Giang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/hue"><span class="sb-pic"><img src="/images/cities/hue-card.webp" alt="Meridian Gate (Ngo Mon) of the Imperial Citadel of Hue, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hue<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/ninhbinh"><span class="sb-pic"><img src="/images/cities/ninhbinh-card.webp" alt="Traditional rowing boats on calm green river at Trang An, flanked by dramatic limestone karst peaks, Ninh Binh, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ninh Binh<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/phuquoc"><span class="sb-pic"><img src="/images/cities/phuquoc-card.webp" alt="An Thoi fishing harbour with colourful boats and Sunset Town cable car tower, Phu Quoc, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phu Quoc<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
-        <a class="sb-card sb-card-pic" href="/services/sapa"><span class="sb-pic"><img src="/images/cities/sapa-card.webp" alt="Fansipan cable car gondola flying over sweeping terraced rice fields in Sa Pa, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sapa<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hochiminhcity/doctors" data-name="ho chi minh city vietnam" data-country="vietnam" data-cats="doctor legal"><span class="sb-pic"><img src="/images/cities/hochiminhcity-card.webp" alt="Ho Chi Minh City skyline with Bitexco Financial Tower at dusk" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ho Chi Minh City<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>13</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hanoi/doctors" data-name="hanoi vietnam" data-country="vietnam" data-cats="doctor vet legal therapy"><span class="sb-pic"><img src="/images/cities/hanoi-card.webp" alt="Hoan Kiem Lake with red Huc Bridge and Ngoc Son Temple, Hanoi" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hanoi<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>12</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Vets</span><span class="sb-tag">Lawyers</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/danang/doctors" data-name="da nang vietnam" data-country="vietnam" data-cats="doctor translator"><span class="sb-pic"><img src="/images/cities/danang-card.webp" alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>5</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/haiphong" data-name="hai phong vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/haiphong-card.webp" alt="The Hai Phong skyline in Vietnam seen across the Cam River, with the red arch of Hoang Van Thu Bridge and port cranes below tall white clouds." width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hai Phong<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>3</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/nhatrang" data-name="nha trang vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/nhatrang-card.webp" alt="Aerial panorama of Nha Trang city, beach, and bay with mountains in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Nha Trang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>3</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/halong" data-name="ha long vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/halong-card.webp" alt="The karst islands of Ha Long Bay, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ha Long<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>2</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hoian/doctors" data-name="hoi an vietnam" data-country="vietnam" data-cats="doctor translator"><span class="sb-pic"><img src="/images/cities/hoian-card.webp" alt="Hoi An Ancient Town riverfront along the Thu Bon River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hoi An<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>2</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/vungtau" data-name="vung tau vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/vungtau-card.webp" alt="Elevated view over Front Beach in Vung Tau, Vietnam, with colourful fishing boats moored in the bay below the green slopes of Small Mountain." width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vung Tau<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>2</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/cantho" data-name="can tho vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/cantho-card.webp" alt="Can Tho Bridge cable-stayed over the Mekong River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Can Tho<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hagiang" data-name="ha giang vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/hagiang-card.webp" alt="The Nho Que river and Tu San canyon near Ha Giang, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ha Giang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/hue" data-name="hue vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/hue-card.webp" alt="Meridian Gate (Ngo Mon) of the Imperial Citadel of Hue, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hue<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/ninhbinh" data-name="ninh binh vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/ninhbinh-card.webp" alt="Traditional rowing boats on calm green river at Trang An, flanked by dramatic limestone karst peaks, Ninh Binh, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ninh Binh<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/phuquoc" data-name="phu quoc vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/phuquoc-card.webp" alt="An Thoi fishing harbour with colourful boats and Sunset Town cable car tower, Phu Quoc, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phu Quoc<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/sapa" data-name="sapa vietnam" data-country="vietnam" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/sapa-card.webp" alt="Fansipan cable car gondola flying over sweeping terraced rice fields in Sa Pa, Vietnam" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sapa<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Hungary<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/budapest/lawyers"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/budapest/lawyers" data-name="budapest hungary" data-country="hungary" data-cats="legal"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>India<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/newdelhi/translators"><span class="sb-pic"><img src="/images/cities/newdelhi-card.webp" alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/newdelhi/translators" data-name="new delhi india" data-country="india" data-cats="translator"><span class="sb-pic"><img src="/images/cities/newdelhi-card.webp" alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Japan<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/tokyo/doctors"><span class="sb-pic"><img src="/images/cities/tokyo-card.webp" alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/tokyo/doctors" data-name="tokyo japan" data-country="japan" data-cats="doctor"><span class="sb-pic"><img src="/images/cities/tokyo-card.webp" alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
-      <section class="svg-country">
+      <section class="svg-country sf-group">
           <h3>Poland<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card sb-card-pic" href="/services/warsaw/lawyers"><span class="sb-pic"><img src="/images/cities/warsaw-card.webp" alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic sf-item" href="/services/warsaw/lawyers" data-name="warsaw poland" data-country="poland" data-cats="legal"><span class="sb-pic"><img src="/images/cities/warsaw-card.webp" alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>Vietnamese</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
+        <div class="sf-empty is-hidden" id="svgEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page lists every city where a published source says a provider works in Vietnamese. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <div class="svg-prose">
@@ -602,6 +643,71 @@
     if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
   q.forEach(function(el){io.observe(el);});
 })();</script>
+  <script>
+    (function(){
+      var bar=document.getElementById('svgBar');
+      if(!bar)return;
+      var out=document.getElementById('svgCount'),blank=document.getElementById('svgEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'city':'cities')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'cities'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svgReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

@@ -31,6 +31,7 @@ const BASE = 'https://thenomadhq.com';
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
 const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
+const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
@@ -294,6 +295,17 @@ for (const pair of Object.values(M.pairs)) {
     // --- listing --------------------------------------------------------------------------------
     const icon = inlineIcon(CAT_ICON[cat]);
     const cards = shown.map((r) => P.card(r, { icon, showCategory: false })).join('\n        ');
+    // Everyone on this page speaks the page's language by definition; what varies is what ELSE they
+    // speak, so that is the only language axis left worth filtering on.
+    const ALSO_SPEAKS = (() => {
+      const n = {};
+      // Not the page's own language, and not the local one either: Paris's German-speaking lawyers
+      // are 99 of 99 French, so offering French is offering nothing.
+      shown.forEach((r) => r.languages.forEach((l) => { if (l !== lang && l !== local) n[l] = (n[l] || 0) + 1; }));
+      return Object.entries(n)
+        .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
+        .map(([l, c]) => [l, P.langName(l) + ' (' + c + ')']);
+    })();
 
     const crumbs = [
       ['Home', '/'],
@@ -424,6 +436,7 @@ ${H.css}
     .svp-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
     .svp-chips { margin: var(--space-4) 0 var(--space-6); }
 ${B.css}
+${F.css}
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
     .svp-up { margin: var(--space-4) 0 0; font-size: var(--text-sm); font-weight: 600; }
@@ -451,9 +464,23 @@ ${shell.headEnd}
     <div class="svp-page container">
       ${ymyl}
 
+      ${F.bar({
+    id: 'svp',
+    // One page of a paginated list is a preview like any other, so the filter waits until the
+    // whole list is on screen. Where it is not, the pager is the honest control.
+    complete: pageCount < 2,
+    items: shown.length,
+    fields: [
+      { key: 'q', search: true, label: 'Name', placeholder: `Search ${shown.length} listings…` },
+      { key: 'lang', label: 'Also speaks', any: 'Any language', options: ALSO_SPEAKS },
+    ],
+  })}
+      ${pageCount < 2 ? F.count({ id: 'svp', total: shown.length, noun: 'listing', nounPlural: 'listings' }) : ''}
+
       <div class="sv-grid">
         ${cards}
       </div>
+      ${pageCount < 2 ? F.empty({ id: 'svp', what: `This page holds every ${esc(langName)}-speaking ${esc(P.catName(cat).replace(/s$/, ''))} we can source in ${esc(city.name)}.` }) : ''}
       ${pager}
 
       <div class="svp-prose">
@@ -473,6 +500,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>
     </div>
   </main>
+  ${pageCount < 2 ? F.js({ id: 'svp', noun: 'listing', nounPlural: 'listings' }) : ''}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

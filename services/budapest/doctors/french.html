@@ -483,6 +483,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svp-faq dt { font-weight: 700; color: var(--color-ink); margin: var(--space-4) 0 .3rem; }
     .svp-faq dd { margin: 0; color: var(--color-charcoal); line-height: 1.7; }
     .svp-up { margin: var(--space-4) 0 0; font-size: var(--text-sm); font-weight: 600; }
@@ -516,8 +546,15 @@
     <div class="svp-page container">
       <p class="ymyl-note">This is a directory, not medical advice. A language claim says nothing about clinical quality, and in an emergency use the local emergency number rather than this page.</p>
 
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 26 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Also speaks</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (15)</option><option value="de">German (6)</option><option value="it">Italian (2)</option><option value="ru">Russian (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">Showing all <b>26</b> listings.</p>
+
       <div class="sv-grid">
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="cabinet raditec">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="cabinet raditec">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -532,7 +569,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Cabinet%20RADITEC%2C%20Budapest%201091%20Ulloi%20ut%2047%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. andras szuromi">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. andras szuromi">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -547,7 +584,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Andras%20SZUROMI%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. andrea luczay">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. andrea luczay">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -562,7 +599,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Andrea%20Luczay%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. antal szabo">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. antal szabo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -577,7 +614,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Antal%20SZABO%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. attila schwarcz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. attila schwarcz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -592,7 +629,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Attila%20SCHWARCZ%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en fr it" data-name="dr. beata balati">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en fr it" data-name="dr. beata balati">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -607,7 +644,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Beata%20BALATI%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. eszter kovacs">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. eszter kovacs">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -622,7 +659,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Eszter%20KOVACS%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. eszter simoncsics">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. eszter simoncsics">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -637,7 +674,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Eszter%20SIMONCSICS%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. eva csajbok">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. eva csajbok">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -652,7 +689,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Eva%20CSAJBOK%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. ferenc darabont">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. ferenc darabont">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -667,7 +704,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Ferenc%20DARABONT%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. franciska bakos">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. franciska bakos">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -682,7 +719,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Franciska%20Bakos%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. gergely jozsef szabo">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. gergely jozsef szabo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -697,7 +734,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Gergely%20Jozsef%20SZABO%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. guillaume lourmet">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. guillaume lourmet">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -712,7 +749,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Guillaume%20LOURMET%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. janos ferenc szabo">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. janos ferenc szabo">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -727,7 +764,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Janos%20Ferenc%20SZABO%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. jozsef kelemen">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. jozsef kelemen">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -742,7 +779,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Jozsef%20KELEMEN%2C%201-es%20szamu%20Gyermekklinika%20(CHU%20de%20pediatrie)%20Budapest%201083%2C%20Bokay%20Janos%20utca%2053%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. krisztina ruttkai">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. krisztina ruttkai">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -757,7 +794,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Krisztina%20RUTTKAI%2C%20Budapest%201055%2C%20Honved%20utca%2022%205eme%20etage%2C%20porte%20n%202%20sonnez%20au%2026%20la%20porte%20a%20droite%20et%20l'ascenseur%20a%20droite%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. laszlo entz professeur emeritus">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. laszlo entz professeur emeritus">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -772,7 +809,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Laszlo%20ENTZ%20professeur%20emeritus%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. orsolya kulkey">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. orsolya kulkey">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -787,7 +824,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Orsolya%20KULKEY%2C%20Budapest%201029%20Boleny%20utca%209%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. pal geher">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. pal geher">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -802,7 +839,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Pal%20GEHER%2C%20Budapest%201023%20Frankel%20Leo%20u.%2017-19.%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. rita berczes">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr. rita berczes">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -817,7 +854,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Rita%20BERCZES%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. tibor glasz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en fr" data-name="dr. tibor glasz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -832,7 +869,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Tibor%20GLASZ%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="de en fr it ru" data-name="dr. timar, tibor">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="de en fr it ru" data-name="dr. timar, tibor">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -847,7 +884,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.arzt-budapest.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Timar%2C%20Tibor%2C%201037%20Budapest%2C%20Matyashegyi%20ut%2043%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. zsolt kopniczky">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. zsolt kopniczky">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -862,7 +899,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Zsolt%20KOPNICZKY%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. zsolt rozgonyi">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. zsolt rozgonyi">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -877,7 +914,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Zsolt%20ROZGONYI%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. zsuzsanna revesz">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="fr" data-name="dr. zsuzsanna revesz">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -892,7 +929,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.%20Zsuzsanna%20REVESZ%2C%20Budapest%201023%20Komjadi%20Bela%20utca%203%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr.zoltan belics">
+        <article class="sv-card sf-item sv-c-doctor" data-cat="doctor" data-lang="en fr" data-name="dr.zoltan belics">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span>
           <div>
@@ -907,6 +944,10 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dr.Zoltan%20BELICS%2C%20Budapest%2C%20Hungary" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
+      </div>
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every French-speaking doctor we can source in Budapest. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
       </div>
       
 
@@ -935,6 +976,71 @@
       </div>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

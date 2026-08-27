@@ -488,6 +488,36 @@
       a.sb-hub:hover { transform:none; }
       a.sb-card:hover .sb-pic img { transform:none; }
     }
+
+    .sf-bar { display:flex; flex-wrap:wrap; align-items:flex-end; gap:.9rem 1.1rem; margin:0 0 var(--space-6);
+      padding:1rem 1.15rem; background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-radius:var(--radius-md,8px); box-shadow:0 3px 6px rgba(15,23,42,.06); }
+    .sf-field { display:flex; flex-direction:column; gap:.35rem; }
+    .sf-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--color-stone); }
+    .sf-field select, .sf-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem;
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff;
+      color:var(--color-ink); min-width:180px; }
+    .sf-field-q input { min-width:240px; }
+    .sf-field select:focus-visible, .sf-field input:focus-visible { outline:2px solid var(--color-terracotta,#c0392b);
+      outline-offset:1px; }
+    .sf-reset { align-self:flex-end; margin-bottom:.1rem; padding:.55rem .2rem; background:none; border:0;
+      font-family:inherit; font-size:.88rem; font-weight:700; color:var(--color-terracotta-dark,#a03325);
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .sf-reset:hover { color:var(--color-ink); }
+    .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
+    .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
+    .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
+    .sf-empty p:last-child { margin:0; }
+    .sf-empty.is-hidden { display:none; }
+    @media (max-width:640px) {
+      .sf-bar { gap:.75rem; }
+      .sf-field { width:100%; }
+      .sf-field select, .sf-field input { min-width:0; width:100%; }
+    }
     .svc-chips { margin: 0 0 var(--space-5); }
     .svc-group-head a:not(.btn):not(.nav-link) { color: inherit; text-decoration: none; }
     .svc-group-head a:hover { text-decoration: underline; }
@@ -529,10 +559,18 @@
         
         <p class="sv-count">All <b>19</b> providers we hold for Amman.</p>
 
-      <section class="svc-group" data-cat="legal" id="svc-legal">
+        <div class="sf-bar" id="svcBar">
+        <div class="sf-field sf-field-q"><label for="svc-q">Name</label><input type="search" id="svc-q" data-sf="q" placeholder="Search 19 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svc-cat">Service</label><select id="svc-cat" data-sf="cat"><option value="all">Any service</option><option value="legal">Legal &amp; visa</option></select></div>
+        <div class="sf-field"><label for="svc-lang">Language</label><select id="svc-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (19)</option></select></div>
+        <button type="button" class="sf-reset" id="svcReset">Reset</button>
+      </div>
+        <p class="sf-count" id="svcCount" role="status" aria-live="polite">Showing all <b>19</b> listings.</p>
+
+      <section class="svc-group sf-group" data-cat="legal" id="svc-legal">
           <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>Legal &amp; visa<span class="svc-group-n">19</span></h2>
           <div class="sv-grid">
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="abdullah partners lawyers">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="abdullah partners lawyers">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -547,7 +585,7 @@
           <p class="sv-links"><a class="sv-go" href="https://abdullahfirm.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Abdullah%20Partners%20Lawyers%2C%2011%20Zahar%20St.%2C%20Umm%20Al%20Summaq%2C%2011108%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="ahmad ghniem partners law firm middle east legal practice">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="ahmad ghniem partners law firm middle east legal practice">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -562,7 +600,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.middleeast.legal" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Ahmad%20Ghniem%20Partners%20Law%20Firm%20Middle%20East%20Legal%20Practice%2C%2075%20Abdallah%20Qusheh%20Street%20%2C%20seven%20Circle%20%2C%20Al%20Rawabi%20%2C%20commercail%20building%20number%2075%20%2C%20First%20Floor%20%2C%20office%20number%20107%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="al khair legal attorneys">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="al khair legal attorneys">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -577,7 +615,7 @@
           <p class="sv-links"><a class="sv-go" href="https://alkhairattorneys.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Al%20Khair%20Legal%20Attorneys%2C%20Shmaisani%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="aljazy and co">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="aljazy and co">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -592,7 +630,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.aljazylaw.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Aljazy%20And%20Co%2C%204%20Abdullah%20Al%20Asbah%2C%20Shmeisani%2C%20111184%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="aljazy co advocates and legal consultants">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="aljazy co advocates and legal consultants">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -607,7 +645,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.aljazylaw.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Aljazy%20Co%20Advocates%20And%20Legal%20Consultants%2C%20Abdallah%20Alsabah%20Street%2C%20Building%20No.%204%2C%2011192%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="andersen in jordan">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="andersen in jordan">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -622,7 +660,7 @@
           <p class="sv-links"><a class="sv-go" href="http://jo.andersen.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Andersen%20In%20Jordan%2C%20Shmeisani%20Abdel%20Hameed%20Badees%20St.%20%2314%2C%20GF%2C%2011194%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="arida partners law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="arida partners law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -637,7 +675,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.aridalegal.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Arida%20Partners%20Law%20Firm%2C%20Amman%2C%20Al%20Rabyeh%2C%20kabul%20street%2C%20Floor%202%2C%20office%2021%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="atwan attorneys">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="atwan attorneys">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -652,7 +690,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.atwanattorneys.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Atwan%20Attorneys%2C%201st%20floor%2C%20Building%20No.58%2C%20Prince%20Shaker%20Bin%20Zaid%20St.%2C%20Shmeisani%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="dajani associates attorneys and legal consultants">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="dajani associates attorneys and legal consultants">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -667,7 +705,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.dajani-associates.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Dajani%20Associates%20Attorneys%20And%20Legal%20Consultants%2C%20Al%20Shareef%20Nasir%20Bin%20Jameel%20St%20101%2C%2011822%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="hammouri partners attorneys at law">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="hammouri partners attorneys at law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -682,7 +720,7 @@
           <p class="sv-links"><a class="sv-go" href="https://hammourilaw.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hammouri%20Partners%20Attorneys%20At%20Law%2C%2096%2C%20Alsharif%20Nasser%20Bin%20Jamil%20St%2C%20Shmeisani%2C%20Amman%2C%2011193%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="hashem law office">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="hashem law office">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -697,7 +735,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.hashemlawoffice.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Hashem%20Law%20Office%2C%2010%20Mansour%20Kreishan%20Street%2C%20Jabal%20Amman%2C%2011181%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="jolegalconsult">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="jolegalconsult">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -712,7 +750,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Jolegalconsult%2C%20Wadi%20Saqra%2C%20133%20Arrar%20Street%2C%2011118%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="michael dabit associates attorneys at law">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="michael dabit associates attorneys at law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -727,7 +765,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Michael%20Dabit%20Associates%20Attorneys%20At%20Law%2C%20Shemesani%2Fprince%20Shaker%20Bin%20Zaid%20Str%2C%20Al%2C%20Hindi%20Commercial%20Center%2C%20Amman%2011194%2C%20Jordan%2C%20P.O.Box%20941389%2C%2011194%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="naffa law firm">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="naffa law firm">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -742,7 +780,7 @@
           <p class="sv-links"><a class="sv-go" href="http://www.naffalawfirm.com/" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Naffa%20Law%20Firm%2C%2032%20Amer%20Ben%20Malek%20Street%2C%20Infront%20of%20New%20English%20Scholl%2C%20Tel%3A%20%2B962%206%20537%201000%2C%2011185%2C%20Amman%2C%20Khilda%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="qudah law firm llp">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="qudah law firm llp">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -757,7 +795,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.qudahlawfirm.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Qudah%20Law%20Firm%20Llp%2C%20Amman%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="safwan moubaydeen law firm in association with dentons co">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="safwan moubaydeen law firm in association with dentons co">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -772,7 +810,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.dentons.com" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Safwan%20Moubaydeen%20Law%20Firm%20In%20Association%20With%20Dentons%20Co%2C%20Emmar%20Towers%2C%20Building%20B%2C%2012th%20Floor%2C%20Zahran%20Street%2C%2011190%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="the jordanian counselor attorneys at law legal advisors">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="the jordanian counselor attorneys at law legal advisors">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -787,7 +825,7 @@
           <p class="sv-links"><a class="sv-go" href="https://www.jclaw.jo" target="_blank" rel="nofollow noopener">Website</a><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Jordanian%20Counselor%20Attorneys%20At%20Law%20Legal%20Advisors%2C%2041%20Sa'eed%20Bin%20Al%2C%20Hareth%20St.%2C%20Jabal%20El%20Weibdeh%2C%207297%20Amman%2011118%20Jordan%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="vision international attorney and law">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="vision international attorney and law">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -802,7 +840,7 @@
           <p class="sv-links"><span class="sv-nogo">No site</span><a class="sv-go" href="https://www.google.com/maps/search/?api=1&amp;query=Vision%20International%20Attorney%20And%20Law%2C%20Amman%2C%20Almadina%20Almonwara%20street%2C%20197%2C%20floor%205%2C%20Amman%2C%20Amman%2C%20Jordan" target="_blank" rel="nofollow noopener">Maps</a></p>
         </div>
       </article>
-        <article class="sv-card sv-c-legal" data-cat="legal" data-lang="ar en" data-name="zubi law associates lawyers legal and consultants">
+        <article class="sv-card sf-item sv-c-legal" data-cat="legal" data-lang="ar en" data-name="zubi law associates lawyers legal and consultants">
         <div class="sv-head">
           <span class="sv-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span>
           <div>
@@ -820,6 +858,11 @@
           </div>
           
         </section>
+
+        <div class="sf-empty is-hidden" id="svcEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page holds every provider in Amman whose working language we can trace to a published source. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <section class="svc-more">
@@ -831,6 +874,71 @@
       </section>
     </div>
   </main>
+  <script>
+    (function(){
+      var bar=document.getElementById('svcBar');
+      if(!bar)return;
+      var out=document.getElementById('svcCount'),blank=document.getElementById('svcEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+'.'
+            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'listings'+'.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svcReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
