@@ -87,4 +87,23 @@ function assertComplete(html, label) {
   }
 }
 
-module.exports = { style, nav, footer, headTop, headEnd, bodyStart, bodyEnd, NEEDLES, assertComplete };
+
+/**
+ * The nav is lifted verbatim from services.html, so it arrives with Services marked active. Any
+ * other page built from this shell then highlights the wrong tab: the four blog category pages
+ * shipped that way until this existed. Pass the label the page belongs under ('Blog', 'Cities',
+ * ...), or nothing to highlight none of them.
+ */
+function navFor(active) {
+  const cleared = nav.replace(/(class="nav-(?:mobile-)?link) active"/g, '$1"');
+  if (!active) return cleared;
+  const re = new RegExp('(class="nav-(?:mobile-)?link)(">' + active + '<)', 'g');
+  const out = cleared.replace(re, '$1 active$2');
+  if (out === cleared) {
+    console.error('page_shell: no nav item labelled "' + active + '". Check the label against the nav in services.html.');
+    process.exit(1);
+  }
+  return out;
+}
+
+module.exports = { style, nav, navFor, footer, headTop, headEnd, bodyStart, bodyEnd, NEEDLES, assertComplete };

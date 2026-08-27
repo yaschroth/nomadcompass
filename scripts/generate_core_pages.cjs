@@ -92,6 +92,7 @@ const FOOTER = `  <footer class="footer">
           <h4 class="footer-heading">Company</h4>
           <ul class="footer-links">
             <li><a href="/about" class="footer-link">About</a></li>
+            <li><a href="/methodology" class="footer-link">Methodology</a></li>
             <li><a href="/contact" class="footer-link">Contact</a></li>
             <li><a href="/about/yannick-schroth" class="footer-link">Author</a></li>
           </ul>

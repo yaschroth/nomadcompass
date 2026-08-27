@@ -17,6 +17,11 @@ const APPLY = process.argv.includes('--apply');
 const ANCHOR = '<a href="/about">About</a>';
 const LINK = '<a href="/methodology">Methodology</a>';
 
+// The core pages and the two index pages carry the newer dark-navy footer instead: no footer-legal
+// row, but a Company column built from footer-link list items. Same link, different shape.
+const COL_ANCHOR = '<li><a href="/about" class="footer-link">About</a></li>';
+const COL_LINK = '<li><a href="/methodology" class="footer-link">Methodology</a></li>';
+
 const SKIP_TOP = new Set(['node_modules', 'scripts', 'data', 'assets', 'images', 'styles',
   'ui-ux-pro-max-skill']);
 
@@ -24,6 +29,7 @@ let done = 0;
 let already = 0;
 let noFooter = 0;
 let repaired = 0;
+let column = 0;
 
 const walk = (dir, rel) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -45,7 +51,18 @@ const walk = (dir, rel) => {
     }
 
     const at = out.indexOf('footer-legal');
-    if (at < 0) { noFooter += 1; if (APPLY && out !== html) fs.writeFileSync(p, out); continue; }
+    if (at < 0) {
+      if (out.includes(COL_ANCHOR) && !out.includes(COL_LINK)) {
+        out = out.replace(COL_ANCHOR, COL_ANCHOR + COL_LINK);
+        column += 1;
+      } else if (out.includes(COL_LINK)) {
+        already += 1;
+      } else {
+        noFooter += 1;
+      }
+      if (APPLY && out !== html) fs.writeFileSync(p, out);
+      continue;
+    }
     // Everything is scoped to the legal row: finding the anchor, testing whether the link is already
     // there, and inserting. A document-wide includes() matched the 126 city pages whose venue source
     // note links to /methodology and called them done.
@@ -68,5 +85,6 @@ walk(ROOT, '');
 console.log(done + ' pages given a footer link to /methodology');
 if (already) console.log('  ' + already + ' already had one');
 if (repaired) console.log('  ' + repaired + ' blog footers repaired: the link had landed inside the Company list item');
+if (column) console.log('  ' + column + ' given one in the Company column of the dark-navy footer');
 if (noFooter) console.log('  ' + noFooter + ' have no footer-legal row to add it to');
 if (!APPLY) console.log('\nDry run. Re-run with --apply to write.');

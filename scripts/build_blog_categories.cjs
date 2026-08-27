@@ -70,28 +70,6 @@ const CATS = [
 ];
 const dateFmt = (d) => { if (!d) return ''; const [y, mo] = d.split('-'); const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; return M[+mo - 1] + ' ' + y; };
 
-function nav(active) {
-  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
-  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}${t === active ? ' active' : ''}">${t}</a></li>`).join('');
-  return `<nav class="nav" id="mainNav"><div class="nav-container">
-      <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
-      <ul class="nav-links">${li('nav-link')}</ul>
-      
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
-    </div><div class="nav-mobile" id="navMobile"><ul class="nav-mobile-links">${li('nav-mobile-link')}</ul>
-      </div></nav>
-  <script>(function(){var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),mm=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');mm.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
-}
-const FOOTER = `<footer class="footer"><div class="container">
-      <div class="footer-grid">
-        <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
-        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li><li><a href="/activities" class="footer-link">By Activity</a></li></ul></div>
-        <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
-      </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
-      <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
-      <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
-    </div></footer>`;
 
 fs.mkdirSync(path.join(ROOT, 'blog', 'category'), { recursive: true });
 let built = 0;
@@ -167,7 +145,7 @@ ${shell.headEnd}
 </head>
 <body>
   ${shell.bodyStart}
-  ${shell.nav}
+  ${shell.navFor('Blog')}
   <main>
     <header class="bc-header"><div class="container">
       <nav class="bc-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog">Blog</a><span>/</span>${esc(cat.h1)}</nav>
@@ -184,7 +162,7 @@ ${cards}
       <div class="bc-other"><span class="bc-other-label">More topics:</span>${otherCats}<a href="/blog">All articles</a></div>
     </div>
   </main>
-  ${FOOTER}
+  ${shell.footer}
   ${AFF_DONOR}
 ${shell.bodyEnd}
 </body>
