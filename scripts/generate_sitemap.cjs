@@ -85,6 +85,14 @@ add('/legal-notice', '0.2', 'yearly');
     for (const p of langs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.7', 'monthly');
     console.log('  services: ' + langs.length + ' service-and-language pages added');
   }
+  // A language on its own, the axis a reader usually arrives with. Ranked above the crossings
+  // because it is the entry point the directory links to from its own index.
+  const languageManifest = path.join(ROOT, 'data', 'service-language-pages.json');
+  if (fs.existsSync(languageManifest)) {
+    const ls = JSON.parse(fs.readFileSync(languageManifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of ls.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.8', 'monthly');
+    console.log('  services: ' + ls.length + ' language pages added');
+  }
 }
 
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html') && x !== 'index.html').sort()) {

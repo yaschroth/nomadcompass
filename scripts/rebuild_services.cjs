@@ -53,6 +53,10 @@ const STEPS = [
   ['build', 'build_service_pair_pages.cjs', 'decides what exists, and writes the manifest the rest read'],
   ['build', 'build_service_hubs.cjs', 'one page per service'],
   ['build', 'build_service_lang_pages.cjs', 'one page per service and language'],
+  // After the crossings, because it links to them where they exist. Its own manifest is read by
+  // build_services.cjs, which runs first, so the index's language tiles lag by one run in exactly
+  // the way the hub tiles already do. Running this script twice settles both.
+  ['build', 'build_service_language_pages.cjs', 'one page per language, the axis readers arrive with'],
   ['build', 'build_service_city_lang_pages.cjs', 'the overflow of a big language section, on a page of its own'],
   ['build', 'build_service_pair_pages.cjs', 'again, now that the language pages exist to link to'],
   ['build', 'build_service_city_pages.cjs', 'city pages, which link to the pages above'],

@@ -200,6 +200,81 @@ usedCities.forEach((slug) => {
   COUNTS[slug] = { t: rows.length, c, l, p: pair };
 });
 
+/**
+ * The eight cities the directory actually knows well, with their photographs.
+ *
+ * Coverage here is wildly uneven and the A-Z grid hides that completely: Madrid holds 952
+ * providers, the median city holds five, and 67 hold exactly one. Every tile looking identical
+ * made the page read as a spreadsheet of equals, which is both duller and less true than what
+ * the data says. This band says it out loud before the grid begins.
+ *
+ * Ranked honestly by provider count, which makes the band all-European. That is the shape of the
+ * dataset today rather than a curatorial choice, and picking cities for geographic spread would
+ * be inventing a balance the directory does not have.
+ */
+const FEATURED = usedCities
+  .map((slug) => {
+    const rows = providers.filter((p) => p.city === slug);
+    return {
+      slug,
+      n: rows.length,
+      langs: new Set(rows.flatMap((p) => p.languages)).size,
+      cats: new Set(rows.map((p) => p.category)).size,
+    };
+  })
+  .sort((a, b) => b.n - a.n)
+  .slice(0, 8);
+
+const FEATURED_CARDS = FEATURED.map((f) => {
+  const c = CITY[f.slug];
+  const a = ATTR[f.slug] || {};
+  const flag = c.iso ? `<img class="sv-ft-flag" src="/assets/flags/${c.iso}.svg" alt="" width="22" height="16" loading="lazy">` : '';
+  return `<a class="sv-ft" href="/services/${f.slug}">
+          <span class="sv-ft-pic"><img src="/images/cities/${f.slug}-card.webp" alt="${esc(a.alt || c.name)}" width="600" height="400" loading="lazy" decoding="async"></span>
+          <span class="sv-ft-body">
+            <span class="sv-ft-name">${flag}${esc(c.name)}<small>${esc(c.country)}</small></span>
+            <span class="sv-ft-n"><b>${f.n.toLocaleString('en-US')}</b><small>providers</small></span>
+            <span class="sv-ft-meta">${f.langs} languages &middot; ${f.cats} ${f.cats === 1 ? 'service' : 'services'}</span>
+          </span>
+        </a>`;
+}).join('\n        ');
+
+// CC BY and CC BY-SA both require naming the photographer wherever the photograph is shown. Eight
+// cards is few enough to credit them all in one line rather than crowd each card with a byline.
+const FEATURED_CREDIT = (() => {
+  const seen = new Map();
+  FEATURED.forEach((f) => {
+    const a = ATTR[f.slug];
+    if (!a || !a.author) return;
+    const label = a.author + (a.license ? ' (' + a.license + ')' : '');
+    if (!seen.has(label)) seen.set(label, a.sourcePageUrl || '');
+  });
+  if (!seen.size) return '';
+  const parts = [...seen].map(([label, url]) => url
+    ? `<a href="${esc(url)}" target="_blank" rel="nofollow noopener">${esc(label)}</a>`
+    : esc(label));
+  return `<p class="sv-ft-credit">Photos: ${parts.join(', ')}.</p>`;
+})();
+
+/**
+ * Browse by language, which the page has never offered despite language being the whole premise.
+ * Until now it linked only to cities and to service hubs, so the one axis a reader arrives with
+ * ("I need someone who speaks Portuguese") was the one axis with no entry point.
+ *
+ * Tiles are written only for languages that have a landing page, so this cannot link into a 404.
+ */
+const LANGUAGE_TILES = (() => {
+  const f = path.join(ROOT, 'data', 'service-language-pages.json');
+  if (!fs.existsSync(f)) return '';
+  return JSON.parse(fs.readFileSync(f, 'utf8'))
+    // By providers, the number the tile shows large, so the big numerals actually descend down the
+    // grid. Sorting by cities while displaying providers put 2,813 third and looked like an error.
+    // Same order as the service tiles above, which rank by their own headline number too.
+    .sort((a, b) => b.n - a.n || b.cities - a.cities)
+    .map((l) => `<a class="sv-lg" href="${l.url}"><span class="sv-lg-name">${esc(l.label)}</span><span class="sv-lg-stat"><b>${l.n.toLocaleString('en-US')}</b><small>${l.cities.toLocaleString('en-US')} ${l.cities === 1 ? 'city' : 'cities'}</small></span></a>`)
+    .join('');
+})();
+
 // The nav is not built here. apply_tools_nav.cjs owns it, and a locally templated copy lost the
 // Tools dropdown on every rebuild, which is one of the features _safe_write.cjs guards: the write
 // was refused until --force was passed. Lifting it means this generator emits whatever the sweep
@@ -264,7 +339,11 @@ ${shell.headTop}
     /* --color-cream is pure #fff, so white cards on the page background did not read as
        separate objects. The listing sits on sand (the token is literally documented as
        "Cards, sections") and the cards stay white, which is what gives them an edge. */
-    .sv-canvas { background:#fff; border-top:1px solid var(--color-sand-dark,#E3D9C6); }
+    /* Sand, not white. The cards are white and the ground was white too, so 329 tiles were
+       separated only by a hairline and the whole page read as one flat sheet. Giving the ground a
+       colour is the cheapest thing on this page and the one that changes it most: the cards
+       become objects sitting on something. */
+    .sv-canvas { background:var(--color-sand,#f6f1e7); border-top:1px solid var(--color-sand-dark,#E3D9C6); }
     .sv-wrap { max-width:1080px; margin:0 auto; padding:2.5rem var(--space-4,1rem) 4rem; }
     .sv-controls { margin:0 0 2rem; display:flex; flex-wrap:wrap; gap:.8rem 1rem; align-items:flex-end; justify-content:center; background:#fff; border:1px solid #E0D5C2; border-radius:16px; padding:1.25rem 1.4rem; box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); }
     .sv-field { display:flex; flex-direction:column; gap:.35rem; }
@@ -272,7 +351,73 @@ ${shell.headTop}
     .sv-field select, .sv-field input { font-family:inherit; font-size:.95rem; padding:.55rem .7rem; border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:10px; background:#fff; color:var(--color-ink); min-width:180px; }
     .sv-field-city input { min-width:240px; }
     .sv-reset { font-family:inherit; font-size:.85rem; font-weight:600; color:var(--color-terracotta); background:none; border:none; cursor:pointer; text-decoration:underline; padding:.5rem 0; }
+    /* The stat band. These four numbers are what the directory has to show for itself and they
+       used to be a grey sentence that read like a status message. The filter rewrites the first
+       two, so both keep their <b>. */
+    .sv-stats { display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem 2.4rem;
+      margin:2.6rem 0 1.6rem; padding:1.15rem 1rem; background:#fff;
+      border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-md,8px); }
+    .sv-stat { display:flex; flex-direction:column; align-items:center; min-width:6.5rem; }
+    .sv-stat b { font-family:'DM Serif Display',serif; font-size:1.85rem; line-height:1.05;
+      color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sv-stat small { margin-top:.2rem; font-size:.66rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.11em; color:var(--color-stone); }
     .sv-count { text-align:center; font-size:.92rem; color:var(--color-stone); margin:1.5rem 0 1.5rem; } .sv-count b { color:var(--color-ink); }
+
+    /* The featured band. Photographs only here, not on all 329 tiles: eight images a reader can
+       take in, against a long index that stays fast and scannable. */
+    .sv-ft-sec { margin:0 0 3rem; }
+    .sv-ft-sec h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .3rem; }
+    .sv-ft-sec .sv-ft-lede { font-size:.92rem; line-height:1.6; color:var(--color-charcoal,#334155); margin:0 0 1.35rem; max-width:62ch; }
+    .sv-ft-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:1rem; }
+    a.sv-ft:not(.btn):not(.nav-link) { display:flex; flex-direction:column; overflow:hidden; text-decoration:none;
+      background:#fff; color:var(--color-ink); border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
+      transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sv-ft:hover { border-color:var(--color-terracotta,#c0392b); transform:translateY(-2px);
+      box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); }
+    .sv-ft-pic { display:block; height:124px; overflow:hidden; background:var(--color-sand,#f6f1e7); }
+    .sv-ft-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sv-ft:hover .sv-ft-pic img { transform:scale(1.045); }
+    .sv-ft-body { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.2rem .7rem;
+      align-items:center; padding:.75rem .9rem .85rem; }
+    .sv-ft-name { grid-column:1; font-family:'DM Serif Display',serif; font-size:1.08rem; line-height:1.2;
+      display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; min-width:0; }
+    .sv-ft-name small { flex:0 0 100%; font-family:var(--font-sans,system-ui); font-size:var(--text-xs);
+      font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--color-stone); }
+    .sv-ft-flag { border-radius:2px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; }
+    .sv-ft-n { grid-column:2; grid-row:1; display:flex; flex-direction:column; align-items:flex-end; }
+    .sv-ft-n b { font-size:1.15rem; font-weight:800; line-height:1; color:var(--color-terracotta-dark,#a03325);
+      font-variant-numeric:tabular-nums; }
+    .sv-ft-n small { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--color-stone); }
+    .sv-ft-meta { grid-column:1/-1; font-size:.75rem; color:var(--color-stone); padding-top:.35rem;
+      border-top:1px solid var(--color-sand,#f0e9dc); margin-top:.35rem; }
+    .sv-ft-credit { font-size:.72rem; line-height:1.6; color:var(--color-stone); margin:.9rem 0 0; }
+    /* The credit is a citation, not a call to action. base.css paints links terracotta and beats a
+       single class, so this needs the element in the selector to stay quiet. */
+    .sv-ft-credit a, .sv-ft-credit a:visited { color:var(--color-stone); text-decoration:underline; text-decoration-color:var(--color-sand-dark,#E3D9C6); }
+    .sv-ft-credit a:hover { color:var(--color-terracotta,#c0392b); }
+
+    /* Browse by language, styled as a sibling of the service hubs rather than a new idea.
+       NOT .sv-langs: that class already belongs to the chip bar on a provider card, is declared
+       further down this stylesheet, and turned this whole section into a flex row of one column. */
+    .sv-lgs { margin:0 0 3rem; }
+    .sv-lgs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 .3rem; }
+    .sv-lgs .sv-lg-lede { font-size:.92rem; line-height:1.6; color:var(--color-charcoal,#334155); margin:0 0 1.35rem; max-width:62ch; }
+    .sv-lgs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:.75rem; }
+    a.sv-lg:not(.btn):not(.nav-link) { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.4rem; overflow:hidden; text-decoration:none;
+      background:#fff; color:var(--color-ink); border:1px solid #E0D5C2; border-radius:var(--radius-md,8px);
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18);
+      transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sv-lg:hover { border-color:var(--color-terracotta,#c0392b); transform:translateY(-2px);
+      box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); }
+    .sv-lg-name { align-self:center; padding:.6rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sv-lg-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.1rem; padding:.45rem .7rem; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sv-lg-stat b { font-size:.98rem; font-weight:800; line-height:1.15; color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    .sv-lg-stat small { font-size:.64rem; font-weight:600; color:var(--color-stone); white-space:nowrap; font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) { a.sv-ft, a.sv-lg { transition:none; } a.sv-ft:hover, a.sv-lg:hover { transform:none; } a.sv-ft:hover .sv-ft-pic img { transform:none; } }
     .sv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.15rem; }
     .sv-city { margin:0 0 3.5rem; }
     .sv-city.is-hidden { display:none; }
@@ -447,10 +592,29 @@ ${shell.headEnd}
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
+      <div class="sv-stats">
+        <span class="sv-stat"><b>${providers.length.toLocaleString('en-US')}</b><small>providers</small></span>
+        <span class="sv-stat"><b>${nCities}</b><small>cities</small></span>
+        <span class="sv-stat"><b>${nCats}</b><small>service types</small></span>
+        <span class="sv-stat"><b>${nLangs}</b><small>languages</small></span>
+      </div>
       <nav class="sv-hubs" id="by-service" aria-label="Browse by service">
         <h2>Browse by service</h2>
         <div class="sv-hubs-grid">${SERVICE_HUBS}</div>
       </nav>
+${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Browse by language">
+        <h2>Browse by language</h2>
+        <p class="sv-lg-lede">The language is usually what you arrive knowing. These are the ones the directory covers across enough cities to be worth a page of their own.</p>
+        <div class="sv-lgs-grid">${LANGUAGE_TILES}</div>
+      </nav>` : ''}
+      <section class="sv-ft-sec" id="deepest" aria-label="Cities with the deepest coverage">
+        <h2>Where the directory goes deepest</h2>
+        <p class="sv-ft-lede">Coverage is uneven, and pretending otherwise would not help you. These eight cities hold the most providers we have sourced; most of the ${nCities} below hold a handful, and 67 hold exactly one.</p>
+        <div class="sv-ft-grid">
+        ${FEATURED_CARDS}
+        </div>
+        ${FEATURED_CREDIT}
+      </section>
       <p class="sv-count" id="svCount">Showing all <b>${nCities}</b> cities, <b>${providers.length}</b> providers in total.</p>
       <div id="svGrid" class="sv-ix-grid">
       ${cityIndex}
