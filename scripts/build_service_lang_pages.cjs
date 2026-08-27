@@ -165,13 +165,24 @@ for (const [cat, svc] of Object.entries(M.services)) {
     const desc = `${v.rows.length} ${label} who work in ${langName}, across ${v.cities.size} cities in ` +
       `${countries.length} countries, led by ${top.map((c) => c.name).join(', ')}. Every language claim names its source.`;
 
+    // One counter for the page, so the photographs that ship in the HTML are the tiles a reader
+    // reaches first rather than the first few of every country block.
+    let tileIndex = 0;
     const countryBlocks = countries.map((country) => `<section class="svl-country">
           <h2>${esc(country)}<span class="svl-n">${byCountry[country].reduce((s, x) => s + x.n, 0)} in ${byCountry[country].length} ${byCountry[country].length === 1 ? 'city' : 'cities'}</span></h2>
           <div class="sb-grid">
-        ${byCountry[country].map((c) => `<a class="sb-card" href="${linkTo(c.slug, cat)}">
-              ${B.cardHead({ name: c.name, n: c.n, unit: langName })}
-              ${B.tray(`Of all ${label} here`, B.shareBar(c.n, c.total))}
-            </a>`).join('\n        ')}
+        ${byCountry[country].map((c) => B.cityTile({
+    href: linkTo(c.slug, cat),
+    slug: c.slug,
+    name: c.name,
+    country: M.cities[c.slug].country,
+    iso: M.cities[c.slug].iso,
+    n: c.n,
+    unit: langName,
+    index: tileIndex++,
+    eyebrow: `Of all ${label} here`,
+    trayInner: B.shareBar(c.n, c.total),
+  })).join('\n        ')}
           </div>
         </section>`).join('\n      ');
 
@@ -286,6 +297,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>
     </div>
   </main>
+  ${B.revealJs}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

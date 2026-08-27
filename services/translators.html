@@ -420,6 +420,61 @@
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
     }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
+    }
     .svh-foot { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svh-foot p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
   </style>
@@ -458,472 +513,220 @@
       <section class="svh-country">
           <h2>Spain<span class="svh-n">1887 in 25 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/madrid/translators">
-              <span class="sb-head"><span class="sb-name">Madrid</span><span class="sb-count"><b>763</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>519</b></span><span class="sb-lang"><i>French</i><b>146</b></span><span class="sb-lang"><i>German</i><b>62</b></span><span class="sb-lang-more">+5</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/barcelona/translators">
-              <span class="sb-head"><span class="sb-name">Barcelona</span><span class="sb-count"><b>220</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>118</b></span><span class="sb-lang"><i>French</i><b>58</b></span><span class="sb-lang"><i>German</i><b>34</b></span><span class="sb-lang-more">+6</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/granadaspain/translators">
-              <span class="sb-head"><span class="sb-name">Granada</span><span class="sb-count"><b>140</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>86</b></span><span class="sb-lang"><i>French</i><b>33</b></span><span class="sb-lang"><i>German</i><b>17</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/laspalmas/translators">
-              <span class="sb-head"><span class="sb-name">Las Palmas</span><span class="sb-count"><b>137</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>106</b></span><span class="sb-lang"><i>German</i><b>18</b></span><span class="sb-lang"><i>French</i><b>13</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/alicante/translators">
-              <span class="sb-head"><span class="sb-name">Alicante</span><span class="sb-count"><b>120</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>53</b></span><span class="sb-lang"><i>French</i><b>40</b></span><span class="sb-lang"><i>German</i><b>25</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/seville/translators">
-              <span class="sb-head"><span class="sb-name">Seville</span><span class="sb-count"><b>61</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>35</b></span><span class="sb-lang"><i>French</i><b>18</b></span><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang-more">+3</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/valencia/translators">
-              <span class="sb-head"><span class="sb-name">Valencia</span><span class="sb-count"><b>54</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>25</b></span><span class="sb-lang"><i>French</i><b>17</b></span><span class="sb-lang"><i>German</i><b>11</b></span><span class="sb-lang-more">+4</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/palma/translators">
-              <span class="sb-head"><span class="sb-name">Palma de Mallorca</span><span class="sb-count"><b>53</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>33</b></span><span class="sb-lang"><i>German</i><b>12</b></span><span class="sb-lang"><i>French</i><b>8</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/malaga/translators">
-              <span class="sb-head"><span class="sb-name">Málaga</span><span class="sb-count"><b>51</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>31</b></span><span class="sb-lang"><i>French</i><b>14</b></span><span class="sb-lang"><i>German</i><b>7</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/zaragoza/translators">
-              <span class="sb-head"><span class="sb-name">Zaragoza</span><span class="sb-count"><b>41</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>27</b></span><span class="sb-lang"><i>French</i><b>12</b></span><span class="sb-lang"><i>German</i><b>3</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/santiagodecompostela/translators">
-              <span class="sb-head"><span class="sb-name">Santiago de Compostela</span><span class="sb-count"><b>29</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>24</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/gijon/translators">
-              <span class="sb-head"><span class="sb-name">Gijón</span><span class="sb-count"><b>26</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>20</b></span><span class="sb-lang"><i>French</i><b>6</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/tenerife/translators">
-              <span class="sb-head"><span class="sb-name">Tenerife</span><span class="sb-count"><b>26</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>18</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang"><i>German</i><b>4</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/salamanca/translators">
-              <span class="sb-head"><span class="sb-name">Salamanca</span><span class="sb-count"><b>21</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span><span class="sb-lang"><i>French</i><b>7</b></span><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bilbao/translators">
-              <span class="sb-head"><span class="sb-name">Bilbao</span><span class="sb-count"><b>20</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>French</i><b>10</b></span><span class="sb-lang"><i>English</i><b>10</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/marbella/translators">
-              <span class="sb-head"><span class="sb-name">Marbella</span><span class="sb-count"><b>19</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>10</b></span><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang"><i>French</i><b>3</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/sansebastian/translators">
-              <span class="sb-head"><span class="sb-name">San Sebastián</span><span class="sb-count"><b>18</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>13</b></span><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/fuerteventura/translators">
-              <span class="sb-head"><span class="sb-name">Fuerteventura</span><span class="sb-count"><b>16</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>12</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/cadiz/translators">
-              <span class="sb-head"><span class="sb-name">Cádiz</span><span class="sb-count"><b>14</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>11</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/toledo">
-              <span class="sb-head"><span class="sb-name">Toledo</span><span class="sb-count"><b>14</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>14</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/caceres">
-              <span class="sb-head"><span class="sb-name">Cáceres</span><span class="sb-count"><b>11</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/ibiza/translators">
-              <span class="sb-head"><span class="sb-name">Ibiza</span><span class="sb-count"><b>10</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>6</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/ronda">
-              <span class="sb-head"><span class="sb-name">Ronda</span><span class="sb-count"><b>10</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>10</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/segovia">
-              <span class="sb-head"><span class="sb-name">Segovia</span><span class="sb-count"><b>8</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/girona/translators">
-              <span class="sb-head"><span class="sb-name">Girona</span><span class="sb-count"><b>5</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/madrid/translators"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>763</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>519</b></span><span class="sb-lang"><i>French</i><b>146</b></span><span class="sb-lang"><i>German</i><b>62</b></span><span class="sb-lang-more">+5</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/barcelona/translators"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>220</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>118</b></span><span class="sb-lang"><i>French</i><b>58</b></span><span class="sb-lang"><i>German</i><b>34</b></span><span class="sb-lang-more">+6</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/granadaspain/translators"><span class="sb-pic"><img src="/images/cities/granadaspain-card.webp" alt="Alhambra palace complex with Sierra Nevada mountains behind, Granada, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Granada<span class="sb-sub">Spain</span></span><span class="sb-count"><b>140</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>86</b></span><span class="sb-lang"><i>French</i><b>33</b></span><span class="sb-lang"><i>German</i><b>17</b></span><span class="sb-lang-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/laspalmas/translators"><span class="sb-pic"><img src="/images/cities/laspalmas-card.webp" alt="Las Canteras beach with the Las Palmas city skyline and mountains behind on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Las Palmas<span class="sb-sub">Spain</span></span><span class="sb-count"><b>137</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>106</b></span><span class="sb-lang"><i>German</i><b>18</b></span><span class="sb-lang"><i>French</i><b>13</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/alicante/translators"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>120</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>53</b></span><span class="sb-lang"><i>French</i><b>40</b></span><span class="sb-lang"><i>German</i><b>25</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/seville/translators"><span class="sb-pic"><img src="/images/cities/seville-card.webp" alt="Plaza de España in Seville, Spain, ornate baroque semicircular palace with canal and rowing boat under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Seville<span class="sb-sub">Spain</span></span><span class="sb-count"><b>61</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>35</b></span><span class="sb-lang"><i>French</i><b>18</b></span><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang-more">+3</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/valencia/translators"><span class="sb-pic"><img src="/images/cities/valencia-card.webp" alt="City of Arts and Sciences in Valencia, Spain, with the Hemisferic dome, Museu de les Ciencies, and L'Assut de l'Or bridge reflected in the turquoise pool" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Valencia<span class="sb-sub">Spain</span></span><span class="sb-count"><b>54</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>25</b></span><span class="sb-lang"><i>French</i><b>17</b></span><span class="sb-lang"><i>German</i><b>11</b></span><span class="sb-lang-more">+4</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/palma/translators"><span class="sb-pic"><img src="/images/cities/palma-card.webp" alt="La Seu Cathedral and Royal Palace of La Almudaina rising above the waterfront promenade in Palma de Mallorca" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Palma de Mallorca<span class="sb-sub">Spain</span></span><span class="sb-count"><b>53</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>33</b></span><span class="sb-lang"><i>German</i><b>12</b></span><span class="sb-lang"><i>French</i><b>8</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/malaga/translators"><span class="sb-pic"><img src="/images/cities/malaga-card.webp" alt="Aerial view of Málaga from Castillo de Gibralfaro showing the bullring, port, and city" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Málaga<span class="sb-sub">Spain</span></span><span class="sb-count"><b>51</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>31</b></span><span class="sb-lang"><i>French</i><b>14</b></span><span class="sb-lang"><i>German</i><b>7</b></span><span class="sb-lang-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/zaragoza/translators"><span class="sb-pic"><img src="/images/cities/zaragoza-card.webp" alt="Basilica of Our Lady of the Pillar and Puente de Piedra over the Ebro River at dusk, Zaragoza" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zaragoza<span class="sb-sub">Spain</span></span><span class="sb-count"><b>41</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>27</b></span><span class="sb-lang"><i>French</i><b>12</b></span><span class="sb-lang"><i>German</i><b>3</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/santiagodecompostela/translators"><span class="sb-pic"><img src="/images/cities/santiagodecompostela-card.webp" alt="The cathedral of Santiago de Compostela, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Santiago de Compostela<span class="sb-sub">Spain</span></span><span class="sb-count"><b>29</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>24</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/gijon/translators"><span class="sb-pic"><img src="/images/cities/gijon-card.webp" alt="Gijón marina at sunset with sailboats reflected in calm water and city buildings on both sides" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Gijón<span class="sb-sub">Spain</span></span><span class="sb-count"><b>26</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>20</b></span><span class="sb-lang"><i>French</i><b>6</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/tenerife/translators"><span class="sb-pic"><img src="/images/cities/tenerife-card.webp" alt="Mount Teide volcano rising above pine forests in Tenerife, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tenerife<span class="sb-sub">Spain</span></span><span class="sb-count"><b>26</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>18</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang"><i>German</i><b>4</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/salamanca/translators"><span class="sb-pic"><img src="/images/cities/salamanca-card.webp" alt="The baroque Plaza Mayor of Salamanca, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Salamanca<span class="sb-sub">Spain</span></span><span class="sb-count"><b>21</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span><span class="sb-lang"><i>French</i><b>7</b></span><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bilbao/translators"><span class="sb-pic"><img src="/images/cities/bilbao-card.webp" alt="Guggenheim Museum Bilbao with Maman spider sculpture and Nervion river" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bilbao<span class="sb-sub">Spain</span></span><span class="sb-count"><b>20</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>French</i><b>10</b></span><span class="sb-lang"><i>English</i><b>10</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/marbella/translators"><span class="sb-pic"><img src="/images/cities/marbella-card.webp" alt="Luxury yachts moored at Puerto Banus marina, Marbella, Spain, under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Marbella<span class="sb-sub">Spain</span></span><span class="sb-count"><b>19</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>10</b></span><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang"><i>French</i><b>3</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/sansebastian/translators"><span class="sb-pic"><img src="/images/cities/sansebastian-card.webp" alt="Panoramic view of San Sebastián's La Concha bay with Santa Clara island and Monte Urgull from Monte Igueldo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">San Sebastián<span class="sb-sub">Spain</span></span><span class="sb-count"><b>18</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>13</b></span><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/fuerteventura/translators"><span class="sb-pic"><img src="/images/cities/fuerteventura-card.webp" alt="Aerial view of Jandia Beach and Playa del Matorral, Fuerteventura, with turquoise Atlantic water and the Morro Jable lighthouse" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Fuerteventura<span class="sb-sub">Spain</span></span><span class="sb-count"><b>16</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>12</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/cadiz/translators"><span class="sb-pic"><img src="/images/cities/cadiz-card.webp" alt="Cádiz Cathedral with golden dome rising above colourful seafront facades, with ocean waves in the foreground" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cádiz<span class="sb-sub">Spain</span></span><span class="sb-count"><b>14</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>11</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/toledo"><span class="sb-pic"><img src="/images/cities/toledo-card.webp" alt="The hilltop city of Toledo above the Tagus river, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Toledo<span class="sb-sub">Spain</span></span><span class="sb-count"><b>14</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>14</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/caceres"><span class="sb-pic"><img src="/images/cities/caceres-card.webp" alt="The medieval old town of Caceres, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cáceres<span class="sb-sub">Spain</span></span><span class="sb-count"><b>11</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/ibiza/translators"><span class="sb-pic"><img src="/images/cities/ibiza-card.webp" alt="Ibiza harbour marina with Dalt Vila walled city and cathedral on the hill" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ibiza<span class="sb-sub">Spain</span></span><span class="sb-count"><b>10</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>6</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/ronda"><span class="sb-pic"><img src="/images/cities/ronda-card.webp" alt="The deep El Tajo gorge splitting the town of Ronda, whitewashed houses perched on the sheer cliff-tops with the Puente Nuevo bridge spanning the ravine and the Andalusian countryside beyond" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ronda<span class="sb-sub">Spain</span></span><span class="sb-count"><b>10</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>10</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/segovia"><span class="sb-pic"><img src="/images/cities/segovia-card.webp" alt="The Roman aqueduct of Segovia, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Segovia<span class="sb-sub">Spain</span></span><span class="sb-count"><b>8</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>8</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/girona/translators"><span class="sb-pic" data-src="/images/cities/girona-card.webp" data-alt="Colorful houses lining the Onyar River with Girona Cathedral rising above"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Girona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>5</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Italy<span class="svh-n">62 in 9 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/rome/translators">
-              <span class="sb-head"><span class="sb-name">Rome</span><span class="sb-count"><b>48</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>48</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/milan/translators">
-              <span class="sb-head"><span class="sb-name">Milan</span><span class="sb-count"><b>6</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang"><i>English</i><b>5</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/florence/translators">
-              <span class="sb-head"><span class="sb-name">Florence</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bari/translators">
-              <span class="sb-head"><span class="sb-name">Bari</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/catania/translators">
-              <span class="sb-head"><span class="sb-name">Catania</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/genoa/translators">
-              <span class="sb-head"><span class="sb-name">Genoa</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/naples">
-              <span class="sb-head"><span class="sb-name">Naples</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/siena">
-              <span class="sb-head"><span class="sb-name">Siena</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/turin/translators">
-              <span class="sb-head"><span class="sb-name">Turin</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/rome/translators"><span class="sb-pic" data-src="/images/cities/rome-card.webp" data-alt="Panoramic view of the Roman Forum and Colosseum from the Vittoriano monument in Rome"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rome<span class="sb-sub">Italy</span></span><span class="sb-count"><b>48</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>48</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/milan/translators"><span class="sb-pic" data-src="/images/cities/milan-card.webp" data-alt="Piazza del Duomo with Milan Cathedral and Galleria Vittorio Emanuele II entrance, Milan, Italy"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Milan<span class="sb-sub">Italy</span></span><span class="sb-count"><b>6</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>6</b></span><span class="sb-lang"><i>English</i><b>5</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span><span class="sb-lang-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/florence/translators"><span class="sb-pic" data-src="/images/cities/florence-card.webp" data-alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bari/translators"><span class="sb-pic" data-src="/images/cities/bari-card.webp" data-alt="Bari lungomare promenade with ornate lampposts, Adriatic Sea, and old town skyline on a sunny day"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bari<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/catania/translators"><span class="sb-pic" data-src="/images/cities/catania-card.webp" data-alt="Piazza del Duomo with Catania Cathedral and Elephant Fountain, Sicily, Italy"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Catania<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/genoa/translators"><span class="sb-pic" data-src="/images/cities/genoa-card.webp" data-alt="Genoa Porto Antico with sailboats and colorful hillside buildings under blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Genoa<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/naples"><span class="sb-pic" data-src="/images/cities/naples-card.webp" data-alt="Panoramic view of Naples from Castello Sant'Elmo, with the port, Bay of Naples, and Mt. Vesuvius"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Naples<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/siena"><span class="sb-pic" data-src="/images/cities/siena-card.webp" data-alt="Piazza del Campo and its medieval palaces in Siena, Italy"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Siena<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/turin/translators"><span class="sb-pic" data-src="/images/cities/turin-card.webp" data-alt="Turin skyline with the Mole Antonelliana and snow-capped Alps in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Turin<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Portugal<span class="svh-n">39 in 6 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lisbon/translators">
-              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>20</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>20</b></span><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang-more">+22</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/porto/translators">
-              <span class="sb-head"><span class="sb-name">Porto</span><span class="sb-count"><b>14</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>14</b></span><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang-more">+20</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/braga/translators">
-              <span class="sb-head"><span class="sb-name">Braga</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/aveiro/translators">
-              <span class="sb-head"><span class="sb-name">Aveiro</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+20</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/cascais/translators">
-              <span class="sb-head"><span class="sb-name">Cascais</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/coimbra/translators">
-              <span class="sb-head"><span class="sb-name">Coimbra</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lisbon/translators"><span class="sb-pic" data-src="/images/cities/lisbon-card.webp" data-alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>20</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>20</b></span><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>French</i><b>4</b></span><span class="sb-lang-more">+22</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/porto/translators"><span class="sb-pic" data-src="/images/cities/porto-card.webp" data-alt="Porto's Ribeira waterfront with rabelo boats on the Douro River"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>14</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>14</b></span><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>French</i><b>2</b></span><span class="sb-lang-more">+20</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/braga/translators"><span class="sb-pic" data-src="/images/cities/braga-card.webp" data-alt="The monumental baroque staircase of Bom Jesus do Monte above Braga, Portugal"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Braga<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/aveiro/translators"><span class="sb-pic" data-src="/images/cities/aveiro-card.webp" data-alt="A brightly painted yellow-and-red moliceiro boat carrying visitors along a canal in Aveiro, Portugal, with a ribbon-covered footbridge and Art Nouveau buildings behind"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aveiro<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+20</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/cascais/translators"><span class="sb-pic" data-src="/images/cities/cascais-card.webp" data-alt="Santa Marta Lighthouse and Casa de Santa Maria overlooking the rocky coastline of Cascais, Portugal"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cascais<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/coimbra/translators"><span class="sb-pic" data-src="/images/cities/coimbra-card.webp" data-alt="University of Coimbra Paco das Escolas courtyard with iconic clock tower"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Coimbra<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Austria<span class="svh-n">25 in 4 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/vienna/translators">
-              <span class="sb-head"><span class="sb-name">Vienna</span><span class="sb-count"><b>10</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>10</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/innsbruck/translators">
-              <span class="sb-head"><span class="sb-name">Innsbruck</span><span class="sb-count"><b>7</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>7</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/graz/translators">
-              <span class="sb-head"><span class="sb-name">Graz</span><span class="sb-count"><b>6</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>6</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/salzburg/translators">
-              <span class="sb-head"><span class="sb-name">Salzburg</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>2</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/vienna/translators"><span class="sb-pic" data-src="/images/cities/vienna-card.webp" data-alt="Vienna cityscape panorama viewed from the south tower of Stephansdom, showing the iconic tiled roof and city stretching to the horizon"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vienna<span class="sb-sub">Austria</span></span><span class="sb-count"><b>10</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>10</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/innsbruck/translators"><span class="sb-pic" data-src="/images/cities/innsbruck-card.webp" data-alt="Maria-Theresien-Strasse pedestrian zone with Nordkette mountains, Innsbruck"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Innsbruck<span class="sb-sub">Austria</span></span><span class="sb-count"><b>7</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>7</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/graz/translators"><span class="sb-pic" data-src="/images/cities/graz-card.webp" data-alt="Schlossberg hill with Uhrturm clock tower overlooking Graz, Austria"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Graz<span class="sb-sub">Austria</span></span><span class="sb-count"><b>6</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>6</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/salzburg/translators"><span class="sb-pic" data-src="/images/cities/salzburg-card.webp" data-alt="Salzburg Altstadt panorama at golden hour with Hohensalzburg Fortress and Salzach river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Salzburg<span class="sb-sub">Austria</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>2</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Hungary<span class="svh-n">11 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/budapest/translators">
-              <span class="sb-head"><span class="sb-name">Budapest</span><span class="sb-count"><b>11</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>7</b></span><span class="sb-lang"><i>German</i><b>5</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/budapest/translators"><span class="sb-pic" data-src="/images/cities/budapest-card.webp" data-alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>11</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>7</b></span><span class="sb-lang"><i>German</i><b>5</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Germany<span class="svh-n">9 in 5 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/berlin/translators">
-              <span class="sb-head"><span class="sb-name">Berlin</span><span class="sb-count"><b>5</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Italian</i><b>2</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/dresden">
-              <span class="sb-head"><span class="sb-name">Dresden</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/hamburg/translators">
-              <span class="sb-head"><span class="sb-name">Hamburg</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/heidelberg">
-              <span class="sb-head"><span class="sb-name">Heidelberg</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/leipzig">
-              <span class="sb-head"><span class="sb-name">Leipzig</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/berlin/translators"><span class="sb-pic" data-src="/images/cities/berlin-card.webp" data-alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>5</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Italian</i><b>2</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/dresden"><span class="sb-pic" data-src="/images/cities/dresden-card.webp" data-alt="Dresden skyline seen from across the Elbe river, with the Frauenkirche dome and Hofkirche tower rising above the Baroque cityscape"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dresden<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/hamburg/translators"><span class="sb-pic" data-src="/images/cities/hamburg-card.webp" data-alt="Hamburg skyline with Rathaus and church spires reflected across the Binnenalster lake at dusk"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hamburg<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/heidelberg"><span class="sb-pic" data-src="/images/cities/heidelberg-card.webp" data-alt="Heidelberg old town panorama from the Alte Brücke, with castle on the hill and church steeples"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Heidelberg<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/leipzig"><span class="sb-pic" data-src="/images/cities/leipzig-card.webp" data-alt="Augustusplatz Leipzig with City-Hochhaus tower and Paulinum university building under blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Leipzig<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Ireland<span class="svh-n">9 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/dublin/translators">
-              <span class="sb-head"><span class="sb-name">Dublin</span><span class="sb-count"><b>8</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>8</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/galway">
-              <span class="sb-head"><span class="sb-name">Galway</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/dublin/translators"><span class="sb-pic" data-src="/images/cities/dublin-card.webp" data-alt="Samuel Beckett Bridge spanning the River Liffey with Dublin Docklands skyline"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ie.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dublin<span class="sb-sub">Ireland</span></span><span class="sb-count"><b>8</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>8</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/galway"><span class="sb-pic" data-src="/images/cities/galway-card.webp" data-alt="Boats moored in the Claddagh Basin, Galway, with colourful houses and Galway Bay in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ie.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Galway<span class="sb-sub">Ireland</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>South Korea<span class="svh-n">8 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/seoul/translators">
-              <span class="sb-head"><span class="sb-name">Seoul</span><span class="sb-count"><b>8</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>8</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/seoul/translators"><span class="sb-pic" data-src="/images/cities/seoul-card.webp" data-alt="Seoul skyline at dusk with Bukhansan mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Seoul<span class="sb-sub">South Korea</span></span><span class="sb-count"><b>8</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>8</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Turkey<span class="svh-n">8 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/istanbul/translators">
-              <span class="sb-head"><span class="sb-name">Istanbul</span><span class="sb-count"><b>3</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+6</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/izmir/translators">
-              <span class="sb-head"><span class="sb-name">Izmir</span><span class="sb-count"><b>3</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+15</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/antalya">
-              <span class="sb-head"><span class="sb-name">Antalya</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>Russian</i><b>1</b></span><span class="sb-lang-more">+15</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/istanbul/translators"><span class="sb-pic" data-src="/images/cities/istanbul-card.webp" data-alt="Aerial view of Istanbul showing the Blue Mosque, Hagia Sophia, and the Bosphorus strait"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Istanbul<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Spanish</i><b>2</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+6</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/izmir/translators"><span class="sb-pic" data-src="/images/cities/izmir-card.webp" data-alt="Panoramic view of Izmir cityscape with the Gulf of Izmir and terracotta rooftops"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Izmir<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Russian</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang-more">+15</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/antalya"><span class="sb-pic" data-src="/images/cities/antalya-card.webp" data-alt="Antalya old harbour with limestone cliffs, turquoise Mediterranean water, and Taurus Mountains"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Antalya<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>German</i><b>2</b></span><span class="sb-lang"><i>Russian</i><b>1</b></span><span class="sb-lang-more">+15</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Mexico<span class="svh-n">6 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/mexicocity/translators">
-              <span class="sb-head"><span class="sb-name">Mexico City</span><span class="sb-count"><b>4</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>French</i><b>3</b></span><span class="sb-lang"><i>Portuguese</i><b>2</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/guanajuato">
-              <span class="sb-head"><span class="sb-name">Guanajuato</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/queretaro/translators">
-              <span class="sb-head"><span class="sb-name">Querétaro</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/mexicocity/translators"><span class="sb-pic" data-src="/images/cities/mexicocity-card.webp" data-alt="Mexico City skyline with Reforma skyscrapers and Chapultepec park"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/mx.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Mexico City<span class="sb-sub">Mexico</span></span><span class="sb-count"><b>4</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>4</b></span><span class="sb-lang"><i>French</i><b>3</b></span><span class="sb-lang"><i>Portuguese</i><b>2</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/guanajuato"><span class="sb-pic" data-src="/images/cities/guanajuato-card.webp" data-alt="Panoramic view of Guanajuato, Mexico, showing colorful colonial buildings spread across a valley with mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/mx.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Guanajuato<span class="sb-sub">Mexico</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/queretaro/translators"><span class="sb-pic" data-src="/images/cities/queretaro-card.webp" data-alt="Panoramic view of Querétaro cityscape with aqueduct and modern skyline"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/mx.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Querétaro<span class="sb-sub">Mexico</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang"><i>Portuguese</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Argentina<span class="svh-n">5 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/buenosaires/translators">
-              <span class="sb-head"><span class="sb-name">Buenos Aires</span><span class="sb-count"><b>5</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>5</b></span><span class="sb-lang"><i>Portuguese</i><b>2</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/buenosaires/translators"><span class="sb-pic" data-src="/images/cities/buenosaires-card.webp" data-alt="Buenos Aires skyline daytime view of Puerto Madero business district skyscrapers under blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Buenos Aires<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>5</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>5</b></span><span class="sb-lang"><i>Portuguese</i><b>2</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Croatia<span class="svh-n">5 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/zagreb/translators">
-              <span class="sb-head"><span class="sb-name">Zagreb</span><span class="sb-count"><b>3</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Italian</i><b>3</b></span><span class="sb-lang"><i>Serbian</i><b>2</b></span><span class="sb-lang-more">+6</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/pula/translators">
-              <span class="sb-head"><span class="sb-name">Pula</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Italian</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/rovinj">
-              <span class="sb-head"><span class="sb-name">Rovinj</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/zagreb/translators"><span class="sb-pic" data-src="/images/cities/zagreb-card.webp" data-alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>3</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>3</b></span><span class="sb-lang"><i>Italian</i><b>3</b></span><span class="sb-lang"><i>Serbian</i><b>2</b></span><span class="sb-lang-more">+6</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/pula/translators"><span class="sb-pic" data-src="/images/cities/pula-card.webp" data-alt="Pula Arena Roman amphitheatre exterior, Pula, Croatia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Pula<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Italian</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/rovinj"><span class="sb-pic" data-src="/images/cities/rovinj-card.webp" data-alt="The old town of Rovinj on its peninsula at sunset, pastel houses rising to the tall Venetian bell tower of St Euphemia, seen across the calm Adriatic with boats along the waterfront"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rovinj<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Czech Republic<span class="svh-n">5 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/prague/translators">
-              <span class="sb-head"><span class="sb-name">Prague</span><span class="sb-count"><b>4</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang"><i>Slovak</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/brno">
-              <span class="sb-head"><span class="sb-name">Brno</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/prague/translators"><span class="sb-pic" data-src="/images/cities/prague-card.webp" data-alt="Prague Castle and St. Vitus Cathedral above the Vltava River at dawn"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Prague<span class="sb-sub">Czech Republic</span></span><span class="sb-count"><b>4</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>4</b></span><span class="sb-lang"><i>Slovak</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/brno"><span class="sb-pic" data-src="/images/cities/brno-card.webp" data-alt="Brno cityscape panorama with Spilberk Castle and Cathedral of Saints Peter and Paul"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Brno<span class="sb-sub">Czech Republic</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>France<span class="svh-n">4 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/paris/translators">
-              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>Italian</i><b>2</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+22</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bordeaux">
-              <span class="sb-head"><span class="sb-name">Bordeaux</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/lyon/translators">
-              <span class="sb-head"><span class="sb-name">Lyon</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang"><i>Danish</i><b>1</b></span><span class="sb-lang-more">+22</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/paris/translators"><span class="sb-pic" data-src="/images/cities/paris-card.webp" data-alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span><span class="sb-lang"><i>Italian</i><b>2</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang-more">+22</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bordeaux"><span class="sb-pic" data-src="/images/cities/bordeaux-card.webp" data-alt="Place de la Bourse and Miroir d'Eau water mirror, Bordeaux, France"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bordeaux<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/lyon/translators"><span class="sb-pic" data-src="/images/cities/lyon-card.webp" data-alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Arabic</i><b>1</b></span><span class="sb-lang"><i>Danish</i><b>1</b></span><span class="sb-lang-more">+22</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Colombia<span class="svh-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bogota/translators">
-              <span class="sb-head"><span class="sb-name">Bogotá</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bogota/translators"><span class="sb-pic" data-src="/images/cities/bogota-card.webp" data-alt="Bogotá skyline with Monserrate hill and sanctuary in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/co.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bogotá<span class="sb-sub">Colombia</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>2</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Japan<span class="svh-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/fukuoka">
-              <span class="sb-head"><span class="sb-name">Fukuoka</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/tokyo">
-              <span class="sb-head"><span class="sb-name">Tokyo</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/fukuoka"><span class="sb-pic" data-src="/images/cities/fukuoka-card.webp" data-alt="Fukuoka Tower and Seaside Momochi beach skyline"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Fukuoka<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/tokyo"><span class="sb-pic" data-src="/images/cities/tokyo-card.webp" data-alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Peru<span class="svh-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lima/translators">
-              <span class="sb-head"><span class="sb-name">Lima</span><span class="sb-count"><b>2</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>2</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lima/translators"><span class="sb-pic" data-src="/images/cities/lima-card.webp" data-alt="Panoramic view of Lima's San Isidro financial district skyline with modern glass towers"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pe.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lima<span class="sb-sub">Peru</span></span><span class="sb-count"><b>2</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>2</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Poland<span class="svh-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/gdansk/translators">
-              <span class="sb-head"><span class="sb-name">Gdańsk</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/warsaw/translators">
-              <span class="sb-head"><span class="sb-name">Warsaw</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Russian</i><b>1</b></span><span class="sb-lang"><i>Ukrainian</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/gdansk/translators"><span class="sb-pic" data-src="/images/cities/gdansk-card.webp" data-alt="Gdańsk waterfront with colorful Hanseatic facades and the medieval Crane on the Motława river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Gdańsk<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/warsaw/translators"><span class="sb-pic" data-src="/images/cities/warsaw-card.webp" data-alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Russian</i><b>1</b></span><span class="sb-lang"><i>Ukrainian</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Vietnam<span class="svh-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/danang/translators">
-              <span class="sb-head"><span class="sb-name">Da Nang</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Korean</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span>
-            </a>
-        <a class="sb-card" href="/services/hoian">
-              <span class="sb-head"><span class="sb-name">Hoi An</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Korean</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/danang/translators"><span class="sb-pic" data-src="/images/cities/danang-card.webp" data-alt="Dragon Bridge over the Han River at sunset with Da Nang city skyline and mountains"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Da Nang<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Korean</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/hoian"><span class="sb-pic" data-src="/images/cities/hoian-card.webp" data-alt="Hoi An Ancient Town riverfront along the Thu Bon River"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/vn.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hoi An<span class="sb-sub">Vietnam</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Korean</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Greece<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/crete">
-              <span class="sb-head"><span class="sb-name">Crete</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/crete"><span class="sb-pic" data-src="/images/cities/crete-card.webp" data-alt="Chania Venetian harbour panorama with mosque dome and White Mountains, Crete"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Crete<span class="sb-sub">Greece</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>French</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>India<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/newdelhi/translators">
-              <span class="sb-head"><span class="sb-name">New Delhi</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Hindi</i><b>1</b></span><span class="sb-lang"><i>Urdu</i><b>1</b></span><span class="sb-lang-more">+31</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/newdelhi/translators"><span class="sb-pic" data-src="/images/cities/newdelhi-card.webp" data-alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Hindi</i><b>1</b></span><span class="sb-lang"><i>Urdu</i><b>1</b></span><span class="sb-lang-more">+31</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Malaysia<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/kualalumpur/translators">
-              <span class="sb-head"><span class="sb-name">Kuala Lumpur</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/kualalumpur/translators"><span class="sb-pic" data-src="/images/cities/kualalumpur-card.webp" data-alt="Kuala Lumpur skyline with Petronas Twin Towers and KL Tower under blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/my.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kuala Lumpur<span class="sb-sub">Malaysia</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Netherlands<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/amsterdam/translators">
-              <span class="sb-head"><span class="sb-name">Amsterdam</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/amsterdam/translators"><span class="sb-pic" data-src="/images/cities/amsterdam-card.webp" data-alt="Amsterdam canal lined with gabled Dutch canal houses and moored boats under a clear blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/nl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Amsterdam<span class="sb-sub">Netherlands</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Spanish</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span><span class="sb-lang-more">+2</span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Switzerland<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/zurich/translators">
-              <span class="sb-head"><span class="sb-name">Zurich</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/zurich/translators"><span class="sb-pic" data-src="/images/cities/zurich-card.webp" data-alt="Zurich skyline with Fraumunster and Grossmunster along the Limmat river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ch.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zurich<span class="sb-sub">Switzerland</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>Italian</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Taiwan<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/taipei">
-              <span class="sb-head"><span class="sb-name">Taipei</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/taipei"><span class="sb-pic" data-src="/images/cities/taipei-card.webp" data-alt="Taipei 101 tower dominating the city skyline at golden hour with mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tw.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Taipei<span class="sb-sub">Taiwan</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>Thailand<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bangkok/translators">
-              <span class="sb-head"><span class="sb-name">Bangkok</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bangkok/translators"><span class="sb-pic" data-src="/images/cities/bangkok-card.webp" data-alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>English</i><b>1</b></span><span class="sb-lang"><i>Chinese</i><b>1</b></span></span></span></a>
           </div>
         </section>
       <section class="svh-country">
           <h2>UAE<span class="svh-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/dubai/translators">
-              <span class="sb-head"><span class="sb-name">Dubai</span><span class="sb-count"><b>1</b><small>listed</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/dubai/translators"><span class="sb-pic" data-src="/images/cities/dubai-card.webp" data-alt="Aerial view of Dubai skyline with Burj Khalifa towering over the city"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ae.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dubai<span class="sb-sub">UAE</span></span><span class="sb-count"><b>1</b><small>listed</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Works in</span><span class="sb-langs"><span class="sb-lang"><i>German</i><b>1</b></span><span class="sb-lang"><i>English</i><b>1</b></span></span></span></a>
           </div>
         </section>
 
@@ -933,13 +736,24 @@
       </section>
     </div>
   </main>
+  <script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>

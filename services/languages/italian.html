@@ -422,6 +422,61 @@
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
     }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
+    }
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -460,39 +515,15 @@
       <section class="svg-sec">
         <h2>By service</h2>
         <p class="svg-lede">What you can actually get in Italian, biggest first. Where a service has enough Italian speakers to be worth its own page, the card goes there.</p>
-        <div class="sb-grid">
-        <a class="sb-card" href="/services/lawyers/italian">
-              <span class="sb-head"><span class="sb-name">Lawyers</span><span class="sb-count"><b>630</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">56 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/translators/italian">
-              <span class="sb-head"><span class="sb-name">Translators</span><span class="sb-count"><b>129</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">38 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/doctors/italian">
-              <span class="sb-head"><span class="sb-name">Doctors</span><span class="sb-count"><b>72</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">17 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/therapists/italian">
-              <span class="sb-head"><span class="sb-name">Therapists</span><span class="sb-count"><b>59</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">8 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/dentists">
-              <span class="sb-head"><span class="sb-name">Dentists</span><span class="sb-count"><b>17</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">9 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/physiotherapists">
-              <span class="sb-head"><span class="sb-name">Physiotherapists</span><span class="sb-count"><b>10</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">6 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/tax-advisers">
-              <span class="sb-head"><span class="sb-name">Tax advisers</span><span class="sb-count"><b>5</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">2 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/vets">
-              <span class="sb-head"><span class="sb-name">Vets</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">1 city</span></span>
-            </a>
+        <div class="sb-hubs">
+        <a class="sb-hub" href="/services/lawyers/italian"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><span class="sb-hub-name">Lawyers</span><span class="sb-hub-stat"><b>630</b><small>56 cities</small></span></a>
+        <a class="sb-hub" href="/services/translators/italian"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span><span class="sb-hub-name">Translators</span><span class="sb-hub-stat"><b>129</b><small>38 cities</small></span></a>
+        <a class="sb-hub" href="/services/doctors/italian"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><span class="sb-hub-name">Doctors</span><span class="sb-hub-stat"><b>72</b><small>17 cities</small></span></a>
+        <a class="sb-hub" href="/services/therapists/italian"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span><span class="sb-hub-name">Therapists</span><span class="sb-hub-stat"><b>59</b><small>8 cities</small></span></a>
+        <a class="sb-hub" href="/services/dentists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span><span class="sb-hub-name">Dentists</span><span class="sb-hub-stat"><b>17</b><small>9 cities</small></span></a>
+        <a class="sb-hub" href="/services/physiotherapists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-bone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 10c.7-.7 1.69 0 2.5 0a2.5 2.5 0 1 0 0-5 .5.5 0 0 1-.5-.5 2.5 2.5 0 1 0-5 0c0 .81.7 1.8 0 2.5l-7 7c-.7.7-1.69 0-2.5 0a2.5 2.5 0 0 0 0 5c.28 0 .5.22.5.5a2.5 2.5 0 1 0 5 0c0-.81-.7-1.8 0-2.5Z" /></svg></span><span class="sb-hub-name">Physiotherapists</span><span class="sb-hub-stat"><b>10</b><small>6 cities</small></span></a>
+        <a class="sb-hub" href="/services/tax-advisers"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-calculator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg></span><span class="sb-hub-name">Tax advisers</span><span class="sb-hub-stat"><b>5</b><small>2 cities</small></span></a>
+        <a class="sb-hub" href="/services/vets"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-paw-print" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="4" r="2" /> <circle cx="18" cy="8" r="2" /> <circle cx="20" cy="16" r="2" /> <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z" /></svg></span><span class="sb-hub-name">Vets</span><span class="sb-hub-stat"><b>1</b><small>1 city</small></span></a>
       </div>
       </section>
 
@@ -502,382 +533,175 @@
         <section class="svg-country">
           <h3>Hungary<span class="svg-n">276 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/budapest/doctors">
-              <span class="sb-head"><span class="sb-name">Budapest</span><span class="sb-count"><b>276</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, lawyers and translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/budapest/doctors"><span class="sb-pic"><img src="/images/cities/budapest-card.webp" alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>276</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Italy<span class="svg-n">256 in 16 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/rome/doctors">
-              <span class="sb-head"><span class="sb-name">Rome</span><span class="sb-count"><b>110</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, therapists and dentists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/milan/therapists">
-              <span class="sb-head"><span class="sb-name">Milan</span><span class="sb-count"><b>47</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">therapists, doctors and dentists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/florence/doctors">
-              <span class="sb-head"><span class="sb-name">Florence</span><span class="sb-count"><b>31</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, lawyers and translators and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/naples/doctors">
-              <span class="sb-head"><span class="sb-name">Naples</span><span class="sb-count"><b>16</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/bologna">
-              <span class="sb-head"><span class="sb-name">Bologna</span><span class="sb-count"><b>10</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/palermo">
-              <span class="sb-head"><span class="sb-name">Palermo</span><span class="sb-count"><b>8</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/turin/lawyers">
-              <span class="sb-head"><span class="sb-name">Turin</span><span class="sb-count"><b>7</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/perugia">
-              <span class="sb-head"><span class="sb-name">Perugia</span><span class="sb-count"><b>5</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/bari/lawyers">
-              <span class="sb-head"><span class="sb-name">Bari</span><span class="sb-count"><b>4</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/genoa/doctors">
-              <span class="sb-head"><span class="sb-name">Genoa</span><span class="sb-count"><b>4</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/lucca">
-              <span class="sb-head"><span class="sb-name">Lucca</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/siena/doctors">
-              <span class="sb-head"><span class="sb-name">Siena</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/trieste">
-              <span class="sb-head"><span class="sb-name">Trieste</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/verona/doctors">
-              <span class="sb-head"><span class="sb-name">Verona</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, dentists and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/catania">
-              <span class="sb-head"><span class="sb-name">Catania</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/lecce">
-              <span class="sb-head"><span class="sb-name">Lecce</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/rome/doctors"><span class="sb-pic"><img src="/images/cities/rome-card.webp" alt="Panoramic view of the Roman Forum and Colosseum from the Vittoriano monument in Rome" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rome<span class="sb-sub">Italy</span></span><span class="sb-count"><b>110</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Therapists</span><span class="sb-tag">Dentists</span><span class="sb-tag-more">+3</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/milan/therapists"><span class="sb-pic"><img src="/images/cities/milan-card.webp" alt="Piazza del Duomo with Milan Cathedral and Galleria Vittorio Emanuele II entrance, Milan, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Milan<span class="sb-sub">Italy</span></span><span class="sb-count"><b>47</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Therapists</span><span class="sb-tag">Doctors</span><span class="sb-tag">Dentists</span><span class="sb-tag-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/florence/doctors"><span class="sb-pic"><img src="/images/cities/florence-card.webp" alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>31</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/naples/doctors"><span class="sb-pic"><img src="/images/cities/naples-card.webp" alt="Panoramic view of Naples from Castello Sant'Elmo, with the port, Bay of Naples, and Mt. Vesuvius" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Naples<span class="sb-sub">Italy</span></span><span class="sb-count"><b>16</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bologna"><span class="sb-pic"><img src="/images/cities/bologna-card.webp" alt="Piazza Maggiore in Bologna seen from above at golden hour, showing Palazzo del Podesta, Torre degli Asinelli, and San Petronio Basilica" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bologna<span class="sb-sub">Italy</span></span><span class="sb-count"><b>10</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/palermo"><span class="sb-pic"><img src="/images/cities/palermo-card.webp" alt="Palermo Cathedral dome and bell tower at golden hour with palm trees and statues in the foreground" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Palermo<span class="sb-sub">Italy</span></span><span class="sb-count"><b>8</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/turin/lawyers"><span class="sb-pic"><img src="/images/cities/turin-card.webp" alt="Turin skyline with the Mole Antonelliana and snow-capped Alps in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Turin<span class="sb-sub">Italy</span></span><span class="sb-count"><b>7</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/perugia"><span class="sb-pic"><img src="/images/cities/perugia-card.webp" alt="The Fontana Maggiore and cathedral on Piazza IV Novembre in Perugia, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Perugia<span class="sb-sub">Italy</span></span><span class="sb-count"><b>5</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bari/lawyers"><span class="sb-pic"><img src="/images/cities/bari-card.webp" alt="Bari lungomare promenade with ornate lampposts, Adriatic Sea, and old town skyline on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bari<span class="sb-sub">Italy</span></span><span class="sb-count"><b>4</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/genoa/doctors"><span class="sb-pic"><img src="/images/cities/genoa-card.webp" alt="Genoa Porto Antico with sailboats and colorful hillside buildings under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Genoa<span class="sb-sub">Italy</span></span><span class="sb-count"><b>4</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/lucca"><span class="sb-pic"><img src="/images/cities/lucca-card.webp" alt="The tree-topped Guinigi Tower above the rooftops of Lucca, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lucca<span class="sb-sub">Italy</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/siena/doctors"><span class="sb-pic"><img src="/images/cities/siena-card.webp" alt="Piazza del Campo and its medieval palaces in Siena, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Siena<span class="sb-sub">Italy</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/trieste"><span class="sb-pic"><img src="/images/cities/trieste-card.webp" alt="Aerial view of Trieste cityscape with orange rooftops, the Adriatic Sea, and green hills" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Trieste<span class="sb-sub">Italy</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/verona/doctors"><span class="sb-pic"><img src="/images/cities/verona-card.webp" alt="Ponte Pietra Roman bridge over the Adige river with Verona Cathedral bell tower and colourful buildings behind, on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Verona<span class="sb-sub">Italy</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Dentists</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/catania"><span class="sb-pic"><img src="/images/cities/catania-card.webp" alt="Piazza del Duomo with Catania Cathedral and Elephant Fountain, Sicily, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Catania<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/lecce"><span class="sb-pic"><img src="/images/cities/lecce-card.webp" alt="Piazza del Duomo in Lecce, Italy, with the baroque cathedral facade and seminary buildings under a blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lecce<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Spain<span class="svg-n">172 in 15 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/madrid/lawyers">
-              <span class="sb-head"><span class="sb-name">Madrid</span><span class="sb-count"><b>69</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers, doctors and dentists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/barcelona/lawyers">
-              <span class="sb-head"><span class="sb-name">Barcelona</span><span class="sb-count"><b>55</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers, doctors and translators and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/valencia/dentists">
-              <span class="sb-head"><span class="sb-name">Valencia</span><span class="sb-count"><b>15</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">dentists, lawyers and translators and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/laspalmas/lawyers">
-              <span class="sb-head"><span class="sb-name">Las Palmas</span><span class="sb-count"><b>9</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers, doctors and physiotherapists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/seville/lawyers">
-              <span class="sb-head"><span class="sb-name">Seville</span><span class="sb-count"><b>5</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/malaga/lawyers">
-              <span class="sb-head"><span class="sb-name">Málaga</span><span class="sb-count"><b>4</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/alicante/translators">
-              <span class="sb-head"><span class="sb-name">Alicante</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/tenerife/lawyers">
-              <span class="sb-head"><span class="sb-name">Tenerife</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and therapists</span></span>
-            </a>
-        <a class="sb-card" href="/services/ibiza/lawyers">
-              <span class="sb-head"><span class="sb-name">Ibiza</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/palma/lawyers">
-              <span class="sb-head"><span class="sb-name">Palma de Mallorca</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/bilbao/dentists">
-              <span class="sb-head"><span class="sb-name">Bilbao</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">dentists</span></span>
-            </a>
-        <a class="sb-card" href="/services/granadaspain/translators">
-              <span class="sb-head"><span class="sb-name">Granada</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/marbella/lawyers">
-              <span class="sb-head"><span class="sb-name">Marbella</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/salamanca/translators">
-              <span class="sb-head"><span class="sb-name">Salamanca</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/zaragoza/lawyers">
-              <span class="sb-head"><span class="sb-name">Zaragoza</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/madrid/lawyers"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>69</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Doctors</span><span class="sb-tag">Dentists</span><span class="sb-tag-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/barcelona/lawyers"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>55</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Doctors</span><span class="sb-tag">Translators</span><span class="sb-tag-more">+3</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/valencia/dentists"><span class="sb-pic"><img src="/images/cities/valencia-card.webp" alt="City of Arts and Sciences in Valencia, Spain, with the Hemisferic dome, Museu de les Ciencies, and L'Assut de l'Or bridge reflected in the turquoise pool" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Valencia<span class="sb-sub">Spain</span></span><span class="sb-count"><b>15</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Dentists</span><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/laspalmas/lawyers"><span class="sb-pic"><img src="/images/cities/laspalmas-card.webp" alt="Las Canteras beach with the Las Palmas city skyline and mountains behind on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Las Palmas<span class="sb-sub">Spain</span></span><span class="sb-count"><b>9</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Doctors</span><span class="sb-tag">Physiotherapists</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/seville/lawyers"><span class="sb-pic"><img src="/images/cities/seville-card.webp" alt="Plaza de España in Seville, Spain, ornate baroque semicircular palace with canal and rowing boat under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Seville<span class="sb-sub">Spain</span></span><span class="sb-count"><b>5</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/malaga/lawyers"><span class="sb-pic"><img src="/images/cities/malaga-card.webp" alt="Aerial view of Málaga from Castillo de Gibralfaro showing the bullring, port, and city" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Málaga<span class="sb-sub">Spain</span></span><span class="sb-count"><b>4</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/alicante/translators"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/tenerife/lawyers"><span class="sb-pic" data-src="/images/cities/tenerife-card.webp" data-alt="Mount Teide volcano rising above pine forests in Tenerife, Spain"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tenerife<span class="sb-sub">Spain</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Therapists</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/ibiza/lawyers"><span class="sb-pic" data-src="/images/cities/ibiza-card.webp" data-alt="Ibiza harbour marina with Dalt Vila walled city and cathedral on the hill"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ibiza<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/palma/lawyers"><span class="sb-pic" data-src="/images/cities/palma-card.webp" data-alt="La Seu Cathedral and Royal Palace of La Almudaina rising above the waterfront promenade in Palma de Mallorca"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Palma de Mallorca<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bilbao/dentists"><span class="sb-pic" data-src="/images/cities/bilbao-card.webp" data-alt="Guggenheim Museum Bilbao with Maman spider sculpture and Nervion river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bilbao<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Dentists</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/granadaspain/translators"><span class="sb-pic" data-src="/images/cities/granadaspain-card.webp" data-alt="Alhambra palace complex with Sierra Nevada mountains behind, Granada, Spain"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Granada<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/marbella/lawyers"><span class="sb-pic" data-src="/images/cities/marbella-card.webp" data-alt="Luxury yachts moored at Puerto Banus marina, Marbella, Spain, under a clear blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Marbella<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/salamanca/translators"><span class="sb-pic" data-src="/images/cities/salamanca-card.webp" data-alt="The baroque Plaza Mayor of Salamanca, Spain"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Salamanca<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/zaragoza/lawyers"><span class="sb-pic" data-src="/images/cities/zaragoza-card.webp" data-alt="Basilica of Our Lady of the Pillar and Puente de Piedra over the Ebro River at dusk, Zaragoza"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zaragoza<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>France<span class="svg-n">108 in 3 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/paris/lawyers">
-              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>96</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers, doctors and dentists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/lyon/lawyers">
-              <span class="sb-head"><span class="sb-name">Lyon</span><span class="sb-count"><b>10</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/grenoble">
-              <span class="sb-head"><span class="sb-name">Grenoble</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/paris/lawyers"><span class="sb-pic" data-src="/images/cities/paris-card.webp" data-alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>96</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Doctors</span><span class="sb-tag">Dentists</span><span class="sb-tag-more">+4</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/lyon/lawyers"><span class="sb-pic" data-src="/images/cities/lyon-card.webp" data-alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>10</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/grenoble"><span class="sb-pic" data-src="/images/cities/grenoble-card.webp" data-alt="Cours Jean Jaures tram boulevard with the Bastille fortress on the hill in the background, Grenoble, France"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Grenoble<span class="sb-sub">France</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Austria<span class="svg-n">36 in 4 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/vienna/lawyers">
-              <span class="sb-head"><span class="sb-name">Vienna</span><span class="sb-count"><b>15</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/innsbruck/lawyers">
-              <span class="sb-head"><span class="sb-name">Innsbruck</span><span class="sb-count"><b>10</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/graz/translators">
-              <span class="sb-head"><span class="sb-name">Graz</span><span class="sb-count"><b>6</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/salzburg/lawyers">
-              <span class="sb-head"><span class="sb-name">Salzburg</span><span class="sb-count"><b>5</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/vienna/lawyers"><span class="sb-pic" data-src="/images/cities/vienna-card.webp" data-alt="Vienna cityscape panorama viewed from the south tower of Stephansdom, showing the iconic tiled roof and city stretching to the horizon"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vienna<span class="sb-sub">Austria</span></span><span class="sb-count"><b>15</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/innsbruck/lawyers"><span class="sb-pic" data-src="/images/cities/innsbruck-card.webp" data-alt="Maria-Theresien-Strasse pedestrian zone with Nordkette mountains, Innsbruck"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Innsbruck<span class="sb-sub">Austria</span></span><span class="sb-count"><b>10</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/graz/translators"><span class="sb-pic" data-src="/images/cities/graz-card.webp" data-alt="Schlossberg hill with Uhrturm clock tower overlooking Graz, Austria"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Graz<span class="sb-sub">Austria</span></span><span class="sb-count"><b>6</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/salzburg/lawyers"><span class="sb-pic" data-src="/images/cities/salzburg-card.webp" data-alt="Salzburg Altstadt panorama at golden hour with Hohensalzburg Fortress and Salzach river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Salzburg<span class="sb-sub">Austria</span></span><span class="sb-count"><b>5</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Greece<span class="svg-n">12 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/athens/doctors">
-              <span class="sb-head"><span class="sb-name">Athens</span><span class="sb-count"><b>11</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/crete">
-              <span class="sb-head"><span class="sb-name">Crete</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/athens/doctors"><span class="sb-pic" data-src="/images/cities/athens-card.webp" data-alt="Acropolis of Athens with the Parthenon and Odeon of Herodes Atticus viewed from Philopappos Hill"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Athens<span class="sb-sub">Greece</span></span><span class="sb-count"><b>11</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/crete"><span class="sb-pic" data-src="/images/cities/crete-card.webp" data-alt="Chania Venetian harbour panorama with mosque dome and White Mountains, Crete"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Crete<span class="sb-sub">Greece</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Germany<span class="svg-n">11 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/berlin/dentists">
-              <span class="sb-head"><span class="sb-name">Berlin</span><span class="sb-count"><b>10</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">dentists, physiotherapists and lawyers and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/munich/lawyers">
-              <span class="sb-head"><span class="sb-name">Munich</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/berlin/dentists"><span class="sb-pic" data-src="/images/cities/berlin-card.webp" data-alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>10</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Dentists</span><span class="sb-tag">Physiotherapists</span><span class="sb-tag">Lawyers</span><span class="sb-tag-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/munich/lawyers"><span class="sb-pic" data-src="/images/cities/munich-card.webp" data-alt="Marienplatz with Neues Rathaus and Frauenkirche towers, Munich"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Munich<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Argentina<span class="svg-n">8 in 5 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/buenosaires/translators">
-              <span class="sb-head"><span class="sb-name">Buenos Aires</span><span class="sb-count"><b>3</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/mendoza/lawyers">
-              <span class="sb-head"><span class="sb-name">Mendoza</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/bariloche/lawyers">
-              <span class="sb-head"><span class="sb-name">Bariloche</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/cordoba">
-              <span class="sb-head"><span class="sb-name">Córdoba</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/rosario">
-              <span class="sb-head"><span class="sb-name">Rosario</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/buenosaires/translators"><span class="sb-pic" data-src="/images/cities/buenosaires-card.webp" data-alt="Buenos Aires skyline daytime view of Puerto Madero business district skyscrapers under blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Buenos Aires<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>3</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/mendoza/lawyers"><span class="sb-pic" data-src="/images/cities/mendoza-card.webp" data-alt="Mendoza city skyline with the Andes mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Mendoza<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bariloche/lawyers"><span class="sb-pic" data-src="/images/cities/bariloche-card.webp" data-alt="Aerial view of Llao Llao peninsula with the iconic hotel, Nahuel Huapi lake, and snow-capped Andes mountains, Bariloche, Argentina"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bariloche<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/cordoba"><span class="sb-pic" data-src="/images/cities/cordoba-card.webp" data-alt="Centro Cívico del Bicentenario building facade, Córdoba, Argentina"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Córdoba<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/rosario"><span class="sb-pic" data-src="/images/cities/rosario-card.webp" data-alt="Panoramic view of Rosario's costanera along the Parana River on a sunny day"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rosario<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Croatia<span class="svg-n">8 in 4 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/zagreb/translators">
-              <span class="sb-head"><span class="sb-name">Zagreb</span><span class="sb-count"><b>4</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/pula/lawyers">
-              <span class="sb-head"><span class="sb-name">Pula</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/dubrovnik/lawyers">
-              <span class="sb-head"><span class="sb-name">Dubrovnik</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/rovinj">
-              <span class="sb-head"><span class="sb-name">Rovinj</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/zagreb/translators"><span class="sb-pic" data-src="/images/cities/zagreb-card.webp" data-alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>4</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/pula/lawyers"><span class="sb-pic" data-src="/images/cities/pula-card.webp" data-alt="Pula Arena Roman amphitheatre exterior, Pula, Croatia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Pula<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/dubrovnik/lawyers"><span class="sb-pic" data-src="/images/cities/dubrovnik-card.webp" data-alt="Aerial view of Dubrovnik Old Town and city walls with the Adriatic Sea"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dubrovnik<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/rovinj"><span class="sb-pic" data-src="/images/cities/rovinj-card.webp" data-alt="The old town of Rovinj on its peninsula at sunset, pastel houses rising to the tall Venetian bell tower of St Euphemia, seen across the calm Adriatic with boats along the waterfront"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rovinj<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Portugal<span class="svg-n">8 in 3 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lisbon/dentists">
-              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>5</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">dentists, translators and doctors and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/porto/translators">
-              <span class="sb-head"><span class="sb-name">Porto</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/aveiro/translators">
-              <span class="sb-head"><span class="sb-name">Aveiro</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lisbon/dentists"><span class="sb-pic" data-src="/images/cities/lisbon-card.webp" data-alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>5</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Dentists</span><span class="sb-tag">Translators</span><span class="sb-tag">Doctors</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/porto/translators"><span class="sb-pic" data-src="/images/cities/porto-card.webp" data-alt="Porto's Ribeira waterfront with rabelo boats on the Douro River"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/aveiro/translators"><span class="sb-pic" data-src="/images/cities/aveiro-card.webp" data-alt="A brightly painted yellow-and-red moliceiro boat carrying visitors along a canal in Aveiro, Portugal, with a ribbon-covered footbridge and Art Nouveau buildings behind"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aveiro<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Australia<span class="svg-n">6 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/sydney/doctors">
-              <span class="sb-head"><span class="sb-name">Sydney</span><span class="sb-count"><b>6</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors and lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/sydney/doctors"><span class="sb-pic" data-src="/images/cities/sydney-card.webp" data-alt="Sydney Opera House and Harbour Bridge from the harbour on a sunny day"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/au.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Sydney<span class="sb-sub">Australia</span></span><span class="sb-count"><b>6</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Slovenia<span class="svg-n">4 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/ljubljana/lawyers">
-              <span class="sb-head"><span class="sb-name">Ljubljana</span><span class="sb-count"><b>4</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/ljubljana/lawyers"><span class="sb-pic" data-src="/images/cities/ljubljana-card.webp" data-alt="Preseren Square and Franciscan Church in Ljubljana, Slovenia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/si.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ljubljana<span class="sb-sub">Slovenia</span></span><span class="sb-count"><b>4</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Switzerland<span class="svg-n">4 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/zurich/lawyers">
-              <span class="sb-head"><span class="sb-name">Zurich</span><span class="sb-count"><b>4</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/zurich/lawyers"><span class="sb-pic" data-src="/images/cities/zurich-card.webp" data-alt="Zurich skyline with Fraumunster and Grossmunster along the Limmat river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ch.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zurich<span class="sb-sub">Switzerland</span></span><span class="sb-count"><b>4</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Poland<span class="svg-n">3 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/krakow/lawyers">
-              <span class="sb-head"><span class="sb-name">Krakow</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/warsaw/lawyers">
-              <span class="sb-head"><span class="sb-name">Warsaw</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/krakow/lawyers"><span class="sb-pic" data-src="/images/cities/krakow-card.webp" data-alt="Krakow Main Market Square with St. Mary's Basilica and Adam Mickiewicz Monument"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Krakow<span class="sb-sub">Poland</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/warsaw/lawyers"><span class="sb-pic" data-src="/images/cities/warsaw-card.webp" data-alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Turkey<span class="svg-n">3 in 3 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/antalya">
-              <span class="sb-head"><span class="sb-name">Antalya</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/istanbul/translators">
-              <span class="sb-head"><span class="sb-name">Istanbul</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/izmir/translators">
-              <span class="sb-head"><span class="sb-name">Izmir</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/antalya"><span class="sb-pic" data-src="/images/cities/antalya-card.webp" data-alt="Antalya old harbour with limestone cliffs, turquoise Mediterranean water, and Taurus Mountains"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Antalya<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/istanbul/translators"><span class="sb-pic" data-src="/images/cities/istanbul-card.webp" data-alt="Aerial view of Istanbul showing the Blue Mosque, Hagia Sophia, and the Bosphorus strait"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Istanbul<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/izmir/translators"><span class="sb-pic" data-src="/images/cities/izmir-card.webp" data-alt="Panoramic view of Izmir cityscape with the Gulf of Izmir and terracotta rooftops"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Izmir<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Denmark<span class="svg-n">2 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/copenhagen">
-              <span class="sb-head"><span class="sb-name">Copenhagen</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/copenhagen"><span class="sb-pic" data-src="/images/cities/copenhagen-card.webp" data-alt="Nyhavn canal with colourful historic buildings and sailing boats, Copenhagen"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Copenhagen<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Israel<span class="svg-n">2 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/telaviv/lawyers">
-              <span class="sb-head"><span class="sb-name">Tel Aviv</span><span class="sb-count"><b>2</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers and doctors</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/telaviv/lawyers"><span class="sb-pic" data-src="/images/cities/telaviv-card.webp" data-alt="Tel Aviv beach and skyline on a sunny day"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/il.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tel Aviv<span class="sb-sub">Israel</span></span><span class="sb-count"><b>2</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Czech Republic<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/prague/lawyers">
-              <span class="sb-head"><span class="sb-name">Prague</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/prague/lawyers"><span class="sb-pic" data-src="/images/cities/prague-card.webp" data-alt="Prague Castle and St. Vitus Cathedral above the Vltava River at dawn"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Prague<span class="sb-sub">Czech Republic</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>India<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/newdelhi/translators">
-              <span class="sb-head"><span class="sb-name">New Delhi</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/newdelhi/translators"><span class="sb-pic" data-src="/images/cities/newdelhi-card.webp" data-alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Thailand<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bangkok/lawyers">
-              <span class="sb-head"><span class="sb-name">Bangkok</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bangkok/lawyers"><span class="sb-pic" data-src="/images/cities/bangkok-card.webp" data-alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>UAE<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/dubai/doctors">
-              <span class="sb-head"><span class="sb-name">Dubai</span><span class="sb-count"><b>1</b><small>Italian</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/dubai/doctors"><span class="sb-pic" data-src="/images/cities/dubai-card.webp" data-alt="Aerial view of Dubai skyline with Burj Khalifa towering over the city"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ae.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Dubai<span class="sb-sub">UAE</span></span><span class="sb-count"><b>1</b><small>Italian</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
       </section>
@@ -901,13 +725,24 @@
       </div>
     </div>
   </main>
+  <script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>

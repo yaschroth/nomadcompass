@@ -25,7 +25,12 @@
  * Usage:  const B = require('./lib/service_bento.cjs');
  *         ...  <style> ${B.css} </style>
  *         B.chip({ href, label, n })  B.cardHead({ name, sub, n, unit })  B.tray(eyebrow, inner)
+ *         B.cityTile({ href, slug, name, country, iso, n, unit, index, eyebrow, trayInner })
+ *         B.hub({ href, icon, name, n, sub })   ... plus B.revealJs once per page that uses tiles
  */
+
+const fs = require('fs');
+const path = require('path');
 
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -110,6 +115,61 @@ const css = `
     @media (prefers-reduced-motion:reduce) {
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
+    }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid ${RULE}; }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid ${RULE}; border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid ${EDGE}; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:${SHADOW}; transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:${SHADOW_HOVER}; transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid ${RULE}; }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid ${RULE}; }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
     }`;
 
 /** A label and its count, as two cells of one box. `n` may be omitted for a chip with no number. */
@@ -150,4 +210,104 @@ const shareBar = (n, total) => {
     + `<span class="sb-figs"><span><b>${esc(n)}</b> of ${esc(total)}</span><span>${pct}%</span></span>`;
 };
 
-module.exports = { css, chip, cardHead, tray, langChips, shareBar, esc };
+/**
+ * The city photographs, loaded once for whichever generators want them.
+ *
+ * Three page families list cities, and all three were drawing a plain card while /services, one
+ * click away, drew a photographed tile. Doing the lookup here rather than in each generator is the
+ * same reason the CSS is here: three copies is how a design ends up meaning three things.
+ */
+const CITY_PHOTOS = (() => {
+  const root = path.resolve(__dirname, '..', '..');
+  const dir = path.join(root, 'images', 'cities');
+  const attribFile = path.join(dir, 'attribution.json');
+  let attrib = {};
+  if (fs.existsSync(attribFile)) {
+    const raw = JSON.parse(fs.readFileSync(attribFile, 'utf8'));
+    attrib = Array.isArray(raw) ? Object.fromEntries(raw.map((r) => [r.slug, r])) : raw;
+  }
+  const present = new Set(fs.existsSync(dir)
+    ? fs.readdirSync(dir).filter((f) => f.endsWith('-card.webp')).map((f) => f.replace(/-card\.webp$/, ''))
+    : []);
+  return { attrib, present };
+})();
+
+/** How many tiles ship their photograph in the HTML before the rest are deferred. */
+const EAGER_TILES = 24;
+
+/**
+ * A city tile: photograph, flag, name over country, a count, and whatever the page wants in the
+ * tray. The one shape /services uses, so a reader clicking between these pages sees one component.
+ *
+ * `index` is the tile's position on the whole page, not within its country block, so the eager
+ * photographs are the ones actually reached first.
+ */
+const cityTile = ({ href, slug, name, country, iso, n, unit, index = 0, eyebrow, trayInner }) => {
+  const a = CITY_PHOTOS.attrib[slug] || {};
+  const band = CITY_PHOTOS.present.has(slug)
+    ? pic({ slug, alt: a.alt || name, eager: index < EAGER_TILES })
+    : '<span class="sb-pic"></span>';
+  return `<a class="sb-card sb-card-pic" href="${href}">`
+    + band
+    + cardHeadFlag({ iso, name, sub: country, n, unit })
+    + tray(eyebrow, trayInner)
+    + `</a>`;
+};
+
+/**
+ * The photograph band at the top of a city tile.
+ *
+ * `eager: false` ships a placeholder carrying the source rather than an <img>, for the tiles below
+ * the fold. /services measured this: a hidden <img> is still fetched, so 329 tiles cost 421
+ * requests whether the card was painted or not. The reveal script builds the real element when the
+ * tile comes near the viewport. The placeholder keeps the band's height either way, which is what
+ * holds every tile on the grid to one height.
+ */
+const pic = ({ slug, alt, eager }) => (eager
+  ? `<span class="sb-pic"><img src="/images/cities/${esc(slug)}-card.webp" alt="${esc(alt)}" width="600" height="400" loading="lazy" decoding="async"></span>`
+  : `<span class="sb-pic" data-src="/images/cities/${esc(slug)}-card.webp" data-alt="${esc(alt)}"></span>`);
+
+/** The identity row of a photographed tile: flag, name over country, and the count tile. */
+const cardHeadFlag = ({ iso, name, sub, n, unit }) => `<span class="sb-head">`
+  + (iso ? `<img class="sb-flag" src="/assets/flags/${esc(iso)}.svg" alt="" width="26" height="20" loading="lazy">` : '<span></span>')
+  + `<span class="sb-name">${esc(name)}${sub ? `<span class="sb-sub">${esc(sub)}</span>` : ''}</span>`
+  + `<span class="sb-count"><b>${esc(n)}</b>${unit ? `<small>${esc(unit)}</small>` : ''}</span>`
+  + `</span>`;
+
+/** A row of plain label chips, with a "+n" for whatever did not fit. */
+const tagChips = (labels, cap = 3) => {
+  const shown = labels.slice(0, cap);
+  const rest = labels.length - shown.length;
+  return `<span class="sb-tags">`
+    + shown.map((l) => `<span class="sb-tag">${esc(l)}</span>`).join('')
+    + (rest > 0 ? `<span class="sb-tag-more">+${rest}</span>` : '')
+    + `</span>`;
+};
+
+/** The compact row: an icon, a label, and a count over what it counts. */
+const hub = ({ href, icon, name, n, sub }) => `<a class="sb-hub" href="${href}">`
+  + `<span class="sb-hub-ico">${icon || ''}</span>`
+  + `<span class="sb-hub-name">${esc(name)}</span>`
+  + `<span class="sb-hub-stat"><b>${esc(n)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</span>`
+  + `</a>`;
+
+/**
+ * Builds the deferred photographs as their tiles come into view.
+ *
+ * Inlined rather than shipped as a file because it is eleven lines and every page that wants it
+ * already carries its own <style>. Without IntersectionObserver every placeholder is filled at
+ * once, which is the behaviour before this existed rather than a broken page.
+ */
+const revealJs = `<script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>`;
+
+module.exports = { css, chip, cardHead, cardHeadFlag, tray, langChips, tagChips, shareBar, pic, hub, cityTile, revealJs, EAGER_TILES, esc };

@@ -422,6 +422,61 @@
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
     }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
+    }
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -460,27 +515,12 @@
       <section class="svg-sec">
         <h2>By service</h2>
         <p class="svg-lede">What you can actually get in Polish, biggest first. Where a service has enough Polish speakers to be worth its own page, the card goes there.</p>
-        <div class="sb-grid">
-        <a class="sb-card" href="/services/lawyers/polish">
-              <span class="sb-head"><span class="sb-name">Lawyers</span><span class="sb-count"><b>106</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">20 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/doctors">
-              <span class="sb-head"><span class="sb-name">Doctors</span><span class="sb-count"><b>29</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">7 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/translators">
-              <span class="sb-head"><span class="sb-name">Translators</span><span class="sb-count"><b>8</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">8 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/dentists">
-              <span class="sb-head"><span class="sb-name">Dentists</span><span class="sb-count"><b>3</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">2 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/therapists">
-              <span class="sb-head"><span class="sb-name">Therapists</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">1 city</span></span>
-            </a>
+        <div class="sb-hubs">
+        <a class="sb-hub" href="/services/lawyers/polish"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><span class="sb-hub-name">Lawyers</span><span class="sb-hub-stat"><b>106</b><small>20 cities</small></span></a>
+        <a class="sb-hub" href="/services/doctors"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><span class="sb-hub-name">Doctors</span><span class="sb-hub-stat"><b>29</b><small>7 cities</small></span></a>
+        <a class="sb-hub" href="/services/translators"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span><span class="sb-hub-name">Translators</span><span class="sb-hub-stat"><b>8</b><small>8 cities</small></span></a>
+        <a class="sb-hub" href="/services/dentists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span><span class="sb-hub-name">Dentists</span><span class="sb-hub-stat"><b>3</b><small>2 cities</small></span></a>
+        <a class="sb-hub" href="/services/therapists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span><span class="sb-hub-name">Therapists</span><span class="sb-hub-stat"><b>1</b><small>1 city</small></span></a>
       </div>
       </section>
 
@@ -490,178 +530,94 @@
         <section class="svg-country">
           <h3>Poland<span class="svg-n">74 in 6 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/warsaw/lawyers">
-              <span class="sb-head"><span class="sb-name">Warsaw</span><span class="sb-count"><b>55</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers, dentists and doctors and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/krakow/doctors">
-              <span class="sb-head"><span class="sb-name">Krakow</span><span class="sb-count"><b>9</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/gdansk/doctors">
-              <span class="sb-head"><span class="sb-name">Gdańsk</span><span class="sb-count"><b>4</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, translators and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/wroclaw">
-              <span class="sb-head"><span class="sb-name">Wrocław</span><span class="sb-count"><b>3</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors</span></span>
-            </a>
-        <a class="sb-card" href="/services/poznan">
-              <span class="sb-head"><span class="sb-name">Poznań</span><span class="sb-count"><b>2</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/torun">
-              <span class="sb-head"><span class="sb-name">Toruń</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/warsaw/lawyers"><span class="sb-pic"><img src="/images/cities/warsaw-card.webp" alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>55</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span><span class="sb-tag">Dentists</span><span class="sb-tag">Doctors</span><span class="sb-tag-more">+1</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/krakow/doctors"><span class="sb-pic"><img src="/images/cities/krakow-card.webp" alt="Krakow Main Market Square with St. Mary's Basilica and Adam Mickiewicz Monument" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Krakow<span class="sb-sub">Poland</span></span><span class="sb-count"><b>9</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/gdansk/doctors"><span class="sb-pic"><img src="/images/cities/gdansk-card.webp" alt="Gdańsk waterfront with colorful Hanseatic facades and the medieval Crane on the Motława river" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Gdańsk<span class="sb-sub">Poland</span></span><span class="sb-count"><b>4</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Translators</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/wroclaw"><span class="sb-pic"><img src="/images/cities/wroclaw-card.webp" alt="Cathedral Island and Cathedral of St. John the Baptist reflected in the Odra River, Wrocław" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Wrocław<span class="sb-sub">Poland</span></span><span class="sb-count"><b>3</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/poznan"><span class="sb-pic"><img src="/images/cities/poznan-card.webp" alt="Neptune Fountain and colorful Baroque townhouses on Old Market Square in Poznań, Poland" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Poznań<span class="sb-sub">Poland</span></span><span class="sb-count"><b>2</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/torun"><span class="sb-pic"><img src="/images/cities/torun-card.webp" alt="The medieval Old Town Hall of Torun, Poland" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Toruń<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Germany<span class="svg-n">31 in 4 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/munich/lawyers">
-              <span class="sb-head"><span class="sb-name">Munich</span><span class="sb-count"><b>14</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/berlin/lawyers">
-              <span class="sb-head"><span class="sb-name">Berlin</span><span class="sb-count"><b>13</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/stuttgart">
-              <span class="sb-head"><span class="sb-name">Stuttgart</span><span class="sb-count"><b>3</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/frankfurt/lawyers">
-              <span class="sb-head"><span class="sb-name">Frankfurt</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/munich/lawyers"><span class="sb-pic"><img src="/images/cities/munich-card.webp" alt="Marienplatz with Neues Rathaus and Frauenkirche towers, Munich" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Munich<span class="sb-sub">Germany</span></span><span class="sb-count"><b>14</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/berlin/lawyers"><span class="sb-pic"><img src="/images/cities/berlin-card.webp" alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>13</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/stuttgart"><span class="sb-pic"><img src="/images/cities/stuttgart-card.webp" alt="Stuttgart city centre viewed from the Hauptbahnhof tower, showing Königstrasse, Stiftskirche and surrounding hills" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Stuttgart<span class="sb-sub">Germany</span></span><span class="sb-count"><b>3</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/frankfurt/lawyers"><span class="sb-pic"><img src="/images/cities/frankfurt-card.webp" alt="Frankfurt skyline with Römerberg old town in the foreground and modern skyscrapers behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Frankfurt<span class="sb-sub">Germany</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>France<span class="svg-n">16 in 6 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lyon/translators">
-              <span class="sb-head"><span class="sb-name">Lyon</span><span class="sb-count"><b>6</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/paris/translators">
-              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>5</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators, doctors and therapists</span></span>
-            </a>
-        <a class="sb-card" href="/services/aixenprovence">
-              <span class="sb-head"><span class="sb-name">Aix-en-Provence</span><span class="sb-count"><b>2</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/montpellier">
-              <span class="sb-head"><span class="sb-name">Montpellier</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/nice">
-              <span class="sb-head"><span class="sb-name">Nice</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/toulouse">
-              <span class="sb-head"><span class="sb-name">Toulouse</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lyon/translators"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>6</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/paris/translators"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>5</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span><span class="sb-tag">Doctors</span><span class="sb-tag">Therapists</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/aixenprovence"><span class="sb-pic"><img src="/images/cities/aixenprovence-card.webp" alt="Aerial view of Aix-en-Provence with the Fontaine de la Rotonde and the tree-lined Cours Mirabeau leading into the terracotta-roofed old town" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aix-en-Provence<span class="sb-sub">France</span></span><span class="sb-count"><b>2</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/montpellier"><span class="sb-pic"><img src="/images/cities/montpellier-card.webp" alt="Chateau d'eau du Peyrou reflected in the basin, Montpellier" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Montpellier<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/nice"><span class="sb-pic"><img src="/images/cities/nice-card.webp" alt="Panoramic view of Nice, France, showing the Bay of Angels, Promenade des Anglais beach, and terracotta rooftops of the Old Town" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Nice<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/toulouse"><span class="sb-pic"><img src="/images/cities/toulouse-card.webp" alt="Panoramic view of Toulouse along the Garonne river with Pont Neuf and pink brick city" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Toulouse<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Netherlands<span class="svg-n">9 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/amsterdam/lawyers">
-              <span class="sb-head"><span class="sb-name">Amsterdam</span><span class="sb-count"><b>6</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/rotterdam/lawyers">
-              <span class="sb-head"><span class="sb-name">Rotterdam</span><span class="sb-count"><b>3</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/amsterdam/lawyers"><span class="sb-pic"><img src="/images/cities/amsterdam-card.webp" alt="Amsterdam canal lined with gabled Dutch canal houses and moored boats under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/nl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Amsterdam<span class="sb-sub">Netherlands</span></span><span class="sb-count"><b>6</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/rotterdam/lawyers"><span class="sb-pic"><img src="/images/cities/rotterdam-card.webp" alt="Rotterdam skyline with Erasmus Bridge and De Rotterdam towers seen from across the Nieuwe Maas river" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/nl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rotterdam<span class="sb-sub">Netherlands</span></span><span class="sb-count"><b>3</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Chile<span class="svg-n">5 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/santiago/lawyers">
-              <span class="sb-head"><span class="sb-name">Santiago</span><span class="sb-count"><b>5</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/santiago/lawyers"><span class="sb-pic"><img src="/images/cities/santiago-card.webp" alt="Santiago skyline with Gran Torre Santiago and the Andes mountains at golden hour" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Santiago<span class="sb-sub">Chile</span></span><span class="sb-count"><b>5</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Lithuania<span class="svg-n">2 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/vilnius/doctors">
-              <span class="sb-head"><span class="sb-name">Vilnius</span><span class="sb-count"><b>2</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/vilnius/doctors"><span class="sb-pic"><img src="/images/cities/vilnius-card.webp" alt="Panoramic view of Vilnius showing the Neris River, old town with orange-tiled rooftops, and modern Snipiskes business district skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/lt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vilnius<span class="sb-sub">Lithuania</span></span><span class="sb-count"><b>2</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Portugal<span class="svg-n">2 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lisbon/dentists">
-              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>2</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">dentists and translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lisbon/dentists"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>2</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Dentists</span><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Turkey<span class="svg-n">2 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/antalya">
-              <span class="sb-head"><span class="sb-name">Antalya</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/izmir/translators">
-              <span class="sb-head"><span class="sb-name">Izmir</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/antalya"><span class="sb-pic"><img src="/images/cities/antalya-card.webp" alt="Antalya old harbour with limestone cliffs, turquoise Mediterranean water, and Taurus Mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Antalya<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/izmir/translators"><span class="sb-pic"><img src="/images/cities/izmir-card.webp" alt="Panoramic view of Izmir cityscape with the Gulf of Izmir and terracotta rooftops" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Izmir<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>UK<span class="svg-n">2 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/london/lawyers">
-              <span class="sb-head"><span class="sb-name">London</span><span class="sb-count"><b>2</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/london/lawyers"><span class="sb-pic"><img src="/images/cities/london-card.webp" alt="City of London skyline with the Walkie Talkie, Gherkin, and River Thames on a bright day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gb.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">London<span class="sb-sub">UK</span></span><span class="sb-count"><b>2</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Belgium<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/brussels/doctors">
-              <span class="sb-head"><span class="sb-name">Brussels</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/brussels/doctors"><span class="sb-pic" data-src="/images/cities/brussels-card.webp" data-alt="Panorama of the Grand-Place in Brussels, Belgium, with the Town Hall spire rising above the ornate guild houses"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/be.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Brussels<span class="sb-sub">Belgium</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Hungary<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/budapest/lawyers">
-              <span class="sb-head"><span class="sb-name">Budapest</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/budapest/lawyers"><span class="sb-pic" data-src="/images/cities/budapest-card.webp" data-alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>India<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/newdelhi/translators">
-              <span class="sb-head"><span class="sb-name">New Delhi</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/newdelhi/translators"><span class="sb-pic" data-src="/images/cities/newdelhi-card.webp" data-alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Spain<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/madrid/lawyers">
-              <span class="sb-head"><span class="sb-name">Madrid</span><span class="sb-count"><b>1</b><small>Polish</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/madrid/lawyers"><span class="sb-pic" data-src="/images/cities/madrid-card.webp" data-alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>Polish</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       </section>
@@ -685,13 +641,24 @@
       </div>
     </div>
   </main>
+  <script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>

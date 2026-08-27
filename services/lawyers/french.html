@@ -419,6 +419,61 @@
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
     }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
+    }
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -456,402 +511,210 @@
       <section class="svl-country">
           <h2>Spain<span class="svl-n">141 in 15 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/barcelona/lawyers">
-              <span class="sb-head"><span class="sb-name">Barcelona</span><span class="sb-count"><b>54</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>54</b> of 109</span><span>50%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/madrid/lawyers">
-              <span class="sb-head"><span class="sb-name">Madrid</span><span class="sb-count"><b>52</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:43%"></i></span><span class="sb-figs"><span><b>52</b> of 122</span><span>43%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/alicante/lawyers">
-              <span class="sb-head"><span class="sb-name">Alicante</span><span class="sb-count"><b>9</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>9</b> of 27</span><span>33%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/valencia/lawyers">
-              <span class="sb-head"><span class="sb-name">Valencia</span><span class="sb-count"><b>6</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:22%"></i></span><span class="sb-figs"><span><b>6</b> of 27</span><span>22%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bilbao/lawyers">
-              <span class="sb-head"><span class="sb-name">Bilbao</span><span class="sb-count"><b>3</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>3</b> of 9</span><span>33%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/girona/lawyers">
-              <span class="sb-head"><span class="sb-name">Girona</span><span class="sb-count"><b>3</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/palma/lawyers">
-              <span class="sb-head"><span class="sb-name">Palma de Mallorca</span><span class="sb-count"><b>3</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:38%"></i></span><span class="sb-figs"><span><b>3</b> of 8</span><span>38%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/seville/lawyers">
-              <span class="sb-head"><span class="sb-name">Seville</span><span class="sb-count"><b>3</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:23%"></i></span><span class="sb-figs"><span><b>3</b> of 13</span><span>23%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/malaga/lawyers">
-              <span class="sb-head"><span class="sb-name">Málaga</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>2</b> of 18</span><span>11%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/cadiz/lawyers">
-              <span class="sb-head"><span class="sb-name">Cádiz</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/granadaspain/lawyers">
-              <span class="sb-head"><span class="sb-name">Granada</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/ibiza/lawyers">
-              <span class="sb-head"><span class="sb-name">Ibiza</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/marbella/lawyers">
-              <span class="sb-head"><span class="sb-name">Marbella</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:6%"></i></span><span class="sb-figs"><span><b>1</b> of 17</span><span>6%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/tenerife/lawyers">
-              <span class="sb-head"><span class="sb-name">Tenerife</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>1</b> of 9</span><span>11%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/zaragoza/lawyers">
-              <span class="sb-head"><span class="sb-name">Zaragoza</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/barcelona/lawyers"><span class="sb-pic"><img src="/images/cities/barcelona-card.webp" alt="Aerial view of Barcelona showing the Eixample grid, Sagrada Familia, and Torre Agbar" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Barcelona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>54</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>54</b> of 109</span><span>50%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/madrid/lawyers"><span class="sb-pic"><img src="/images/cities/madrid-card.webp" alt="Aerial view of Madrid cityscape featuring the Metropolis Building and Gran Via boulevard" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Madrid<span class="sb-sub">Spain</span></span><span class="sb-count"><b>52</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:43%"></i></span><span class="sb-figs"><span><b>52</b> of 122</span><span>43%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/alicante/lawyers"><span class="sb-pic"><img src="/images/cities/alicante-card.webp" alt="Aerial view of Alicante from Santa Barbara Castle showing the city, marina, and Mediterranean Sea" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Alicante<span class="sb-sub">Spain</span></span><span class="sb-count"><b>9</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>9</b> of 27</span><span>33%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/valencia/lawyers"><span class="sb-pic"><img src="/images/cities/valencia-card.webp" alt="City of Arts and Sciences in Valencia, Spain, with the Hemisferic dome, Museu de les Ciencies, and L'Assut de l'Or bridge reflected in the turquoise pool" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Valencia<span class="sb-sub">Spain</span></span><span class="sb-count"><b>6</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:22%"></i></span><span class="sb-figs"><span><b>6</b> of 27</span><span>22%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bilbao/lawyers"><span class="sb-pic"><img src="/images/cities/bilbao-card.webp" alt="Guggenheim Museum Bilbao with Maman spider sculpture and Nervion river" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bilbao<span class="sb-sub">Spain</span></span><span class="sb-count"><b>3</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>3</b> of 9</span><span>33%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/girona/lawyers"><span class="sb-pic"><img src="/images/cities/girona-card.webp" alt="Colorful houses lining the Onyar River with Girona Cathedral rising above" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Girona<span class="sb-sub">Spain</span></span><span class="sb-count"><b>3</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/palma/lawyers"><span class="sb-pic"><img src="/images/cities/palma-card.webp" alt="La Seu Cathedral and Royal Palace of La Almudaina rising above the waterfront promenade in Palma de Mallorca" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Palma de Mallorca<span class="sb-sub">Spain</span></span><span class="sb-count"><b>3</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:38%"></i></span><span class="sb-figs"><span><b>3</b> of 8</span><span>38%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/seville/lawyers"><span class="sb-pic"><img src="/images/cities/seville-card.webp" alt="Plaza de España in Seville, Spain, ornate baroque semicircular palace with canal and rowing boat under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Seville<span class="sb-sub">Spain</span></span><span class="sb-count"><b>3</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:23%"></i></span><span class="sb-figs"><span><b>3</b> of 13</span><span>23%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/malaga/lawyers"><span class="sb-pic"><img src="/images/cities/malaga-card.webp" alt="Aerial view of Málaga from Castillo de Gibralfaro showing the bullring, port, and city" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Málaga<span class="sb-sub">Spain</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>2</b> of 18</span><span>11%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/cadiz/lawyers"><span class="sb-pic"><img src="/images/cities/cadiz-card.webp" alt="Cádiz Cathedral with golden dome rising above colourful seafront facades, with ocean waves in the foreground" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cádiz<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/granadaspain/lawyers"><span class="sb-pic"><img src="/images/cities/granadaspain-card.webp" alt="Alhambra palace complex with Sierra Nevada mountains behind, Granada, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Granada<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/ibiza/lawyers"><span class="sb-pic"><img src="/images/cities/ibiza-card.webp" alt="Ibiza harbour marina with Dalt Vila walled city and cathedral on the hill" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ibiza<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/marbella/lawyers"><span class="sb-pic"><img src="/images/cities/marbella-card.webp" alt="Luxury yachts moored at Puerto Banus marina, Marbella, Spain, under a clear blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Marbella<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:6%"></i></span><span class="sb-figs"><span><b>1</b> of 17</span><span>6%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/tenerife/lawyers"><span class="sb-pic"><img src="/images/cities/tenerife-card.webp" alt="Mount Teide volcano rising above pine forests in Tenerife, Spain" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tenerife<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:11%"></i></span><span class="sb-figs"><span><b>1</b> of 9</span><span>11%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/zaragoza/lawyers"><span class="sb-pic"><img src="/images/cities/zaragoza-card.webp" alt="Basilica of Our Lady of the Pillar and Puente de Piedra over the Ebro River at dusk, Zaragoza" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/es.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zaragoza<span class="sb-sub">Spain</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Italy<span class="svl-n">61 in 11 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/florence/lawyers">
-              <span class="sb-head"><span class="sb-name">Florence</span><span class="sb-count"><b>18</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:31%"></i></span><span class="sb-figs"><span><b>18</b> of 58</span><span>31%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/milan/lawyers">
-              <span class="sb-head"><span class="sb-name">Milan</span><span class="sb-count"><b>15</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:29%"></i></span><span class="sb-figs"><span><b>15</b> of 52</span><span>29%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/rome/lawyers">
-              <span class="sb-head"><span class="sb-name">Rome</span><span class="sb-count"><b>10</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>10</b> of 60</span><span>17%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bologna">
-              <span class="sb-head"><span class="sb-name">Bologna</span><span class="sb-count"><b>7</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:44%"></i></span><span class="sb-figs"><span><b>7</b> of 16</span><span>44%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bergamo">
-              <span class="sb-head"><span class="sb-name">Bergamo</span><span class="sb-count"><b>3</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bari/lawyers">
-              <span class="sb-head"><span class="sb-name">Bari</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/turin/lawyers">
-              <span class="sb-head"><span class="sb-name">Turin</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>2</b> of 8</span><span>25%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/genoa/lawyers">
-              <span class="sb-head"><span class="sb-name">Genoa</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/lucca">
-              <span class="sb-head"><span class="sb-name">Lucca</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/naples/lawyers">
-              <span class="sb-head"><span class="sb-name">Naples</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:8%"></i></span><span class="sb-figs"><span><b>1</b> of 12</span><span>8%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/palermo">
-              <span class="sb-head"><span class="sb-name">Palermo</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>1</b> of 8</span><span>13%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/florence/lawyers"><span class="sb-pic"><img src="/images/cities/florence-card.webp" alt="Florence skyline panorama from Piazzale Michelangelo, showing the Arno river, Palazzo Vecchio tower, and the Duomo" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Florence<span class="sb-sub">Italy</span></span><span class="sb-count"><b>18</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:31%"></i></span><span class="sb-figs"><span><b>18</b> of 58</span><span>31%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/milan/lawyers"><span class="sb-pic"><img src="/images/cities/milan-card.webp" alt="Piazza del Duomo with Milan Cathedral and Galleria Vittorio Emanuele II entrance, Milan, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Milan<span class="sb-sub">Italy</span></span><span class="sb-count"><b>15</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:29%"></i></span><span class="sb-figs"><span><b>15</b> of 52</span><span>29%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/rome/lawyers"><span class="sb-pic"><img src="/images/cities/rome-card.webp" alt="Panoramic view of the Roman Forum and Colosseum from the Vittoriano monument in Rome" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rome<span class="sb-sub">Italy</span></span><span class="sb-count"><b>10</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>10</b> of 60</span><span>17%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bologna"><span class="sb-pic"><img src="/images/cities/bologna-card.webp" alt="Piazza Maggiore in Bologna seen from above at golden hour, showing Palazzo del Podesta, Torre degli Asinelli, and San Petronio Basilica" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bologna<span class="sb-sub">Italy</span></span><span class="sb-count"><b>7</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:44%"></i></span><span class="sb-figs"><span><b>7</b> of 16</span><span>44%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bergamo"><span class="sb-pic"><img src="/images/cities/bergamo-card.webp" alt="Piazza Vecchia and the Palazzo della Ragione in the upper town of Bergamo, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bergamo<span class="sb-sub">Italy</span></span><span class="sb-count"><b>3</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bari/lawyers"><span class="sb-pic"><img src="/images/cities/bari-card.webp" alt="Bari lungomare promenade with ornate lampposts, Adriatic Sea, and old town skyline on a sunny day" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bari<span class="sb-sub">Italy</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/turin/lawyers"><span class="sb-pic"><img src="/images/cities/turin-card.webp" alt="Turin skyline with the Mole Antonelliana and snow-capped Alps in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Turin<span class="sb-sub">Italy</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>2</b> of 8</span><span>25%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/genoa/lawyers"><span class="sb-pic"><img src="/images/cities/genoa-card.webp" alt="Genoa Porto Antico with sailboats and colorful hillside buildings under blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Genoa<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/lucca"><span class="sb-pic"><img src="/images/cities/lucca-card.webp" alt="The tree-topped Guinigi Tower above the rooftops of Lucca, Italy" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lucca<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/naples/lawyers"><span class="sb-pic" data-src="/images/cities/naples-card.webp" data-alt="Panoramic view of Naples from Castello Sant'Elmo, with the port, Bay of Naples, and Mt. Vesuvius"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Naples<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:8%"></i></span><span class="sb-figs"><span><b>1</b> of 12</span><span>8%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/palermo"><span class="sb-pic" data-src="/images/cities/palermo-card.webp" data-alt="Palermo Cathedral dome and bell tower at golden hour with palm trees and statues in the foreground"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Palermo<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>1</b> of 8</span><span>13%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Austria<span class="svl-n">29 in 4 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/vienna/lawyers">
-              <span class="sb-head"><span class="sb-name">Vienna</span><span class="sb-count"><b>19</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:21%"></i></span><span class="sb-figs"><span><b>19</b> of 92</span><span>21%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/salzburg/lawyers">
-              <span class="sb-head"><span class="sb-name">Salzburg</span><span class="sb-count"><b>7</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:44%"></i></span><span class="sb-figs"><span><b>7</b> of 16</span><span>44%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/graz/lawyers">
-              <span class="sb-head"><span class="sb-name">Graz</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/innsbruck/lawyers">
-              <span class="sb-head"><span class="sb-name">Innsbruck</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:10%"></i></span><span class="sb-figs"><span><b>1</b> of 10</span><span>10%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/vienna/lawyers"><span class="sb-pic" data-src="/images/cities/vienna-card.webp" data-alt="Vienna cityscape panorama viewed from the south tower of Stephansdom, showing the iconic tiled roof and city stretching to the horizon"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Vienna<span class="sb-sub">Austria</span></span><span class="sb-count"><b>19</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:21%"></i></span><span class="sb-figs"><span><b>19</b> of 92</span><span>21%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/salzburg/lawyers"><span class="sb-pic" data-src="/images/cities/salzburg-card.webp" data-alt="Salzburg Altstadt panorama at golden hour with Hohensalzburg Fortress and Salzach river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Salzburg<span class="sb-sub">Austria</span></span><span class="sb-count"><b>7</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:44%"></i></span><span class="sb-figs"><span><b>7</b> of 16</span><span>44%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/graz/lawyers"><span class="sb-pic" data-src="/images/cities/graz-card.webp" data-alt="Schlossberg hill with Uhrturm clock tower overlooking Graz, Austria"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Graz<span class="sb-sub">Austria</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/innsbruck/lawyers"><span class="sb-pic" data-src="/images/cities/innsbruck-card.webp" data-alt="Maria-Theresien-Strasse pedestrian zone with Nordkette mountains, Innsbruck"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/at.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Innsbruck<span class="sb-sub">Austria</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:10%"></i></span><span class="sb-figs"><span><b>1</b> of 10</span><span>10%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Portugal<span class="svl-n">18 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lisbon/lawyers">
-              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>9</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:24%"></i></span><span class="sb-figs"><span><b>9</b> of 38</span><span>24%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/porto/lawyers">
-              <span class="sb-head"><span class="sb-name">Porto</span><span class="sb-count"><b>9</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:43%"></i></span><span class="sb-figs"><span><b>9</b> of 21</span><span>43%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lisbon/lawyers"><span class="sb-pic" data-src="/images/cities/lisbon-card.webp" data-alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>9</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:24%"></i></span><span class="sb-figs"><span><b>9</b> of 38</span><span>24%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/porto/lawyers"><span class="sb-pic" data-src="/images/cities/porto-card.webp" data-alt="Porto's Ribeira waterfront with rabelo boats on the Douro River"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>9</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:43%"></i></span><span class="sb-figs"><span><b>9</b> of 21</span><span>43%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Romania<span class="svl-n">16 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bucharest/lawyers">
-              <span class="sb-head"><span class="sb-name">Bucharest</span><span class="sb-count"><b>13</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:39%"></i></span><span class="sb-figs"><span><b>13</b> of 33</span><span>39%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/timisoara">
-              <span class="sb-head"><span class="sb-name">Timișoara</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/clujnapoca">
-              <span class="sb-head"><span class="sb-name">Cluj-Napoca</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bucharest/lawyers"><span class="sb-pic" data-src="/images/cities/bucharest-card.webp" data-alt="Aerial view of Bucharest historic center with the Palace of Parliament in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ro.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bucharest<span class="sb-sub">Romania</span></span><span class="sb-count"><b>13</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:39%"></i></span><span class="sb-figs"><span><b>13</b> of 33</span><span>39%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/timisoara"><span class="sb-pic" data-src="/images/cities/timisoara-card.webp" data-alt="Victory Square in Timisoara with the Metropolitan Cathedral in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ro.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Timișoara<span class="sb-sub">Romania</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:67%"></i></span><span class="sb-figs"><span><b>2</b> of 3</span><span>67%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/clujnapoca"><span class="sb-pic" data-src="/images/cities/clujnapoca-card.webp" data-alt="Cluj-Napoca cityscape viewed from Cetătuia Park, showing St. Michael's Church and red-tiled rooftops"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ro.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Cluj-Napoca<span class="sb-sub">Romania</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Greece<span class="svl-n">14 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/athens/lawyers">
-              <span class="sb-head"><span class="sb-name">Athens</span><span class="sb-count"><b>14</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:22%"></i></span><span class="sb-figs"><span><b>14</b> of 65</span><span>22%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/athens/lawyers"><span class="sb-pic" data-src="/images/cities/athens-card.webp" data-alt="Acropolis of Athens with the Parthenon and Odeon of Herodes Atticus viewed from Philopappos Hill"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/gr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Athens<span class="sb-sub">Greece</span></span><span class="sb-count"><b>14</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:22%"></i></span><span class="sb-figs"><span><b>14</b> of 65</span><span>22%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Czech Republic<span class="svl-n">10 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/prague/lawyers">
-              <span class="sb-head"><span class="sb-name">Prague</span><span class="sb-count"><b>10</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:37%"></i></span><span class="sb-figs"><span><b>10</b> of 27</span><span>37%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/prague/lawyers"><span class="sb-pic" data-src="/images/cities/prague-card.webp" data-alt="Prague Castle and St. Vitus Cathedral above the Vltava River at dawn"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cz.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Prague<span class="sb-sub">Czech Republic</span></span><span class="sb-count"><b>10</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:37%"></i></span><span class="sb-figs"><span><b>10</b> of 27</span><span>37%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Chile<span class="svl-n">9 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/santiago/lawyers">
-              <span class="sb-head"><span class="sb-name">Santiago</span><span class="sb-count"><b>9</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:43%"></i></span><span class="sb-figs"><span><b>9</b> of 21</span><span>43%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/santiago/lawyers"><span class="sb-pic" data-src="/images/cities/santiago-card.webp" data-alt="Santiago skyline with Gran Torre Santiago and the Andes mountains at golden hour"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/cl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Santiago<span class="sb-sub">Chile</span></span><span class="sb-count"><b>9</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:43%"></i></span><span class="sb-figs"><span><b>9</b> of 21</span><span>43%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Germany<span class="svl-n">7 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/berlin/lawyers">
-              <span class="sb-head"><span class="sb-name">Berlin</span><span class="sb-count"><b>7</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:12%"></i></span><span class="sb-figs"><span><b>7</b> of 58</span><span>12%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/berlin/lawyers"><span class="sb-pic" data-src="/images/cities/berlin-card.webp" data-alt="Berlin skyline panorama with Fernsehturm, Reichstag, and Brandenburger Tor"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/de.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Berlin<span class="sb-sub">Germany</span></span><span class="sb-count"><b>7</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:12%"></i></span><span class="sb-figs"><span><b>7</b> of 58</span><span>12%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Argentina<span class="svl-n">6 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/buenosaires/lawyers">
-              <span class="sb-head"><span class="sb-name">Buenos Aires</span><span class="sb-count"><b>4</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:19%"></i></span><span class="sb-figs"><span><b>4</b> of 21</span><span>19%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/bariloche/lawyers">
-              <span class="sb-head"><span class="sb-name">Bariloche</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/cordoba">
-              <span class="sb-head"><span class="sb-name">Córdoba</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/buenosaires/lawyers"><span class="sb-pic" data-src="/images/cities/buenosaires-card.webp" data-alt="Buenos Aires skyline daytime view of Puerto Madero business district skyscrapers under blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Buenos Aires<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>4</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:19%"></i></span><span class="sb-figs"><span><b>4</b> of 21</span><span>19%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/bariloche/lawyers"><span class="sb-pic" data-src="/images/cities/bariloche-card.webp" data-alt="Aerial view of Llao Llao peninsula with the iconic hotel, Nahuel Huapi lake, and snow-capped Andes mountains, Bariloche, Argentina"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bariloche<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/cordoba"><span class="sb-pic" data-src="/images/cities/cordoba-card.webp" data-alt="Centro Cívico del Bicentenario building facade, Córdoba, Argentina"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ar.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Córdoba<span class="sb-sub">Argentina</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Poland<span class="svl-n">6 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/warsaw/lawyers">
-              <span class="sb-head"><span class="sb-name">Warsaw</span><span class="sb-count"><b>5</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>5</b> of 39</span><span>13%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/krakow/lawyers">
-              <span class="sb-head"><span class="sb-name">Krakow</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:8%"></i></span><span class="sb-figs"><span><b>1</b> of 13</span><span>8%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/warsaw/lawyers"><span class="sb-pic" data-src="/images/cities/warsaw-card.webp" data-alt="Warsaw skyline at dawn with the Palace of Culture and Science and modern skyscrapers"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Warsaw<span class="sb-sub">Poland</span></span><span class="sb-count"><b>5</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>5</b> of 39</span><span>13%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/krakow/lawyers"><span class="sb-pic" data-src="/images/cities/krakow-card.webp" data-alt="Krakow Main Market Square with St. Mary's Basilica and Adam Mickiewicz Monument"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Krakow<span class="sb-sub">Poland</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:8%"></i></span><span class="sb-figs"><span><b>1</b> of 13</span><span>8%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Singapore<span class="svl-n">5 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/singapore/lawyers">
-              <span class="sb-head"><span class="sb-name">Singapore</span><span class="sb-count"><b>5</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:29%"></i></span><span class="sb-figs"><span><b>5</b> of 17</span><span>29%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/singapore/lawyers"><span class="sb-pic" data-src="/images/cities/singapore-card.webp" data-alt="Singapore Marina Bay at dusk with Marina Bay Sands and CBD skyline"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/sg.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Singapore<span class="sb-sub">Singapore</span></span><span class="sb-count"><b>5</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:29%"></i></span><span class="sb-figs"><span><b>5</b> of 17</span><span>29%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Canada<span class="svl-n">4 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/montreal">
-              <span class="sb-head"><span class="sb-name">Montreal</span><span class="sb-count"><b>3</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/toronto/lawyers">
-              <span class="sb-head"><span class="sb-name">Toronto</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>1</b> of 8</span><span>13%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/montreal"><span class="sb-pic" data-src="/images/cities/montreal-card.webp" data-alt="Montreal downtown skyline viewed from Mount Royal, with the St. Lawrence River in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ca.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Montreal<span class="sb-sub">Canada</span></span><span class="sb-count"><b>3</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>3</b> of 3</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/toronto/lawyers"><span class="sb-pic" data-src="/images/cities/toronto-card.webp" data-alt="Toronto skyline with CN Tower from Trillium Park on a clear sunny day"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ca.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Toronto<span class="sb-sub">Canada</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>1</b> of 8</span><span>13%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Armenia<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/yerevan/lawyers">
-              <span class="sb-head"><span class="sb-name">Yerevan</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>2</b> of 4</span><span>50%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/yerevan/lawyers"><span class="sb-pic" data-src="/images/cities/yerevan-card.webp" data-alt="Yerevan skyline with snow-capped Mount Ararat in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/am.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Yerevan<span class="sb-sub">Armenia</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>2</b> of 4</span><span>50%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Belgium<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/brussels/lawyers">
-              <span class="sb-head"><span class="sb-name">Brussels</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>2</b> of 4</span><span>50%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/brussels/lawyers"><span class="sb-pic" data-src="/images/cities/brussels-card.webp" data-alt="Panorama of the Grand-Place in Brussels, Belgium, with the Town Hall spire rising above the ornate guild houses"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/be.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Brussels<span class="sb-sub">Belgium</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>2</b> of 4</span><span>50%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Cambodia<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/phnompenh/lawyers">
-              <span class="sb-head"><span class="sb-name">Phnom Penh</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:14%"></i></span><span class="sb-figs"><span><b>2</b> of 14</span><span>14%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/phnompenh/lawyers"><span class="sb-pic" data-src="/images/cities/phnompenh-card.webp" data-alt="Aerial view of Phnom Penh skyline with the Royal Palace in the foreground and modern high-rises behind"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kh.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phnom Penh<span class="sb-sub">Cambodia</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:14%"></i></span><span class="sb-figs"><span><b>2</b> of 14</span><span>14%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Denmark<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/copenhagen">
-              <span class="sb-head"><span class="sb-name">Copenhagen</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>2</b> of 6</span><span>33%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/copenhagen"><span class="sb-pic" data-src="/images/cities/copenhagen-card.webp" data-alt="Nyhavn canal with colourful historic buildings and sailing boats, Copenhagen"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/dk.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Copenhagen<span class="sb-sub">Denmark</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>2</b> of 6</span><span>33%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Netherlands<span class="svl-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/amsterdam/lawyers">
-              <span class="sb-head"><span class="sb-name">Amsterdam</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:6%"></i></span><span class="sb-figs"><span><b>1</b> of 16</span><span>6%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/rotterdam/lawyers">
-              <span class="sb-head"><span class="sb-name">Rotterdam</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/amsterdam/lawyers"><span class="sb-pic" data-src="/images/cities/amsterdam-card.webp" data-alt="Amsterdam canal lined with gabled Dutch canal houses and moored boats under a clear blue sky"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/nl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Amsterdam<span class="sb-sub">Netherlands</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:6%"></i></span><span class="sb-figs"><span><b>1</b> of 16</span><span>6%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/rotterdam/lawyers"><span class="sb-pic" data-src="/images/cities/rotterdam-card.webp" data-alt="Rotterdam skyline with Erasmus Bridge and De Rotterdam towers seen from across the Nieuwe Maas river"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/nl.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Rotterdam<span class="sb-sub">Netherlands</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:25%"></i></span><span class="sb-figs"><span><b>1</b> of 4</span><span>25%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Slovenia<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/ljubljana/lawyers">
-              <span class="sb-head"><span class="sb-name">Ljubljana</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>2</b> of 15</span><span>13%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/ljubljana/lawyers"><span class="sb-pic" data-src="/images/cities/ljubljana-card.webp" data-alt="Preseren Square and Franciscan Church in Ljubljana, Slovenia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/si.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Ljubljana<span class="sb-sub">Slovenia</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>2</b> of 15</span><span>13%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Taiwan<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/taipei/lawyers">
-              <span class="sb-head"><span class="sb-name">Taipei</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:18%"></i></span><span class="sb-figs"><span><b>2</b> of 11</span><span>18%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/taipei/lawyers"><span class="sb-pic" data-src="/images/cities/taipei-card.webp" data-alt="Taipei 101 tower dominating the city skyline at golden hour with mountains in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tw.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Taipei<span class="sb-sub">Taiwan</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:18%"></i></span><span class="sb-figs"><span><b>2</b> of 11</span><span>18%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Thailand<span class="svl-n">2 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bangkok/lawyers">
-              <span class="sb-head"><span class="sb-name">Bangkok</span><span class="sb-count"><b>2</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>2</b> of 38</span><span>5%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bangkok/lawyers"><span class="sb-pic" data-src="/images/cities/bangkok-card.webp" data-alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>2</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>2</b> of 38</span><span>5%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Croatia<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/zagreb/lawyers">
-              <span class="sb-head"><span class="sb-name">Zagreb</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:4%"></i></span><span class="sb-figs"><span><b>1</b> of 28</span><span>4%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/zagreb/lawyers"><span class="sb-pic" data-src="/images/cities/zagreb-card.webp" data-alt="Aerial view of Ban Jelacic Square and Zagreb Cathedral, Croatia"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Zagreb<span class="sb-sub">Croatia</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:4%"></i></span><span class="sb-figs"><span><b>1</b> of 28</span><span>4%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Hungary<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/budapest/lawyers">
-              <span class="sb-head"><span class="sb-name">Budapest</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 326</span><span>0%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/budapest/lawyers"><span class="sb-pic" data-src="/images/cities/budapest-card.webp" data-alt="Hungarian Parliament Building seen from across the Danube River in Budapest, Hungary"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/hu.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Budapest<span class="sb-sub">Hungary</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:2%"></i></span><span class="sb-figs"><span><b>1</b> of 326</span><span>0%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>India<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/kolkata/lawyers">
-              <span class="sb-head"><span class="sb-name">Kolkata</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/kolkata/lawyers"><span class="sb-pic" data-src="/images/cities/kolkata-card.webp" data-alt="The Howrah Bridge over the Hooghly River in Kolkata on a misty morning"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Kolkata<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Indonesia<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bali/lawyers">
-              <span class="sb-head"><span class="sb-name">Bali (Canggu)</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:20%"></i></span><span class="sb-figs"><span><b>1</b> of 5</span><span>20%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bali/lawyers"><span class="sb-pic" data-src="/images/cities/bali-card.webp" data-alt="Balinese shrine on volcanic rocks at Canggu beach with surfers and black sand"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/id.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bali (Canggu)<span class="sb-sub">Indonesia</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:20%"></i></span><span class="sb-figs"><span><b>1</b> of 5</span><span>20%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Israel<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/telaviv/lawyers">
-              <span class="sb-head"><span class="sb-name">Tel Aviv</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:3%"></i></span><span class="sb-figs"><span><b>1</b> of 34</span><span>3%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/telaviv/lawyers"><span class="sb-pic" data-src="/images/cities/telaviv-card.webp" data-alt="Tel Aviv beach and skyline on a sunny day"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/il.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tel Aviv<span class="sb-sub">Israel</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:3%"></i></span><span class="sb-figs"><span><b>1</b> of 34</span><span>3%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Japan<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/tokyo/lawyers">
-              <span class="sb-head"><span class="sb-name">Tokyo</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:4%"></i></span><span class="sb-figs"><span><b>1</b> of 24</span><span>4%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/tokyo/lawyers"><span class="sb-pic" data-src="/images/cities/tokyo-card.webp" data-alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:4%"></i></span><span class="sb-figs"><span><b>1</b> of 24</span><span>4%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>UAE<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/abudhabi/lawyers">
-              <span class="sb-head"><span class="sb-name">Abu Dhabi</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/abudhabi/lawyers"><span class="sb-pic" data-src="/images/cities/abudhabi-card.webp" data-alt="Abu Dhabi skyline viewed from the water, with the curved ADIA tower and Corniche skyscrapers"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/ae.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Abu Dhabi<span class="sb-sub">UAE</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:17%"></i></span><span class="sb-figs"><span><b>1</b> of 6</span><span>17%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Uruguay<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/montevideo/lawyers">
-              <span class="sb-head"><span class="sb-name">Montevideo</span><span class="sb-count"><b>1</b><small>French</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>1</b> of 8</span><span>13%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/montevideo/lawyers"><span class="sb-pic" data-src="/images/cities/montevideo-card.webp" data-alt="Aerial view of Montevideo with the Palacio Legislativo and the Rio de la Plata in the background"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/uy.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Montevideo<span class="sb-sub">Uruguay</span></span><span class="sb-count"><b>1</b><small>French</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all lawyers here</span><span class="sb-bar"><i style="width:13%"></i></span><span class="sb-figs"><span><b>1</b> of 8</span><span>13%</span></span></span></a>
           </div>
         </section>
 
@@ -874,13 +737,24 @@
       </div>
     </div>
   </main>
+  <script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>

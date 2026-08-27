@@ -422,6 +422,61 @@
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
     }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
+    }
     .sb-note { font-size: .82rem; color: var(--color-charcoal, #334155); line-height: 1.5; }
     .svg-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svg-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
@@ -460,39 +515,15 @@
       <section class="svg-sec">
         <h2>By service</h2>
         <p class="svg-lede">What you can actually get in Thai, biggest first. Where a service has enough Thai speakers to be worth its own page, the card goes there.</p>
-        <div class="sb-grid">
-        <a class="sb-card" href="/services/doctors">
-              <span class="sb-head"><span class="sb-name">Doctors</span><span class="sb-count"><b>42</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">5 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/lawyers">
-              <span class="sb-head"><span class="sb-name">Lawyers</span><span class="sb-count"><b>34</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">5 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/therapists">
-              <span class="sb-head"><span class="sb-name">Therapists</span><span class="sb-count"><b>4</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">3 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/translators">
-              <span class="sb-head"><span class="sb-name">Translators</span><span class="sb-count"><b>4</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">4 cities</span></span>
-            </a>
-        <a class="sb-card" href="/services/dentists">
-              <span class="sb-head"><span class="sb-name">Dentists</span><span class="sb-count"><b>3</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">1 city</span></span>
-            </a>
-        <a class="sb-card" href="/services?cat=fitness&amp;lang=th">
-              <span class="sb-head"><span class="sb-name">Gyms</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">1 city</span></span>
-            </a>
-        <a class="sb-card" href="/services/physiotherapists">
-              <span class="sb-head"><span class="sb-name">Physiotherapists</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">1 city</span></span>
-            </a>
-        <a class="sb-card" href="/services/vets">
-              <span class="sb-head"><span class="sb-name">Vets</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Found in</span><span class="sb-note">1 city</span></span>
-            </a>
+        <div class="sb-hubs">
+        <a class="sb-hub" href="/services/doctors"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><span class="sb-hub-name">Doctors</span><span class="sb-hub-stat"><b>42</b><small>5 cities</small></span></a>
+        <a class="sb-hub" href="/services/lawyers"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg></span><span class="sb-hub-name">Lawyers</span><span class="sb-hub-stat"><b>34</b><small>5 cities</small></span></a>
+        <a class="sb-hub" href="/services/therapists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span><span class="sb-hub-name">Therapists</span><span class="sb-hub-stat"><b>4</b><small>3 cities</small></span></a>
+        <a class="sb-hub" href="/services/translators"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></svg></span><span class="sb-hub-name">Translators</span><span class="sb-hub-stat"><b>4</b><small>4 cities</small></span></a>
+        <a class="sb-hub" href="/services/dentists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-tooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.7c-1.4-1.4-3-2.2-4.7-2.2C4.9 3.5 3 5.6 3 8.4c0 1.7.5 2.9 1 4.1.5 1.3.8 2.9 1 4.7.2 1.8.4 3.8 1.8 3.8 1.2 0 1.5-1.7 1.8-3.5.3-1.9.6-3.6 2.4-3.6s2.1 1.7 2.4 3.6c.3 1.8.6 3.5 1.8 3.5 1.4 0 1.6-2 1.8-3.8.2-1.8.5-3.4 1-4.7.5-1.2 1-2.4 1-4.1 0-2.8-1.9-4.9-4.3-4.9-1.7 0-3.3.8-4.7 2.2z" /></svg></span><span class="sb-hub-name">Dentists</span><span class="sb-hub-stat"><b>3</b><small>1 city</small></span></a>
+        <a class="sb-hub" href="/services?cat=fitness&amp;lang=th"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-dumbbell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z" /> <path d="m2.5 21.5 1.4-1.4" /> <path d="m20.1 3.9 1.4-1.4" /> <path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z" /> <path d="m9.6 14.4 4.8-4.8" /></svg></span><span class="sb-hub-name">Gyms</span><span class="sb-hub-stat"><b>1</b><small>1 city</small></span></a>
+        <a class="sb-hub" href="/services/physiotherapists"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-bone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 10c.7-.7 1.69 0 2.5 0a2.5 2.5 0 1 0 0-5 .5.5 0 0 1-.5-.5 2.5 2.5 0 1 0-5 0c0 .81.7 1.8 0 2.5l-7 7c-.7.7-1.69 0-2.5 0a2.5 2.5 0 0 0 0 5c.28 0 .5.22.5.5a2.5 2.5 0 1 0 5 0c0-.81-.7-1.8 0-2.5Z" /></svg></span><span class="sb-hub-name">Physiotherapists</span><span class="sb-hub-stat"><b>1</b><small>1 city</small></span></a>
+        <a class="sb-hub" href="/services/vets"><span class="sb-hub-ico"><svg class="nh-icon nh-icon-paw-print" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="4" r="2" /> <circle cx="18" cy="8" r="2" /> <circle cx="20" cy="16" r="2" /> <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z" /></svg></span><span class="sb-hub-name">Vets</span><span class="sb-hub-stat"><b>1</b><small>1 city</small></span></a>
       </div>
       </section>
 
@@ -502,79 +533,43 @@
         <section class="svg-country">
           <h3>Thailand<span class="svg-n">84 in 6 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/bangkok/doctors">
-              <span class="sb-head"><span class="sb-name">Bangkok</span><span class="sb-count"><b>56</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, dentists and therapists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/chiangmai/doctors">
-              <span class="sb-head"><span class="sb-name">Chiang Mai</span><span class="sb-count"><b>12</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors, vets and therapists and more</span></span>
-            </a>
-        <a class="sb-card" href="/services/phuket/doctors">
-              <span class="sb-head"><span class="sb-name">Phuket</span><span class="sb-count"><b>9</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors and lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/kohsamui">
-              <span class="sb-head"><span class="sb-name">Koh Samui</span><span class="sb-count"><b>4</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors</span></span>
-            </a>
-        <a class="sb-card" href="/services/pattaya">
-              <span class="sb-head"><span class="sb-name">Pattaya</span><span class="sb-count"><b>2</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
-        <a class="sb-card" href="/services/huahin">
-              <span class="sb-head"><span class="sb-name">Hua Hin</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/bangkok/doctors"><span class="sb-pic"><img src="/images/cities/bangkok-card.webp" alt="Bangkok skyline at twilight featuring the MahaNakhon tower and Ratchadamri district" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Bangkok<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>56</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Dentists</span><span class="sb-tag">Therapists</span><span class="sb-tag-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/chiangmai/doctors"><span class="sb-pic"><img src="/images/cities/chiangmai-card.webp" alt="Golden chedi and ceremonial umbrella of Wat Phra That Doi Suthep against a clear blue sky, Chiang Mai, Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Chiang Mai<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>12</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Vets</span><span class="sb-tag">Therapists</span><span class="sb-tag-more">+2</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/phuket/doctors"><span class="sb-pic"><img src="/images/cities/phuket-card.webp" alt="The Big Buddha of Phuket, a white marble seated Buddha statue on Nakkerd Hill against a blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phuket<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>9</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/kohsamui"><span class="sb-pic"><img src="/images/cities/kohsamui-card.webp" alt="Chaweng Beach with white sand, palm trees, turquoise water and jungle hills, Koh Samui, Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Koh Samui<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>4</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/pattaya"><span class="sb-pic"><img src="/images/cities/pattaya-card.webp" alt="Aerial view of Pattaya Beach with the city skyline and Gulf of Thailand" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Pattaya<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>2</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/huahin"><span class="sb-pic"><img src="/images/cities/huahin-card.webp" alt="Hua Hin Railway Station platform with ornate red colonial canopy and blue sky" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/th.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Hua Hin<span class="sb-sub">Thailand</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>France<span class="svg-n">2 in 2 cities</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lyon/translators">
-              <span class="sb-head"><span class="sb-name">Lyon</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
-        <a class="sb-card" href="/services/paris/translators">
-              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lyon/translators"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/paris/translators"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Cambodia<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/phnompenh/doctors">
-              <span class="sb-head"><span class="sb-name">Phnom Penh</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">doctors</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/phnompenh/doctors"><span class="sb-pic"><img src="/images/cities/phnompenh-card.webp" alt="Aerial view of Phnom Penh skyline with the Royal Palace in the foreground and modern high-rises behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/kh.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Phnom Penh<span class="sb-sub">Cambodia</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Doctors</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>India<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/newdelhi/translators">
-              <span class="sb-head"><span class="sb-name">New Delhi</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">translators</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/newdelhi/translators"><span class="sb-pic"><img src="/images/cities/newdelhi-card.webp" alt="The red sandstone and white marble facade of Humayun's Tomb in Delhi, seen head on down the central water channel of its formal Mughal garden" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/in.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">New Delhi<span class="sb-sub">India</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Translators</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Japan<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/tokyo/therapists">
-              <span class="sb-head"><span class="sb-name">Tokyo</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">therapists</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/tokyo/therapists"><span class="sb-pic"><img src="/images/cities/tokyo-card.webp" alt="Tokyo skyline with Tokyo Tower at golden hour, Minato City" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/jp.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Tokyo<span class="sb-sub">Japan</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Therapists</span></span></span></a>
           </div>
         </section>
       <section class="svg-country">
           <h3>Singapore<span class="svg-n">1 in 1 city</span></h3>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/singapore/lawyers">
-              <span class="sb-head"><span class="sb-name">Singapore</span><span class="sb-count"><b>1</b><small>Thai</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-note">lawyers</span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/singapore/lawyers"><span class="sb-pic"><img src="/images/cities/singapore-card.webp" alt="Singapore Marina Bay at dusk with Marina Bay Sands and CBD skyline" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/sg.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Singapore<span class="sb-sub">Singapore</span></span><span class="sb-count"><b>1</b><small>Thai</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Services here</span><span class="sb-tags"><span class="sb-tag">Lawyers</span></span></span></a>
           </div>
         </section>
       </section>
@@ -598,13 +593,24 @@
       </div>
     </div>
   </main>
+  <script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>

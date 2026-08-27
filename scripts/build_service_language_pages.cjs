@@ -32,6 +32,11 @@ const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+// inlineIcon rather than icon(): same reason as /services, the shared sprite is a second request
+// and these are the first thing on the page.
+const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
+const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
+
 
 const esc = P.esc;
 const MIN_ROWS = 20;
@@ -192,20 +197,37 @@ for (const [lang, v] of Object.entries(rowsByLang)) {
   const desc = `${v.rows.length} doctors, dentists, lawyers and other providers who work in ${langName}, `
     + `across ${v.cities.size} cities, led by ${top.map((c) => c.name).join(', ')}. Every language claim names its source.`;
 
-  const serviceBlock = `<div class="sb-grid">
-        ${catRows.map((c) => `<a class="sb-card" href="${c.href}">
-              ${B.cardHead({ name: c.label.replace(/^./, (x) => x.toUpperCase()), n: c.n, unit: langName })}
-              ${B.tray('Found in', `<span class="sb-note">${c.cities} ${c.cities === 1 ? 'city' : 'cities'}</span>`)}
-            </a>`).join('\n        ')}
+  // The same two shapes /services uses, so the page a reader clicks through from does not change
+  // component vocabulary underneath them: the compact icon row for services, the photographed tile
+  // for cities.
+  const serviceBlock = `<div class="sb-hubs">
+        ${catRows.map((c) => B.hub({
+    href: c.href,
+    icon: inlineIcon(CAT_ICON[c.cat]),
+    name: P.catName(c.cat).replace(/^./, (x) => x.toUpperCase()),
+    n: c.n.toLocaleString('en-US'),
+    sub: c.cities.toLocaleString('en-US') + ' ' + (c.cities === 1 ? 'city' : 'cities'),
+  })).join('\n        ')}
       </div>`;
 
+  // Tile order across the whole page, not within a country, so the eager photographs are the ones
+  // a reader actually reaches first.
+  let tileIndex = 0;
   const countryBlocks = countries.map((country) => `<section class="svg-country">
           <h3>${esc(country)}<span class="svg-n">${byCountry[country].reduce((s, x) => s + x.n, 0)} in ${byCountry[country].length} ${byCountry[country].length === 1 ? 'city' : 'cities'}</span></h3>
           <div class="sb-grid">
-        ${byCountry[country].map((c) => `<a class="sb-card" href="${cityLink(c.slug, c.cats[0])}">
-              ${B.cardHead({ name: c.name, n: c.n, unit: langName })}
-              ${B.tray('Services here', `<span class="sb-note">${esc(P.list(c.cats.slice(0, 3).map((x) => P.catName(x))))}${c.cats.length > 3 ? ' and more' : ''}</span>`)}
-            </a>`).join('\n        ')}
+        ${byCountry[country].map((c) => B.cityTile({
+    href: cityLink(c.slug, c.cats[0]),
+    slug: c.slug,
+    name: c.name,
+    country: c.country,
+    iso: M.cities[c.slug].iso,
+    n: c.n,
+    unit: langName,
+    index: tileIndex++,
+    eyebrow: 'Services here',
+    trayInner: B.tagChips(c.cats.map((x) => P.catName(x).replace(/^./, (y) => y.toUpperCase())), 3),
+  })).join('\n        ')}
           </div>
         </section>`).join('\n      ');
 
@@ -333,6 +355,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>
     </div>
   </main>
+  ${B.revealJs}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

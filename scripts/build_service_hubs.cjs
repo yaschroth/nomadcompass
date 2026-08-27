@@ -92,6 +92,9 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   })();
   const langChips = LANGS_FOR.map((x) => B.chip({ href: x.url, label: P.langName(x.language), n: x.n })).join('');
 
+  // One counter for the page, so the photographs that ship in the HTML are the tiles a reader
+  // reaches first rather than the first few of every country block.
+  let tileIndex = 0;
   const countryBlocks = countries.map((country) => {
     const slugs = byCountry[country].slice().sort((a, b) => rowsFor(b).n - rowsFor(a).n || M.cities[a].name.localeCompare(M.cities[b].name));
     const total = slugs.reduce((s, x) => s + rowsFor(x).n, 0);
@@ -103,13 +106,18 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
     // A language and its count are two cells of a chip now, so the numbers line up down the column
     // instead of being buried mid-sentence in "English 519, French 146, German 62".
     const pairs = p.nonLocal.filter(([, n]) => n >= 1).map(([l, n]) => [P.langName(l), n]);
-    const tray = pairs.length
-      ? B.tray('Works in', B.langChips(pairs))
-      : B.tray('Works in', '<span class="sb-tray-text">Language recorded on the page</span>');
-    return `<a class="sb-card" href="${linkFor(slug)}">
-              ${B.cardHead({ name: M.cities[slug].name, n: p.n, unit: 'listed' })}
-              ${tray}
-            </a>`;
+    return B.cityTile({
+      href: linkFor(slug),
+      slug,
+      name: M.cities[slug].name,
+      country: M.cities[slug].country,
+      iso: M.cities[slug].iso,
+      n: p.n,
+      unit: 'listed',
+      index: tileIndex++,
+      eyebrow: 'Works in',
+      trayInner: pairs.length ? B.langChips(pairs) : '<span class="sb-tray-text">Language recorded on the page</span>',
+    });
   }).join('\n        ')}
           </div>
         </section>`;
@@ -212,6 +220,7 @@ ${shell.headEnd}
       </section>
     </div>
   </main>
+  ${B.revealJs}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

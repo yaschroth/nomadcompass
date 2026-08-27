@@ -419,6 +419,61 @@
       a.sb-card, a.sb-chip, button.sb-chip { transition:none; }
       a.sb-card:hover, a.sb-chip:hover, button.sb-chip:hover { transform:none; }
     }
+
+    /* ---- the photographed city tile, the full .sv-ix shape from /services ----
+       The plain .sb-card above is the same card without a picture. These declarations are copied
+       from build_services.cjs rather than re-picked: the two pages sit one click apart and a tile
+       that is 4px shorter or a shade lighter on one of them reads as a different component. */
+    .sb-card-pic { grid-template-rows:auto auto 1fr; }
+    /* A fixed height, so a card whose photograph is missing is exactly as tall as one that has it. */
+    .sb-pic { display:block; height:96px; overflow:hidden; background:var(--color-sand,#f6f1e7);
+      border-bottom:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-pic img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
+    a.sb-card:hover .sb-pic img { transform:scale(1.045); }
+    /* The flag sits outside the name so a wrapping name does not push it off its line. */
+    .sb-card-pic .sb-head { grid-template-columns:auto minmax(0,1fr) auto; min-height:5.7rem; padding:.9rem 1rem .95rem; }
+    .sb-flag { border-radius:3px; box-shadow:0 0 0 1px rgba(15,23,42,.12); flex:0 0 auto; align-self:start; margin-top:.2rem; }
+    .sb-card-pic .sb-name { font-size:1.15rem; }
+    .sb-card-pic .sb-count { min-width:3.15rem; }
+    .sb-card-pic .sb-tray { padding:.7rem 1rem .85rem; }
+    /* Chips that are labels rather than label-and-count pairs: the services a city holds. Two rows'
+       worth of height is reserved for the same reason /services reserves it, so a city with one row
+       of chips is not shorter than the card beside it. */
+    .sb-tags { display:flex; flex-wrap:wrap; align-content:flex-start; gap:.3rem; min-height:62px; }
+    .sb-tag { display:inline-block; padding:.26rem .45rem; font-size:.72rem; line-height:1.25; font-weight:700;
+      color:var(--color-ink); background:#fff; border:1px solid var(--color-sand-dark,#E3D9C6); border-radius:var(--radius-sm,4px); }
+    /* "+2" counts what did not fit. Not a service, so not their chip. */
+    .sb-tag-more { display:inline-block; padding:.26rem .1rem .26rem .25rem; font-size:.72rem; line-height:1.25;
+      font-weight:600; color:var(--color-stone); }
+    /* The language chips need the same reserve when they are the tray of a photographed tile.
+       Without it the service hubs came out in three heights at wide widths, 259, 283 and 285, with
+       26px between cards in one row: a city whose chips wrapped to a second line grew and the rest
+       did not. Scoped to .sb-card-pic so the flat card families keep the height they have. */
+    .sb-card-pic .sb-langs { align-content:flex-start; min-height:62px; }
+
+    /* ---- the compact row with an icon, the .sv-hub shape from /services ---- */
+    .sb-hubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:.75rem; }
+    /* min-height for the same reason as everywhere else here: at one width a long label wraps to a
+       second line and stands 6px taller than its neighbours. The row is reserved so it cannot. */
+    a.sb-hub:not(.btn):not(.nav-link) { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:stretch;
+      gap:0; padding:0; min-height:3.75rem; overflow:hidden; background:#fff; color:var(--color-ink);
+      border:1px solid #E0D5C2; border-radius:var(--radius-md,8px); text-decoration:none;
+      box-shadow:0 3px 6px rgba(15,23,42,.10), 0 14px 32px rgba(15,23,42,.18); transition:border-color .15s, box-shadow .15s, transform .15s; }
+    a.sb-hub:hover { border-color:var(--color-terracotta,#c0392b); box-shadow:0 6px 14px rgba(15,23,42,.12), 0 24px 48px rgba(15,23,42,.22); transform:translateY(-2px); }
+    .sb-hub-ico { display:grid; place-items:center; width:2.9rem; background:#fff; border-right:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub svg { width:19px; height:19px; color:var(--color-terracotta-dark,#a03325); flex:0 0 auto; }
+    .sb-hub-name { align-self:center; padding:.72rem .8rem; font-weight:700; font-size:var(--text-sm); line-height:1.25; }
+    .sb-hub-stat { display:flex; flex-direction:column; align-items:flex-end; justify-content:center;
+      width:5.8rem; padding:.5rem .7rem; background:#fff; border-left:1px solid var(--color-sand-dark,#E3D9C6); }
+    .sb-hub-stat b { font-size:1.02rem; font-weight:800; line-height:1.15; color:var(--color-ink);
+      font-variant-numeric:tabular-nums; }
+    .sb-hub-stat small { font-size:.68rem; font-weight:600; color:var(--color-stone); white-space:nowrap;
+      font-variant-numeric:tabular-nums; }
+    @media (prefers-reduced-motion:reduce) {
+      a.sb-hub { transition:none; }
+      a.sb-hub:hover { transform:none; }
+      a.sb-card:hover .sb-pic img { transform:none; }
+    }
     .svl-prose { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svl-prose h2 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin: var(--space-8) 0 var(--space-5); }
     .svl-prose p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
@@ -456,53 +511,29 @@
       <section class="svl-country">
           <h2>Portugal<span class="svl-n">3 in 3 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/aveiro/translators">
-              <span class="sb-head"><span class="sb-name">Aveiro</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/lisbon/translators">
-              <span class="sb-head"><span class="sb-name">Lisbon</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>1</b> of 20</span><span>5%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/porto/translators">
-              <span class="sb-head"><span class="sb-name">Porto</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:7%"></i></span><span class="sb-figs"><span><b>1</b> of 14</span><span>7%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/aveiro/translators"><span class="sb-pic"><img src="/images/cities/aveiro-card.webp" alt="A brightly painted yellow-and-red moliceiro boat carrying visitors along a canal in Aveiro, Portugal, with a ribbon-covered footbridge and Art Nouveau buildings behind" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Aveiro<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/lisbon/translators"><span class="sb-pic"><img src="/images/cities/lisbon-card.webp" alt="Lisbon's Arco da Rua Augusta triumphal arch with the Tagus River behind it" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lisbon<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:5%"></i></span><span class="sb-figs"><span><b>1</b> of 20</span><span>5%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/porto/translators"><span class="sb-pic"><img src="/images/cities/porto-card.webp" alt="Porto's Ribeira waterfront with rabelo boats on the Douro River" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/pt.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Porto<span class="sb-sub">Portugal</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:7%"></i></span><span class="sb-figs"><span><b>1</b> of 14</span><span>7%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>France<span class="svl-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/lyon/translators">
-              <span class="sb-head"><span class="sb-name">Lyon</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/paris/translators">
-              <span class="sb-head"><span class="sb-name">Paris</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/lyon/translators"><span class="sb-pic"><img src="/images/cities/lyon-card.webp" alt="Panoramic view of Lyon from Fourvière hill showing Lyon Cathedral, the Saône river, and red-roofed Presqu'île with Tour Part-Dieu in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Lyon<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/paris/translators"><span class="sb-pic"><img src="/images/cities/paris-card.webp" alt="Paris skyline with Palais de Chaillot, Seine river and La Defense viewed from the Eiffel Tower" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/fr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Paris<span class="sb-sub">France</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Turkey<span class="svl-n">2 in 2 cities</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/antalya">
-              <span class="sb-head"><span class="sb-name">Antalya</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span>
-            </a>
-        <a class="sb-card" href="/services/izmir/translators">
-              <span class="sb-head"><span class="sb-name">Izmir</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/antalya"><span class="sb-pic"><img src="/images/cities/antalya-card.webp" alt="Antalya old harbour with limestone cliffs, turquoise Mediterranean water, and Taurus Mountains" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Antalya<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:50%"></i></span><span class="sb-figs"><span><b>1</b> of 2</span><span>50%</span></span></span></a>
+        <a class="sb-card sb-card-pic" href="/services/izmir/translators"><span class="sb-pic"><img src="/images/cities/izmir-card.webp" alt="Panoramic view of Izmir cityscape with the Gulf of Izmir and terracotta rooftops" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/tr.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Izmir<span class="sb-sub">Turkey</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:33%"></i></span><span class="sb-figs"><span><b>1</b> of 3</span><span>33%</span></span></span></a>
           </div>
         </section>
       <section class="svl-country">
           <h2>Italy<span class="svl-n">1 in 1 city</span></h2>
           <div class="sb-grid">
-        <a class="sb-card" href="/services/turin/translators">
-              <span class="sb-head"><span class="sb-name">Turin</span><span class="sb-count"><b>1</b><small>Dutch</small></span></span>
-              <span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span>
-            </a>
+        <a class="sb-card sb-card-pic" href="/services/turin/translators"><span class="sb-pic"><img src="/images/cities/turin-card.webp" alt="Turin skyline with the Mole Antonelliana and snow-capped Alps in the background" width="600" height="400" loading="lazy" decoding="async"></span><span class="sb-head"><img class="sb-flag" src="/assets/flags/it.svg" alt="" width="26" height="20" loading="lazy"><span class="sb-name">Turin<span class="sb-sub">Italy</span></span><span class="sb-count"><b>1</b><small>Dutch</small></span></span><span class="sb-tray"><span class="sb-eyebrow">Of all translators here</span><span class="sb-bar"><i style="width:100%"></i></span><span class="sb-figs"><span><b>1</b> of 1</span><span>100%</span></span></span></a>
           </div>
         </section>
 
@@ -525,13 +556,24 @@
       </div>
     </div>
   </main>
+  <script>(function(){
+  var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
+  if(!q.length)return;
+  function fill(el){var s=el.getAttribute('data-src');if(!s)return;el.removeAttribute('data-src');
+    var i=new Image();i.src=s;i.alt=el.getAttribute('data-alt')||'';i.width=600;i.height=400;
+    i.loading='lazy';i.decoding='async';el.appendChild(i);}
+  if(!('IntersectionObserver' in window)){q.forEach(fill);return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){io.unobserve(e.target);fill(e.target);}});},{rootMargin:'600px 0px'});
+  q.forEach(function(el){io.observe(el);});
+})();</script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
         <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/services" class="footer-link">Services by Language</a></li><li><a href="/timezones" class="footer-link">Time Zone Finder</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li></ul></div>
         <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/methodology">Methodology</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
+      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
       <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
       <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
     </div></footer>
