@@ -33,7 +33,7 @@ const FEATURES = [
   ['Affiliate-Tracking', 'affiliate_click'],
   ['Cookie-Consent-Skript', 'nomadhq_consent'],
   ['Stadt-Inhaltsverzeichnis', 'city-toc'],
-  ['Fakten-Panel', 'nomad-facts'],
+  ['Fakten-Panel', 'facts-panel'],
   ['YMYL-Hinweis', 'ymyl-note'],
 ];
 

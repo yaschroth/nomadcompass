@@ -64,6 +64,7 @@ const CHILDREN = new Set();
 // footer left every generated page short of five tracked features, so _safe_write refused the
 // second run and the family was being built with --force, guard off. See scripts/lib/page_shell.cjs.
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
@@ -186,14 +187,31 @@ for (const slug of slugs) {
     : `${list(langs)}-speaking ${list(catWords)} in ${c.name}`;
   // The meta title is deliberately a different string from the h1, and carries the numbers a search
   // result can use.
-  const title = isHub
-    ? `${c.name} services by language: ${rows.length} providers across ${allCats.length} services`
-    : `${rows.length} ${list(langs)}-speaking ${list(catWords)} in ${c.name}, each with its source`;
-  const desc = isHub
+  // A ladder rather than one string: the same shape runs to 63 characters in Addis Ababa and 51 in
+  // Agadir, and Google truncates a title at roughly 60. Longest that fits wins, so short city
+  // names keep the fuller sentence.
+  const titleOpts = isHub
+    ? [`${c.name} services by language: ${rows.length} providers across ${allCats.length} services`,
+      `${c.name} services by language: ${rows.length} providers`,
+      `${c.name} services by the language they work in`]
+    : [`${rows.length} ${list(langs)}-speaking ${list(catWords)} in ${c.name}, each with its source`,
+      `${rows.length} ${list(langs)}-speaking ${list(catWords)} in ${c.name}`,
+      `${list(langs)}-speaking ${list(catWords)} in ${c.name}`];
+  const title = titleOpts.find((t) => t.length <= 60) || titleOpts[titleOpts.length - 1];
+  // The core is the count and the languages; the closing sentence is picked to land the whole
+  // thing in what Google actually shows. One fixed ending cannot: Abu Dhabi listing four languages
+  // ran to 165 characters and Agadir with one ran to 96, the same sentence failing both ways.
+  const descCore = isHub
     ? `${rows.length} providers in ${c.name} across ${allCats.length} services, indexed by the language they work in: ` +
-      `${foreign.slice(0, 4).map(([l, n]) => LANGS[l] + ' ' + n).join(', ')}. Every language claim names its source.`
+      `${foreign.slice(0, 3).map(([l, n]) => LANGS[l] + ' ' + n).join(', ')}.`
     : `${rows.length} ${rows.length === 1 ? 'provider' : 'providers'} in ${c.name} listed by the language they work in, ` +
-      `across ${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}. Every language claim names its source.`;
+      `across ${allLangs.length} ${allLangs.length === 1 ? 'language' : 'languages'}.`;
+  const desc = META.band(descCore, [
+    'Every language claim names the source it was read on, and links straight to it.',
+    'Every language claim names the source it was read on, and links to it.',
+    'Every language claim names the source it was read on.',
+    'Every language claim names its source.',
+  ]);
 
   // Grouped by service, biggest group first. The page used to be one undifferentiated grid sorted
   // by evidence tier, so a dentist sat between two lawyers and the only way to find the thing you

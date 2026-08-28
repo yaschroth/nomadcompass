@@ -30,6 +30,7 @@ const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
@@ -81,6 +82,11 @@ const SKELETONS_MANY_LANGUAGES = [
   (t) => `${t.Service} in ${t.city} for ${t.langList} speakers, ${t.n} with sources`,
   (t) => `${t.n} ${t.service} in ${t.city} working in ${t.langList}, checked ${t.month}`,
   (t) => `${t.Service} in ${t.city}: ${t.langList}, ${t.n} names and their sources`,
+  // Three languages and a long service word ("physiotherapists in Barcelona") leave no room for a
+  // list, and 28 pages had no candidate under 60 at all. These two name the biggest language only,
+  // which is the one the title is competing for anyway.
+  (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}`,
+  (t) => `${t.Service} in ${t.city} who work in ${t.lang1}`,
 ];
 
 const hash = (s) => {
@@ -332,9 +338,17 @@ for (const page of ordered) {
   const descLangs = servable.length
     ? P.list(servable.map(([l, n]) => P.langName(l) + ' (' + n + ')'))
     : P.list(langs);
-  const desc = `${pair.n} ${P.catName(cat)} in ${city.name} who work in ${descLangs}` +
-    (topArea && Object.keys(pair.areas).length > 1 ? `, across ${Object.keys(pair.areas).length} postcodes` : '') +
-    `. Every language claim names the source it came from.`;
+  // P.plural, not the bare plural: 77 pages were describing themselves as "1 lawyers in Agadir".
+  const descCore = `${pair.n} ${P.plural(pair.n, P.singular(cat), P.catName(cat))} in ${city.name} who ${P.plural(pair.n, 'works', 'work')} in ${descLangs}`
+    + (topArea && Object.keys(pair.areas).length > 1 ? `, across ${Object.keys(pair.areas).length} postcodes` : '') + '.';
+  const desc = META.band(descCore, [
+    'Every language claim names the source it came from, links straight to it, and carries the tier we grade that source by.',
+    'Every language claim names the source it came from and links straight to it, with the tier we grade it by.',
+    'Every language claim names the source it came from, and links straight to it.',
+    'Every language claim names the source it came from, and links to it.',
+    'Every language claim names the source it came from.',
+    'Every language claim names its source.',
+  ]);
 
   // --- listing --------------------------------------------------------------------------------
   const icon = inlineIcon(CAT_ICON[cat]);

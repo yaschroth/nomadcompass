@@ -33,6 +33,7 @@ const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 // inlineIcon rather than icon(): same reason as /services, the shared sprite is a second request
 // and these are the first thing on the page.
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
@@ -195,8 +196,13 @@ for (const [lang, v] of Object.entries(rowsByLang)) {
 
   const h1 = `Find services in ${langName}`;
   const title = `${langName}-speaking services in ${v.cities.size} cities: ${v.rows.length} listed`;
-  const desc = `${v.rows.length} doctors, dentists, lawyers and other providers who work in ${langName}, `
-    + `across ${v.cities.size} cities, led by ${top.map((c) => c.name).join(', ')}. Every language claim names its source.`;
+  const descCore = `${v.rows.length} doctors, dentists, lawyers and other providers who work in ${langName}, `
+    + `across ${v.cities.size} cities, led by ${top.map((c) => c.name).join(', ')}.`;
+  const desc = META.band(descCore, [
+    'Every language claim names the source it was read on, and links straight to it.',
+    'Every language claim names the source it was read on.',
+    'Every language claim names its source.',
+  ]);
 
   // The same two shapes /services uses, so the page a reader clicks through from does not change
   // component vocabulary underneath them: the compact icon row for services, the photographed tile

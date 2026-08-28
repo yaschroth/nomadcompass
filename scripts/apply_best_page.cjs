@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
+const META = require(path.join(__dirname, 'lib', 'meta_text.cjs'));
 const DIR = process.env.DIR || ROOT;
 const OUTDIR = path.join(ROOT, 'best');
 const BASE = 'https://thenomadhq.com';
@@ -183,6 +184,43 @@ function build(key, related) {
 
   const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: esc(data.h1), itemListOrder: 'https://schema.org/ItemListOrderDescending', numberOfItems: data.cities.length,
     itemListElement: data.cities.map((c) => ({ '@type': 'ListItem', position: c.rank, url: BASE + '/cities/' + c.id, name: c.name })) };
+  /**
+   * The meta description, composed from the ranking rather than written by hand.
+   *
+   * The hand-written sentence in content-<key>.json went stale the moment rank_best recomputed the
+   * fifteen, and had: this page's description said "from $700 bases in Vietnam" while its cheapest
+   * entry was Jodhpur at $280 and no Vietnamese city was on it. Appending derived figures to it was
+   * tried first and does not work either, because all 32 were written to fill the whole
+   * 155-character budget alone, so the two halves cannot both fit and cutting one mid-sentence
+   * reads as a bug.
+   *
+   * So the sentence is built here in full. It names the three cities that top the ranking, which is
+   * what someone searching "best cities for fast wifi" wants to know and what no hand-written
+   * summary of the category can tell them, and it cannot describe a ranking that no longer exists.
+   */
+  const plain = (v) => '$' + Number(v).toLocaleString('en-US');
+  const top3 = data.cities.slice(0, 3).map((c) => c.name);
+  const priced = data.cities.filter((c) => typeof c.costPerMonth === 'number')
+    .sort((a, b) => a.costPerMonth - b.costPerMonth);
+  // "the best bases across Asia" is a place, not a quality, so it reads "across Asia" rather than
+  // "for the best bases across Asia". The 15 region and country pages are all phrased that way.
+  const scope = /^the best bases /.test(data.dimension || '')
+    ? data.dimension.replace(/^the best bases /, '')
+    : 'for ' + (data.dimension || 'life as a nomad base');
+  const lead = top3.length === 3
+    ? top3[0] + ', ' + top3[1] + ' and ' + top3[2] + ' top our ' + data.cities.length + '-city ranking ' + scope + '.'
+    : 'Our ' + data.cities.length + '-city ranking ' + scope + '.';
+  const costs = priced.length >= 2
+    ? ' Costs run ' + plain(priced[0].costPerMonth) + ' to '
+      + plain(priced[priced.length - 1].costPerMonth) + ' a month, each with its source.'
+    : '';
+  // The country rankings have short names and come out around 116 characters, which leaves Google
+  // room to pad the line with page text. The scores are on every card, so saying so is both true
+  // and the thing a reader is deciding between.
+  const extra = ' Compare wifi, safety and visas.';
+  let metaDesc = (lead + costs).length <= META.MAX ? lead + costs : lead;
+  if (metaDesc.length < 120 && (metaDesc + extra).length <= META.MAX) metaDesc += extra;
+
   const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) } : null;
   const crumbs = [['Home', BASE + '/'], ['Rankings', BASE + '/best'], [data.h1, url]];
   const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
@@ -195,11 +233,11 @@ ${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(content.metaTitle || data.h1)} | The Nomad HQ</title>
-  <meta name="description" content="${esc(content.metaDescription || '')}">
+  <meta name="description" content="${esc(metaDesc)}">
   <link rel="canonical" href="${url}">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="${esc(content.metaTitle || data.h1)} | The Nomad HQ">
-  <meta property="og:description" content="${esc(content.metaDescription || '')}">
+  <meta property="og:description" content="${esc(metaDesc)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${url}">
   <meta property="og:image" content="${BASE}/images/og/${top.id}.jpg">

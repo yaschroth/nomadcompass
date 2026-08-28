@@ -24,6 +24,7 @@ const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
@@ -75,9 +76,20 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   const topLangs = Object.entries(langTotals).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
   const h1 = `${Label} who work in a language you speak, city by city`;
-  const title = `${Label} abroad by working language: ${svc.cities.length} cities, ${svc.n} listed`;
-  const desc = `${svc.n} ${label} across ${svc.cities.length} cities, indexed by the language they ` +
-    `work in. ${topLangs.slice(0, 3).map(([l, n]) => P.langName(l) + ' ' + n).join(', ')}. Every claim names its source.`;
+  // "Physiotherapists" alone is 17 characters, so the full shape runs to 65. Longest that fits.
+  const titleOpts = [
+    `${Label} abroad by working language: ${svc.cities.length} cities, ${svc.n} listed`,
+    `${Label} abroad by language: ${svc.cities.length} cities, ${svc.n} listed`,
+    `${Label} abroad by the language they work in`,
+  ];
+  const title = titleOpts.find((x) => x.length <= 60) || titleOpts[titleOpts.length - 1];
+  const descCore = `${svc.n} ${label} across ${svc.cities.length} cities, indexed by the language they ` +
+    `work in. ${topLangs.slice(0, 3).map(([l, n]) => P.langName(l) + ' ' + n).join(', ')}.`;
+  const desc = META.band(descCore, [
+    'Every language claim names the source it was read on, and links straight to it.',
+    'Every language claim names the source it was read on.',
+    'Every claim names its source.',
+  ]);
 
   const standfirst = `${svc.n} ${label} in ${svc.cities.length} cities, listed by the language they ` +
     `work in rather than by rating. Most of them are recorded in ` +

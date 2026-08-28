@@ -29,12 +29,19 @@ const BLOG = {
   tbilisi: 'digital-nomads-tbilisi-georgia', medellin: 'medellin-vs-chiang-mai',
   chiangmai: 'medellin-vs-chiang-mai',
 };
-// accommodations grouped by city id prefix
+// Accommodations grouped by city id prefix, where any still exist.
+//
+// The 657 accommodation pages were deleted on 2026-08-11 for carrying fabricated ratings and
+// review counts, and this readdirSync has thrown ENOENT on every run since, which is why the city
+// titles could not be changed until now. A directory that is gone on purpose is not an error.
 const accomByCity = {};
-for (const f of fs.readdirSync(path.join(ROOT, 'accommodations')).filter((x) => x.endsWith('.html'))) {
-  const slug = f.replace(/\.html$/, '');
-  const city = CITIES.find((c) => slug.startsWith(c.id + '-'));
-  if (city) (accomByCity[city.id] = accomByCity[city.id] || []).push(slug);
+const accomDir = path.join(ROOT, 'accommodations');
+if (fs.existsSync(accomDir)) {
+  for (const f of fs.readdirSync(accomDir).filter((x) => x.endsWith('.html'))) {
+    const slug = f.replace(/\.html$/, '');
+    const city = CITIES.find((c) => slug.startsWith(c.id + '-'));
+    if (city) (accomByCity[city.id] = accomByCity[city.id] || []).push(slug);
+  }
 }
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -72,15 +79,12 @@ function faqFor(c) {
   ];
 }
 
-function adaptiveTitle(name, country) {
-  const opts = [
-    `${name}, ${country} Digital Nomad Guide: Cost, WiFi & Visa`,
-    `${name} Digital Nomad Guide: Cost of Living, WiFi & Visa`,
-    `${name}, ${country} Digital Nomad Guide`,
-    `${name} Digital Nomad Guide`,
-  ];
-  return opts.find((t) => t.length <= 60) || opts[opts.length - 1];
-}
+// The title now carries the city's monthly cost instead of the words "Cost, WiFi & Visa", which
+// said the same thing on all 710 pages and told a searcher nothing. Built in
+// scripts/lib/city_snippet.cjs alongside the description, because the two are read together in one
+// result and were previously written by two sweeps that did not know about each other: the title
+// promised "Cost, WiFi & Visa" and the description promised the same three things again.
+const SNIPPET = require(path.join(__dirname, 'lib', 'city_snippet.cjs'));
 
 const only = process.argv[2];
 const files = fs.readdirSync(CITY_DIR).filter((f) => f.endsWith('.html')).filter((f) => !only || f === only || f === only + '.html');
@@ -98,7 +102,7 @@ for (const file of files) {
   const metaDesc = (html.match(/<meta name="description" content="([^"]+)"/) || [, ''])[1];
 
   // title
-  html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(adaptiveTitle(c.name, c.country))}</title>`);
+  html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(SNIPPET.title(c))}</title>`);
   // og:type article -> website
   html = html.replace(/<meta property="og:type" content="article">/, '<meta property="og:type" content="website">');
   // robots

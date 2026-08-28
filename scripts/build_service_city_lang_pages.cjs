@@ -35,6 +35,7 @@ const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const ATTR = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'cities', 'attribution.json'), 'utf8'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
@@ -263,9 +264,20 @@ for (const pair of Object.values(M.pairs)) {
     // smaller cost than a page that hides what it holds.
     const alsoNamed = Object.entries(alsoCount).filter(([, n]) => n >= 2)
       .sort((a, b) => b[1] - a[1]).map(([l, n]) => P.langName(l) + ' (' + n + ')');
-    const desc = `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the list that names them` +
-      (srcTop.length > 1 ? `, from ${srcTop.length} sources` : `, from ${srcTop[0].publisher}`) +
-      `.${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : ''} Every claim links to where it came from.`;
+    // "Some also work in X" is required, not decoration. check_service_pages fails a page that
+    // serves two or more providers in a language its title and description never name, because a
+    // reader searching for an Italian-speaking lawyer in Madrid would never reach the page that
+    // holds ten of them. Trimming it to fit the display budget broke nineteen pages that way.
+    //
+    // So it goes in the core, and only the closing sentence is optional. Madrid's list runs the
+    // description past what Google shows; being findable is worth more than being whole on screen.
+    const descCore = `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the list that names them`
+      + (srcTop.length > 1 ? `, from ${srcTop.length} sources` : `, from ${srcTop[0].publisher}`) + '.'
+      + (alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : '');
+    const desc = META.band(descCore, [
+      'Every claim links to the source it was read on.',
+      'Every claim links to where it came from.',
+    ]);
 
     // --- one page per slice of the list ---------------------------------------------------------
     // The body below stays at this indent on purpose. It is one page's worth of template and the
@@ -284,10 +296,20 @@ for (const pair of Object.values(M.pairs)) {
     // A language two or more of these providers also work in has to be in the description of every
     // page of the series. Leaving it to the first hid French from four of Madrid's five.
     const pageDesc = pageNo === 1 ? desc
-      : `Entries ${first} to ${last} of the ${rows.length} ${P.catName(cat)} in ${city.name} whose ` +
-        `${langName} is stated by the list that names them.` +
-        `${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : ''}` +
-        ` Page ${pageNo} of ${pageCount}, and every claim links to where it came from.`;
+      // Every page of the series names the other languages too, for the same reason page one does:
+      // check_service_pages counts what the whole list serves, not what this slice of it shows.
+      : META.band(
+        `Entries ${first} to ${last} of the ${rows.length} ${P.catName(cat)} in ${city.name} whose `
+        + `${langName} is stated by the list that names them.`
+        + `${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : ''}`,
+        [
+          `Page ${pageNo} of ${pageCount}, and every claim links to the source it was read on.`,
+          `Page ${pageNo} of ${pageCount}, and every claim links to where it came from.`,
+          `Page ${pageNo} of ${pageCount}, each linked to its source.`,
+          `Page ${pageNo} of ${pageCount}, each with its source.`,
+          `Page ${pageNo} of ${pageCount}.`,
+        ],
+      );
     // The standfirst opens with the count, so a page of the series opens with its range and reads
     // straight on into it rather than saying 519 twice in one sentence.
     const pageStand = pageNo === 1 ? standfirst : `Entries ${first} to ${last} of the ` + standfirst;

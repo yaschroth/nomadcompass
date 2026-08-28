@@ -48,6 +48,7 @@ const STEPS = [
   ['nav search box (apply_nav_search)', 'apply_nav_search.cjs'],
   ['structured data (apply_entity_schema, must run last)', 'apply_entity_schema.cjs'],
   ['analytics (apply_analytics)', 'apply_analytics.cjs'],
+  ['search snippets (check_meta, a gate)', 'check_meta.cjs'],
 ];
 STEPS.forEach(([label, script, args], i) => {
   console.log((i ? '\n' : '') + (i + 1) + '/' + STEPS.length + '  ' + label + '...');

@@ -22,7 +22,7 @@ const TITLES = {
   'best.html': 'Best Cities for Digital Nomads: Cost, WiFi, Safety | The Nomad HQ',
   'blog/category/visa-legal.html': 'Visas & Legal for Digital Nomads: Guides | The Nomad HQ',
   'blog.html': 'Digital Nomad Blog: City Guides & Remote Work Tips | The Nomad HQ',
-  'cost-of-living-index.html': 'Digital Nomad Cost of Living Index 2026: Real Monthly Costs, 330 Cities | The Nomad HQ',
+  'cost-of-living-index.html': 'Cost of Living Index for Digital Nomads: 330 Cities | The Nomad HQ',
   'route.html': 'Nomad Route Planner: Dates, Budget & Weather | The Nomad HQ',
   'salary.html': 'Salary Calculator: What You Need in Any City | The Nomad HQ',
   'tier-list/affordability.html': 'Affordability Tier List: Nomad Cities S to F | The Nomad HQ',
@@ -47,7 +47,7 @@ const TITLES = {
 const OG_PAGES = ['about.html', 'activities.html', 'contact.html', 'disclosure.html', 'legal-notice.html', 'privacy.html', 'terms.html'];
 
 const DESCS = {
-  'cost-of-living-index.html': 'A transparent, sourced cost-of-living index for digital nomads: the real monthly budget for 330 cities, ranked, from central rent plus a one-person basket priced from Numbeo. Sort and filter by region.',
+  'cost-of-living-index.html': 'The real monthly budget for 330 cities, ranked: central rent plus a one-person basket, every figure priced from Numbeo. Sort and filter by region.',
   'route.html': 'Plan a dated multi-city nomad trip: month-by-month budget, per-stop weather, a packing list, a Schengen 90/180 tracker, and flight info. Free planner.',
   'salary.html': 'Pick a city and see the monthly income you need to live there as a digital nomad, at a lean, comfortable or premium lifestyle. Free calculator.',
   'cities/sancristobal.html': 'Is San Cristobal de las Casas good for digital nomads? Nomad Score 6.9/10, cost of living in USD, WiFi, safety, visas, neighborhoods and coworking.',

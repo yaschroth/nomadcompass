@@ -11,6 +11,7 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
+const META = require(path.join(__dirname, 'lib', 'meta_text.cjs'));
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -65,12 +66,12 @@ function composite(c, weights, cheapWeight) {
 const valueIndex = (c) => typeof c.costPerMonth === 'number' && c.costPerMonth > 0 ? +(nomadScore(c) / (c.costPerMonth / 1000)).toFixed(2) : 0;
 const COUNTRIES = { Spain: 'spain', Mexico: 'mexico', Thailand: 'thailand', Portugal: 'portugal', Indonesia: 'indonesia', Vietnam: 'vietnam', Colombia: 'colombia', Italy: 'italy' };
 const PERSONA = [
-  { slug: 'female-nomads', hub: 'Female nomads', h1: 'Digital Nomad Cities for Women: Tier List', mt: 'Best Cities for Female Digital Nomads: Tier List', md: 'A tier list of the best cities for female digital nomads, bucketed S to F on a safety-led blend of safety, cleanliness, community and affordability.', cheapWeight: .20, weights: { safety: .30, cleanliness: .15, airquality: .10, community: .10, english: .15 } },
-  { slug: 'tight-budget', hub: 'Tight budget', h1: 'Digital Nomad Cities on a Tight Budget: Tier List', mt: 'Tight-Budget Digital Nomad Cities: Tier List', md: 'A tier list of the best cities for nomads on a tight budget, bucketed S to F on a cheap-but-workable blend of cost, WiFi and safety.', cheapWeight: .55, weights: { wifi: .25, safety: .20 } },
-  { slug: 'first-timers', hub: 'First-timers', h1: 'Digital Nomad Cities for First-Timers: Tier List', mt: 'Best Cities for First-Time Nomads: Tier List', md: 'A tier list of the easiest cities for first-time digital nomads, bucketed S to F on English, community, safety and WiFi.', weights: { english: .30, community: .25, safety: .25, wifi: .20 } },
-  { slug: 'families', hub: 'Families', h1: 'Digital Nomad Cities for Families: Tier List', mt: 'Best Cities for Digital Nomad Families: Tier List', md: 'A tier list of the best cities for digital nomads with kids, bucketed S to F on safety, cleanliness, air quality, nature and community.', weights: { safety: .30, cleanliness: .20, airquality: .20, nature: .15, community: .15 } },
-  { slug: 'party', hub: 'Party scene', h1: 'Digital Nomad Cities for Nightlife: Tier List', mt: 'Best Party Cities for Digital Nomads: Tier List', md: 'A tier list of the best cities for party-loving nomads, bucketed S to F on nightlife and nomad community.', weights: { nightlife: .60, community: .40 } },
-  { slug: 'best-value', hub: 'Best value', h1: 'Best Value Digital Nomad Cities: Tier List', mt: 'Best Value Digital Nomad Cities: Tier List', md: 'A tier list of the best value digital nomad cities, bucketed S to F by quality of life per dollar (Nomad Score relative to monthly cost).', value: true },
+  { slug: 'female-nomads', hub: 'Female nomads', h1: 'Digital Nomad Cities for Women: Tier List', mt: 'Best Cities for Female Digital Nomads: Tier List', md: 'A tier list of the best cities for female digital nomads, on a safety-led blend of scores.', cheapWeight: .20, weights: { safety: .30, cleanliness: .15, airquality: .10, community: .10, english: .15 } },
+  { slug: 'tight-budget', hub: 'Tight budget', h1: 'Digital Nomad Cities on a Tight Budget: Tier List', mt: 'Tight-Budget Digital Nomad Cities: Tier List', md: 'A tier list of the best cities for nomads on a tight budget, on cost, WiFi and safety.', cheapWeight: .55, weights: { wifi: .25, safety: .20 } },
+  { slug: 'first-timers', hub: 'First-timers', h1: 'Digital Nomad Cities for First-Timers: Tier List', mt: 'Best Cities for First-Time Nomads: Tier List', md: 'A tier list of the easiest cities for first-time nomads, on English, community, safety and WiFi.', weights: { english: .30, community: .25, safety: .25, wifi: .20 } },
+  { slug: 'families', hub: 'Families', h1: 'Digital Nomad Cities for Families: Tier List', mt: 'Best Cities for Digital Nomad Families: Tier List', md: 'A tier list of the best cities for nomads with kids, on safety, cleanliness, air and nature.', weights: { safety: .30, cleanliness: .20, airquality: .20, nature: .15, community: .15 } },
+  { slug: 'party', hub: 'Party scene', h1: 'Digital Nomad Cities for Nightlife: Tier List', mt: 'Best Party Cities for Digital Nomads: Tier List', md: 'A tier list of the best cities for party-loving nomads, on nightlife and nomad community.', weights: { nightlife: .60, community: .40 } },
+  { slug: 'best-value', hub: 'Best value', h1: 'Best Value Digital Nomad Cities: Tier List', mt: 'Best Value Digital Nomad Cities: Tier List', md: 'A tier list of the best value digital nomad cities, by quality of life per dollar.', value: true },
 ];
 
 // ---- build variant descriptors ----
@@ -78,15 +79,19 @@ const master = {
   type: 'master', slug: 'tier-list', file: 'tier-list.html', hubLabel: 'All cities',
   h1: 'The Digital Nomad Cities Tier List',
   metaTitle: 'Nomad Cities Tier List: All Ranked S to F',
-  metaDesc: 'The definitive digital nomad cities tier list. Every rated city bucketed from S tier to F by Nomad Score, cost, WiFi, safety, climate and more.',
+  metaDesc: 'The definitive digital nomad cities tier list, every rated city bucketed S to F by Nomad Score.',
   kicker: 'The Nomad HQ City Index',
   pool: CITIES, score: nomadScore, mode: 'nomad',
 };
 const regionVariants = Object.keys(REGION_NAMES).map((rk) => ({
   type: 'region', slug: 'tier-list/' + REGION_SLUG[rk], file: path.join('tier-list', REGION_SLUG[rk] + '.html'), hubLabel: REGION_NAMES[rk].replace(/^the /, ''),
   h1: `Digital Nomad Cities in ${REGION_NAMES[rk]}: Tier List`,
-  metaTitle: `Nomad Cities in ${REGION_NAMES[rk]} Tier List: S to F`,
-  metaDesc: `A tier list of the best digital nomad cities in ${REGION_NAMES[rk]}, every rated city bucketed from S to F by Nomad Score.`,
+  // "North America & the Caribbean" pushes the usual shape to 63 characters, so the long names
+  // drop the "S to F", which the description says anyway.
+  metaTitle: `Nomad Cities in ${REGION_NAMES[rk]} Tier List: S to F`.length <= 60
+    ? `Nomad Cities in ${REGION_NAMES[rk]} Tier List: S to F`
+    : `Nomad Cities in ${REGION_NAMES[rk]}: Tier List`,
+  metaDesc: `A tier list of the best digital nomad cities in ${REGION_NAMES[rk]}, bucketed S to F by Nomad Score.`,
   kicker: 'Regional tier list',
   pool: CITIES.filter((c) => REGION[c.id] === rk), score: nomadScore, mode: 'nomad', region: rk,
 }));
@@ -94,7 +99,7 @@ const catVariants = CATS.map((cat) => ({
   type: 'category', slug: 'tier-list/' + cat.slug, file: path.join('tier-list', cat.slug + '.html'), hubLabel: cat.label,
   h1: `Digital Nomad Cities by ${cat.label}: Tier List`,
   metaTitle: `${cat.label} Tier List: Nomad Cities S to F`,
-  metaDesc: `A tier list of digital nomad cities by ${cat.lc}, every rated city bucketed from S to F on its ${cat.label} score.`,
+  metaDesc: `A tier list of digital nomad cities by ${cat.lc}, bucketed S to F on the ${cat.label} score.`,
   kicker: 'Category tier list',
   pool: CITIES, score: (c) => (typeof c.scores[cat.key] === 'number' ? c.scores[cat.key] : 0), mode: 'category', cat,
 }));
@@ -102,7 +107,7 @@ const countryVariants = Object.keys(COUNTRIES).map((cn) => ({
   type: 'country', slug: 'tier-list/' + COUNTRIES[cn], file: path.join('tier-list', COUNTRIES[cn] + '.html'), hubLabel: cn,
   h1: `Digital Nomad Cities in ${cn}: Tier List`,
   metaTitle: `Nomad Cities in ${cn} Tier List: S to F`,
-  metaDesc: `A tier list of the digital nomad cities we rate in ${cn}, bucketed from S to F by Nomad Score.`,
+  metaDesc: `A tier list of the digital nomad cities we rate in ${cn}, bucketed S to F by Nomad Score.`,
   kicker: 'Country tier list',
   pool: CITIES.filter((c) => c.country === cn), score: nomadScore, mode: 'nomad', country: cn, countrySlug: COUNTRIES[cn],
 }));
@@ -351,6 +356,23 @@ function render(v) {
     { q: 'Is a lower-tier city a bad place to live?', a: 'Not necessarily. The tiers rank one dimension, so a lower-tier city can still be a great fit if it is strong in the things you care about most. Open any city to see its full breakdown.' },
     { q: 'How often is it updated?', a: 'It is generated directly from our city data, so it updates whenever scores change or new cities are added.' },
   ];
+  /**
+   * The meta description, finished with figures from the list itself.
+   *
+   * The hand-written half says what the page ranks and stays put; the numbers come from the same
+   * ranking the page renders, so a description cannot end up describing a tier list that no longer
+   * exists. Same reason the ranking pages derive theirs.
+   */
+  const lead = ranked[0] && ranked[0].c ? ranked[0].c.name : null;
+  const tail = lead
+    ? N + ' cities, ' + (groups.S.length ? groups.S.length + ' in S tier' : 'none in S tier') + ', led by ' + lead + '.'
+    : '';
+  // The shortest category label, WiFi, put that one page a character under the floor, so where
+  // there is room the sentence says what the tiers are for.
+  const withTail = META.fit(v.metaDesc, tail);
+  const nudge = ' Open any city for its full breakdown.';
+  const metaDesc = withTail.length < 120 && (withTail + nudge).length <= META.MAX ? withTail + nudge : withTail;
+
   const itemList = { '@context': 'https://schema.org', '@type': 'ItemList', name: v.metaTitle, numberOfItems: N, itemListOrder: 'https://schema.org/ItemListOrderDescending',
     itemListElement: ranked.map((r, i) => ({ '@type': 'ListItem', position: i + 1, url: BASE + '/cities/' + r.c.id, name: r.c.name })) };
   const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
@@ -366,11 +388,11 @@ ${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(v.metaTitle)} | The Nomad HQ</title>
-  <meta name="description" content="${esc(v.metaDesc)}">
+  <meta name="description" content="${esc(metaDesc)}">
   <link rel="canonical" href="${BASE}/${v.slug}">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="${esc(v.metaTitle)} | The Nomad HQ">
-  <meta property="og:description" content="${esc(v.metaDesc)}">
+  <meta property="og:description" content="${esc(metaDesc)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${BASE}/${v.slug}">
   <meta property="og:image" content="${BASE}/images/og/${heroId}.jpg">
@@ -448,7 +470,7 @@ function buildHub() {
 ${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Nomad City Tier Lists: Overall, by Region and Category | The Nomad HQ</title>
+  <title>Digital Nomad City Tier Lists: Region and Category | The Nomad HQ</title>
   <meta name="description" content="Every Nomad HQ tier list in one place, the all-cities tier list plus regional and category tier lists ranking digital nomad cities S to F.">
   <link rel="canonical" href="${BASE}/tier-lists">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">

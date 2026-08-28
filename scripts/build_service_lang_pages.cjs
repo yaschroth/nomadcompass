@@ -30,6 +30,7 @@ const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
@@ -163,8 +164,13 @@ for (const [cat, svc] of Object.entries(M.services)) {
 
     const h1 = `${langName}-speaking ${label}, city by city`;
     const title = `${langName}-speaking ${label} in ${v.cities.size} cities: ${v.rows.length} listed`;
-    const desc = `${v.rows.length} ${label} who work in ${langName}, across ${v.cities.size} cities in ` +
-      `${countries.length} countries, led by ${top.map((c) => c.name).join(', ')}. Every language claim names its source.`;
+    const descCore = `${v.rows.length} ${label} who work in ${langName}, across ${v.cities.size} cities in ` +
+      `${countries.length} countries, led by ${top.map((c) => c.name).join(', ')}.`;
+    const desc = META.band(descCore, [
+      'Every language claim names the source it was read on, and links straight to it.',
+      'Every language claim names the source it was read on.',
+      'Every language claim names its source.',
+    ]);
 
     // One counter for the page, so the photographs that ship in the HTML are the tiles a reader
     // reaches first rather than the first few of every country block.

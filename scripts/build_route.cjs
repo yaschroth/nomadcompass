@@ -76,7 +76,7 @@ const html = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nomad Route Planner: Dates, Budget, Weather & Packing | The Nomad HQ</title>
-  <meta name="description" content="Plan a dated multi-city nomad trip: set your dates and get a month-by-month budget, per-stop weather, a packing list, a Schengen 90/180 tracker, jet-lag and flight info. Free.">
+  <meta name="description" content="Plan a dated multi-city nomad trip: a month-by-month budget, per-stop weather, a packing list, a Schengen 90/180 tracker and flight costs. Free.">
   <link rel="canonical" href="${BASE}/route">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="Nomad Route Planner | The Nomad HQ">

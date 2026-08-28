@@ -1,16 +1,27 @@
 require(require('path').join(__dirname,'_safe_write.cjs'));
-// Upgrade the city-page meta description (+ twitter:description) for CTR: add the distinctive Nomad
-// Score and a question framing that matches search intent, while staying accurate (every page shows
-// USD costs, so "cost of living in USD" is true even for cities without the real Numbeo table).
-// Re-runnable (replaces the tag content each time). Nomad Score uses the exact site formula.
+/**
+ * The meta description (and twitter:description) on every city page.
+ *
+ * This used to build one sentence: "Is X good for digital nomads? Nomad Score N/10 - cost of
+ * living in USD, WiFi, safety, visas, neighborhoods and coworking, all in one guide." It was
+ * written for CTR and it did not work. All 710 descriptions collapsed to two real strings, and
+ * Search Console for the 30 days to 2026-08-27 put 412 pages at position 5-10 on a 1.6% CTR
+ * against a 3-6% norm: the pages rank and the snippet gives nobody a reason to pick them.
+ *
+ * The sentence now comes from scripts/lib/city_snippet.cjs, which composes it out of the cost, the
+ * two scores this city is unusual for, an honest weakness and its real monthly temperatures. The
+ * Nomad Score is gone from it: it is tier editorial in data/provenance.json, it is the one figure
+ * a reader cannot check, and it was the only thing the old sentence offered.
+ *
+ * Re-runnable (replaces the tag content each time).
+ */
 const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname.includes('scripts') ? path.join(__dirname, '..') : 'c:/Users/yasch/Coding Projects/Website Projects/nomadcompass');
 const m = {}; eval(fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8').replace(/const CITIES/, 'm.CITIES'));
 const byId = {}; for (const c of m.CITIES) if (c && c.id) byId[c.id] = c;
 const APPLY = process.env.APPLY === '1';
-const KEYS = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
+const S = require(path.join(__dirname, 'lib', 'city_snippet.cjs'));
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const nomadScore = sc => { const raw = KEYS.reduce((s, k) => s + (sc[k] || 0), 0) / KEYS.length; return Math.max(2.5, Math.min(9.9, 6.9 + (raw - 6.47) / 0.44 * 1.05)).toFixed(1); };
 
 const dir = path.join(ROOT, 'cities');
 const files = fs.readdirSync(dir).filter(f => f.endsWith('.html'));
@@ -20,8 +31,7 @@ for (const f of files) {
   if (!city || !city.scores) { skip++; continue; }
   const p = path.join(dir, f);
   let s = fs.readFileSync(p, 'utf8'); const before = s;
-  const nom = nomadScore(city.scores);
-  const desc = `Is ${city.name} good for digital nomads? Nomad Score ${nom}/10 - cost of living in USD, WiFi, safety, visas, neighborhoods and coworking, all in one guide.`;
+  const desc = S.description(city);
   const e = esc(desc);
   s = s.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${e}">`);
   s = s.replace(/<meta name="twitter:description" content="[^"]*">/, `<meta name="twitter:description" content="${e}">`);

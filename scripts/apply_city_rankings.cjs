@@ -110,7 +110,9 @@ for (const file of cityFiles) {
   const card = `\n          <div class="city-explore" data-explore="v3">\n          <p class="city-rank-eyebrow">In the rankings</p>\n          <h3 class="city-rank-head">${head}</h3>\n          ${sub}\n          <ol class="city-rank-list">\n${rows}\n          </ol>\n          ${footer}\n          </div>\n`;
 
   if (DRY) continue;
-  html = html.replace(re, `$1${card}$3`);
+  html = html.replace(re, () => `${m[1]}${card}
+
+          <h2 id="faq">`);
   fs.writeFileSync(abs, html);
   injected++;
 }

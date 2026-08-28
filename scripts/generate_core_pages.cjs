@@ -163,7 +163,7 @@ ${FOOTER}
 // Bespoke, styled contact page (the generic legal template looked bland here).
 function contactPage() {
   const title = 'Contact The Nomad HQ';
-  const desc = 'Get in touch with The Nomad HQ: corrections, city suggestions, partnerships, or press.';
+  const desc = 'Questions, corrections, city suggestions or partnership ideas. Reader corrections are what keep the city guides accurate, and we read every message.';
   const ICON = {
     email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
     linkedin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 17v-7"/></svg>',
@@ -252,7 +252,7 @@ ${updatedLine}`),
 
   'contact.html': contactPage(),
 
-  'disclosure.html': page('disclosure', 'Affiliate Disclosure, The Nomad HQ', 'How The Nomad HQ uses affiliate links and how that does (and does not) affect our content.', `    <h1>Affiliate Disclosure</h1>
+  'disclosure.html': page('disclosure', 'Affiliate Disclosure, The Nomad HQ', 'Some links on The Nomad HQ earn a commission. What that does and does not change about what we recommend, and how to spot one on the page.', `    <h1>Affiliate Disclosure</h1>
     <p class="lead">In plain English: some links earn us a commission. That never changes what we recommend.</p>
     <p>The Nomad HQ is reader-supported. Some links on this site, for example, to accommodation booking platforms, travel insurance, eSIMs, or banking services, are <strong>affiliate links</strong>. If you click one and make a purchase, we may earn a commission <strong>at no extra cost to you</strong>.</p>
     <h2>How this affects our content</h2>
@@ -262,7 +262,7 @@ ${updatedLine}`),
     <p>This disclosure is provided in accordance with U.S. Federal Trade Commission (FTC) guidelines. Questions? <a href="/contact">Contact us</a>.</p>
 ${updatedLine}`),
 
-  'privacy.html': page('privacy', 'Privacy Policy, The Nomad HQ', 'How The Nomad HQ collects, uses, and protects your information.', `    <h1>Privacy Policy</h1>
+  'privacy.html': page('privacy', 'Privacy Policy, The Nomad HQ', 'What The Nomad HQ collects and why, the cookies the banner controls, the third parties involved, your rights over the data and how long it is kept.', `    <h1>Privacy Policy</h1>
     <p class="lead">This policy explains what we collect and why. We keep it minimal.</p>
     <h2>Information we collect</h2>
     <ul>
@@ -281,7 +281,7 @@ ${updatedLine}`),
     <p>We may update this policy; material changes will be reflected by the date below. Questions? <a href="/contact">Contact us</a>.</p>
 ${privacyUpdatedLine}`),
 
-  'terms.html': page('terms', 'Terms of Service, The Nomad HQ', 'The terms governing your use of The Nomad HQ.', `    <h1>Terms of Service</h1>
+  'terms.html': page('terms', 'Terms of Service, The Nomad HQ', 'The terms for using The Nomad HQ: the site is informational, what we do not warrant, how affiliate links work, and the limits of our liability.', `    <h1>Terms of Service</h1>
     <p class="lead">By using The Nomad HQ, you agree to these terms.</p>
     <h2>Informational purposes only</h2>
     <p>The Nomad HQ provides information about cities, cost of living, visas, safety, and related topics for <strong>general informational purposes only</strong>. Data can change quickly and may contain errors. Nothing here is legal, financial, immigration, tax, or travel advice. <strong>Always verify critical details</strong>, especially visa rules, taxes, and safety, with official sources before making decisions.</p>

@@ -45,7 +45,7 @@ const html = `<!DOCTYPE html>
 ${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Best Cities for Digital Nomads: Rankings by Cost, WiFi, Safety and More | The Nomad HQ</title>
+  <title>Best Cities for Digital Nomads: Cost, WiFi and Safety | The Nomad HQ</title>
   <meta name="description" content="Data-driven rankings of the best digital nomad cities for cost of living, fast WiFi, safety and more, drawn from our index of ${S.cities} destinations.">
   <link rel="canonical" href="${BASE}/best">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
