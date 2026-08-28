@@ -81,12 +81,23 @@ const css = `
 /** Below this many rows a filter is furniture: you can see the whole list without it. */
 const MIN_ITEMS = 6;
 
+/**
+ * Below how many rendered rows a capped page still gets no filter.
+ *
+ * A page that shows three cards of a service and links to the child page for the rest is a
+ * signpost, and a search box over three cards is furniture. A page that shows 120 of 267 is a
+ * listing, and leaving it with no way to search was the actual complaint: 133 pages held six or
+ * more rows and offered nothing, the worst of them 120 rows deep.
+ */
+const CAPPED_MIN = 12;
+
 const bar = ({ id, fields, complete = true, items = Infinity }) => {
-  // A filter over a preview lies. 123 city pages show three cards of each service and link to the
-  // child page for the rest, so a search there would report "2 of 3" out of a set of 763. Where the
-  // page is not showing everything it counts, it gets no filter and the reader follows the link to
-  // the page that is, which has one.
-  if (!complete) return '';
+  // A filter over a preview used to lie, so capped pages got none at all. It does not lie: TOTAL is
+  // counted from the rendered .sf-item nodes, so the tally has always described exactly the rows
+  // the reader can see. Only the word "all" was wrong. So the filter is offered here too, and
+  // count()/js() say "on this page" instead, with the "Showing 120 of 267" line and its link to the
+  // full child page left where they were.
+  if (!complete && items < CAPPED_MIN) return '';
   if (items < MIN_ITEMS) return '';
   const usable = fields.filter((f) => f.search || (f.options && f.options.length > 0));
   if (!usable.length) return '';
@@ -105,9 +116,19 @@ const bar = ({ id, fields, complete = true, items = Infinity }) => {
     + `<button type="button" class="sf-reset" id="${id}Reset">Reset</button>\n      </div>`;
 };
 
-/** The tally line, and the region the script rewrites. */
-const count = ({ id, total, noun, nounPlural }) =>
-  `<p class="sf-count" id="${id}Count" role="status" aria-live="polite">Showing all <b>${total}</b> ${total === 1 ? esc(noun) : esc(nounPlural)}.</p>`;
+/**
+ * The tally line, and the region the script rewrites.
+ *
+ * `capped` is for a page showing part of what it counts. The number is the same either way, since
+ * it is the rendered rows in both cases; what changes is the claim made about it. "Showing all 120
+ * listings" on a page holding 120 of 267 is the only part of a capped filter that was ever untrue.
+ */
+const count = ({ id, total, noun, nounPlural, capped = false }) =>
+  `<p class="sf-count" id="${id}Count" role="status" aria-live="polite">`
+  + (capped
+    ? `All <b>${total}</b> ${total === 1 ? esc(noun) : esc(nounPlural)} on this page.`
+    : `Showing all <b>${total}</b> ${total === 1 ? esc(noun) : esc(nounPlural)}.`)
+  + `</p>`;
 
 /** What a reader sees when a combination has nothing in it. */
 const empty = ({ id, what }) => `<div class="sf-empty is-hidden" id="${id}Empty">
@@ -121,7 +142,7 @@ const empty = ({ id, what }) => `<div class="sf-empty is-hidden" id="${id}Empty"
  * Reads its fields from the DOM rather than from a config repeated in every generator: a control
  * declares which attribute it filters with data-sf, so adding a field is a markup change.
  */
-const js = ({ id, noun, nounPlural }) => `<script>
+const js = ({ id, noun, nounPlural, capped = false }) => `<script>
     (function(){
       var bar=document.getElementById('${id}Bar');
       if(!bar)return;
@@ -160,8 +181,10 @@ const js = ({ id, noun, nounPlural }) => `<script>
         });
         if(out){
           out.innerHTML = shown===TOTAL
-            ? 'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'${esc(noun)}':'${esc(nounPlural)}')+'.'
-            : 'Showing <b>'+shown+'</b> of '+TOTAL+' '+'${esc(nounPlural)}'+'.';
+            ? ${capped ? `'All <b>'+TOTAL+'</b> '+(TOTAL===1?'${esc(noun)}':'${esc(nounPlural)}')+' on this page.'`
+    : `'Showing all <b>'+TOTAL+'</b> '+(TOTAL===1?'${esc(noun)}':'${esc(nounPlural)}')+'.'`}
+            : ${capped ? `'<b>'+shown+'</b> of the '+TOTAL+' '+'${esc(nounPlural)}'+' on this page.'`
+    : `'Showing <b>'+shown+'</b> of '+TOTAL+' '+'${esc(nounPlural)}'+'.'`};
         }
         if(blank)blank.classList.toggle('is-hidden',shown>0);
       }

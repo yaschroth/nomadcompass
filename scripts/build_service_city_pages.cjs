@@ -241,6 +241,10 @@ for (const slug of slugs) {
       .sort((a, b) => b[1] - a[1] || LANGS[a[0]].localeCompare(LANGS[b[0]]))
       .map(([l, c]) => [l, LANGS[l] + ' (' + c + ')']);
   })();
+  // The cards this page actually renders, which on a page previewing its services is fewer than
+  // the providers it counts: Lisbon counts 103 and shows 26. The tally has to describe the rows the
+  // filter can reach, or it claims 103 sit on a page holding 26.
+  const rendered = groups.reduce((n, g) => n + ((single || !hasChild(g.cat)) ? g.rows.length : Math.min(PREVIEW, g.rows.length)), 0);
   const groupsHtml = groups.map((g) => {
     // A service with no page of its own has nowhere else to be read, so this page shows all of it.
     // Bangkok holds four hairdressers, its hairdressers page was held back under the word floor,
@@ -388,18 +392,20 @@ ${F.css}
         ${F.bar({
     id: 'svc',
     complete,
-    items: rows.length,
+    items: rendered,
     fields: [
-      { key: 'q', search: true, label: 'Name', placeholder: `Search ${rows.length} listings…` },
+      { key: 'q', search: true, label: 'Name', placeholder: `Search ${rendered} listings…` },
       { key: 'cat', label: 'Service', any: 'Any service', options: groups.map((g) => [g.cat, CATS[g.cat]]) },
       { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
     ],
   })}
-        ${complete ? F.count({ id: 'svc', total: rows.length, noun: 'listing', nounPlural: 'listings' }) : ''}
+        ${F.count({ id: 'svc', total: rendered, noun: 'listing', nounPlural: 'listings', capped: !complete })}
 
       ${groupsHtml}
 
-        ${complete ? F.empty({ id: 'svc', what: `This page holds every provider in ${esc(c.name)} whose working language we can trace to a published source.` }) : ''}
+        ${F.empty({ id: 'svc', what: complete
+    ? `This page holds every provider in ${esc(c.name)} whose working language we can trace to a published source.`
+    : `This page shows part of what we hold for ${esc(c.name)}; the service pages linked above hold the rest.` })}
       </section>
 
       <section class="svc-more">
@@ -411,7 +417,7 @@ ${F.css}
       </section>
     </div>
   </main>
-  ${complete ? F.js({ id: 'svc', noun: 'listing', nounPlural: 'listings' }) : ''}
+  ${F.js({ id: 'svc', noun: 'listing', nounPlural: 'listings', capped: !complete })}
   ${FOOTER}
 ${shell.bodyEnd}
   <script>

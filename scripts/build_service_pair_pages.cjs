@@ -541,11 +541,13 @@ ${shell.headEnd}
       { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
     ],
   })}
-      ${complete ? F.count({ id: 'svp', total: rendered, noun: 'listing', nounPlural: 'listings' }) : ''}
+      ${F.count({ id: 'svp', total: rendered, noun: 'listing', nounPlural: 'listings', capped: !complete })}
 
       ${listing}
 
-      ${complete ? F.empty({ id: 'svp', what: `This page holds every ${esc(P.catName(cat).replace(/s$/, ''))} in ${esc(city.name)} whose working language we can trace to a published source.` }) : ''}
+      ${F.empty({ id: 'svp', what: complete
+    ? `This page holds every ${esc(P.catName(cat).replace(/s$/, ''))} in ${esc(city.name)} whose working language we can trace to a published source.`
+    : `This page shows the first of the ${esc(P.catName(cat))} we hold in ${esc(city.name)}; the language pages linked beside each list hold the rest.` })}
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -563,7 +565,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>
     </div>
   </main>
-  ${complete ? F.js({ id: 'svp', noun: 'listing', nounPlural: 'listings' }) : ''}
+  ${F.js({ id: 'svp', noun: 'listing', nounPlural: 'listings', capped: !complete })}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>

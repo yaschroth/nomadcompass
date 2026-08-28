@@ -561,7 +561,7 @@
         <p class="sv-count"><b>13</b> providers across <b>5</b> services. Each service has its own page with the full list.</p>
 
         
-        
+        <p class="sf-count" id="svcCount" role="status" aria-live="polite">All <b>9</b> listings on this page.</p>
 
       <section class="svc-group sf-group" data-cat="doctor" id="svc-doctor">
           <h2 class="svc-group-head"><span class="svc-group-ico"><svg class="nh-icon nh-icon-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></span><a href="/services/lima/doctors">Doctors &amp; clinics</a><span class="svc-group-n">7</span></h2>
@@ -729,7 +729,10 @@
           
         </section>
 
-        
+        <div class="sf-empty is-hidden" id="svcEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page shows part of what we hold for Lima; the service pages linked above hold the rest. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
       </section>
 
       <section class="svc-more">
@@ -741,7 +744,71 @@
       </section>
     </div>
   </main>
-  
+  <script>
+    (function(){
+      var bar=document.getElementById('svcBar');
+      if(!bar)return;
+      var out=document.getElementById('svcCount'),blank=document.getElementById('svcEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'All <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+' on this page.'
+            : '<b>'+shown+'</b> of the '+TOTAL+' '+'listings'+' on this page.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svcReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

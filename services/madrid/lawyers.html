@@ -544,8 +544,12 @@
       <nav class="svp-langbar sb-chips" aria-label="Languages on this page"><a class="sb-chip" href="#lang-en"><span class="sb-chip-label">English</span><span class="sb-chip-n">80</span></a><a class="sb-chip" href="#lang-fr"><span class="sb-chip-label">French</span><span class="sb-chip-n">52</span></a><a class="sb-chip" href="#lang-de"><span class="sb-chip-label">German</span><span class="sb-chip-n">39</span></a><a class="sb-chip" href="#lang-it"><span class="sb-chip-label">Italian</span><span class="sb-chip-n">28</span></a><a class="sb-chip" href="#lang-pt"><span class="sb-chip-label">Portuguese</span><span class="sb-chip-n">5</span></a><a class="sb-chip" href="#lang-ar"><span class="sb-chip-label">Arabic</span><span class="sb-chip-n">4</span></a><a class="sb-chip" href="#lang-ru"><span class="sb-chip-label">Russian</span><span class="sb-chip-n">2</span></a><a class="sb-chip" href="#lang-no"><span class="sb-chip-label">Norwegian</span><span class="sb-chip-n">2</span></a><a class="sb-chip" href="#lang-nl"><span class="sb-chip-label">Dutch</span><span class="sb-chip-n">2</span></a></nav>
       <p class="ymyl-note">This is a directory, not legal or financial advice. Being listed here says nothing about the quality or the price of the work, and we take no fee from anyone on this page.</p>
 
-      
-      
+      <div class="sf-bar" id="svpBar">
+        <div class="sf-field sf-field-q"><label for="svp-q">Name</label><input type="search" id="svp-q" data-sf="q" placeholder="Search 122 listings…" autocomplete="off"></div>
+        <div class="sf-field"><label for="svp-lang">Language</label><select id="svp-lang" data-sf="lang"><option value="all">Any language</option><option value="en">English (80)</option><option value="fr">French (52)</option><option value="de">German (39)</option><option value="it">Italian (28)</option><option value="pt">Portuguese (5)</option><option value="ar">Arabic (4)</option><option value="nl">Dutch (2)</option><option value="no">Norwegian (2)</option><option value="ru">Russian (2)</option><option value="zh">Chinese (1)</option><option value="ja">Japanese (1)</option><option value="pl">Polish (1)</option><option value="ro">Romanian (1)</option><option value="sv">Swedish (1)</option></select></div>
+        <button type="button" class="sf-reset" id="svpReset">Reset</button>
+      </div>
+      <p class="sf-count" id="svpCount" role="status" aria-live="polite">All <b>214</b> listings on this page.</p>
 
       <section class="svp-lang sf-group" id="lang-en">
           <h2>English-speaking lawyers in Madrid<span class="svp-lang-n">80</span></h2>
@@ -1316,7 +1320,10 @@
           
         </section>
 
-      
+      <div class="sf-empty is-hidden" id="svpEmpty">
+        <p>Nothing matches that combination.</p>
+        <p>This page shows the first of the lawyers we hold in Madrid; the language pages linked beside each list hold the rest. If you know a provider that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
+      </div>
 
       <div class="svp-prose">
         <h2>Where these came from</h2>
@@ -1343,7 +1350,71 @@
       </div>
     </div>
   </main>
-  
+  <script>
+    (function(){
+      var bar=document.getElementById('svpBar');
+      if(!bar)return;
+      var out=document.getElementById('svpCount'),blank=document.getElementById('svpEmpty');
+      var items=[].slice.call(document.querySelectorAll('.sf-item'));
+      var groups=[].slice.call(document.querySelectorAll('.sf-group'));
+      var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
+      if(!items.length)return;
+      var TOTAL=items.length;
+      // A token list, so one attribute can hold several values: data-cats="doctor dentist".
+      function holds(el,key,v){
+        var raw=el.getAttribute('data-'+key);
+        if(raw===null)return false;
+        return (' '+raw+' ').indexOf(' '+v+' ')>-1;
+      }
+      function render(){
+        var terms=[];
+        controls.forEach(function(c){
+          var v=(c.value||'').trim();
+          if(!v||v==='all')return;
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+        });
+        var shown=0;
+        items.forEach(function(el){
+          var ok=terms.every(function(t){
+            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            return holds(el,t.key,t.v);
+          });
+          el.classList.toggle('is-hidden',!ok);
+          if(ok)shown++;
+        });
+        // A country heading over nothing is worse than no heading: it reads as an empty country.
+        groups.forEach(function(g){
+          var any=g.querySelector('.sf-item:not(.is-hidden)');
+          g.classList.toggle('is-hidden',!any);
+        });
+        if(out){
+          out.innerHTML = shown===TOTAL
+            ? 'All <b>'+TOTAL+'</b> '+(TOTAL===1?'listing':'listings')+' on this page.'
+            : '<b>'+shown+'</b> of the '+TOTAL+' '+'listings'+' on this page.';
+        }
+        if(blank)blank.classList.toggle('is-hidden',shown>0);
+      }
+      controls.forEach(function(c){
+        c.addEventListener('input',render);
+        c.addEventListener('change',render);
+      });
+      // The tally is rendered once at load from the same count the filter uses. A pair page lists a
+      // provider under each language they speak, so its 27 providers are 32 cards, and a
+      // server-rendered "27" would have been contradicted by the first keystroke.
+      render();
+      document.getElementById('svpReset').addEventListener('click',function(){
+        controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        render();
+      });
+      // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
+      var qs=new URLSearchParams(location.search),touched=false;
+      controls.forEach(function(c){
+        var v=qs.get(c.getAttribute('data-sf'));
+        if(v){ c.value=v; touched=true; }
+      });
+      if(touched)render();
+    })();
+  </script>
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>

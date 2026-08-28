@@ -497,12 +497,14 @@ ${shell.headEnd}
       { key: 'lang', label: 'Also speaks', any: 'Any language', options: ALSO_SPEAKS },
     ],
   })}
-      ${pageCount < 2 ? F.count({ id: 'svp', total: shown.length, noun: 'listing', nounPlural: 'listings' }) : ''}
+      ${F.count({ id: 'svp', total: shown.length, noun: 'listing', nounPlural: 'listings', capped: pageCount >= 2 })}
 
       <div class="sv-grid">
         ${cards}
       </div>
-      ${pageCount < 2 ? F.empty({ id: 'svp', what: `This page holds every ${esc(langName)}-speaking ${esc(P.catName(cat).replace(/s$/, ''))} we can source in ${esc(city.name)}.` }) : ''}
+      ${F.empty({ id: 'svp', what: pageCount < 2
+    ? `This page holds every ${esc(langName)}-speaking ${esc(P.catName(cat).replace(/s$/, ''))} we can source in ${esc(city.name)}.`
+    : `This is page ${pageNo} of ${pageCount}; the others hold the rest of the ${esc(langName)}-speaking ${esc(P.catName(cat))} in ${esc(city.name)}.` })}
       ${pager}
 
       <div class="svp-prose">
@@ -522,7 +524,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>
     </div>
   </main>
-  ${pageCount < 2 ? F.js({ id: 'svp', noun: 'listing', nounPlural: 'listings' }) : ''}
+  ${F.js({ id: 'svp', noun: 'listing', nounPlural: 'listings', capped: pageCount >= 2 })}
   ${shell.footer}
 ${shell.bodyEnd}
 </body>
