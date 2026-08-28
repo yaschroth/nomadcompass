@@ -60,6 +60,9 @@ const STEPS = [
   ['build', 'build_service_city_lang_pages.cjs', 'the overflow of a big language section, on a page of its own'],
   ['build', 'build_service_pair_pages.cjs', 'again, now that the language pages exist to link to'],
   ['build', 'build_service_city_pages.cjs', 'city pages, which link to the pages above'],
+  // After the city pages, because it links to them and to the pair and city-lang pages, and reads
+  // their manifests to point at the most specific page that exists rather than guessing a URL.
+  ['build', 'build_service_country_pages.cjs', 'the country axis: /services/greece, and the service and language under it'],
   ['build', 'apply_city_services_link.cjs', 'the links from cities/ into the directory'],
   ['sweep', 'apply_analytics.cjs', ''],
   ['sweep', 'apply_skip_link.cjs', ''],
@@ -67,7 +70,7 @@ const STEPS = [
   ['sweep', 'apply_nav_search.cjs', ''],
   ['sweep', 'apply_footer_legal.cjs', ''],
   ['sweep', 'apply_entity_schema.cjs', 'must be the last writer'],
-  ['build', 'generate_sitemap.cjs', 'reads the four manifests'],
+  ['build', 'generate_sitemap.cjs', 'reads the seven manifests'],
   ['gate', 'check_parsers.cjs', 'the readers still read their frozen pages the same way'],
   ['gate', 'check_service_pages.cjs', ''],
   ['gate', 'check_service_dupes.cjs', ''],

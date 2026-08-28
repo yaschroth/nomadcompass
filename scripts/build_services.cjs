@@ -270,6 +270,37 @@ const LANGUAGE_TILES = (() => {
     .join('');
 })();
 
+/**
+ * The country tiles, which reuse the language tiles' markup and CSS exactly.
+ *
+ * Every query Search Console returned for this directory is <service> in <place>, so country is the
+ * axis a reader arrives with just as often as language. It reads the country manifest, so on a
+ * first run after the country pages appear this block lags by one rebuild, the same way the
+ * language tiles do and for the same reason: this generator runs before the one that writes them.
+ */
+const COUNTRY_TILES = (() => {
+  const f = path.join(ROOT, 'data', 'service-country-pages.json');
+  if (!fs.existsSync(f)) return '';
+  const iso = {};
+  const cslug = (x) => String(x).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  Object.values(CITY).forEach((c) => { if (c.country && c.iso) iso[cslug(c.country)] = c.iso; });
+  return JSON.parse(fs.readFileSync(f, 'utf8'))
+    .filter((x) => x.kind === 'country')
+    .sort((a, b) => b.n - a.n || b.cities - a.cities)
+    .map((c) => {
+      const code = iso[c.country];
+      const flag = code && fs.existsSync(path.join(ROOT, 'assets', 'flags', code + '.svg'))
+        ? '<img class="sv-lg-flag" src="/assets/flags/' + code + '.svg" alt="" width="20" height="15" loading="lazy">'
+        : '';
+      const name = c.h1.replace(/^Services in /, '').replace(/, city by city$/, '');
+      return '<a class="sv-lg" href="' + c.url + '"><span class="sv-lg-name">' + flag + esc(name)
+        + '</span><span class="sv-lg-stat"><b>' + c.n.toLocaleString('en-US') + '</b><small>in ' + c.cities
+        + (c.cities === 1 ? ' city' : ' cities') + '</small></span></a>';
+    })
+    .join('');
+})();
+
 // The nav is not built here. apply_tools_nav.cjs owns it, and a locally templated copy lost the
 // Tools dropdown on every rebuild, which is one of the features _safe_write.cjs guards: the write
 // was refused until --force was passed. Lifting it means this generator emits whatever the sweep
@@ -576,6 +607,11 @@ ${shell.headEnd}
         <h2>Browse by service</h2>
         <div class="sv-hubs-grid">${SERVICE_HUBS}</div>
       </nav>
+${COUNTRY_TILES ? `      <nav class="sv-lgs" id="by-country" aria-label="Browse by country">
+        <h2>Browse by country</h2>
+        <p class="sv-lg-lede">Where the destination is what you know first. These are the countries the directory covers across enough cities for a page of their own.</p>
+        <div class="sv-lgs-grid">${COUNTRY_TILES}</div>
+      </nav>` : ''}
 ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Browse by language">
         <h2>Browse by language</h2>
         <p class="sv-lg-lede">The language is usually what you arrive knowing. These are the ones the directory covers across enough cities to be worth a page of their own.</p>

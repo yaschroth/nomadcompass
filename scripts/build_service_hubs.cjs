@@ -29,6 +29,14 @@ const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 
 const esc = P.esc;
+
+const COUNTRY_PAGES = new Set((() => {
+  const f = path.join(ROOT, 'data', 'service-country-pages.json');
+  if (!fs.existsSync(f)) return [];
+  return JSON.parse(fs.readFileSync(f, 'utf8'))
+    .filter((x) => x.kind === 'country-service').map((x) => x.country + '|' + x.service);
+})());
+
 const CHILDREN = new Set();
 {
   const f = path.join(ROOT, 'data', 'service-pair-pages.json');
@@ -119,7 +127,7 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
     const slugs = byCountry[country].slice().sort((a, b) => rowsFor(b).n - rowsFor(a).n || M.cities[a].name.localeCompare(M.cities[b].name));
     const total = slugs.reduce((s, x) => s + rowsFor(x).n, 0);
     return `<section class="svh-country sf-group">
-          <h2>${esc(country)}<span class="svh-n">${total} in ${slugs.length} ${slugs.length === 1 ? 'city' : 'cities'}</span></h2>
+          <h2>${COUNTRY_PAGES.has(B.slugify(country) + '|' + cat) ? '<a href="/services/' + B.slugify(country) + '/' + M.SERVICE_SLUGS[cat] + '">' + esc(country) + '</a>' : esc(country)}<span class="svh-n">${total} in ${slugs.length} ${slugs.length === 1 ? 'city' : 'cities'}</span></h2>
           <div class="sb-grid">
         ${slugs.map((slug) => {
     const p = rowsFor(slug);

@@ -87,6 +87,15 @@ add('/legal-notice', '0.2', 'yearly');
   }
   // A language on its own, the axis a reader usually arrives with. Ranked above the crossings
   // because it is the entry point the directory links to from its own index.
+  // The country axis: /services/greece, /services/greece/lawyers, and the language under it.
+  // Ranked with the language pages because it is the same kind of index and answers the query
+  // shape Search Console actually returns, "<service> in <place>".
+  const countryManifest = path.join(ROOT, 'data', 'service-country-pages.json');
+  if (fs.existsSync(countryManifest)) {
+    const cs = JSON.parse(fs.readFileSync(countryManifest, 'utf8')).filter((p) => p.indexable);
+    for (const p of cs.sort((a, b) => a.url.localeCompare(b.url))) add(p.url, '0.8', 'monthly');
+    console.log('  services: ' + cs.length + ' country pages added');
+  }
   const languageManifest = path.join(ROOT, 'data', 'service-language-pages.json');
   if (fs.existsSync(languageManifest)) {
     const ls = JSON.parse(fs.readFileSync(languageManifest, 'utf8')).filter((p) => p.indexable);

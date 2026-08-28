@@ -188,10 +188,15 @@ const cardHead = ({ name, sub, n, unit }) => `<span class="sb-head">`
   + `<span class="sb-count"><b>${esc(n)}</b>${unit ? `<small>${esc(unit)}</small>` : ''}</span>`
   + `</span>`;
 
-/** The tray under it: what this is, then the thing itself. */
+/**
+ * The tray under it: what this is, then the thing itself.
+ *
+ * `inner` is optional. A caller passing an eyebrow and nothing else used to concatenate undefined
+ * and print it, which is what "Listed here / undefined" was on every tile of the country pages.
+ */
 const tray = (eyebrow, inner) => `<span class="sb-tray">`
   + (eyebrow ? `<span class="sb-eyebrow">${esc(eyebrow)}</span>` : '')
-  + inner + `</span>`;
+  + (inner || '') + `</span>`;
 
 /** A row of language chips, with a "+n" for whatever did not fit. */
 const langChips = (pairs, cap = 3) => {
