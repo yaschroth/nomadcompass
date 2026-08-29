@@ -69,6 +69,7 @@ const STEPS = [
   ['sweep', 'apply_tools_nav.cjs', ''],
   ['sweep', 'apply_nav_search.cjs', ''],
   ['sweep', 'apply_footer_legal.cjs', ''],
+  ['sweep', 'apply_photo_credit.cjs', 'names the photographer of every CC-licensed city photo'],
   ['sweep', 'apply_entity_schema.cjs', 'must be the last writer'],
   ['build', 'generate_sitemap.cjs', 'reads the seven manifests'],
   ['gate', 'check_parsers.cjs', 'the readers still read their frozen pages the same way'],
@@ -78,6 +79,7 @@ const STEPS = [
   ['gate', 'check_site_numbers.cjs', ''],
   ['gate', 'check_css_tokens.cjs', 'a var() with no definition and no fallback drops the whole declaration'],
   ['gate', 'check_prose_style.cjs', 'no em-dashes, and every price in USD'],
+  ['gate', 'check_photo_credit.cjs', 'a licensed image is never shown without its photographer'],
   ['gate', 'check_meta.cjs', 'every page has its own title and description, both in budget'],
   ['gate', 'verify_service_links.cjs --new-only', 'fetches the links a data change added, and only those'],
 ];
