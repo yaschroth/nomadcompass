@@ -66,6 +66,38 @@ for (const { abs, rel } of pages) {
     errors.push(rel + ': renders ' + cards + ' cards but says '
       + wrong.map(([w, n]) => n + ' in the ' + w).join(' and '));
   }
+
+  /**
+   * Every dropdown option, against the cards it would actually select.
+   *
+   * Two failures, both found by a reader on /services/madrid/lawyers. The menu offered
+   * "Polish (1)" when no card on the page was Polish, so choosing it emptied the list, and
+   * "English (80)" over 43 English cards. Both came from counting the city instead of the page.
+   * On the hubs the same menu counted providers while the cards are cities, so "English (2099)"
+   * narrowed to 235 tiles: two true numbers measuring different things, which is worse than one
+   * wrong one. An option that can only return nothing is the serious half of this.
+   */
+  for (const sel of body.matchAll(/<select id="[^"]+" data-sf="([^"]+)"[^>]*>([\s\S]*?)<\/select>/g)) {
+    const key = sel[1];
+    const per = {};
+    for (const it of body.matchAll(/class="[^"]*\b(?:sf-item|sv-ix)\b[^"]*"([^>]*)>/g)) {
+      const m = it[1].match(new RegExp('data-' + key + '="([^"]*)"'));
+      if (m) m[1].split(/\s+/).forEach((v) => { if (v) per[v] = (per[v] || 0) + 1; });
+    }
+    for (const opt of sel[2].matchAll(/<option value="([^"]+)">([^<]*)<\/option>/g)) {
+      if (opt[1] === 'all') continue;
+      const hits = per[opt[1]] || 0;
+      const label = opt[2].replace(/&amp;/g, '&');
+      if (hits === 0) {
+        errors.push(rel + ': the ' + key + ' menu offers "' + label + '", which matches no card on the page');
+        continue;
+      }
+      const says = label.match(/\((\d[\d,]*)\)/);
+      if (says && parseInt(says[1].replace(/,/g, ''), 10) !== hits) {
+        errors.push(rel + ': the ' + key + ' menu says "' + label + '" but selecting it shows ' + hits);
+      }
+    }
+  }
 }
 
 console.log('FILTER COUNT GATE  (the page agrees with itself about how long its list is)\n');

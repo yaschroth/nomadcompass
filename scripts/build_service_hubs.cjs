@@ -116,7 +116,25 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   // The filter's language menu is every non-local language actually recorded for this service, not
   // only the six named in the standfirst: a menu that stops at six is a filter that cannot find the
   // seventh.
-  const LANG_FILTER = Object.entries(langTotals)
+  /**
+   * The menu counts CITIES, because the cards are cities and the tally under it says cities.
+   *
+   * It used langTotals, which counts providers, so /services/lawyers offered "English (2099)" and
+   * then narrowed to 235 tiles. Both numbers are true and they measure different things, which is
+   * the worst version: a reader picks 2,099 and is shown 235 with no explanation of either. The
+   * provider figure is the right one for the standfirst, which still uses langTotals, and the wrong
+   * one for a control whose result is a list of cities.
+   */
+  const langCities = {};
+  svc.cities.forEach((slug) => {
+    const local = M.LOCAL[M.cities[slug].country];
+    const seen = new Set();
+    rowsFor(slug).rows.forEach((r) => r.languages.forEach((l) => {
+      if (l !== local && M.LANGS[l]) seen.add(l);
+    }));
+    seen.forEach((l) => { langCities[l] = (langCities[l] || 0) + 1; });
+  });
+  const LANG_FILTER = Object.entries(langCities)
     .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
     .map(([l, n]) => [l, P.langName(l) + ' (' + n + ')']);
 

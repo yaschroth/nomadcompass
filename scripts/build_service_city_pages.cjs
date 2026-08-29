@@ -231,12 +231,24 @@ for (const slug of slugs) {
   // tally about a preview. 123 of the 329 cities are in that state and get no filter; the child
   // page they point at has one.
   const complete = groups.every((g) => single || !hasChild(g.cat));
+  /** The rows that actually become cards: whole groups, or the preview where a child page holds the rest. */
+  const renderedRows = groups.flatMap((g) => ((single || !hasChild(g.cat)) ? g.rows : g.rows.slice(0, PREVIEW)));
+
+  /**
+   * The language menu, counted over the cards on the page rather than over the city.
+   *
+   * Counted over `rows` it described a set the filter cannot reach. Alicante offered "English (77)"
+   * on a page holding 9 English cards, and "German (28)", "Italian (3)" and "Danish (1)" where the
+   * page has none at all, so those three choices could only ever empty the list.
+   */
   const LANG_FILTER = (() => {
     const n = {};
     // The city's own language sits on nearly every row, so it is not a choice. Same reason the
     // headline is worked out without it.
     const localHere = LOCAL[c.country];
-    rows.forEach((r) => r.languages.forEach((l) => { if (LANGS[l] && l !== localHere) n[l] = (n[l] || 0) + 1; }));
+    renderedRows.forEach((r) => r.languages.forEach((l) => {
+      if (LANGS[l] && l !== localHere) n[l] = (n[l] || 0) + 1;
+    }));
     return Object.entries(n)
       .sort((a, b) => b[1] - a[1] || LANGS[a[0]].localeCompare(LANGS[b[0]]))
       .map(([l, c]) => [l, LANGS[l] + ' (' + c + ')']);

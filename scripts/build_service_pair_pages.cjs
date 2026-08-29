@@ -372,14 +372,34 @@ for (const page of ordered) {
     ? sections.reduce((n, s) => n + Math.min(s.rows.length, childOf(s) ? TEASER : SECTION_CAP), 0)
     : pair.rows.length;
   const complete = !sections || sections.every((s) => !childOf(s) && s.rows.length <= SECTION_CAP);
-  // Every language on the page, for the menu, with the number of providers behind each.
+  /**
+   * The rows that actually become cards, one entry per card.
+   *
+   * A provider appears once per language section it belongs to, so this is longer than the list of
+   * providers, and each section is cut to its cap. This is the set the filter operates on, so it is
+   * the set the menu has to be built from.
+   */
+  const renderedRows = sections
+    ? sections.flatMap((s) => s.rows.slice(0, childOf(s) ? TEASER : SECTION_CAP))
+    : pair.rows;
+
+  /**
+   * The language menu: every language on THIS PAGE, with the number of cards behind each.
+   *
+   * Built from pair.rows, it described the city rather than the page. On Madrid's lawyers it
+   * offered "English (80)" where 43 cards carry English, and it offered "Polish (1)" when no card
+   * on the page is Polish at all, so choosing it emptied the list. A menu entry that can only
+   * return nothing is worse than a missing one.
+   *
+   * The local language still stays out. It sits on 46 of Madrid's 47 cards, so as the first item it
+   * would be a choice that changes nothing, which is the same reason it stays out of the headline.
+   */
   const LANG_FILTER = (() => {
     const n = {};
-    // The local language is on nearly every row, so as the first item in the menu it is a choice
-    // that changes nothing: Alicante's lawyers are 32 of 32 Spanish. It stays out, the way it stays
-    // out of the hub's menu and the headline.
     const localHere = M.LOCAL[city.country];
-    pair.rows.forEach((r) => r.languages.forEach((l) => { if (l !== localHere) n[l] = (n[l] || 0) + 1; }));
+    renderedRows.forEach((r) => r.languages.forEach((l) => {
+      if (l !== localHere && M.LANGS[l]) n[l] = (n[l] || 0) + 1;
+    }));
     return Object.entries(n)
       .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
       .map(([l, c]) => [l, P.langName(l) + ' (' + c + ')']);
