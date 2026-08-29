@@ -1,144 +1,130 @@
 {
-  "_readme": "Provenance manifest. STANDING RULE: every factual claim we publish must trace to a PRIMARY source and be citable. Where no primary source exists, the claim must be TRIANGULATED across at least two independent sources, both recorded here. Anything else is tier 'editorial', which means it is our judgement, not a fact, and must be presented as such on the page. Enforced by scripts/check_provenance.cjs. Kept as a sidecar rather than a _meta key inside each dataset, because an extra key in CITY_CLIMATE or CITY_TZ would be read as a city by every consumer.",
-  "_tiers": {
-    "primary": "Taken directly from the body that produces or governs the data (a met agency, IANA, a government visa portal, the photographer's licence).",
-    "triangulated": "No usable primary source, so agreed across >=2 independent secondary sources, each listed in corroboration.",
-    "editorial": "Our own judgement. Not a fact. Must be labelled as opinion wherever it is shown."
-  },
-
-  "climate": {
-    "tier": "primary",
-    "source": "Open-Meteo Historical Weather API (ERA5 reanalysis)",
-    "sourceUrl": "https://open-meteo.com/en/docs/historical-weather-api",
-    "retrieved": "2026-08-06",
-    "method": "Daily 2019-2023 normals per city coordinate, averaged to monthly highs, lows and precipitation by scripts/build_city_climate.cjs.",
-    "coverage": "710 of 710 cities"
-  },
-
-  "timezones": {
-    "tier": "primary",
-    "source": "IANA Time Zone Database",
-    "sourceUrl": "https://www.iana.org/time-zones",
-    "retrieved": "2026-08-06",
-    "method": "Zone resolved from each city's coordinates with tz-lookup, then evaluated at runtime by the Intl API so DST is always current.",
-    "coverage": "710 of 710 cities"
-  },
-
-  "hero-images": {
-    "tier": "primary",
-    "source": "Wikimedia Commons file pages",
-    "sourceUrl": "https://commons.wikimedia.org/",
-    "retrieved": "2026-08-06",
-    "method": "Photographer, licence and file page recorded per image in images/cities/attribution.json and shown as a visible credit on the page. Only PD, CC0, CC BY and CC BY-SA accepted.",
-    "coverage": "713 images"
-  },
-
-  "numbeo-costs": {
-    "tier": "primary",
-    "source": "Numbeo cost-of-living index",
-    "sourceUrl": "https://www.numbeo.com/cost-of-living/",
-    "retrieved": "2026-08-05",
-    "method": "Component prices scraped per city in local currency exactly as Numbeo reports them, converted to USD at apply time. Numbeo is itself crowd-sourced, so it is primary only for the Numbeo index, not for ground truth.",
-    "coverage": "331 of 710 cities",
-    "knownLimits": "Numbeo sample sizes are small in less-visited cities and its 'last updated' date varies widely per city."
-  },
-
-  "visa": {
-    "tier": "triangulated",
-    "source": "Wikipedia 'Visa policy of X' cross-checked against official government portals",
-    "sourceUrl": "https://en.wikipedia.org/wiki/Category:Visa_policy_by_country",
-    "corroboration": [
-      "https://en.wikipedia.org/wiki/Category:Visa_policy_by_country",
-      "Official e-visa and immigration portals of the destination countries (evisacuba.cu, elsalvadorpei.migracion.gob.sv, snedai.com, and equivalents)"
-    ],
-    "retrieved": "2026-08-08",
-    "method": "Default rule established from the article lead first, exceptions layered on top, then every country sanity-checked against five known passports (DE/US/UK/IN/NG) before acceptance.",
-    "coverage": "15 of 117 destinations verified this way; the original 102 destinations predate this rule and their origin was never recorded",
-    "knownLimits": "UNVERIFIED BACKLOG: the 102 older destinations are not sourced. Mongolia's visa-free programme expires 2027-01-01 and Myanmar's visa-on-arrival entries are dated trials, so both need re-checking."
-  },
-
-  "city-elevations": {
-    "tier": "primary",
-    "source": "Open-Meteo Elevation API (Copernicus DEM GLO-90)",
-    "sourceUrl": "https://open-meteo.com/en/docs/elevation-api",
-    "retrieved": "2026-08-09",
-    "method": "Elevation sampled at each city's stored coordinate. Not published; used by scripts/check_data_sanity.cjs to catch island and region centroids that land on high ground.",
-    "coverage": "710 of 710 cities"
-  },
-
-  "city-scores": {
-    "tier": "editorial",
-    "source": "Our own assessment",
-    "method": "13 category scores assigned per city by editorial judgement. No measurement, no external index, no sample.",
-    "coverage": "710 of 710 cities",
-    "knownLimits": "This is the most visible number on the site: it drives the Nomad Score in the hero, every ranking, the compare tool and every share card. It is currently presented as if it were measured. Replacing it with sourced inputs (Numbeo crime index for safety, Ookla for internet, IQAir for air quality, Numbeo for cost) is the single highest-value provenance fix outstanding."
-  },
-
-  "cost-per-month": {
-    "tier": "editorial",
-    "source": "Numbeo for 331 cities, our own estimate for the rest",
-    "method": "Where Numbeo data exists the headline figure is reconciled against it; otherwise it is an editorial estimate.",
-    "coverage": "331 of 710 sourced, 379 estimated",
-    "knownLimits": "The 379 estimated figures are indistinguishable from the sourced ones on the page."
-  },
-
-  "guide-prose": {
-    "tier": "editorial",
-    "source": "Written from model knowledge, venue and neighbourhood names verified by search",
-    "method": "Seven sections per city. Venue names, districts and visa mechanics were checked during writing; the price ranges and internet speeds quoted in the prose were not individually sourced.",
-    "coverage": "61 cities have researched long-form sections; the remainder use the older generated text",
-    "knownLimits": "Contains specific figures (rent bands, coworking day passes, Mbps) that carry no citation."
-  },
-
-  "neighborhoods": {
-    "tier": "editorial",
-    "source": "Written from model knowledge, district names verified by search",
-    "method": "295 entries across 59 cities researched in 2026-08. Coordinates hand-placed from known landmarks and validated against the city centre, not geocoded.",
-    "coverage": "710 of 710 cities have a section; 295 entries are from the 2026-08 pass",
-    "knownLimits": "Coordinates are accurate to roughly a few hundred metres, fine for a map pin but not authoritative. Price levels are relative judgements."
-  },
-
-  "venues": {
-    "tier": "triangulated",
-    "source": "Google Maps ratings, mostly via aggregators that republish them, plus OpenStreetMap for location",
-    "sourceUrl": "https://nominatim.openstreetmap.org/",
-    "corroboration": [
-      "https://www.google.com/maps",
-      "https://nominatim.openstreetmap.org/"
-    ],
-    "retrieved": "2026-08-06",
-    "method": "Venues gated at a 4.0 published rating, then geo-checked against OpenStreetMap within 25km of the city centre. 65% resolve to an OSM record, 15% carry a verified official website, 20% rest on the research pass alone. Coworking spaces may instead be admitted on confirmed current operation without a rating.",
-    "coverage": "713 venue cards across 710 cities",
-    "knownLimits": "Most ratings came from aggregators mirroring Google rather than Google directly, because the search and scraper budgets ran out. A handful in the Sendai and Tashkent sets were conservative estimates rather than read values."
-  },
-
-  "service-languages": {
-    "tier": "primary",
-    "source": "The provider's own website, or an embassy list of physicians published by language",
-    "sourceUrl": "https://bangkok.diplo.de/th-de/service/aerzteliste-1506722",
-    "corroboration": [
-      "https://bangkok.diplo.de/th-de/service/aerzteliste-1506722",
-      "Each provider's own site, recorded per row as sourceUrl in data/service-languages.json"
-    ],
-    "retrieved": "2026-08-12",
-    "method": "Every row records the exact URL the language claim was read on and an evidence tier: official (a government or embassy list defined by working language), self-declared (the provider's own site), directory (a third-party aggregator only), or visited (we confirmed in person; unused so far). scripts/build_services.cjs refuses to build if any row lacks a sourceUrl, a known evidence tier, a known language or a real city slug. The tiers are printed on every card. scripts/verify_service_links.cjs re-fetches every url and sourceUrl and reports status, redirect target and page title, so a link that rots or starts pointing somewhere else is caught rather than assumed; the 2026-08-12 runs removed one row whose cited article did not contain the claim, dropped two invented domains, corrected a link that redirected to the wrong branch, and later dropped five more rows whose sources turned out to be a dead domain, a 404, an unreachable directory, or a site that never actually states a spoken language. The checker retries three times before calling a link dead, because a single transient failure once reported six healthy URLs as dead. One live site (vetinlisbon.pt) refuses Node's fetch entirely and was confirmed by hand.",
-    "coverage": "253 providers across 21 of 710 cities, 12 service types and 32 languages. 6 official, 131 self-declared, 116 directory. Chiang Mai 34, Tbilisi 30, Lisbon 19, Bangkok 18, Hanoi 16, Da Nang 16, Medellin 14, Ho Chi Minh City 14, Barcelona 11, Mexico City 11, Bali 10, Budapest 10, Belgrade 8, Dubai 8, Buenos Aires 7, Prague 6, Berlin 5, Warsaw 5, Cape Town 4, Kuala Lumpur 4, Tallinn 4. Coverage is 3 percent of the site's cities.",
-    "knownLimits": "THE EVIDENCE MIX SHIFTED ON 2026-08-12. An owner decision to grow volume via aggregator directories took the directory tier from 39 rows to 105, roughly half the set, so the average row is now weaker than when the dataset was 62 rows. Many directory rows rest on a ROSTER-LEVEL claim (\"the clinics we list speak English\") rather than a statement about the named business; each such row says so in its note. PRIMARY FOR THE CLAIM, NOT FOR FLUENCY. We source that a provider is stated to work in a language; we have not verified that it does, and no row carries the 'visited' tier. A hospital offering interpretation is counted under the languages it interprets, which is not the same as a doctor speaking them: Chiang Mai Ram and Thonglor Pet are interpreter desks, not multilingual clinicians. The 17 directory-tier rows rest on guides and aggregators that may sell placement, making them the weakest entries. Only Bangkok has official-tier rows. The US Consulate Chiang Mai health-facilities and legal-provider PDFs and the US Embassy Georgia mental-health resource PDF are all image-only or protected and could not be read; retrieving those would upgrade several rows and is the obvious next improvement. A Russian-language directory of Russian-speaking doctors in Georgia (needdoc.ru) is an unexploited language-defined source of the same kind. Coverage is a pilot, not a map of any city's real provision, so absence from this list means nothing."
-  },
-
-  "country-facts": {
-    "tier": "editorial",
-    "source": "Hand-authored",
-    "method": "Currency, language, mains voltage, tap water guidance, tipping norm, ride-hailing apps and emergency numbers written per country without a cited source.",
-    "coverage": "All countries in the dataset",
-    "knownLimits": "Emergency numbers and tap-water guidance are safety-relevant and should be moved to a primary source (ITU and each country's civil protection agency)."
-  },
-
-  "country-meta": {
-    "tier": "editorial",
-    "source": "Hand-authored",
-    "method": "Plug type letters per country, written without a cited source.",
-    "coverage": "All countries in the dataset",
-    "knownLimits": "IEC World Plugs is the obvious primary source and is not yet used."
-  }
+ "_readme": "Provenance manifest. STANDING RULE: every factual claim we publish must trace to a PRIMARY source and be citable. Where no primary source exists, the claim must be TRIANGULATED across at least two independent sources, both recorded here. Anything else is tier 'editorial', which means it is our judgement, not a fact, and must be presented as such on the page. Enforced by scripts/check_provenance.cjs. Kept as a sidecar rather than a _meta key inside each dataset, because an extra key in CITY_CLIMATE or CITY_TZ would be read as a city by every consumer.",
+ "_tiers": {
+  "primary": "Taken directly from the body that produces or governs the data (a met agency, IANA, a government visa portal, the photographer's licence).",
+  "triangulated": "No usable primary source, so agreed across >=2 independent secondary sources, each listed in corroboration.",
+  "editorial": "Our own judgement. Not a fact. Must be labelled as opinion wherever it is shown."
+ },
+ "climate": {
+  "tier": "primary",
+  "source": "Open-Meteo Historical Weather API (ERA5 reanalysis)",
+  "sourceUrl": "https://open-meteo.com/en/docs/historical-weather-api",
+  "retrieved": "2026-08-06",
+  "method": "Daily 2019-2023 normals per city coordinate, averaged to monthly highs, lows and precipitation by scripts/build_city_climate.cjs.",
+  "coverage": "710 of 710 cities"
+ },
+ "timezones": {
+  "tier": "primary",
+  "source": "IANA Time Zone Database",
+  "sourceUrl": "https://www.iana.org/time-zones",
+  "retrieved": "2026-08-06",
+  "method": "Zone resolved from each city's coordinates with tz-lookup, then evaluated at runtime by the Intl API so DST is always current.",
+  "coverage": "710 of 710 cities"
+ },
+ "hero-images": {
+  "tier": "primary",
+  "source": "Wikimedia Commons file pages",
+  "sourceUrl": "https://commons.wikimedia.org/",
+  "retrieved": "2026-08-06",
+  "method": "Photographer, licence and file page recorded per image in images/cities/attribution.json and shown as a visible credit on the page. Only PD, CC0, CC BY and CC BY-SA accepted.",
+  "coverage": "713 images"
+ },
+ "numbeo-costs": {
+  "tier": "primary",
+  "source": "Numbeo cost-of-living index",
+  "sourceUrl": "https://www.numbeo.com/cost-of-living/",
+  "retrieved": "2026-08-05",
+  "method": "Component prices scraped per city in local currency exactly as Numbeo reports them, converted to USD at apply time. Numbeo is itself crowd-sourced, so it is primary only for the Numbeo index, not for ground truth.",
+  "coverage": "330 of 710 cities",
+  "knownLimits": "Numbeo sample sizes are small in less-visited cities and its 'last updated' date varies widely per city."
+ },
+ "visa": {
+  "tier": "triangulated",
+  "source": "Wikipedia 'Visa policy of X' cross-checked against official government portals",
+  "sourceUrl": "https://en.wikipedia.org/wiki/Category:Visa_policy_by_country",
+  "corroboration": [
+   "https://en.wikipedia.org/wiki/Category:Visa_policy_by_country",
+   "Official e-visa and immigration portals of the destination countries (evisacuba.cu, elsalvadorpei.migracion.gob.sv, snedai.com, and equivalents)"
+  ],
+  "retrieved": "2026-08-08",
+  "method": "Default rule established from the article lead first, exceptions layered on top, then every country sanity-checked against five known passports (DE/US/UK/IN/NG) before acceptance.",
+  "coverage": "15 of 117 destinations verified this way; the original 102 destinations predate this rule and their origin was never recorded",
+  "knownLimits": "UNVERIFIED BACKLOG: the 102 older destinations are not sourced. Mongolia's visa-free programme expires 2027-01-01 and Myanmar's visa-on-arrival entries are dated trials, so both need re-checking."
+ },
+ "city-elevations": {
+  "tier": "primary",
+  "source": "Open-Meteo Elevation API (Copernicus DEM GLO-90)",
+  "sourceUrl": "https://open-meteo.com/en/docs/elevation-api",
+  "retrieved": "2026-08-09",
+  "method": "Elevation sampled at each city's stored coordinate. Not published; used by scripts/check_data_sanity.cjs to catch island and region centroids that land on high ground.",
+  "coverage": "710 of 710 cities"
+ },
+ "city-scores": {
+  "tier": "editorial",
+  "source": "Our own assessment",
+  "method": "13 category scores assigned per city by editorial judgement. No measurement, no external index, no sample.",
+  "coverage": "710 of 710 cities",
+  "knownLimits": "This is the most visible number on the site: it drives the Nomad Score in the hero, every ranking, the compare tool and every share card. It is currently presented as if it were measured. Replacing it with sourced inputs (Numbeo crime index for safety, Ookla for internet, IQAir for air quality, Numbeo for cost) is the single highest-value provenance fix outstanding."
+ },
+ "cost-per-month": {
+  "tier": "editorial",
+  "source": "Numbeo for 330 cities, our own estimate for the other 380",
+  "method": "Where Numbeo data exists the headline figure is reconciled against it; otherwise it is an editorial estimate.",
+  "coverage": "330 of 710 sourced, 380 estimated, each labelled on its own page",
+  "knownLimits": "The 380 estimated figures carry more uncertainty than the 330 sourced ones. Each city page now states which of the two it is, in a note under its Cost of Living heading; check_cost_basis.cjs is the gate. The page title and meta description still hedge with \"about\" rather than naming the basis, because they carry one figure and no room for the caveat."
+ },
+ "guide-prose": {
+  "tier": "editorial",
+  "source": "Written from model knowledge, venue and neighbourhood names verified by search",
+  "method": "Seven sections per city. Venue names, districts and visa mechanics were checked during writing; the price ranges and internet speeds quoted in the prose were not individually sourced.",
+  "coverage": "61 cities have researched long-form sections; the remainder use the older generated text",
+  "knownLimits": "Contains specific figures (rent bands, coworking day passes, Mbps) that carry no citation."
+ },
+ "neighborhoods": {
+  "tier": "editorial",
+  "source": "Written from model knowledge, district names verified by search",
+  "method": "295 entries across 59 cities researched in 2026-08. Coordinates hand-placed from known landmarks and validated against the city centre, not geocoded.",
+  "coverage": "710 of 710 cities have a section; 295 entries are from the 2026-08 pass",
+  "knownLimits": "Coordinates are accurate to roughly a few hundred metres, fine for a map pin but not authoritative. Price levels are relative judgements."
+ },
+ "venues": {
+  "tier": "triangulated",
+  "source": "Google Maps ratings, mostly via aggregators that republish them, plus OpenStreetMap for location",
+  "sourceUrl": "https://nominatim.openstreetmap.org/",
+  "corroboration": [
+   "https://www.google.com/maps",
+   "https://nominatim.openstreetmap.org/"
+  ],
+  "retrieved": "2026-08-06",
+  "method": "Venues gated at a 4.0 published rating, then geo-checked against OpenStreetMap within 25km of the city centre. 65% resolve to an OSM record, 15% carry a verified official website, 20% rest on the research pass alone. Coworking spaces may instead be admitted on confirmed current operation without a rating.",
+  "coverage": "713 venue cards across 710 cities",
+  "knownLimits": "Most ratings came from aggregators mirroring Google rather than Google directly, because the search and scraper budgets ran out. A handful in the Sendai and Tashkent sets were conservative estimates rather than read values."
+ },
+ "service-languages": {
+  "tier": "primary",
+  "source": "The provider's own website, or an embassy list of physicians published by language",
+  "sourceUrl": "https://bangkok.diplo.de/th-de/service/aerzteliste-1506722",
+  "corroboration": [
+   "https://bangkok.diplo.de/th-de/service/aerzteliste-1506722",
+   "Each provider's own site, recorded per row as sourceUrl in data/service-languages.json"
+  ],
+  "retrieved": "2026-08-12",
+  "method": "Every row records the exact URL the language claim was read on and an evidence tier: official (a government or embassy list defined by working language), self-declared (the provider's own site), directory (a third-party aggregator only), or visited (we confirmed in person; unused so far). scripts/build_services.cjs refuses to build if any row lacks a sourceUrl, a known evidence tier, a known language or a real city slug. The tiers are printed on every card. scripts/verify_service_links.cjs re-fetches every url and sourceUrl and reports status, redirect target and page title, so a link that rots or starts pointing somewhere else is caught rather than assumed; the 2026-08-12 runs removed one row whose cited article did not contain the claim, dropped two invented domains, corrected a link that redirected to the wrong branch, and later dropped five more rows whose sources turned out to be a dead domain, a 404, an unreachable directory, or a site that never actually states a spoken language. The checker retries three times before calling a link dead, because a single transient failure once reported six healthy URLs as dead. One live site (vetinlisbon.pt) refuses Node's fetch entirely and was confirmed by hand.",
+  "coverage": "253 providers across 21 of 710 cities, 12 service types and 32 languages. 6 official, 131 self-declared, 116 directory. Chiang Mai 34, Tbilisi 30, Lisbon 19, Bangkok 18, Hanoi 16, Da Nang 16, Medellin 14, Ho Chi Minh City 14, Barcelona 11, Mexico City 11, Bali 10, Budapest 10, Belgrade 8, Dubai 8, Buenos Aires 7, Prague 6, Berlin 5, Warsaw 5, Cape Town 4, Kuala Lumpur 4, Tallinn 4. Coverage is 3 percent of the site's cities.",
+  "knownLimits": "THE EVIDENCE MIX SHIFTED ON 2026-08-12. An owner decision to grow volume via aggregator directories took the directory tier from 39 rows to 105, roughly half the set, so the average row is now weaker than when the dataset was 62 rows. Many directory rows rest on a ROSTER-LEVEL claim (\"the clinics we list speak English\") rather than a statement about the named business; each such row says so in its note. PRIMARY FOR THE CLAIM, NOT FOR FLUENCY. We source that a provider is stated to work in a language; we have not verified that it does, and no row carries the 'visited' tier. A hospital offering interpretation is counted under the languages it interprets, which is not the same as a doctor speaking them: Chiang Mai Ram and Thonglor Pet are interpreter desks, not multilingual clinicians. The 17 directory-tier rows rest on guides and aggregators that may sell placement, making them the weakest entries. Only Bangkok has official-tier rows. The US Consulate Chiang Mai health-facilities and legal-provider PDFs and the US Embassy Georgia mental-health resource PDF are all image-only or protected and could not be read; retrieving those would upgrade several rows and is the obvious next improvement. A Russian-language directory of Russian-speaking doctors in Georgia (needdoc.ru) is an unexploited language-defined source of the same kind. Coverage is a pilot, not a map of any city's real provision, so absence from this list means nothing."
+ },
+ "country-facts": {
+  "tier": "editorial",
+  "source": "Hand-authored",
+  "method": "Currency, language, mains voltage, tap water guidance, tipping norm, ride-hailing apps and emergency numbers written per country without a cited source.",
+  "coverage": "All countries in the dataset",
+  "knownLimits": "Emergency numbers and tap-water guidance are safety-relevant and should be moved to a primary source (ITU and each country's civil protection agency)."
+ },
+ "country-meta": {
+  "tier": "editorial",
+  "source": "Hand-authored",
+  "method": "Plug type letters per country, written without a cited source.",
+  "coverage": "All countries in the dataset",
+  "knownLimits": "IEC World Plugs is the obvious primary source and is not yet used."
+ }
 }

@@ -46,11 +46,13 @@ const STEPS = [
   ['"Best of" links, same section (apply_best_links)', 'apply_best_links.cjs'],
   ['head-to-head links, same section (apply_vs_links)', 'apply_vs_links.cjs'],
   ['nav search box (apply_nav_search)', 'apply_nav_search.cjs'],
+  ['cost basis (apply_cost_basis)', 'apply_cost_basis.cjs'],
   ['photo credit (apply_photo_credit)', 'apply_photo_credit.cjs'],
   ['structured data (apply_entity_schema, must run last)', 'apply_entity_schema.cjs'],
   ['analytics (apply_analytics)', 'apply_analytics.cjs'],
   ['search snippets (check_meta, a gate)', 'check_meta.cjs'],
   ['photo credit (check_photo_credit, a gate)', 'check_photo_credit.cjs'],
+  ['cost basis (check_cost_basis, a gate)', 'check_cost_basis.cjs'],
 ];
 STEPS.forEach(([label, script, args], i) => {
   console.log((i ? '\n' : '') + (i + 1) + '/' + STEPS.length + '  ' + label + '...');
