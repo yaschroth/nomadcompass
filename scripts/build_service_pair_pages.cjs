@@ -395,8 +395,19 @@ for (const page of ordered) {
    * would be a choice that changes nothing, which is the same reason it stays out of the headline.
    */
   const LANG_FILTER = (() => {
-    const n = {};
     const localHere = M.LOCAL[city.country];
+    // On a sectioned page a card carries only its section's language, so the menu is one entry per
+    // section and the number is that section's card count. Counting the languages of the rows
+    // instead would promise more than selecting it can show.
+    if (sections) {
+      return sections
+        .filter((s) => s.lang && s.lang !== localHere && M.LANGS[s.lang])
+        .map((s) => [s.lang, Math.min(s.rows.length, childOf(s) ? TEASER : SECTION_CAP)])
+        .filter(([, n]) => n > 0)
+        .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
+        .map(([l, c]) => [l, P.langName(l) + ' (' + c + ')']);
+    }
+    const n = {};
     renderedRows.forEach((r) => r.languages.forEach((l) => {
       if (l !== localHere && M.LANGS[l]) n[l] = (n[l] || 0) + 1;
     }));
@@ -412,7 +423,12 @@ for (const page of ordered) {
           <div class="sv-grid">
         ${(() => {
     const kid = s.lang ? CITY_LANG_PAGES.get(city.id + '|' + cat + '|' + s.lang) : null;
-    return s.rows.slice(0, kid ? TEASER : SECTION_CAP).map((r) => P.card(r, { icon, showCategory: false })).join('\n        ');
+    // Each card is tagged with the language of the section holding it, not with everything its
+    // provider speaks, so the language control selects a section rather than scattering matches
+    // across all of them. Line 438 below is the unsectioned layout and keeps the full list.
+    return s.rows.slice(0, kid ? TEASER : SECTION_CAP)
+      .map((r) => P.card(r, { icon, showCategory: false, lang: s.lang || M.LOCAL[pair.country] || '' }))
+      .join('\n        ');
   })()}
           </div>
           ${(() => {

@@ -251,7 +251,19 @@ function card(p, opts) {
     : esc(p.name);
   const meta = [o.showCategory === false ? '' : esc(M.CATS[p.category]), p.area ? esc(p.area) : '']
     .filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card sf-item sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+  /**
+   * What the language filter matches this card on.
+   *
+   * Normally every language the provider works in. But a page grouped INTO language sections
+   * renders the same provider once per section, and each of those cards is that provider as an
+   * X-speaking lawyer, not the provider in general. Tagged with all their languages, a firm working
+   * in Arabic and English matched an Arabic filter from inside the English section, so choosing
+   * Arabic on /services/madrid/lawyers left the page headed "English-speaking lawyers in Madrid".
+   * `o.lang` lets such a page tag each copy with the section it belongs to. Everything else keeps
+   * the full list, which is right where cards are grouped by category rather than by language.
+   */
+  const filterLangs = o.lang ? o.lang : p.languages.join(' ');
+  return `<article class="sv-card sf-item sv-c-${p.category}" data-cat="${p.category}" data-lang="${filterLangs}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${o.icon || ''}</span>
           <div>
