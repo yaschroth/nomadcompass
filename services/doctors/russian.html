@@ -502,7 +502,16 @@
     .sf-reset:hover { color:var(--color-ink); }
     .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
     .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
-    .sf-item.is-hidden, .sf-group.is-hidden { display:none; }
+    /* !important because this is a state class whose whole job is to beat a layout rule, and on
+       every page built from city tiles it was losing. service_bento sets the tile's layout with
+       .sb-card:not(.btn):not(.nav-link) at display grid, three class-level selectors against this
+       rule's two, so the grid won on specificity no matter what order the two blocks were in and
+       a marked card stayed on screen. Selecting German on /services/lawyers marked 177 of 255
+       cards hidden and displayed all 177 of them.
+       It looked like it worked, which is why it lasted: a search that matches nothing empties every
+       country block, the blocks hide themselves, and the page goes blank as expected. Only a filter
+       that matches SOME rows revealed it, and then only by a handful of tiles in mixed blocks. */
+    .sf-item.is-hidden, .sf-group.is-hidden { display:none !important; }
     .sf-empty { margin:var(--space-8) 0; padding:1.4rem 1.5rem; background:var(--color-sand,#f6f1e7);
       border:1px solid var(--color-sand-dark,#e3d9c6); border-radius:var(--radius-md,8px); }
     .sf-empty p { margin:0 0 .5rem; color:var(--color-charcoal,#334155); line-height:1.6; }
