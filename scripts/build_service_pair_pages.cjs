@@ -356,13 +356,22 @@ for (const page of ordered) {
   // Whether every provider this page counts is actually on it. A section is cut short either
   // because a city-and-language child page exists to hold the rest, or because it is over the cap.
   // The filter is only offered when nothing is cut, so a tally can never describe a preview.
-  // The number of CARDS the page renders, which on a sectioned page is more than the number of
-  // providers: someone who speaks two of the languages is listed under both.
-  const rendered = sections ? sections.reduce((n, s) => n + s.rows.length, 0) : pair.rows.length;
-  const complete = !sections || sections.every((s) => {
-    const kid = s.lang ? CITY_LANG_PAGES.get(city.id + '|' + cat + '|' + s.lang) : null;
-    return !kid && s.rows.length <= SECTION_CAP;
-  });
+  const childOf = (s) => (s.lang ? CITY_LANG_PAGES.get(city.id + '|' + cat + '|' + s.lang) : null);
+  /**
+   * The number of cards the page actually renders.
+   *
+   * This counted the full length of every section and so described a page that does not exist.
+   * Two things make it wrong. Each section is sliced to TEASER or SECTION_CAP a few lines below,
+   * and a provider who works in three of the languages is counted once per section. Madrid's
+   * lawyers came out at 214 on a page carrying 47 cards, beside a search box offering to filter
+   * 122, which is three different numbers for one list.
+   *
+   * The slice is repeated here rather than inferred, so this figure moves if the caps do.
+   */
+  const rendered = sections
+    ? sections.reduce((n, s) => n + Math.min(s.rows.length, childOf(s) ? TEASER : SECTION_CAP), 0)
+    : pair.rows.length;
+  const complete = !sections || sections.every((s) => !childOf(s) && s.rows.length <= SECTION_CAP);
   // Every language on the page, for the menu, with the number of providers behind each.
   const LANG_FILTER = (() => {
     const n = {};
@@ -536,8 +545,14 @@ ${shell.headEnd}
       ${F.bar({
     id: 'svp',
     complete,
+    // Without this the bar defaults to Infinity items and its size thresholds never apply, so a
+    // page showing three cards was still offered a search box over them.
+    items: rendered,
     fields: [
-      { key: 'q', search: true, label: 'Name', placeholder: `Search ${pair.rows.length} listings…` },
+      // The search box filters the cards on this page, so it must offer the number of cards on this
+      // page. pair.rows.length is every provider in the city, which is a larger and different
+      // number: "Search 122 listings" over a list of 47.
+      { key: 'q', search: true, label: 'Name', placeholder: `Search ${rendered} listings…` },
       { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
     ],
   })}
