@@ -56,13 +56,22 @@ const css = `
        binding case and came to 4.53:1 at .70 there, which is over the line by 0.03 and no use
        across 329 cities whose skies vary; .76 puts it near 5. */
     /*
-       The last two stops exist only to kill the edge: ending the ramp at .42 put a visible step
-       across the photograph where the block began. .16 meets what the ::after whisper is already
-       doing there, so the two blend. Neither stop is anywhere near the text. */
+       The top stop MUST be fully transparent. It was .16, on the reasoning that the ::after whisper
+       was already doing about that much where the block starts and the two would blend. It is not:
+       ::after runs transparent at 55% to .22 at 100%, so at the block's top edge, around 64% up a
+       100vh hero, it is only .046. The block therefore opened with an alpha step of .16 across zero
+       distance, which is a hard horizontal line drawn across the middle of every service hero.
+       Measured on /services/kolkata/lawyers with the photograph replaced by flat grey: a 15.3/255
+       jump between adjacent rows at the block's top edge, against 0-1 for a smooth ramp.
+       Ending at 0 removes it (3.0/255, about 1%, below what an eye picks out of a gradient).
+       The stops below it were re-spaced so the ramp still reaches the text at full strength: the
+       breadcrumb sits at 77% of the block height, where this ramp is .774 against the old .787, so
+       white type on the palest sky in the index keeps 8.7:1 and the AA floor is not in play. */
     .sv-hero-in { position:relative; z-index:1; width:100%; color:#fff;
       padding:calc(var(--nav-height,64px) + 2.5rem) 0 2.4rem;
-      background:linear-gradient(to top, rgba(15,23,42,.96) 0%, rgba(15,23,42,.86) 65%,
-        rgba(15,23,42,.76) 82%, rgba(15,23,42,.42) 93%, rgba(15,23,42,.16) 100%); }
+      background:linear-gradient(to top, rgba(15,23,42,.96) 0%, rgba(15,23,42,.86) 62%,
+        rgba(15,23,42,.76) 80%, rgba(15,23,42,.52) 90%, rgba(15,23,42,.24) 96%,
+        rgba(15,23,42,0) 100%); }
     /* A whisper over the rest of the picture, so the top of the frame is not brighter than the nav. */
     .sv-hero::after { content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
       background:linear-gradient(to top, transparent 55%, rgba(15,23,42,.22) 100%); }
