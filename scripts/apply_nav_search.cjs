@@ -146,7 +146,14 @@ for (const rel of all) {
   // Form + datalist in the nav.
   if (formRe.test(html)) { html = html.replace(formRe, FORM); }
   else if (/<div class="nav-actions">/.test(html)) { html = html.replace('<div class="nav-actions">', FORM + '\n      <div class="nav-actions">'); }
-  else { skipped++; }
+  // Third anchor, for pages whose nav has no nav-actions wrapper. Without it this sweep could only
+  // ever REFRESH a form that already existed, so once a generator overwrote one of those pages the
+  // search box was gone for good and nothing could put it back. That is what happened to
+  // cities.html, visa.html, geoarbitrage.html and tier-list/maker.html on the 740-city rebuild.
+  // The toggle button closes the nav on every template, so it is the reliable last resort.
+  else if (/<button[^>]*class="nav-toggle"/.test(html)) {
+    html = html.replace(/<button[^>]*class="nav-toggle"/, (m) => FORM + '\n      ' + m);
+  } else { skipped++; }
 
   // Resolver JS before </body> (only on pages that got the form).
   if (/class="nav-search"/.test(html)) {

@@ -237,7 +237,17 @@ const CITY_REGIONS = {
         abidjan: 'africa', agadir: 'africa', algiers: 'africa',
         monterrey: 'northamerica', houston: 'northamerica', tampa: 'northamerica',
         dallas: 'northamerica', saltlakecity: 'northamerica', montegobay: 'northamerica',
-        manaus: 'latam', portoalegre: 'latam'
+        manaus: 'latam', portoalegre: 'latam',
+
+        // Batch 31, 2026-08-29
+        bansko: 'europe', jerusalem: 'middleeast', ankara: 'middleeast', olomouc: 'europe',
+        pecs: 'europe', rijeka: 'europe', ioannina: 'europe', naxos: 'europe',
+        alanya: 'middleeast', constanta: 'europe', iasi: 'europe', vlore: 'europe',
+        hercegnovi: 'europe', taichung: 'asia', hualien: 'asia', cameronhighlands: 'asia',
+        quetzaltenango: 'latam', puertoviejo: 'latam', lafortuna: 'latam', durban: 'africa',
+        knysna: 'africa', puertovaras: 'latam', vinadelmar: 'latam', arugambay: 'asia',
+        dianibeach: 'africa', hurghada: 'africa', mindo: 'latam', sokcho: 'asia',
+        trincomalee: 'asia', siwa: 'africa'
 
       };
 

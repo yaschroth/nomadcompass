@@ -33,13 +33,19 @@ const RULES = [
   // Prose. The hyphenated "410-city index" form is separate: it has no space, so the
   // lookahead rules below never saw it and it survived the first sweep.
   [/\b650\+(?=\s+(?:cities|rated cities))/g, String(s.cities)],
-  [/\b410\b(?=\s+(?:cities|destinations|rated cities))/g, String(s.cities)],
-  [/\b410-city\b/g, `${s.cities}-city`],
-  [/\b650-city\b/g, `${s.cities}-city`],
+  // "N cities" is NOT a site-wide claim. /services/lawyers says "255 cities" and means it, and a
+  // rule matching any three or four digits before the word rewrote 4,855 figures across 1,117
+  // pages, most of them correct before it ran. So these stay pinned to the values this site has
+  // actually claimed about ITSELF, and a new one gets appended here when the count moves.
+  // The list is the safety mechanism, not an oversight.
+  ...[410, 650, 710].flatMap((old) => [
+    [new RegExp('\\b' + old + '\\b(?=\\s+(?:cities|destinations|rated cities))', 'g'), String(s.cities)],
+    [new RegExp('\\b' + old + '-city\\b', 'g'), `${s.cities}-city`],
+  ]),
 
-  // about.html stat tiles, scoped by their own label so a stray "11" elsewhere is safe.
-  [/(<div class="num">)410(<\/div>\s*<div class="lbl">cities rated<\/div>)/g, `$1${s.cities}$2`],
-  [/(<div class="num">)11(<\/div>\s*<div class="lbl">rankings<\/div>)/g, `$1${s.rankings}$2`],
+  // about.html stat tiles, scoped by their own label, so any count here is safe to rewrite.
+  [/(<div class="num">)\d{2,4}(<\/div>\s*<div class="lbl">cities rated<\/div>)/g, `$1${s.cities}$2`],
+  [/(<div class="num">)\d{1,3}(<\/div>\s*<div class="lbl">rankings<\/div>)/g, `$1${s.rankings}$2`],
   [/\b11 rankings\b/g, `${s.rankings} rankings`],
 ];
 
