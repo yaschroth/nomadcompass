@@ -415,6 +415,43 @@ for (const page of ordered) {
       .sort((a, b) => b[1] - a[1] || P.langName(a[0]).localeCompare(P.langName(b[0])))
       .map(([l, c]) => [l, P.langName(l) + ' (' + c + ')']);
   })();
+  const filterBar = F.bar({
+    id: 'svp',
+    complete,
+    // Without this the bar defaults to Infinity items and its size thresholds never apply, so a
+    // page showing three cards was still offered a search box over them.
+    items: rendered,
+    fields: [
+      // The search box filters the cards on this page, so it must offer the number of cards on this
+      // page. pair.rows.length is every provider in the city, which is a larger and different
+      // number: "Search 122 listings" over a list of 47.
+      { key: 'q', search: true, label: 'Name', placeholder: `Search ${rendered} listings…` },
+      { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
+    ],
+  });
+
+  /**
+   * The jump-link chips, shown only where there is no filter to do the same job better.
+   *
+   * With both on screen the page carried two language controls, one above the other, listing the
+   * same languages and disagreeing about them: the chips said "English 519" and the menu under them
+   * said "English (8)". Both numbers are true, 519 exist and 8 are on the page, and a reader has no
+   * way to know that. The filter is the better of the two now that it hides the other sections, and
+   * the totals are still on the page where they belong: in each section's own heading and in its
+   * "Showing 8 of 519" line, which links to the page holding the rest.
+   *
+   * Where the bar is suppressed, on the short pages, the chips are the only navigation and stay.
+   */
+  const langChipNav = (sections && !filterBar)
+    ? `<nav class="svp-langbar sb-chips" aria-label="Languages on this page">`
+      + sections.map((sec) => B.chip({
+        href: '#lang-' + (sec.lang || 'other'),
+        label: sec.lang ? P.langName(sec.lang) : 'Local language only',
+        n: sec.n,
+      })).join('')
+      + `</nav>`
+    : '';
+
   const listing = sections
     ? sections.map((s) => `<section class="svp-lang sf-group" id="lang-${s.lang || 'other'}">
           <h2>${s.lang
@@ -573,25 +610,10 @@ ${shell.headEnd}
       : H.sectionImage(),
   })}
     <div class="svp-page container">
-      ${sections ? `<nav class="svp-langbar sb-chips" aria-label="Languages on this page">` +
-        sections.map((sec) => B.chip({ href: '#lang-' + (sec.lang || 'other'), label: sec.lang ? P.langName(sec.lang) : 'Local language only', n: sec.n })).join('') +
-        `</nav>` : ''}
+      ${langChipNav}
       ${ymyl}
 
-      ${F.bar({
-    id: 'svp',
-    complete,
-    // Without this the bar defaults to Infinity items and its size thresholds never apply, so a
-    // page showing three cards was still offered a search box over them.
-    items: rendered,
-    fields: [
-      // The search box filters the cards on this page, so it must offer the number of cards on this
-      // page. pair.rows.length is every provider in the city, which is a larger and different
-      // number: "Search 122 listings" over a list of 47.
-      { key: 'q', search: true, label: 'Name', placeholder: `Search ${rendered} listings…` },
-      { key: 'lang', label: 'Language', any: 'Any language', options: LANG_FILTER },
-    ],
-  })}
+      ${filterBar}
       ${F.count({ id: 'svp', total: rendered, noun: 'listing', nounPlural: 'listings', capped: !complete })}
 
       ${listing}
