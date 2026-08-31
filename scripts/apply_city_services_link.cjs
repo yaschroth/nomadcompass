@@ -56,13 +56,29 @@ const serviceLink = (slug, cat) => (CHILDREN.has(slug + '|' + cat)
   ? '/services/' + slug + '/' + M.SERVICE_SLUGS[cat]
   : '/services/' + slug + '#svc-' + cat);
 
-let written = 0; let skippedNoAnchor = 0; let skippedNoData = 0;
+let written = 0; let skippedNoAnchor = 0; let skippedNoData = 0; let cleared = 0;
+
+/** The block, wherever it sits, so it can be replaced or taken out. */
+const BLOCK_RE = new RegExp(
+  '\\n?\\s*' + START.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  + '[\\s\\S]*?' + END.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+);
 
 for (const slug of Object.keys(NAME)) {
   const file = path.join(ROOT, 'cities', slug + '.html');
   if (!fs.existsSync(file)) continue;
   const rows = byCity[slug];
-  if (!rows || !rows.length) { skippedNoData++; continue; }
+  if (!rows || !rows.length) {
+    // A city with no providers must not keep a block from when it had some. This used to `continue`,
+    // which updates a block but never removes one, so Glasgow kept a panel reading "One provider in
+    // Glasgow" with a button to /services/glasgow after its single provider left the data. The page
+    // did not exist, so that button was a 404 in production, and the sentence was untrue besides.
+    const html = fs.readFileSync(file, 'utf8');
+    const stripped = html.replace(BLOCK_RE, '');
+    if (stripped !== html) { fs.writeFileSync(file, stripped); cleared++; }
+    skippedNoData++;
+    continue;
+  }
 
   let html = fs.readFileSync(file, 'utf8');
   const name = NAME[slug];
@@ -127,4 +143,5 @@ for (const slug of Object.keys(NAME)) {
   written++;
 }
 
-console.log(`Services block on ${written} city pages | no providers yet: ${skippedNoData} | no anchor found: ${skippedNoAnchor}`);
+console.log(`Services block on ${written} city pages | no providers yet: ${skippedNoData} | no anchor found: ${skippedNoAnchor}`
+  + (cleared ? ` | removed from ${cleared} that no longer have any` : ''));

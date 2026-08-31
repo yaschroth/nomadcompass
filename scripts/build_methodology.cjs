@@ -95,10 +95,22 @@ function card(key) {
   const src = d.sourceUrl
     ? '<a href="' + esc(d.sourceUrl) + '" rel="noopener nofollow" target="_blank">' + esc(d.source) + '</a>'
     : esc(d.source);
+  /**
+   * A corroboration entry is usually a URL and is sometimes a description of where to look.
+   *
+   * Linking every entry unconditionally produced two anchors on this page whose href was an English
+   * sentence: href="Each provider's own site, recorded per row as sourceUrl in
+   * data/service-languages.json". A browser resolves that against the current directory, so both
+   * were 404s, on the one page whose whole job is to show that the sourcing is real. A description
+   * is worth printing, it is just not worth linking.
+   */
+  const isUrl = (u) => /^https?:\/\//i.test(String(u));
   const corr = (d.corroboration || []).length
     ? '<p class="mth-row"><span class="mth-k">Corroborated against</span><span class="mth-v">'
-      + d.corroboration.map((u) => '<a href="' + esc(u) + '" rel="noopener nofollow" target="_blank">'
-        + esc(u.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</a>').join(', ')
+      + d.corroboration.map((u) => (isUrl(u)
+        ? '<a href="' + esc(u) + '" rel="noopener nofollow" target="_blank">'
+          + esc(String(u).replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</a>'
+        : esc(u))).join(', ')
       + '</span></p>'
     : '';
   const when = d.retrieved
