@@ -239,6 +239,16 @@ const CITY_REGIONS = {
         dallas: 'northamerica', saltlakecity: 'northamerica', montegobay: 'northamerica',
         manaus: 'latam', portoalegre: 'latam',
 
+        // Batch 32, 2026-09-01
+        lublin: 'europe', katowice: 'europe', zakopane: 'europe', plzen: 'europe',
+        karlovyvary: 'europe', debrecen: 'europe', nis: 'europe', burgas: 'europe',
+        paros: 'europe', patras: 'europe', trento: 'europe', ravenna: 'europe',
+        santander: 'europe', setubal: 'europe', munster: 'europe', erfurt: 'europe',
+        rennes: 'europe', biarritz: 'europe', trabzon: 'middleeast', marmaris: 'middleeast',
+        okayama: 'asia', nagasaki: 'asia', daejeon: 'asia', udonthani: 'asia',
+        padang: 'asia', bacolod: 'asia', coorg: 'asia', natal: 'latam',
+        xalapa: 'latam', ushuaia: 'latam', hermanus: 'africa',
+
         // Batch 31, 2026-08-29
         bansko: 'europe', jerusalem: 'middleeast', ankara: 'middleeast', olomouc: 'europe',
         pecs: 'europe', rijeka: 'europe', ioannina: 'europe', naxos: 'europe',
