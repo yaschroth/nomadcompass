@@ -100,7 +100,10 @@ const prose = {
       'The ' + nEstimated + ' estimated figures carry more uncertainty than the ' + nSourced + ' sourced ones.'),
   },
   neighborhoods: {
-    method: (s) => s.replace(/^\d+ entries across \d+ cities researched in 2026-08\./,
+    // Matches both the original wording and the one this script writes, so a second run
+    // updates the line rather than skipping it. The first version only matched the original
+    // and silently left the count stale the moment it had rewritten it once.
+    method: (s) => s.replace(/^\d+ entries across \d+ cities(?: researched in [\d-]+)?\./,
       nbCards + ' entries across ' + nbCities + ' cities.'),
   },
 };
