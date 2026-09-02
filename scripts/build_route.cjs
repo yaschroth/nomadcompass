@@ -11,6 +11,10 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
  */
 const fs = require('fs');
 const path = require('path');
+// The sitewide shell, lifted from pages the sweeps have already touched. Without it this
+// generator emitted a page missing seven tracked features, so _safe_write refused every run and
+// route.html quietly stopped being regenerated: it was still listing 771 cities at 801.
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const iso = (flag) => { const p = [...(flag || '')]; if (p.length !== 2) return ''; return p.map((x) => String.fromCharCode(x.codePointAt(0) - 0x1F1E6 + 97)).join(''); };
@@ -73,6 +77,7 @@ const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', i
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nomad Route Planner: Dates, Budget, Weather & Packing | The Nomad HQ</title>
@@ -210,9 +215,11 @@ const html = `<!DOCTYPE html>
       body { background:#fff; }
     }
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-  ${navHtml()}
+  ${shell.bodyStart}
+  ${shell.navFor('Route Planner')}
   <main>
     <header class="hub-hero">
       <img class="hub-hero-img" src="/assets/route-hero.webp" alt="The winding hairpin bends of the Transfagarasan mountain road through green Romanian peaks" fetchpriority="high" width="1920" height="1275">
@@ -273,7 +280,7 @@ const html = `<!DOCTYPE html>
       </aside>
     </div>
   </main>
-  ${FOOTER}
+  ${shell.footer}
   <script src="/assets/city-search-index.js" defer></script>
   <script>
     (function(){
@@ -560,8 +567,10 @@ const html = `<!DOCTYPE html>
       })();
     })();
   </script>
+${shell.bodyEnd}
 </body>
 </html>`;
 
+shell.assertComplete(html, 'route.html');
 fs.writeFileSync(path.join(ROOT, 'route.html'), html);
 console.log(`Wrote route.html (${DATA.length} cities, ${Object.keys(CLIMATE).length} with climate; default: ${DEFAULT_ROUTE.join(' -> ')}).`);

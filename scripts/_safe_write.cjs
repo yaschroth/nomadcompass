@@ -35,6 +35,10 @@ const FEATURES = [
   ['Stadt-Inhaltsverzeichnis', 'city-toc'],
   ['Fakten-Panel', 'facts-panel'],
   ['YMYL-Hinweis', 'ymyl-note'],
+  // Added after generate_cities_hub was repaired and its first clean run silently dropped 735
+  // photo credits from cities.html. Crediting a CC-BY photograph is a licence condition, not a
+  // nicety, and it was the one destroyable feature this list did not watch.
+  ['Foto-Credits', 'photo-credit'],
 ];
 
 const FORCE = process.argv.includes('--force');

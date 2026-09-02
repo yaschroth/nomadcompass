@@ -8,6 +8,9 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
  */
 const fs = require('fs');
 const path = require('path');
+// The sitewide shell. Without it this generator wrote a page missing seven tracked features,
+// so _safe_write refused every run and tier-list/maker.html quietly froze at 771 cities.
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -52,6 +55,7 @@ const tierRows = TIERS.map(([k, c]) => `        <div class="tm-row"><div class="
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Nomad Tier List Maker: Rank & Share | The Nomad HQ</title>
@@ -109,9 +113,11 @@ const html = `<!DOCTYPE html>
     .tm-copied { color:#2f7d5a; font-weight:600; font-size:.9rem; }
     .tm-hint { font-size:.85rem; color:var(--color-stone); margin:1rem 0 0; line-height:1.6; }
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-  ${navHtml()}
+  ${shell.bodyStart}
+  ${shell.navFor('Tier List Maker')}
   <main>
     <header class="hub-hero">
       <img class="hub-hero-img" src="/assets/tier-maker-hero.webp" alt="The tiered green rice terraces of Tegallalang in Ubud, Bali, stepping down the hillside" fetchpriority="high" width="1920" height="1277">
@@ -141,7 +147,7 @@ ${tierRows}
       <p class="tm-hint">This is your personal ranking, not our data-driven one. Want ours? See the <a href="/tier-list">official Nomad Cities Tier List</a>.</p>
     </div>
   </main>
-  ${FOOTER}
+  ${shell.footer}
   <script>
     (function(){
       var CITIES=${JSON.stringify(ALL)};
@@ -186,9 +192,11 @@ ${tierRows}
       init(false);
     })();
   </script>
+${shell.bodyEnd}
 </body>
 </html>`;
 
 fs.mkdirSync(path.join(ROOT, 'tier-list'), { recursive: true });
+shell.assertComplete(html, 'tier-list/maker.html');
 fs.writeFileSync(path.join(ROOT, 'tier-list', 'maker.html'), html);
 console.log(`Wrote tier-list/maker.html (pool seeded with ${POOL.length} cities, ${ALL.length} addable).`);

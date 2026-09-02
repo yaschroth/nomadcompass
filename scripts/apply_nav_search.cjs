@@ -132,7 +132,7 @@ function htmlUnder(dir) {
 // services was missing from this list entirely, so the largest page family on the site carried a
 // search box whose resolver had never been swept onto it. The pages get it from lib/page_shell.cjs
 // now, but a sweep that cannot see a page cannot repair one either.
-const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog', 'blog/category', 'services']
+const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog', 'blog/category', 'services', 'vs']
   .flatMap(htmlIn).concat(htmlUnder('services'));
 
 const formRe = /<form class="nav-search"[\s\S]*?<\/form>/;

@@ -50,6 +50,9 @@ const all = [
   ...htmlIn('cities'), ...htmlIn('best'), ...htmlIn('tier-list'),
   ...htmlIn('activities'), ...htmlIn('blog'), ...htmlIn('blog/category'), ...htmlIn('about'),
   ...htmlIn('services'), ...htmlUnder('services'),
+  // 107 /vs/ pages were missing the brand graph for the same reason: the directory postdates
+  // this list and nobody added it.
+  ...htmlIn('vs'),
 ];
 const articleDirs = ['cities' + path.sep, 'activities' + path.sep];
 

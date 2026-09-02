@@ -62,7 +62,10 @@ function htmlUnder(dir) {
     .filter((e) => e.isDirectory())
     .flatMap((e) => htmlIn(path.join(dir, e.name)).concat(htmlUnder(path.join(dir, e.name))));
 }
-const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'blog/category', 'about', 'accommodations', 'services']
+// 'vs' was added late and never reached this list, so 107 head-to-head pages carried the GA4
+// block but no consent banner: correctly gated, and with no way for a visitor landing there to
+// grant consent at all.
+const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'blog', 'blog/category', 'about', 'accommodations', 'services', 'vs']
   .flatMap(htmlIn)
   .concat(htmlUnder('services'));
 

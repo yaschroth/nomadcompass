@@ -7,6 +7,25 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
  */
 const fs = require('fs');
 const path = require('path');
+// The sitewide shell, lifted from pages the sweeps have already touched. This generator used
+// to carry its own nav, footer and head, none of which knew about GA4, the consent banner, the
+// brand graph, the tools dropdown, the nav search or the skip link. _safe_write refused every
+// run as a result and cities.html froze: it was still listing 771 cards against 801 cities, on
+// the page Googlebot follows to find the city guides at all.
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
+// The photo-credit block is lifted from the page it is replacing, then corrected by
+// apply_photo_credit.cjs at the end of this script. Crediting a CC-BY photograph is a licence
+// condition and _safe_write watches for it, so a generator that emitted nothing here would be
+// refused on every run after the first. Lifting rather than rebuilding is deliberate: the block
+// is page-aware (it drops a credit when the page links to one that already names the
+// photographer) and a second implementation of that rule would drift from the first.
+function liftPhotoCredit() {
+  const existing = path.join(ROOT, 'cities.html');
+  if (!fs.existsSync(existing)) return '';
+  const m = fs.readFileSync(existing, 'utf8')
+    .match(/<!-- photo-credit -->[\s\S]*?<!-- \/photo-credit -->/);
+  return m ? '  ' + m[0] + '\n' : '';
+}
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://thenomadhq.com';
@@ -155,6 +174,7 @@ const cards = cities.map((c) => {
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -225,68 +245,12 @@ const html = `<!DOCTYPE html>
     ]
   }
   </script>
+  ${shell.headEnd}
 </head>
 <body>
+  ${shell.bodyStart}
 
-  <nav class="nav" id="mainNav">
-    <div class="nav-container">
-      <a href="/" class="nav-logo">
-        <img src="/assets/logo.svg" alt="" class="nav-logo-icon">
-        <span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="/" class="nav-link">Home</a></li>
-        <li><a href="/wheel" class="nav-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-link active">Cities</a></li><li><a href="/map" class="nav-link">Map</a></li>
-        <li><a href="/best" class="nav-link">Rankings</a></li>
-        <li><a href="/tier-list" class="nav-link">Tier List</a></li>
-        <li><a href="/compare" class="nav-link">Compare</a></li>
-        <li><a href="/blog" class="nav-link">Blog</a></li>
-      </ul>
-      
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span class="nav-toggle-line"></span>
-        <span class="nav-toggle-line"></span>
-        <span class="nav-toggle-line"></span>
-      </button>
-    </div>
-    <div class="nav-mobile" id="navMobile">
-      <ul class="nav-mobile-links">
-        <li><a href="/" class="nav-mobile-link">Home</a></li>
-        <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-mobile-link active">Cities</a></li><li><a href="/map" class="nav-mobile-link">Map</a></li>
-        <li><a href="/best" class="nav-mobile-link">Rankings</a></li>
-        <li><a href="/tier-list" class="nav-mobile-link">Tier List</a></li>
-        <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
-        <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
-      </ul>
-      
-    </div>
-  </nav>
-
-  <script>
-    (function() {
-      const nav = document.getElementById('mainNav');
-      const navToggle = document.getElementById('navToggle');
-      const navMobile = document.getElementById('navMobile');
-      const body = document.body;
-      navToggle.addEventListener('click', function() {
-        const isOpen = navToggle.classList.toggle('active');
-        navMobile.classList.toggle('active');
-        body.classList.toggle('nav-open');
-        navToggle.setAttribute('aria-expanded', isOpen);
-      });
-      navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn').forEach(function(link) {
-        link.addEventListener('click', function() {
-          navToggle.classList.remove('active');
-          navMobile.classList.remove('active');
-          body.classList.remove('nav-open');
-          navToggle.setAttribute('aria-expanded', 'false');
-        });
-      });
-      window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-    })();
-  </script>
+  ${shell.navFor('Cities')}
 
   <main>
     <header class="cities-hero">
@@ -398,43 +362,7 @@ ${cards}
     </div>
     <p class="city-dir-empty" id="cityEmpty" hidden>No cities match those filters. <button type="button" class="linklike" id="cityReset">Reset all filters</button></p>
   </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-column footer-about">
-          <a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a>
-          <p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p>
-        </div>
-        <div class="footer-column">
-          <h4 class="footer-heading">Explore</h4>
-          <ul class="footer-links">
-            <li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li>
-            <li><a href="/wheel" class="footer-link">Decision Wheel</a></li>
-            <li><a href="/activities" class="footer-link">By Activity</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4 class="footer-heading">Resources</h4>
-          <ul class="footer-links">
-            <li><a href="/blog" class="footer-link">Blog</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <nav class="footer-legal" aria-label="Legal and company">
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-          <a href="/disclosure">Affiliate Disclosure</a>
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/legal-notice">Legal Notice</a>
-        </nav>
-        <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
-        <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+${liftPhotoCredit()}  ${shell.footer}
 
   <script>
     // Full browse-and-compare filter/sort over the static (crawlable) city grid.
@@ -605,9 +533,14 @@ ${cards}
     })();
   </script>
 
+${shell.bodyEnd}
 </body>
 </html>
 `;
 
+shell.assertComplete(html, 'cities.html');
 fs.writeFileSync(path.join(ROOT, 'cities.html'), html);
+// The lifted block credits the previous city set. Re-run the sweep so it credits this one.
+require('child_process').execFileSync(process.execPath,
+  [path.join(__dirname, 'apply_photo_credit.cjs')], { stdio: 'inherit' });
 console.log(`Wrote cities.html with ${cities.length} city links (filterable/sortable grid).`);
