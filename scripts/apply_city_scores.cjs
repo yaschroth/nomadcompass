@@ -3,7 +3,7 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 // AI crawlers (which don't run JS) and search engines can read them. The visible tiles/radar are
 // JS-rendered into an empty grid, so without this the scores are invisible to non-JS agents.
 // Adds (a) an sr-only crawlable text summary and (b) a JSON-LD Place with additionalProperty scores,
-// inserted just before the radar chart. Idempotent (guards on <!-- city-scores -->). Reads scores from
+// inserted just before the radar chart. Rewrites the block in place when the data has moved. Reads scores from
 // cities-data.js; Nomad Score uses the exact site formula. Cities not in CITIES (orphans) are skipped.
 const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..');
@@ -22,17 +22,15 @@ const nomadScore = sc => {
 const ANCHOR = '<div class="radar-chart-container">';
 const dir = path.join(ROOT, 'cities');
 const files = fs.readdirSync(dir).filter(f => f.endsWith('.html'));
-let done = 0, skip = 0, orphan = 0, noanchor = 0;
+let done = 0, refreshed = 0, skip = 0, orphan = 0, noanchor = 0;
 for (const f of files) {
   const slug = f.replace('.html', '');
   const city = byId[slug];
   if (!city || !city.scores) { orphan++; continue; }
   const p = path.join(dir, f);
   let s = fs.readFileSync(p, 'utf8');
-  // Guard on the closing marker: the opening one carries a trailing description, so matching
-  // '<!-- city-scores -->' never fired and a re-run would have duplicated the block everywhere.
-  if (s.includes('<!-- /city-scores -->')) { skip++; continue; }
-  if (!s.includes(ANCHOR)) { noanchor++; console.error('no anchor: ' + slug); continue; }
+  const had = s.includes('<!-- /city-scores -->');
+  if (!had && !s.includes(ANCHOR)) { noanchor++; console.error('no anchor: ' + slug); continue; }
 
   const sc = city.scores, nom = nomadScore(sc);
   const catText = KEYS.map(k => LABEL[k] + ' ' + sc[k]).join(', ');
@@ -52,8 +50,25 @@ for (const f of files) {
     '          <!-- /city-scores -->' + nl +
     '          ';
 
-  s = s.replace(ANCHOR, block + ANCHOR);
+  // Replace rather than skip. This used to bail on any page that already carried the block, which
+  // made it write-once: a score change or a country rename never reached the crawlable copy, and
+  // the only thing a non-JS agent can read went stale against the tiles beside it. Renaming "UK"
+  // to "United Kingdom" is what surfaced it, on three pages whose JSON-LD still said "London, UK".
+  const OPEN = '<!-- city-scores:';
+  const CLOSE = '<!-- /city-scores -->';
+  const before = s;
+  if (had) {
+    const a = s.indexOf(OPEN);
+    let b = s.indexOf(CLOSE, a) + CLOSE.length;
+    while (b < s.length && (s[b] === '\r' || s[b] === '\n' || s[b] === ' ')) b++;
+    s = s.slice(0, a) + block + s.slice(b);
+  } else {
+    s = s.replace(ANCHOR, block + ANCHOR);
+  }
+  if (s === before) { skip++; continue; }
   if (APPLY) fs.writeFileSync(p, s);
-  done++;
+  if (had) refreshed++; else done++;
 }
-console.log((APPLY ? 'APPLIED' : 'DRY-RUN') + ' | injected: ' + done + ' | already: ' + skip + ' | orphan(skipped): ' + orphan + ' | no-anchor: ' + noanchor + ' | total: ' + files.length);
+console.log((APPLY ? 'APPLIED' : 'DRY-RUN') + ' | injected: ' + done + ' | refreshed: ' + refreshed
+  + ' | unchanged: ' + skip + ' | orphan(skipped): ' + orphan + ' | no-anchor: ' + noanchor
+  + ' | total: ' + files.length);

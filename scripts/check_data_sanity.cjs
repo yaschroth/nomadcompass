@@ -167,6 +167,30 @@ for (const c of CITIES) {
   }
 }
 
+// 6b. One country, one name. The site filed London, Manchester and Edinburgh under "UK" and the
+//     other eleven British cities under "United Kingdom", and Sarajevo under "Bosnia" against
+//     Mostar's "Bosnia and Herzegovina". The country string is a grouping key: it drives the
+//     country filter on /cities and /map, the country ranking pages, the services country pages
+//     and every "in <country>" heading. Two names for one country means each grouping shows a
+//     partial list, and nothing looks broken, which is why it survived 831 cities. The flag emoji
+//     is the tell: it is per-country, so two names sharing one flag is always this bug. An ERROR
+//     rather than a warning, because the next batch to type "UK" should not be able to ship it.
+{
+  const byFlag = new Map();
+  for (const c of CITIES) {
+    if (!c.flag) continue;
+    if (!byFlag.has(c.flag)) byFlag.set(c.flag, new Map());
+    const names = byFlag.get(c.flag);
+    names.set(c.country, (names.get(c.country) || 0) + 1);
+  }
+  for (const [flag, names] of byFlag) {
+    if (names.size < 2) continue;
+    const listed = [...names].map(([n, k]) => `"${n}" (${k})`).join(' and ');
+    err('country-names', flag + ' is used for ' + names.size + ' different country names: ' + listed
+      + '. Pick one and rewrite the others in cities-data.js and data/city_list.json.');
+  }
+}
+
 // 7. Neighbourhood pins sit near their city.
 const nbDir = path.join(ROOT, 'data/neighborhoods');
 if (fs.existsSync(nbDir)) {
