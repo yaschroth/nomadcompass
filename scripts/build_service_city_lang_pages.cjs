@@ -533,7 +533,7 @@ ${shell.bodyEnd}
     shell.assertComplete(html, pageUrl);
     const dir = path.dirname(path.join(ROOT, pageFile));
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(ROOT, pageFile), html);
+    shell.writePage(pageFile, html);
     written.push({
       url: pageUrl, file: pageFile, kind: 'city-lang', city: city.id, service: cat, language: lang,
       page: pageNo, pages: pageCount,

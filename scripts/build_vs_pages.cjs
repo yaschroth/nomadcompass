@@ -10,6 +10,7 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 
 const code = fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8');
 const data = (new Function(code + ';return {CITIES, CATEGORIES};'))();
@@ -18,9 +19,6 @@ const CATDESC = data.CATEGORIES; // { climate: { name, icon, description }, ... 
 
 // shell pieces from compare.html
 const cmp = fs.readFileSync(path.join(ROOT, 'compare.html'), 'utf8');
-const NAV = cmp.match(/<nav class="nav"[\s\S]*?<\/nav>/)[0];
-const FOOTER = cmp.match(/<footer[\s\S]*?<\/footer>/)[0];
-const NAVSCRIPT = (cmp.match(/<script>[\s\S]*?<\/script>/g) || []).find((b) => b.includes('navToggle'));
 
 const CATS = [
   ['climate', 'Climate'], ['cost', 'Cost of Living'], ['wifi', 'WiFi'], ['nightlife', 'Nightlife'],
@@ -131,10 +129,7 @@ function build(a, b) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ga4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JV1BMRJF89"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});try{if(localStorage.getItem('nomadhq_consent')==='granted'){gtag('consent','update',{analytics_storage:'granted'});}}catch(e){}gtag('config','G-JV1BMRJF89');</script>
-  <!-- /ga4 -->
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preload" as="image" href="/images/cities/${a.id}.webp" fetchpriority="high">
@@ -156,10 +151,11 @@ function build(a, b) {
   <link rel="stylesheet" href="/styles/footer.css">
   <script type="application/ld+json">${JSON.stringify(crumbSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
+  ${shell.headEnd}
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-  ${NAV}
+  ${shell.bodyStart}
+  ${shell.navFor('Compare Cities')}
   <main id="main-content" tabindex="-1">
     <header class="vs-hero">
       <div class="vs-hero-media">
@@ -224,10 +220,9 @@ function build(a, b) {
       </div>
     </section>
   </main>
-  ${FOOTER}
+  ${shell.footer}
   <script src="/cities-data.js"></script>
-  <script src="/assets/city-search-index.js" defer></script>
-  ${NAVSCRIPT}
+${shell.bodyEnd}
 </body>
 </html>`;
 }
@@ -243,7 +238,9 @@ for (const [x, y] of PAIRS) {
   if (seen.has(key)) continue;
   seen.add(key);
   const slug = `${a.id}-vs-${b.id}`;
-  fs.writeFileSync(path.join(OUT, slug + '.html'), build(a, b));
+  const html = build(a, b);
+  shell.assertComplete(html, 'vs/' + slug + '.html');
+  shell.writePage('vs/' + slug + '.html', html);
   done++;
 }
 console.log(`vs pages generated: ${done}` + (missing.length ? ` | missing city: ${missing.join(', ')}` : ''));

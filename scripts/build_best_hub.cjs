@@ -124,7 +124,7 @@ ${cards}
       </div>
     </div>
   </main>
-  ${shell.footer}
+${shell.liftPhotoCredit('best.html')}  ${shell.footer}
 ${shell.bodyEnd}
 </body>
 </html>

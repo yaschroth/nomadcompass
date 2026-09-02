@@ -10,114 +10,18 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 
 const UPDATED = 'July 1, 2026';
 const CONTACT_EMAIL = 'info@topblog.agency';
 
-const NAV = `  <nav class="nav" id="mainNav">
-    <div class="nav-container">
-      <a href="/" class="nav-logo">
-        <img src="/assets/logo.svg" alt="" class="nav-logo-icon">
-        <span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="/" class="nav-link">Home</a></li>
-        <li><a href="/wheel" class="nav-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-link">Cities</a></li><li><a href="/map" class="nav-link">Map</a></li>
-        <li><a href="/best" class="nav-link">Rankings</a></li>
-        <li><a href="/tier-list" class="nav-link">Tier List</a></li>
-        <li><a href="/compare" class="nav-link">Compare</a></li>
-        <li><a href="/blog" class="nav-link">Blog</a></li>
-      </ul>
-      
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span>
-      </button>
-    </div>
-    <div class="nav-mobile" id="navMobile">
-      <ul class="nav-mobile-links">
-        <li><a href="/" class="nav-mobile-link">Home</a></li>
-        <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-mobile-link">Cities</a></li><li><a href="/map" class="nav-mobile-link">Map</a></li>
-        <li><a href="/best" class="nav-mobile-link">Rankings</a></li>
-        <li><a href="/tier-list" class="nav-mobile-link">Tier List</a></li>
-        <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
-        <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
-      </ul>
-      
-    </div>
-  </nav>
 
-  <script>
-    (function () {
-      const nav = document.getElementById('mainNav');
-      const navToggle = document.getElementById('navToggle');
-      const navMobile = document.getElementById('navMobile');
-      const body = document.body;
-      navToggle.addEventListener('click', function () {
-        const isOpen = navToggle.classList.toggle('active');
-        navMobile.classList.toggle('active');
-        body.classList.toggle('nav-open');
-        navToggle.setAttribute('aria-expanded', isOpen);
-      });
-      navMobile.querySelectorAll('.nav-mobile-link, .nav-mobile-actions .btn').forEach(function (link) {
-        link.addEventListener('click', function () {
-          navToggle.classList.remove('active');
-          navMobile.classList.remove('active');
-          body.classList.remove('nav-open');
-          navToggle.setAttribute('aria-expanded', 'false');
-        });
-      });
-      window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-    })();
-  </script>`;
-
-const FOOTER = `  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-column footer-about">
-          <a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a>
-          <p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p>
-        </div>
-        <div class="footer-column">
-          <h4 class="footer-heading">Explore</h4>
-          <ul class="footer-links">
-            <li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li>
-            <li><a href="/wheel" class="footer-link">Nomad Wheel</a></li>
-            <li><a href="/activities" class="footer-link">By Activity</a></li>
-            <li><a href="/blog" class="footer-link">Blog</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4 class="footer-heading">Company</h4>
-          <ul class="footer-links">
-            <li><a href="/about" class="footer-link">About</a></li>
-            <li><a href="/methodology" class="footer-link">Methodology</a></li>
-            <li><a href="/contact" class="footer-link">Contact</a></li>
-            <li><a href="/about/yannick-schroth" class="footer-link">Author</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4 class="footer-heading">Legal</h4>
-          <ul class="footer-links">
-            <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
-            <li><a href="/terms" class="footer-link">Terms of Service</a></li>
-            <li><a href="/disclosure" class="footer-link">Affiliate Disclosure</a></li>
-            <li><a href="/legal-notice" class="footer-link">Legal Notice</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you. This never affects our data-driven ratings.</p>
-        <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>`;
 
 function page(slug, title, desc, bodyHtml, robots = 'index, follow', extraCss = '', mainClass = 'legal-page') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
@@ -146,15 +50,18 @@ function page(slug, title, desc, bodyHtml, robots = 'index, follow', extraCss = 
     .legal-cta { display: inline-flex; margin-top: 1rem; }
 ${extraCss}
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-${NAV}
+  ${shell.bodyStart}
+  ${shell.navFor()}
 
   <main${mainClass ? ` class="${mainClass}"` : ''}>
 ${bodyHtml}
   </main>
 
-${FOOTER}
+  ${shell.footer}
+${shell.bodyEnd}
 </body>
 </html>
 `;
@@ -313,7 +220,8 @@ ${updatedLine}`),
 
 let n = 0;
 for (const [file, html] of Object.entries(pages)) {
-  fs.writeFileSync(path.join(ROOT, file), html);
+  shell.assertComplete(html, file);
+  shell.writePage(file, html);
   n++;
 }
 console.log(`Wrote ${n} core pages: ${Object.keys(pages).join(', ')}`);

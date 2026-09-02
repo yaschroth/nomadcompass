@@ -289,7 +289,7 @@ ${shell.bodyEnd}
 </html>`;
 
   shell.assertComplete(html, page.url);
-  fs.writeFileSync(path.join(ROOT, page.file), html);
+  shell.writePage(page.file, html);
   written.push({ url: page.url, file: page.file, kind: 'service', service: cat, n: svc.n, cities: svc.cities.length, indexable: true, title, h1 });
 }
 

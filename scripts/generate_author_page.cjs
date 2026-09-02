@@ -10,6 +10,7 @@ const path = require('path');
 const { SITE, AUTHOR, personEntity } = require('./lib/author.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const get = (re, s) => { const m = s.match(re); return m ? m[1] : null; };
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -48,6 +49,7 @@ const socialLinks = AUTHOR.sameAs.length
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -91,20 +93,11 @@ const html = `<!DOCTYPE html>
     .author-articles a:hover { text-decoration: underline; }
     .author-article-tag { color: #888; font-size: .8rem; white-space: nowrap; }
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-
-  <nav class="nav" id="mainNav">
-    <div class="nav-container">
-      <a href="/" class="nav-logo"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
-      <ul class="nav-links">
-        <li><a href="/" class="nav-link">Home</a></li>
-        <li><a href="/wheel" class="nav-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-link">Cities</a></li>
-        <li><a href="/blog" class="nav-link">Blog</a></li>
-      </ul>
-    </div>
-  </nav>
+  ${shell.bodyStart}
+  ${shell.navFor()}
 
   <main class="author-page">
     <div class="author-head">
@@ -130,16 +123,13 @@ ${articleItems}
     </ul>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p style="text-align:center; padding:2rem 0; color:#777;">&copy; The Nomad HQ &middot; <a href="/">Home</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/cities">Cities</a></p>
-    </div>
-  </footer>
-
+  ${shell.footer}
+${shell.bodyEnd}
 </body>
 </html>
 `;
 
 fs.mkdirSync(path.join(ROOT, 'about'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'about', 'yannick-schroth.html'), html);
+shell.assertComplete(html, 'about/yannick-schroth.html');
+shell.writePage('about/yannick-schroth.html', html);
 console.log(`Wrote about/yannick-schroth.html with ${articles.length} article links.`);

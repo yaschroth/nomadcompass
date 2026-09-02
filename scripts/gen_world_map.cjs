@@ -11,6 +11,7 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const BASE = 'https://thenomadhq.com';
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -47,36 +48,15 @@ const slidersMarkup = SLIDER_CATS.map(([cat, label]) => `              <div clas
                 </div>
               </div>`).join('\n');
 
-function navHtml() {
-  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
-  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}${h === '/map' ? ' active' : ''}">${t}</a></li>`).join('');
-  return `<nav class="nav" id="mainNav"><div class="nav-container">
-      <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
-      <ul class="nav-links">${li('nav-link')}</ul>
-      
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
-    </div><div class="nav-mobile" id="navMobile"><ul class="nav-mobile-links">${li('nav-mobile-link')}</ul>
-      </div></nav>
-  <script>(function(){var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),mm=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');mm.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
-}
-function footerHtml() {
-  return `<footer class="footer"><div class="container">
-      <div class="footer-grid">
-        <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
-        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/best" class="footer-link">Best Cities Rankings</a></li><li><a href="/compare" class="footer-link">Compare Cities</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li><li><a href="/activities" class="footer-link">By Activity</a></li></ul></div>
-        <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
-      </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
-      <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
-      <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
-    </div></footer>`;
-}
-
+// The nav and footer used to be written out here by hand, which is why /map was the only page on
+// the site whose nav had no Services entry and whose footer listed a different set of links. Both
+// now come from lib/page_shell.cjs, which lifts whatever the sweeps last wrote.
 const ld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Digital Nomad World Map', url: BASE + '/map', description: `An interactive map of ${cities.length} digital nomad cities worldwide, plotted by location and scored across 13 categories.` };
 
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Nomad World Map: ${cities.length} Cities Mapped | The Nomad HQ</title>
@@ -128,9 +108,11 @@ const html = `<!DOCTYPE html>
     .wm-pop .wm-pop-row{display:flex;justify-content:space-between;font-size:.85rem;margin-top:.15rem;}
     .wm-pop .wm-pop-go{color:#ff8863;font-size:.8rem;font-weight:600;margin-top:.5rem;}
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-  ${navHtml()}
+  ${shell.bodyStart}
+  ${shell.navFor('World Map')}
   <main>
     <header class="hub-hero">
       <img class="hub-hero-img" src="/assets/map-hero.webp" alt="An airplane wing above the clouds at sunset" fetchpriority="high">
@@ -183,7 +165,6 @@ ${slidersMarkup}
     </div>
   </main>
   <div class="wm-pop" id="wmPop" role="tooltip"></div>
-  ${footerHtml()}
   <script>
     (function(){
       var CK=${JSON.stringify(CK)};
@@ -249,8 +230,11 @@ ${slidersMarkup}
       render();apply();
     })();
   </script>
+  ${shell.footer}
+${shell.bodyEnd}
 </body>
 </html>`;
 
-fs.writeFileSync(path.join(ROOT, 'map.html'), html);
+shell.assertComplete(html, 'map.html');
+shell.writePage('map.html', html);
 console.log(`Wrote map.html with ${cities.length} city dots + full filters + zoom/pan.`);

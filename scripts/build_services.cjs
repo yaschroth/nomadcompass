@@ -644,7 +644,7 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
     </div>
     </div>
   </main>
-  ${FOOTER}
+${shell.liftPhotoCredit('services.html')}  ${FOOTER}
 ${shell.bodyEnd}
   <script>
     (function(){

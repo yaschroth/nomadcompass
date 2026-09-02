@@ -10,6 +10,7 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 
 const COSTS = require(path.join(ROOT, 'data', 'numbeo-costs.json'));
 const FX = require(path.join(ROOT, 'assets', 'fx-usd.json'));
@@ -42,15 +43,14 @@ const cheapest = rows[0], priciest = rows[rows.length - 1];
 const asOf = (COSTS._meta && COSTS._meta.updated) || 'this year';
 const fxDate = (FX.time_last_update_utc || '').replace(/^[A-Za-z]+, /, '').replace(/ \d{2}:\d{2}.*$/, '');
 
-// ---- clone shared shell from geoarbitrage.html ----
-const src = fs.readFileSync(path.join(ROOT, 'geoarbitrage.html'), 'utf8');
-const grab = (re, name) => { const m = src.match(re); if (!m) throw new Error('shell missing: ' + name); return m[0]; };
-const ga4 = grab(/<!-- ga4 -->[\s\S]*?<!-- \/ga4 -->/, 'ga4');
-const nav = grab(/<nav class="nav"[\s\S]*?<\/nav>\s*<script>\(function\(\)\{var n=document\.getElementById\('mainNav'[\s\S]*?\}\)\(\);<\/script>/, 'nav');
-const footer = grab(/<footer class="footer">[\s\S]*?<\/footer>/, 'footer');
-const navsearch = grab(/<!-- nav-search-js -->[\s\S]*?<!-- \/nav-search-js -->/, 'navsearch');
-const cc = grab(/<!-- cc -->[\s\S]*?<!-- \/cc -->/, 'cc');
-const brand = grab(/<!-- brand-graph -->[\s\S]*?<\/script>/, 'brand');
+// The shell used to be lifted from geoarbitrage.html by six hand-written regexes here, which is
+// why this page was the one that shipped without the affiliate click tracker: the list was a copy
+// and nobody updated it when the sweep was added. lib/page_shell.cjs is the single copy.
+const ga4 = shell.headTop;
+const nav = shell.navFor('Cost of Living Index');
+const footer = shell.footer;
+const cc = shell.bodyEnd;
+const brand = shell.headEnd;
 
 // table rows
 const tbody = rows.map((r) => {
@@ -87,8 +87,8 @@ const page = `<!DOCTYPE html>
   ${ga4}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Nomad Cost of Living Index ${new Date().getFullYear()}: Real Monthly Costs, ${rows.length} Cities | The Nomad HQ</title>
-  <meta name="description" content="A transparent, sourced cost-of-living index for digital nomads: the real monthly budget for ${rows.length} cities, ranked, from central rent plus a one-person basket priced from Numbeo. Sort and filter by region.">
+  <title>Cost of Living Index for Digital Nomads: ${rows.length} Cities | The Nomad HQ</title>
+  <meta name="description" content="The real monthly budget for ${rows.length} cities, ranked: central rent plus a one-person basket, every figure priced from Numbeo. Sort and filter by region.">
   <link rel="canonical" href="https://thenomadhq.com/cost-of-living-index">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="Digital Nomad Cost of Living Index | The Nomad HQ">
@@ -132,7 +132,7 @@ const page = `<!DOCTYPE html>
   ${brand}
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  ${shell.bodyStart}
   ${nav}
   <main id="main-content" tabindex="-1">
     <header class="hub-hero">
@@ -209,7 +209,6 @@ ${tbody}
   <!-- tc-end -->
   </main>
   ${footer}
-  ${navsearch}
   <script>
     (function(){
       var body=document.getElementById('ciBody'),table=document.getElementById('ciTable');
@@ -248,5 +247,6 @@ ${tbody}
 </body>
 </html>`;
 
-fs.writeFileSync(path.join(ROOT, 'cost-of-living-index.html'), page);
+shell.assertComplete(page, 'cost-of-living-index.html');
+shell.writePage('cost-of-living-index.html', page);
 console.log('Built cost-of-living-index.html with', rows.length, 'cities. Cheapest', cheapest.name, money(cheapest.solo), '| priciest', priciest.name, money(priciest.solo));

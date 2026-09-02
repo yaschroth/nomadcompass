@@ -385,7 +385,7 @@ ${shell.bodyEnd}
   shell.assertComplete(html, url);
   const dir = path.join(ROOT, 'services', 'languages');
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(ROOT, file), html);
+  shell.writePage(file, html);
   written.push({
     url, file, kind: 'language', language: lang, label: langName,
     n: v.rows.length, cities: v.cities.size, services: catRows.length, indexable: true, title, h1,

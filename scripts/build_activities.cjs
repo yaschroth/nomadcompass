@@ -9,6 +9,9 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
+const { stats } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
+const S = stats();
 const BASE = 'https://thenomadhq.com';
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const txt = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -25,45 +28,6 @@ const activities = SLUGS.map((s) => {
   return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, ''));
 }).filter(Boolean);
 
-const NAV = `  <nav class="nav" id="mainNav">
-    <div class="nav-container">
-      <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
-      <ul class="nav-links">
-        <li><a href="/" class="nav-link">Home</a></li>
-        <li><a href="/wheel" class="nav-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-link">Cities</a></li><li><a href="/map" class="nav-link">Map</a></li>
-        <li><a href="/best" class="nav-link">Rankings</a></li>
-        <li><a href="/tier-list" class="nav-link">Tier List</a></li>
-        <li><a href="/compare" class="nav-link">Compare</a></li>
-        <li><a href="/blog" class="nav-link">Blog</a></li>
-      </ul>
-      
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
-    </div>
-    <div class="nav-mobile" id="navMobile">
-      <ul class="nav-mobile-links">
-        <li><a href="/" class="nav-mobile-link">Home</a></li>
-        <li><a href="/wheel" class="nav-mobile-link">Wheel</a></li>
-        <li><a href="/cities" class="nav-mobile-link">Cities</a></li><li><a href="/map" class="nav-mobile-link">Map</a></li>
-        <li><a href="/best" class="nav-mobile-link">Rankings</a></li>
-        <li><a href="/tier-list" class="nav-mobile-link">Tier List</a></li>
-        <li><a href="/compare" class="nav-mobile-link">Compare</a></li>
-        <li><a href="/blog" class="nav-mobile-link">Blog</a></li>
-      </ul>
-      
-    </div>
-  </nav>`;
-const FOOTER = `<footer class="footer"><div class="container">
-      <div class="footer-grid">
-        <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
-        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/map" class="footer-link">World Map</a></li><li><a href="/best" class="footer-link">Rankings</a></li><li><a href="/tier-list" class="footer-link">Tier List</a></li><li><a href="/activities" class="footer-link">By Activity</a></li><li><a href="/compare" class="footer-link">Compare</a></li></ul></div>
-        <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
-      </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
-      <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
-      <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
-    </div></footer>`;
-const NAVJS = `<script>(function(){var nav=document.getElementById('mainNav'),t=document.getElementById('navToggle'),m=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');m.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});m.querySelectorAll('.nav-mobile-link,.nav-mobile-actions .btn').forEach(function(l){l.addEventListener('click',function(){t.classList.remove('active');m.classList.remove('active');b.classList.remove('nav-open');t.setAttribute('aria-expanded','false');});});window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
 
 const CSS = `
   .act-hero { position:relative; width:100%; min-height:70vh; display:flex; align-items:flex-end; overflow:hidden; }
@@ -145,6 +109,7 @@ function render(a) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(a.metaTitle)} | The Nomad HQ</title>
@@ -165,9 +130,11 @@ function render(a) {
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
   ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ''}
   <style>${CSS}</style>
+  ${shell.headEnd}
 </head>
 <body>
-${NAV}
+  ${shell.bodyStart}
+  ${shell.navFor()}
   <main>
     <header class="act-hero">
       <img class="act-hero-img" src="${heroImg}" alt="${esc(hero.name)}" fetchpriority="high">
@@ -196,8 +163,8 @@ ${items}
       </div>
     </div>
   </main>
-  ${FOOTER}
-  ${NAVJS}
+  ${shell.footer}
+${shell.bodyEnd}
 </body>
 </html>
 `;
@@ -212,9 +179,10 @@ function buildHub() {
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Best Cities by Activity: Surf, Dive, Watersports and Shopping | The Nomad HQ</title>
+  <title>Best Cities by Activity: Surf, Dive &amp; Shop | The Nomad HQ</title>
   <meta name="description" content="Curated editorial picks of the best cities for surfing, diving, kayaking and shopping as a digital nomad, with links to the full city guides.">
   <link rel="canonical" href="${BASE}/activities">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -244,9 +212,11 @@ function buildHub() {
     .hub-card-teaser { font-size:var(--text-sm); color:var(--color-stone); margin:0; line-height:1.5; }
     .hub-cta { text-align:center; padding:3rem 1rem 4rem; }
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-${NAV}
+  ${shell.bodyStart}
+  ${shell.navFor()}
   <main>
     <header class="hub-hero">
       <img class="hub-hero-img" src="/assets/activities-hero.webp" alt="Turquoise ocean waves rolling onto a sandy beach, seen from above" fetchpriority="high">
@@ -263,15 +233,16 @@ ${cards}
       <div class="hub-cta"><a href="/cities" class="btn btn-primary btn-lg">Browse all ${S.cities} cities &rarr;</a></div>
     </div>
   </main>
-  ${FOOTER}
-  ${NAVJS}
+  ${shell.footer}
+${shell.bodyEnd}
 </body>
 </html>
 `;
-  fs.writeFileSync(path.join(ROOT, 'activities.html'), html);
+  shell.assertComplete(html, 'activities.html');
+  shell.writePage('activities.html', html);
 }
 
 fs.mkdirSync(path.join(ROOT, 'activities'), { recursive: true });
-for (const a of activities) fs.writeFileSync(path.join(ROOT, 'activities', a.slug + '.html'), render(a));
+for (const a of activities) { const h = render(a); shell.assertComplete(h, 'activities/' + a.slug + '.html'); shell.writePage('activities/' + a.slug + '.html', h); }
 if (activities.length) buildHub();
 console.log(`Built ${activities.length} activity pages + hub: ${activities.map((a) => a.slug + '(' + (a.entries || []).length + ')').join(', ')}`);

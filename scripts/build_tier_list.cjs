@@ -446,7 +446,7 @@ ${faq.map((f) => `        <div><h3 class="tl-faq-q">${esc(f.q)}</h3><p class="tl
     </div>
   </main>
   <div class="tl-pop" id="tlPop" role="tooltip"></div>
-  ${FOOTER}
+${shell.liftPhotoCredit(v.file)}  ${FOOTER}
   ${NAVJS}
   ${TLPOP}
   ${TLFILTER}
@@ -521,7 +521,7 @@ ${section('By category', catVariants)}
       <div class="hub-cta"><a href="/tier-list" class="btn btn-primary btn-lg">Open the master tier list &rarr;</a></div>
     </div>
   </main>
-  ${FOOTER}
+${shell.liftPhotoCredit('tier-lists.html')}  ${FOOTER}
   ${NAVJS}
 </body>
 </html>

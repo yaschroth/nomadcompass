@@ -430,7 +430,7 @@ ${HUBS.has(cat) ? `          <li><a href="/services/${M.SERVICE_SLUGS[cat]}">${e
 
       const ldir = path.join(ROOT, 'services', cslug, M.SERVICE_SLUGS[cat]);
       if (!fs.existsSync(ldir)) fs.mkdirSync(ldir, { recursive: true });
-      fs.writeFileSync(path.join(ldir, langSlug(lang) + '.html'), lhtml);
+      shell.writePage('services/' + cslug + '/' + M.SERVICE_SLUGS[cat] + '/' + langSlug(lang) + '.html', lhtml);
       written.push({
         url: lurl, file: 'services/' + cslug + '/' + M.SERVICE_SLUGS[cat] + '/' + langSlug(lang) + '.html',
         kind: 'country-lang', country: cslug, service: cat, language: lang,
@@ -582,7 +582,7 @@ ${HUBS.has(cat) ? `          <li><a href="/services/${M.SERVICE_SLUGS[cat]}">${e
 
     const dir = path.join(ROOT, 'services', cslug);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, M.SERVICE_SLUGS[cat] + '.html'), html);
+    shell.writePage('services/' + cslug + '/' + M.SERVICE_SLUGS[cat] + '.html', html);
     written.push({
       url, file: 'services/' + cslug + '/' + M.SERVICE_SLUGS[cat] + '.html',
       kind: 'country-service', country: cslug, service: cat,
@@ -758,7 +758,7 @@ ${faq.map((q) => '          <dt>' + esc(q.q) + '</dt>\n          <dd>' + esc(q.a
       </div>`,
   });
 
-  fs.writeFileSync(path.join(ROOT, 'services', cslug + '.html'), html);
+  shell.writePage('services/' + cslug + '.html', html);
   written.push({
     url, file: 'services/' + cslug + '.html', kind: 'country', country: cslug,
     n: co.rows.length, cities: co.cities.size, services: cats.length,

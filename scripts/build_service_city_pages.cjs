@@ -452,7 +452,7 @@ ${shell.bodyEnd}
 </body>
 </html>`;
 
-  fs.writeFileSync(path.join(OUTDIR, slug + '.html'), html);
+  shell.writePage('services/' + slug + '.html', html);
   written.push({ slug, n: rows.length, indexable: isIndexable, title });
 }
 

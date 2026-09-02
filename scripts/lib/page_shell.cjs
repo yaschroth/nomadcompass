@@ -57,18 +57,62 @@ const footer = grab(SERVICES, 'services.html', 'the footer', /<footer class="foo
 // The two leading spaces matter: apply_analytics.cjs detects its own block with /  <!-- ga4 -->/
 // and inserted a second copy into all 287 pages when the lift dropped them.
 const headTop = grab(INDEX, 'index.html', 'the GA4 block', /  <!-- ga4 -->[\s\S]*?<!-- \/ga4 -->/);
-const headEnd = grab(INDEX, 'index.html', 'the brand graph', /<!-- brand-graph -->[\s\S]*?<\/script>/);
+const brandGraph = grab(INDEX, 'index.html', 'the brand graph', /<!-- brand-graph -->[\s\S]*?<\/script>/);
 const bodyStart = grab(INDEX, 'index.html', 'the skip link', /<a [^>]*class="skip-link"[^>]*>[^<]*<\/a>/);
 const consent = grab(INDEX, 'index.html', 'the consent banner', /  <!-- cc -->[\s\S]*?<!-- \/cc -->/);
 const navSearchJs = grab(INDEX, 'index.html', 'the nav search resolver', /<!-- nav-search-js -->[\s\S]*?<!-- \/nav-search-js -->/);
-const bodyEnd = consent + '\n' + navSearchJs;
+
+// Two more sweeps the shell was not lifting, which is why apply_best_page.cjs aborted in the write
+// guard on its first run after the site gained them: the template it emitted was a page that would
+// have deleted Travelpayouts and the affiliate click tracker from all 32 ranking pages. They sit at
+// the same two positions the sweeps put them in, so a generated page needs no further handling.
+const travelpayouts = grab(INDEX, 'index.html', 'the Travelpayouts loader', /<!-- travelpayouts -->[\s\S]*?<!-- \/travelpayouts -->/);
+const affTrack = grab(INDEX, 'index.html', 'the affiliate click tracker', /<!-- aff-track -->[\s\S]*?<!-- \/aff-track -->/);
+
+const headEnd = brandGraph + '\n' + travelpayouts;
+const bodyEnd = consent + '\n' + navSearchJs + '\n' + affTrack;
+
+/**
+ * The photo credit is per page, not sitewide: it names the photographer of every hero that page
+ * happens to show, which is a condition of the Creative Commons licences rather than a nicety.
+ * apply_photo_credit.cjs owns it and recomputes it from whatever the page ends up displaying, so a
+ * generator only has to carry the existing block through its own rewrite and then let the sweep
+ * run. Without that the write guard refuses the generator, and the tempting fix is --force, which
+ * would delete the credits from every page in the family at once.
+ */
+function liftPhotoCredit(file) {
+  const p = path.join(ROOT, file);
+  if (!fs.existsSync(p)) return '';
+  const m = fs.readFileSync(p, 'utf8').match(/  <!-- photo-credit -->[\s\S]*?<!-- \/photo-credit -->\n/);
+  return m ? m[0] : '';
+}
+
+/**
+ * Write a generated page, carrying its photo credit through.
+ *
+ * The seven service generators build their HTML deep inside a render function that does not know
+ * its own output path, so lifting the block into the template is awkward in a way that invites the
+ * shortcut the guard exists to prevent. Doing it at the write instead needs only the path the
+ * generator already has. The block goes back exactly where apply_photo_credit.cjs puts it, directly
+ * before the footer, and a page that never had one is written unchanged.
+ *
+ * `file` is relative to the repository root, the same string the caller passes to path.join(ROOT, ...).
+ */
+function writePage(file, html) {
+  const credit = liftPhotoCredit(file);
+  if (credit && !html.includes('<!-- photo-credit -->')) {
+    const at = html.indexOf('  <footer class="footer"');
+    if (at !== -1) html = html.slice(0, at) + credit + html.slice(at);
+  }
+  fs.writeFileSync(path.join(ROOT, file), html);
+}
 
 // The needles _safe_write.cjs tracks that this shell is responsible for. A generator can assert
 // against this list before writing, so a missing block fails at the generator with a clear message
 // rather than inside the write guard with a generic one.
 const NEEDLES = [
   'G-JV1BMRJF89', 'cookie-consent', 'nomadhq_consent', '#organization',
-  'nav-drop-menu', 'nav-search', 'skip-link',
+  'nav-drop-menu', 'nav-search', 'skip-link', 'tp-em.com', 'affiliate_click',
 ];
 
 /**
@@ -111,4 +155,4 @@ function navFor(active) {
   return out;
 }
 
-module.exports = { style, nav, navFor, footer, headTop, headEnd, bodyStart, bodyEnd, NEEDLES, assertComplete };
+module.exports = { style, nav, navFor, footer, headTop, headEnd, bodyStart, bodyEnd, NEEDLES, assertComplete, liftPhotoCredit, writePage };

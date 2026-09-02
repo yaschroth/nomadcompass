@@ -647,7 +647,7 @@ ${shell.bodyEnd}
   shell.assertComplete(html, page.url);
   const dir = path.join(ROOT, 'services', city.id);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(ROOT, page.file), html);
+  shell.writePage(page.file, html);
   accepted.push({ url: page.url, fingerprint });
   written.push({ url: page.url, file: page.file, kind: 'pair', city: city.id, service: cat, n: pair.n, words: uniqueWords, title, h1, indexable: true });
 }

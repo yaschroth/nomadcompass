@@ -301,7 +301,7 @@ ${items}
       </div>
     </div>
   </main>
-  ${shell.footer}
+${shell.liftPhotoCredit('best/' + data.slug + '.html')}  ${shell.footer}
 ${shell.bodyEnd}
 </body>
 </html>

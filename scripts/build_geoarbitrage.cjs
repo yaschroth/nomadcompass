@@ -9,6 +9,7 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const BASE = 'https://thenomadhq.com';
 const iso = (flag) => { const p = [...(flag || '')]; if (p.length !== 2) return ''; return p.map((x) => String.fromCharCode(x.codePointAt(0) - 0x1F1E6 + 97)).join(''); };
 const m = {};
@@ -25,28 +26,6 @@ const DATA = m.exports.filter((c) => c && c.id && typeof c.costPerMonth === 'num
 const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'Middle East', northamerica: 'North America', oceania: 'Oceania' };
 const regionOptions = Object.keys(REGION_NAMES).map((r) => `<option value="${r}">${REGION_NAMES[r]}</option>`).join('');
 
-function navHtml() {
-  const items = [['/', 'Home'], ['/wheel', 'Wheel'], ['/cities', 'Cities'], ['/map', 'Map'], ['/best', 'Rankings'], ['/tier-list', 'Tier List'], ['/compare', 'Compare'], ['/blog', 'Blog']];
-  const li = (cls) => items.map(([h, t]) => `<li><a href="${h}" class="${cls}">${t}</a></li>`).join('');
-  return `<nav class="nav" id="mainNav"><div class="nav-container">
-      <a href="/" class="nav-logo"><img src="/assets/logo.svg" alt="" class="nav-logo-icon"><span class="nav-logo-nomad">The Nomad</span><span class="nav-logo-accent">HQ</span></a>
-      <ul class="nav-links">${li('nav-link')}</ul>
-      
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span><span class="nav-toggle-line"></span></button>
-    </div><div class="nav-mobile" id="navMobile"><ul class="nav-mobile-links">${li('nav-mobile-link')}</ul>
-      </div></nav>
-  <script>(function(){var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),mm=document.getElementById('navMobile'),b=document.body;t.addEventListener('click',function(){var o=t.classList.toggle('active');mm.classList.toggle('active');b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window.scrollY>10);},{passive:true});})();</script>`;
-}
-const FOOTER = `<footer class="footer"><div class="container">
-      <div class="footer-grid">
-        <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
-        <div class="footer-column"><h4 class="footer-heading">Explore</h4><ul class="footer-links"><li><a href="/cities" class="footer-link">All Cities</a></li><li><a href="/geoarbitrage" class="footer-link">Geoarbitrage Calculator</a></li><li><a href="/visa" class="footer-link">Visa Finder</a></li><li><a href="/best-weather" class="footer-link">Best Weather by Month</a></li><li><a href="/route" class="footer-link">Route Planner</a></li><li><a href="/wheel" class="footer-link">Decision Wheel</a></li></ul></div>
-        <div class="footer-column"><h4 class="footer-heading">Resources</h4><ul class="footer-links"><li><a href="/blog" class="footer-link">Blog</a></li></ul></div>
-      </div>
-      <div class="footer-bottom"><nav class="footer-legal" aria-label="Legal and company"><a href="/about">About</a><a href="/contact">Contact</a><a href="/disclosure">Affiliate Disclosure</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/legal-notice">Legal Notice</a></nav>
-      <p class="footer-disclosure">Some links on this site are affiliate links; we may earn a commission at no extra cost to you.</p>
-      <p class="footer-copyright">&copy; 2026 The Nomad HQ. All rights reserved.</p></div>
-    </div></footer>`;
 
 const ld = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Geoarbitrage Calculator', url: BASE + '/geoarbitrage', applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description: 'See how much you could save each month by living in different digital nomad cities on your income.' };
 const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [['Home', BASE + '/'], ['Geoarbitrage Calculator', BASE + '/geoarbitrage']].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
@@ -54,6 +33,7 @@ const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', i
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
+${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Geoarbitrage Calculator: How Far Your Salary Goes | The Nomad HQ</title>
@@ -107,9 +87,11 @@ const html = `<!DOCTYPE html>
     .ga-share { margin-top:1.5rem; } .ga-share button { font-family:inherit; font-size:.85rem; font-weight:600; padding:.55rem 1.1rem; border-radius:9px; cursor:pointer; border:1px solid var(--color-sand-dark,#e3d9c6); background:#fff; color:var(--color-charcoal); } .ga-share button:hover { border-color:var(--color-terracotta); color:var(--color-terracotta); }
     .ga-disclaim { font-size:.78rem; color:var(--color-stone); margin-top:1rem; line-height:1.6; }
   </style>
+  ${shell.headEnd}
 </head>
 <body>
-  ${navHtml()}
+  ${shell.bodyStart}
+  ${shell.navFor('Geoarbitrage Calculator')}
   <main>
     <header class="hub-hero">
       <img class="hub-hero-img" src="/assets/geo-hero.webp" alt="A white villa with a pool and palm trees under a bright sky" fetchpriority="high" width="1920" height="1267">
@@ -133,7 +115,8 @@ const html = `<!DOCTYPE html>
       <p class="ga-disclaim">Cost of living figures are The Nomad HQ's editorial estimates of a comfortable monthly budget for one person (rent, food, coworking, getting around and some fun), in USD, not official data. Your real spend depends on your lifestyle. Income is after tax; taxes are not modelled.</p>
     </div>
   </main>
-  ${FOOTER}
+  ${shell.footer}
+${shell.bodyEnd}
   <script>
     (function(){
       var CITIES=${JSON.stringify(DATA)};
@@ -167,5 +150,6 @@ const html = `<!DOCTYPE html>
 </body>
 </html>`;
 
-fs.writeFileSync(path.join(ROOT, 'geoarbitrage.html'), html);
+shell.assertComplete(html, 'geoarbitrage.html');
+shell.writePage('geoarbitrage.html', html);
 console.log(`Wrote geoarbitrage.html (${DATA.length} cities with cost).`);
