@@ -9,7 +9,11 @@
 const META = {
   Albania: ['C/F', 0], Argentina: ['C/I', 0], Armenia: ['C/F', 0], Australia: ['I', 0],
   Austria: ['C/F', 1], Azerbaijan: ['C/F', 0], Bahrain: ['G', 0], Belgium: ['C/E', 1],
-  Bolivia: ['A/C', 0], Bosnia: ['C/F', 0], 'Bosnia and Herzegovina': ['C/F', 0], Brazil: ['C/N', 0],
+  Bolivia: ['A/C', 0], Bosnia: ['C/F', 0], 'Bosnia and Herzegovina': ['C/F', 0], Botswana: ['D/G/M', 0],
+  Brazil: ['C/N', 0],
+  // Zambia, Nicaragua and El Salvador have been in cities-data.js without a META row for some
+  // time; the file's own docstring claims it covers every country present, so it did not.
+  Zambia: ['C/D/G', 0], Nicaragua: ['A/B', 0], 'El Salvador': ['A/B', 0],
   Bulgaria: ['C/F', 1], Cambodia: ['A/C/G', 0], Canada: ['A/B', 0], 'Cape Verde': ['C/F', 0],
   Chile: ['C/L', 0], China: ['A/C/I', 0], Colombia: ['A/B', 0], 'Costa Rica': ['A/B', 0],
   Croatia: ['C/F', 1], Cyprus: ['G', 0], 'Czech Republic': ['C/E', 1], Denmark: ['C/F/K', 1],

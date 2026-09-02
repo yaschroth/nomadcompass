@@ -25,6 +25,7 @@ const FACTS = {
   Bolivia: { cur: 'Boliviano (Bs, BOB)', lang: 'Spanish', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'inDrive, Yango', emg: '911' },
   Bosnia: { cur: 'Mark (KM, BAM)', lang: 'Bosnian', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Round up or 10%', ride: 'Bolt', emg: '112' },
   'Bosnia and Herzegovina': { cur: 'Mark (KM, BAM)', lang: 'Bosnian', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Round up or 10%', ride: 'Bolt', emg: '112' },
+  Botswana: { cur: 'Pula (P, BWP)', lang: 'English, Setswana', volt: '230V / 50Hz', water: 'Safe in towns; bottled in the delta', tip: '10%', ride: 'Local taxis, combis', emg: '997 / 999' },
   Brazil: { cur: 'Real (R$, BRL)', lang: 'Portuguese', volt: '127/220V / 60Hz', water: 'Bottled or filtered', tip: '10%, usually added', ride: 'Uber, 99', emg: '190' },
   Bulgaria: { cur: 'Lev (лв, BGN)', lang: 'Bulgarian', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Round up or 10%', ride: 'Bolt', emg: '112' },
   Cambodia: { cur: 'Riel (៛, KHR) / USD', lang: 'Khmer', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: 'Not expected; appreciated', ride: 'Grab, PassApp', emg: '117' },

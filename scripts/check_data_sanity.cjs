@@ -40,6 +40,8 @@ const ALLOW_HIGH = {
   uyuni: 'Bolivian altiplano at 3,600m, correct',
   isfahan: 'Iranian plateau at 1,580m, correct',
   yazd: 'Iranian plateau at 1,215m, correct',
+  shiraz: 'Iranian plateau at 1,507m, correct. Same case as Isfahan and Yazd: the city really '
+    + 'does sit high enough to have near-freezing January nights at latitude 29.6',
   ouarzazate: 'south of the Atlas at 1,110m, correct',
   aitbenhaddou: 'Ounila valley at 1,270m, correct',
   wadimusa: 'Petra approach at 1,090m, correct',
@@ -146,6 +148,23 @@ for (const c of CITIES) {
   if (!fs.existsSync(path.join(ROOT, 'cities', c.id + '.html'))) err('coverage', `${c.id}: no page`);
   if (!fs.existsSync(path.join(ROOT, 'images/og', c.id + '.jpg'))) warn('coverage', `${c.id}: no OG card`);
   if (!fs.existsSync(path.join(ROOT, 'images/cities', c.id + '.webp'))) warn('coverage', `${c.id}: no self-hosted hero`);
+}
+
+// 6a. A region mapping for a city that does not exist is a landmine, not just dead weight.
+//     city-regions.js still carries entries from an older dataset, and a new city that happens
+//     to take one of those slugs inherits its region silently. Batch 33 walked into exactly that:
+//     Newcastle, Australia landed on `newcastle: 'europe'`, left over from Newcastle upon Tyne,
+//     and would have shipped filed under Europe. Listing them here means the next batch sees the
+//     collision before it authors the slug rather than after.
+{
+  const ids = new Set(CITIES.map((c) => c.id));
+  const orphans = Object.keys(regions).filter((k) => !ids.has(k));
+  if (orphans.length) {
+    // Its own category on purpose: inside 'coverage' this line sat behind sixty OG-card
+    // warnings and the printer truncates each category at twelve, so it was never shown.
+    warn('region-orphans', orphans.length + ' mapping(s) for a city that does not exist. A new '
+      + 'city taking one of these slugs inherits its region silently: ' + orphans.join(', '));
+  }
 }
 
 // 7. Neighbourhood pins sit near their city.

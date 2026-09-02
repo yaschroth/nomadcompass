@@ -38,7 +38,7 @@ const RULES = [
   // pages, most of them correct before it ran. So these stay pinned to the values this site has
   // actually claimed about ITSELF, and a new one gets appended here when the count moves.
   // The list is the safety mechanism, not an oversight.
-  ...[410, 650, 710].flatMap((old) => [
+  ...[410, 650, 710, 740, 771].flatMap((old) => [
     [new RegExp('\\b' + old + '\\b(?=\\s+(?:cities|destinations|rated cities))', 'g'), String(s.cities)],
     [new RegExp('\\b' + old + '-city\\b', 'g'), `${s.cities}-city`],
   ]),

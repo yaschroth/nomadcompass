@@ -31,7 +31,14 @@ const target = path.join(ROOT, 'cities-data.js');
 const src = fs.readFileSync(target, 'utf8');
 const CITIES = (new Function(src + ';return CITIES;'))();
 
-const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+// NFD splits a letter from its combining accent, which handles é and ö, and does nothing at all for
+// the letters where the stroke or slash is part of the character itself. So Wrocław normalised to
+// "wrocaw" and Wroclaw to "wroclaw", and the duplicate check called them different cities. Both are
+// in the dataset today (Wrocław, Tromsø) and only their slugs happened to stop a second copy.
+// Fold those by hand before the accent pass.
+const FOLD = { 'ł': 'l', 'ø': 'o', 'đ': 'd', 'ð': 'd', 'þ': 'th', 'ß': 'ss', 'æ': 'ae', 'œ': 'oe', 'ı': 'i' };
+const norm = (s) => String(s).toLowerCase().replace(/[łøđðþßæœı]/g, (c) => FOLD[c])
+  .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
 const haveKey = new Set(CITIES.map((c) => norm(c.name) + '|' + norm(c.country)));
 const haveSlug = new Set(CITIES.map((c) => c.id));
 

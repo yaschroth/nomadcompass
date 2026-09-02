@@ -257,8 +257,17 @@ const CITY_REGIONS = {
         quetzaltenango: 'latam', puertoviejo: 'latam', lafortuna: 'latam', durban: 'africa',
         knysna: 'africa', puertovaras: 'latam', vinadelmar: 'latam', arugambay: 'asia',
         dianibeach: 'africa', hurghada: 'africa', mindo: 'latam', sokcho: 'asia',
-        trincomalee: 'asia', siwa: 'africa'
+        trincomalee: 'asia', siwa: 'africa',
 
+        // Batch 33
+        newcastleau: 'oceania', rotorua: 'oceania', nelson: 'oceania', broome: 'oceania',
+        shiraz: 'middleeast', gaziantep: 'middleeast', madaba: 'middleeast', rasalkhaimah: 'middleeast',
+        gqeberha: 'africa', sousse: 'africa', jinja: 'africa', capecoast: 'africa',
+        maun: 'africa', santafe: 'northamerica', bozeman: 'northamerica', kelowna: 'northamerica',
+        savannah: 'northamerica', kumamoto: 'asia', takamatsu: 'asia', melaka: 'asia',
+        gangtok: 'asia', karakol: 'asia', phanthiet: 'asia', valdivia: 'latam',
+        morelia: 'latam', puertomadryn: 'latam', laserena: 'latam', cagliari: 'europe',
+        maribor: 'europe', almeria: 'europe'
       };
 
 if (typeof module !== 'undefined' && module.exports) module.exports = CITY_REGIONS;
