@@ -276,7 +276,39 @@ const CITY_REGIONS = {
         tofo: 'africa', boise: 'northamerica', spokane: 'northamerica', burlington: 'northamerica',
         nanaimo: 'northamerica', stjohns: 'northamerica', manta: 'latam', belem: 'latam',
         bucaramanga: 'latam', campogrande: 'latam', hakodate: 'asia', kagoshima: 'asia',
-        vizag: 'asia', shymkent: 'asia'
-      };
+        vizag: 'asia', shymkent: 'asia',
+      
+  // batch 35
+  bridgetown: 'northamerica',
+  hamiltonbermuda: 'northamerica',
+  georgetowncayman: 'northamerica',
+  willemstad: 'northamerica',
+  oranjestad: 'northamerica',
+  nassau: 'northamerica',
+  roseau: 'northamerica',
+  stgeorges: 'northamerica',
+  castries: 'northamerica',
+  portofspain: 'northamerica',
+  roatan: 'latam',
+  sanpedrobelize: 'latam',
+  georgetownguyana: 'latam',
+  paramaribo: 'latam',
+  chisinau: 'europe',
+  dushanbe: 'asia',
+  bandarseribegawan: 'asia',
+  dili: 'asia',
+  thimphu: 'asia',
+  nosybe: 'africa',
+  blantyre: 'africa',
+  victoriafalls: 'africa',
+  lusaka: 'africa',
+  douala: 'africa',
+  cotonou: 'africa',
+  mahe: 'africa',
+  apia: 'oceania',
+  nukualofa: 'oceania',
+  rarotonga: 'oceania',
+  papeete: 'oceania',
+};
 
 if (typeof module !== 'undefined' && module.exports) module.exports = CITY_REGIONS;
