@@ -136,8 +136,14 @@ const all = ['.', 'cities', 'best', 'tier-list', 'activities', 'about', 'blog', 
   .flatMap(htmlIn).concat(htmlUnder('services'));
 
 const formRe = /<form class="nav-search"[\s\S]*?<\/form>/;
-const jsRe = /  <!-- nav-search-js -->[\s\S]*?<!-- \/nav-search-js -->/;
-let form = 0, skipped = 0, js = 0;
+// The leading indentation is optional, and that matters. This used to require exactly two spaces,
+// which is how this sweep put a SECOND copy of the resolver on 1,149 pages: lib/page_shell.cjs
+// lifts the block without them, so every page a generator wrote through the shell failed this test
+// and had another block appended. Two 87-line style blocks and two copies of the script, on every
+// generated page, and nothing looked wrong. Global, because the job now includes collapsing the
+// duplicates it created.
+const jsRe = /[ \t]*<!-- nav-search-js -->[\s\S]*?<!-- \/nav-search-js -->\n?/g;
+let form = 0, skipped = 0, js = 0, collapsed = 0;
 for (const rel of all) {
   const abs = path.join(ROOT, rel);
   let html = fs.readFileSync(abs, 'utf8');
@@ -155,13 +161,18 @@ for (const rel of all) {
     html = html.replace(/<button[^>]*class="nav-toggle"/, (m) => FORM + '\n      ' + m);
   } else { skipped++; }
 
-  // Resolver JS before </body> (only on pages that got the form).
+  // Resolver JS before </body> (only on pages that got the form). Strip every existing copy first,
+  // then insert exactly one: a page that already carries two is left with one rather than two
+  // refreshed ones, which is what a plain replace would have done.
   if (/class="nav-search"/.test(html)) {
-    if (jsRe.test(html)) { html = html.replace(jsRe, JS); }
-    else if (/<\/body>/i.test(html)) { html = html.replace(/<\/body>/i, JS + '\n</body>'); }
+    jsRe.lastIndex = 0;
+    const copies = (html.match(jsRe) || []).length;
+    if (copies) html = html.replace(jsRe, '');
+    if (copies > 1) collapsed++;
+    if (/<\/body>/i.test(html)) html = html.replace(/<\/body>/i, JS + '\n</body>');
     js++;
   }
 
   if (html !== before) { fs.writeFileSync(abs, html); form++; }
 }
-console.log(`Nav search: written ${form}, js on ${js}, skipped (no nav-actions) ${skipped} of ${all.length}`);
+console.log(`Nav search: written ${form}, js on ${js}, duplicate blocks collapsed on ${collapsed}, skipped (no nav-actions) ${skipped} of ${all.length}`);

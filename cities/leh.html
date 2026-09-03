@@ -59,7 +59,6 @@
     })();
   </script>
 
-  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 831 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -169,6 +168,7 @@
   })();
 </script>
 <!-- /travelpayouts -->
+  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 831 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -1215,6 +1215,87 @@
     })();
   </script>
 
+
+  <!-- cc -->
+  <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
+    <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>
+    <div class="cc-actions">
+      <button type="button" id="cc-decline" class="cc-btn cc-btn-ghost">Decline</button>
+      <button type="button" id="cc-accept" class="cc-btn cc-btn-primary">Accept</button>
+    </div>
+  </div>
+  <style>
+    .cc-banner{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:1rem 1.4rem;flex-wrap:wrap;justify-content:center;background:var(--color-ink,#0f172a);color:#fff;padding:.9rem 1.2rem;box-shadow:0 -4px 22px rgba(0,0,0,.2);}
+    .cc-banner[hidden]{display:none!important;}
+    .cc-text{margin:0;font-size:.9rem;line-height:1.5;max-width:66ch;color:rgba(255,255,255,.9);}
+    .cc-text a{color:#ff8863;text-decoration:underline;}
+    .cc-actions{display:flex;gap:.6rem;flex:0 0 auto;}
+    .cc-btn{cursor:pointer;border-radius:8px;padding:.5rem 1.2rem;font-size:.88rem;font-weight:600;font-family:inherit;border:1px solid transparent;transition:background .15s,border-color .15s;}
+    .cc-btn-primary{background:var(--color-terracotta,#c0392b);color:#fff;}
+    .cc-btn-primary:hover{background:#a5311f;}
+    .cc-btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);}
+    .cc-btn-ghost:hover{border-color:#fff;}
+  </style>
+  <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
+  <!-- /cc -->
+  <script src="../scripts/city-blog-articles.js"></script>  <script>
+    (function() {
+      const mapEl = document.getElementById('neighborhoodsMap');
+      if (!mapEl || typeof L === 'undefined') return;
+      const neighborhoods = [{"name":"Main Bazaar & Old Town","tagline":"Central market beneath the royal palace","lat":34.1642,"lng":77.5848},{"name":"Changspa","tagline":"Traveller hub of cafes and guesthouses","lat":34.162,"lng":77.572},{"name":"Karzoo","tagline":"Quiet lanes among fields and homestays","lat":34.167,"lng":77.576},{"name":"Upper Tukcha & Sankar","tagline":"Peaceful outskirts toward Sankar monastery","lat":34.172,"lng":77.581}];
+      if (neighborhoods.length === 0) return;
+      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
+      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
+      const map = L.map('neighborhoodsMap', { scrollWheelZoom: false }).setView([avgLat, avgLng], 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }).addTo(map);
+      const createIcon = (index, isActive) => L.divIcon({
+        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
+        html: '<span>' + (index + 1) + '</span>', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32]
+      });
+      const markers = neighborhoods.map((n, i) => {
+        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) }).addTo(map)
+          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
+        marker.on('click', () => highlightNeighborhood(i));
+        return marker;
+      });
+      const group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+      function highlightNeighborhood(index) {
+        markers.forEach((mk, i) => mk.setIcon(createIcon(i, i === index)));
+        document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.classList.toggle('active', i === index));
+        map.panTo(markers[index].getLatLng());
+        markers[index].openPopup();
+      }
+      document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.addEventListener('click', () => highlightNeighborhood(i)));
+      setTimeout(() => highlightNeighborhood(0), 500);
+    })();
+  </script>
+
+  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
+  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
+  <!-- /city-toc-js -->
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
   <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
   <style>
@@ -1302,85 +1383,5 @@
   if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
   })();</script>
   <!-- /nav-search-js -->
-  <!-- cc -->
-  <div id="cookie-consent" class="cc-banner" role="dialog" aria-label="Cookie consent" hidden>
-    <p class="cc-text">We use cookies to measure traffic and improve the site. Accept analytics cookies, or decline and we keep only what is essential. See our <a href="/privacy">Privacy Policy</a>.</p>
-    <div class="cc-actions">
-      <button type="button" id="cc-decline" class="cc-btn cc-btn-ghost">Decline</button>
-      <button type="button" id="cc-accept" class="cc-btn cc-btn-primary">Accept</button>
-    </div>
-  </div>
-  <style>
-    .cc-banner{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:1rem 1.4rem;flex-wrap:wrap;justify-content:center;background:var(--color-ink,#0f172a);color:#fff;padding:.9rem 1.2rem;box-shadow:0 -4px 22px rgba(0,0,0,.2);}
-    .cc-banner[hidden]{display:none!important;}
-    .cc-text{margin:0;font-size:.9rem;line-height:1.5;max-width:66ch;color:rgba(255,255,255,.9);}
-    .cc-text a{color:#ff8863;text-decoration:underline;}
-    .cc-actions{display:flex;gap:.6rem;flex:0 0 auto;}
-    .cc-btn{cursor:pointer;border-radius:8px;padding:.5rem 1.2rem;font-size:.88rem;font-weight:600;font-family:inherit;border:1px solid transparent;transition:background .15s,border-color .15s;}
-    .cc-btn-primary{background:var(--color-terracotta,#c0392b);color:#fff;}
-    .cc-btn-primary:hover{background:#a5311f;}
-    .cc-btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);}
-    .cc-btn-ghost:hover{border-color:#fff;}
-  </style>
-  <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
-  <!-- /cc -->
-  <script src="../scripts/city-blog-articles.js"></script>  <script>
-    (function() {
-      const mapEl = document.getElementById('neighborhoodsMap');
-      if (!mapEl || typeof L === 'undefined') return;
-      const neighborhoods = [{"name":"Main Bazaar & Old Town","tagline":"Central market beneath the royal palace","lat":34.1642,"lng":77.5848},{"name":"Changspa","tagline":"Traveller hub of cafes and guesthouses","lat":34.162,"lng":77.572},{"name":"Karzoo","tagline":"Quiet lanes among fields and homestays","lat":34.167,"lng":77.576},{"name":"Upper Tukcha & Sankar","tagline":"Peaceful outskirts toward Sankar monastery","lat":34.172,"lng":77.581}];
-      if (neighborhoods.length === 0) return;
-      const avgLat = neighborhoods.reduce((s, n) => s + n.lat, 0) / neighborhoods.length;
-      const avgLng = neighborhoods.reduce((s, n) => s + n.lng, 0) / neighborhoods.length;
-      const map = L.map('neighborhoodsMap', { scrollWheelZoom: false }).setView([avgLat, avgLng], 13);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-        subdomains: 'abcd', maxZoom: 19
-      }).addTo(map);
-      const createIcon = (index, isActive) => L.divIcon({
-        className: 'neighborhood-marker' + (isActive ? ' active' : ''),
-        html: '<span>' + (index + 1) + '</span>', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -32]
-      });
-      const markers = neighborhoods.map((n, i) => {
-        const marker = L.marker([n.lat, n.lng], { icon: createIcon(i, false) }).addTo(map)
-          .bindPopup('<strong>' + n.name + '</strong><br>' + n.tagline);
-        marker.on('click', () => highlightNeighborhood(i));
-        return marker;
-      });
-      const group = L.featureGroup(markers);
-      map.fitBounds(group.getBounds().pad(0.1));
-      function highlightNeighborhood(index) {
-        markers.forEach((mk, i) => mk.setIcon(createIcon(i, i === index)));
-        document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.classList.toggle('active', i === index));
-        map.panTo(markers[index].getLatLng());
-        markers[index].openPopup();
-      }
-      document.querySelectorAll('.neighborhood-card').forEach((card, i) => card.addEventListener('click', () => highlightNeighborhood(i)));
-      setTimeout(() => highlightNeighborhood(0), 500);
-    })();
-  </script>
-
-  <!-- city-toc-js: highlight the active section in the sticky jump nav -->
-  <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
-  <!-- /city-toc-js -->
-<!-- aff-track -->
-<script>(function(){
-  document.addEventListener("click", function (e) {
-    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
-    if (!a) return;
-    var h = a.href || "";
-    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
-    if (typeof gtag !== "function") return;
-    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
-    var partner = m ? m[1] : "travelpayouts";
-    gtag("event", "affiliate_click", {
-      affiliate_partner: partner,
-      affiliate_placement: a.getAttribute("data-aff") || "",
-      link_url: h,
-      page_path: location.pathname
-    });
-  }, true);
-})();</script>
-<!-- /aff-track -->
 </body>
 </html>

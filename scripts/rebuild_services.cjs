@@ -82,6 +82,7 @@ const STEPS = [
   ['gate', 'check_prose_style.cjs', 'no em-dashes, and every price in USD'],
   ['gate', 'check_photo_credit.cjs', 'a licensed image is never shown without its photographer'],
   ['gate', 'check_meta.cjs', 'every page has its own title and description, both in budget'],
+  ['gate', 'check_duplicate_blocks.cjs', 'no page carries a sweep-owned block twice'],
   ['gate', 'verify_service_links.cjs --new-only', 'fetches the links a data change added, and only those'],
 ];
 

@@ -12,30 +12,12 @@ const path = require('path');
 // lifted from a live page rather than restated here. Without them _safe_write refuses the write,
 // which is how this generator came to be blocked.
 const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
+const { stats } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
+const S = stats();
 
-// Travelpayouts and the affiliate click tracker are blog-family blocks that page_shell does not
-// carry (the service pages have neither). Both are marker-delimited and owned by their own sweeps,
-// so they are lifted from a page that already has them rather than restated here, which is what
-// _safe_write was refusing the write over.
-const liftBlock = (html, name) => {
-  const i = html.indexOf('<!-- ' + name + ' -->');
-  const j = html.indexOf('<!-- /' + name + ' -->');
-  return i >= 0 && j > i ? html.slice(i, j + name.length + 9) : '';
-};
-const AFF_DONOR = (() => {
-  // ROOT is declared further down, so resolve it here rather than reaching forward to it.
-  const root = path.resolve(__dirname, '..');
-  for (const f of ['blog/category/city-guides.html', 'blog.html', 'blog/budapest-nomad-guide.html']) {
-    const p = path.join(root, f);
-    if (!fs.existsSync(p)) continue;
-    const html = fs.readFileSync(p, 'utf8');
-    const tp = liftBlock(html, 'travelpayouts');
-    const at = liftBlock(html, 'aff-track');
-    if (tp && at) return tp + '\n  ' + at;
-  }
-  console.error('build_blog_categories: no page carries both affiliate blocks; run the sweeps first');
-  return '';
-})();
+// page_shell.cjs carries Travelpayouts and the affiliate click tracker now, so the donor-lift that
+// used to live here is gone. It was left behind when the shell gained them, which put both blocks
+// on these four pages twice.
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -56,8 +38,8 @@ const posts = fs.readdirSync(path.join(ROOT, 'blog')).filter((f) => f.endsWith('
 
 const CATS = [
   { name: 'City Guides', slug: 'city-guides', h1: 'City Guides', blurb: 'Field-tested guides to living and working remotely in specific cities: cost of living, neighborhoods, coworking and the day-to-day reality.',
-    body: 'Every guide here is written from lived experience rather than scraped from a spreadsheet. Each one digs into what a place is actually like to base yourself in for a month or more: a realistic monthly budget, which neighbourhoods suit remote workers, where the wifi holds up, the coworking scene, and the small day-to-day frictions nobody warns you about. Read them alongside the hard numbers in our <a href="/cities">410 city profiles</a> and the <a href="/best">best-cities rankings</a>, put two places <a href="/compare">side by side</a>, or thread several into one trip with the <a href="/route">route planner</a>.',
-    related: [['/cities', 'All 410 city guides'], ['/best', 'Best cities rankings'], ['/compare', 'Compare cities'], ['/route', 'Route Planner'], ['/best-weather', 'Best weather by month']] },
+    body: `Every guide here is written from lived experience rather than scraped from a spreadsheet. Each one digs into what a place is actually like to base yourself in for a month or more: a realistic monthly budget, which neighbourhoods suit remote workers, where the wifi holds up, the coworking scene, and the small day-to-day frictions nobody warns you about. Read them alongside the hard numbers in our <a href="/cities">${S.cities} city profiles</a> and the <a href="/best">best-cities rankings</a>, put two places <a href="/compare">side by side</a>, or thread several into one trip with the <a href="/route">route planner</a>.`,
+    related: [['/cities', `All ${S.cities} city guides`], ['/best', 'Best cities rankings'], ['/compare', 'Compare cities'], ['/route', 'Route Planner'], ['/best-weather', 'Best weather by month']] },
   { name: 'Remote Work', slug: 'remote-work', h1: 'Remote Work', blurb: 'Coworking, productivity and the craft of working well from anywhere, from a routine that survives time zones to picking the right desk abroad.',
     body: 'Working well from anywhere is a skill, not a given. These pieces cover the practical craft of it: building a routine that survives jet lag and time-zone gaps, finding reliable wifi and a desk you actually want to sit at, and staying focused when the beach is right outside. When you are ready to choose a base around your work, the <a href="/best/best-cities-for-fast-wifi">fastest-wifi ranking</a>, the <a href="/best/best-cities-for-nomad-community">best cities for community</a>, the <a href="/timezones">time-zone overlap finder</a> and the <a href="/wheel">Decision Wheel</a> turn the advice into a shortlist.',
     related: [['/best/best-cities-for-fast-wifi', 'Best for fast wifi'], ['/best/best-cities-for-nomad-community', 'Best for community'], ['/timezones', 'Time Zone Finder'], ['/wheel', 'Decision Wheel'], ['/best', 'All rankings']] },
@@ -68,6 +50,10 @@ const CATS = [
     body: 'Beyond the spreadsheets, this is the texture of nomad life: where the scenes are, how communities and coliving spaces form, and how whole regions compare rather than single cities. Use it to work out the vibe you are after, then get specific with the <a href="/tier-list">cities tier list</a>, the <a href="/best">best-cities rankings</a>, or the <a href="/best-weather">best-weather-by-month finder</a> if you would rather follow the sun around the calendar.',
     related: [['/tier-list', 'Cities tier list'], ['/best', 'Best cities rankings'], ['/best-weather', 'Best weather by month'], ['/route', 'Route Planner'], ['/cities', 'All city guides']] },
 ];
+// og:image is absolute by necessity; an <img> on our own page should not be. Left as-is these 25
+// cards fetched images from https://thenomadhq.com that this very deployment already holds, so the
+// page hung on any preview build and never finished loading in a headless browser.
+const sameOrigin = (u) => String(u || '').replace(/^https?:\/\/(?:www\.)?thenomadhq\.com/, '');
 const dateFmt = (d) => { if (!d) return ''; const [y, mo] = d.split('-'); const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; return M[+mo - 1] + ' ' + y; };
 
 
@@ -78,7 +64,7 @@ for (const cat of CATS) {
   if (!items.length) continue;
   const url = `${BASE}/blog/category/${cat.slug}`;
   const cards = items.map((p) => `        <a class="bc-card" href="/blog/${p.slug}">
-          <span class="bc-card-img"><img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" onerror="this.closest('.bc-card-img').style.background='var(--color-sand)';this.remove();"></span>
+          <span class="bc-card-img"><img src="${esc(sameOrigin(p.image))}" alt="${esc(p.title)}" loading="lazy" onerror="this.closest('.bc-card-img').style.background='var(--color-sand)';this.remove();"></span>
           <span class="bc-card-body"><span class="bc-tag">${esc(cat.name)}</span><span class="bc-card-title">${esc(p.title)}</span><span class="bc-card-excerpt">${esc(p.excerpt)}</span><span class="bc-card-meta">Yannick Schroth &middot; ${dateFmt(p.date)}</span></span>
         </a>`).join('\n');
   const otherCats = CATS.filter((c) => c.slug !== cat.slug && posts.some((p) => p.section === c.name))
@@ -163,11 +149,10 @@ ${cards}
     </div>
   </main>
   ${shell.footer}
-  ${AFF_DONOR}
 ${shell.bodyEnd}
 </body>
 </html>`;
-  fs.writeFileSync(path.join(ROOT, 'blog', 'category', cat.slug + '.html'), html);
+  shell.writePage('blog/category/' + cat.slug + '.html', html);
   built++;
 }
 

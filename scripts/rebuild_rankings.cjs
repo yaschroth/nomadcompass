@@ -52,6 +52,7 @@ const STEPS = [
   ['analytics (apply_analytics)', 'apply_analytics.cjs'],
   ['search snippets (check_meta, a gate)', 'check_meta.cjs'],
   ['photo credit (check_photo_credit, a gate)', 'check_photo_credit.cjs'],
+  ['duplicated blocks (check_duplicate_blocks, a gate)', 'check_duplicate_blocks.cjs'],
   ['cost basis (check_cost_basis, a gate)', 'check_cost_basis.cjs'],
 ];
 STEPS.forEach(([label, script, args], i) => {
