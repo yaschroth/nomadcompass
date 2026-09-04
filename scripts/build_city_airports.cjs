@@ -136,16 +136,49 @@ const METRO = {
   shanghai: 'PVG',     // nearest is Hongqiao, which is mostly domestic
 };
 
+/**
+ * The distance discount has no idea where the water and the hard borders are, so it can pick an
+ * airport that is close in a straight line and unreachable in practice. Anguilla was being sent to
+ * Sint Maarten, 20km away across open sea, when Anguilla's own international airport is 1.4km from
+ * the town centre: SXM is classed large and the 60km bonus beat AXA's 25km one.
+ *
+ * There is no general rule available here. "Prefer the airport in the city's own country" would
+ * break Basel, whose airport is in France, Malmo, which flies from Copenhagen, and Freiburg and
+ * Chamonix, which do the same. So this is the same shape as METRO above: hand-maintained, short,
+ * and only where the automatic answer would strand somebody. Each entry names why.
+ *
+ * Cases NOT listed, because the cross-border answer is right or genuinely arguable: Basel (BSL is
+ * Basel's own airport, in France), Malmo (CPH over the bridge), Freiburg, Chamonix and Annecy
+ * (Geneva), Saranda and Ksamil (the Corfu ferry is the normal route), Andorra, Monaco, Vaduz and
+ * San Marino (no airport in the country at all).
+ */
+const HOME_AIRPORT = {
+  thevalley: 'AXA',     // SXM is on another island across open sea; AXA is 1.4km from town
+  kas: 'DLM',           // KZS is Kastellorizo, a Greek island 9km offshore, two flights a week
+  kampot: 'KOS',        // PQC is Phu Quoc, an island in Vietnam, with no land route
+  kep: 'KOS',           // same
+  victoriafalls: 'VFA', // the town's own airport; LVI is Livingstone, over the Zambian border
+  eilat: 'ETM',         // Ramon was built to serve Eilat; AQJ is Aqaba, across the Jordanian border
+  musanze: 'KGL',       // GOM is Goma in DR Congo, across a border nobody flies into for Rwanda
+  stepantsminda: 'TBS', // OGZ is Vladikavkaz, over the Russian border at Larsi
+};
+
 const out = {};
 const unserved = [];
+const overrideMisses = [];
 for (const c of CITIES) {
   let best = null;
+  const want = HOME_AIRPORT[c.id];
   for (const a of airports) {
     const d = km(c.lat, c.lng, a.lat, a.lng);
+    if (want) { if (a.iata === want) best = { a, d, eff: d }; continue; }
     if (d > MAX_KM) continue;
     const eff = d - BONUS[a.type];
     if (!best || eff < best.eff) best = { a, d, eff };
   }
+  // An override naming an airport that has dropped out of OurAirports, or lost its scheduled
+  // service, must be loud rather than silently falling back to the answer it was there to replace.
+  if (want && !best) overrideMisses.push(c.id + ' -> ' + want);
   if (!best) { unserved.push(c.id); continue; }
   const rec = {
     iata: best.a.iata,
@@ -162,6 +195,11 @@ for (const c of CITIES) {
 
 const served = Object.keys(out).length;
 console.log(served + ' of ' + CITIES.length + ' cities mapped to an airport, ' + unserved.length + ' unserved');
+console.log(Object.keys(HOME_AIRPORT).length + ' hand-set, where the nearest airport is across water or a hard border');
+if (overrideMisses.length) {
+  console.error('\n  OVERRIDE NOT FOUND (no IATA match with scheduled service): ' + overrideMisses.join(', '));
+  process.exitCode = 1;
+}
 const far = Object.entries(out).filter(([, a]) => a.km > 120).sort((a, b) => b[1].km - a[1].km);
 console.log(far.length + ' are more than 120km from their airport');
 far.slice(0, 8).forEach(([id, a]) => console.log('    ' + id.padEnd(20) + a.iata + '  ' + a.km + 'km  ' + a.name));

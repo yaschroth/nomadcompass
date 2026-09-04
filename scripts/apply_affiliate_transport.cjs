@@ -17,8 +17,11 @@ const LINE =
   'or compare car rental on <a href="https://autoeurope.tpx.li/jKF6nkTd" target="_blank" rel="sponsored nofollow" data-aff="transport">Auto Europe</a> ' +
   'and <a href="https://qeeq.tpx.li/wWufeCEY" target="_blank" rel="sponsored nofollow" data-aff="transport">QEEQ</a>.</p>';
 
-// capture the Getting Around section up to the next <h2, insert the line before that <h2
-const RE = /(<h2[^>]*>\s*Getting Around\s*<\/h2>[\s\S]*?)(\r?\n\s*<h2)/;
+// capture the Getting Around section up to the next <h2, insert the line before that <h2.
+// Pages built since the pipeline rewrite head the section "Getting Around <City>", so the
+// city name has to be allowed here: requiring the </h2> immediately is what left 481 pages
+// without the aside for months.
+const RE = /(<h2[^>]*>\s*Getting Around\b[^<]*<\/h2>[\s\S]*?)(\r?\n\s*<h2)/;
 
 const dir = path.join(ROOT, 'cities');
 let done = 0, skipped = 0, noSection = [];

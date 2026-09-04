@@ -54,6 +54,7 @@ const STEPS = [
   ['photo credit (check_photo_credit, a gate)', 'check_photo_credit.cjs'],
   ['duplicated blocks (check_duplicate_blocks, a gate)', 'check_duplicate_blocks.cjs'],
   ['cost basis (check_cost_basis, a gate)', 'check_cost_basis.cjs'],
+  ['local assets (check_local_assets, a gate)', 'check_local_assets.cjs'],
 ];
 STEPS.forEach(([label, script, args], i) => {
   console.log((i ? '\n' : '') + (i + 1) + '/' + STEPS.length + '  ' + label + '...');

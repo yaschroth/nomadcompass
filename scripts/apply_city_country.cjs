@@ -62,7 +62,15 @@ for (const f of fs.readdirSync(DIR).filter((n) => n.endsWith('.html'))) {
     if (out !== s) { hits.push(label); s = out; }
   };
 
-  swap('hero', /(<p class="city-hero-country">)[^<]*(<\/p>)/g, `$1${country}$2`);
+  // Eight entries are a city and a country of the same name (Singapore, Cyprus, Mauritius, Monaco,
+  // Gibraltar, San Marino, Djibouti, Macau), so the hero printed "Macau" under "Macau". The line is
+  // hidden rather than dropped: city-blog-articles.js reads .city-hero-country at runtime to match
+  // articles by country and returns early when the element is absent, which would silently kill the
+  // related-articles block on exactly those pages. The attribute is also REMOVED again when the two
+  // differ, so a later rename of either value corrects itself here.
+  const dup = c.name.trim().toLowerCase() === c.country.trim().toLowerCase();
+  swap('hero', /<p class="city-hero-country"(?: hidden)?>[^<]*<\/p>/g,
+    `<p class="city-hero-country"${dup ? ' hidden' : ''}>${country}</p>`);
   swap('flag-alt', /(<img class="flag-img"[^>]*\salt=")[^"]*( flag"[^>]*>)/g, `$1${country}$2`);
   swap('containedInPlace', /("@type":\s*"Country",\s*\n?\s*"name":\s*")[^"]*(")/g, `$1${country}$2`);
   swap('place-ld', new RegExp('("@type":"Place","name":"' + rx(name) + ', )[^"]*(")', 'g'), `$1${country}$2`);

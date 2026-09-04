@@ -83,6 +83,7 @@ const STEPS = [
   ['gate', 'check_photo_credit.cjs', 'a licensed image is never shown without its photographer'],
   ['gate', 'check_meta.cjs', 'every page has its own title and description, both in budget'],
   ['gate', 'check_duplicate_blocks.cjs', 'no page carries a sweep-owned block twice'],
+  ['gate', 'check_local_assets.cjs', 'no page points at a local file that is not there'],
   ['gate', 'verify_service_links.cjs --new-only', 'fetches the links a data change added, and only those'],
 ];
 

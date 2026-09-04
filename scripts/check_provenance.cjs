@@ -43,6 +43,7 @@ const CLAIMS = [
   ['country-facts', 'Currency, voltage, tap water, tipping, ride-hailing, emergency numbers', 'scripts/lib/country-facts.cjs'],
   ['country-meta', 'Plug types per country', 'scripts/lib/country-meta.cjs'],
   ['city-elevations', 'Elevation reference used by the sanity gate', 'data/city-elevations.json'],
+  ['city-airports', 'The airport each city flies from, and the flight legs on /route', 'data/city-airports.json'],
 ];
 
 const TIERS = ['primary', 'triangulated', 'editorial'];
@@ -72,6 +73,22 @@ for (const [id, claim, file] of CLAIMS) {
     detail = (m.source || '') + (m.coverage ? ' | ' + m.coverage : '');
   }
   rows.push({ id, claim, file, status, detail, knownLimits: m && m.knownLimits });
+}
+
+// The header above says that adding a dataset without adding it here is itself a gate failure.
+// It was not true: the loop only walked CLAIMS, so data/city-airports.json backed the flight legs
+// on /route for weeks with no entry, no tier and nothing on /methodology. Walk the other direction
+// too, so a dataset declared in the manifest but not claimed here cannot stay invisible.
+const declared = Object.keys(man).filter((k) => !k.startsWith('_'));
+const unclaimed = declared.filter((k) => !CLAIMS.some(([id]) => id === k));
+for (const id of unclaimed) {
+  rows.push({
+    id,
+    claim: 'declared in data/provenance.json but not listed in CLAIMS',
+    file: '',
+    status: 'UNCLAIMED',
+    detail: 'add it to CLAIMS in this file so it is checked and published',
+  });
 }
 
 const broken = rows.filter(r => !TIERS.map(t => t.toUpperCase()).includes(r.status));
