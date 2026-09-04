@@ -35,9 +35,25 @@ const DIR = path.join(ROOT, 'cities');
 const CITIES = (new Function(fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';return CITIES;'))();
 const IDS = CITIES.map((c) => c.id);
 
+// data/category-descriptions.json still holds notes for 70 slugs that no longer exist, left from
+// cities that were renamed or dropped. A new city landing on one of those slugs silently inherits
+// them: batch 38's Inverness picked up a set averaging eleven words per tile, a quarter of the
+// forty-word floor apply_category_notes.cjs enforces, and reported it as a success. Notes that
+// would not pass that gate are treated as absent, so the tiles start empty and get written properly.
+const NOTE_FLOOR = 40;
+const stale = [];
 const NOTES = (() => {
   const f = path.join(ROOT, 'data', 'category-descriptions.json');
-  return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : {};
+  if (!fs.existsSync(f)) return {};
+  const all = JSON.parse(fs.readFileSync(f, 'utf8'));
+  const out = {};
+  for (const [id, notes] of Object.entries(all)) {
+    if (id.startsWith('_') || !notes || typeof notes !== 'object') continue;
+    const words = Object.values(notes).map((v) => String(v).trim().split(/\s+/).length);
+    if (!words.length || Math.min(...words) < NOTE_FLOOR) { stale.push(id); continue; }
+    out[id] = notes;
+  }
+  return out;
 })();
 
 /** Pull the canonical block out of a page that already has one. */
@@ -88,4 +104,9 @@ for (const id of IDS) {
 console.log('Score block: added to ' + added + ' page(s), copied from ' + T.from
   + '; ' + withNotes + ' had category notes on file, ' + (added - withNotes) + ' start empty'
   + (DRY ? '  [dry run]' : ''));
+if (stale.length) {
+  console.log('  ' + stale.length + ' slug(s) in category-descriptions.json hold notes below the '
+    + NOTE_FLOOR + '-word floor and were ignored: ' + stale.slice(0, 10).join(', ')
+    + (stale.length > 10 ? ' +' + (stale.length - 10) : ''));
+}
 if (failed.length) console.log('  failed: ' + failed.join(', '));
