@@ -52,6 +52,11 @@ const STEPS = [
   ['analytics (apply_analytics)', 'apply_analytics.cjs'],
   ['search snippets (check_meta, a gate)', 'check_meta.cjs'],
   ['photo credit (check_photo_credit, a gate)', 'check_photo_credit.cjs'],
+  // check_photo_credit asks whether a credit exists. This asks whether it is the right one,
+  // which is a different question: two pages were found crediting the wrong photographer for a
+  // CC-licensed photograph and both passed the gate above. Cached, so it costs no network calls
+  // unless a credit changed.
+  ['hero credit is the right one (check_hero_credit, a gate)', 'check_hero_credit.cjs'],
   ['duplicated blocks (check_duplicate_blocks, a gate)', 'check_duplicate_blocks.cjs'],
   ['cost basis (check_cost_basis, a gate)', 'check_cost_basis.cjs'],
   ['local assets (check_local_assets, a gate)', 'check_local_assets.cjs'],

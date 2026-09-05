@@ -62,11 +62,16 @@ const esc = (s) => String(s == null ? '' : s).replace(/[ \t]*(?:&mdash;|&#8212;|
     s = s.replace(/(<meta name="twitter:image" content=")[^"]*(">)/, (_, a, b) => a + absHero + b);
     s = s.replace(/("image":\s*")https?:\/\/[^"]*(")/g, (_, a, b) => a + absHero + b);
 
-    if (!/class="hero-credit"/.test(s)) {
-      const lic = j.license && !/unsplash|pexels/i.test(j.license) ? ` (${esc(j.license)})` : '';
-      const credit = `<a class="hero-credit" href="${esc(j.sourcePageUrl || '#')}" target="_blank" rel="nofollow noopener">Photo: ${esc(j.author || 'Unknown')} / ${esc(j.source || '')}${lic}</a>`;
-      s = s.replace('<div class="city-hero-overlay"></div>', () => '<div class="city-hero-overlay"></div>\n      ' + credit);
-    }
+    // The credit is REPLACED, not merely inserted when absent. Guarding on the element's existence
+    // meant a hero swap left the previous photographer's name, licence and file link in place,
+    // which is a false attribution rather than a missing one: Kumasi's page credited Maven Egote
+    // under CC BY-SA 4.0 while displaying Afus199620's photograph released CC0. check_photo_credit
+    // asks whether a credit exists, not whether it is the right one, so it read that as clean.
+    const lic = j.license && !/unsplash|pexels/i.test(j.license) ? ` (${esc(j.license)})` : '';
+    const credit = `<a class="hero-credit" href="${esc(j.sourcePageUrl || '#')}" target="_blank" rel="nofollow noopener">Photo: ${esc(j.author || 'Unknown')} / ${esc(j.source || '')}${lic}</a>`;
+    const creditRe = /<a class="hero-credit"[\s\S]*?<\/a>/;
+    if (creditRe.test(s)) s = s.replace(creditRe, () => credit);
+    else s = s.replace('<div class="city-hero-overlay"></div>', () => '<div class="city-hero-overlay"></div>\n      ' + credit);
     fs.writeFileSync(page, s);
 
     // /cities card image in cities-data.js

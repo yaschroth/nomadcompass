@@ -21,7 +21,13 @@ const attr = (html, re) => { const m = html.match(re); return m ? m[1] : ''; };
 const canonicalOf = (h) => attr(h, /<link rel="canonical" href="([^"]+)"/i);
 const descOf = (h) => attr(h, /<meta name="description" content="([^"]+)"/i);
 const ogImageOf = (h) => attr(h, /<meta property="og:image" content="([^"]+)"/i);
-const dateOf = (h) => attr(h, /<time datetime="(\d{4}-\d{2}-\d{2})"/i) || '2026-07-01';
+// The byline <time> carries both dates: datetime is when the page was last updated, data-published
+// is when it first went live. They used to be the same hardcoded constant, so every page in the
+// Article graph claimed it was written on one day in July and never touched. A page that predates
+// the split has no data-published, and falls back to its modified date rather than to a constant
+// that would go stale again.
+const modifiedOf = (h) => attr(h, /<time datetime="(\d{4}-\d{2}-\d{2})"/i);
+const publishedOf = (h) => attr(h, /<time[^>]*data-published="(\d{4}-\d{2}-\d{2})"/i) || modifiedOf(h);
 const headlineOf = (h) => {
   const t = attr(h, /<title>([^<]*)<\/title>/i);
   return t.split(/\s*[|]\s*/)[0].trim() || t.trim();
@@ -117,8 +123,8 @@ for (const rel of all) {
         description: decode(descOf(html)),
         url,
         image: ogImageOf(html),
-        datePublished: dateOf(html),
-        dateModified: dateOf(html),
+        datePublished: publishedOf(html),
+        dateModified: modifiedOf(html),
       });
       const artRe = /  <!-- article-schema --><script type="application\/ld\+json">.*?<\/script>/s;
       if (artRe.test(html)) { html = html.replace(artRe, node); }

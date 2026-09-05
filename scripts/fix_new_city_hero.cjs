@@ -22,7 +22,17 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const DIR = path.join(ROOT, 'cities');
 
-const BYLINE = '        <p class="city-hero-byline">By <a href="/about/yannick-schroth">Yannick Schroth</a> &middot; Updated <time datetime="2026-07-01">July 2026</time></p>';
+// The date used to be a constant here and in apply_city_byline.cjs, which is how 1000 pages came
+// to claim they were all published on 2026-07-01 and never touched since, in the visible byline
+// and in the Article JSON-LD that reads it. A new page gets today's date; apply_city_byline.cjs
+// then refreshes every page from data/city-dates.json. See build_city_dates.cjs.
+const TODAY = new Date().toISOString().slice(0, 10);
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTH_LABEL = MONTH_NAMES[Number(TODAY.slice(5, 7)) - 1] + ' ' + TODAY.slice(0, 4);
+const BYLINE = '        <p class="city-hero-byline">By <a href="/about/yannick-schroth">Yannick Schroth</a>'
+  + ' &middot; Updated <time datetime="' + TODAY + '" data-published="' + TODAY + '">'
+  + MONTH_LABEL + '</time></p>';
 
 const only = process.argv[2];
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.html') && f !== 'index.html').filter((f) => !only || f === only || f === only + '.html');

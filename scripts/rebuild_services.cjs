@@ -81,6 +81,7 @@ const STEPS = [
   ['gate', 'check_css_tokens.cjs', 'a var() with no definition and no fallback drops the whole declaration'],
   ['gate', 'check_prose_style.cjs', 'no em-dashes, and every price in USD'],
   ['gate', 'check_photo_credit.cjs', 'a licensed image is never shown without its photographer'],
+  ['gate', 'check_hero_credit.cjs', 'a hero credit names the photographer Commons names, not a stale one'],
   ['gate', 'check_meta.cjs', 'every page has its own title and description, both in budget'],
   ['gate', 'check_duplicate_blocks.cjs', 'no page carries a sweep-owned block twice'],
   ['gate', 'check_local_assets.cjs', 'no page points at a local file that is not there'],

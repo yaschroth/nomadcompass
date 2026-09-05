@@ -437,6 +437,29 @@ const CITY_REGIONS = {
   tuzla: 'europe',
   prilep: 'europe',
   elbasan: 'europe',
+
+  // batch 40
+  savannakhet: 'asia',
+  kampongcham: 'asia',
+  coimbatore: 'asia',
+  bhubaneswar: 'asia',
+  indore: 'asia',
+  nagpur: 'asia',
+  multan: 'asia',
+  whangarei: 'oceania',
+  nelspruit: 'africa',
+  oran: 'africa',
+  constantine: 'africa',
+  sfax: 'africa',
+  portsaid: 'africa',
+  townsville: 'oceania',
+  launceston: 'oceania',
+  maceio: 'latam',
+  joaopessoa: 'latam',
+
+  // batch 40
+  mandalay: 'asia',
+  kumasi: 'africa',
 };
 
 if (typeof module !== 'undefined' && module.exports) module.exports = CITY_REGIONS;
