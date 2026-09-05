@@ -31,13 +31,56 @@ const ORDER = [
   ['whoFor', (n) => `Who ${n} Is For`],
 ];
 
-let done = 0, skipped = 0, noAnchor = 0, noContent = 0, incomplete = [];
+/**
+ * Refresh the prose of a guide section that is already on the page.
+ *
+ * Skipping a page that already carries id="guide" made this sweep unable to correct its own
+ * output: edit data/guide-content.json for a city that has already been injected and nothing
+ * happens, which is the same insert-never-refresh trap that froze a stale byline date and a wrong
+ * photographer on 1000 pages.
+ *
+ * It replaces ONLY the paragraphs under each heading, never the heading itself. The headings are
+ * emitted plain here and apply_city_toc.cjs adds the ids and the jump links afterwards, so
+ * rewriting the whole block would strip those ids and leave the in-page nav pointing at anchors
+ * that no longer exist. apply_city_toc skips a page that already has a TOC, so it would not repair
+ * them either.
+ */
+function refresh(html, name, c, eol) {
+  let out = html, changed = 0;
+  for (const [key, heading] of ORDER) {
+    const h = esc(heading(name));
+    // Replace ONLY the run of plain <p> paragraphs directly after the heading, and stop at the
+    // first element that is anything else. Other sweeps inject their own blocks inside these
+    // sections: the YMYL "not legal advice" note sits at the end of Visas, and the affiliate
+    // transport aside at the end of Getting Around. A first draft matched everything up to the
+    // next <h2> and would have deleted the YMYL note from San Francisco. _safe_write caught it,
+    // which is the whole reason that guard exists.
+    const re = new RegExp('(<h2[^>]*>\\s*' + h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      + '\\s*</h2>)((?:\\s*<p>(?:(?!</p>)[\\s\\S])*</p>)+)', 'i');
+    const m = out.match(re);
+    if (!m) continue;
+    const body = paras(c[key]).replace(/\n/g, eol);
+    const next = m[1] + eol + body;
+    if (next !== m[0]) { out = out.replace(re, () => next); changed++; }
+  }
+  return { out, changed };
+}
+
+let done = 0, refreshed = 0, unchanged = 0, noAnchor = 0, noContent = 0, incomplete = [];
 for (const [slug, c] of Object.entries(CONTENT)) {
   if (slug === '_meta') continue;
   const file = path.join(DIR, slug + '.html');
   if (!fs.existsSync(file)) { noContent++; continue; }
   let s = fs.readFileSync(file, 'utf8');
-  if (s.includes('id="guide"')) { skipped++; continue; }
+  if (s.includes('id="guide"')) {
+    const name = NAME.get(slug) || slug;
+    const missing = ORDER.filter(([k]) => !c[k] || !String(c[k]).trim()).map(([k]) => k);
+    if (missing.length) { incomplete.push(slug + '(' + missing.join(',') + ')'); continue; }
+    const eol = s.includes('\r\n') ? '\r\n' : '\n';
+    const r = refresh(s, name, c, eol);
+    if (r.changed) { fs.writeFileSync(file, r.out); refreshed++; } else unchanged++;
+    continue;
+  }
   if (!s.includes(ANCHOR)) { noAnchor++; continue; }
   const name = NAME.get(slug) || slug;
   const missing = ORDER.filter(([k]) => !c[k] || !String(c[k]).trim()).map(([k]) => k);
@@ -49,5 +92,5 @@ for (const [slug, c] of Object.entries(CONTENT)) {
   fs.writeFileSync(file, s);
   done++;
 }
-console.log(`guide sections injected: ${done} | already: ${skipped} | no-anchor: ${noAnchor} | no-page: ${noContent} | incomplete: ${incomplete.length}`);
+console.log(`guide sections: injected ${done} | refreshed ${refreshed} | unchanged ${unchanged} | no-anchor ${noAnchor} | no-page ${noContent} | incomplete ${incomplete.length}`);
 if (incomplete.length) console.log('  incomplete:', incomplete.join(', '));
