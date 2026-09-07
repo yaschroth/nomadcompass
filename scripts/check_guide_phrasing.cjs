@@ -95,7 +95,24 @@ for (const [key, text] of Object.entries(ext)) {
   }
 }
 
+// The enumerator tic, checked here so it cannot slide through on a regex retyped from memory.
+// Sections opening "Two things worth knowing" or "One further consideration" ran at 1.90 per city
+// across the 42 guides written on 2026-09-07 against 0.03 across the other 308, and 74 of them
+// were removed in 03e4a4cc9. The pattern must allow leading whitespace: these extensions begin
+// with a space, so an anchor of ^ or ". " alone misses the first sentence of every one of them,
+// which is exactly how " Two federal facts sit underneath the prices" reached the applied data.
+const ENUM = /(?:^\s*|[.:]\s+)(?:Two|Three|One|Four)\s+[a-z]/g;
+let tics = 0;
+for (const [key, text] of Object.entries(ext)) {
+  const hits = String(text).match(ENUM);
+  if (hits) {
+    console.log('  ' + key + ' opens a sentence with an enumerator: "' + hits[0].trim() + '..."');
+    tics += hits.length;
+  }
+}
+if (tics) console.log('  ' + tics + ' enumerator opener(s): lead with the fact instead of counting it out');
+
 console.log(Object.keys(ext).length + ' extension(s) checked against '
   + corpus.size.toLocaleString() + ' phrases from ' + (Object.keys(g).length - 1) + ' cities, '
   + flagged + ' reusing another city\'s phrasing');
-process.exit(flagged ? 1 : 0);
+process.exit(flagged || tics ? 1 : 0);
