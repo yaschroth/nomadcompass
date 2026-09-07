@@ -49,19 +49,36 @@ function refresh(html, name, c, eol) {
   let out = html, changed = 0;
   for (const [key, heading] of ORDER) {
     const h = esc(heading(name));
-    // Replace ONLY the run of plain <p> paragraphs directly after the heading, and stop at the
-    // first element that is anything else. Other sweeps inject their own blocks inside these
-    // sections: the YMYL "not legal advice" note sits at the end of Visas, and the affiliate
-    // transport aside at the end of Getting Around. A first draft matched everything up to the
-    // next <h2> and would have deleted the YMYL note from San Francisco. _safe_write caught it,
-    // which is the whole reason that guard exists.
-    const re = new RegExp('(<h2[^>]*>\\s*' + h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-      + '\\s*</h2>)((?:\\s*<p>(?:(?!</p>)[\\s\\S])*</p>)+)', 'i');
-    const m = out.match(re);
-    if (!m) continue;
+    // Replace ONLY the first run of PLAIN <p> paragraphs inside the section, and leave everything
+    // else where it is. Other sweeps put their own markup in these sections and none of it may be
+    // touched: apply_cost_basis writes a comment, a <style> block and a <p class="cost-basis">
+    // between the Cost of Living heading and the prose; the YMYL "not legal advice" note closes
+    // Visas; the affiliate transport aside closes Getting Around. All three carry a class, so
+    // matching only attribute-free <p> skips them.
+    //
+    // An earlier version required the paragraph run to start immediately after the </h2>, which
+    // silently did nothing on every page where the cost-basis block sits in between. That is all of
+    // them: 93 cities had a rewritten costOfLiving in guide-content.json that never reached the
+    // page, and the sweep reported them as refreshed because its six other sections had changed.
+    // Hence the section is located first and the paragraph run found within it.
+    const headRe = new RegExp('<h2[^>]*>\\s*' + h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*</h2>', 'i');
+    const hm = out.match(headRe);
+    if (!hm) continue;
+    const start = hm.index + hm[0].length;
+    const rest = out.slice(start);
+    const endRel = rest.search(/<h2[\s>]/i);
+    const segment = endRel === -1 ? rest : rest.slice(0, endRel);
+
+    const runRe = /(?:[ \t]*<p>(?:(?!<\/p>)[\s\S])*<\/p>\s*)+/;
+    const rm = segment.match(runRe);
+    if (!rm) continue;
+
     const body = paras(c[key]).replace(/\n/g, eol);
-    const next = m[1] + eol + body;
-    if (next !== m[0]) { out = out.replace(re, () => next); changed++; }
+    const replaced = segment.slice(0, rm.index) + body + eol + segment.slice(rm.index + rm[0].length);
+    if (replaced !== segment) {
+      out = out.slice(0, start) + replaced + (endRel === -1 ? '' : rest.slice(endRel));
+      changed++;
+    }
   }
   return { out, changed };
 }
