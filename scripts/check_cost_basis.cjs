@@ -62,6 +62,17 @@ for (const c of CITIES) {
   if (hasNote) {
     const want = '$' + String(c.costPerMonth).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     const m = html.match(/<div class="cost-basis">[\s\S]*?<\/div>/);
+
+    // The marker is not the note. apply_city_guide_sections once overwrote the paragraph inside
+    // this block with the cost prose on 350 pages and left the comment markers standing, so every
+    // check above still passed: the block was present, and the prose it had been replaced with
+    // opens "Budget around $1,600 a month", which satisfied a test looking only for the figure.
+    // The pages lost the one sentence saying the number is an estimate and nothing reported it.
+    // So assert the note is the note.
+    if (!m || !m[0].includes('Where this figure comes from') || !m[0].includes('/methodology')) {
+      errors.push(c.id + ': the cost-basis block is present but its provenance sentence is gone');
+      continue;
+    }
     if (m && !m[0].includes(want + ' a month')) {
       errors.push(c.id + ': the basis note names a different figure than cities-data.js (' + want + ')');
       continue;

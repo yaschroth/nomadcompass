@@ -12,6 +12,12 @@
  * The markers below are the sitewide blocks that a sweep owns and inserts exactly once. Each is
  * counted by its OPENING comment, so a matched open/close pair counts as one.
  *
+ * Counting markers is not enough on its own. When apply_city_guide_sections overwrote the
+ * cost-basis note with the cost prose, the markers stayed exactly where they were, so this gate
+ * saw one block and passed, while 257 city pages printed the same paragraph twice, once inside
+ * the block and once below it. A reader would have seen it immediately. So the visible prose is
+ * counted too: no page may print the same substantial paragraph more than once.
+ *
  * Usage: node scripts/check_duplicate_blocks.cjs [--all]
  * Exit 1 if any page carries a block more than once.
  */
@@ -39,7 +45,9 @@ const ONCE = {
   '<footer class="footer"': 'the shared footer',
 };
 
-const SKIP_DIRS = new Set(['node_modules', '.git', 'ui-ux-pro-max-skill']);
+// tests/fixtures holds third-party HTML captured for the service readers to parse. It is not our
+// markup and its repetitions are the source's, not ours. check_local_assets.cjs skips it too.
+const SKIP_DIRS = new Set(['node_modules', '.git', '.vercel', 'tests', 'ui-ux-pro-max-skill']);
 
 function walk(dir, out) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -53,6 +61,7 @@ function walk(dir, out) {
 
 const files = walk(ROOT, []);
 const problems = [];
+const dupProse = [];
 let scanned = 0;
 
 for (const fp of files) {
@@ -65,15 +74,44 @@ for (const fp of files) {
       problems.push({ file: path.relative(ROOT, fp).replace(/\\/g, '/'), marker, n, owner });
     }
   }
+
+  // The same visible paragraph twice on one page. Short ones repeat legitimately (a shared caption,
+  // a stock line in a card), so only substantial prose counts, and the two copies are compared with
+  // whitespace normalised because they are rarely indented alike.
+  const seen = new Map();
+  // <p must not match <path: the service pages carry inline SVG icons and an unanchored <p turned
+  // every one of them into a phantom paragraph.
+  for (const m of s.matchAll(/<p(?=[\s>])(?![^>]*\bclass=)[^>]*>([\s\S]*?)<\/p>/g)) {
+    const t = m[1].replace(/[\s]+/g, ' ').trim();
+    if (t.length < 200) continue;
+    const seenN = (seen.get(t) || 0) + 1;
+    seen.set(t, seenN);
+    if (seenN === 2) {
+      dupProse.push({ file: path.relative(ROOT, fp).replace(/[\\]/g, '/'), text: t.slice(0, 70) });
+    }
+  }
 }
 
 console.log('DUPLICATE BLOCK GATE  (a sweep-owned block appears once per page)\n');
 console.log('  ' + scanned + ' pages, ' + Object.keys(ONCE).length + ' blocks checked\n');
 
-if (!problems.length) {
-  console.log('  clean: no page carries a block twice.');
+if (dupProse.length) {
+  console.log('  FAILING: ' + dupProse.length + ' page(s) print the same paragraph twice:\n');
+  for (const d of (SHOW_ALL ? dupProse : dupProse.slice(0, 8))) {
+    console.log('    ' + d.file + '  "' + d.text + '..."');
+  }
+  if (!SHOW_ALL && dupProse.length > 8) console.log('    ... and ' + (dupProse.length - 8) + ' more (--all)');
+  console.log('');
+  console.log('  Usually a sweep that wrote its prose into a block another sweep owns, leaving the');
+  console.log('  original standing below it. Fix the sweep, then rebuild the affected pages.\n');
+}
+
+if (!problems.length && !dupProse.length) {
+  console.log('  clean: no page carries a block twice, and no paragraph is printed twice.');
   process.exit(0);
 }
+
+if (!problems.length) process.exit(1);
 
 const byMarker = new Map();
 for (const p of problems) {

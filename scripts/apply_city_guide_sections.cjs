@@ -45,22 +45,56 @@ const ORDER = [
  * that no longer exist. apply_city_toc skips a page that already has a TOC, so it would not repair
  * them either.
  */
+/**
+ * Blanks the regions other sweeps own, keeping the string the same length so an index found in the
+ * mask still points at the right character in the original.
+ *
+ * Matching is on the paired comment markers alone. What a sweep writes between its own markers is
+ * that sweep's business, and this one must not care whether the markup inside happens to carry a
+ * class: assuming it did is what cost 350 pages their cost-basis note.
+ */
+const OWNED = [
+  ['<!-- cost-basis -->', '<!-- /cost-basis -->'],  // apply_cost_basis.cjs
+  ['<!-- cost-start -->', '<!-- cost-end -->'],     // apply_city_costs.cjs
+];
+function mask(str) {
+  let out = str;
+  for (const [open, close] of OWNED) {
+    for (let i = 0; ; ) {
+      const a = out.indexOf(open, i);
+      if (a === -1) break;
+      const b = out.indexOf(close, a + open.length);
+      if (b === -1) break;
+      const end = b + close.length;
+      out = out.slice(0, a) + ' '.repeat(end - a) + out.slice(end);
+      i = end;
+    }
+  }
+  return out;
+}
+
 function refresh(html, name, c, eol) {
   let out = html, changed = 0;
   for (const [key, heading] of ORDER) {
     const h = esc(heading(name));
     // Replace ONLY the first run of PLAIN <p> paragraphs inside the section, and leave everything
     // else where it is. Other sweeps put their own markup in these sections and none of it may be
-    // touched: apply_cost_basis writes a comment, a <style> block and a <p class="cost-basis">
-    // between the Cost of Living heading and the prose; the YMYL "not legal advice" note closes
-    // Visas; the affiliate transport aside closes Getting Around. All three carry a class, so
-    // matching only attribute-free <p> skips them.
+    // touched: apply_cost_basis writes a comment, a <style> block and a note between the Cost of
+    // Living heading and the prose; the YMYL "not legal advice" note closes Visas; the affiliate
+    // transport aside closes Getting Around.
     //
-    // An earlier version required the paragraph run to start immediately after the </h2>, which
-    // silently did nothing on every page where the cost-basis block sits in between. That is all of
-    // them: 93 cities had a rewritten costOfLiving in guide-content.json that never reached the
-    // page, and the sweep reported them as refreshed because its six other sections had changed.
-    // Hence the section is located first and the paragraph run found within it.
+    // Two earlier versions got this wrong in opposite directions. The first required the run to
+    // start immediately after the </h2>, so it silently did nothing on any page where the
+    // cost-basis block sits in between, which is all 670 estimated ones. The second located the
+    // section first and took the first plain <p> inside it, on the reasoning that every block a
+    // sweep owns carries a class. The cost-basis note does not: apply_cost_basis puts the class on
+    // the wrapping <div> and the paragraph inside is a bare <p>. So the run began on the note, and
+    // 350 pages had "Where this figure comes from" overwritten with the cost prose, losing the one
+    // sentence that tells a reader the figure is an estimate rather than a measurement.
+    //
+    // Neither rule is enough alone. The regions a sweep owns are masked out by their comment
+    // markers first, so no run can begin inside one, and the run is then found anywhere in what
+    // remains. Masking preserves length, so an index into the mask is valid in the real segment.
     const headRe = new RegExp('<h2[^>]*>\\s*' + h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*</h2>', 'i');
     const hm = out.match(headRe);
     if (!hm) continue;
@@ -70,7 +104,7 @@ function refresh(html, name, c, eol) {
     const segment = endRel === -1 ? rest : rest.slice(0, endRel);
 
     const runRe = /(?:[ \t]*<p>(?:(?!<\/p>)[\s\S])*<\/p>\s*)+/;
-    const rm = segment.match(runRe);
+    const rm = mask(segment).match(runRe);
     if (!rm) continue;
 
     const body = paras(c[key]).replace(/\n/g, eol);
