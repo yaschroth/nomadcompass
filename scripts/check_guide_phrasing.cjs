@@ -96,12 +96,23 @@ for (const [key, text] of Object.entries(ext)) {
 }
 
 // The enumerator tic, checked here so it cannot slide through on a regex retyped from memory.
+//
+// The tic is a COUNT OF NOTHING: "Two things worth knowing", "One further consideration". It is
+// not a count of something, and the difference decides whether the check is usable. "Two ferry
+// routes cross to the mainland" and "Four world-class ski resorts sit within an hour" are facts
+// with numbers in them, and a pattern that flags those reports seventeen problems of which four
+// are real, which is a gate nobody keeps running. So the noun after the numeral has to be one of
+// the empty ones.
 // Sections opening "Two things worth knowing" or "One further consideration" ran at 1.90 per city
 // across the 42 guides written on 2026-09-07 against 0.03 across the other 308, and 74 of them
 // were removed in 03e4a4cc9. The pattern must allow leading whitespace: these extensions begin
 // with a space, so an anchor of ^ or ". " alone misses the first sentence of every one of them,
 // which is exactly how " Two federal facts sit underneath the prices" reached the applied data.
-const ENUM = /(?:^\s*|[.:]\s+)(?:Two|Three|One|Four)\s+[a-z]/g;
+const VAGUE = 'things?|points?|facts?|notes?|considerations?|rules?|reasons?|oddities|oddity'
+  + '|words?|constraints?|realities|reality|specifics?|consequences?|steps?|hazards?|escapes?'
+  + '|caveats?|details?|questions?|warnings?|habits?|cautions?|matters?|aspects?|elements?';
+const ENUM = new RegExp('(?:^\\s*|[.:]\\s+)(?:Two|Three|One|Four)\\s+'
+  + '(?:[a-z-]+\\s+)?(?:' + VAGUE + ')\\b', 'g');   // one optional adjective: "two federal facts"
 let tics = 0;
 for (const [key, text] of Object.entries(ext)) {
   const hits = String(text).match(ENUM);
