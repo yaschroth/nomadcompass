@@ -62,6 +62,7 @@ const NOT_A_PREFIX = '(?![\\d,])';
 const changed = [];
 const leftAlone = [];
 const broken = [];
+const rangeHero = [];
 let scanned = 0, agreed = 0, noStat = 0;
 
 for (const f of fs.readdirSync(path.join(ROOT, 'cities')).sort()) {
@@ -72,9 +73,15 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).sort()) {
   scanned += 1;
   const p = path.join(ROOT, 'cities', f);
   const html = fs.readFileSync(p, 'utf8');
-  const m = html.match(/<div class="quick-stat-value">\$([\d,]+)<\/div>\s*<div class="quick-stat-label">Monthly Budget/);
+  // Two shapes now. apply_cost_range.cjs renders the hero as "$1,810-2,140" on the 327 cities
+  // where both ends are measured, and the original single-figure matcher stopped dead on those:
+  // every one would have been counted as "carries no Monthly Budget stat" and skipped in silence,
+  // which is the insert-never-refresh failure that once froze a wrong date onto 1000 pages.
+  // The high end is the figure that corresponds to costPerMonth, so that is what gets compared.
+  const m = html.match(/<div class="quick-stat-value">\$([\d,]+)(?:-([\d,]+))?<\/div>\s*<div class="quick-stat-label">Monthly Budget/);
   if (!m) { noStat += 1; continue; }
-  const onPage = Number(m[1].replace(/,/g, ''));
+  const isRange = m[2] != null;
+  const onPage = Number((isRange ? m[2] : m[1]).replace(/,/g, ''));
   const want = Number(c.costPerMonth);
   if (onPage === want) { agreed += 1; continue; }
 
@@ -84,9 +91,15 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).sort()) {
   let out = html;
   let hits = 0;
 
-  // 1. the hero quick-stat
-  out = out.replace(new RegExp('(<div class="quick-stat-value">)' + S + NOT_A_PREFIX + '(</div>\\s*<div class="quick-stat-label">Monthly Budget)', 'g'),
-    (_, a, b) => { hits += 1; return a + fresh + b; });
+  // 1. the hero quick-stat, but only while it is still a single figure. A ranged stat is rebuilt
+  // from data/cost-ranges.json by apply_cost_range.cjs; patching one end of it here would leave
+  // the other end stale and hand two scripts joint ownership of the same markup.
+  if (isRange) {
+    rangeHero.push(id);
+  } else {
+    out = out.replace(new RegExp('(<div class="quick-stat-value">)' + S + NOT_A_PREFIX + '(</div>\\s*<div class="quick-stat-label">Monthly Budget)', 'g'),
+      (_, a, b) => { hits += 1; return a + fresh + b; });
+  }
   // 2. "$X a month" / "$X per month"
   out = out.replace(new RegExp(S + NOT_A_PREFIX + '(\\s*(?:a|per)\\s+month)', 'g'),
     (_, tail) => { hits += 1; return fresh + tail; });
@@ -121,6 +134,10 @@ console.log('  already in agreement: ' + agreed);
 console.log('  rewritten:            ' + changed.length
   + '  (' + changed.reduce((s, x) => s + x.hits, 0) + ' figures)');
 console.log('  left alone as ranges: ' + leftAlone.length);
+if (rangeHero.length) {
+  console.log('  hero stat is a measured range on ' + rangeHero.length + ' page(s): the prose was');
+  console.log('    updated here, the stat rebuilds from data. Run scripts/apply_cost_range.cjs --apply');
+}
 if (broken.length) console.log('  SKIPPED, JSON-LD would not parse: ' + broken.join(', '));
 
 console.log('\n  biggest corrections:');
