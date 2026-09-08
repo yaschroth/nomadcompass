@@ -36,6 +36,7 @@ const CLAIMS = [
   ['visa', 'Visa status per passport and destination', 'assets/visa-data.js'],
   ['city-scores', '13 category scores, the Nomad Score, and every ranking derived from them', 'cities-data.js'],
   ['cost-per-month', 'Headline monthly cost figure per city', 'cities-data.js'],
+  ['cost-ranges', 'The low and high ends of the monthly budget shown in the hero', 'data/cost-ranges.json'],
   ['guide-prose', 'Seven long-form guide sections per city, including price figures', 'data/guide-content.json'],
   ['neighborhoods', 'Neighbourhood descriptions, price levels and map coordinates', 'data/neighborhoods'],
   ['venues', 'Named coworking, cafe and restaurant recommendations', 'cities/*.html'],

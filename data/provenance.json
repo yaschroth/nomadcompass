@@ -77,9 +77,18 @@
   "cost-per-month": {
     "tier": "editorial",
     "source": "Numbeo for 330 cities, our own estimate for the other 670",
-    "method": "Where Numbeo data exists the headline figure is reconciled against it; otherwise it is an editorial estimate.",
+    "method": "Where Numbeo data exists the headline figure is reconciled against it; otherwise it is an editorial estimate. On the sourced cities it is rent for a one-bedroom in the city centre plus a one-person basket without rent, which is the TOP of the range, not a typical spend. Those cities show the range in the hero instead, described under Monthly budget range.",
     "coverage": "330 of 1000 sourced, 670 estimated, each labelled on its own page",
-    "knownLimits": "The 670 estimated figures carry more uncertainty than the 330 sourced ones. Each city page now states which of the two it is, in a note under its Cost of Living heading; check_cost_basis.cjs is the gate. The page title and meta description still hedge with \"about\" rather than naming the basis, because they carry one figure and no room for the caveat."
+    "knownLimits": "The 670 estimated figures carry more uncertainty than the 330 sourced ones. Each city page now states which of the two it is, in a note under its Cost of Living heading; check_cost_basis.cjs is the gate. The page title and meta description still hedge with \"about\" rather than naming the basis, because they carry one figure and no room for the caveat. This figure is still the single number every ranking, filter and comparison sorts on, so a city whose Numbeo catchment is wider than the area nomads actually live in is ranked cheaper than anyone can live there: Goa is the clearest, where Numbeo covers a whole state and the guide prose puts rent in the coastal belt at two to three times the state figure."
+  },
+  "cost-ranges": {
+    "tier": "primary",
+    "source": "Numbeo cost-of-living components, converted to USD at exchangerate-api.com",
+    "sourceUrl": "https://www.numbeo.com/cost-of-living/",
+    "retrieved": "2026-08-05",
+    "method": "The low end is a one-bedroom outside the centre plus the one-person no-rent basket; the high end is the same basket with a one-bedroom in the centre. Rent varies, the basket is held constant, because groceries and transport do not change with the neighbourhood and Numbeo does not split them by one anyway. Built by scripts/build_cost_range.cjs, rendered by apply_cost_range.cjs, checked by check_cost_range.cjs.",
+    "coverage": "327 of 1000 cities. Two more (Leon, Noumea) are excluded because Numbeo reports rent outside the centre as higher than rent in it, which would render backwards.",
+    "knownLimits": "The other 671 cities show a single estimate and no range, deliberately. They hold no cost components, so the only way to derive a second end was to read a rent range out of their own page prose. Tested against the 330 cities where the true figures are known, that method missed by 23% at the median and by more than 50% on 72 of 488 endpoints, so it was not used: a range nobody measured would look exactly like one we did. The range is also only as good as Numbeo's idea of where the city ends, and it covers rent and a basket, not flights, visas, insurance or health care."
   },
   "guide-prose": {
     "tier": "editorial",
