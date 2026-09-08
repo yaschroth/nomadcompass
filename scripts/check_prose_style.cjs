@@ -173,6 +173,28 @@ if (fs.existsSync(DATA)) {
   }
 }
 
+// Prose must not point at the site's own score and call it correct. "The cost score of 3 is
+// accurate", "The visa score of 4 reflects a difficult process", "Connectivity is the weakest
+// score in this batch": each of these takes a number the reader can already see, asserts it is
+// right, and adds nothing. The owner's word for them was leere Worthuellen, empty word-shells,
+// and the instruction was never to write one. Eighteen were removed in this commit.
+//
+// A sentence may still tell a reader NOT to trust a rating, because that says something. What it
+// may not do is restate the number as its own justification.
+const SCORE = /[^.]*\b(?:score|rating)\b[^.]*\./gi;
+const SCORE_OK = /worth more than|rather than rely on|instead of any/i;
+const GUIDE_FILE = path.join(ROOT, 'data', 'guide-content.json');
+const GUIDE = fs.existsSync(GUIDE_FILE) ? JSON.parse(fs.readFileSync(GUIDE_FILE, 'utf8')) : {};
+for (const [id, o] of Object.entries(GUIDE)) {
+  if (id.startsWith('_')) continue;
+  for (const [k, raw] of Object.entries(o)) {
+    for (const m of String(raw || '').match(SCORE) || []) {
+      if (SCORE_OK.test(m)) continue;
+      errors.push('data ' + id + '.' + k + ': cites its own score  "' + m.trim().slice(0, 90) + '"');
+    }
+  }
+}
+
 console.log('PROSE STYLE GATE  (no em-dashes, every price in USD)');
 console.log('  ' + pages.length + ' city pages' + (noObject ? ', ' + noObject + ' without a score object' : '') + '\n');
 
