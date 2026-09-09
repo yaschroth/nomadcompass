@@ -7,6 +7,31 @@ const g = JSON.parse(fs.readFileSync(ROOT + '/data/guide-content.json', 'utf8'))
 const CITIES = (new Function(fs.readFileSync(ROOT + '/cities-data.js', 'utf8') + ';return CITIES;'))();
 const byId = Object.fromEntries(CITIES.map((c) => [c.id, c]));
 const KEYS = ['costOfLiving', 'whereToWork', 'gettingAround', 'visas', 'bestTime', 'prosCons', 'whoFor'];
+
+// The most worn-out sentence openers in the corpus right now, recomputed on every run so the
+// warning tracks the file rather than a list that goes stale. Only the constructions a writer
+// chooses are counted: openers that are really data templates ("Budget around $X a month",
+// "A one-bedroom runs roughly") are excluded, because those belong to the generator and rewriting
+// them would make the cost lines inconsistent for no gain.
+const DATA_TEMPLATE = /^(budget|a one bedroom|groceries land|fibre runs|a monthly transit|this is our own|this figure is our own|the time zone is|there is no (digital|remote))/;
+const WORN = (() => {
+  const n = new Map();
+  for (const [id, city] of Object.entries(g)) {
+    if (id.startsWith('_') || typeof city !== 'object') continue;
+    for (const t of Object.values(city)) {
+      if (typeof t !== 'string') continue;
+      for (const s of String(t).replace(/(\d)\.(\d)/g, '$1․$2').split(/(?<=[.!?])\s+/)) {
+        const w = s.toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
+        if (w.length < 5) continue;
+        const k = w.slice(0, 5).join(' ');
+        if (DATA_TEMPLATE.test(k)) continue;
+        n.set(k, (n.get(k) || 0) + 1);
+      }
+    }
+  }
+  return [...n].filter(([, c]) => c >= 12).sort((a, b) => b[1] - a[1]).map(([k, c]) => ({ k, n: c }));
+})();
+
 for (const slug of process.argv.slice(2)) {
   const c = g[slug], m = byId[slug];
   if (!c) { console.log('### ' + slug + ' NOT IN guide-content.json\n'); continue; }
@@ -48,6 +73,16 @@ for (const slug of process.argv.slice(2)) {
     ? '  ^ DEEPENED SIBLINGS in ' + m.country + ': ' + sibs.map((x) => x.id + ' (' + x.w + 'w)').join(', ')
       + ' -- read their visas/costOfLiving/whereToWork first and choose different facts'
     : '  ^ no deepened siblings in ' + m.country + ', national facts are unspent');
+  // The openers to avoid, computed rather than remembered.
+  //
+  // The phrasing gate kept catching the same constructions of mine, always after the writing. A
+  // census (check_guide_openers.cjs) showed the habit is corpus-wide and predates me: 12% of all
+  // guide sentences begin with one of 62 five-word skeletons, and in whoFor it is 24%, with 187
+  // cities opening a sentence "It is a poor fit for" and 88 more "It does not suit anyone". A
+  // warning printed here costs nothing and removes a round trip through the gate on every batch.
+  console.log('  ^ AVOID these openers, already worn out across the corpus: '
+    + WORN.slice(0, 6).map((x) => '"' + x.k + '" (' + x.n + ')').join(', '));
+
   // Print the addition each section needs, so a single pass lands on target rather than three.
   // The band caps a section at 220, so anything already near that gets nothing and the weight
   // moves to the short sections instead.
