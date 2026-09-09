@@ -44,6 +44,52 @@ If you want those eight re-ranked, say so and it is an hour's work.
 
 ---
 
+## 0b. RESOLVED 2026-09-09: the three stock closers, and what is left of the template problem
+
+**The measurement that started it.** `check_guide_openers.cjs` counted 1,981 of 16,207 sentences,
+about 12%, opening with one of 62 five-word skeletons used a dozen times or more. The heaviest were
+the whoFor verdicts: 187 cities said "It is a poor fit for", another 88 "It does not suit anyone".
+
+**Done.** Both negative verdicts were cleared first. Then the three additive ones, 318 sentences in
+all, rewritten by hand in nine batches through `guide_reframe.cjs`:
+
+- "It also suits anyone ..." — 209, now 0
+- "It is a strong choice ..." — 40, now 0
+- "It works well for ..." — 69, now 0
+
+The corpus figure at the original threshold is now 1,496 of 16,512, 9.1%. whoFor at that threshold
+is 12 sentences, 0.5%.
+
+**What the remaining 9.1% actually is, and why most of it should stay.** Roughly two thirds is
+price and visa data: "Budget around $940 a month", "A one bedroom runs roughly $520 to $700",
+"There is no digital nomad visa". Those repeat because they are the same measurement quoted for a
+different city, and a reader comparing two pages wants them to line up. Varying the frame would
+make the numbers harder to read and the prose no better. `check_guide_openers.cjs --prose` excludes
+them and reports the figure that is actually a writing habit: **3.9% at min 12, 6.4% at min 8**.
+
+**Left, in descending order of how much it matters** (all figures from `--prose --min 8`):
+
+- 50 cities: "There is a small coworking ..." — a real fact, but the frame is doing no work
+- 43 + 19 cities: "The case against is the/that ..." — 62 cities make the same rhetorical turn
+- 42 + 29 + 22 + 19 cities: season openers ("May to September is the ...") — borderline data frame
+- 31 cities: "Everyone else needs a Schengen ..." — arguably belongs with the visa frames
+- 12 cities: "It suits people who want ...", 11: "It suits anyone drawn to ...", 10: "It is a good
+  choice ...", 9: "It works for solo workers ...", 8: "It is a strong fit ...", 8: "It does not
+  suit a ..." — 58 whoFor sentences, the direct continuation of the work already done
+
+The whoFor 58 and the 62 "case against" sentences are the ones worth taking next. The seasonal and
+Schengen openers are closer to data frames than to habits and the DATA_TEMPLATE list in
+`guide_dump_sections.cjs` / `check_guide_openers.cjs` should probably grow to cover them, rather
+than 120 sentences being rewritten to no reader's benefit.
+
+**Process notes that cost time.** The phrasing gate reads six-word shingles, so it cannot see a
+writer falling into the same *clause shape* repeatedly: one batch used "which is ..." as a tail
+nine times in 23 sentences and the gate was clean. Reading a batch back before applying is the only
+thing that catches those. And `guide_reframe.cjs` enforces the 90-220 band, so three sections with
+no headroom left (Plzen, Coorg, Vizag) had to be written to fit rather than the band being widened.
+
+---
+
 ## 1. Affiliate conversion layer (deferred — biggest revenue lever)
 
 **Goal:** monetize via accommodation affiliate (Booking) + affiliate links in blog posts.

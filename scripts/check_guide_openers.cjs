@@ -18,7 +18,15 @@
  * information, unlike the empty phrases removed earlier, so the fix is rewriting rather than
  * deletion and it is a body of work somebody has to choose to take on. Exits 0 unless --strict.
  *
- * Usage: node scripts/check_guide_openers.cjs [--top N] [--field whoFor] [--strict]
+ * --prose separates the two kinds of repetition, which are not the same defect. "Budget around
+ * $940 a month" and "A one bedroom runs roughly $520 to $700" repeat because they are the same
+ * measurement quoted for a different city, and a reader comparing two pages WANTS those to line
+ * up: changing the frame every time would make the numbers harder to read, not the prose better.
+ * The habit worth fixing is the one in the judgements around them. Without --prose the census
+ * mixes both and the headline percentage cannot fall below about nine, because that much of it is
+ * price data doing its job.
+ *
+ * Usage: node scripts/check_guide_openers.cjs [--top N] [--field whoFor] [--min N] [--prose] [--strict]
  */
 const fs = require('fs');
 const path = require('path');
@@ -32,6 +40,11 @@ const TOP = Number(arg('top', 25));
 const FIELD = arg('field', null);
 const STRICT = process.argv.includes('--strict');
 const MIN = Number(arg('min', 12));
+const PROSE = process.argv.includes('--prose');
+
+// The frames that quote a measurement. Kept identical to guide_dump_sections.cjs, which uses the
+// same list to decide which openers to warn a writer away from: one definition, two consumers.
+const DATA_TEMPLATE = /^(budget|a one bedroom|groceries land|fibre runs|a monthly transit|this is our own|this figure is our own|the time zone is|there is no (digital|remote))/;
 
 const g = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'guide-content.json'), 'utf8'));
 
@@ -60,6 +73,7 @@ for (const [id, city] of Object.entries(g)) {
     for (const s of sentences(text)) {
       const k = skeleton(s);
       if (!k) continue;
+      if (PROSE && DATA_TEMPLATE.test(k)) continue;
       counts.set(k, (counts.get(k) || 0) + 1);
       if (!cities.has(k)) cities.set(k, new Set());
       cities.get(k).add(id);
@@ -72,7 +86,8 @@ const rows = [...counts].filter(([, n]) => n >= MIN).sort((a, b) => b[1] - a[1])
 const covered = rows.reduce((a, [, n]) => a + n, 0);
 const share = total ? ((covered / total) * 100).toFixed(1) : '0';
 
-console.log('GUIDE OPENER CENSUS' + (FIELD ? '  (' + FIELD + ' only)' : '') + '\n');
+console.log('GUIDE OPENER CENSUS' + (FIELD ? '  (' + FIELD + ' only)' : '')
+  + (PROSE ? '  (prose only, price and visa frames excluded)' : '') + '\n');
 console.log('  ' + total.toLocaleString() + ' sentences'
   + (FIELD ? ' in ' + FIELD : ' across 350 guides'));
 console.log('  ' + rows.length + ' five-word openers used ' + MIN + ' times or more, covering '
