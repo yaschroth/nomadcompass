@@ -70,4 +70,27 @@ function stats() {
   return cached;
 }
 
-module.exports = { stats };
+/**
+ * Phrasings that can ONLY be about this site's whole index, so the number in them may be matched
+ * as any 3-4 digits rather than against a list of figures the site used to claim.
+ *
+ * That list was the original safety mechanism and it was the right call: a blanket rule on "N
+ * cities" rewrote 4,855 correct figures, because /services/lawyers says "255 cities" and means it.
+ * But a hand-maintained list of old values only holds until the count moves again, and it did:
+ * 831 was never added, so about.html publicly claimed 831 cities while the gate reported clean,
+ * and 32 ranking pages said "browse all 410 city guides" because "city guides" was not one of the
+ * counted nouns. Anchoring on the PHRASE instead of the number closes both, and it cannot fire on
+ * a subset count, because no subset is ever described as "browse all N city guides".
+ *
+ * Each entry is [regex with the number as group 2, prefix group 1, suffix group 3].
+ */
+const INDEX_PHRASES = [
+  /(browse all )(\d{3,4})( city guides)/g,
+  /(keep )(\d{3,4})( city guides accurate)/g,
+  /(rates )(\d{3,4})( cities)/g,
+  /(ranked across )(\d{3,4})( cities)/g,
+  /(across our )(\d{3,4})(-city index)/g,
+  /(an index of )(\d{3,4})( cities)/g,
+];
+
+module.exports = { stats, INDEX_PHRASES };

@@ -10,6 +10,8 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
+const { stats: siteStats } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
+const SITE = siteStats();
 const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 
 const UPDATED = 'July 1, 2026';
@@ -88,7 +90,7 @@ function contactPage() {
       <div class="container">
         <span class="contact-eyebrow">Get in touch</span>
         <h1>Contact</h1>
-        <p class="contact-lead">Questions, corrections, city suggestions, or partnership ideas. We read everything, and reader corrections are what keep 410 city guides accurate.</p>
+        <p class="contact-lead">Questions, corrections, city suggestions, or partnership ideas. We read everything, and reader corrections are what keep ${SITE.cities} city guides accurate.</p>
       </div>
     </header>
     <div class="contact-wrap">
@@ -210,7 +212,7 @@ ${updatedLine}`),
     <p class="lead">We couldn&rsquo;t find that page, it may have moved, or never existed.</p>
     <p>Try one of these instead:</p>
     <ul>
-      <li><a href="/cities">Browse all 410 city guides</a></li>
+      <li><a href="/cities">Browse all ${SITE.cities} city guides</a></li>
       <li><a href="/wheel">Find your match on the Nomad Wheel</a></li>
       <li><a href="/blog">Read the blog</a></li>
       <li><a href="/">Go to the homepage</a></li>

@@ -26,8 +26,8 @@ const APPLY = process.argv.includes('--apply');
 // [page, kind, old, new]
 const FIXES = [
   ['about.html', 'desc',
-    'The Nomad HQ rates 710 cities on the 13 things that matter most to digital nomads, so remote workers can find their ideal base with real data instead of guesswork.',
-    'The Nomad HQ rates 710 cities on the 13 things that matter most to remote workers, so you can choose a base from real data rather than guesswork.'],
+    'The Nomad HQ rates 1000 cities on the 13 things that matter most to digital nomads, so remote workers can find their ideal base with real data instead of guesswork.',
+    'The Nomad HQ rates 1000 cities on the 13 things that matter most to remote workers, so you can choose a base from real data rather than guesswork.'],
 
   ['contact.html', 'desc',
     'Get in touch with The Nomad HQ: corrections, city suggestions, partnerships, or press.',

@@ -18,7 +18,7 @@
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
-const { stats } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
+const { stats, INDEX_PHRASES } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
 const S = stats();
 
 // Deliberately narrow: only the figures the site has actually claimed about its own index
@@ -63,6 +63,18 @@ for (const f of html) {
     }
     problems.push(`${rel}: ${m.length} x ${what}  e.g. "${m[0].trim()}"`);
   }
+  // Whole-index phrasings: the number is checked against the truth rather than against a list of
+  // figures the site used to claim. That list missed 831 entirely and the gate reported clean
+  // while about.html said "rates 831 cities" in four places including its own meta description.
+  for (const re of INDEX_PHRASES) {
+    re.lastIndex = 0;
+    let m;
+    while ((m = re.exec(t))) {
+      if (Number(m[2]) !== S.cities) {
+        problems.push(`${rel}: "${m[0].trim()}" should say ${S.cities}`);
+      }
+    }
+  }
   for (const [key, want] of Object.entries(MARKERS)) {
     const re = new RegExp(`<span data-stat="${key}">([^<]*)</span>`, 'g');
     let m;
@@ -77,6 +89,10 @@ const scripts = [];
 walk(path.join(ROOT, 'scripts'), scripts, '.cjs');
 const warnings = [];
 const LITERAL = /\b(?:410|650\+?)\s+(?:cities|destinations)|\b(?:410|650)-city\b/g;
+// A whole-index phrasing typed into a generator is the same defect one step upstream: the sweep
+// fixes the HTML and the generator's next run puts it back. That is exactly what happened with
+// "browse all 410 city guides" in apply_best_page.cjs, which survived every sweep.
+const GEN_PHRASE = INDEX_PHRASES.map((re) => new RegExp(re.source, 'g'));
 for (const f of scripts) {
   const rel = path.relative(ROOT, f);
   // These three describe the old figures in prose; they do not emit them.
@@ -84,6 +100,11 @@ for (const f of scripts) {
   fs.readFileSync(f, 'utf8').split('\n').forEach((line, i) => {
     if (LITERAL.test(line)) warnings.push(`${rel}:${i + 1}  ${line.trim().slice(0, 110)}`);
     LITERAL.lastIndex = 0;
+    for (const re of GEN_PHRASE) {
+      re.lastIndex = 0;
+      const m = re.exec(line);
+      if (m && Number(m[2]) !== S.cities) warnings.push(`${rel}:${i + 1}  ${line.trim().slice(0, 110)}`);
+    }
   });
 }
 

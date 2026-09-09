@@ -17,7 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const DRY = process.argv.includes('--dry');
-const { stats } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
+const { stats, INDEX_PHRASES } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
 const s = stats();
 
 // Each rule is deliberately anchored to the noun it counts. A bare /410/ would eat prices,
@@ -42,6 +42,10 @@ const RULES = [
     [new RegExp('\\b' + old + '\\b(?=\\s+(?:cities|destinations|rated cities))', 'g'), String(s.cities)],
     [new RegExp('\\b' + old + '-city\\b', 'g'), `${s.cities}-city`],
   ]),
+
+  // Phrasings that can only mean the whole index, so the number is matched as any 3-4 digits.
+  // See INDEX_PHRASES in lib/site-stats.cjs for why the pinned list above was not enough.
+  ...INDEX_PHRASES.map((re) => [re, `$1${s.cities}$3`]),
 
   // about.html stat tiles, scoped by their own label, so any count here is safe to rewrite.
   [/(<div class="num">)\d{2,4}(<\/div>\s*<div class="lbl">cities rated<\/div>)/g, `$1${s.cities}$2`],

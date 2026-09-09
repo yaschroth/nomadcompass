@@ -13,6 +13,14 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const META = require(path.join(__dirname, 'lib', 'meta_text.cjs'));
+const { stats, INDEX_PHRASES } = require(path.join(__dirname, 'lib', 'site-stats.cjs'));
+const SITE = stats();
+// The methodology sentence is hand-written in content-<key>.json and states the index size.
+// Those files were written when the site had 710 cities and nobody updates them when it grows,
+// so the number is corrected on the way out rather than trusted. A content file may say what it
+// likes; the published page says what is true.
+const trueCounts = (str) => INDEX_PHRASES.reduce((acc, re) =>
+  acc.replace(new RegExp(re.source, 'g'), '$1' + SITE.cities + '$3'), String(str || ''));
 const DIR = process.env.DIR || ROOT;
 const OUTDIR = path.join(ROOT, 'best');
 const BASE = 'https://thenomadhq.com';
@@ -273,7 +281,7 @@ ${shell.headTop}
       ${crumbHtml}
       <section class="best-intro">
         ${introHtml}
-        <p class="best-method">${txt(content.methodology || '')} Explore the numbers yourself on the <a href="/compare">comparison tool</a> or <a href="/cities">browse all 410 city guides</a>.</p>
+        <p class="best-method">${trueCounts(txt(content.methodology || ''))} Explore the numbers yourself on the <a href="/compare">comparison tool</a> or <a href="/cities">browse all ${SITE.cities} city guides</a>.</p>
       </section>
 
       ${picks ? `<section class="best-picks"><h2 class="best-h2">At a glance</h2><div class="best-picks-grid">\n${picks}\n        </div></section>` : ''}
