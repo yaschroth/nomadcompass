@@ -73,7 +73,7 @@ const cities = fileSlugs
     const c = meta.get(slug) || {};
     return {
       slug, name: c.name || titleCase(slug), country: c.country || '', flag: c.flag || '',
-      cost: c.costPerMonth || null, region: CITY_REGIONS[slug] || '', climate: c.climateType || '',
+      cost: c.costPerMonth || null, costLow: c.costLow || null, region: CITY_REGIONS[slug] || '', climate: c.climateType || '',
       score: nomadScore(avgScore(c)), image: c.image || '', scores: c.scores || {},
       tz: (typeof c.timezone === 'number' ? c.timezone : null),
     };
@@ -141,7 +141,12 @@ const badgeCls = (v) => (v == null ? 'below' : v >= 8 ? 'excellent' : v >= 6.5 ?
 const cards = cities.map((c) => {
   // Hover stats overlay is built lazily client-side from data-scores (keeps the
   // static DOM ~20k nodes lighter across 410 cards). See buildOverlay() below.
-  const cost = c.cost != null ? `$${c.cost.toLocaleString('en-US')}` : 'N/A';
+  // Show the measured range where there is one, matching the city page hero and the home cards.
+  const cost = c.cost == null ? 'N/A'
+    : c.costLow != null
+      ? `$${c.costLow.toLocaleString('en-US')}-${c.cost.toLocaleString('en-US')}`
+      : `$${c.cost.toLocaleString('en-US')}`;
+  const approx = c.costLow != null ? '' : '~';
   const scoresCsv = SCORE_KEYS.map((k) => (typeof c.scores[k] === 'number' ? c.scores[k] : '')).join(',');
   return `      <article class="city-card fade-in"` +
     ` data-name="${escapeHtml((c.name || '').toLowerCase())}"` +
@@ -164,7 +169,7 @@ const cards = cities.map((c) => {
           </div>
           <div class="city-card-info">
             <div class="city-card-climate-type">${escapeHtml(c.climate || 'N/A')}</div>
-            <div class="city-card-cost"><span class="cost-label">~${cost}</span><span class="cost-period">/month</span></div>
+            <div class="city-card-cost"><span class="cost-label">${approx}${cost}</span><span class="cost-period">/month</span></div>
           </div>
           <a href="/cities/${c.slug}" class="btn btn-primary city-card-action">View City &rarr;</a>
         </div>

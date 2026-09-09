@@ -1680,6 +1680,16 @@
         }
         return '$' + costPerMonth;
       }
+      // Match cards are dense, so the range is abbreviated the same way the single figure was:
+      // $1.9k-2.4k rather than $1,950-2,400. costLow exists only on the 327 measured cities; the
+      // rest keep the single estimate they have always shown.
+      function formatCostRange(city) {
+        if (!city.costLow || !city.costPerMonth) return null;
+        var lo = city.costLow >= 1000
+          ? (city.costLow / 1000).toFixed(1).replace('.0', '') + 'k'
+          : String(city.costLow);
+        return '$' + lo + '-' + formatCost(city.costPerMonth).replace('$', '');
+      }
 
       /**
        * Generate overlay stats HTML for hover effect
@@ -1714,7 +1724,8 @@
         const matchPercent = Math.round(city.matchScore * 100);
         const nomadScore = calculateNomadScore(city);
         const scoreClass = getScoreClass(parseFloat(nomadScore));
-        const costPerMonth = formatCost(city.costPerMonth);
+        const costRange = formatCostRange(city);
+        const costPerMonth = costRange || formatCost(city.costPerMonth);
 
         const card = document.createElement('article');
         card.className = 'city-card';
@@ -1756,7 +1767,7 @@
               </div>
               <div class="city-card-climate-type">${city.climateType || 'N/A'}</div>
               <div class="city-card-cost">
-                <span class="cost-label">~${costPerMonth}</span>
+                <span class="cost-label">${costRange ? '' : '~'}${costPerMonth}</span>
                 <span class="cost-period">/mo</span>
               </div>
             </div>

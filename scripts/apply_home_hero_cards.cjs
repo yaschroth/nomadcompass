@@ -41,7 +41,13 @@ if (noImage.length) { console.error('Missing card image for: ' + noImage.map((c)
 const cards = picks.map((c) => {
   const code = iso(c.flag);
   const flag = code ? `<img src="/assets/flags/${code}.svg" alt="" width="16" height="12" loading="lazy">` : '';
-  const cost = typeof c.costPerMonth === 'number' ? '$' + c.costPerMonth.toLocaleString('en-US') : 'n/a';
+  // The fifth and last surface that prints a budget. The others were the static home cards, the
+  // runtime home grid, the /cities hub, /compare and the wheel; this one sits above all of them
+  // in the hero and would have been the only place still showing a bare figure.
+  const cost = typeof c.costPerMonth !== 'number' ? 'n/a'
+    : typeof c.costLow === 'number'
+      ? '$' + c.costLow.toLocaleString('en-US') + '-' + c.costPerMonth.toLocaleString('en-US')
+      : '$' + c.costPerMonth.toLocaleString('en-US');
   // The climate type is real data and it is what fills the tile: without it the card was a photo,
   // two short words and a lot of empty white before the score at the far right.
   const climate = c.climateType ? `<span class="hero-pick-climate"><span class="hero-pick-sep">&middot;</span> ${esc(c.climateType)}</span>` : '';

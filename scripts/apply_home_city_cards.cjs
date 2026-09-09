@@ -23,14 +23,22 @@ const featured = m.exports.slice().sort((a, b) => overall(b) - overall(a)).slice
 
 const cards = featured.map((city, index) => {
   const sc = nscore(city).toFixed(1);
-  const cost = typeof city.costPerMonth === 'number' ? '$' + city.costPerMonth.toLocaleString('en-US') : 'N/A';
+  // These cards exist as static HTML so crawlers and AI readers see the same figures a browser
+  // does. That is exactly why the range has to be rendered here too: updating only the runtime
+  // template would have left every non-JS reader looking at the old single number.
+  const cost = typeof city.costPerMonth !== 'number' ? 'N/A'
+    : typeof city.costLow === 'number'
+      ? '$' + city.costLow.toLocaleString('en-US') + '-' + city.costPerMonth.toLocaleString('en-US')
+      : '$' + city.costPerMonth.toLocaleString('en-US');
+  // The tilde means "about", which a stated range is not.
+  const approx = typeof city.costLow === 'number' ? '' : '~';
   const code = iso(city.flag);
   const flag = code ? `<img class="flag-img" src="/assets/flags/${code}.svg" alt="" width="24" height="18" loading="lazy">` : esc(city.flag || '');
   const stats = CK.map((k) => {
     const v = typeof city.scores[k] === 'number' ? city.scores[k] : 0;
     return `<div class="overlay-stat"><div class="overlay-stat-header"><span class="overlay-stat-label">${LBL[k]}</span><span class="overlay-stat-value">${v}</span></div><div class="overlay-stat-bar"><div class="overlay-stat-fill ${cls(v)}" style="width:${v * 10}%"></div></div></div>`;
   }).join('');
-  return `          <article class="city-card fade-in" data-city-id="${city.id}" style="animation-delay:${index * 50}ms"><div class="city-card-image-container"><img src="${esc(city.image)}" alt="${esc(city.name)}, ${esc(city.country)}" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats">${stats}</div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag">${flag}</span><div><h2 class="city-card-name">${esc(city.name)}</h2><span class="city-card-country">${esc(city.country)}</span></div></div><div class="nomad-score ${cls(nscore(city))}"><span class="nomad-score-value">${sc}</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">${esc(city.climateType || 'N/A')}</div><div class="city-card-cost"><span class="cost-label">~${cost}</span><span class="cost-period">/month</span></div></div><a href="/cities/${city.id}" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>`;
+  return `          <article class="city-card fade-in" data-city-id="${city.id}" style="animation-delay:${index * 50}ms"><div class="city-card-image-container"><img src="${esc(city.image)}" alt="${esc(city.name)}, ${esc(city.country)}" class="city-card-image" loading="lazy"><div class="city-card-overlay"><div class="overlay-stats">${stats}</div></div></div><div class="city-card-body"><div class="city-card-header"><div class="city-card-location"><span class="city-card-flag">${flag}</span><div><h2 class="city-card-name">${esc(city.name)}</h2><span class="city-card-country">${esc(city.country)}</span></div></div><div class="nomad-score ${cls(nscore(city))}"><span class="nomad-score-value">${sc}</span><span class="nomad-score-label">Score</span></div></div><div class="city-card-info"><div class="city-card-climate-type">${esc(city.climateType || 'N/A')}</div><div class="city-card-cost"><span class="cost-label">${approx}${cost}</span><span class="cost-period">/month</span></div></div><a href="/cities/${city.id}" class="btn btn-primary city-card-action">View City &rarr;</a></div></article>`;
 }).join('\n');
 
 const abs = path.join(ROOT, 'index.html');

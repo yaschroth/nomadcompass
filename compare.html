@@ -418,6 +418,13 @@
 
       function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
       function fmtCost(v) { return typeof v !== 'number' ? 'n/a' : '$' + v.toLocaleString('en-US') + '/mo'; }
+      // The header block shows the range; the comparison rows below keep a single figure, because
+      // those rows rank cities against each other and a range cannot be put in an order.
+      function fmtBudget(c) {
+        if (typeof c.costPerMonth !== 'number') return 'n/a';
+        if (typeof c.costLow !== 'number') return fmtCost(c.costPerMonth);
+        return '$' + c.costLow.toLocaleString('en-US') + '-' + c.costPerMonth.toLocaleString('en-US') + '/mo';
+      }
 
       var byId = {};
       CITIES.forEach(function (c) { byId[c.id] = c; });
@@ -570,7 +577,7 @@
             '<div class="cmp-country">' + esc(c.country) + '</div>' +
             gauge(sc, isBest) +
             '<div class="cmp-score-lbl">Nomad Score</div>' +
-            '<div class="cmp-cost">Budget <b>' + fmtCost(c.costPerMonth) + '</b></div>' +
+            '<div class="cmp-cost">Budget <b>' + fmtBudget(c) + '</b></div>' +
             '<a class="cmp-guide" href="/cities/' + c.id + '">View guide →</a>' +
             '</div>';
         }
