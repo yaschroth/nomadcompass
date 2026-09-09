@@ -43,7 +43,21 @@ function localStr(local, cur) {
 }
 const fxDate = (FX.time_last_update_utc || '').replace(/^[A-Za-z]+, /, '').replace(/ \d{2}:\d{2}.*$/, '');
 
-function costBox(slug, d) {
+// The guide prose under this box states its own monthly range on many pages, and on 148 of them it
+// disagrees with the table by more than 15%. Both numbers are right. They measure different things:
+// this table prices a defined one-person basket at Numbeo's figures, and the guide range is an
+// editorial judgement about how somebody actually lives in the city, which on most pages assumes
+// more eating out and a workspace and on some (Budapest) assumes less. A reader meeting two totals
+// four lines apart with nothing joining them concludes one of us is wrong.
+//
+// The sentence is direction-neutral on purpose. Saying the guide runs "higher" would be false on
+// Budapest, Seoul and a dozen others where it runs lower, and a reconciling note that is itself
+// wrong on a tenth of its pages is worse than none.
+const RECONCILE = ' The guide below quotes its own monthly range, which is a different measurement '
+  + 'rather than a competing one: this table prices a defined basket at the figures above, while '
+  + 'that range is a judgement about how somebody actually lives here.';
+
+function costBox(slug, d, reconcile) {
   const rate = FX.rates[d.cur];
   if (!rate) { console.error('NO FX RATE for', d.cur, '(' + slug + ')'); return null; }
   const city = NAME[slug] || slug;
@@ -89,20 +103,43 @@ ${personas}
         <ul class="cost-lines">
 ${lines}
         </ul>
-        <p class="cost-src">Prices are from Numbeo (${esc(d.date)}), converted to USD at ${esc(rateStr)} (${esc(fxDate)}). The monthly living-costs figure is our transparent one-person basket, groceries, a few meals out, utilities, phone, internet, transport and essentials, priced from those figures. Solo adds central rent; couple and lean are estimates from the same numbers.</p>
+        <p class="cost-src">Prices are from Numbeo (${esc(d.date)}), converted to USD at ${esc(rateStr)} (${esc(fxDate)}). The monthly living-costs figure is our transparent one-person basket, groceries, a few meals out, utilities, phone, internet, transport and essentials, priced from those figures. Solo adds central rent; couple and lean are estimates from the same numbers.${reconcile ? RECONCILE : ''}</p>
       </div>
       <!-- cost-end -->`;
 }
 
-let ok = 0, noAnchor = 0, noRate = 0;
+let ok = 0, noAnchor = 0, noRate = 0, reconciled = 0;
 for (const slug of Object.keys(COSTS)) {
   if (slug === '_meta') continue;
   const page = path.join(ROOT, 'cities', slug + '.html');
   if (!fs.existsSync(page)) { console.error('NO PAGE:', slug); continue; }
-  const box = costBox(slug, COSTS[slug]);
-  if (!box) { noRate++; continue; }
   let s = fs.readFileSync(page, 'utf8');
   s = s.replace(/\s*<!-- cost-start -->[\s\S]*?<!-- cost-end -->/, ''); // idempotent
+
+  // Decide the reconciling sentence from the page AFTER the old box is stripped, so the box's own
+  // figures can never be mistaken for the guide's. Only where the two genuinely differ: on a page
+  // where they agree the sentence is noise pointing at a disagreement that is not there.
+  const d = COSTS[slug];
+  const rate0 = FX.rates[d.cur];
+  let reconcile = false;
+  if (rate0 && d.rent1c != null && d.singleNoRent != null) {
+    const sec = s.match(/<h2 id="cost-of-living">[\s\S]{0,6000}?<h2/);
+    const bullet = sec && sec[0].match(/<strong>\s*(?:Total|Realistic|Monthly total)[^<:]{0,40}:?\s*<\/strong>([^<]{0,240})/i);
+    const r = bullet && bullet[1].match(/\$?\s?([\d,]+)\s*(?:to|-|–|and)\s*\$?([\d,]+)/);
+    if (r) {
+      const lo = Number(r[1].replace(/,/g, '')), hi = Number(r[2].replace(/,/g, ''));
+      const tLow = (d.rent1o != null ? d.rent1o : d.rent1c) + d.singleNoRent;
+      const tHigh = d.rent1c + d.singleNoRent;
+      const low = Math.round(tLow / rate0), high = Math.round(tHigh / rate0);
+      if (hi > lo && lo > 30) {
+        reconcile = Math.abs(lo - low) / low > 0.15 || Math.abs(hi - high) / high > 0.15;
+      }
+    }
+  }
+
+  const box = costBox(slug, d, reconcile);
+  if (!box) { noRate++; continue; }
+  if (reconcile) reconciled++;
   const city = NAME[slug] || slug;
   const h2re = new RegExp('(<h2[^>]*>\\s*Cost of Living[^<]*</h2>)');
   if (!h2re.test(s)) { console.error('NO COST HEADING:', slug); noAnchor++; continue; }
@@ -111,3 +148,4 @@ for (const slug of Object.keys(COSTS)) {
   ok++;
 }
 console.log(`Cost table: applied ${ok} | no anchor ${noAnchor} | no fx rate ${noRate}`);
+console.log(`  reconciling sentence added where the guide total differs by more than 15%: ${reconciled}`);

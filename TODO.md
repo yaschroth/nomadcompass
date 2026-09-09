@@ -4,38 +4,43 @@ Deferred work and decisions, so nothing gets lost. Newest/most important first.
 
 ---
 
-## 0. 172 city pages state two different costs, and the prose is probably the right one
+## 0. RESOLVED 2026-09-09: the 172 conflicting cost pages, split and fixed
 
-Found 2026-09-08 while making the hero budget a range. On 172 of the 201 measured cities that
-carry a "Total monthly range" bullet, the guide prose contradicts the Numbeo table printed
-directly above it. The prose runs higher every time.
+Found 2026-09-08, fixed the next day. Recorded here because the first diagnosis was wrong and the
+correction is the useful part.
 
-Goa is the clearest case. The cost box says a one-bedroom in the centre is **$180**. The very next
-paragraph says **"Rent (North Goa, tourist belt, Anjuna/Vagator/Assagao): $365-575/month"**. Both
-are on the page today, three lines apart.
+**What I claimed first:** 172 pages contradict their own cost table, the prose is probably right,
+and Goa proves it because Numbeo covers a whole state while nomads live on one coast.
 
-**The prose is likely correct and the table misleading**, which is the uncomfortable direction.
-Numbeo's "Goa" is an entire Indian state and averages in rural rents; nomads live in a small
-coastal belt that costs two to three times the state average. Same shape in zanzibar (220% apart),
-malang, santacruz, muscat, cochabamba, lapaz. The scores and every ranking sort on the table
-figure, so where the catchment is wrong the city is ranked cheaper than anyone can actually live
-there.
+**What the classifier found** (`scripts/classify_cost_conflicts.cjs`), once the test compared RENT
+rather than totals:
 
-Not all 172 are the same fault. Bangkok's table says $700 for central rent and its prose says
-$540-1,050, which agree fine; only the *totals* differ, because the prose assumes a more generous
-lifestyle than our one-person basket. That is a labelling problem, not a data problem.
+- **148 are not contradictions at all.** The rents agree and only the totals differ, because the
+  table prices a defined one-person basket and the guide range is a judgement about how somebody
+  lives. Both right, measuring different things, with nothing on the page saying so. Fixed by a
+  direction-neutral reconciling sentence in `apply_city_costs.cjs`, applied to the 177 pages where
+  the two figures actually differ by more than 15% and withheld where they agree. Direction-neutral
+  matters: the guide runs LOWER than the table on Budapest, Seoul and a dozen more, so a note
+  saying "the guide runs higher" would be wrong on a tenth of its pages.
+- **8 are real**, and on those the measurement misleads: zanzibar, buenosaires, goa, malang,
+  leipzig, ohrid, lima, antwerp. Each now carries a per-city note (`apply_catchment_note.cjs`)
+  saying what the figure covers.
+- **16 could not be classified** because their pages quote rent only in local currency. They get
+  the reconciling sentence, which is true regardless of which class they belong to.
 
-**So it splits two ways and needs sorting per city, not by sweep:**
-1. *Catchment mismatch* — Numbeo's city boundary is not the nomad area. The figure is wrong for
-   our reader. Needs a per-city judgement and possibly a documented override.
-2. *Basket mismatch* — both figures are right, they measure different lifestyles. Needs the page
-   to say which is which, not a data change.
+**Goa, corrected.** The page does not contradict itself and the table is not wrong. It quotes
+$155-295 inland, which matches Numbeo almost exactly, AND $365-575 for the Anjuna belt. The fault
+is that the headline averages a district whose readers will all live in its expensive corner.
+Comparing the cheapest rent bullet cleared Goa entirely; comparing the dearest caught it. That is
+why the classifier now tests both directions.
 
-Reproduce with the scratch script logic in `check_cost_range.cjs`'s sibling analysis, or re-derive:
-compare the labelled total bullet against `data/cost-ranges.json` per city.
-
-Do NOT "fix" this by rewriting the prose to match the table. That would delete researched local
-knowledge in favour of a number that is wrong for the reader in at least the six cities above.
+**STILL OPEN, and the reason it is open.** The ranking is unchanged on all eight. The measured
+figure is correct for the city as Numbeo defines it, and the only substitute available is editorial
+rent from the prose plus a measured basket. Prose rent was tested against Numbeo across the 330
+sourced cities when the budget range was built: 23% off at the median, 72 of 488 endpoints more
+than 50% out. Swapping a number that is right about the wrong area for one that is roughly right
+about the right area, silently, on eight cities, is not an improvement I should make alone.
+If you want those eight re-ranked, say so and it is an hour's work.
 
 ---
 
