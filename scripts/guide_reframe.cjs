@@ -11,12 +11,18 @@
  * surrounding section to rewrite them against, and applies replacements written one at a time.
  *
  *   --list "It is a poor fit for" [--from 0] [--n 20]   print sentences needing a rewrite
- *   --apply FILE                                        apply {"city.field": "new sentence"}
+ *   --apply FILE [--allow-shorter]                      apply {"city.field": {old, now}}
  *
  * Replacements are matched on the exact old sentence, so a stale file fails loudly rather than
  * writing to the wrong place. The 90-220 word band and the per-city floor are enforced exactly as
  * guide_extend.cjs enforces them, and a replacement shorter than what it removes is refused,
  * because several of these cities were topped up to clear the 1155-word floor.
+ *
+ * --allow-shorter lifts only that last rule, and exists for one job: removing a sentence that
+ * restates one already in the section. There the shortening IS the fix, and refusing it would
+ * force padding back in to replace words that were never carrying anything. The band and the
+ * floor still apply, so a section cannot be cut below 90 words or a city below 1155 either way.
+ * Do not reach for it to make an ordinary rewrite easier to write.
  */
 const fs = require('fs');
 const path = require('path');
@@ -35,6 +41,7 @@ const sentences = (s) => String(s)
 
 const LIST = arg('list');
 const APPLY = arg('apply');
+const ALLOW_SHORTER = process.argv.includes('--allow-shorter');
 
 if (LIST) {
   const from = Number(arg('from', 0));
@@ -75,7 +82,7 @@ for (const [key, spec] of Object.entries(repl)) {
   const { old, now } = spec;
   if (!old || !now) { problems.push(key + ': needs {old, now}'); continue; }
   if (!guide[id][field].includes(old)) { problems.push(key + ': the old sentence is not there any more'); continue; }
-  if (words(now) < words(old)) {
+  if (!ALLOW_SHORTER && words(now) < words(old)) {
     problems.push(key + ': replacement is shorter (' + words(now) + ' vs ' + words(old) + ')');
     continue;
   }

@@ -32,7 +32,21 @@
  * shingle. Both are deliberately blunt; the point is to catch the paragraph that says a thing and
  * then says it again.
  *
- * Usage: node scripts/check_guide_self_repeat.cjs [--all] [--fix-list]
+ * THE CLOSING SENTENCE IS NOT THE ONLY PLACE THIS HAPPENS, which the first version assumed because
+ * every example it was built from was an appended closer. Widening the same test to every pair of
+ * sentences in a section found 26 more at seven shared words: Nassau explaining Eastern time twice
+ * in a row, Dili quoting the same 2016 Atauro reef survey in consecutive sentences, Kuopio saying
+ * that EU and EEA citizens need no permit and then saying it again in shorter words. Apia's
+ * gettingAround described the brightly painted wooden buses with no timetable, and then described
+ * them again.
+ *
+ * The pair pass runs at SEVEN rather than six, and that gap is not laziness. At six the pair pass
+ * returns 62, and roughly a third are legitimate: a visas section says "Everyone else needs a
+ * United States visa" after saying Americans need none, which shares six words and contradicts
+ * nothing. Elaboration reuses the nouns of the thing being elaborated. Seven is where the
+ * restatements separate from the elaborations, checked by reading all 62.
+ *
+ * Usage: node scripts/check_guide_self_repeat.cjs [--all] [--fix-list] [--min=6] [--pair-min=7]
  * Exit 1 if any section repeats itself.
  */
 const fs = require('fs');
@@ -44,6 +58,8 @@ const FIX_LIST = process.argv.includes('--fix-list');
 // Six is where the false positives stop. At five, a pro and a con about the same landmark start
 // appearing; at seven, Zilina's twice-told cars-per-head line drops out. Tunable here on purpose.
 const MIN_SHARED = Number((process.argv.find((a) => a.startsWith('--min=')) || '--min=6').split('=')[1]);
+// See the header: seven is where restatement separates from elaboration when every pair is compared.
+const PAIR_MIN = Number((process.argv.find((a) => a.startsWith('--pair-min=')) || '--pair-min=7').split('=')[1]);
 const g = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'guide-content.json'), 'utf8'));
 const CITIES = (new Function(fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';return CITIES;'))();
 const byId = Object.fromEntries(CITIES.map((c) => [c.id, c]));
@@ -102,6 +118,7 @@ for (const [id, city] of Object.entries(g)) {
     const lastSh = shingles(last, 6);
     const lastWords = contentWords(last, stop);
 
+    let found = false;
     for (let i = 0; i < sents.length - 1; i++) {
       const prev = sents[i];
       const sharedSh = [...shingles(prev, 6)].filter((x) => lastSh.has(x));
@@ -110,7 +127,26 @@ for (const [id, city] of Object.entries(g)) {
         hits.push({ id, field,
           why: sharedSh.length ? 'phrase "' + sharedSh[0] + '"' : shared.length + ' shared: ' + shared.slice(0, 8).join(', '),
           prev, last });
+        found = true;
         break;
+      }
+    }
+    if (found) continue;
+
+    // Every other pair, at the higher threshold. Reported once per section: a writer fixing one
+    // restatement will re-run this and see the next, and listing four pairs from one paragraph
+    // makes the output harder to act on rather than more complete.
+    const cw = sents.map((s) => contentWords(s, stop));
+    outer:
+    for (let i = 0; i < sents.length; i++) {
+      for (let j = i + 1; j < sents.length; j++) {
+        const shared = [...cw[i]].filter((x) => cw[j].has(x));
+        if (shared.length >= PAIR_MIN) {
+          hits.push({ id, field, pair: true,
+            why: shared.length + ' shared: ' + shared.slice(0, 8).join(', '),
+            prev: sents[i], last: sents[j] });
+          break outer;
+        }
       }
     }
   }
@@ -121,7 +157,7 @@ const cities = new Set(hits.map((h) => h.id));
 console.log('  ' + Object.keys(g).filter((k) => !k.startsWith('_')).length + ' cities scanned\n');
 
 if (!hits.length) {
-  console.log('  clean: no section restates itself in its closing sentence.');
+  console.log('  clean: no section restates itself, in its closing sentence or anywhere else.');
   process.exit(0);
 }
 
