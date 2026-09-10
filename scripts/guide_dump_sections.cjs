@@ -13,7 +13,11 @@ const KEYS = ['costOfLiving', 'whereToWork', 'gettingAround', 'visas', 'bestTime
 // chooses are counted: openers that are really data templates ("Budget around $X a month",
 // "A one-bedroom runs roughly") are excluded, because those belong to the generator and rewriting
 // them would make the cost lines inconsistent for no gain.
-const DATA_TEMPLATE = /^(budget|a one bedroom|groceries land|fibre runs|a monthly transit|this is our own|this figure is our own|the time zone is|there is no (digital|remote))/;
+//
+// skeleton() masks the city's own name, which this file used to leave in place. That is why a
+// writer was never warned off "<City> suits remote workers who ..." while 310 of 350 guides were
+// using it: with the name inside the window every city looked like a one-off.
+const { skeleton, isDataFrame } = require('./lib/guide-openers.cjs');
 const WORN = (() => {
   const n = new Map();
   for (const [id, city] of Object.entries(g)) {
@@ -21,10 +25,9 @@ const WORN = (() => {
     for (const t of Object.values(city)) {
       if (typeof t !== 'string') continue;
       for (const s of String(t).replace(/(\d)\.(\d)/g, '$1․$2').split(/(?<=[.!?])\s+/)) {
-        const w = s.toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
-        if (w.length < 5) continue;
-        const k = w.slice(0, 5).join(' ');
-        if (DATA_TEMPLATE.test(k)) continue;
+        if (s.trim().split(/\s+/).length < 5) continue;
+        const k = skeleton(s);
+        if (!k || isDataFrame(k)) continue;
         n.set(k, (n.get(k) || 0) + 1);
       }
     }

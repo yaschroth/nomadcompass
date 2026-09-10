@@ -26,6 +26,16 @@
  * mixes both and the headline percentage cannot fall below about nine, because that much of it is
  * price data doing its job.
  *
+ * WHAT THIS TOOL MISSED FOR ITS WHOLE LIFE, until 2026-09-10. The header above always said place
+ * names were stripped, and the code never stripped them, so any template carrying the city's own
+ * name inside its first five words counted as one unique opener per city and was never reported.
+ * That hid the two commonest constructions in the corpus: 310 of 350 whoFor sections open
+ * "<City> suits ...", and 112 prosCons sections open "The case for <City> is ...". A whole
+ * campaign of rewriting ran against this census and declared whoFor clean of five-word repeats
+ * while nine in ten of its verdicts opened the same way. Masking lives in lib/guide-openers.cjs
+ * now, shared with guide_dump_sections.cjs, and the prose figure it reports is 7.1% rather than
+ * the 3.8% that was believed.
+ *
  * Usage: node scripts/check_guide_openers.cjs [--top N] [--field whoFor] [--min N] [--prose] [--strict]
  */
 const fs = require('fs');
@@ -42,9 +52,9 @@ const STRICT = process.argv.includes('--strict');
 const MIN = Number(arg('min', 12));
 const PROSE = process.argv.includes('--prose');
 
-// The frames that quote a measurement. Kept identical to guide_dump_sections.cjs, which uses the
-// same list to decide which openers to warn a writer away from: one definition, two consumers.
-const DATA_TEMPLATE = /^(budget|a one bedroom|groceries land|fibre runs|a monthly transit|this is our own|this figure is our own|the time zone is|there is no (digital|remote))/;
+// One definition of an opener, shared with guide_dump_sections.cjs so the census and the
+// warning a writer sees can never disagree about what counts as the same sentence.
+const { skeleton, isDataFrame } = require('./lib/guide-openers.cjs');
 
 const g = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'guide-content.json'), 'utf8'));
 
@@ -54,12 +64,6 @@ const sentences = (s) => String(s)
   .split(/(?<=[.!?])\s+/)
   .map((x) => x.replace(/․/g, '.').trim())
   .filter((x) => x.split(/\s+/).length >= 5);
-
-// Numbers and place names are stripped, because "Budget around $940 a month" and "Budget around
-// $1,200 a month" are the same skeleton wearing different figures, and that is the thing being
-// counted. Five words is long enough to be a construction and short enough to catch variants.
-const skeleton = (s) => s.toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim()
-  .split(' ').slice(0, 5).join(' ');
 
 const counts = new Map();
 const cities = new Map();
@@ -73,7 +77,7 @@ for (const [id, city] of Object.entries(g)) {
     for (const s of sentences(text)) {
       const k = skeleton(s);
       if (!k) continue;
-      if (PROSE && DATA_TEMPLATE.test(k)) continue;
+      if (PROSE && isDataFrame(k)) continue;
       counts.set(k, (counts.get(k) || 0) + 1);
       if (!cities.has(k)) cities.set(k, new Set());
       cities.get(k).add(id);
