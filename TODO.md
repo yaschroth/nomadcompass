@@ -4,7 +4,33 @@ Deferred work and decisions, so nothing gets lost. Newest/most important first.
 
 ---
 
-## 0. RESOLVED 2026-09-09: the 172 conflicting cost pages, split and fixed
+## 0. RESOLVED 2026-09-11: every JSON-backed city guide clears the 1,155-word floor
+
+The owner asked on 2026-09-05 ("THEY ALL MUST BE DEEP") for all 350 cities whose guide prose lives
+in `data/guide-content.json` to reach 1,155 words across the seven sections. Done and published:
+**350 of 350**, min 1,155, median 1,184, max 1,380.
+
+**What the last stretch cost, and what it taught.** From ~800 words a city needed roughly 355, and
+the shape that lands it is four sections at 90 to 100 words each rather than seven at 50. A short
+addition has nowhere to go: `check_guide_overlap.cjs` rejects any proper noun already standing in
+that section, so 50 words of genuinely new material is harder to find than 100. Check the
+arithmetic BEFORE the gates, because a city landing at 1,153 wastes a whole cycle.
+
+**Where the new facts came from, once the obvious material was spent.** Administrative and seasonal
+specifics: how a deposit is held, what a utility bills and on what cycle, which registration has a
+deadline, what a local wind or a migration or a harvest does to the year. Those are per-COUNTRY and
+per-COAST rather than per-city, which is exactly why `check_guide_phrasing.cjs` kept catching
+siblings. Picking a DIFFERENT mechanism for the second city of a country beats rewording the same
+one: Xian's winter-heating line was the mirror image of Chengdu's and collided on eight shingles, so
+it was swapped for the student population, which is the fact that actually sets prices there.
+
+**STILL OPEN: the 1,295 target.** 118 cities clear it; 232 do not, needing about 27,000 words in
+total. Every one of them is now within 140 words of it, so this is a much smaller job than the
+floor was. `node scripts/guide_worklist.cjs --count` prints the live split.
+
+---
+
+## 0a. RESOLVED 2026-09-09: the 172 conflicting cost pages, split and fixed
 
 Found 2026-09-08, fixed the next day. Recorded here because the first diagnosis was wrong and the
 correction is the useful part.
