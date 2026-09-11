@@ -95,6 +95,7 @@ function extract(slug) {
   const missing = [];   // blocking: the heading itself could not be located
   const notProse = [];  // not blocking: that section is not prose on this page, so we do not own it
   const markup = [];    // blocking: the paragraphs carry inline tags this data model cannot hold
+  const split = [];     // blocking: the prose is broken across several runs by a list or a block
   for (const key of ORDER) {
     let hm = null;
     for (const gen of ALIASES[key]) {
@@ -122,6 +123,17 @@ function extract(slug) {
     const run = segment.slice(rm.index, rm.index + rm[0].length);
     const inner = [...run.matchAll(/<p>([\s\S]*?)<\/p>/g)].map((m) => m[1]);
 
+    // REFUSE a section whose prose is SPLIT by a list or another block, because the applier only
+    // ever rewrites the first run of paragraphs. Storing that first run alone would leave the JSON
+    // describing a fraction of the section: Cusco's whereToWork is 31 words in the first run and
+    // 273 on the page. Nothing is lost from the page, but guide_worklist would then read those
+    // cities as far thinner than they are and send a whole deepening batch at pages that are
+    // already fine. 79 sections across 37 cities look like this. Storing the whole thing is not
+    // the answer either: the applier would write it all into the first run and leave the later
+    // paragraphs below the list, printing them twice.
+    const allP = [...mask(segment).matchAll(/<p>([\s\S]*?)<\/p>/g)];
+    if (allP.length > inner.length) { split.push(key); continue; }
+
     // REFUSE anything carrying inline markup rather than quietly flattening it. guide-content.json
     // holds plain text and apply_city_guide_sections escapes it, so a <strong> lifted in here comes
     // back out as visible &lt;strong&gt; if kept, or disappears from the page if stripped. 371 of
@@ -137,7 +149,7 @@ function extract(slug) {
     if (!paras.length) { missing.push(key + '(empty)'); continue; }
     sections[key] = paras.join('\n\n');
   }
-  return { sections, missing, notProse, markup };
+  return { sections, missing, notProse, markup, split };
 }
 
 const guide = JSON.parse(fs.readFileSync(GUIDE, 'utf8'));
@@ -147,6 +159,7 @@ const slugs = fs.readdirSync(DIR).filter((f) => f.endsWith('.html')).map((f) => 
 
 const ok = [];
 const hasMarkup = [];
+const splitProse = [];
 const listStyle = [];
 const partial = [];
 const skipped = [];
@@ -155,6 +168,7 @@ for (const slug of slugs) {
   if (!r) { skipped.push(slug + '(no guide block)'); continue; }
   if (r.missing.length) { partial.push(slug + ' [' + r.missing.join(',') + ']'); continue; }
   if (r.markup.length) { hasMarkup.push(slug + ' [' + r.markup.join(',') + ']'); continue; }
+  if (r.split.length) { splitProse.push(slug + ' [' + r.split.join(',') + ']'); continue; }
   if (r.notProse.length) listStyle.push(slug + ' [' + r.notProse.join(',') + ']');
   ok.push([slug, r.sections]);
 }
@@ -167,6 +181,7 @@ console.log('  candidates (not already in JSON) :', slugs.length);
 console.log('  migrated                         :', ok.length);
 console.log('    of those, six sections only    :', listStyle.length, '(Pros and Cons is a list, not prose)');
 console.log('  NOT migrated, inline markup      :', hasMarkup.length);
+console.log('  NOT migrated, prose split by list:', splitProse.length);
 console.log('  NOT migrated, heading not found  :', partial.length);
 console.log('  no guide block                   :', skipped.length);
 if (totals.length) {
@@ -221,6 +236,28 @@ if (process.argv.includes('--verify')) {
   shown.forEach((x) => console.log('      ' + x));
   console.log('');
   process.exit(text ? 1 : 0);
+}
+
+if (process.argv.includes('--prune')) {
+  // Remove cities that an EARLIER, laxer run of this script merged in but that the current rules
+  // reject. Needed once, after the split-prose rule was added: 37 cities had already been migrated
+  // holding only the first run of a section whose prose a list breaks in two. Their pages are
+  // untouched and correct, so dropping them from the JSON simply returns them to unreachable,
+  // which is the honest state until the data model can represent them.
+  const dropped = [];
+  for (const slug of Object.keys(guide)) {
+    if (slug.startsWith('_')) continue;
+    const r = extract(slug);
+    if (!r) continue;
+    if (r.missing.length || r.markup.length || r.split.length) { delete guide[slug]; dropped.push(slug); }
+  }
+  if (!dropped.length) { console.log('\n  nothing to prune\n'); process.exit(0); }
+  const eol = fs.readFileSync(GUIDE, 'utf8').includes('\r\n') ? '\r\n' : '\n';
+  fs.writeFileSync(GUIDE, JSON.stringify(guide, null, 2).replace(/\n/g, eol) + eol);
+  console.log('\n  pruned ' + dropped.length + ' cities the current rules reject:');
+  console.log('    ' + dropped.join(' '));
+  console.log('  now ' + Object.keys(guide).filter((k) => !k.startsWith('_')).length + ' cities\n');
+  process.exit(0);
 }
 
 if (process.argv.includes('--write')) {
