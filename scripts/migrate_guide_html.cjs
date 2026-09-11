@@ -134,15 +134,22 @@ function extract(slug) {
     const allP = [...mask(segment).matchAll(/<p>([\s\S]*?)<\/p>/g)];
     if (allP.length > inner.length) { split.push(key); continue; }
 
-    // REFUSE anything carrying inline markup rather than quietly flattening it. guide-content.json
-    // holds plain text and apply_city_guide_sections escapes it, so a <strong> lifted in here comes
-    // back out as visible &lt;strong&gt; if kept, or disappears from the page if stripped. 371 of
-    // these pages use inline tags, 6,388 <strong> and 16 links between them, mostly bolded labels
-    // like "Rent:". Losing those is a visible change to somebody's page, and this script is not the
-    // place to decide that silently. --verify is what proved it: flattening produced 1,235
-    // paragraphs the applier would have rewritten.
-    if (inner.some((t) => /<\s*\/?\s*[a-z]/i.test(t))) { markup.push(key); continue; }
+    // Inline markup used to be refused outright, because the data file held plain text and the
+    // applier escaped it: a <strong> lifted in here came back as visible &lt;strong&gt; if kept or
+    // vanished from the page if stripped. apply_city_guide_sections now lets four tags back through
+    // after escaping, so the four can be carried. ANYTHING ELSE IS STILL REFUSED, because a tag the
+    // applier will not re-emit would be silently deleted from the page on the next run.
+    //
+    // Sitewide, guide paragraphs contain only <strong>, <a> and <em>, so nothing is currently
+    // turned away by this. The check is here for the page that arrives later carrying a <span>.
+    const OUTSIDE = /<\s*\/?\s*(?!(?:strong|em|b|i|a)\b)[a-z][a-z0-9]*/i;
+    if (inner.some((t) => OUTSIDE.test(t))) { markup.push(key); continue; }
 
+    // Stored form is DECODED entities with LITERAL tags: "AT&T" and "<strong>Rent:</strong>".
+    // Storing the raw HTML instead would make the applier's esc() double every entity, putting
+    // &amp;amp; on the page. Decoding &lt; and &gt; is safe here only because no guide paragraph
+    // anywhere on the site contains one; a page that did could see escaped text promoted back into
+    // a real tag by the applier's allowlist, so that measurement is a precondition, not trivia.
     const paras = inner
       .map((t) => unesc(t.replace(/\s+/g, ' ').trim()))
       .filter(Boolean);
@@ -214,7 +221,9 @@ if (process.argv.includes('--verify')) {
   //            browser renders both identically, so this is a normalisation, not a content change.
   //
   // Conflating them is how a migration ships a content change calling itself a formatting one.
-  const decode = (x) => unesc(x).replace(/\s+/g, ' ').trim();
+  const ALLOW = /&lt;(\/?)(strong|em|b|i|a)((?:\s+[a-zA-Z-]+="[^"<>]*")*)\s*&gt;/g;
+  const render = (x) => esc(x).replace(ALLOW, (_, sl, tag, at) => '<' + sl + tag + at + '>');
+  const decode = (x) => unesc(x.replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim();
   let text = 0, encoding = 0;
   const shown = [];
   for (const [slug, s] of ok) {
@@ -223,7 +232,7 @@ if (process.argv.includes('--verify')) {
     for (const key of ORDER) {
       if (!s[key]) continue;
       for (const p of s[key].split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean)) {
-        if (html.includes('<p>' + esc(p) + '</p>')) continue;
+        if (html.includes('<p>' + render(p) + '</p>')) continue;
         if (pagePara.has(decode(p))) { encoding++; continue; }
         text++;
         if (shown.length < 8) shown.push(slug + '.' + key + ': ' + p.slice(0, 90));

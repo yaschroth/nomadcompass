@@ -17,8 +17,29 @@ const CITIES = (new Function(fs.readFileSync(path.join(ROOT, 'cities-data.js'), 
 const NAME = new Map(CITIES.map((c) => [c.id, c.name]));
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/**
+ * Escape everything, then let four inline tags back through.
+ *
+ * The data file holds plain text and this script escapes it, which is the right default and is why
+ * nothing in a guide section can inject markup. It is also why 361 city pages could not be managed
+ * from the data file at all: their paragraphs carry <strong> labels and a handful of links, 6,388
+ * and 16 of them, and the choice was to print visible &lt;strong&gt; or to delete the formatting
+ * from somebody's page. Neither is acceptable, so a narrow allowlist is the third option.
+ *
+ * ORDER MATTERS AND SO DOES THE STORED FORM. Escaping first and selectively unescaping after is
+ * what keeps the guarantee: only these four tags can ever survive, everything else a paragraph
+ * contains is still inert. The stored string must therefore hold DECODED entities with literal
+ * tags, "AT&T" and "<strong>Rent:</strong>", never "AT&amp;T". Store the raw HTML instead and
+ * esc() doubles every entity, turning &amp; into &amp;amp; on the page.
+ *
+ * Attribute values pass through untouched because esc() does not escape quotes, so an href
+ * survives; an & inside one becomes &amp;, which is what an href should carry anyway.
+ */
+const ALLOW = /&lt;(\/?)(strong|em|b|i|a)((?:\s+[a-zA-Z-]+="[^"<>]*")*)\s*&gt;/g;
+const escInline = (s) => esc(s).replace(ALLOW, (_, slash, tag, attrs) => '<' + slash + tag + attrs + '>');
 // paragraphs: split content on blank lines into <p> blocks (most are one paragraph)
-const paras = (t) => String(t).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `        <p>${esc(p)}</p>`).join('\n');
+const paras = (t) => String(t).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `        <p>${escInline(p)}</p>`).join('\n');
 
 const ANCHOR = '<!-- Where to Stay -->';
 const ORDER = [
