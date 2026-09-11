@@ -4,6 +4,41 @@ Deferred work and decisions, so nothing gets lost. Newest/most important first.
 
 ---
 
+## 0. IN PROGRESS: the 1,155-word floor across all 649 loop-reachable cities
+
+The floor job was declared done at 350 of 350 (below), but the site has 1,000 city pages and the
+migration brought the loop-reachable corpus to 649. Measured page-aware (JSON sections plus the
+`<li>` and `<h3>` the page carries and the data file does not), **474 of 649 clear the floor as of
+2026-09-11, from 429 when the page-aware fix landed.** 175 to go. Live count:
+`node scripts/guide_worklist.cjs --count`.
+
+Shape that works for a city in the low 700s: about 145 words into prosCons and about 80 into each
+of the other six. Read the page bullets first, because the thin cities keep their real Pros and Cons
+in `<ul>` items the JSON does not hold, and a prosCons that lists pros and cons just restates what
+the reader has read; write it to weigh the trade instead.
+
+**Two structural blockers to decide on:**
+
+- **42 migrated cities store six sections, not seven.** Their Pros and Cons on the page is two `<ul>`
+  lists with no `<p>` run, so `apply_city_guide_sections` cannot reach it and `guide-content.json`
+  has no `prosCons` key at all. Naha and Aswan are examples. Those cities can still clear the floor
+  by taking the words in the other six sections, but they will never have a written prosCons unless
+  the applier learns to insert a paragraph before a list. That is a code change with sitewide
+  blast radius and it has not been made.
+- **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
+  file), and 9 pages match no known heading generation.
+
+## 0b. OPEN: 84 sections open with "Be honest with yourself"
+
+`check_guide_openers.cjs` flagged this construction at 59 uses when the opener work was done; it now
+stands at **84 sections** across the corpus because it kept getting written. It is the single most
+visible template signature left in the guides. Fixing it means individual rewrites, not a rotation
+through six replacement frames, for the reason recorded in `guide_reframe.cjs`'s own header. Two
+were fixed on 2026-09-11 (sidibousaid, barichara) while those cities were being deepened, which is
+the cheap way to pay it down: fix the opener whenever a city is touched for another reason.
+
+---
+
 ## 0. RESOLVED 2026-09-11: every JSON-backed city guide clears the 1,155-word floor
 
 The owner asked on 2026-09-05 ("THEY ALL MUST BE DEEP") for all 350 cities whose guide prose lives
