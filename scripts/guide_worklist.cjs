@@ -23,6 +23,10 @@ const g = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'guide-content.json
 const CITIES = (new Function(fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';return CITIES;'))();
 const byId = Object.fromEntries(CITIES.map((c) => [c.id, c]));
 const KEYS = ['costOfLiving', 'whereToWork', 'gettingAround', 'visas', 'bestTime', 'prosCons', 'whoFor'];
+// Pages also carry <ul> and <h3> content inside the guide that the JSON never holds, most often a
+// pair of Pros and Cons bullets. Counting only the JSON under-reads those cities by about 110 words
+// and would send a writer to buy depth they already have. See scripts/lib/guide-page-extras.cjs.
+const { pageExtras } = require(path.join(__dirname, 'lib', 'guide-page-extras.cjs'));
 
 let done = new Set();
 if (DONEF && fs.existsSync(DONEF)) done = new Set(JSON.parse(fs.readFileSync(DONEF, 'utf8')));
@@ -31,8 +35,10 @@ const rows = [];
 for (const [slug, c] of Object.entries(g)) {
   if (slug.startsWith('_') || !byId[slug]) continue;
   const w = KEYS.map((k) => String(c[k] || '').trim().split(/\s+/).length);
-  const total = w.reduce((a, b) => a + b, 0);
-  rows.push({ slug, w, total, short: total < 1250 ? 1 : 0, done: done.has(slug) });
+  const jsonTotal = w.reduce((a, b) => a + b, 0);
+  const extras = pageExtras(slug);
+  const total = jsonTotal + extras;
+  rows.push({ slug, w, total, jsonTotal, extras, short: total < 1250 ? 1 : 0, done: done.has(slug) });
 }
 rows.sort((a, b) => a.total - b.total);
 

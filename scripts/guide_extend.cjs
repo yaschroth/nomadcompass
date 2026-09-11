@@ -39,9 +39,13 @@ if (bad) { console.log(bad + ' section(s) out of band after extending, nothing w
 // budget by eye consistently landed about 62 words per section against a target of 85, which meant
 // every batch needed a second pass. Better to be told before the write than after the measurement.
 const FLOOR = Number((process.argv.find((a) => a.startsWith('--floor=')) || '--floor=1155').split('=')[1]);
+// The floor is judged on what a READER sees, which is the JSON sections plus any <ul> or <h3> the
+// page carries inside the guide and the data file does not hold. Judging it on the JSON alone
+// under-reads cities with pro-and-con bullets by about 110 words each.
+const { pageExtras } = require(require('path').join(__dirname, 'lib', 'guide-page-extras.cjs'));
 const touched = [...new Set(Object.keys(ext).map((k) => k.split('.')[0]))];
 const under = touched
-  .map((id) => [id, Object.entries(guide[id] || {}).reduce((a, [, v]) => a + String(v).trim().split(/\s+/).length, 0)])
+  .map((id) => [id, Object.entries(guide[id] || {}).reduce((a, [, v]) => a + String(v).trim().split(/\s+/).length, 0) + pageExtras(id)])
   .filter(([, total]) => total < FLOOR);
 if (under.length) {
   console.log('REFUSING, ' + under.length + ' city/cities would still be under the ' + FLOOR + '-word floor:');
