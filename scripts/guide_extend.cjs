@@ -20,16 +20,21 @@ for (const [key, text] of Object.entries(ext)) {
 }
 if (unknown.length) console.log('no such section: ' + unknown.join(', '));
 
+// The band is checked on the SECTIONS this run extends, not on every section in the file.
+//
+// Scanning everything was harmless while guide-content.json held only the 350 cities already
+// brought inside the band. Migrating the 277 HTML-only cities in broke it: they arrive with
+// sections of 13, 16 and 35 words, so an extension anywhere was refused because of a city the run
+// never touched. What the band is for is making sure an extension leaves ITS OWN section usable.
 let bad = 0;
-for (const [id, c] of Object.entries(guide)) {
-  // _meta carries provenance notes, not prose, and is not subject to the word band.
-  if (id.startsWith('_') || typeof c !== 'object') continue;
-  for (const [k, v] of Object.entries(c)) {
-    const w = v.trim().split(/\s+/).length;
-    if (w < 90 || w > 220) { console.log('  OUT OF BAND ' + id + '.' + k + ': ' + w); bad++; }
-  }
+for (const key of Object.keys(ext)) {
+  const [id, field] = key.split('.');
+  const v = guide[id] && guide[id][field];
+  if (v == null) continue;
+  const w = String(v).trim().split(/\s+/).length;
+  if (w < 90 || w > 220) { console.log('  OUT OF BAND ' + key + ': ' + w); bad++; }
 }
-if (bad) { console.log(bad + ' section(s) still out of band, nothing written'); process.exit(1); }
+if (bad) { console.log(bad + ' section(s) out of band after extending, nothing written'); process.exit(1); }
 // Refuse a city that would still sit under the per-city floor after the extension. Writing to a
 // budget by eye consistently landed about 62 words per section against a target of 85, which meant
 // every batch needed a second pass. Better to be told before the write than after the measurement.

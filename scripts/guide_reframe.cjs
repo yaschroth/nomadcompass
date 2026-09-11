@@ -101,12 +101,23 @@ for (const [key, spec] of Object.entries(repl)) {
   }
 }
 
-for (const [id, c] of Object.entries(guide)) {
-  if (id.startsWith('_') || typeof c !== 'object') continue;
-  for (const [k, v] of Object.entries(c)) {
-    const w = words(v);
-    if (w < 90 || w > 220) problems.push('OUT OF BAND ' + id + '.' + k + ': ' + w);
-  }
+// The band is checked on the cities this run TOUCHES, not on the whole file.
+//
+// It used to scan everything, which was harmless while guide-content.json held only the 350 cities
+// that had already been brought inside the band. Migrating the 277 HTML-only cities in broke it:
+// those arrive with sections of 13, 16, 35 words, so every reframe of an unrelated city was refused
+// for a problem somewhere else in the file. A tool must not decline to fix Tropea because Arusha is
+// thin. The floor check below was already scoped this way and stays as it is.
+// Narrower still: the SECTIONS this run rewrites, not every section of the cities it touches.
+// Scoping to the city was already an improvement but still refused a Tropea fix because Kruje's
+// cost section, which no reframe goes near, arrived from the migration at 226 words. What this
+// check is for is stopping a rewrite from pushing its own section out of the band.
+for (const key of Object.keys(repl)) {
+  const [id, field] = key.split('.');
+  const v = guide[id] && guide[id][field];
+  if (v == null) continue;
+  const w = words(v);
+  if (w < 90 || w > 220) problems.push('OUT OF BAND ' + key + ': ' + w);
 }
 const FLOOR = 1155;
 for (const id of new Set(Object.keys(repl).map((k) => k.split('.')[0]))) {
