@@ -12,6 +12,7 @@
  *
  *   --list "It is a poor fit for" [--from 0] [--n 20]   print sentences needing a rewrite
  *   --apply FILE [--allow-shorter]                      apply {"city.field": {old, now}}
+ *                                                       or {"city.field": [{old, now}, ...]}
  *
  * Replacements are matched on the exact old sentence, so a stale file fails loudly rather than
  * writing to the wrong place. The 90-220 word band and the per-city floor are enforced exactly as
@@ -76,18 +77,28 @@ const before = JSON.parse(fs.readFileSync(FILE, 'utf8'));
 const problems = [];
 const changes = [];
 
+// A key may carry one {old, now} or an ARRAY of them. The array exists because prosCons states a
+// case for and a case against in the same paragraph, and rewriting only one of them leaves the
+// other half of the template standing next to its replacement, which reads worse than leaving
+// both. Length is then checked across the whole key rather than sentence by sentence: what must
+// not shrink is the section, and a pair often trades words between its two halves.
 for (const [key, spec] of Object.entries(repl)) {
   const [id, field] = key.split('.');
   if (!guide[id] || typeof guide[id][field] !== 'string') { problems.push(key + ': no such section'); continue; }
-  const { old, now } = spec;
-  if (!old || !now) { problems.push(key + ': needs {old, now}'); continue; }
-  if (!guide[id][field].includes(old)) { problems.push(key + ': the old sentence is not there any more'); continue; }
-  if (!ALLOW_SHORTER && words(now) < words(old)) {
-    problems.push(key + ': replacement is shorter (' + words(now) + ' vs ' + words(old) + ')');
+  const pairs = Array.isArray(spec) ? spec : [spec];
+  if (pairs.some((p) => !p || !p.old || !p.now)) { problems.push(key + ': needs {old, now}'); continue; }
+  const missing = pairs.find((p) => !guide[id][field].includes(p.old));
+  if (missing) { problems.push(key + ': the old sentence is not there any more: "' + missing.old.slice(0, 60) + '"'); continue; }
+  const wasW = pairs.reduce((a, p) => a + words(p.old), 0);
+  const nowW = pairs.reduce((a, p) => a + words(p.now), 0);
+  if (!ALLOW_SHORTER && nowW < wasW) {
+    problems.push(key + ': replacement is shorter (' + nowW + ' vs ' + wasW + ')');
     continue;
   }
-  guide[id][field] = guide[id][field].replace(old, now);
-  changes.push({ key, old, now });
+  for (const p of pairs) {
+    guide[id][field] = guide[id][field].replace(p.old, p.now);
+    changes.push({ key, old: p.old, now: p.now });
+  }
 }
 
 for (const [id, c] of Object.entries(guide)) {
