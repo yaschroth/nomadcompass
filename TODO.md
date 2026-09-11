@@ -44,14 +44,26 @@ If you want those eight re-ranked, say so and it is an hour's work.
 
 ---
 
-## 0b. RESOLVED 2026-09-09: the whoFor field is no longer templated
+## 0b. RESOLVED 2026-09-11: the guide templating, and the census that could not see it
+
+**CORRECTION to what this section claimed on 2026-09-09.** It recorded whoFor as resolved. It was
+not. `check_guide_openers.cjs` said in its header that place names were stripped and the code never
+stripped them, so any template carrying the city's own name inside its first five words counted as
+one unique opener per city and was never reported. 310 of 350 whoFor sections were opening
+"<City> suits ..." before that campaign and still were after it. Masking now lives in
+`scripts/lib/guide-openers.cjs`, shared with `guide_dump_sections.cjs`.
 
 **The measurement that started it.** `check_guide_openers.cjs` counted 1,981 of 16,207 sentences,
 about 12%, opening with one of 62 five-word skeletons used a dozen times or more. The heaviest were
 the whoFor verdicts: 187 cities said "It is a poor fit for", another 88 "It does not suit anyone".
 
-**Done.** 710 sentences rewritten by hand, in batches of 15-34, through `guide_reframe.cjs`. The
-whoFor field now has NO five-word opener used five times or more, against 24.4% when this started.
+**Done 2026-09-09.** 710 sentences rewritten by hand, in batches of 15-34, through
+`guide_reframe.cjs`. That cleared the second sentence of the verdict; it never touched the first.
+
+**Done 2026-09-10/11, 635 more sentences, published and pushed.** prosCons: 113 "The case for
+<City> is ... The case against is ..." pairs and 210 "Against that ..." pivots. whoFor: all 310
+"<City> suits ..." verdicts and 60 "Anyone weighing it against <City> ..." comparisons. Measured
+with the fixed census: **whoFor 0.0%** at min 5, **prosCons 1.5%** at min 8, corpus 4.9% at min 12.
 
 The constructions cleared, in the order they fell: "It is a poor fit for" (187), "It does not suit
 anyone" (88), "It also suits anyone" (209), "It is a strong choice" (40), "It works well for" (69),
@@ -64,17 +76,25 @@ quoted for a different city, and a reader comparing two pages wants them to line
 frame would make the numbers harder to read and the prose no better. `check_guide_openers.cjs
 --prose` excludes them and reports what is actually a writing habit: **3.8% at min 12**.
 
-**Left, all figures from `--prose --min 12`:**
+**LEFT AFTER 2026-09-11, measured per field with `--prose --min 8`.** Two of seven fields are done.
+The other five have never been touched, and the figures below are what the fixed census reports:
 
-- 43 + 19 cities: "The case against is the/that ..." — 62 cities make the same rhetorical turn.
-  This is the largest genuine habit remaining and the obvious next job.
-- 50 cities: "There is a small coworking ..." — a real fact, but the frame does no work
-- 42 + 29 + 22 + 19 cities: season openers ("May to September is the ...")
-- 31 cities: "Everyone else needs a Schengen ..."
+| field | templated | the honest reading |
+|---|---|---|
+| whoFor | 0.0% | done |
+| prosCons | 1.5% | done |
+| gettingAround | 3.0% | "You do not need a car", "<City> is compact and walkable" — part habit |
+| whereToWork | 8.2% | "<City> has a small coworking ..." on 50 cities is the one real habit |
+| costOfLiving | 9.1% | mostly price frames; "Market produce is cheap and" on 20 is a habit |
+| visas | 13.3% | almost all data: Schengen, 90/180, "no digital nomad visa" |
+| bestTime | 14.0% | almost all data: "Winter from December to February ..." |
 
-The seasonal and Schengen openers are closer to data frames than to habits, and the DATA_TEMPLATE
-list in `guide_dump_sections.cjs` / `check_guide_openers.cjs` should probably grow to cover them
-rather than 120 sentences being rewritten to no reader's benefit.
+**Do not rewrite the seasonal and visa frames.** They are the same measurement quoted for a
+different city, and a reader comparing two pages wants them to line up. The right fix is to grow
+the DATA_TEMPLATE list in `scripts/lib/guide-openers.cjs` to cover the season and Schengen shapes,
+so the census stops charging them as habits. That is a small job and it makes every future figure
+honest. The genuine habits left are the coworking openers (50 + 19 + 13 + 11 + 10 cities, all
+saying the same thing about the same absence) and the walkability openers in gettingAround.
 
 **What the rewriting turned up, which was worth more than the rewriting.** Four sections were
 saying the same thing twice: Namur put the Ardennes within reach and then put the Ardennes at the
