@@ -87,6 +87,50 @@ Do that sweep every time; the grep that found the work is not the grep that prov
 two per calendar year since late 2025, and the five-year Destination Thailand Visa has required a
 criminal record certificate since 31 August 2026 and seasoned bank statements since May 2026.
 
+## 0f. OPEN, HIGH PRIORITY: 34 city pages contradict their own headline budget
+
+Found while deepening Toledo and Pondicherry on 2026-09-12. The guide prose in `costOfLiving`
+states a monthly budget range that disagrees with the Numbeo-measured range in `cost-ranges.json`
+which the hero, the title, the meta description, the FAQ answer and the Article schema all print.
+A reader sees both numbers on one page.
+
+**Pondicherry before the fix:** title, hero, meta, FAQ and JSON-LD all said `$370/mo`; hero range
+`$240-370`; guide prose said "around 600 to 900 US dollars". **Toledo:** hero `$1,780-2,030`, prose
+"$1,100 and $1,600".
+
+**Scope, measured 2026-09-12:** of the 328 cities in `cost-ranges.json`, 69 also state a parseable
+range in guide prose, and **36 of those 69 are off the measured midpoint by more than 25%**. Toledo
+and Pondicherry are now fixed; **34 remain**. The worst are wrong by a factor of two to three:
+
+    jodhpur   +253%   prose $700-1100   data $230-280
+    udaipur   +210%   prose $700-1100   data $270-310
+    mysore    +208%   prose $600-1000   data $230-290
+    jakarta   +113%   prose $1000-1600  data $530-690
+    bogota     +93%   prose $1560-2810  data $1020-1240
+    sofia      +89%   prose $940-2060   data $750-840
+    izmir      -66%   prose $315-525    data $1150-1350
+    bari       -60%   prose $520-750    data $1470-1700
+    semarang   -56%   prose $140-250    data $400-490
+
+The scan that produced this is `scratchpad/scan_cost2.py`; it belongs in `scripts/` as a gate.
+
+**Why it matters more than it looks.** This is the credibility play failing on its own terms (see
+[[nomadhq-usp]]): the FAQ answer that Google reads says one number and the prose beneath it says
+another. `check_site_numbers.cjs` passes clean because it never compares prose against
+`cost-ranges.json`.
+
+**How to fix, and how NOT to.** Do not simply overwrite the prose number with the measured one and
+do not delete the prose range. Both numbers are real and they measure different things: the Numbeo
+basket is one person with a one-bedroom flat, and the prose range is usually what a foreign remote
+worker actually spends. The fix used on Toledo and Pondicherry states the measured range, says it
+is the figure at the top of the page, then names the higher figure and says what the gap is made of
+(in Pondicherry: French Quarter rent, imported groceries, cafes over canteens). That is better
+content than either number alone. Write it per city; a swept sentence across 34 pages is the
+failure mode in [[nomadhq-stock-clauses]].
+
+**Also check the direction.** Of the 36 found, 24 had prose BELOW the measured data and 12 above, so
+this is not one systematic bias that a multiplier could correct.
+
 ## 0c. DONE 2026-09-12: South African load shedding ended and 9 guides had not noticed
 
 Eskom imposed its **last load shedding on 16 May 2025**. None since: 441 consecutive days by
