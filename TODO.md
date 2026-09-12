@@ -28,6 +28,32 @@ the reader has read; write it to weigh the trade instead.
 - **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
   file), and 9 pages match no known heading generation.
 
+## 0a. OPEN: the EU Entry/Exit System changes what 192 Schengen guides should say
+
+The EES became **fully operational across the Schengen area on 10 April 2026**, after a phased
+rollout that started 12 October 2025. It records a facial image and fingerprints at every external
+crossing, **replaces the passport stamp** for non-EU short-stay travellers, and **counts the
+90-in-180 allowance automatically across all member states**. ETIAS is a separate scheme expected
+later in 2026. Verified against the Commission's own notice, not a travel blog.
+
+**Scope measured 2026-09-12:** 218 sections across 192 cities in `guide-content.json` mention
+Schengen; 330 HTML pages do. Only three were made *wrong* by the change and all three are fixed:
+
+- `corfu.visas` told readers to "track every entry stamp", which is now impossible (it was written
+  in this same session, which is the lesson: a current fact can go stale between the research and
+  the writing).
+- `ancona.visas` said the Albania ferry is "checked and stamped much as an airport would".
+- `malmo.visas` described the EES in the future tense as something that "will automate" stamping.
+
+**What is still open is not a correction but an improvement.** Most Schengen guides describe the
+90/180 rule without saying how it is now enforced, which is no longer the most useful thing a
+reader can be told. **Do NOT sweep a boilerplate sentence into 192 sections**: that is exactly the
+shape that makes pages read as generated, and the phrasing gate would flag it anyway. Fold the EES
+fact in city by city as each Schengen guide is deepened, phrased differently each time and attached
+to something local (a ferry that is an external crossing, a land border, an island hop that is not).
+
+---
+
 ## 0b. OPEN: 84 sections open with "Be honest with yourself"
 
 `check_guide_openers.cjs` flagged this construction at 59 uses when the opener work was done; it now
