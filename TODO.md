@@ -8,8 +8,8 @@ Deferred work and decisions, so nothing gets lost. Newest/most important first.
 
 The floor job was declared done at 350 of 350 (below), but the site has 1,000 city pages and the
 migration brought the loop-reachable corpus to 649. Measured page-aware (JSON sections plus the
-`<li>` and `<h3>` the page carries and the data file does not), **474 of 649 clear the floor as of
-2026-09-11, from 429 when the page-aware fix landed.** 175 to go. Live count:
+`<li>` and `<h3>` the page carries and the data file does not), **507 of 649 clear the floor as of
+2026-09-12, from 429 when the page-aware fix landed.** 142 to go. Live count:
 `node scripts/guide_worklist.cjs --count`.
 
 Shape that works for a city in the low 700s: about 145 words into prosCons and about 80 into each
@@ -27,6 +27,37 @@ the reader has read; write it to weigh the trade instead.
   blast radius and it has not been made.
 - **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
   file), and 9 pages match no known heading generation.
+
+## 0c. DONE 2026-09-12: South African load shedding ended and 9 guides had not noticed
+
+Eskom imposed its **last load shedding on 16 May 2025**. None since: 441 consecutive days by
+August 2026, and the whole 2026 winter carried without a stage. Verified against Eskom and
+government releases, not a travel blog.
+
+Nine South African pages still told readers to buy an inverter, install EskomSePush and plan the
+working week around a published schedule. All corrected, city by city rather than by sweeping one
+sentence into nine pages: Stellenbosch, Gqeberha, Nelspruit, Oudtshoorn, Durban, Cape Town,
+Johannesburg, Knysna, Hermanus, plus Mbabane, which imports its power from Eskom and inherited
+the claim across the border.
+
+Each says the cuts **stopped**, and says the grid was **repaired rather than rebuilt**, so the risk
+receded rather than vanished. That second half matters: the hardware is still in the buildings and
+a bad run of breakdowns would bring the cuts back. A reader arriving with the old picture needs to
+be told it changed, not to find the subject quietly missing.
+
+**Deliberately not touched:**
+- **Swakopmund (Namibia)** says load-shedding happens there. Namibia has its own grid and imports
+  only part of its supply; the Namibian position was not verified, so the claim was left alone
+  rather than corrected on the assumption that it tracks South Africa. Verify before editing.
+- The 14 non-SA pages using the term (Malawi, Zambia, Uganda, Bangladesh, Pakistan, Mozambique,
+  Zimbabwe) are describing their own countries and remain accurate.
+
+**Loose end:** South Africa's remote-work visa floor is a **fixed rand amount** set in the October
+2024 regulations, about **USD 39,000/year** (R650,976), and it is now stated on Stellenbosch and
+Johannesburg, which agree. South Africa is *not* in the COUNTRIES table in
+`scripts/apply_visa_thresholds.cjs`, so nothing keeps future pages in line. Add it, with the note that it is flat rather than wage-pegged
+so only a regulation change moves it. Same gap for **South Korea**, whose F-1-D test is 2x GNI per
+capita, halved to 1x for applicants aged 18-34 outside Seoul/Incheon/Gyeonggi.
 
 ## 0a. OPEN: the EU Entry/Exit System changes what 192 Schengen guides should say
 
