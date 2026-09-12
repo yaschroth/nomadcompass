@@ -28,6 +28,32 @@ the reader has read; write it to weigh the trade instead.
 - **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
   file), and 9 pages match no known heading generation.
 
+## 0e. OPEN: the visa sections are the fastest-rotting thing on the site
+
+Four separate national visa regimes turned out to be wrong or stale in a single day of deepening
+work, all found by reading a page rather than by any gate:
+
+- **Thailand** cut visa-free entry 60 -> 30 days (see 0d).
+- **Brazil** reinstated visas for US, Canadian and Australian citizens on **10 April 2025**. Five
+  pages still called them visa-free (Diamantina, Florianopolis, Gramado, Lencois, and Jericoacoara
+  hedging with "at times"). Fixed. Rio and Sao Luis already had it right.
+- **Brazil's digital nomad visa (VITEM XIV)** has existed since **January 2022**, $1,500/month
+  foreign income or $18,000 savings. Olinda's page flatly said Brazil has no such framework. Fixed.
+- **Namibia** withdrew visa exemption from **33 nationalities on 1 April 2025** (visa on arrival
+  about $97, or e-visa), and **has** a digital nomad visa: six months, $2,000/month. Swakopmund's
+  page said the opposite on both counts. Fixed. Windhoek was already correct and detailed.
+
+**The pattern is the point.** These are not obscure facts; they are the single most consequential
+paragraph on a city page, and they are the ones a reader acts on. Three of the four errors were
+*assertions of absence* ("there is no digital nomad visa"), which no gate can check and which read
+as authoritative. `check_visa_consistency.cjs` only compares *figures* between pages of the same
+country, so a country where every page is confidently wrong in the same direction passes clean.
+
+**Worth building:** a gate or a recurring audit that lists every "there is no X visa" claim per
+country and forces a dated re-check, plus adding **Brazil, Namibia, South Korea and South Africa**
+to the `COUNTRIES` table in `scripts/apply_visa_thresholds.cjs` so their figures are pinned the way
+the other nine are.
+
 ## 0d. DONE 2026-09-12: Thailand cuts visa-free entry to 30 days on 15 September 2026
 
 Thailand's cabinet approved reverting visa-free entry from 60 days to 30 on **19 May 2026**; four
