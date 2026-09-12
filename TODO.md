@@ -28,6 +28,39 @@ the reader has read; write it to weigh the trade instead.
 - **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
   file), and 9 pages match no known heading generation.
 
+## 0d. DONE 2026-09-12: Thailand cuts visa-free entry to 30 days on 15 September 2026
+
+Thailand's cabinet approved reverting visa-free entry from 60 days to 30 on **19 May 2026**; four
+Interior Ministry regulations were published in the Royal Gazette on **31 August 2026**, confirming
+an effective date of **15 September 2026**. About 60 countries keep visa-free entry at 30 days, two
+get 15, three revert to visa on arrival. Anyone admitted before the switch keeps the stay they were
+granted. The 60-day allowance had run since July 2024.
+
+Fixed across 14 cities and three surfaces on the day the regulations were three days from taking
+effect: 3 guide sections (Khao Lak, Koh Tao, Udon Thani), 11 category tiles, and 11 stretches of
+page prose (Bangkok, Chiang Mai, Chiang Rai x2, Hua Hin, Kanchanaburi, Koh Phangan, Koh Samui,
+Krabi, Pattaya, Phuket). Ayutthaya was written with the change already folded in, in the same
+batch that surfaced it.
+
+**Two things deliberately left alone:**
+- **Tourist visa (TR) mentions stay at 60 days.** The TR is a different permit, obtained at an
+  embassy or consulate, and the change does not touch it. Pai, Pattaya, Kanchanaburi and Koh Phangan
+  all describe it correctly and were not edited. A sweep that treats every "60 days" on a Thai page
+  as stale would break four accurate passages.
+- **Phuket had been stale in the other direction**, still describing the pre-2024 30-day rule and
+  therefore about to become accidentally correct. It was given the date rather than left to luck.
+
+**What the scans kept missing, and why it matters for the next one of these.** The first pass
+searched for sentences containing "Thai" and missed Hua Hin and Krabi, whose visa paragraphs never
+name the country. The South African pass before it searched "load shedding" and missed the three
+cities that write "load-shedding". Both misses were found only by a verification sweep run AFTER
+the fix, with a deliberately loose pattern and an exclusion list for already-corrected wording.
+Do that sweep every time; the grep that found the work is not the grep that proves it is done.
+
+**Also worth knowing, already on the pages:** back-to-back visa-exempt entries have been limited to
+two per calendar year since late 2025, and the five-year Destination Thailand Visa has required a
+criminal record certificate since 31 August 2026 and seasoned bank statements since May 2026.
+
 ## 0c. DONE 2026-09-12: South African load shedding ended and 9 guides had not noticed
 
 Eskom imposed its **last load shedding on 16 May 2025**. None since: 441 consecutive days by
