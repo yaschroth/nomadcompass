@@ -679,13 +679,23 @@ ${shell.bodyEnd}
       var COUNTS=${JSON.stringify(COUNTS)};
       var TOTAL=${providers.length};
       function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
+      // "bogota" has to find the card reading "bogotá colombia". Both sides get folded.
+      function fold(s){
+        s=String(s==null?'':s);
+        return (s.normalize?s.normalize('NFD').replace(/[\\u0300-\\u036f]/g,''):s).toLowerCase();
+      }
+      cards.forEach(function(el){ el._fname=fold(el.getAttribute('data-name')); });
+      // A city with no entry in COUNTS used to throw on the next line and kill the loop halfway,
+      // leaving whichever cards had already been processed on screen: a filter that silently
+      // stopped applying, which reads as wrong results rather than as a broken filter.
+      var NOCOUNT={t:0,c:{},l:{},p:{}};
       function render(){
-        var cat=catSel.value,lang=langSel.value,term=(q.value||'').trim().toLowerCase();
+        var cat=catSel.value,lang=langSel.value,term=fold((q.value||'').trim());
         // Any filter at all reveals the whole grid first, so the results are the results.
         if(cat!=='all'||lang!=='all'||term)expand();
         var shown=0,rows=0;
         cards.forEach(function(el){
-          var slug=el.getAttribute('data-city'),k=COUNTS[slug];
+          var slug=el.getAttribute('data-city'),k=COUNTS[slug]||NOCOUNT;
           // How many of this city's providers actually answer the question being asked. A city
           // whose match count is zero is hidden even if it holds the service and the language
           // separately: Barcelona has therapists and it has German, but not both in one provider.
@@ -694,7 +704,7 @@ ${shell.bodyEnd}
           else if(cat!=='all') n=k.c[cat]||0;
           else if(lang!=='all') n=k.l[lang]||0;
           else n=k.t;
-          var ok=n>0&&(!term||el.getAttribute('data-name').indexOf(term)>-1);
+          var ok=n>0&&(!term||el._fname.indexOf(term)>-1);
           el.classList.toggle('is-hidden',!ok);
           // The count tile holds the number and its unit in two elements, so the filter writes them
           // separately: putting "4 dentists" into one of them would have left the other showing the
@@ -721,11 +731,21 @@ ${shell.bodyEnd}
         count.innerHTML='Showing <b>'+shown+'</b> '+(shown===1?'city':'cities')+(bits.length?' '+bits.join(', '):'')
           +', <b>'+(filtered?rows:TOTAL)+'</b> providers'+(filtered?' in '+(shown===1?'it':'them'):' in total')+'.';
         empty.classList.toggle('is-hidden',shown>0);
-        try{
-          var u=new URL(window.location);
-          [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
-          history.replaceState(null,'',u);
-        }catch(e){}
+        syncUrl(cat,lang);
+      }
+      // Safari throws SecurityError after 100 replaceState calls in 30 seconds, and this used to run
+      // on every keystroke. The address only has to be right once the typing stops.
+      var urlT=null;
+      function syncUrl(cat,lang){
+        if(urlT)clearTimeout(urlT);
+        urlT=setTimeout(function(){
+          urlT=null;
+          try{
+            var u=new URL(window.location);
+            [['cat',cat],['lang',lang]].forEach(function(p){ if(p[1]==='all')u.searchParams.delete(p[0]); else u.searchParams.set(p[0],p[1]); });
+            history.replaceState(null,'',u);
+          }catch(e){}
+        },250);
       }
       // Picking a city goes to that city's page rather than filtering this one down to a single
       // card: the city page is the thing worth landing on.
@@ -736,18 +756,26 @@ ${shell.bodyEnd}
         return p.length?'?'+p.join('&'):'';
       }
       function go(slug){ window.location.href='/services/'+slug+qs(); }
-      // Typing narrows the cards below. Completing a city, either from the browser's suggestions or
-      // by hand, opens that city, because the city page is the thing worth landing on.
+      // Typing narrows the cards below, and only that.
+      //
+      // It used to navigate the moment what you had typed so far spelled a city: typing "rome" on
+      // the way to "romero" threw you onto /services/rome at the fourth letter, and pasting a name
+      // left the page before you could look at it. Opening a city is now something you ask for,
+      // with Enter or by clicking its card, both of which are below.
+      var qT=null;
       q.addEventListener('input',function(){
-        var slug=CITY_SLUG[(q.value||'').trim().toLowerCase()];
-        if(slug){go(slug);return;}
-        render();
+        if(qT)clearTimeout(qT);
+        qT=setTimeout(function(){ qT=null; render(); },120);
       });
+      // The lookup is keyed on the written name, so "bogota" missed "bogotá colombia" the same way
+      // the card search did. Folded keys sit alongside the originals.
+      (function(){ for(var key in CITY_SLUG){ var fk=fold(key); if(!CITY_SLUG[fk])CITY_SLUG[fk]=CITY_SLUG[key]; } })();
       // Enter on a narrowed-down list opens the one city left, so the keyboard never dead-ends.
       q.addEventListener('keydown',function(e){
         if(e.key!=='Enter')return;
         e.preventDefault();
-        var slug=CITY_SLUG[(q.value||'').trim().toLowerCase()];
+        if(qT){clearTimeout(qT);qT=null;render();}
+        var slug=CITY_SLUG[fold((q.value||'').trim())];
         if(!slug){
           var left=cards.filter(function(el){return !el.classList.contains('is-hidden');});
           if(left.length===1)slug=left[0].getAttribute('data-city');

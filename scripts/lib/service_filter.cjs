@@ -56,6 +56,12 @@ const css = `
     .sf-reset:hover { color:var(--color-ink); }
     .sf-count { margin:0 0 var(--space-6); font-size:var(--text-sm); color:var(--color-stone); }
     .sf-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    /* Said only when a link arrived carrying a filter this page cannot honour. Empty the rest of
+       the time, and empty elements must not reserve space above the list. */
+    .sf-note { margin:0; font-size:var(--text-sm); line-height:1.55; color:var(--color-charcoal,#334155); }
+    .sf-note:not(:empty) { margin:-.4rem 0 var(--space-6); padding:.7rem .9rem;
+      background:var(--color-sand,#f6f1e7); border:1px solid var(--color-sand-dark,#e3d9c6);
+      border-left:3px solid var(--color-terracotta,#c0392b); border-radius:var(--radius-md,8px); }
     /* !important because this is a state class whose whole job is to beat a layout rule, and on
        every page built from city tiles it was losing. service_bento sets the tile's layout with
        .sb-card:not(.btn):not(.nav-link) at display grid, three class-level selectors against this
@@ -161,6 +167,18 @@ const js = ({ id, noun, nounPlural, capped = false }) => `<script>
       var controls=[].slice.call(bar.querySelectorAll('[data-sf]'));
       if(!items.length)return;
       var TOTAL=items.length;
+      // Typing "bogota" found nothing on a card reading "bogotá colombia". Both sides of the
+      // comparison get folded, so the accent stops being a requirement.
+      function fold(s){
+        s=String(s==null?'':s);
+        return (s.normalize?s.normalize('NFD').replace(/[\\u0300-\\u036f]/g,''):s).toLowerCase();
+      }
+      // Which group each item belongs to, resolved once. Asking the DOM per group per keystroke
+      // cost 75 querySelector calls over 255 items on /services/lawyers, every keystroke.
+      var gIndex=items.map(function(el){
+        return el.closest ? groups.indexOf(el.closest('.sf-group')) : -1;
+      });
+      items.forEach(function(el){ el._fname=fold(el.getAttribute('data-name')); });
       // A token list, so one attribute can hold several values: data-cats="doctor dentist".
       function holds(el,key,v){
         var raw=el.getAttribute('data-'+key);
@@ -172,22 +190,19 @@ const js = ({ id, noun, nounPlural, capped = false }) => `<script>
         controls.forEach(function(c){
           var v=(c.value||'').trim();
           if(!v||v==='all')return;
-          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search'});
+          terms.push({key:c.getAttribute('data-sf'),v:v,search:c.type==='search',f:fold(v)});
         });
-        var shown=0;
-        items.forEach(function(el){
+        var shown=0,live=new Array(groups.length);
+        items.forEach(function(el,i){
           var ok=terms.every(function(t){
-            if(t.search)return (el.getAttribute('data-name')||'').indexOf(t.v.toLowerCase())>-1;
+            if(t.search)return el._fname.indexOf(t.f)>-1;
             return holds(el,t.key,t.v);
           });
           el.classList.toggle('is-hidden',!ok);
-          if(ok)shown++;
+          if(ok){ shown++; if(gIndex[i]>-1)live[gIndex[i]]=1; }
         });
         // A country heading over nothing is worse than no heading: it reads as an empty country.
-        groups.forEach(function(g){
-          var any=g.querySelector('.sf-item:not(.is-hidden)');
-          g.classList.toggle('is-hidden',!any);
-        });
+        groups.forEach(function(g,i){ g.classList.toggle('is-hidden',!live[i]); });
         if(out){
           out.innerHTML = shown===TOTAL
             ? ${capped ? `'All <b>'+TOTAL+'</b> '+(TOTAL===1?'${esc(noun)}':'${esc(nounPlural)}')+' on this page.'`
@@ -197,25 +212,63 @@ const js = ({ id, noun, nounPlural, capped = false }) => `<script>
         }
         if(blank)blank.classList.toggle('is-hidden',shown>0);
       }
+      var t=null;
+      function soon(){ if(t)clearTimeout(t); t=setTimeout(function(){ t=null; render(); },120); }
       controls.forEach(function(c){
-        c.addEventListener('input',render);
+        c.addEventListener('input',c.type==='search'?soon:render);
         c.addEventListener('change',render);
       });
       // The tally is rendered once at load from the same count the filter uses. A pair page lists a
       // provider under each language they speak, so its 27 providers are 32 cards, and a
       // server-rendered "27" would have been contradicted by the first keystroke.
-      render();
+      // Drop one or more filters out of the query string without reloading.
+      function stripParams(keys){
+        try{
+          var u=new URL(window.location);
+          keys.forEach(function(k){ u.searchParams.delete(k); });
+          history.replaceState(null,'',u);
+        }catch(e){}
+      }
       document.getElementById('${id}Reset').addEventListener('click',function(){
         controls.forEach(function(c){ c.value=c.type==='search'?'':'all'; });
+        // Reset used to leave ?cat=… in the address, so the filter came back on the next reload or
+        // for whoever the link was sent to, and the page disagreed with its own controls.
+        stripParams(controls.map(function(c){ return c.getAttribute('data-sf'); }));
+        if(note)note.textContent='';
         render();
       });
+
       // A filter carried in the URL, so a link can arrive pre-narrowed and the page still says so.
-      var qs=new URLSearchParams(location.search),touched=false;
+      //
+      // The value has to exist as an option first. Assigning an unknown value to a <select> sets
+      // selectedIndex to -1: the control renders BLANK, render() then reads '' and drops the term,
+      // and the page quietly shows everything while claiming to show all of it. That is what made
+      // a narrowed link from /services land on an unnarrowed page. The index offers every category
+      // in the directory; a city page only carries the ones that city has, so the mismatch is
+      // routine rather than exotic, and silence was the wrong answer to it.
+      var note=document.createElement('p');
+      note.className='sf-note';
+      note.setAttribute('role','status');
+      bar.parentNode.insertBefore(note,bar.nextSibling);
+
+      var qs=new URLSearchParams(location.search),dropped=[];
       controls.forEach(function(c){
-        var v=qs.get(c.getAttribute('data-sf'));
-        if(v){ c.value=v; touched=true; }
+        var key=c.getAttribute('data-sf'),v=qs.get(key);
+        if(!v)return;
+        if(c.type==='search'){ c.value=v; return; }
+        var ok=false;
+        for(var i=0;i<c.options.length;i++){ if(c.options[i].value===v){ ok=true; break; } }
+        if(ok){ c.value=v; return; }
+        var lab=bar.querySelector('label[for="'+c.id+'"]');
+        dropped.push({key:key,v:v,label:lab?lab.textContent.trim():key});
       });
-      if(touched)render();
+      if(dropped.length){
+        note.textContent=dropped.map(function(d){
+          return 'This page has no '+d.label+' option for \\u201c'+d.v+'\\u201d.';
+        }).join(' ')+' Showing the full list instead.';
+        stripParams(dropped.map(function(d){ return d.key; }));
+      }
+      render();
     })();
   </script>`;
 
