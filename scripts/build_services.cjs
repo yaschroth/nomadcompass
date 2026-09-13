@@ -534,6 +534,13 @@ ${shell.headTop}
       .sv-hit { grid-template-columns:1fr; }
       .sv-hit-tags { grid-column:1; grid-row:auto; justify-content:flex-start; }
     }
+    /* The one filled control in the bar, because it is the one that commits. Reset stays a quiet
+       text button beside it so the two are never confused at a glance. */
+    .sv-search { align-self:flex-end; font-family:inherit; font-size:.95rem; font-weight:700;
+      padding:.58rem 1.3rem; border:1px solid var(--color-terracotta,#c0392b); border-radius:10px;
+      background:var(--color-terracotta,#c0392b); color:#fff; cursor:pointer; }
+    .sv-search:hover { background:var(--color-terracotta-dark,#a03325); border-color:var(--color-terracotta-dark,#a03325); }
+    .sv-search:focus-visible { outline:2px solid var(--color-ink); outline-offset:2px; }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     /* The empty state is the answer to a question that has none, so it gets the width of a sentence
@@ -663,12 +670,13 @@ ${shell.headEnd}
     </header>
     <div class="sv-canvas">
     <div class="sv-wrap">
-      <div class="sv-controls">
+      <form class="sv-controls" id="svForm" role="search">
         <div class="sv-field sv-field-city"><label for="svCity">Search</label><input type="search" id="svCity" list="svCityList" placeholder="Name, city or street&hellip;" autocomplete="off" aria-describedby="svCityHint"><datalist id="svCityList">${cityOptions}</datalist><span id="svCityHint" class="sr-only">Searches every provider in the directory by name, city and address</span></div>
         <div class="sv-field"><label for="svCat">Service</label><select id="svCat"><option value="all">Any service</option>${catOptions}</select></div>
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
+        <button type="submit" class="sv-search" id="svSearch">Search</button>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
-      </div>
+      </form>
 
       <!-- Live results over all ${providers.length} providers. Empty and hidden until somebody
            searches, and the static city grid below is what the crawler and a no-JS visitor get. -->
@@ -750,6 +758,7 @@ ${shell.bodyEnd}
       if(more)more.addEventListener('click',expand);
       var q=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang');
       var CITY_SLUG=${JSON.stringify(cityLookup)};
+      var CITY_NAME=${JSON.stringify(Object.fromEntries(usedCities.map((c) => [c, CITY[c].name + ', ' + CITY[c].country])))};
       var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var CAT_PLURAL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CAT_PLURAL[c] || CATS[c].toLowerCase()])))};
@@ -825,21 +834,62 @@ ${shell.bodyEnd}
       // getting an empty page. The current choice is never disabled, so a link that arrives carrying
       // an impossible pair still shows what was asked for, and explain() below says why it is empty.
       function optBase(o){ if(o._base==null)o._base=o.textContent; return o._base; }
+
+      // The three controls are one question asked three ways, so each is counted against the other
+      // two. Typing a city narrows the two menus to what that city holds; choosing a service narrows
+      // the languages and the city list; choosing a language narrows the services and the city list.
+      // COUNTS already knows all of it per city: .c by service, .l by language, .p by the pair.
+      function activeCity(){
+        var v=fold((q.value||'').trim());
+        return (v&&CITY_SLUG[v])||null;
+      }
+      function nCat(cat,lang,city){
+        if(city){ var k=COUNTS[city]||NOCOUNT; return lang==='all'?(k.c[cat]||0):(k.p[cat+'|'+lang]||0); }
+        return lang==='all'?(CAT_TOTALS[cat]||0):(PAIR_TOTALS[cat+'|'+lang]||0);
+      }
+      function nLang(lang,cat,city){
+        if(city){ var k=COUNTS[city]||NOCOUNT; return cat==='all'?(k.l[lang]||0):(k.p[cat+'|'+lang]||0); }
+        return cat==='all'?(LANG_TOTALS[lang]||0):(PAIR_TOTALS[cat+'|'+lang]||0);
+      }
+      function nCity(city,cat,lang){
+        var k=COUNTS[city]||NOCOUNT;
+        if(cat!=='all'&&lang!=='all')return k.p[cat+'|'+lang]||0;
+        if(cat!=='all')return k.c[cat]||0;
+        if(lang!=='all')return k.l[lang]||0;
+        return k.t||0;
+      }
+
+      var cityList=document.getElementById('svCityList');
       function syncOptions(){
-        var cat=catSel.value,lang=langSel.value,i,o,n;
+        var cat=catSel.value,lang=langSel.value,city=activeCity(),i,o,n;
         for(i=0;i<langSel.options.length;i++){
           o=langSel.options[i];
           if(o.value==='all'){ o.textContent=optBase(o); o.disabled=false; continue; }
-          n=cat==='all'?(LANG_TOTALS[o.value]||0):(PAIR_TOTALS[cat+'|'+o.value]||0);
+          n=nLang(o.value,cat,city);
           o.textContent=optBase(o)+(n?' ('+n+')':'');
           o.disabled=n===0&&o.value!==lang;
         }
         for(i=0;i<catSel.options.length;i++){
           o=catSel.options[i];
           if(o.value==='all'){ o.textContent=optBase(o); o.disabled=false; continue; }
-          n=lang==='all'?(CAT_TOTALS[o.value]||0):(PAIR_TOTALS[o.value+'|'+lang]||0);
+          n=nCat(o.value,lang,city);
           o.textContent=optBase(o)+(n?' ('+n+')':'');
           o.disabled=n===0&&o.value!==cat;
+        }
+        // The city suggestions narrow the same way. A datalist cannot grey an entry out, so a city
+        // the current service and language rule out is simply not offered.
+        if(cityList){
+          var key=cat+'|'+lang;
+          if(cityList._key!==key){
+            var out='';
+            for(var slug in CITY_NAME){
+              var cn=nCity(slug,cat,lang);
+              if(!cn)continue;
+              out+='<option value="'+CITY_NAME[slug].replace(/"/g,'&quot;')+'" label="'+cn+'"></option>';
+            }
+            cityList.innerHTML=out;
+            cityList._key=key;
+          }
         }
       }
 
@@ -998,15 +1048,9 @@ ${shell.bodyEnd}
           }catch(e){}
         },250);
       }
-      // Picking a city goes to that city's page rather than filtering this one down to a single
-      // card: the city page is the thing worth landing on.
-      function qs(){
-        var p=[];
-        if(catSel.value!=='all')p.push('cat='+catSel.value);
-        if(langSel.value!=='all')p.push('lang='+langSel.value);
-        return p.length?'?'+p.join('&'):'';
-      }
-      function go(slug){ window.location.href='/services/'+slug+qs(); }
+      // qs() and go() lived here and sent you to a city page with the filter in the query string.
+      // Both are gone: the live results are the answer now, and the one deliberate way onto a city
+      // page is the button beside the count, which names the page it opens.
       // Typing narrows the cards below, and only that.
       //
       // It used to navigate the moment what you had typed so far spelled a city: typing "rome" on
@@ -1021,17 +1065,18 @@ ${shell.bodyEnd}
       // The lookup is keyed on the written name, so "bogota" missed "bogotá colombia" the same way
       // the card search did. Folded keys sit alongside the originals.
       (function(){ for(var key in CITY_SLUG){ var fk=fold(key); if(!CITY_SLUG[fk])CITY_SLUG[fk]=CITY_SLUG[key]; } })();
-      // Enter on a narrowed-down list opens the one city left, so the keyboard never dead-ends.
-      q.addEventListener('keydown',function(e){
-        if(e.key!=='Enter')return;
+      // The results appear as you type, so the button is not what makes the search happen. It is
+      // there because a search field without one reads as unfinished, and because it gives Enter and
+      // the on-screen keyboard's "go" key something definite to do: flush any pending keystroke,
+      // then put the results where the eye already is.
+      document.getElementById('svForm').addEventListener('submit',function(e){
         e.preventDefault();
-        if(qT){clearTimeout(qT);qT=null;render();}
-        var slug=CITY_SLUG[fold((q.value||'').trim())];
-        if(!slug){
-          var left=cards.filter(function(el){return !el.classList.contains('is-hidden');});
-          if(left.length===1)slug=left[0].getAttribute('data-city');
-        }
-        if(slug)go(slug);
+        if(qT){clearTimeout(qT);qT=null;}
+        render();
+        var target=results.hidden?grid:results;
+        if(target&&target.scrollIntoView)target.scrollIntoView({behavior:'smooth',block:'start'});
+        // Announce where we landed for anyone not watching the page move.
+        if(!results.hidden&&hitCount)hitCount.setAttribute('tabindex','-1'),hitCount.focus({preventScroll:true});
       });
       [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
       document.getElementById('svReset').addEventListener('click',function(){catSel.value='all';langSel.value='all';q.value='';render();});
