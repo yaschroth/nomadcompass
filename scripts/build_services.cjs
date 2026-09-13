@@ -524,20 +524,37 @@ ${shell.headTop}
     .sv-results-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
     /* The way out of the search and into the page that owns these providers. It is the SEO surface,
        so it is a real link with real text, never a scripted jump. */
-    .sv-cta { display:inline-flex; align-items:center; gap:.4rem; font-size:.92rem; font-weight:700;
-      text-decoration:none; padding:.5rem .95rem; border-radius:999px; color:#fff;
-      background:var(--color-terracotta,#c0392b); }
-    .sv-cta:hover { background:var(--color-terracotta-dark,#a03325); }
-    .sv-cta:focus-visible { outline:2px solid var(--color-ink); outline-offset:2px; }
+    /* ID selectors, because base.css sets a:not(.btn):not(.nav-link) to terracotta at specificity
+       0,3,1. A plain .sv-cta lost that fight and painted terracotta text on a terracotta pill: the
+       button rendered as a solid red block with the label invisible inside it. Same reason the
+       provider name needs #svHits in front of it, or every result reads as a link the colour of
+       the accent instead of as a heading. */
+    #svCta a.sv-cta { display:inline-flex; align-items:center; gap:.4rem; font-size:.92rem;
+      font-weight:700; text-decoration:none; padding:.5rem .95rem; border-radius:999px;
+      color:#fff; background:var(--color-terracotta,#c0392b); }
+    #svCta a.sv-cta:hover { background:var(--color-terracotta-dark,#a03325); color:#fff; }
+    #svCta a.sv-cta:focus-visible { outline:2px solid var(--color-ink); outline-offset:2px; }
     .sv-hits { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
     .sv-hit { display:grid; grid-template-columns:1fr auto; gap:.2rem 1.2rem; align-items:baseline;
       padding:.75rem 0; border-bottom:1px solid var(--color-sand,#f0e9dc); }
     .sv-hit:last-child { border-bottom:0; }
     .sv-hit-name { margin:0; font-weight:700; color:var(--color-ink); font-size:1rem; line-height:1.35; }
-    .sv-hit-name a { color:inherit; text-decoration:none; }
-    .sv-hit-name a:hover { text-decoration:underline; }
+    #svHits .sv-hit-name a { color:var(--color-ink); text-decoration:none; }
+    #svHits .sv-hit-name a:hover { color:var(--color-terracotta-dark,#a03325); text-decoration:underline; }
     .sv-hit-where { grid-column:1; margin:0; font-size:.84rem; color:var(--color-stone); }
-    .sv-hit-where a { color:var(--color-terracotta-dark,#a03325); }
+    #svHits .sv-hit-where a { color:var(--color-terracotta-dark,#a03325); }
+    /* The row of things you can actually do with a result. */
+    .sv-hit-do { grid-column:1; display:flex; flex-wrap:wrap; gap:.45rem; margin:.35rem 0 0; }
+    #svHits .sv-hit-do a { display:inline-flex; align-items:center; gap:.3rem; font-size:.78rem;
+      font-weight:700; text-decoration:none; padding:.25rem .6rem; border-radius:999px;
+      color:var(--color-charcoal,#334155); background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); }
+    #svHits .sv-hit-do a:hover { color:var(--color-ink); border-color:var(--color-terracotta,#c0392b); }
+    .sv-hit-ev { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      padding:.15rem .4rem; border-radius:4px; }
+    .sv-ev-o { background:#dcefe4; color:#1c6a49; }
+    .sv-ev-s { background:#f7edd8; color:#8f6212; }
+    .sv-ev-d { background:#ece7e8; color:#6d6368; }
     .sv-hit-tags { grid-column:2; grid-row:1 / span 2; display:flex; flex-wrap:wrap; gap:.3rem;
       justify-content:flex-end; align-content:flex-start; }
     .sv-hit-lang { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
@@ -936,6 +953,9 @@ ${shell.bodyEnd}
           hitsMore=document.getElementById('svHitsMore'),more=document.getElementById('svMore');
       var IDX=null,IDXWANTED=false,HAY=null,CITYMETA={},PAGES={};
       var SHOWN=60;
+      // How we know this provider works in these languages, which is the claim the whole directory
+      // rests on, so it travels with every result rather than only appearing on the listing page.
+      var EV_LABEL={o:'Official list',v:'Visited',s:'Own site',d:'Directory'};
 
       function loadIndex(){
         if(IDX||IDXWANTED)return;
@@ -1031,11 +1051,23 @@ ${shell.bodyEnd}
             var code=h[3].substr(k,2);
             langs+='<span class="sv-hit-lang">'+esc(LANG_LABEL[code]||code)+'</span>';
           }
+          // Everything a reader can do with this row, in one place. A provider with no website is
+          // still reachable: the listing page carries the source we read the language claim on, and
+          // an address is enough to put it on a map.
+          var doRow='';
+          if(h[6])doRow+='<a href="'+esc(h[6])+'" target="_blank" rel="nofollow noopener">Website \\u2197</a>';
+          doRow+='<a href="'+page+'">Where it is listed</a>';
+          if(h[5])doRow+='<a href="https://www.google.com/maps/search/?api=1&amp;query='
+            +encodeURIComponent(h[0]+', '+h[5]+', '+m[0])+'" target="_blank" rel="nofollow noopener">Map \\u2197</a>';
+
           html+='<li class="sv-hit">'
             +'<p class="sv-hit-name">'+(h[6]?'<a href="'+esc(h[6])+'" target="_blank" rel="nofollow noopener">'+esc(h[0])+'</a>':esc(h[0]))+'</p>'
             +'<p class="sv-hit-where">'+esc(CAT_LABEL[h[2]]||h[2])+' \\u00b7 <a href="'+page+'">'+esc(m[0])+'</a>'
             +(m[1]?', '+esc(m[1]):'')+(h[5]?' \\u00b7 '+esc(h[5]):'')+'</p>'
-            +'<span class="sv-hit-tags">'+langs+'</span></li>';
+            +'<span class="sv-hit-do">'+doRow+'</span>'
+            +'<span class="sv-hit-tags">'+langs
+            +'<span class="sv-hit-ev sv-ev-'+esc(h[4])+'">'+esc(EV_LABEL[h[4]]||h[4])+'</span>'
+            +'</span></li>';
         }
         hits.innerHTML=html;
 
