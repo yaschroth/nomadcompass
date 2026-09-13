@@ -7,9 +7,54 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
  */
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://thenomadhq.com';
 const today = new Date().toISOString().slice(0, 10);
+
+// lastmod per URL, from the last commit that touched the file behind it.
+//
+// This used to stamp every one of the 2,196 URLs with today's date on every run, which tells a
+// crawler nothing: if everything changed today then nothing did, and the signal is discarded. It is
+// the same firehose mistake submit_indexnow.cjs was written to avoid. One `git log` pass gives the
+// real date per file; anything uncommitted falls back to today, which is correct for a new page.
+const lastmod = new Map();
+try {
+  const log = execFileSync('git', ['log', '--pretty=format:@%cs', '--name-only'],
+    { cwd: ROOT, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
+  let date = today;
+  for (const line of log.split('\n')) {
+    if (!line) continue;
+    if (line[0] === '@') { date = line.slice(1); continue; }
+    if (!lastmod.has(line)) lastmod.set(line, date);   // log is newest-first
+  }
+} catch (e) {
+  console.warn('git log unavailable, falling back to today for every lastmod:', e.message);
+}
+
+// A file edited but not yet committed still carries its previous commit's date above, which would
+// understate it. Anything dirty in the working tree changed today by definition.
+try {
+  const dirty = execFileSync('git', ['status', '--porcelain', '--untracked-files=all'],
+    { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  for (const line of dirty.split('\n')) {
+    const f = line.slice(3).trim().replace(/^"|"$/g, '');
+    if (f && f.endsWith('.html')) lastmod.set(f, today);
+  }
+} catch (e) { /* clean tree, or no git: the committed dates already stand */ }
+
+// cleanUrls: "/" -> index.html, "/nomad-visas" -> nomad-visas.html, "/cities/taxco" -> cities/taxco.html
+function fileFor(loc) {
+  const rel = loc === '/' ? 'index.html' : loc.replace(/^\//, '') + '.html';
+  if (fs.existsSync(path.join(ROOT, rel))) return rel;
+  const alt = loc.replace(/^\//, '') + '/index.html';
+  return fs.existsSync(path.join(ROOT, alt)) ? alt : null;
+}
+
+const modFor = (loc) => {
+  const f = fileFor(loc);
+  return (f && lastmod.get(f)) || today;
+};
 
 const urls = [];
 const add = (loc, priority, changefreq) => urls.push({ loc, priority, changefreq });
@@ -137,8 +182,9 @@ if (fs.existsSync(path.join(ROOT, 'activities'))) {
 }
 
 const body = urls.map((u) =>
-  `  <url>\n    <loc>${BASE}${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`
+  `  <url>\n    <loc>${BASE}${u.loc}</loc>\n    <lastmod>${modFor(u.loc)}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`
 ).join('\n');
 const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), xml);
-console.log(`Wrote sitemap.xml with ${urls.length} URLs (lastmod ${today}).`);
+const dates = new Set(urls.map((u) => modFor(u.loc)));
+console.log(`Wrote sitemap.xml with ${urls.length} URLs across ${dates.size} distinct lastmod dates.`);

@@ -64,6 +64,25 @@ const COUNTRIES = {
     rule: "That floor is three times Montenegro's minimum wage, and the wage itself depends on your education, so applicants with a bachelor's degree or higher are assessed at about $2,760 rather than $2,070. The scheme is currently legislated to close at the end of 2026.",
     toolRule: 'Three times the minimum wage, which is education-dependent: about $2,760 with a degree. Legislated to close at the end of 2026.',
   },
+  'South Africa': {
+    usd: 3280,
+    // Unlike every other entry here, this one is NOT pegged to a wage. It is a flat rand figure
+    // (R650,976/yr) set in the October 2024 regulations, cut from the R1,000,000 the scheme opened
+    // with, so it only moves when the regulations are amended or when the rand does. Verified
+    // 2026-09-12. Per nomadhq-prices-usd the rand amount never goes on the page, only the rule.
+    rule: 'That floor is a flat rand figure set in the October 2024 regulations rather than a wage-pegged one, so the dollar equivalent moves with the currency rather than with any wage.',
+    toolRule: 'A flat rand amount from the October 2024 rules, cut from the opening figure; the dollar value moves with the currency, not a wage.',
+    tool: { duration: 'Up to 3 years' },
+  },
+  'South Korea': {
+    usd: 6070,
+    // Twice the previous year's GNI per capita (2025 base KRW 52.41m, so 2x = KRW 104.82m/yr).
+    // The F-1-D became a permanent category on 2026-06-30 and the stay went from 2 years to 3.
+    // A relaxed tier assesses applicants aged 18-34 living outside Seoul/Incheon/Gyeonggi at 1x.
+    rule: "That floor is twice Korea's gross national income per head and is recalculated every year, and it halves to one times for applicants aged 18 to 34 living outside Seoul, Incheon and Gyeonggi.",
+    toolRule: 'Twice Korea’s GNI per head, recalculated yearly; halves for applicants aged 18 to 34 living outside the capital region.',
+    tool: { duration: 'Up to 3 years' },
+  },
   Mexico: {
     usd: 4600,
     savings: 77500,
@@ -131,6 +150,15 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).sort()) {
   const sentences = visa.split(/(?<=[.!?])\s+/);
   const target = sentences.findIndex((s) => MONEY.test(s) && INCOMEY.test(s));
   if (target < 0) { skipped.push(id + ': no income sentence with a figure'); continue; }
+
+  // Every figure in COUNTRIES is MONTHLY. Some pages state the same rule annually, because the law
+  // behind it is written per year (South Africa is a rand-per-annum figure). Dropping a monthly
+  // number into "must earn at least $X annually" produced "$3,280 annually" on Cape Town and
+  // Oudtshoorn before this guard existed. Leave those sentences alone and report them instead.
+  if (/\b(a year|annually|per annum|per year|\/year|yearly)\b/i.test(sentences[target])) {
+    skipped.push(id + ': states the floor ANNUALLY, not monthly; fix by hand');
+    continue;
+  }
 
   const want = '$' + spec.usd.toLocaleString('en-US');
   const save = spec.savings ? '$' + spec.savings.toLocaleString('en-US') : null;
