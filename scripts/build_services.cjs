@@ -76,6 +76,20 @@ const usedLangs = [...new Set(providers.flatMap((p) => p.languages))].sort((a, b
 // Portugal", and the slug is carried alongside so the field can send you straight there.
 const cityOptions = usedCities
   .map((c) => `<option data-slug="${c}" value="${esc(CITY[c].name)}, ${esc(CITY[c].country)}"></option>`).join('');
+
+// The city as a real <select>, not a datalist.
+//
+// It was a datalist beside the free-text search, and that was the wrong control twice over. A
+// datalist is a suggestion, never a constraint: with Dentists and German chosen it still let you
+// type Belgrade, which has dentists and no German-speaking one, and browsers do not reliably
+// re-read an open suggestion list after its options change. Worse, picking a suggestion inserted
+// "Madrid, Spain" with a comma into a field searching a haystack that reads "madrid spain" without
+// one, so the most obvious way to search for a city returned nothing at all.
+// A select can grey an option out and say how many are behind it, which is what was asked for.
+const citySelectOptions = usedCities
+  .slice()
+  .sort((a, b) => CITY[a].name.localeCompare(CITY[b].name))
+  .map((c) => `<option value="${c}">${esc(CITY[c].name)}, ${esc(CITY[c].country)}</option>`).join('');
 const cityLookup = Object.fromEntries(
   usedCities.map((c) => [(CITY[c].name + ', ' + CITY[c].country).toLowerCase(), c]));
 const catOptions = usedCats.map((c) => `<option value="${c}">${esc(CATS[c])}</option>`).join('');
@@ -671,7 +685,8 @@ ${shell.headEnd}
     <div class="sv-canvas">
     <div class="sv-wrap">
       <form class="sv-controls" id="svForm" role="search">
-        <div class="sv-field sv-field-city"><label for="svCity">Search</label><input type="search" id="svCity" list="svCityList" placeholder="Name, city or street&hellip;" autocomplete="off" aria-describedby="svCityHint"><datalist id="svCityList">${cityOptions}</datalist><span id="svCityHint" class="sr-only">Searches every provider in the directory by name, city and address</span></div>
+        <div class="sv-field sv-field-city"><label for="svCity">Search</label><input type="search" id="svCity" placeholder="Name, street or city&hellip;" autocomplete="off" aria-describedby="svCityHint"><span id="svCityHint" class="sr-only">Searches every provider in the directory by name, address and city</span></div>
+        <div class="sv-field"><label for="svCityPick">City</label><select id="svCityPick"><option value="all">Any city</option>${citySelectOptions}</select></div>
         <div class="sv-field"><label for="svCat">Service</label><select id="svCat"><option value="all">Any service</option>${catOptions}</select></div>
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
         <button type="submit" class="sv-search" id="svSearch">Search</button>
@@ -756,7 +771,7 @@ ${shell.bodyEnd}
         }
       }
       if(more)more.addEventListener('click',expand);
-      var q=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang');
+      var q=document.getElementById('svCity'),catSel=document.getElementById('svCat'),langSel=document.getElementById('svLang'),citySel=document.getElementById('svCityPick');
       var CITY_SLUG=${JSON.stringify(cityLookup)};
       var CITY_NAME=${JSON.stringify(Object.fromEntries(usedCities.map((c) => [c, CITY[c].name + ', ' + CITY[c].country])))};
       var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
@@ -839,10 +854,7 @@ ${shell.bodyEnd}
       // two. Typing a city narrows the two menus to what that city holds; choosing a service narrows
       // the languages and the city list; choosing a language narrows the services and the city list.
       // COUNTS already knows all of it per city: .c by service, .l by language, .p by the pair.
-      function activeCity(){
-        var v=fold((q.value||'').trim());
-        return (v&&CITY_SLUG[v])||null;
-      }
+      function activeCity(){ return citySel&&citySel.value!=='all'?citySel.value:null; }
       function nCat(cat,lang,city){
         if(city){ var k=COUNTS[city]||NOCOUNT; return lang==='all'?(k.c[cat]||0):(k.p[cat+'|'+lang]||0); }
         return lang==='all'?(CAT_TOTALS[cat]||0):(PAIR_TOTALS[cat+'|'+lang]||0);
@@ -859,7 +871,6 @@ ${shell.bodyEnd}
         return k.t||0;
       }
 
-      var cityList=document.getElementById('svCityList');
       function syncOptions(){
         var cat=catSel.value,lang=langSel.value,city=activeCity(),i,o,n;
         for(i=0;i<langSel.options.length;i++){
@@ -876,20 +887,13 @@ ${shell.bodyEnd}
           o.textContent=optBase(o)+(n?' ('+n+')':'');
           o.disabled=n===0&&o.value!==cat;
         }
-        // The city suggestions narrow the same way. A datalist cannot grey an entry out, so a city
-        // the current service and language rule out is simply not offered.
-        if(cityList){
-          var key=cat+'|'+lang;
-          if(cityList._key!==key){
-            var out='';
-            for(var slug in CITY_NAME){
-              var cn=nCity(slug,cat,lang);
-              if(!cn)continue;
-              out+='<option value="'+CITY_NAME[slug].replace(/"/g,'&quot;')+'" label="'+cn+'"></option>';
-            }
-            cityList.innerHTML=out;
-            cityList._key=key;
-          }
+        // The city menu narrows the same way, and being a select it can actually enforce it.
+        for(i=0;i<citySel.options.length;i++){
+          o=citySel.options[i];
+          if(o.value==='all'){ o.textContent=optBase(o); o.disabled=false; continue; }
+          n=nCity(o.value,cat,lang);
+          o.textContent=optBase(o)+(n?' ('+n+')':'');
+          o.disabled=n===0&&o.value!==citySel.value;
         }
       }
 
@@ -983,9 +987,23 @@ ${shell.bodyEnd}
       function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
         return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
+      // Every word has to appear, in any order. A single substring test failed the most obvious
+      // search on the page: the suggestion list inserted "Madrid, Spain" and the text being
+      // searched reads "madrid spain", so the comma alone reduced 956 providers to one.
+      function terms(raw){
+        return fold(raw).split(/[^a-z0-9]+/).filter(function(t){ return t.length>1; });
+      }
+      function matches(hay,ts){
+        for(var i=0;i<ts.length;i++)if(hay.indexOf(ts[i])<0)return false;
+        return true;
+      }
+
       function searchRender(){
-        var term=fold((q.value||'').trim()),cat=catSel.value,lang=langSel.value;
-        var searching=term.length>=2;
+        var ts=terms((q.value||'').trim()),cat=catSel.value,lang=langSel.value,city=activeCity();
+        var term=ts.join(' ');
+        // A chosen city is a search in its own right: picking Madrid and nothing else should show
+        // Madrid's providers, not send you back to the grid of 329 city cards.
+        var searching=ts.length>0||!!city||cat!=='all'||lang!=='all';
         // Below two characters this is browsing, not searching, and the grid is the better answer.
         results.hidden=!searching;
         grid.hidden=searching;
@@ -997,9 +1015,10 @@ ${shell.bodyEnd}
         var list=[];
         for(var i=0;i<IDX.length;i++){
           var r=IDX[i];
+          if(city&&r[1]!==city)continue;
           if(cat!=='all'&&r[2]!==cat)continue;
           if(lang!=='all'&&!hasLang(r[3],lang))continue;
-          if(HAY[i].indexOf(term)<0)continue;
+          if(ts.length&&!matches(HAY[i],ts))continue;
           list.push(r);
         }
 
@@ -1020,13 +1039,17 @@ ${shell.bodyEnd}
         }
         hits.innerHTML=html;
 
+        // Say back the question that was asked, including the parts that came from the menus, so a
+        // count of nothing is legible without looking up at the controls to see why.
         var bits=[];
         if(cat!=='all')bits.push(CAT_PLURAL[cat]);
         if(lang!=='all')bits.push('working in '+LANG_LABEL[lang]);
+        if(city)bits.push('in '+((CITYMETA[city]||[city])[0]));
+        if(ts.length)bits.push('matching \\u201c'+esc(q.value.trim())+'\\u201d');
+        var asked=bits.length?' '+bits.join(', '):'';
         hitCount.innerHTML=list.length
-          ? '<b>'+list.length+'</b> '+(list.length===1?'provider':'providers')
-            +(bits.length?' '+bits.join(', '):'')+' matching \\u201c'+esc(q.value.trim())+'\\u201d'
-          : 'No provider'+(bits.length?' '+bits.join(', '):'')+' matches \\u201c'+esc(q.value.trim())+'\\u201d.';
+          ? '<b>'+list.length+'</b> '+(list.length===1?'provider':'providers')+asked
+          : 'No provider'+asked+'.';
         hitsMore.hidden=list.length<=SHOWN;
         if(list.length>SHOWN)hitsMore.textContent='Showing the first '+SHOWN+'. Narrow the search, or open the city page for the full list.';
 
@@ -1078,8 +1101,10 @@ ${shell.bodyEnd}
         // Announce where we landed for anyone not watching the page move.
         if(!results.hidden&&hitCount)hitCount.setAttribute('tabindex','-1'),hitCount.focus({preventScroll:true});
       });
-      [catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
-      document.getElementById('svReset').addEventListener('click',function(){catSel.value='all';langSel.value='all';q.value='';render();});
+      [citySel,catSel,langSel].forEach(function(s){s.addEventListener('change',render);});
+      document.getElementById('svReset').addEventListener('click',function(){
+        citySel.value='all';catSel.value='all';langSel.value='all';q.value='';render();
+      });
       (function(){
         var sp=new URLSearchParams(window.location.search);
         function set(sel,v){ if(!v)return; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===v){sel.value=v;return;} } }
