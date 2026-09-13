@@ -81,6 +81,25 @@ const cityLookup = Object.fromEntries(
 const catOptions = usedCats.map((c) => `<option value="${c}">${esc(CATS[c])}</option>`).join('');
 const langOptions = usedLangs.map((l) => `<option value="${l}">${esc(LANGS[l])}</option>`).join('');
 
+// How many providers stand behind each answer the two menus can produce.
+//
+// 13 services x 56 languages is 728 questions a reader can assemble, and only 250 of them have an
+// answer: 478 combinations are dead ends. "Doctors" plus "Bengali" was one of them, and the page
+// took the choice, hid all 329 cities and said "Nothing matches that combination yet", which reads
+// as nothing having happened at all. The counts below let the menu say what is behind an option
+// before it is picked, and let the empty state say what is actually missing.
+const CAT_TOTALS = {};
+const LANG_TOTALS = {};
+const PAIR_TOTALS = {};
+providers.forEach((p) => {
+  CAT_TOTALS[p.category] = (CAT_TOTALS[p.category] || 0) + 1;
+  (p.languages || []).forEach((l) => {
+    LANG_TOTALS[l] = (LANG_TOTALS[l] || 0) + 1;
+    const k = p.category + '|' + l;
+    PAIR_TOTALS[k] = (PAIR_TOTALS[k] || 0) + 1;
+  });
+});
+
 function card(p) {
   const chips = p.languages.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('');
   const host = (() => { try { return new URL(p.sourceUrl).hostname.replace(/^www\./, ''); } catch (e) { return 'source'; } })();
@@ -483,6 +502,19 @@ ${shell.headTop}
     .sv-nogo { font-size:.76rem; color:var(--color-stone); }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
+    /* The empty state is the answer to a question that has none, so it gets the width of a sentence
+       and a way out, rather than a shrug. */
+    .sv-empty #svEmptyWhy { max-width:56ch; margin:0 auto 1rem; color:var(--color-ink);
+      font-size:1.02rem; line-height:1.6; }
+    .sv-empty-do { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin:0 0 1.2rem; }
+    .sv-empty-btn { font-family:inherit; font-size:.9rem; font-weight:700; cursor:pointer;
+      padding:.5rem .9rem; border-radius:999px; color:var(--color-terracotta-dark,#a03325);
+      background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-empty-btn:hover { border-color:var(--color-terracotta,#c0392b); color:var(--color-ink); }
+    .sv-empty-btn:focus-visible { outline:2px solid var(--color-terracotta,#c0392b); outline-offset:2px; }
+    /* A service or language the current choice rules out. Kept visible so the menu still shows the
+       shape of the directory, but plainly not pickable. */
+    .sv-field select option:disabled { color:var(--color-stone); }
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 3rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 1.5rem; }
@@ -625,7 +657,8 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
       <noscript><style>#svGrid[data-collapsed] .sv-ix { display:grid; } .sv-more { display:none; }</style></noscript>
       <p class="sv-grid-credit">City photographs come from Wikimedia Commons under CC BY or CC BY-SA. Each one names its photographer and licence on that city's own page.</p>
       <div class="sv-empty is-hidden" id="svEmpty">
-        <p>Nothing matches that combination yet.</p>
+        <p id="svEmptyWhy">Nothing matches that combination yet.</p>
+        <p class="sv-empty-do" id="svEmptyDo" hidden></p>
         <p>This directory is early and deliberately small: a provider only appears once we can point at a source for the language it works in. If you know one that belongs here, <a href="/contact">tell us</a> and include where the language is stated.</p>
       </div>
 
@@ -676,6 +709,8 @@ ${shell.bodyEnd}
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var CAT_PLURAL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CAT_PLURAL[c] || CATS[c].toLowerCase()])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(usedLangs.map((l) => [l, LANGS[l]])))};
+      var CAT_TOTALS=${JSON.stringify(CAT_TOTALS)},LANG_TOTALS=${JSON.stringify(LANG_TOTALS)},PAIR_TOTALS=${JSON.stringify(PAIR_TOTALS)};
+      var why=document.getElementById('svEmptyWhy'),doEl=document.getElementById('svEmptyDo');
       var COUNTS=${JSON.stringify(COUNTS)};
       var TOTAL=${providers.length};
       function has(el,attr,v){ return (' '+el.getAttribute(attr)+' ').indexOf(' '+v+' ')>-1; }
@@ -731,7 +766,60 @@ ${shell.bodyEnd}
         count.innerHTML='Showing <b>'+shown+'</b> '+(shown===1?'city':'cities')+(bits.length?' '+bits.join(', '):'')
           +', <b>'+(filtered?rows:TOTAL)+'</b> providers'+(filtered?' in '+(shown===1?'it':'them'):' in total')+'.';
         empty.classList.toggle('is-hidden',shown>0);
+        if(!shown)explain(cat,lang,term);
+        syncOptions();
         syncUrl(cat,lang);
+      }
+
+      // Each menu says what the OTHER one leaves behind it, and stops offering what it cannot
+      // answer. A reader picking "Doctors" then sees "Bengali" greyed out rather than picking it and
+      // getting an empty page. The current choice is never disabled, so a link that arrives carrying
+      // an impossible pair still shows what was asked for, and explain() below says why it is empty.
+      function optBase(o){ if(o._base==null)o._base=o.textContent; return o._base; }
+      function syncOptions(){
+        var cat=catSel.value,lang=langSel.value,i,o,n;
+        for(i=0;i<langSel.options.length;i++){
+          o=langSel.options[i];
+          if(o.value==='all'){ o.textContent=optBase(o); o.disabled=false; continue; }
+          n=cat==='all'?(LANG_TOTALS[o.value]||0):(PAIR_TOTALS[cat+'|'+o.value]||0);
+          o.textContent=optBase(o)+(n?' ('+n+')':'');
+          o.disabled=n===0&&o.value!==lang;
+        }
+        for(i=0;i<catSel.options.length;i++){
+          o=catSel.options[i];
+          if(o.value==='all'){ o.textContent=optBase(o); o.disabled=false; continue; }
+          n=lang==='all'?(CAT_TOTALS[o.value]||0):(PAIR_TOTALS[o.value+'|'+lang]||0);
+          o.textContent=optBase(o)+(n?' ('+n+')':'');
+          o.disabled=n===0&&o.value!==cat;
+        }
+      }
+
+      // "Nothing matches that combination yet" is true and useless. Say which half is missing, what
+      // the other half does hold, and offer the one click that gets somewhere.
+      function explain(cat,lang,term){
+        var one=function(n,s){ return n+' '+s+(n===1?'':'s'); };
+        if(cat!=='all'&&lang!=='all'&&!PAIR_TOTALS[cat+'|'+lang]){
+          var lt=LANG_TOTALS[lang]||0,ct=CAT_TOTALS[cat]||0;
+          why.textContent='No '+CAT_PLURAL[cat]+' in the directory are recorded as working in '
+            +LANG_LABEL[lang]+'. '+LANG_LABEL[lang]+' appears with '+one(lt,'provider')
+            +' in other services, and we hold '+one(ct,'provider')+' under '+CAT_PLURAL[cat]+'.';
+          doEl.hidden=false;
+          doEl.innerHTML='';
+          [[LANG_LABEL[lang]+' in any service',function(){catSel.value='all';render();}],
+            [CAT_PLURAL[cat]+' in any language',function(){langSel.value='all';render();}]]
+            .forEach(function(p,i){
+              var b=document.createElement('button');
+              b.type='button'; b.className='sv-empty-btn'; b.textContent=p[0];
+              b.addEventListener('click',p[1]);
+              if(i)doEl.appendChild(document.createTextNode(' '));
+              doEl.appendChild(b);
+            });
+          return;
+        }
+        why.textContent=term
+          ? 'No city matching \\u201c'+term+'\\u201d has that combination.'
+          : 'Nothing matches that combination yet.';
+        doEl.hidden=true; doEl.innerHTML='';
       }
       // Safari throws SecurityError after 100 replaceState calls in 30 seconds, and this used to run
       // on every keystroke. The address only has to be right once the typing stops.
