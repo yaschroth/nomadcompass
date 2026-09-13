@@ -500,6 +500,40 @@ ${shell.headTop}
     .sv-card a.sv-go { font-size:.76rem; font-weight:700; color:var(--color-terracotta); text-decoration:none; white-space:nowrap; }
     .sv-card a.sv-go:hover { text-decoration:underline; }
     .sv-nogo { font-size:.76rem; color:var(--color-stone); }
+    /* The live provider results. Deliberately a list and not a card grid: this is a lookup, the
+       answer is a row, and a row can be read at a glance in a way a tile cannot. */
+    .sv-results { margin:0 0 3rem; }
+    .sv-results-head { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between;
+      gap:.6rem 1.2rem; margin:0 0 1rem; padding-bottom:.8rem;
+      border-bottom:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-results-count { margin:0; font-size:var(--text-sm); color:var(--color-stone); }
+    .sv-results-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    /* The way out of the search and into the page that owns these providers. It is the SEO surface,
+       so it is a real link with real text, never a scripted jump. */
+    .sv-cta { display:inline-flex; align-items:center; gap:.4rem; font-size:.92rem; font-weight:700;
+      text-decoration:none; padding:.5rem .95rem; border-radius:999px; color:#fff;
+      background:var(--color-terracotta,#c0392b); }
+    .sv-cta:hover { background:var(--color-terracotta-dark,#a03325); }
+    .sv-cta:focus-visible { outline:2px solid var(--color-ink); outline-offset:2px; }
+    .sv-hits { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+    .sv-hit { display:grid; grid-template-columns:1fr auto; gap:.2rem 1.2rem; align-items:baseline;
+      padding:.75rem 0; border-bottom:1px solid var(--color-sand,#f0e9dc); }
+    .sv-hit:last-child { border-bottom:0; }
+    .sv-hit-name { margin:0; font-weight:700; color:var(--color-ink); font-size:1rem; line-height:1.35; }
+    .sv-hit-name a { color:inherit; text-decoration:none; }
+    .sv-hit-name a:hover { text-decoration:underline; }
+    .sv-hit-where { grid-column:1; margin:0; font-size:.84rem; color:var(--color-stone); }
+    .sv-hit-where a { color:var(--color-terracotta-dark,#a03325); }
+    .sv-hit-tags { grid-column:2; grid-row:1 / span 2; display:flex; flex-wrap:wrap; gap:.3rem;
+      justify-content:flex-end; align-content:flex-start; }
+    .sv-hit-lang { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      padding:.15rem .4rem; border-radius:4px; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); color:var(--color-charcoal,#334155); }
+    .sv-hits-more { margin:1rem 0 0; font-size:var(--text-sm); color:var(--color-stone); }
+    @media (max-width:560px) {
+      .sv-hit { grid-template-columns:1fr; }
+      .sv-hit-tags { grid-column:1; grid-row:auto; justify-content:flex-start; }
+    }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
     /* The empty state is the answer to a question that has none, so it gets the width of a sentence
@@ -630,11 +664,22 @@ ${shell.headEnd}
     <div class="sv-canvas">
     <div class="sv-wrap">
       <div class="sv-controls">
-        <div class="sv-field sv-field-city"><label for="svCity">City</label><input type="search" id="svCity" list="svCityList" placeholder="Type a city&hellip;" autocomplete="off" aria-describedby="svCityHint"><datalist id="svCityList">${cityOptions}</datalist><span id="svCityHint" class="sr-only">Type to narrow the list below, or complete a city name to open its page</span></div>
+        <div class="sv-field sv-field-city"><label for="svCity">Search</label><input type="search" id="svCity" list="svCityList" placeholder="Name, city or street&hellip;" autocomplete="off" aria-describedby="svCityHint"><datalist id="svCityList">${cityOptions}</datalist><span id="svCityHint" class="sr-only">Searches every provider in the directory by name, city and address</span></div>
         <div class="sv-field"><label for="svCat">Service</label><select id="svCat"><option value="all">Any service</option>${catOptions}</select></div>
         <div class="sv-field"><label for="svLang">Language</label><select id="svLang"><option value="all">Any language</option>${langOptions}</select></div>
         <button type="button" class="sv-reset" id="svReset">Reset</button>
       </div>
+
+      <!-- Live results over all ${providers.length} providers. Empty and hidden until somebody
+           searches, and the static city grid below is what the crawler and a no-JS visitor get. -->
+      <section class="sv-results" id="svResults" hidden aria-live="polite">
+        <div class="sv-results-head">
+          <p class="sv-results-count" id="svHitCount"></p>
+          <div class="sv-results-cta" id="svCta"></div>
+        </div>
+        <ol class="sv-hits" id="svHits"></ol>
+        <p class="sv-hits-more" id="svHitsMore" hidden></p>
+      </section>
       <nav class="sv-hubs" id="by-service" aria-label="Browse by service">
         <h2>Browse by service</h2>
         <div class="sv-hubs-grid">${SERVICE_HUBS}</div>
@@ -765,10 +810,14 @@ ${shell.bodyEnd}
         var filtered=cat!=='all'||lang!=='all'||!!term;
         count.innerHTML='Showing <b>'+shown+'</b> '+(shown===1?'city':'cities')+(bits.length?' '+bits.join(', '):'')
           +', <b>'+(filtered?rows:TOTAL)+'</b> providers'+(filtered?' in '+(shown===1?'it':'them'):' in total')+'.';
-        empty.classList.toggle('is-hidden',shown>0);
-        if(!shown)explain(cat,lang,term);
+        // While the live results are up they are the answer, so the grid's own empty state stays
+        // out of the way rather than contradicting them.
+        var searching=fold((q.value||'').trim()).length>=2;
+        empty.classList.toggle('is-hidden',shown>0||searching);
+        if(!shown&&!searching)explain(cat,lang,term);
         syncOptions();
         syncUrl(cat,lang);
+        searchRender();
       }
 
       // Each menu says what the OTHER one leaves behind it, and stops offering what it cannot
@@ -821,6 +870,120 @@ ${shell.bodyEnd}
           : 'Nothing matches that combination yet.';
         doEl.hidden=true; doEl.innerHTML='';
       }
+
+      // ---- live search over every provider ---------------------------------------------------
+      //
+      // The grid below answers "which cities do you cover". This answers "find me this person", and
+      // they are different questions, so they are now different surfaces. The grid stays in the HTML
+      // untouched for the crawler and for a visitor without JavaScript; the index that powers this
+      // is fetched only once somebody actually searches.
+      var results=document.getElementById('svResults'),hits=document.getElementById('svHits'),
+          hitCount=document.getElementById('svHitCount'),cta=document.getElementById('svCta'),
+          hitsMore=document.getElementById('svHitsMore'),more=document.getElementById('svMore');
+      var IDX=null,IDXWANTED=false,HAY=null,CITYMETA={},PAGES={};
+      var SHOWN=60;
+
+      function loadIndex(){
+        if(IDX||IDXWANTED)return;
+        IDXWANTED=true;
+        var s=document.createElement('script');
+        s.src='/assets/service-search-index.js';
+        s.onload=function(){
+          IDX=window.NOMAD_SERVICES||[];
+          CITYMETA=window.NOMAD_SERVICE_CITIES||{};
+          PAGES=window.NOMAD_SERVICE_PAGES||{};
+          // Folded once here rather than shipped folded: the precomputed haystack repeated the name,
+          // the city and the address and tripled the file.
+          HAY=IDX.map(function(r){
+            var m=CITYMETA[r[1]]||[r[1],''];
+            return fold(r[0]+' '+m[0]+' '+m[1]+' '+r[5]);
+          });
+          searchRender();
+        };
+        s.onerror=function(){
+          IDXWANTED=false;
+          hitCount.textContent='The provider index could not be loaded. The city list below still works.';
+        };
+        document.head.appendChild(s);
+      }
+
+      // Codes are concatenated two-letter pairs ("deenth"), so a plain indexOf finds "en" inside
+      // "denl", which is "de nl" and contains no English at all. Only even offsets are real.
+      function hasLang(s,l){
+        for(var i=0;i<s.length;i+=2){ if(s.charAt(i)===l.charAt(0)&&s.charAt(i+1)===l.charAt(1))return true; }
+        return false;
+      }
+
+      function svcSlug(cat){ return (CAT_PLURAL[cat]||cat).replace(/ /g,'-'); }
+
+      // The button out of the search and into the page that owns these providers. Its text names
+      // the page it actually opens: promising "lawyers in Madrid" and landing on the all-services
+      // city page is the mistake this whole surface exists to stop making.
+      function ctaFor(list,cat){
+        if(!list.length)return null;
+        var city=list[0][1],same=true;
+        for(var i=1;i<list.length;i++){ if(list[i][1]!==city){ same=false; break; } }
+        if(!same)return null;
+        var name=(CITYMETA[city]||[city])[0];
+        if(cat!=='all'&&PAGES[city+'|'+cat])
+          return ['/services/'+city+'/'+svcSlug(cat),'See all '+CAT_PLURAL[cat]+' in '+name];
+        return ['/services/'+city,'See everything we list in '+name];
+      }
+
+      function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+      function searchRender(){
+        var term=fold((q.value||'').trim()),cat=catSel.value,lang=langSel.value;
+        var searching=term.length>=2;
+        // Below two characters this is browsing, not searching, and the grid is the better answer.
+        results.hidden=!searching;
+        grid.hidden=searching;
+        count.hidden=searching;
+        if(more)more.hidden=searching||!grid.hasAttribute('data-collapsed');
+        if(!searching)return;
+        if(!IDX){ hitCount.textContent='Loading the provider index\\u2026'; hits.innerHTML=''; cta.innerHTML=''; loadIndex(); return; }
+
+        var list=[];
+        for(var i=0;i<IDX.length;i++){
+          var r=IDX[i];
+          if(cat!=='all'&&r[2]!==cat)continue;
+          if(lang!=='all'&&!hasLang(r[3],lang))continue;
+          if(HAY[i].indexOf(term)<0)continue;
+          list.push(r);
+        }
+
+        var html='';
+        for(var j=0;j<Math.min(list.length,SHOWN);j++){
+          var h=list[j],m=CITYMETA[h[1]]||[h[1],''];
+          var page=(cat!=='all'&&PAGES[h[1]+'|'+h[2]])?'/services/'+h[1]+'/'+svcSlug(h[2]):'/services/'+h[1];
+          var langs='';
+          for(var k=0;k<h[3].length;k+=2){
+            var code=h[3].substr(k,2);
+            langs+='<span class="sv-hit-lang">'+esc(LANG_LABEL[code]||code)+'</span>';
+          }
+          html+='<li class="sv-hit">'
+            +'<p class="sv-hit-name">'+(h[6]?'<a href="'+esc(h[6])+'" target="_blank" rel="nofollow noopener">'+esc(h[0])+'</a>':esc(h[0]))+'</p>'
+            +'<p class="sv-hit-where">'+esc(CAT_LABEL[h[2]]||h[2])+' \\u00b7 <a href="'+page+'">'+esc(m[0])+'</a>'
+            +(m[1]?', '+esc(m[1]):'')+(h[5]?' \\u00b7 '+esc(h[5]):'')+'</p>'
+            +'<span class="sv-hit-tags">'+langs+'</span></li>';
+        }
+        hits.innerHTML=html;
+
+        var bits=[];
+        if(cat!=='all')bits.push(CAT_PLURAL[cat]);
+        if(lang!=='all')bits.push('working in '+LANG_LABEL[lang]);
+        hitCount.innerHTML=list.length
+          ? '<b>'+list.length+'</b> '+(list.length===1?'provider':'providers')
+            +(bits.length?' '+bits.join(', '):'')+' matching \\u201c'+esc(q.value.trim())+'\\u201d'
+          : 'No provider'+(bits.length?' '+bits.join(', '):'')+' matches \\u201c'+esc(q.value.trim())+'\\u201d.';
+        hitsMore.hidden=list.length<=SHOWN;
+        if(list.length>SHOWN)hitsMore.textContent='Showing the first '+SHOWN+'. Narrow the search, or open the city page for the full list.';
+
+        var c=ctaFor(list,cat);
+        cta.innerHTML=c?'<a class="sv-cta" href="'+c[0]+'">'+esc(c[1])+' \\u2192</a>':'';
+      }
+      q.addEventListener('focus',loadIndex,{once:true});
       // Safari throws SecurityError after 100 replaceState calls in 30 seconds, and this used to run
       // on every keystroke. The address only has to be right once the typing stops.
       var urlT=null;
