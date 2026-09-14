@@ -247,7 +247,7 @@ const CITY_REGIONS = {
         rennes: 'europe', biarritz: 'europe', trabzon: 'middleeast', marmaris: 'middleeast',
         okayama: 'asia', nagasaki: 'asia', daejeon: 'asia', udonthani: 'asia',
         padang: 'asia', bacolod: 'asia', coorg: 'asia', natal: 'latam',
-        xalapa: 'latam', ushuaia: 'latam', hermanus: 'africa',
+        xalapa: 'latam', ushuaia: 'latam', hermanus: 'africa',
 
         // Batch 31, 2026-08-29
         bansko: 'europe', jerusalem: 'middleeast', ankara: 'middleeast', olomouc: 'europe',
@@ -257,7 +257,7 @@ const CITY_REGIONS = {
         quetzaltenango: 'latam', puertoviejo: 'latam', lafortuna: 'latam', durban: 'africa',
         knysna: 'africa', puertovaras: 'latam', vinadelmar: 'latam', arugambay: 'asia',
         dianibeach: 'africa', hurghada: 'africa', mindo: 'latam', sokcho: 'asia',
-        trincomalee: 'asia', siwa: 'africa',
+        trincomalee: 'asia', siwa: 'africa',
 
         // Batch 33
         newcastleau: 'oceania', rotorua: 'oceania', nelson: 'oceania', broome: 'oceania',

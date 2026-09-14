@@ -78,6 +78,7 @@ const STEPS = [
   ['gate', 'check_parsers.cjs', 'the readers still read their frozen pages the same way'],
   ['gate', 'check_service_pages.cjs', ''],
   ['gate', 'check_filter_counts.cjs', 'a listing agrees with itself about how long it is'],
+  ['gate', 'check_service_search.cjs', 'runs the live search in Node and reads what it printed'],
   ['gate', 'check_service_dupes.cjs', ''],
   ['gate', 'check_provenance.cjs', ''],
   ['gate', 'check_site_numbers.cjs', ''],

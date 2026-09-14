@@ -83,8 +83,13 @@ const bodyEnd = consent + '\n' + navSearchJs + '\n' + affTrack;
 function liftPhotoCredit(file) {
   const p = path.join(ROOT, file);
   if (!fs.existsSync(p)) return '';
-  const m = fs.readFileSync(p, 'utf8').match(/  <!-- photo-credit -->[\s\S]*?<!-- \/photo-credit -->\n/);
-  return m ? m[0] : '';
+  // \r?\n rather than \n: a file that has been through a Windows text-mode write has CRLF
+  // endings, the match fails, the block is not carried, and _safe_write then refuses the
+  // rebuild with a message about photo credits that says nothing about line endings. That
+  // cost an hour once.
+  const m = fs.readFileSync(p, 'utf8')
+    .match(/ {2}<!-- photo-credit -->[\s\S]*?<!-- \/photo-credit -->\r?\n/);
+  return m ? m[0].replace(/\r\n/g, '\n') : '';
 }
 
 /**

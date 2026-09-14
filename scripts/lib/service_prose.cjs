@@ -235,6 +235,9 @@ const BOILERPLATE = [
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+// A row flagged `mobile` has a service area and no address, so it gets no Maps link: the pin
+// would land on whichever of its districts Google prefers. The card decides that, not this
+// function, because the URL is still right for anything that does have a place to go.
 function mapsUrl(p) {
   const c = M.cities[p.city];
   // A Maps search, not a claimed pin: we have not verified any listing's coordinates.
@@ -275,12 +278,57 @@ function card(p, opts) {
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
           <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
-          <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a></p>
+          <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}${p.mobile ? '' : `<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a>`}${contactLinks(p, o.lang)}</p>
         </div>
       </article>`;
 }
+/**
+ * The contact details a provider gave us itself, shown in full.
+ *
+ * Standing rule from the owner: where a firm supplies its own details, publish all of them. That is
+ * only ever data the firm sent in order to be reachable, so withholding half of it serves nobody.
+ * It is deliberately NOT applied to rows read off a roster: a phone number on a consular list was
+ * published by the embassy, not handed to us, and belongs to a different decision.
+ *
+ * Rendered as more <a class="sv-go"> in the card's existing link row, so a contact link is the same
+ * object as the Website and Maps links beside it and needs no CSS of its own.
+ */
+const WA_HELLO = {
+  en: 'Hello, I found you through thenomadhq.com',
+  de: 'Guten Tag, ich habe Sie über thenomadhq.com gefunden',
+  es: 'Hola, les encontré a través de thenomadhq.com',
+  fr: 'Bonjour, je vous ai trouvés via thenomadhq.com',
+  it: 'Buongiorno, vi ho trovati tramite thenomadhq.com',
+  pt: 'Bom dia, encontrei-vos através de thenomadhq.com',
+  nl: 'Goedendag, ik heb u gevonden via thenomadhq.com',
+};
+
+function contactLinks(p, lang) {
+  const out = [];
+  // wa.me takes digits only: no plus, no spaces, no dashes.
+  const wa = (p.whatsapp || '').replace(/[^\d]/g, '');
+  if (wa) {
+    // Greet them in a language they actually work in, which is the whole premise of the directory.
+    const pick = (lang && WA_HELLO[lang]) ? lang
+      : (p.languages || []).find((l) => WA_HELLO[l]) || 'en';
+    out.push(`<a class="sv-go" href="https://wa.me/${wa}?text=${encodeURIComponent(WA_HELLO[pick])}"`
+      + ` target="_blank" rel="nofollow noopener">WhatsApp</a>`);
+  }
+  if (p.phone && p.phone.replace(/[^\d]/g, '') !== wa) {
+    out.push(`<a class="sv-go" href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">${esc(p.phone)}</a>`);
+  }
+  if (p.email) out.push(`<a class="sv-go" href="mailto:${esc(p.email)}">Email</a>`);
+  for (const s of p.social || []) {
+    let label = 'Profile';
+    try { label = new URL(s).hostname.replace(/^www\./, '').split('.')[0]; } catch (e) { /* keep */ }
+    out.push(`<a class="sv-go" href="${esc(s)}" target="_blank" rel="nofollow noopener">`
+      + esc(label.charAt(0).toUpperCase() + label.slice(1)) + `</a>`);
+  }
+  return out.join('');
+}
+
 module.exports = {
-  esc, card, mapsUrl,
+  esc, card, mapsUrl, contactLinks, WA_HELLO,
   words, list, plural, count, langName, an, catName, singular, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,
 };

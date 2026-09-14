@@ -1,0 +1,29 @@
+# Store text as LF, always.
+#
+# "text=auto" is not enough here. It asks Git to guess, and Git's guess is that a file holding a
+# lone carriage return, one not paired with a newline, is binary. It then stops normalising that
+# file's line endings and commits it whole, as CRLF. A sweep whose block regex matched \n but not
+# \r\n left exactly such a stray on about a thousand pages, and every rebuild since has been
+# committing ninety thousand lines of line-ending churn on top of a dozen real ones.
+#
+# An explicit "text" skips the guess. Windows checkouts still get CRLF in the working tree, which
+# is what core.autocrlf is for; the repository keeps LF.
+*.html   text
+*.css    text
+*.js     text
+*.cjs    text
+*.mjs    text
+*.json   text
+*.xml    text
+*.md     text
+*.txt    text
+*.svg    text
+*.py     text
+
+*.webp   binary
+*.jpg    binary
+*.jpeg   binary
+*.png    binary
+*.ico    binary
+*.woff   binary
+*.woff2  binary

@@ -51,6 +51,7 @@ const { CAT_ICON, CAT_PLURAL, EV_RANK, EV_LABEL } = require(path.join(ROOT, 'scr
 // The blocks the sweeps inject. Without them this generator loses six tracked features on every
 // rebuild and only runs with --force, which is the guard switched off. See lib/page_shell.cjs.
 const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
+const PROSE = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 
 const providers = DB.providers.slice();
 const bad = providers.filter((p) => !CITY[p.city] || !CATS[p.category] || !CAT_ICON[p.category] || !p.sourceUrl || !EVIDENCE[p.evidence] || !p.languages || !p.languages.length || p.languages.some((l) => !LANGS[l]));
@@ -510,7 +511,11 @@ ${shell.headTop}
     .sv-ev-visited { color:#1c5c3c; background:#bfe8cf; }
     .sv-ev-self-declared { color:#8a5a00; background:#fbeecb; }
     .sv-ev-directory { color:#5c6672; background:#eceff3; }
-    .sv-links { display:flex; align-items:center; gap:.75rem; margin:0; flex:0 0 auto; }
+    /* Two links was the whole vocabulary here, so the row could never overflow. A provider that
+       sent us its own details carries up to six, and 'flex:0 0 auto' with nowrap would have pushed
+       them off the edge of the card rather than breaking the line. */
+    .sv-links { display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center;
+      gap:.3rem .75rem; margin:0; flex:0 1 auto; }
     .sv-card a.sv-go { font-size:.76rem; font-weight:700; color:var(--color-terracotta); text-decoration:none; white-space:nowrap; }
     .sv-card a.sv-go:hover { text-decoration:underline; }
     .sv-nogo { font-size:.76rem; color:var(--color-stone); }
@@ -795,6 +800,7 @@ ${shell.bodyEnd}
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var CAT_PLURAL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CAT_PLURAL[c] || CATS[c].toLowerCase()])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(usedLangs.map((l) => [l, LANGS[l]])))};
+      var WA_HELLO=${JSON.stringify(PROSE.WA_HELLO)};
       var CAT_TOTALS=${JSON.stringify(CAT_TOTALS)},LANG_TOTALS=${JSON.stringify(LANG_TOTALS)},PAIR_TOTALS=${JSON.stringify(PAIR_TOTALS)};
       var why=document.getElementById('svEmptyWhy'),doEl=document.getElementById('svEmptyDo');
       var COUNTS=${JSON.stringify(COUNTS)};
@@ -1057,8 +1063,32 @@ ${shell.bodyEnd}
           var doRow='';
           if(h[6])doRow+='<a href="'+esc(h[6])+'" target="_blank" rel="nofollow noopener">Website \\u2197</a>';
           doRow+='<a href="'+page+'">Where it is listed</a>';
-          if(h[5])doRow+='<a href="https://www.google.com/maps/search/?api=1&amp;query='
+          // Field 7 carries what this row has and most rows do not: the contact details the
+          // provider itself sent us, and m=1 for a practice that travels to you and therefore has
+          // a service area rather than an address. A Map link for one of those drops a pin on
+          // whichever district Google prefers, which is a link that lies about where it goes.
+          var ct=h[7];
+          if(h[5]&&!(ct&&ct.m))doRow+='<a href="https://www.google.com/maps/search/?api=1&amp;query='
             +encodeURIComponent(h[0]+', '+h[5]+', '+m[0])+'" target="_blank" rel="nofollow noopener">Map \\u2197</a>';
+          // The rest of field 7 is contact, and where it exists all of it is shown.
+          // reachable, and then all of them are shown. The WhatsApp greeting is written in the
+          // language the reader filtered on, falling back to one the provider actually works in.
+          if(ct){
+            if(ct.w){
+              var wl=(lang!=='all'&&WA_HELLO[lang])?lang:'';
+              if(!wl){for(var w=0;w<h[3].length;w+=2){if(WA_HELLO[h[3].substr(w,2)]){wl=h[3].substr(w,2);break;}}}
+              doRow+='<a href="https://wa.me/'+ct.w+'?text='+encodeURIComponent(WA_HELLO[wl||'en'])
+                +'" target="_blank" rel="nofollow noopener">WhatsApp \\u2197</a>';
+            }
+            if(ct.p&&ct.p.replace(/[^0-9]/g,'')!==ct.w)doRow+='<a href="tel:'+esc(ct.p.replace(/[^0-9+]/g,''))+'">'+esc(ct.p)+'</a>';
+            if(ct.e)doRow+='<a href="mailto:'+esc(ct.e)+'">Email</a>';
+            for(var si=0;si<(ct.s||[]).length;si++){
+              var sl='Profile';
+              try{sl=new URL(ct.s[si]).hostname.replace(/^www\\./,'').split('.')[0];}catch(e){}
+              doRow+='<a href="'+esc(ct.s[si])+'" target="_blank" rel="nofollow noopener">'
+                +esc(sl.charAt(0).toUpperCase()+sl.slice(1))+' \\u2197</a>';
+            }
+          }
 
           html+='<li class="sv-hit">'
             +'<p class="sv-hit-name">'+(h[6]?'<a href="'+esc(h[6])+'" target="_blank" rel="nofollow noopener">'+esc(h[0])+'</a>':esc(h[0]))+'</p>'

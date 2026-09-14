@@ -155,12 +155,87 @@
     .sv-ev-visited { color:#1c5c3c; background:#bfe8cf; }
     .sv-ev-self-declared { color:#8a5a00; background:#fbeecb; }
     .sv-ev-directory { color:#5c6672; background:#eceff3; }
-    .sv-links { display:flex; align-items:center; gap:.75rem; margin:0; flex:0 0 auto; }
+    /* Two links was the whole vocabulary here, so the row could never overflow. A provider that
+       sent us its own details carries up to six, and 'flex:0 0 auto' with nowrap would have pushed
+       them off the edge of the card rather than breaking the line. */
+    .sv-links { display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center;
+      gap:.3rem .75rem; margin:0; flex:0 1 auto; }
     .sv-card a.sv-go { font-size:.76rem; font-weight:700; color:var(--color-terracotta); text-decoration:none; white-space:nowrap; }
     .sv-card a.sv-go:hover { text-decoration:underline; }
     .sv-nogo { font-size:.76rem; color:var(--color-stone); }
+    /* The live provider results. Deliberately a list and not a card grid: this is a lookup, the
+       answer is a row, and a row can be read at a glance in a way a tile cannot. */
+    .sv-results { margin:0 0 3rem; }
+    .sv-results-head { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between;
+      gap:.6rem 1.2rem; margin:0 0 1rem; padding-bottom:.8rem;
+      border-bottom:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-results-count { margin:0; font-size:var(--text-sm); color:var(--color-stone); }
+    .sv-results-count b { color:var(--color-ink); font-variant-numeric:tabular-nums; }
+    /* The way out of the search and into the page that owns these providers. It is the SEO surface,
+       so it is a real link with real text, never a scripted jump. */
+    /* ID selectors, because base.css sets a:not(.btn):not(.nav-link) to terracotta at specificity
+       0,3,1. A plain .sv-cta lost that fight and painted terracotta text on a terracotta pill: the
+       button rendered as a solid red block with the label invisible inside it. Same reason the
+       provider name needs #svHits in front of it, or every result reads as a link the colour of
+       the accent instead of as a heading. */
+    #svCta a.sv-cta { display:inline-flex; align-items:center; gap:.4rem; font-size:.92rem;
+      font-weight:700; text-decoration:none; padding:.5rem .95rem; border-radius:999px;
+      color:#fff; background:var(--color-terracotta,#c0392b); }
+    #svCta a.sv-cta:hover { background:var(--color-terracotta-dark,#a03325); color:#fff; }
+    #svCta a.sv-cta:focus-visible { outline:2px solid var(--color-ink); outline-offset:2px; }
+    .sv-hits { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+    .sv-hit { display:grid; grid-template-columns:1fr auto; gap:.2rem 1.2rem; align-items:baseline;
+      padding:.75rem 0; border-bottom:1px solid var(--color-sand,#f0e9dc); }
+    .sv-hit:last-child { border-bottom:0; }
+    .sv-hit-name { margin:0; font-weight:700; color:var(--color-ink); font-size:1rem; line-height:1.35; }
+    #svHits .sv-hit-name a { color:var(--color-ink); text-decoration:none; }
+    #svHits .sv-hit-name a:hover { color:var(--color-terracotta-dark,#a03325); text-decoration:underline; }
+    .sv-hit-where { grid-column:1; margin:0; font-size:.84rem; color:var(--color-stone); }
+    #svHits .sv-hit-where a { color:var(--color-terracotta-dark,#a03325); }
+    /* The row of things you can actually do with a result. */
+    .sv-hit-do { grid-column:1; display:flex; flex-wrap:wrap; gap:.45rem; margin:.35rem 0 0; }
+    #svHits .sv-hit-do a { display:inline-flex; align-items:center; gap:.3rem; font-size:.78rem;
+      font-weight:700; text-decoration:none; padding:.25rem .6rem; border-radius:999px;
+      color:var(--color-charcoal,#334155); background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); }
+    #svHits .sv-hit-do a:hover { color:var(--color-ink); border-color:var(--color-terracotta,#c0392b); }
+    .sv-hit-ev { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      padding:.15rem .4rem; border-radius:4px; }
+    .sv-ev-o { background:#dcefe4; color:#1c6a49; }
+    .sv-ev-s { background:#f7edd8; color:#8f6212; }
+    .sv-ev-d { background:#ece7e8; color:#6d6368; }
+    .sv-hit-tags { grid-column:2; grid-row:1 / span 2; display:flex; flex-wrap:wrap; gap:.3rem;
+      justify-content:flex-end; align-content:flex-start; }
+    .sv-hit-lang { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      padding:.15rem .4rem; border-radius:4px; background:var(--color-sand,#f6f1e7);
+      border:1px solid var(--color-sand-dark,#e3d9c6); color:var(--color-charcoal,#334155); }
+    .sv-hits-more { margin:1rem 0 0; font-size:var(--text-sm); color:var(--color-stone); }
+    @media (max-width:560px) {
+      .sv-hit { grid-template-columns:1fr; }
+      .sv-hit-tags { grid-column:1; grid-row:auto; justify-content:flex-start; }
+    }
+    /* The one filled control in the bar, because it is the one that commits. Reset stays a quiet
+       text button beside it so the two are never confused at a glance. */
+    .sv-search { align-self:flex-end; font-family:inherit; font-size:.95rem; font-weight:700;
+      padding:.58rem 1.3rem; border:1px solid var(--color-terracotta,#c0392b); border-radius:10px;
+      background:var(--color-terracotta,#c0392b); color:#fff; cursor:pointer; }
+    .sv-search:hover { background:var(--color-terracotta-dark,#a03325); border-color:var(--color-terracotta-dark,#a03325); }
+    .sv-search:focus-visible { outline:2px solid var(--color-ink); outline-offset:2px; }
     .sv-empty { text-align:center; padding:2.5rem 1rem; color:var(--color-stone); }
     .sv-empty.is-hidden { display:none; }
+    /* The empty state is the answer to a question that has none, so it gets the width of a sentence
+       and a way out, rather than a shrug. */
+    .sv-empty #svEmptyWhy { max-width:56ch; margin:0 auto 1rem; color:var(--color-ink);
+      font-size:1.02rem; line-height:1.6; }
+    .sv-empty-do { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin:0 0 1.2rem; }
+    .sv-empty-btn { font-family:inherit; font-size:.9rem; font-weight:700; cursor:pointer;
+      padding:.5rem .9rem; border-radius:999px; color:var(--color-terracotta-dark,#a03325);
+      background:#fff; border:1px solid var(--color-sand-dark,#e3d9c6); }
+    .sv-empty-btn:hover { border-color:var(--color-terracotta,#c0392b); color:var(--color-ink); }
+    .sv-empty-btn:focus-visible { outline:2px solid var(--color-terracotta,#c0392b); outline-offset:2px; }
+    /* A service or language the current choice rules out. Kept visible so the menu still shows the
+       shape of the directory, but plainly not pickable. */
+    .sv-field select option:disabled { color:var(--color-stone); }
     /* The city index. Each card is a link to services/<city>, which is where the providers live. */
     .sv-hubs { margin:0 0 3rem; }
     .sv-hubs h2 { font-family:'DM Serif Display',serif; font-size:1.35rem; color:var(--color-ink); margin:0 0 1.5rem; }
@@ -532,7 +607,6 @@
     .svh-foot { max-width: 68ch; margin: var(--space-8) 0 0; }
     .svh-foot p { color: var(--color-charcoal); line-height: 1.7; margin: 0 0 var(--space-3); }
   </style>
-<!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 1000 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 <!-- travelpayouts -->
 <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
   (function () {
@@ -556,6 +630,7 @@
   })();
 </script>
 <!-- /travelpayouts -->
+  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 1000 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -1075,6 +1150,17 @@
       </section>
     </div>
   </main>
+  <!-- photo-credit -->
+  <style>
+    .photo-credit { max-width: var(--container, 1200px); margin: 0 auto; padding: 0 var(--space-4, 1rem) var(--space-8, 3rem); }
+    .photo-credit p { margin: 0; font-size: var(--text-xs, .78rem); line-height: 1.6; color: var(--color-stone, #7a7266); }
+    .photo-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+    .photo-credit a:hover { color: var(--color-ink, #1a1a1a); }
+  </style>
+  <aside class="photo-credit">
+    <p>City photographs come from <a href="https://commons.wikimedia.org/" target="_blank" rel="nofollow noopener">Wikimedia Commons</a>, reused under the Creative Commons licence each one names. Each city photograph names its photographer and licence on that city's own page.</p>
+  </aside>
+  <!-- /photo-credit -->
   <script>(function(){
   var q=[].slice.call(document.querySelectorAll('.sb-pic[data-src]'));
   if(!q.length)return;
@@ -1198,17 +1284,6 @@
       render();
     })();
   </script>
-  <!-- photo-credit -->
-  <style>
-    .photo-credit { max-width: var(--container, 1200px); margin: 0 auto; padding: 0 var(--space-4, 1rem) var(--space-8, 3rem); }
-    .photo-credit p { margin: 0; font-size: var(--text-xs, .78rem); line-height: 1.6; color: var(--color-stone, #7a7266); }
-    .photo-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-    .photo-credit a:hover { color: var(--color-ink, #1a1a1a); }
-  </style>
-  <aside class="photo-credit">
-    <p>City photographs come from <a href="https://commons.wikimedia.org/" target="_blank" rel="nofollow noopener">Wikimedia Commons</a>, reused under the Creative Commons licence each one names. Each city photograph names its photographer and licence on that city's own page.</p>
-  </aside>
-  <!-- /photo-credit -->
   <footer class="footer"><div class="container">
       <div class="footer-grid">
         <div class="footer-column footer-about"><a href="/" class="footer-logo"><img src="/assets/logo.svg" alt="" class="footer-logo-icon"><span class="footer-logo-nomad">The Nomad</span><span class="footer-logo-accent">HQ</span></a><p class="footer-description">Your trusted guide for finding the perfect city to work and live remotely.</p></div>
@@ -1241,7 +1316,26 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
-<!-- nav-search-js -->
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
+  <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
   <style>
   form[data-city-search]{position:relative;}
@@ -1328,24 +1422,5 @@
   if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
   })();</script>
   <!-- /nav-search-js -->
-<!-- aff-track -->
-<script>(function(){
-  document.addEventListener("click", function (e) {
-    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
-    if (!a) return;
-    var h = a.href || "";
-    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
-    if (typeof gtag !== "function") return;
-    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
-    var partner = m ? m[1] : "travelpayouts";
-    gtag("event", "affiliate_click", {
-      affiliate_partner: partner,
-      affiliate_placement: a.getAttribute("data-aff") || "",
-      link_url: h,
-      page_path: location.pathname
-    });
-  }, true);
-})();</script>
-<!-- /aff-track -->
 </body>
 </html>

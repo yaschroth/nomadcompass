@@ -21,6 +21,8 @@
  * SHAPE (positional, to keep it small — the reader is the search code in build_services.cjs):
  *   0 name  1 city slug  2 category  3 languages (concatenated 2-letter codes)
  *   4 evidence initial   5 area/address  6 website url
+ *   7 what this row has and most do not: contact details the provider gave us {w,p,e,s},
+ *     plus m=1 for a practice that travels to you and so has no address to map
  *
  * A precomputed folded haystack was the obvious eighth field and the wrong call: it repeated the
  * name, the city and the address and took the file from 795 KB to 2.9 MB. The browser folds the
@@ -50,15 +52,28 @@ CITIES.forEach((c) => { cityMeta[c.id] = [c.name, c.country]; });
 
 const EV = { official: 'o', visited: 'v', 'self-declared': 's', directory: 'd' };
 
-const out = rows.map((r) => [
-  r.name,
-  r.city,
-  r.category,
-  (r.languages || []).slice().sort().join(''),
-  EV[r.evidence] || '?',
-  (r.area || '').slice(0, 90),
-  r.url || '',
-]);
+const out = rows.map((r) => {
+  const row = [
+    r.name,
+    r.city,
+    r.category,
+    (r.languages || []).slice().sort().join(''),
+    EV[r.evidence] || '?',
+    (r.area || '').slice(0, 90),
+    r.url || '',
+  ];
+  // Field 7, present only on the rows that have it. Where a provider handed us its own contact
+  // details the search shows all of them, the same rule the cards follow. An empty eighth string
+  // on the 7,002 rows that have none would cost 14 KB to say nothing, so the field is absent.
+  const c = {};
+  if (r.whatsapp) c.w = String(r.whatsapp).replace(/[^0-9]/g, '');
+  if (r.phone) c.p = r.phone;
+  if (r.email) c.e = r.email;
+  if (r.social && r.social.length) c.s = r.social;
+  if (r.mobile) c.m = 1;
+  if (Object.keys(c).length) row.push(c);
+  return row;
+});
 
 // Which city+service pages actually exist, so the "see all" button can name the page it opens
 // instead of promising one that was never written. Same fallback the generators do, made visible.
@@ -73,4 +88,5 @@ const body = 'window.NOMAD_SERVICES=' + JSON.stringify(out)
 const dest = path.join(ROOT, 'assets', 'service-search-index.js');
 fs.writeFileSync(dest, body);
 console.log(`Wrote assets/service-search-index.js: ${out.length} providers, `
+  + `${out.filter((r) => r[7]).length} with contact details, `
   + `${Object.keys(built).length} city+service pages, ${(body.length / 1024).toFixed(0)} KB raw`);

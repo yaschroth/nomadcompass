@@ -74,7 +74,12 @@ const CSS = `<style>
 
 const OPEN = '<!-- photo-credit -->';
 const CLOSE = '<!-- /photo-credit -->';
-const BLOCK_RE = /\n?[ \t]*<!-- photo-credit -->[\s\S]*?<!-- \/photo-credit -->/g;
+// \r?\n, not \n. On a Windows checkout the line before the block ends \r\n; matching only the
+// \n left the \r behind, the block was reinserted after </main>, and the page ended up with a
+// lone carriage return. Git's text detection reads a lone CR as binary and stops normalising
+// line endings for that file, so about a thousand pages were being committed whole, as CRLF,
+// every time this sweep ran. Two characters of regex, a 90,000-line diff.
+const BLOCK_RE = /\r?\n?[ \t]*<!-- photo-credit -->[\s\S]*?<!-- \/photo-credit -->/g;
 
 /** One photographer, linked to the file page the image came from. */
 function nameOf(slug) {

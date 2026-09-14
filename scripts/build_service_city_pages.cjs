@@ -68,6 +68,9 @@ const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const B = require(path.join(ROOT, 'scripts', 'lib', 'service_bento.cjs'));
 const F = require(path.join(ROOT, 'scripts', 'lib', 'service_filter.cjs'));
 const H = require(path.join(ROOT, 'scripts', 'lib', 'service_hero.cjs'));
+// Only for contactLinks: this file has its own card(), and the contact block must not be a
+// second implementation of the same rule. One helper, called from both card renderers.
+const P = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 const { style: STYLE, nav: NAV, footer: FOOTER } = shell;
 
 const mapsUrl = (p) => 'https://www.google.com/maps/search/?api=1&query=' +
@@ -92,7 +95,7 @@ function card(p) {
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
           <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
-          <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a></p>
+          <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}${p.mobile ? '' : `<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a>`}${P.contactLinks(p)}</p>
         </div>
       </article>`;
 }

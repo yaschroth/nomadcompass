@@ -1310,7 +1310,8 @@
   <!-- /cc -->
   <!-- city-toc-js: highlight the active section in the sticky jump nav -->
   <script>(function(){var toc=document.querySelector('.city-toc');if(!toc)return;var inner=toc.querySelector('.city-toc-inner');var links=[].slice.call(toc.querySelectorAll('a'));var map={},targets=[];links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){map[id]=a;targets.push(el);}});if(!targets.length)return;var current=null;function setActive(id){if(current===id||!map[id])return;current=id;links.forEach(function(a){a.classList.remove('active');});var a=map[id];a.classList.add('active');if(inner){inner.scrollLeft=a.offsetLeft-inner.clientWidth/2+a.clientWidth/2;}}var obs=new IntersectionObserver(function(entries){var vis=entries.filter(function(e){return e.isIntersecting;});if(vis.length){vis.sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});setActive(vis[0].target.id);}},{rootMargin:'-132px 0px -68% 0px',threshold:0});targets.forEach(function(t){obs.observe(t);});})();</script>
-  <!-- /city-toc-js -->  <script>
+  <!-- /city-toc-js -->
+  <script>
     (function() {
       const mapEl = document.getElementById('neighborhoodsMap');
       if (!mapEl || typeof L === 'undefined') return;
@@ -1365,6 +1366,17 @@
   }, true);
 })();</script>
 <!-- /aff-track -->
+  <!-- nav-behaviour -->
+  <script>(function(){
+    var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),
+        m=document.getElementById('navMobile'),b=document.body;
+    if(t&&m){t.addEventListener('click',function(){
+      var o=t.classList.toggle('active');m.classList.toggle('active');
+      b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});}
+    if(n){var s=function(){n.classList.toggle('scrolled',window.scrollY>10);};
+      window.addEventListener('scroll',s,{passive:true});s();}
+  })();</script>
+  <!-- /nav-behaviour -->
   <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
   <style>
@@ -1452,16 +1464,5 @@
   if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
   })();</script>
   <!-- /nav-search-js -->
-  <!-- nav-behaviour -->
-  <script>(function(){
-    var n=document.getElementById('mainNav'),t=document.getElementById('navToggle'),
-        m=document.getElementById('navMobile'),b=document.body;
-    if(t&&m){t.addEventListener('click',function(){
-      var o=t.classList.toggle('active');m.classList.toggle('active');
-      b.classList.toggle('nav-open');t.setAttribute('aria-expanded',o);});}
-    if(n){var s=function(){n.classList.toggle('scrolled',window.scrollY>10);};
-      window.addEventListener('scroll',s,{passive:true});s();}
-  })();</script>
-  <!-- /nav-behaviour -->
 </body>
 </html>
