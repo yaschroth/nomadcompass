@@ -314,7 +314,9 @@ function contactLinks(p, lang) {
     out.push(`<a class="sv-go" href="https://wa.me/${wa}?text=${encodeURIComponent(WA_HELLO[pick])}"`
       + ` target="_blank" rel="nofollow noopener">WhatsApp</a>`);
   }
-  if (p.phone && p.phone.replace(/[^\d]/g, '') !== wa) {
+  // Shown even when the digits match the WhatsApp number: tapping "WhatsApp" and dialling are
+  // two different things, and these hotlines are given as one number for both.
+  if (p.phone) {
     out.push(`<a class="sv-go" href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">${esc(p.phone)}</a>`);
   }
   if (p.email) out.push(`<a class="sv-go" href="mailto:${esc(p.email)}">Email</a>`);
