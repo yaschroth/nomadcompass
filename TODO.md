@@ -28,6 +28,30 @@ the reader has read; write it to weigh the trade instead.
 - **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
   file), and 9 pages match no known heading generation.
 
+## 0g. OPEN: three more sweeps leave a stray carriage return behind
+
+Found while committing the provider contact work. A sweep that removes its own marker block with a
+regex matching `\n?` but not `\r?\n?` leaves the `\r` of a CRLF line ending orphaned. Git reads a
+lone carriage return as binary, stops normalising that file's line endings, and commits the whole
+page as CRLF. The measured cost was 90,000 lines of churn on top of 11 real ones, across about a
+thousand pages, on every rebuild.
+
+`apply_photo_credit.cjs` is fixed and `.gitattributes` now marks text explicitly so Git no longer
+has to guess. Three sources of strays were seen and not fixed:
+
+- `apply_analytics.cjs`, the `cc` block: pages end up with `<!-- /cc -->\r  <script>`.
+- whatever writes `cities-data.js`: `},\r  {id:"pondicherry"`, twice.
+- whatever writes `city-regions.js`: `'hermanus'\r,\r\n`, twice.
+
+To find new ones: per file, `b.count(b'\r') - b.count(b'\r\n')` must be 0. The 97 damaged files
+were repaired on 2026-09-14, so any new hit is a fresh regression and names the sweep that ran last.
+
+Two rules that follow from this and are easy to forget:
+- a patch script must write repo files in **binary** mode; Python text mode turns every `\n` into
+  `\r\n` and silently rewrites the file, which is what broke `liftPhotoCredit` and blocked every
+  rebuild for an hour.
+- when a regex has to match a line ending in a page, it is `\r?\n`, never `\n`.
+
 ## 0e. OPEN: the visa sections are the fastest-rotting thing on the site
 
 Four separate national visa regimes turned out to be wrong or stale in a single day of deepening
