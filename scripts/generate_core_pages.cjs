@@ -151,6 +151,8 @@ const pages = {
     <p>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>. For corrections, city suggestions, or anything else, see our <a href="/contact">contact page</a>.</p>
     <h2>Responsible for content</h2>
     <p>Editorial content is written and maintained by Yannick Schroth on behalf of Topblog LLC. Read more on the <a href="/about/yannick-schroth">author page</a>.</p>
+    <h2>The services directory</h2>
+    <p>The directory lists providers by the language they are recorded as working in, and every entry names the source that claim came from. We have not visited or telephoned the providers listed. Where a government body publishes such a list it usually does so without guaranteeing the service, and naming a provider on it is not an endorsement by that government; where a commercial directory is the source, the listing may be paid placement on that directory's side. A row marked as checked means the provider itself answered us and confirmed its own entry on the date shown, which is a statement about the entry and not about the quality of the practice. No provider has paid us to appear, and there are no affiliate links in the listings; if that changes, paid placement will be labelled as paid.</p>
     <h2>Affiliate links</h2>
     <p>Some links on this site are affiliate links, and we may earn a commission at no extra cost to you. This never influences our ratings. Full details are in our <a href="/disclosure">affiliate disclosure</a>.</p>
     <h2>Liability for content and links</h2>
@@ -198,6 +200,8 @@ ${privacyUpdatedLine}`),
     <p>The site is provided &ldquo;as is,&rdquo; without warranties of any kind, express or implied, including accuracy, completeness, or fitness for a particular purpose.</p>
     <h2>Limitation of liability</h2>
     <p>To the fullest extent permitted by law, The Nomad HQ and its author are not liable for any loss or damage arising from your use of, or reliance on, the site or its content.</p>
+    <h2>The services directory</h2>
+    <p>The directory lists providers by the language they are recorded as working in, and every entry names the source that claim came from. We have not visited or telephoned the providers listed. Where a government body publishes such a list it usually does so without guaranteeing the service, and naming a provider on it is not an endorsement by that government; where a commercial directory is the source, the listing may be paid placement on that directory's side. A row marked as checked means the provider itself answered us and confirmed its own entry on the date shown, which is a statement about the entry and not about the quality of the practice. No provider has paid us to appear, and there are no affiliate links in the listings; if that changes, paid placement will be labelled as paid.</p>
     <h2>Affiliate links</h2>
     <p>Some links are affiliate links, as described in our <a href="/disclosure">Affiliate Disclosure</a>.</p>
     <h2>Intellectual property &amp; acceptable use</h2>

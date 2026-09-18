@@ -168,7 +168,7 @@ for (const [lang, v] of Object.entries(rowsByLang)) {
   const claim = official === v.rows.length
     ? 'Every one of these sits on an official list, the strongest tier this directory carries.'
     : `${official} of the ${v.rows.length} sit on an official list. The rest rest on the provider `
-      + `saying so, or on a directory that says it of its whole roster, which is a weaker claim and `
+      + `saying so, or on a directory that says it of its whole roster, and `
       + `is labelled as such on every card.`;
 
   const strongest = catRows[0];

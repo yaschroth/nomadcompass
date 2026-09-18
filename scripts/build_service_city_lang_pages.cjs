@@ -382,11 +382,9 @@ for (const pair of Object.values(M.pairs)) {
       });
     }
 
-    const ymyl = HEALTH.has(cat)
-      ? '<p class="ymyl-note">This is a directory, not medical advice. A language claim says nothing about clinical quality, and in an emergency use the local emergency number rather than this page.</p>'
-      : MONEY.has(cat)
-        ? '<p class="ymyl-note">This is a directory, not legal or financial advice. Being listed here says nothing about the quality or the price of the work, and we take no fee from anyone on this page.</p>'
-        : '';
+    // The YMYL paragraph that used to sit here is on /terms now, which the footer links
+    // from every page. Legal cover does not belong in the middle of what a reader came for.
+    const ymyl = '';
 
     const otherLangChips = alsoLangs.slice(0, 6).map(([l, n]) => {
       const kid = `/services/${city.id}/${M.SERVICE_SLUGS[cat]}/${langSlug(l)}`;

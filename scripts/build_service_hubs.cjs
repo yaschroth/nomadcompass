@@ -276,7 +276,7 @@ ${shell.headEnd}
       ${F.empty({ id: 'svh', what: `This page lists every city where we hold at least one ${esc(label.replace(/s$/, ''))} with a sourced working language.` })}
 
       <section class="svh-foot">
-        <p>Every city above links to the ${esc(label)} we hold for it, and every entry there names the source its language claim came from. We have not called or visited any of them, so treat each one as a claim someone else made.</p>
+        <p>Every city above links to the ${esc(label)} we hold for it, and every entry there names the source its language claim came from.</p>
         <p><a href="/services">Browse by city instead</a>, or read the <a href="/services#how">tiers we grade a source by</a>.</p>
       </section>
     </div>

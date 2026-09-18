@@ -28,6 +28,28 @@ the reader has read; write it to weigh the trade instead.
 - **351 HTML-only pages remain unreachable** by the loop (see the migration notes in the memory
   file), and 9 pages match no known heading generation.
 
+## 0h. OPEN: what is left of the legal hedging, and one thing that should come back
+
+Owner's rule, 2026-09-18: legal cover goes on a legal page or in the footer, never in client-facing
+content. `/terms` carries it and the footer links `/terms` from every page. Two gates hold the line:
+`check_service_notes.cjs` for provider notes, `check_disclaimers.cjs` for the whole site.
+
+Removed: the YMYL paragraph from 1,200 pages, the roster-level and not-a-recommendation caveats from
+the provider notes and the page prose, the paid-placement and we-have-not-visited paragraphs from
+`/services` and the city pages, the "not legal advice" clause from 48 guide sections, 45 city tiles
+and 64 places in the city pages' own markup, and the boxed disclaimer from the tax article.
+
+**One removal worth a second thought.** The doctors and lawyers pages used to end with "in an
+emergency use the local emergency number rather than this page". That is practical information
+rather than legal cover, and it went out with the rest of the block it sat in. It would be
+defensible to bring that one sentence back as plain text, without the disclaimer framing around it.
+
+**Two traps recorded for whoever does this next.** `data/category-descriptions.json` is not what the
+city tiles render from: each page carries its own inline `CATEGORY_DESCRIPTIONS` object, and the
+visa bullets are `<li>` items no data file holds. And photo credits look like legal text and are
+not: crediting a CC-BY photograph is a licence condition, `check_photo_credit.cjs` enforces it, and
+it stays.
+
 ## 0g. OPEN: three more sweeps leave a stray carriage return behind
 
 Found while committing the provider contact work. A sweep that removes its own marker block with a

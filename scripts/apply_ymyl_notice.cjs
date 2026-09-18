@@ -1,3 +1,9 @@
+// RETIRED 2026-09-18. The owner's rule is that legal hedging belongs on a legal
+// page or in the footer, not in the middle of what a reader came to read. Terms
+// carries the substance and the footer links Terms from every page. Running this
+// would put the paragraph back on a thousand pages.
+console.error("apply_ymyl_notice.cjs is retired: the notice lives on /terms now.");
+process.exit(1);
 require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Adds a visible YMYL disclaimer wherever we publish visa, immigration or tax guidance.

@@ -113,10 +113,8 @@ function provenance(pair) {
   }
   if (kinds.has('directory')) {
     const d = named.filter((s) => s.kind === 'directory').reduce((a, s) => a + s.n, 0);
-    out.push(d + ' of these ' + plural(d, 'is', 'are') + ' from a commercial directory, which may sell placement and often makes one claim about a whole roster rather than about the named business. Read that tier with more caution than the rest.');
+    out.push(d + ' of these ' + plural(d, 'is', 'are') + ' from a commercial directory rather than an official list.');
   }
-  if (kinds.has('consular')) caveatOnce.push('These lists are published without a guarantee of the service and naming a provider is not a recommendation by the government that published it.');
-  if (kinds.has('directory')) caveatOnce.push('A directory listing is a weaker claim than a government one and may be paid placement.');
   // What each source says about its own list: who it admits, what it checks, what it disclaims.
   // This used to sit on every card that came from that source, so the Madrid consulate's listing
   // requirement was printed 34 times on one page. It is a fact about the list, so it belongs to the
@@ -241,7 +239,6 @@ function gapSentence(country, category) {
 
 const BOILERPLATE = [
   'A gap here means we have not found a source we can cite, not that nobody exists.',
-  'We have not called or visited any of them, so nothing here is a recommendation from us.',
 ];
 
 

@@ -770,14 +770,11 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
       <section class="sv-method">
         <h2>How to read this</h2>
         <p>Currently ${providers.length} providers across ${nCities} cities, ${nCats} service types and ${nLangs} languages. Nothing goes in without a source, and the source is named on every card.</p>
-        <p><strong>Read the tier before you trust the row.</strong> Roughly half these listings now come from aggregator directories, and many of those make a claim about their whole roster ("our listed clinics speak English") rather than about the named business. We say so in the card's own words. A provider that states its languages on its own site is a stronger signal than one that appears on a list someone else curates, and a directory may sell placement.</p>
         <p>Each card carries a tier saying <em>how</em> we know, because that matters more than the claim itself:</p>
         <ul class="sv-tiers">
           ${Object.keys(EV_RANK).map((k) => `<li><span class="sv-ev sv-ev-${k}">${EV_LABEL[k]}</span>${esc(EVIDENCE[k])}</li>`).join('\n          ')}
         </ul>
-        <p><strong>We have not visited any of these providers.</strong> A few have now written back and confirmed their own entry, and those carry the Checked tier with the date they answered; every other entry is a claim someone else made, not a recommendation from us. Checked means the entry is right by the provider's own account, and nothing more: we hold no view on how good anyone is, and no provider can buy the tier or any other position here. A hospital advertising interpretation services is not the same as a doctor who speaks your language, and a directory listing may be paid placement on the directory's side.</p>
-        <p>Where the German Embassy in Bangkok is the source, note their own wording: the list is published without guarantee of accuracy or service quality, and naming a doctor or hospital does not constitute an endorsement. The same caution applies to everything else on this page.</p>
-        <p>No provider has paid to appear here, and there are no affiliate links in these listings. If that ever changes, paid placement will be labelled as paid.</p>
+        <p>What this data is and is not, including who publishes these lists and on what terms, is set out in the <a href="/terms">terms</a>.</p>
       </section>
     </div>
     </div>
