@@ -74,6 +74,21 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+
+// The token lives in .env.local, which is gitignored, the same place BING_WEBMASTER_API_KEY sits.
+// Read it here rather than making the caller export it, because a harvest that needs a shell
+// incantation to run is a harvest that gets run by hand instead.
+(() => {
+  const f = path.join(ROOT, '.env.local');
+  if (!fs.existsSync(f)) return;
+  fs.readFileSync(f, 'utf8').split(/\r?\n/).forEach((line) => {
+    const m = /^\s*([A-Z0-9_]+)\s*=\s*(.*)$/.exec(line);
+    if (!m) return;
+    const v = m[2].trim().replace(/^["']|["']$/g, '');
+    if (v && !process.env[m[1]]) process.env[m[1]] = v;
+  });
+})();
+
 const TARGETS = path.join(ROOT, 'data', 'outreach-targets.json');
 const STORE = path.join(ROOT, 'data', 'outreach-emails.json');
 const PLAN_OUT = path.join(ROOT, 'data', 'outreach-scrape-input.json');
