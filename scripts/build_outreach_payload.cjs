@@ -32,6 +32,12 @@ const rows = targets.map((t) => ({
   s: t.sources.slice(0, 2),
   su: t.sourceUrls.filter(Boolean).slice(0, 1),
   d: t.checked,
+  // The address to write to, the kind it is, and every candidate found. The tool shows the kind
+  // because "role-same-domain" and "a partner's personal address" are not the same thing to send to.
+  e: t.email || '',
+  ek: t.emailKind || '',
+  ea: t.emailAmbiguous ? 1 : 0,
+  ec: t.emails && t.emails.length > 1 ? t.emails.slice(0, 5) : undefined,
 }));
 
 const payload = {
@@ -45,3 +51,5 @@ const kb = (fs.statSync(out).size / 1024).toFixed(0);
 console.log(`${rows.length} firms -> data/outreach-payload.json (${kb} KB)`);
 console.log(`  countries: ${new Set(rows.flatMap((r) => r.k)).size}, cities: ${new Set(rows.flatMap((r) => r.c)).size}`);
 console.log(`  categories: ${[...new Set(rows.flatMap((r) => r.g))].join(', ')}`);
+const mailable = rows.filter((r) => r.e);
+console.log(`  ${mailable.length} with an address, ${mailable.filter((r) => /^role-/.test(r.ek)).length} of them a role mailbox`);

@@ -123,6 +123,26 @@ const targets = [...byDomain.values()].sort((a, b) => {
   return a.name.localeCompare(b.name);
 });
 
+// Addresses are harvested separately and kept separately, because this file is rewritten from
+// scratch on every run and anything written onto a target here would not survive the next one.
+// scripts/harvest_outreach_emails.cjs owns data/outreach-emails.json; this only reads it.
+const MAILS = path.join(ROOT, 'data', 'outreach-emails.json');
+let withEmail = 0;
+if (fs.existsSync(MAILS)) {
+  const { domains } = JSON.parse(fs.readFileSync(MAILS, 'utf8'));
+  for (const t of targets) {
+    const m = domains[t.domain];
+    if (!m) continue;
+    t.emailCheckedOn = m.checkedOn;
+    if (!m.picked) continue;
+    t.email = m.picked;
+    t.emailKind = m.kind;            // role-same-domain is the only one safe to send unattended
+    t.emails = m.emails;             // every address found, so a human can overrule the pick
+    if (m.ambiguous) t.emailAmbiguous = true;
+    withEmail += 1;
+  }
+}
+
 const out = {
   _meta: {
     description: 'Private backlink-outreach catalogue. Not published, not linked from the site.',
@@ -132,6 +152,7 @@ const out = {
     rowsWithWebsite: providers.length - skippedNoUrl,
     firms: targets.length,
     aggregatorFirms: targets.filter((t) => t.aggregator).length,
+    firmsWithEmail: withEmail,
   },
   targets,
 };
@@ -139,4 +160,5 @@ fs.writeFileSync(path.join(ROOT, 'data', 'outreach-targets.json'), JSON.stringif
 console.log(`${targets.length} firms from ${providers.length - skippedNoUrl} rows with a website`);
 console.log(`  ${targets.filter((t) => !t.aggregator).length} contactable, ${targets.filter((t) => t.aggregator).length} aggregator/profile pages flagged`);
 console.log(`  ${targets.filter((t) => t.evidence === 'official').length} official-evidence firms`);
+console.log(`  ${withEmail} with a contact address from data/outreach-emails.json`);
 console.log('wrote data/outreach-targets.json');
