@@ -15,6 +15,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
+const { sources: SOURCES } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 const { CAT_PLURAL, EV_LABEL } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
 const PUB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-publishers.json'), 'utf8'));
 
@@ -89,9 +90,14 @@ function provenance(pair) {
   } else {
     const top = named[0];
     const rest = named.slice(1);
+    // "The other come from an Italian consulate (7)" agreed with nothing: one source left,
+    // seven providers left, and a verb for neither. Count the providers, not the sources.
+    const left = pair.n - top.n;
     out.push(top.n + ' of the ' + pair.n + ' come from ' + top.publisher + '. ' +
-      'The ' + (rest.length === 1 ? 'other' : 'others') + ' come from ' +
-      list(rest.map((s) => s.publisher + (s.n > 1 ? ' (' + s.n + ')' : ''))) + '.');
+      (rest.length === 1
+        ? 'The other ' + (left === 1 ? 'one comes' : left + ' come') + ' from ' + rest[0].publisher + '.'
+        : 'The others come from ' +
+          list(rest.map((s) => s.publisher + (s.n > 1 ? ' (' + s.n + ')' : ''))) + '.'));
   }
   // The publisher caveat, once per page rather than once per card. It used to sit in every note:
   // six sentences repeated between 446 and 1,384 times were half of all the note text in the
@@ -111,7 +117,17 @@ function provenance(pair) {
   }
   if (kinds.has('consular')) caveatOnce.push('These lists are published without a guarantee of the service and naming a provider is not a recommendation by the government that published it.');
   if (kinds.has('directory')) caveatOnce.push('A directory listing is a weaker claim than a government one and may be paid placement.');
-  return out.concat(caveatOnce).join(' ');
+  // What each source says about its own list: who it admits, what it checks, what it disclaims.
+  // This used to sit on every card that came from that source, so the Madrid consulate's listing
+  // requirement was printed 34 times on one page. It is a fact about the list, so it belongs to the
+  // list, once. Capped at the three sources that supplied the most rows: a city page can draw on a
+  // dozen, and a paragraph of twelve disclaimers is the same padding in a different place.
+  const pageNotes = [];
+  for (const { id } of (pair.srcIds || []).slice(0, 3)) {
+    const note = (SOURCES[id] || {}).pageNote;
+    if (note && !pageNotes.includes(note)) pageNotes.push(note);
+  }
+  return out.concat(pageNotes, caveatOnce).join(' ');
 }
 
 /** What the language claim is worth, from the evidence mix. */

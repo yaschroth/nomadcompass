@@ -29,7 +29,11 @@ function load() {
     const s = sources[p.source];
     if (!s) { missing.add(p.source); return; }
     p.sourceUrl = s.url;
-    p.note = (s.notePrefix || '') + (p.note || '') + (s.noteSuffix || '');
+    // Deliberately NOT prefixed or suffixed from the source any more. That mechanism put one
+    // sentence on up to 1,374 cards, 85% of all note text in the dataset was sentences shared
+    // by more than one row, and it had already been cleaned out once before refilling. What a
+    // source says about itself is now s.pageNote and belongs on the page, once.
+    p.note = p.note || '';
   });
   if (missing.size) {
     console.error('REFUSED: ' + missing.size + ' source id(s) named by rows are not in data/service-sources.json: '

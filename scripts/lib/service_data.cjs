@@ -164,6 +164,8 @@ Object.keys(byPair).forEach((key) => {
     sources: Object.entries(tally(rows, (r) => hostOf(r.sourceUrl)))
       .sort((a, b) => b[1] - a[1])
       .map(([host, n]) => ({ host, n, url: (rows.find((r) => hostOf(r.sourceUrl) === host) || {}).sourceUrl })),
+    srcIds: Object.entries(tally(rows, (r) => r.source)).sort((a, b) => b[1] - a[1])
+      .map(([id, n]) => ({ id, n })),
     checked: rows.map((r) => r.checked).filter(Boolean).sort(),
     withSite: rows.filter((r) => r.url).length,
   };
