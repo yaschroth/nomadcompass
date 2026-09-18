@@ -330,6 +330,9 @@ const WA_HELLO = {
   nl: 'Goedendag, ik heb u gevonden via thenomadhq.com',
 };
 
+const SOCIAL_NAME = { linkedin: 'LinkedIn', youtube: 'YouTube', tiktok: 'TikTok',
+  vk: 'VK', wechat: 'WeChat', whatsapp: 'WhatsApp', xing: 'XING' };
+
 function contactLinks(p, lang) {
   const out = [];
   // wa.me takes digits only: no plus, no spaces, no dashes.
@@ -342,16 +345,20 @@ function contactLinks(p, lang) {
       + ` target="_blank" rel="nofollow noopener">WhatsApp</a>`);
   }
   // Shown even when the digits match the WhatsApp number: tapping "WhatsApp" and dialling are
-  // two different things, and these hotlines are given as one number for both.
-  if (p.phone) {
-    out.push(`<a class="sv-go" href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">${esc(p.phone)}</a>`);
+  // two different things, and these hotlines are given as one number for both. An array because a
+  // firm with an office line and a mobile sent both, and both are how to reach them.
+  for (const tel of [].concat(p.phone || [])) {
+    out.push(`<a class="sv-go" href="tel:${esc(String(tel).replace(/[^\d+]/g, ''))}">${esc(tel)}</a>`);
   }
   if (p.email) out.push(`<a class="sv-go" href="mailto:${esc(p.email)}">Email</a>`);
   for (const s of p.social || []) {
     let label = 'Profile';
     try { label = new URL(s).hostname.replace(/^www\./, '').split('.')[0]; } catch (e) { /* keep */ }
+    // Capitalising the first letter gave "Linkedin", which is not how anyone writes it and reads as
+    // carelessness on a card whose whole job is to look like it was checked.
+    label = SOCIAL_NAME[label] || (label.charAt(0).toUpperCase() + label.slice(1));
     out.push(`<a class="sv-go" href="${esc(s)}" target="_blank" rel="nofollow noopener">`
-      + esc(label.charAt(0).toUpperCase() + label.slice(1)) + `</a>`);
+      + esc(label) + `</a>`);
   }
   return out.join('');
 }

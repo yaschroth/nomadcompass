@@ -1106,7 +1106,8 @@ ${shell.bodyEnd}
               doRow+='<a href="https://wa.me/'+ct.w+'?text='+encodeURIComponent(WA_HELLO[wl||'en'])
                 +'" target="_blank" rel="nofollow noopener">WhatsApp \\u2197</a>';
             }
-            if(ct.p)doRow+='<a href="tel:'+esc(ct.p.replace(/[^0-9+]/g,''))+'">'+esc(ct.p)+'</a>';
+            for(var pi=0;pi<(ct.p||[]).length;pi++)
+              doRow+='<a href="tel:'+esc(String(ct.p[pi]).replace(/[^0-9+]/g,''))+'">'+esc(ct.p[pi])+'</a>';
             if(ct.e)doRow+='<a href="mailto:'+esc(ct.e)+'">Email</a>';
             for(var si=0;si<(ct.s||[]).length;si++){
               var sl='Profile';

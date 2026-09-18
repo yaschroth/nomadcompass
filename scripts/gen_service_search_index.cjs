@@ -68,7 +68,7 @@ const out = rows.map((r) => {
   // on the 7,002 rows that have none would cost 14 KB to say nothing, so the field is absent.
   const c = {};
   if (r.whatsapp) c.w = String(r.whatsapp).replace(/[^0-9]/g, '');
-  if (r.phone) c.p = r.phone;
+  if (r.phone) c.p = [].concat(r.phone);
   if (r.email) c.e = r.email;
   if (r.social && r.social.length) c.s = r.social;
   if (r.mobile) c.m = 1;
