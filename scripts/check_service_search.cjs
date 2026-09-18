@@ -25,6 +25,7 @@
  *   - the button out of the search names a page that exists
  *   - a provider that gave us its own contact details shows all of them
  *   - a practice with a service area and no address is not offered a map of it
+ *   - a provider that answered us is listed before the rest, under the same label the cards use
  *
  * Usage: node scripts/check_service_search.cjs
  */
@@ -337,6 +338,21 @@ if (mobile) {
   const li = (html.split('<li class="sv-hit">').find((s) => s.includes(mobile[0])) || '');
   check('a mobile practice is not offered a map of its service area', !li.includes('maps/search'),
     `${mobile[0]} has no address and the result offered a map anyway`);
+}
+
+// 8. A checked row sorts above everything else in its city. The listing pages have always ordered
+// on the tier; the search returned rows in file order until this was added, so the one provider who
+// answered our questions could sit thirtieth in the answer.
+const checked = IDX.find((r) => r[4] === 'v');
+if (checked) {
+  html = search({ city: checked[1] });
+  const first = names(html)[0];
+  const others = IDX.filter((r) => r[1] === checked[1] && r[4] !== 'v').length;
+  check('a checked provider is listed before the rest', first === checked[0],
+    `${checked[0]} answered us and ${first} came first, ahead of it, among ${others} unchecked rows`);
+  const li = (html.split('<li class="sv-hit">').find((x) => x.includes(checked[0])) || '');
+  check('the checked badge says what it says on the cards', li.includes('Checked with them'),
+    'the search labelled the tier differently from the listing pages');
 }
 
 /* ---------- report ---------------------------------------------------------------------------- */

@@ -22,7 +22,8 @@
  *   0 name  1 city slug  2 category  3 languages (concatenated 2-letter codes)
  *   4 evidence initial   5 area/address  6 website url
  *   7 what this row has and most do not: contact details the provider gave us {w,p,e,s},
- *     plus m=1 for a practice that travels to you and so has no address to map
+ *     plus m=1 for a practice that travels to you and so has no address to map, and d, the day
+ *     a checked provider answered us
  *
  * A precomputed folded haystack was the obvious eighth field and the wrong call: it repeated the
  * name, the city and the address and took the file from 795 KB to 2.9 MB. The browser folds the
@@ -71,6 +72,7 @@ const out = rows.map((r) => {
   if (r.email) c.e = r.email;
   if (r.social && r.social.length) c.s = r.social;
   if (r.mobile) c.m = 1;
+  if (r.confirmedOn) c.d = r.confirmedOn;
   if (Object.keys(c).length) row.push(c);
   return row;
 });

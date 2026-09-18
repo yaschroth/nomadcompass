@@ -55,6 +55,14 @@ const PROSE = require(path.join(ROOT, 'scripts', 'lib', 'service_prose.cjs'));
 
 const providers = DB.providers.slice();
 const bad = providers.filter((p) => !CITY[p.city] || !CATS[p.category] || !CAT_ICON[p.category] || !p.sourceUrl || !EVIDENCE[p.evidence] || !p.languages || !p.languages.length || p.languages.some((l) => !LANGS[l]));
+// The Checked tier claims a named provider answered us on a named day. Without the day it is
+// an assertion nobody can check, which is the one thing this directory sells against.
+const unproven = providers.filter((p) => p.evidence === 'visited' && !/^\d{4}-\d{2}-\d{2}$/.test(p.confirmedOn || ''));
+if (unproven.length) {
+  console.error('REFUSED: ' + unproven.length + ' row(s) carry the Checked tier with no confirmedOn date:');
+  unproven.forEach((p) => console.error('  - ' + p.name + ' [' + p.city + '/' + p.category + ']'));
+  process.exit(1);
+}
 if (bad.length) {
   console.error('REFUSED: ' + bad.length + ' row(s) in data/service-languages.json are unusable:');
   bad.forEach((p) => console.error('  - ' + (p.name || '(unnamed)') + ' [' + p.city + '/' + p.category + '] missing a known city, category, language or sourceUrl/evidence'));
@@ -512,7 +520,10 @@ ${shell.headTop}
     .sv-card .sv-src a:hover { color:var(--color-terracotta); }
     .sv-ev { flex:0 0 auto; font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; border-radius:5px; padding:.16rem .36rem; white-space:nowrap; }
     .sv-ev-official { color:#1c5c3c; background:#dff2e5; }
-    .sv-ev-visited { color:#1c5c3c; background:#bfe8cf; }
+    .sv-ev-visited { color:#0f4a2f; background:#bfe8cf; }
+    .sv-card.sv-checked { border-color:#9dcdb0; }
+    .sv-on { flex:0 0 auto; font-size:.66rem; color:var(--color-stone); white-space:nowrap; }
+    .sv-card.sv-checked .sv-ev-visited { box-shadow:0 0 0 1px #7fbf9a; }
     .sv-ev-self-declared { color:#8a5a00; background:#fbeecb; }
     .sv-ev-directory { color:#5c6672; background:#eceff3; }
     /* Two links was the whole vocabulary here, so the row could never overflow. A provider that
@@ -764,7 +775,7 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
         <ul class="sv-tiers">
           ${Object.keys(EV_RANK).map((k) => `<li><span class="sv-ev sv-ev-${k}">${EV_LABEL[k]}</span>${esc(EVIDENCE[k])}</li>`).join('\n          ')}
         </ul>
-        <p><strong>We have not visited or called any of these providers.</strong> Nothing here carries the "we confirmed" tier yet, so treat every entry as a claim someone else made, not a recommendation from us. A hospital advertising interpretation services is not the same as a doctor who speaks your language, and a directory listing may be paid placement on the directory's side.</p>
+        <p><strong>We have not visited any of these providers.</strong> A few have now written back and confirmed their own entry, and those carry the Checked tier with the date they answered; every other entry is a claim someone else made, not a recommendation from us. Checked means the entry is right by the provider's own account, and nothing more: we hold no view on how good anyone is, and no provider can buy the tier or any other position here. A hospital advertising interpretation services is not the same as a doctor who speaks your language, and a directory listing may be paid placement on the directory's side.</p>
         <p>Where the German Embassy in Bangkok is the source, note their own wording: the list is published without guarantee of accuracy or service quality, and naming a doctor or hospital does not constitute an endorsement. The same caution applies to everything else on this page.</p>
         <p>No provider has paid to appear here, and there are no affiliate links in these listings. If that ever changes, paid placement will be labelled as paid.</p>
       </section>
@@ -965,7 +976,8 @@ ${shell.bodyEnd}
       var SHOWN=60;
       // How we know this provider works in these languages, which is the claim the whole directory
       // rests on, so it travels with every result rather than only appearing on the listing page.
-      var EV_LABEL={o:'Official list',v:'Visited',s:'Own site',d:'Directory'};
+      var EV_LABEL=${JSON.stringify(Object.fromEntries(Object.keys(EV_RANK).map((k) => [k.charAt(0), EV_LABEL[k]])))};
+      var EV_RANK_C=${JSON.stringify(Object.fromEntries(Object.keys(EV_RANK).map((k) => [k.charAt(0), EV_RANK[k]])))};
 
       function loadIndex(){
         if(IDX||IDXWANTED)return;
@@ -999,6 +1011,13 @@ ${shell.bodyEnd}
       }
 
       function svcSlug(cat){ return (CAT_PLURAL[cat]||cat).replace(/ /g,'-'); }
+
+      // The tier and the day it was earned travel together, here as on the cards.
+      var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      function shortDate(iso){
+        var m=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(String(iso||''));
+        return m?(Number(m[3])+' '+MON[Number(m[2])-1]+' '+m[1]):'';
+      }
 
       // The button out of the search and into the page that owns these providers. Its text names
       // the page it actually opens: promising "lawyers in Madrid" and landing on the all-services
@@ -1051,6 +1070,12 @@ ${shell.bodyEnd}
           if(ts.length&&!matches(HAY[i],ts))continue;
           list.push(r);
         }
+        // Same order as every listing page: the tier is the order. Array.prototype.sort is stable,
+        // so rows on one tier keep the order the directory holds them in.
+        // rank(): not EV_RANK_C[x]||9. The top tier is rank 0, 0 is falsy, and the fallback swallowed
+        // exactly the rows this ordering exists for.
+        var rank=function(r){ var v=EV_RANK_C[r[4]]; return v===undefined?9:v; };
+        list.sort(function(a,b){ return rank(a)-rank(b); });
 
         var html='';
         for(var j=0;j<Math.min(list.length,SHOWN);j++){
@@ -1101,6 +1126,7 @@ ${shell.bodyEnd}
             +'<span class="sv-hit-do">'+doRow+'</span>'
             +'<span class="sv-hit-tags">'+langs
             +'<span class="sv-hit-ev sv-ev-'+esc(h[4])+'">'+esc(EV_LABEL[h[4]]||h[4])+'</span>'
+            +((ct&&ct.d)?'<span class="sv-on">'+esc(shortDate(ct.d))+'</span>':'')
             +'</span></li>';
         }
         hits.innerHTML=html;

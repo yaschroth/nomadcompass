@@ -26,9 +26,12 @@ const CAT_PLURAL = {
 };
 
 // Strongest evidence first, so the best-sourced row in a city leads.
-const EV_RANK = { official: 0, visited: 1, 'self-declared': 2, directory: 3 };
+// Checked ranks above an official list on purpose. An embassy roster is a real source and it
+// is also months old and about a roster; a practice that answered a question about its own
+// entry answered it this year. Listings sort on this, so the order is the tier.
+const EV_RANK = { visited: 0, official: 1, 'self-declared': 2, directory: 3 };
 const EV_LABEL = {
-  official: 'Official list', visited: 'We confirmed',
+  official: 'Official list', visited: 'Checked with them',
   'self-declared': 'Says so itself', directory: 'Directory only',
 };
 

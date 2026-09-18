@@ -238,6 +238,20 @@ const esc = (s) => String(s == null ? '' : s)
 // A row flagged `mobile` has a service area and no address, so it gets no Maps link: the pin
 // would land on whichever of its districts Google prefers. The card decides that, not this
 // function, because the URL is still right for anything that does have a place to go.
+// "Checked with them" is only worth reading beside the day it happened, and a date carried in prose
+// is a date the next row forgets. The badge gets it from the field, on every page that renders a
+// card, so the claim on the tier legend is structurally true rather than true by discipline.
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function shortDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+  return m ? Number(m[3]) + ' ' + MON[Number(m[2]) - 1] + ' ' + m[1] : '';
+}
+function evBadge(p) {
+  const on = p.evidence === 'visited' ? shortDate(p.confirmedOn) : '';
+  return `<span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span>`
+    + (on ? `<span class="sv-on">${on}</span>` : '');
+}
+
 function mapsUrl(p) {
   const c = M.cities[p.city];
   // A Maps search, not a claimed pin: we have not verified any listing's coordinates.
@@ -266,7 +280,7 @@ function card(p, opts) {
    * the full list, which is right where cards are grouped by category rather than by language.
    */
   const filterLangs = o.lang ? o.lang : p.languages.join(' ');
-  return `<article class="sv-card sf-item sv-c-${p.category}" data-cat="${p.category}" data-lang="${filterLangs}" data-name="${esc(p.name.toLowerCase())}">
+  return `<article class="sv-card sf-item sv-c-${p.category}${p.evidence === 'visited' ? ' sv-checked' : ''}" data-cat="${p.category}" data-lang="${filterLangs}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${o.icon || ''}</span>
           <div>
@@ -277,7 +291,7 @@ function card(p, opts) {
         <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
+          <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
           <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}${p.mobile ? '' : `<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a>`}${contactLinks(p, o.lang)}</p>
         </div>
       </article>`;

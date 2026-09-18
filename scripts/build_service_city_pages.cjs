@@ -76,6 +76,20 @@ const { style: STYLE, nav: NAV, footer: FOOTER } = shell;
 const mapsUrl = (p) => 'https://www.google.com/maps/search/?api=1&query=' +
   encodeURIComponent([p.name, p.area, CITY[p.city] && CITY[p.city].name, CITY[p.city] && CITY[p.city].country].filter(Boolean).join(', '));
 
+// "Checked with them" is only worth reading beside the day it happened, and a date carried in prose
+// is a date the next row forgets. The badge gets it from the field, on every page that renders a
+// card, so the claim on the tier legend is structurally true rather than true by discipline.
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function shortDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+  return m ? Number(m[3]) + ' ' + MON[Number(m[2]) - 1] + ' ' + m[1] : '';
+}
+function evBadge(p) {
+  const on = p.evidence === 'visited' ? shortDate(p.confirmedOn) : '';
+  return `<span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span>`
+    + (on ? `<span class="sv-on">${on}</span>` : '');
+}
+
 function card(p) {
   const chips = p.languages.map((l) => `<span class="sv-lang">${esc(LANGS[l])}</span>`).join('');
   const host = (() => { try { return new URL(p.sourceUrl).hostname.replace(/^www\./, ''); } catch (e) { return 'source'; } })();
@@ -83,7 +97,7 @@ function card(p) {
     ? `<a href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
     : esc(p.name);
   const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card sf-item sv-c-${p.category}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+  return `<article class="sv-card sf-item sv-c-${p.category}${p.evidence === 'visited' ? ' sv-checked' : ''}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${inlineIcon(CAT_ICON[p.category])}</span>
           <div>
@@ -94,7 +108,7 @@ function card(p) {
         <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
-          <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
+          <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
           <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}${p.mobile ? '' : `<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a>`}${P.contactLinks(p)}</p>
         </div>
       </article>`;
@@ -426,7 +440,7 @@ ${F.css}
       <section class="svc-more">
         <h2>How to read this</h2>
         <p>Nothing on this page goes in without a source, and the source is named on every card. The tier on each card says <em>how</em> we know, which matters more than the claim itself: ${allCats.length} service ${allCats.length === 1 ? 'type' : 'types'} are covered here, and a provider that states its own languages is a stronger signal than one that appears on a list somebody else curates.</p>
-        <p><strong>We have not visited or called any of these providers.</strong> Treat every entry as a claim someone else made, not a recommendation from us.</p>
+        <p><strong>We have not visited any of these providers.</strong> A few have written back and confirmed their own entry, and those carry the Checked tier with the date they answered. Every other entry is a claim someone else made, not a recommendation from us.</p>
         <p>No provider has paid to appear here, and there are no affiliate links in these listings.</p>
         <p><a href="/cities/${slug}">Read the full ${esc(c.name)} city guide</a> or <a href="/services">browse every city in the directory</a>.</p>
       </section>
