@@ -50,6 +50,11 @@ function domainOf(url) {
   } catch (e) { return ''; }
 }
 
+// Which city+service pages were actually built. Same question the search's "see all" button
+// asks before it names a page.
+const PAIR = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-pair-pages.json'), 'utf8'))
+  .filter((p) => p.city && p.service).map((p) => p.city + '|' + p.service));
+
 const byDomain = new Map();
 let skippedNoUrl = 0;
 
@@ -60,7 +65,14 @@ for (const r of providers) {
 
   const cityMeta = CITY.get(r.city) || {};
   const catSlug = slug(CAT_PLURAL[r.category] || r.category);
-  const listing = `https://thenomadhq.com/services/${r.city}/${catSlug}`;
+  // The page, not the page we would have liked to build. /services/<city>/<service> exists
+  // only where the pair cleared the similarity cap, and a letter that links to one that did
+  // not sends the provider to a 404. It happened: the therapist in Tbilisi was written to on
+  // 14 September at /services/tbilisi/therapists, and that page was not built until three
+  // days later. The manifest says which exist, so ask it.
+  const listing = PAIR.has(`${r.city}|${r.category}`)
+    ? `https://thenomadhq.com/services/${r.city}/${catSlug}`
+    : `https://thenomadhq.com/services/${r.city}`;
 
   if (!byDomain.has(domain)) {
     byDomain.set(domain, {
