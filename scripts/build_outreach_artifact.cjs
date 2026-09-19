@@ -64,10 +64,10 @@ patch('channel css', `  @media (max-width:1100px){ .strip{grid-template-columns:
   .chan-go:hover{filter:brightness(1.08)}
   .chan-go.wa{background:#1f9d55}
   .chan-alt{display:flex;gap:6px;flex-wrap:wrap}
-  .chan-alt a{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:var(--r);
-              background:var(--surface);border:1px solid var(--line);color:var(--ink-2);
-              text-decoration:none;font-size:12.5px}
-  .chan-alt a:hover{border-color:var(--line-2);color:var(--ink)}
+  .chan-alt a,.chan-alt button{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;
+              border-radius:var(--r);background:var(--surface);border:1px solid var(--line);
+              color:var(--ink-2);text-decoration:none;font-size:12.5px;cursor:pointer}
+  .chan-alt a:hover,.chan-alt button:hover{border-color:var(--line-2);color:var(--ink)}
   .chan-none{font-size:13px;color:var(--muted)}
   .chip{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
         padding:1px 5px;border-radius:3px;border:1px solid currentColor}
@@ -104,6 +104,12 @@ patch('wa message + helpers', `  var EVNAME = {'official':'amtlich','self-declar
     return WA_MSG[pick](r.c[0]||'', r.g[0]||'', r.u[0]||'https://thenomadhq.com/services');
   }
   function waHref(r){ return 'https://wa.me/' + r.wa + '?text=' + encodeURIComponent(waText(r)); }
+  // wa.me is a redirector: it forwards to api.whatsapp.com, which refuses to be framed. That is
+  // fine in a real tab and fatal inside this sandbox, so every WhatsApp link here is a plain anchor
+  // with target="_blank" and never window.open, which the sandbox blocks and some browsers then
+  // turn into a navigation of the iframe itself. web.whatsapp.com is offered beside it for a
+  // network or browser that blocks the redirector outright.
+  function webWaHref(r){ return 'https://web.whatsapp.com/send?phone=' + r.wa + '&text=' + encodeURIComponent(waText(r)); }
 
   // Only a profile that can actually receive a message from a stranger. A LinkedIn company page
   // cannot, so it is shown as a link to look at and never offered as a way to write.
@@ -128,9 +134,11 @@ patch('channel block in panel',
     // so the pick is legible rather than magic.
     h += '<div class="grp"><span class="lbl">Kontaktweg</span><div class="chan">';
     if (r.ch === 'whatsapp'){
-      h += '<div class="chan-top"><button class="chan-go wa" type="button" data-wa="'+esc(r.id)+'">WhatsApp öffnen &rarr;</button>'
+      h += '<div class="chan-top"><a class="chan-go wa" href="'+esc(waHref(r))+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">WhatsApp öffnen &rarr;</a>'
          + '<span class="chip chip-whatsapp">WhatsApp</span></div>'
-         + '<p class="chan-why">Nachricht ist vorausgefüllt in der Sprache der Firma. Senden musst du selbst. Wird beim Klick als gesendet markiert.</p>';
+         + '<p class="chan-why">Nachricht ist vorausgefüllt in der Sprache der Firma. Senden musst du selbst. Wird beim Klick als gesendet markiert.</p>'
+         + '<div class="chan-alt"><a href="'+esc(webWaHref(r))+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">WhatsApp Web ↗</a>'
+         + '<button type="button" data-copy="+'+esc(r.wa)+'">+'+esc(r.wa)+' kopieren</button></div>';
     } else if (r.ch === 'social'){
       var dms = dmProfiles(r);
       h += '<div class="chan-top"><a class="chan-go" href="'+esc(dms[0][1])+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">'
@@ -143,7 +151,7 @@ patch('channel block in panel',
       }
     } else if (r.ch === 'email'){
       h += '<div class="chan-top"><span class="mono">'+esc(r.e)+'</span><span class="chip chip-email">E-Mail</span></div>'
-         + '<div class="chan-alt"><a href="#" data-copy="'+esc(r.e)+'">Adresse kopieren</a></div>'
+         + '<div class="chan-alt"><button type="button" data-copy="'+esc(r.e)+'">Adresse kopieren</button></div>'
          + '<p class="chan-why">'+esc(r.ek)+(r.ea?' · mehrere gleich gute Postfächer, bitte prüfen':'')+'</p>';
     } else {
       h += '<p class="chan-none">Kein Kontaktweg gefunden. Website öffnen und selbst nachsehen.</p>';
@@ -151,7 +159,7 @@ patch('channel block in panel',
     // Everything else we hold, so a dead channel is one click from the next one.
     var extras = [];
     if (r.ch !== 'whatsapp' && r.wa) extras.push('<a href="'+esc(waHref(r))+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">WhatsApp ↗</a>');
-    if (r.ch !== 'email' && r.e) extras.push('<a href="#" data-copy="'+esc(r.e)+'">'+esc(r.e)+'</a>');
+    if (r.ch !== 'email' && r.e) extras.push('<button type="button" data-copy="'+esc(r.e)+'">'+esc(r.e)+'</button>');
     if (r.ch !== 'social'){
       var alt = dmProfiles(r);
       for (var x=0; x<alt.length; x++) extras.push('<a href="'+esc(alt[x][1])+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">'+esc(SOC_LABEL[alt[x][0]])+' ↗</a>');
@@ -170,19 +178,14 @@ patch('channel block in panel',
 // ---- 6. clicks --------------------------------------------------------------
 patch('click targets',
   `    var t = ev.target.closest ? ev.target.closest('[data-open],[data-set],[data-filter],[data-copy],[data-copy-draft],[data-lang],[data-sort]') : null;`,
-  `    var t = ev.target.closest ? ev.target.closest('[data-open],[data-set],[data-filter],[data-copy],[data-copy-draft],[data-lang],[data-sort],[data-wa],[data-social],[data-copy-wa]') : null;`);
+  `    var t = ev.target.closest ? ev.target.closest('[data-open],[data-set],[data-filter],[data-copy],[data-copy-draft],[data-lang],[data-sort],[data-social],[data-copy-wa]') : null;`);
 
 patch('click handlers',
   `    if (t.hasAttribute('data-copy-draft')){`,
   `    // Opening the chat is the last thing that happens before the message goes, so it is the
-    // honest moment to record it, the same rule the mail draft already follows.
-    if (t.hasAttribute('data-wa')){
-      var waId = t.getAttribute('data-wa');
-      var waRow = null;
-      for (var wi=0; wi<ROWS.length; wi++) if (ROWS[wi].id === waId){ waRow = ROWS[wi]; break; }
-      if (waRow){ window.open(waHref(waRow), '_blank', 'noopener'); if (statusOf({id:waId}) !== 'sent') setStatus(waId, 'sent'); }
-      return;
-    }
+    // honest moment to record it, the same rule the mail draft already follows. The anchor opens
+    // itself: this only records. window.open was tried and is blocked by the sandbox, which turned
+    // the click into a navigation of the iframe and an "refused to connect" from WhatsApp.
     if (t.hasAttribute('data-social')){
       var soId = t.getAttribute('data-social');
       if (statusOf({id:soId}) !== 'sent') setStatus(soId, 'sent');
