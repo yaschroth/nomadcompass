@@ -118,6 +118,15 @@ const REJECT_LOCAL = /^(your|youremail|yourname|name|email|e?mail|user|username|
 
 const FREEMAIL = /^(gmail|googlemail|outlook|hotmail|live|msn|yahoo|ymail|aol|gmx|web|t-online|freenet|icloud|me|mac|protonmail|proton|pm|zoho|mail|yandex|naver|qq|163|126|seznam|wp|o2|orange|free|libero|virgilio|alice|bol|uol|terra|abv|mynet|hanmail|daum|rediffmail|sina|foxmail)\./i;
 
+// Which channel to reach a firm on, best first. WhatsApp beats everything because it is the channel
+// these businesses actually answer in Bangkok, Sao Paulo and Nairobi, and because it sidesteps the
+// domain warm-up and deliverability problem entirely. See the note on sending in the header.
+const CHANNELS = ['whatsapp', 'social', 'email'];
+
+// Share widgets and intent links. A page that offers "share this on LinkedIn" is not giving you its
+// own profile, and following one writes a post rather than opening a conversation.
+const SOCIAL_JUNK = /\/(sharer|share|shareArticle|share_channel|intent|dialog|plugins|login|signup|help|policies|legal|about\/cookies)/i;
+
 // ---- argv -------------------------------------------------------------------
 const argv = process.argv.slice(2);
 const has = (f) => argv.includes(f);
@@ -240,6 +249,58 @@ function hitsHint(email, hints) {
   return hints.some((h) => local.includes(h));
 }
 
+/**
+ * The number out of a WhatsApp link, in the only form wa.me accepts: digits, full international,
+ * no plus and no spaces.
+ *
+ * The trap is the national format. mmtklaw.com publishes both wa.me/+254700720011 and
+ * wa.me/0700720011 for the same phone; the second is what a Kenyan dials at home and reaches nobody
+ * from abroad. A leading zero is a national trunk prefix, never part of an international number, so
+ * those are dropped rather than guessed at: we do not hold a country dialling table and a wrong
+ * country code opens a chat with a stranger.
+ */
+function whatsappNumber(urls) {
+  const out = [];
+  [].concat(urls || []).forEach((u) => {
+    const s = String(u);
+    const m = /(?:phone=|wa\.me\/|whatsapp\.com\/send\/?\?phone=)\+?([\d\s()-]{6,})/i.exec(s);
+    if (!m) return;
+    const d = m[1].replace(/\D/g, '');
+    if (!d || d.startsWith('0')) return;   // national format, not dialable from outside
+    if (d.length < 8 || d.length > 15) return; // E.164 allows 15 digits at most
+    out.push(d);
+  });
+  // Longest first: where a site gives both a short local form and the full one, the full one wins.
+  out.sort((a, b) => b.length - a.length);
+  return [...new Set(out)][0] || '';
+}
+
+/** One usable profile URL per network, or nothing. */
+function socialProfiles(row) {
+  const pick = (list) => {
+    const ok = [].concat(list || []).map(String).filter((u) => {
+      if (!/^https?:\/\//i.test(u)) return false;
+      if (SOCIAL_JUNK.test(u)) return false;
+      const bare = u.replace(/[?#].*$/, '').replace(/\/+$/, '');
+      // A slug cut off mid-word: "linkedin.com/company/hall-" is a 404, not a profile. The scraper
+      // truncates these where the page held the link inside a shortened label.
+      if (/[-_]$/.test(bare)) return false;
+      // The network's own index page rather than anybody's profile.
+      if (/\/(company|in|pages|profile\.php)$/i.test(bare)) return false;
+      return true;
+    });
+    return ok[0] || '';
+  };
+  const s = {};
+  const li = pick(row.linkedIns);
+  const fb = pick(row.facebooks);
+  const ig = pick(row.instagrams);
+  if (li) s.linkedin = li;
+  if (fb) s.facebook = fb;
+  if (ig) s.instagram = ig;
+  return s;
+}
+
 /** Turn one actor result row into a store entry. */
 function entryFrom(row, firmDomain, target) {
   const raw = []
@@ -274,7 +335,21 @@ function entryFrom(row, firmDomain, target) {
   const tied = kept.filter((e) => rank(e, firmDomain).score === topScore);
   const ambiguous = tied.length > 1 && !hitsHint(picked, hints);
 
+  const whatsapp = whatsappNumber(row.whatsapps);
+  const social = socialProfiles(row);
+  const hasSocial = Object.keys(social).length > 0;
+
+  // The ladder. WhatsApp, then a social profile, then e-mail, and "none" is a real answer: a firm
+  // whose site publishes no way to reach it is a firm to leave alone rather than to guess at.
+  let channel = '';
+  if (whatsapp) channel = 'whatsapp';
+  else if (hasSocial) channel = 'social';
+  else if (picked) channel = 'email';
+
   return {
+    channel,
+    whatsapp: whatsapp || undefined,
+    social: hasSocial ? social : undefined,
     emails: kept.slice(0, 5),
     picked,
     kind: picked ? rank(picked, firmDomain).kind : '',
@@ -283,7 +358,7 @@ function entryFrom(row, firmDomain, target) {
     pagesRead: (row.scrapedUrls || row.crawledUrls || row.visitedUrls || []).length || undefined,
     foundOn: row.url || row.originalStartUrl || '',
     checkedOn: today,
-    status: picked ? 'ok' : 'none',
+    status: channel ? 'ok' : 'none',
   };
 }
 
@@ -381,7 +456,12 @@ function ingest(rows, store) {
       e.picked = all[0] || '';
       e.kind = e.picked ? rank(e.picked, d).kind : '';
       e.dropped += prev.dropped;
-      e.status = e.picked ? 'ok' : 'none';
+      e.whatsapp = e.whatsapp || prev.whatsapp;
+      if (prev.social || e.social) e.social = Object.assign({}, prev.social, e.social);
+      e.channel = e.whatsapp ? 'whatsapp'
+        : (e.social && Object.keys(e.social).length) ? 'social'
+          : (e.picked ? 'email' : '');
+      e.status = e.channel ? 'ok' : 'none';
     }
     merged.set(d, e);
   });
@@ -389,7 +469,7 @@ function ingest(rows, store) {
   merged.forEach((e, d) => {
     store.domains[d] = e;
     matched += 1;
-    if (e.picked) found += 1; else none += 1;
+    if (e.channel) found += 1; else none += 1;
   });
 
   return { matched, unmatched, found, none };
@@ -398,16 +478,27 @@ function ingest(rows, store) {
 function report(store, res) {
   const d = store.domains;
   const keys = Object.keys(d);
+  const reachable = keys.filter((k) => d[k].channel);
   const withAddr = keys.filter((k) => d[k].picked);
   const byKind = {};
   withAddr.forEach((k) => { byKind[d[k].kind] = (byKind[d[k].kind] || 0) + 1; });
 
   if (res) {
-    console.log(`ingested ${res.matched} firms: ${res.found} with an address, ${res.none} without`);
+    console.log(`ingested ${res.matched} firms: ${res.found} reachable, ${res.none} with no channel at all`);
     if (res.unmatched) console.log(`  ${res.unmatched} result row(s) matched no firm and were skipped`);
   }
-  console.log(`store: ${keys.length} firms looked at, ${withAddr.length} with an address `
-    + `(${keys.length ? Math.round((withAddr.length / keys.length) * 100) : 0}%)`);
+  const pct = (n) => (keys.length ? `${Math.round((n / keys.length) * 100)}%` : '0%');
+  console.log(`store: ${keys.length} firms looked at, ${reachable.length} reachable (${pct(reachable.length)})`);
+  console.log('  by channel, best first:');
+  CHANNELS.forEach((c) => {
+    const n = keys.filter((k) => d[k].channel === c).length;
+    console.log(`    ${String(n).padStart(5)}  ${c.padEnd(9)} ${pct(n)}`);
+  });
+  const anyWa = keys.filter((k) => d[k].whatsapp).length;
+  const anySocial = keys.filter((k) => d[k].social).length;
+  const anyMail = keys.filter((k) => d[k].picked).length;
+  console.log(`  held regardless of the pick: whatsapp ${anyWa}, social ${anySocial}, e-mail ${anyMail}`);
+  console.log('  e-mail picks by kind:');
   Object.entries(byKind).sort((a, b) => b[1] - a[1])
     .forEach(([k, n]) => console.log(`  ${String(n).padStart(5)}  ${k}`));
   const dropped = keys.reduce((s, k) => s + (d[k].dropped || 0), 0);
