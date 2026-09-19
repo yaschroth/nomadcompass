@@ -38,6 +38,10 @@ const rows = targets.map((t) => ({
   ek: t.emailKind || '',
   ea: t.emailAmbiguous ? 1 : 0,
   ec: t.emails && t.emails.length > 1 ? t.emails.slice(0, 5) : undefined,
+  // The channel to reach them on, and what it needs. wa is digits only, ready for a wa.me link.
+  ch: t.channel || '',
+  wa: t.whatsapp || '',
+  so: t.social || undefined,
 }));
 
 const payload = {
@@ -53,3 +57,7 @@ console.log(`  countries: ${new Set(rows.flatMap((r) => r.k)).size}, cities: ${n
 console.log(`  categories: ${[...new Set(rows.flatMap((r) => r.g))].join(', ')}`);
 const mailable = rows.filter((r) => r.e);
 console.log(`  ${mailable.length} with an address, ${mailable.filter((r) => /^role-/.test(r.ek)).length} of them a role mailbox`);
+['whatsapp', 'social', 'email'].forEach((c) => {
+  const n = rows.filter((r) => r.ch === c).length;
+  if (n) console.log(`  ${String(n).padStart(5)} reachable by ${c}`);
+});

@@ -128,12 +128,20 @@ const targets = [...byDomain.values()].sort((a, b) => {
 // scripts/harvest_outreach_emails.cjs owns data/outreach-emails.json; this only reads it.
 const MAILS = path.join(ROOT, 'data', 'outreach-emails.json');
 let withEmail = 0;
+let withChannel = 0;
 if (fs.existsSync(MAILS)) {
   const { domains } = JSON.parse(fs.readFileSync(MAILS, 'utf8'));
   for (const t of targets) {
     const m = domains[t.domain];
     if (!m) continue;
-    t.emailCheckedOn = m.checkedOn;
+    t.contactCheckedOn = m.checkedOn;
+    // The channel comes first and is set even where no address was found, because a firm reachable
+    // on WhatsApp and nowhere else is still reachable. Skipping on a missing e-mail, which is what
+    // this did, hid every one of them.
+    if (m.channel) { t.channel = m.channel; withChannel += 1; }
+    if (m.whatsapp) t.whatsapp = m.whatsapp;
+    if (m.social) t.social = m.social;
+    if (m.socialDm) t.socialDm = true;
     if (!m.picked) continue;
     t.email = m.picked;
     t.emailKind = m.kind;            // role-same-domain is the only one safe to send unattended
@@ -153,6 +161,7 @@ const out = {
     firms: targets.length,
     aggregatorFirms: targets.filter((t) => t.aggregator).length,
     firmsWithEmail: withEmail,
+    firmsReachable: withChannel,
   },
   targets,
 };
@@ -160,5 +169,5 @@ fs.writeFileSync(path.join(ROOT, 'data', 'outreach-targets.json'), JSON.stringif
 console.log(`${targets.length} firms from ${providers.length - skippedNoUrl} rows with a website`);
 console.log(`  ${targets.filter((t) => !t.aggregator).length} contactable, ${targets.filter((t) => t.aggregator).length} aggregator/profile pages flagged`);
 console.log(`  ${targets.filter((t) => t.evidence === 'official').length} official-evidence firms`);
-console.log(`  ${withEmail} with a contact address from data/outreach-emails.json`);
+console.log(`  ${withChannel} reachable, ${withEmail} of them by e-mail (data/outreach-emails.json)`);
 console.log('wrote data/outreach-targets.json');
