@@ -301,6 +301,21 @@ function socialProfiles(row) {
   return s;
 }
 
+/**
+ * Can anyone actually start a conversation here?
+ *
+ * A LinkedIn *company* page cannot be messaged by someone who does not administer it; only a
+ * personal /in/ profile can. So a firm whose only profile is linkedin.com/company/x has a page we
+ * can look at and no way to write to it, and routing it to "social" would park it on a channel that
+ * does not exist while its perfectly good info@ address went unused. Facebook pages and Instagram
+ * both accept a message from a stranger, so those count.
+ */
+function canDm(social) {
+  if (!social) return false;
+  if (social.facebook || social.instagram) return true;
+  return !!(social.linkedin && /linkedin\.com\/in\//i.test(social.linkedin));
+}
+
 /** Turn one actor result row into a store entry. */
 function entryFrom(row, firmDomain, target) {
   const raw = []
@@ -338,18 +353,22 @@ function entryFrom(row, firmDomain, target) {
   const whatsapp = whatsappNumber(row.whatsapps);
   const social = socialProfiles(row);
   const hasSocial = Object.keys(social).length > 0;
+  const dmable = canDm(social);
 
-  // The ladder. WhatsApp, then a social profile, then e-mail, and "none" is a real answer: a firm
-  // whose site publishes no way to reach it is a firm to leave alone rather than to guess at.
+  // The ladder. WhatsApp, then a social profile we can actually write to, then e-mail, and "none"
+  // is a real answer: a firm whose site publishes no way to reach it is a firm to leave alone
+  // rather than to guess at. A profile that cannot take a message is kept for context but never
+  // chosen, so it cannot displace an address that works.
   let channel = '';
   if (whatsapp) channel = 'whatsapp';
-  else if (hasSocial) channel = 'social';
+  else if (dmable) channel = 'social';
   else if (picked) channel = 'email';
 
   return {
     channel,
     whatsapp: whatsapp || undefined,
     social: hasSocial ? social : undefined,
+    socialDm: hasSocial ? dmable : undefined,
     emails: kept.slice(0, 5),
     picked,
     kind: picked ? rank(picked, firmDomain).kind : '',
@@ -458,8 +477,9 @@ function ingest(rows, store) {
       e.dropped += prev.dropped;
       e.whatsapp = e.whatsapp || prev.whatsapp;
       if (prev.social || e.social) e.social = Object.assign({}, prev.social, e.social);
+      e.socialDm = canDm(e.social);
       e.channel = e.whatsapp ? 'whatsapp'
-        : (e.social && Object.keys(e.social).length) ? 'social'
+        : e.socialDm ? 'social'
           : (e.picked ? 'email' : '');
       e.status = e.channel ? 'ok' : 'none';
     }
@@ -495,7 +515,7 @@ function report(store, res) {
     console.log(`    ${String(n).padStart(5)}  ${c.padEnd(9)} ${pct(n)}`);
   });
   const anyWa = keys.filter((k) => d[k].whatsapp).length;
-  const anySocial = keys.filter((k) => d[k].social).length;
+  const anySocial = keys.filter((k) => d[k].socialDm).length;
   const anyMail = keys.filter((k) => d[k].picked).length;
   console.log(`  held regardless of the pick: whatsapp ${anyWa}, social ${anySocial}, e-mail ${anyMail}`);
   console.log('  e-mail picks by kind:');
