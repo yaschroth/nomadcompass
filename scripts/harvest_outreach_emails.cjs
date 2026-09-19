@@ -144,6 +144,10 @@ const opt = {
   eu: has('--eu'),
   dach: has('--dach'),
   country: val('--country', ''),
+  // Specific firms by domain. The default ordering puts official-evidence firms first, which is
+  // right for working through the backlog and wrong when a handful of rows were just added and
+  // those are the ones wanted.
+  domains: val('--domains', '').split(',').map((d) => d.trim().toLowerCase()).filter(Boolean),
 };
 
 const today = new Date().toISOString().slice(0, 10);
@@ -393,7 +397,10 @@ function candidates(store) {
     return 'non-eu';
   };
 
-  if (opt.country) {
+  if (opt.domains.length) {
+    const want = new Set(opt.domains);
+    list = list.filter((t) => want.has(t.domain));
+  } else if (opt.country) {
     const want = opt.country.toLowerCase();
     list = list.filter((t) => t.countries.some((c) => String(c).toLowerCase() === want));
   } else if (opt.nonEu) list = list.filter((t) => region(t) === 'non-eu');
@@ -401,7 +408,7 @@ function candidates(store) {
   else if (opt.dach) list = list.filter((t) => region(t) === 'dach');
   else list = list.filter((t) => region(t) !== 'dach'); // DACH is opt-in, never a default
 
-  if (!opt.force) {
+  if (!opt.force && !opt.domains.length) {
     list = list.filter((t) => {
       const e = store.domains[t.domain];
       if (!e) return true;

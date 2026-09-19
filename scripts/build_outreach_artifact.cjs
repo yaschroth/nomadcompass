@@ -224,6 +224,26 @@ patch('row chip',
   `        + (sv.email?' <span class="flag" style="color:var(--st-yes)">· E-Mail hinterlegt</span>':'')+'</span>'
         + (r.ch?' <span class="chip chip-'+r.ch+'">'+esc(CHAN_LABEL[r.ch])+'</span>':'')+'</td>'`);
 
+/**
+ * Every token the added CSS uses must be defined in the artifact itself.
+ *
+ * check_css_tokens.cjs cannot do this one. It checks the site's stylesheets against the site's
+ * tokens, and this file's CSS belongs to a different document with its own :root, so to that gate
+ * every --accent here looks undefined. The check still needs doing, because a var() with no
+ * definition and no fallback drops the whole declaration silently, so it is done here instead,
+ * against the file that actually carries the definitions.
+ */
+const usedTokens = new Set();
+for (const m of html.matchAll(/var\(\s*(--[a-z0-9-]+)\s*([,)])/gi)) {
+  if (m[2] === ')') usedTokens.add(m[1]); // no fallback, so it has to exist
+}
+const definedTokens = new Set([...html.matchAll(/(--[a-z0-9-]+)\s*:/gi)].map((m) => m[1]));
+const missing = [...usedTokens].filter((t) => !definedTokens.has(t));
+if (missing.length) {
+  throw new Error(`these tokens are used with no definition and no fallback: ${missing.join(', ')}`);
+}
+console.log(`css tokens: ${usedTokens.size} used without a fallback, all defined`);
+
 fs.writeFileSync(OUT, html);
 console.log(`patched ${path.basename(SRC)} -> ${path.basename(OUT)}`);
 console.log(`  ${(before / 1024).toFixed(0)} KB -> ${(html.length / 1024).toFixed(0)} KB`);

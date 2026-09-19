@@ -27,6 +27,16 @@ const SKIP = new Set(['node_modules', '.git', 'ui-ux-pro-max-skill']);
 // This file names tokens in its own prose and regexes; scanning itself is noise.
 const SELF = 'check_css_tokens.cjs';
 
+// Generators whose CSS is not for this site.
+//
+// build_outreach_artifact.cjs patches the private Backlink-Pipeline artifact, a separate document
+// with its own :root and its own palette: --accent, --ink-2, --st-queued and the rest are defined
+// there, not in styles/. Scanning it here reports eighteen tokens as undefined that are perfectly
+// well defined in the only file that matters. The check is not skipped, it is moved: that script
+// asserts every var() it adds resolves against the artifact it is patching, and refuses to write
+// the file otherwise.
+const FOREIGN = new Set(['build_outreach_artifact.cjs']);
+
 // Phantom tokens that predate this gate. Each is a declaration that has never once applied: that
 // text is not bold, that button has no amber, that panel has no coral. Giving them real values
 // would CHANGE how those pages look, and nobody asked for those pages to change, so they are
@@ -46,7 +56,7 @@ const walk = (dir) => {
     if (SKIP.has(f.name)) continue;
     const p = path.join(dir, f.name);
     if (f.isDirectory()) walk(p);
-    else if (READ.test(f.name) && f.name !== SELF) files.push(p);
+    else if (READ.test(f.name) && f.name !== SELF && !FOREIGN.has(f.name)) files.push(p);
   }
 };
 for (const d of SOURCES) if (fs.existsSync(path.join(ROOT, d))) walk(path.join(ROOT, d));
