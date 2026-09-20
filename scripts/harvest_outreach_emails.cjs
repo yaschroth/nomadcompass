@@ -107,6 +107,49 @@ const EU = new Set([
   'Estonia', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Cyprus', 'Iceland', 'Liechtenstein',
 ]);
 
+/**
+ * How likely a country is to answer on WhatsApp, for ordering the queue.
+ *
+ * Seeded from what this harvest actually measured over its first 319 firms, not from assumption:
+ * Brazil 60%, Turkey 27%, Thailand 20%, Kenya 20%, Israel 17%, Spain 14%, Italy 11%, against
+ * Norway 0 of 22, France 0 of 36 and the Netherlands and Sweden at zero. Countries not yet sampled
+ * sit where their neighbours landed. The numbers are small, so this orders the work; it never
+ * decides anything about a firm.
+ *
+ * 3 = WhatsApp is how business is done, 0 = it is barely used.
+ */
+const WA_TIER = {
+  // Latin America
+  Brazil: 3, Mexico: 3, Argentina: 3, Colombia: 3, Chile: 3, Peru: 3, Ecuador: 3, Bolivia: 3,
+  Uruguay: 3, Paraguay: 3, Venezuela: 3, 'Costa Rica': 3, Panama: 3, Guatemala: 3, Honduras: 3,
+  Nicaragua: 3, 'El Salvador': 3, 'Dominican Republic': 3, Cuba: 3,
+  // Middle East, Africa, South Asia
+  Turkey: 3, Israel: 3, UAE: 3, Jordan: 3, Oman: 3, 'Saudi Arabia': 3, Qatar: 3, Kuwait: 3,
+  Bahrain: 3, Lebanon: 3, Egypt: 3, Morocco: 3, Tunisia: 3, Nigeria: 3, Kenya: 3, Tanzania: 3,
+  Ethiopia: 3, 'South Africa': 3, Ghana: 3, India: 3, Pakistan: 3, 'Sri Lanka': 3, Nepal: 3,
+  Indonesia: 3, Malaysia: 3, Philippines: 3,
+  // Southern and eastern Europe, the Caucasus, mainland southeast Asia
+  Spain: 2, Italy: 2, Portugal: 2, Greece: 2, Cyprus: 2, Malta: 2, Poland: 2, Bulgaria: 2,
+  Romania: 2, Croatia: 2, Serbia: 2, Albania: 2, 'North Macedonia': 2, Montenegro: 2, Slovenia: 2,
+  Georgia: 2, Armenia: 2, Kazakhstan: 2, Uzbekistan: 2, Thailand: 2, Vietnam: 2, Cambodia: 2,
+  Laos: 2, Myanmar: 2, Singapore: 2,
+  // Northern and western Europe
+  Germany: 1, Austria: 1, Switzerland: 1, Belgium: 1, Ireland: 1, 'United Kingdom': 1,
+  'Czech Republic': 1, Hungary: 1, Slovakia: 1, Estonia: 1, Latvia: 1, Lithuania: 1,
+  // Measured at zero here, or a market where another messenger owns the ground
+  France: 0, Netherlands: 0, Norway: 0, Sweden: 0, Denmark: 0, Finland: 0, Iceland: 0,
+  Japan: 0, 'South Korea': 0, China: 0, Taiwan: 0, 'United States': 0, Canada: 0,
+  Australia: 0, 'New Zealand': 0,
+};
+const waTier = (t) => {
+  let best = -1;
+  (t.countries || []).filter(Boolean).forEach((c) => {
+    const v = WA_TIER[c];
+    if (v !== undefined && v > best) best = v;
+  });
+  return best < 0 ? 1 : best; // an unlisted country is treated as ordinary, never as hopeless
+};
+
 // Mailbox names that belong to a company rather than to a person.
 const ROLE = /^(info|kontakt|contact|office|mail|email|hello|hallo|hi|praxis|kanzlei|clinic|clinica|klinik|reception|empfang|termin|appointments?|booking|buchung|anfrage|enquiries|enquiry|inquiries|admin|administration|sekretariat|secretariat|service|support|welcome|post|team|studio|shop|sales|vertrieb|verwaltung|zentrale|general|main|help|ask|care|patients?|kunden|customer|rezeption)([._-]?[a-z0-9]{0,12})?$/i;
 
@@ -144,6 +187,8 @@ const opt = {
   eu: has('--eu'),
   dach: has('--dach'),
   country: val('--country', ''),
+  waFirst: has('--wa-first'),
+  local: has('--local'),
   // Specific firms by domain. The default ordering puts official-evidence firms first, which is
   // right for working through the backlog and wrong when a handful of rows were just added and
   // those are the ones wanted.
@@ -417,8 +462,14 @@ function candidates(store) {
   }
 
   // Best-sourced and most-listed first: those are the firms whose listing is worth most to them,
-  // and the ones whose reply is worth most to us.
+  // and the ones whose reply is worth most to us. With --wa-first, the country's WhatsApp habit
+  // leads instead, because the default order is by evidence tier and the best-evidenced firms are
+  // European law firms off embassy rosters, which is the segment least likely to answer a chat.
   list.sort((a, b) => {
+    if (opt.waFirst) {
+      const w = waTier(b) - waTier(a);
+      if (w) return w;
+    }
     const r = { official: 0, visited: 1, 'self-declared': 2, directory: 3 };
     const d = (r[a.evidence] ?? 9) - (r[b.evidence] ?? 9);
     if (d) return d;
@@ -521,6 +572,8 @@ function report(store, res) {
     const n = keys.filter((k) => d[k].channel === c).length;
     console.log(`    ${String(n).padStart(5)}  ${c.padEnd(9)} ${pct(n)}`);
   });
+  const unread = keys.filter((k) => d[k].status === 'unread').length;
+  if (unread) console.log(`  ${unread} firm(s) could not be read at all: retry those through a proxy`);
   const anyWa = keys.filter((k) => d[k].whatsapp).length;
   const anySocial = keys.filter((k) => d[k].socialDm).length;
   const anyMail = keys.filter((k) => d[k].picked).length;
@@ -540,6 +593,127 @@ function report(store, res) {
 }
 
 // ---- api (only when a token is on hand) -------------------------------------
+/**
+ * The same job, done here, for nothing.
+ *
+ * Apify's contact scraper fetches a handful of pages per site and reads addresses and profile links
+ * out of them. Node can do that. The reason to have it is not elegance: the account's Apify credit
+ * ran out mid-harvest with 909 firms still to look at, and a pipeline that stops dead when a
+ * third-party balance hits zero is a pipeline with a hole in it.
+ *
+ * What is genuinely lost without Apify is proxying. Some sites answer 403 to a plain client and
+ * would have answered a residential IP, so expect a lower hit rate here, not an equal one. Nothing
+ * else differs: the browser was off in the Apify runs too, so neither sees JavaScript-rendered
+ * contacts, and the rows produced here have exactly the shape the ingest already reads, so ranking,
+ * the channel ladder and the bookkeeping are the tested ones and not a second implementation.
+ */
+const UA = 'Mozilla/5.0 (compatible; thenomadhq-contacts/1.0; +https://thenomadhq.com)';
+
+/** Run tasks with a ceiling on how many are in flight: polite to each host, quick over the list. */
+async function pool(items, limit, fn) {
+  const out = new Array(items.length);
+  let next = 0;
+  await Promise.all(new Array(Math.min(limit, items.length)).fill(0).map(async () => {
+    for (;;) {
+      const i = next; next += 1;
+      if (i >= items.length) return;
+      out[i] = await fn(items[i], i);
+    }
+  }));
+  return out;
+}
+
+async function getHtml(url, ms = 10000) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: ctl.signal, redirect: 'follow', headers: { 'user-agent': UA } });
+    if (!r.ok) return '';
+    if (!/html|text/i.test(r.headers.get('content-type') || '')) return '';
+    const body = await r.text();
+    return body.length > 800000 ? body.slice(0, 800000) : body;
+  } catch (e) { return ''; } finally { clearTimeout(t); }
+}
+
+/** Links on a page that look like the place a site keeps its contact details. */
+const CONTACTISH = /(kontakt|contact|impressum|imprint|about|ueber-uns|über|acerca|contacto|contato|quem-somos|chi-siamo|nous|equipe|team|iletisim|legal|privacy)/i;
+
+function contactLinks(html, base) {
+  const out = [];
+  const seen = new Set();
+  for (const m of String(html).matchAll(/<a\b[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]{0,120}?)<\/a>/gi)) {
+    const href = m[1];
+    const label = m[2].replace(/<[^>]+>/g, ' ');
+    if (!CONTACTISH.test(href) && !CONTACTISH.test(label)) continue;
+    let abs = '';
+    try { abs = new URL(href, base).toString(); } catch (e) { continue; }
+    if (!/^https?:/i.test(abs)) continue;
+    let same = false;
+    try { same = new URL(abs).hostname.replace(/^www\./, '') === new URL(base).hostname.replace(/^www\./, ''); } catch (e) { /* ignore */ }
+    if (!same) continue;
+    abs = abs.replace(/#.*$/, '');
+    if (seen.has(abs) || abs === base) continue;
+    seen.add(abs);
+    out.push(abs);
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+
+const SOCIAL_HOSTS = {
+  facebooks: /(?:^|\/\/)(?:[a-z-]+\.)?facebook\.com\//i,
+  instagrams: /(?:^|\/\/)(?:[a-z-]+\.)?instagram\.com\//i,
+  linkedIns: /(?:^|\/\/)(?:[a-z-]+\.)?linkedin\.com\//i,
+};
+
+/** Pull the same fields out of a page that the Apify actor reports. */
+function harvestFrom(html, acc) {
+  // mailto first: an address the page linked is an address the page meant.
+  for (const m of String(html).matchAll(/mailto:([^"'?>\s]+)/gi)) acc.emails.push(decodeURIComponent(m[1]));
+  // then anything that looks like one in the text, which catches the ones written out.
+  const text = String(html).replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
+  for (const m of text.matchAll(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi)) acc.emails.push(m[0]);
+
+  for (const m of String(html).matchAll(/https?:\/\/[^"'<>\s]+/gi)) {
+    const u = m[0].replace(/&amp;/g, '&');
+    if (/(?:wa\.me|api\.whatsapp\.com|web\.whatsapp\.com)\//i.test(u)) acc.whatsapps.push(u);
+    for (const [k, re] of Object.entries(SOCIAL_HOSTS)) if (re.test(u)) acc[k].push(u);
+  }
+}
+
+async function scrapeOne(t) {
+  const acc = { originalStartUrl: t.website, emails: [], whatsapps: [], facebooks: [], instagrams: [], linkedIns: [] };
+  const home = await getHtml(t.website);
+  // "The site published nothing" and "we could not read the site" are different answers and need
+  // different follow-ups: the first is final, the second is a candidate for a retry through a
+  // proxy. Without the distinction a 403 looks exactly like an honest empty page for ever.
+  if (!home) { acc._unread = true; return acc; }
+  harvestFrom(home, acc);
+  const links = contactLinks(home, t.website).slice(0, PAGES_PER_FIRM - 1);
+  for (const u of links) {
+    // eslint-disable-next-line no-await-in-loop
+    const h = await getHtml(u);
+    if (h) harvestFrom(h, acc);
+  }
+  ['emails', 'whatsapps', 'facebooks', 'instagrams', 'linkedIns'].forEach((k) => {
+    acc[k] = [...new Set(acc[k])].slice(0, 40);
+  });
+  return acc;
+}
+
+async function runLocally(list) {
+  const total = list.length;
+  let done = 0;
+  const rows = await pool(list, 12, async (t) => {
+    const r = await scrapeOne(t);
+    done += 1;
+    if (done % 10 === 0 || done === total) process.stdout.write(`\r  ${done}/${total} sites read`);
+    return r;
+  });
+  process.stdout.write('\n');
+  return rows;
+}
+
 async function runOnApify(input) {
   const token = process.env.APIFY_TOKEN;
   if (!token) {
@@ -631,6 +805,32 @@ async function runOnApify(input) {
   const cc = {};
   list.forEach((t) => t.countries.filter(Boolean).forEach((c) => { cc[c] = (cc[c] || 0) + 1; }));
   console.log(`  ${Object.entries(cc).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([c, n]) => `${c} ${n}`).join(', ')}`);
+
+  if (opt.local) {
+    const rows = await runLocally(list);
+    const res = ingest(rows, store);
+    const unread = new Set(rows.filter((r) => r && r._unread).map((r) => {
+      try { return new URL(r.originalStartUrl).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+    }));
+    let blocked = 0;
+    list.forEach((t) => {
+      if (store.domains[t.domain] && store.domains[t.domain].channel) return;
+      const couldNotRead = unread.has(t.domain) || unread.has(baseDomain(t.domain));
+      if (couldNotRead) blocked += 1;
+      store.domains[t.domain] = {
+        emails: [], picked: '', kind: '', dropped: 0, channel: '',
+        checkedOn: today,
+        status: couldNotRead ? 'unread' : 'none',
+        note: couldNotRead
+          ? 'the site did not answer this client, worth retrying through a proxy'
+          : 'read here, nothing published on the site',
+      };
+    });
+    if (blocked) console.log(`  ${blocked} site(s) would not answer us and are marked "unread", not empty`);
+    saveStore(store);
+    report(store, res);
+    return;
+  }
 
   if (opt.run) {
     const rows = await runOnApify(input);
