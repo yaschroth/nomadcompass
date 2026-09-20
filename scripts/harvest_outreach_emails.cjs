@@ -669,7 +669,14 @@ const SOCIAL_HOSTS = {
 /** Pull the same fields out of a page that the Apify actor reports. */
 function harvestFrom(html, acc) {
   // mailto first: an address the page linked is an address the page meant.
-  for (const m of String(html).matchAll(/mailto:([^"'?>\s]+)/gi)) acc.emails.push(decodeURIComponent(m[1]));
+  for (const m of String(html).matchAll(/mailto:([^"'?>\s]+)/gi)) {
+    // A stray % in a mailto makes decodeURIComponent throw, and an unguarded throw in here took out
+    // a run of 869 sites at number 370 and saved none of it. The raw value is fine when it will not
+    // decode: cleanEmail has to validate it either way.
+    let v = m[1];
+    try { v = decodeURIComponent(v); } catch (e) { /* keep it as it came */ }
+    acc.emails.push(v);
+  }
   // then anything that looks like one in the text, which catches the ones written out.
   const text = String(html).replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
   for (const m of text.matchAll(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi)) acc.emails.push(m[0]);
@@ -705,7 +712,15 @@ async function runLocally(list) {
   const total = list.length;
   let done = 0;
   const rows = await pool(list, 12, async (t) => {
-    const r = await scrapeOne(t);
+    // One site must never be able to end the run. Whatever a page does, this firm is simply one
+    // that could not be read, and the other 868 still get their answer.
+    let r;
+    try {
+      r = await scrapeOne(t);
+    } catch (e) {
+      r = { originalStartUrl: t.website, emails: [], whatsapps: [], facebooks: [],
+            instagrams: [], linkedIns: [], _unread: true };
+    }
     done += 1;
     if (done % 10 === 0 || done === total) process.stdout.write(`\r  ${done}/${total} sites read`);
     return r;

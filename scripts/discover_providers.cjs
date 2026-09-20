@@ -342,13 +342,17 @@ async function verify(file) {
   for (const pl of places) {
     i += 1;
     const name = clean(pl.title || pl.name);
-    const site = pl.website || pl.url || '';
+    const site = pl.website || pl.url || pl.site || '';
     if (!name || !site || !/^https?:/i.test(site)) { skipped.noSite += 1; continue; }
     if (!isRealSite(site)) { skipped.notASite += 1; continue; }
 
+    // Two shapes arrive here. Google Maps rows carry the query they were found through, and the
+    // plan wrote down what each query meant. A hand-assembled candidate list says city and category
+    // outright. Neither is trusted for the language claim, which only the provider's own site can
+    // settle, so accepting both costs nothing.
     const tag = MAP[pl.searchString] || MAP[pl.searchQuery] || {};
-    const city = pl._city || tag.city || '';
-    const category = pl._category || tag.category || '';
+    const city = pl.city || pl._city || tag.city || '';
+    const category = pl.category || pl._category || tag.category || '';
     const meta = CITY.get(city);
     if (!meta || !category) { skipped.noCity += 1; continue; }
 
