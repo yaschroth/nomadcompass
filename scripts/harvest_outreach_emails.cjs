@@ -582,15 +582,38 @@ async function runOnApify(input) {
     if (opt.ingest) {
       rows = JSON.parse(fs.readFileSync(path.resolve(opt.ingest), 'utf8'));
     } else {
+      // A dataset is readable by its id alone. No token needed, which matters more than it looks:
+      // without this the only way to get an MCP-driven run's results back here was to read them into
+      // the conversation and type them out again, which truncates long address lists by hand and puts
+      // a transcription step in front of the data that outreach is later sent to. The id is enough.
       const token = process.env.APIFY_TOKEN;
-      if (!token) { console.error('APIFY_TOKEN is not set, so --ingest-dataset cannot fetch.'); process.exit(1); }
-      rows = await fetch(`https://api.apify.com/v2/datasets/${opt.ingestDataset}/items?token=${token}&clean=true`)
-        .then((r) => r.json());
+      const q = ['clean=true', 'format=json'];
+      if (token) q.push(`token=${token}`);
+      const url = `https://api.apify.com/v2/datasets/${opt.ingestDataset}/items?${q.join('&')}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.error(`dataset ${opt.ingestDataset} could not be read: HTTP ${res.status}`);
+        console.error('a private dataset needs APIFY_TOKEN in .env.local');
+        process.exit(1);
+      }
+      rows = await res.json();
     }
     if (!Array.isArray(rows)) { console.error('expected an array of actor result rows'); process.exit(1); }
     const res = ingest(rows, store);
+    // Close out everything the plan asked about that the scraper never answered for.
+    const plannedFile = path.join(ROOT, 'data', 'outreach-planned.json');
+    let closed = 0;
+    if (fs.existsSync(plannedFile)) {
+      JSON.parse(fs.readFileSync(plannedFile, 'utf8')).forEach((d) => {
+        if (store.domains[d]) return;
+        store.domains[d] = { emails: [], picked: '', kind: '', dropped: 0, channel: '',
+          checkedOn: today, status: 'none', note: 'the scraper returned nothing for this site' };
+        closed += 1;
+      });
+    }
     saveStore(store);
     report(store, res);
+    if (closed) console.log(`  ${closed} firm(s) the scraper never answered for, recorded as looked-at`);
     console.log(`wrote ${path.relative(ROOT, STORE)}`);
     return;
   }
@@ -618,6 +641,12 @@ async function runOnApify(input) {
   }
 
   fs.writeFileSync(PLAN_OUT, `${JSON.stringify(input, null, 2)}\n`);
+  // Which firms this plan covers. A firm whose website is malformed ("http://www.m-") comes back
+  // from the scraper as no row at all, so it never gets a checkedOn, so it is selected again in
+  // every future batch for ever. Recording the plan lets the ingest close them out as looked-at.
+  fs.writeFileSync(path.join(ROOT, 'data', 'outreach-planned.json'),
+    `${JSON.stringify(list.map((t) => t.domain), null, 1)}
+`);
   console.log(`wrote ${path.relative(ROOT, PLAN_OUT)} for ${ACTOR}`);
   console.log('then: node scripts/harvest_outreach_emails.cjs --ingest <saved-dataset.json>');
 })().catch((e) => { console.error(e); process.exit(1); });

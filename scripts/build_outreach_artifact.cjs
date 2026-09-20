@@ -34,12 +34,26 @@ if (!SRC || !fs.existsSync(SRC)) {
 let html = fs.readFileSync(SRC, 'utf8');
 const before = html.length;
 
-/** Replace exactly once, and say so loudly when the anchor has moved. */
+/**
+ * Replace exactly once, and say so loudly when the anchor has moved.
+ *
+ * The published file uses CRLF; the anchors in this script are written with LF, because that is
+ * what a source file here contains. Every anchor was single-line until the database block needed
+ * patching, so the mismatch stayed invisible and then read as "the published file has drifted",
+ * which was wrong and sent me looking in the wrong place. Both forms are tried, and the
+ * replacement takes the line ending of whichever matched, so the file never ends up mixed.
+ */
 function patch(label, find, replace) {
-  const i = html.indexOf(find);
+  let needle = find;
+  let body = replace;
+  if (html.indexOf(needle) < 0 && find.includes('\n')) {
+    needle = find.replace(/\r?\n/g, '\r\n');
+    body = replace.replace(/\r?\n/g, '\r\n');
+  }
+  const i = html.indexOf(needle);
   if (i < 0) throw new Error(`anchor not found for "${label}". The published file has drifted.`);
-  if (html.indexOf(find, i + find.length) >= 0) throw new Error(`anchor for "${label}" is not unique.`);
-  html = html.slice(0, i) + replace + html.slice(i + find.length);
+  if (html.indexOf(needle, i + needle.length) >= 0) throw new Error(`anchor for "${label}" is not unique.`);
+  html = html.slice(0, i) + body + html.slice(i + needle.length);
 }
 
 // ---- 1. the catalogue -------------------------------------------------------
@@ -69,16 +83,29 @@ patch('channel css', `  @media (max-width:1100px){ .strip{grid-template-columns:
               color:var(--ink-2);text-decoration:none;font-size:12.5px;cursor:pointer}
   .chan-alt a:hover,.chan-alt button:hover{border-color:var(--line-2);color:var(--ink)}
   .chan-none{font-size:13px;color:var(--muted)}
+  /* Reporting a dead channel is a quiet action, never a primary one: it sits with the alternatives
+     and only turns red once it has been used. */
+  .chan-bad{color:var(--st-no)!important;border-color:color-mix(in srgb,var(--st-no) 45%,transparent)!important}
+  .chan-flag{font-size:12.5px;color:var(--st-no);margin:0}
+  /* One per contact, right beside it. Small and grey until hovered, because reporting a dead
+     number is a correction and not one of the things the panel is asking you to do. */
+  .xbad{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+        padding:0;border-radius:5px;background:none;border:1px solid var(--line);color:var(--muted);
+        cursor:pointer;font-size:11px;line-height:1;flex:none}
+  .xbad:hover{border-color:var(--st-no);color:var(--st-no);background:var(--st-no-bg)}
+  .chan-pair{display:inline-flex;align-items:center;gap:4px}
+  .chan-dead{text-decoration:line-through;opacity:.6}
   .chip{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
         padding:1px 5px;border-radius:3px;border:1px solid currentColor}
   .chip-whatsapp{color:#1f9d55} .chip-social{color:var(--st-queued)} .chip-email{color:var(--st-sent)}
+  .chip-broken{color:var(--st-no)}
 
   @media (max-width:1100px){ .strip{grid-template-columns:repeat(3,1fr)} }`);
 
 // ---- 3. the channel filter --------------------------------------------------
 patch('channel filter control',
   `    <select id="fEv"><option value="">Alle Belege</option>`,
-  `    <select id="fChan"><option value="">Alle Kontaktwege</option><option value="whatsapp">nur WhatsApp</option><option value="social">nur Social</option><option value="email">nur E-Mail</option><option value="none">ohne Kontaktweg</option></select>
+  `    <select id="fChan"><option value="">Alle Kontaktwege</option><option value="whatsapp">nur WhatsApp</option><option value="social">nur Social</option><option value="email">nur E-Mail</option><option value="none">ohne Kontaktweg</option><option value="broken">defekt gemeldet</option></select>
     <select id="fEv"><option value="">Alle Belege</option>`);
 
 // ---- 4. the message, and the helpers that build the block -------------------
@@ -99,9 +126,65 @@ patch('wa message + helpers', `  var EVNAME = {'official':'amtlich','self-declar
   var CHAN_LABEL = {whatsapp:'WhatsApp', social:'Social', email:'E-Mail'};
   var SOC_LABEL = {facebook:'Facebook', instagram:'Instagram', linkedin:'LinkedIn'};
 
+  // A reported-dead channel, kept per firm as {channel: 'YYYY-MM-DD'}. The date, not a boolean,
+  // because "this number was dead in September" is worth knowing when it is re-sourced in November.
+  // It lives in the same database document as the status, so it survives a reload and a republish,
+  // and can be read back from outside the page to drive a fresh harvest of exactly these firms.
+  function brokenMap(id){
+    var s = state[id] || {};
+    return (s.broken && typeof s.broken === 'object') ? s.broken : {};
+  }
+  function isBroken(id, ch){ return !!brokenMap(id)[ch]; }
+  function anyBroken(id){ for (var k in brokenMap(id)) return true; return false; }
+
+  var KIND_LABEL = {whatsapp:'WhatsApp', facebook:'Facebook', instagram:'Instagram',
+                    linkedin:'LinkedIn', email:'E-Mail'};
+
+  // Every way in we hold for this firm, best first, each one reportable on its own. Reporting used
+  // to work on the channel ("social is broken"), which was too coarse: a firm can have a dead
+  // Instagram and a perfectly good Facebook, and marking the channel threw both away.
+  function contactItems(r){
+    var out = [];
+    if (r.wa) out.push({k:'whatsapp', label:'WhatsApp', href:waHref(r), wa:1});
+    var so = r.so || {};
+    if (so.facebook)  out.push({k:'facebook',  label:'Facebook',  href:so.facebook});
+    if (so.instagram) out.push({k:'instagram', label:'Instagram', href:so.instagram});
+    if (so.linkedin && /linkedin\\.com\\/in\\//i.test(so.linkedin)) out.push({k:'linkedin', label:'LinkedIn', href:so.linkedin});
+    if (r.e) out.push({k:'email', label:r.e, copy:r.e});
+    return out;
+  }
+  function chipFor(k){ return k === 'whatsapp' ? 'whatsapp' : (k === 'email' ? 'email' : 'social'); }
+  function xBtn(id, k){
+    var t = (KIND_LABEL[k] || k) + ' funktioniert nicht';
+    return '<button type="button" class="xbad" data-broken="' + esc(id) + '|' + esc(k) + '"'
+         + ' title="' + esc(t) + '" aria-label="' + esc(t) + '">&#10005;</button>';
+  }
+
+  // Which language we write to a firm in.
+  //
+  // The country's own language where that is German, Spanish or Portuguese, and English everywhere
+  // else. NOT the languages the firm works in, which is what this used to do: a Bangkok barber who
+  // advertises English is still a Thai business, and picking "a language it works in" meant writing
+  // to Italy and France in Italian and French off the back of a directory field, which is a claim
+  // about who they serve rather than about who opens the mail. Four languages, written properly,
+  // beat twenty written from a table.
+  var COUNTRY_LANG = {
+    'Germany':'de','Austria':'de','Switzerland':'de','Liechtenstein':'de',
+    'Spain':'es','Mexico':'es','Argentina':'es','Colombia':'es','Chile':'es','Peru':'es',
+    'Ecuador':'es','Bolivia':'es','Uruguay':'es','Paraguay':'es','Venezuela':'es',
+    'Costa Rica':'es','Panama':'es','Guatemala':'es','Honduras':'es','Nicaragua':'es',
+    'El Salvador':'es','Dominican Republic':'es','Cuba':'es','Puerto Rico':'es',
+    'Portugal':'pt','Brazil':'pt','Angola':'pt','Mozambique':'pt','Cape Verde':'pt'
+  };
+  // The first country, because it is the one the first listing and the message itself name.
+  function msgLang(r){
+    var c = (r.k || []).filter(Boolean)[0] || '';
+    var l = COUNTRY_LANG[c] || 'en';
+    return WA_MSG[l] ? l : 'en';
+  }
+
   function waText(r){
-    var pick = (r.l||[]).filter(function(l){ return WA_MSG[l]; })[0] || 'en';
-    return WA_MSG[pick](r.c[0]||'', r.g[0]||'', r.u[0]||'https://thenomadhq.com/services');
+    return WA_MSG[msgLang(r)](r.c[0]||'', r.g[0]||'', r.u[0]||'https://thenomadhq.com/services');
   }
   function waHref(r){ return 'https://wa.me/' + r.wa + '?text=' + encodeURIComponent(waText(r)); }
   // wa.me is a redirector: it forwards to api.whatsapp.com, which refuses to be framed. That is
@@ -125,6 +208,27 @@ patch('wa message + helpers', `  var EVNAME = {'official':'amtlich','self-declar
     return (so.linkedin && !/linkedin\\.com\\/in\\//i.test(so.linkedin)) ? [['linkedin', so.linkedin]] : [];
   }`);
 
+// ---- 4b. the mail draft follows the same rule ------------------------------
+//
+// The tabs used to offer every language the firm was recorded as working in, defaulting to the
+// first. That is the same mistake as the WhatsApp text made: the directory field says who they can
+// serve, not what language reaches them. Now the country's language leads, with English beside it
+// as the only alternative, so the two message types cannot say different things about the same firm.
+patch('draft language by country',
+  `  function draftLangsFor(r){
+    var out = [];
+    for (var i=0;i<r.l.length;i++) if (DRAFTS[r.l[i]] && out.indexOf(r.l[i])<0) out.push(r.l[i]);
+    if (out.indexOf('en')<0) out.push('en');
+    return out;
+  }`,
+  `  function draftLangsFor(r){
+    var out = [];
+    var own = msgLang(r);
+    if (DRAFTS[own]) out.push(own);
+    if (out.indexOf('en') < 0) out.push('en');
+    return out;
+  }`);
+
 // ---- 5. the block itself, at the top of the panel --------------------------
 patch('channel block in panel',
   `    h += '<div class="grp"><span class="lbl">Status</span>' + segHTML(r.id, statusOf(r), true) + '</div>';`,
@@ -133,40 +237,71 @@ patch('channel block in panel',
     // The channel block. Best way in first, alternatives beside it, and the reason it was chosen,
     // so the pick is legible rather than magic.
     h += '<div class="grp"><span class="lbl">Kontaktweg</span><div class="chan">';
-    if (r.ch === 'whatsapp'){
-      h += '<div class="chan-top"><a class="chan-go wa" href="'+esc(waHref(r))+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">WhatsApp öffnen &rarr;</a>'
-         + '<span class="chip chip-whatsapp">WhatsApp</span></div>'
-         + '<p class="chan-why">Nachricht ist vorausgefüllt in der Sprache der Firma. Senden musst du selbst. Wird beim Klick als gesendet markiert.</p>'
-         + '<div class="chan-alt"><a href="'+esc(webWaHref(r))+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">WhatsApp Web ↗</a>'
-         + '<button type="button" data-copy="+'+esc(r.wa)+'">+'+esc(r.wa)+' kopieren</button></div>';
-    } else if (r.ch === 'social'){
-      var dms = dmProfiles(r);
-      h += '<div class="chan-top"><a class="chan-go" href="'+esc(dms[0][1])+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">'
-         + esc(SOC_LABEL[dms[0][0]]) + ' öffnen &rarr;</a><span class="chip chip-social">Social</span></div>'
-         + '<p class="chan-why">Profil öffnen und Nachricht einfügen: kein Netzwerk füllt eine DM vor. Text unten kopieren.</p>';
-      if (dms.length > 1){
+    var items = contactItems(r);
+    var live = [], dead = [];
+    for (var ii=0; ii<items.length; ii++) (isBroken(r.id, items[ii].k) ? dead : live).push(items[ii]);
+
+    if (!items.length){
+      h += '<p class="chan-none">Kein Kontaktweg gefunden. Website oeffnen und selbst nachsehen.</p>';
+    } else if (!live.length){
+      h += '<p class="chan-none">Alle gefundenen Kontaktwege sind als defekt gemeldet. Wird neu gesucht.</p>';
+    } else {
+      // The best one that still works leads. A reported-dead contact does not merely get a mark,
+      // it steps aside, so the panel always offers something that can actually be used.
+      var top = live[0];
+      h += '<div class="chan-top"><span class="chan-pair">';
+      if (top.copy){
+        h += '<span class="mono">' + esc(top.label) + '</span>'
+           + '<button type="button" class="chan-go" data-copy="' + esc(top.copy) + '">Adresse kopieren</button>';
+      } else {
+        h += '<a class="chan-go' + (top.wa ? ' wa' : '') + '" href="' + esc(top.href) + '"'
+           + ' target="_blank" rel="noopener noreferrer" data-social="' + esc(r.id) + '">'
+           + esc(top.label) + ' oeffnen &rarr;</a>';
+      }
+      h += xBtn(r.id, top.k) + '</span>'
+         + '<span class="chip chip-' + chipFor(top.k) + '">' + esc(KIND_LABEL[top.k] || top.k) + '</span></div>';
+
+      if (top.k === 'whatsapp'){
+        h += '<p class="chan-why">Nachricht ist vorausgefuellt in der Sprache des Landes. Senden musst du selbst. Wird beim Klick als gesendet markiert.</p>'
+           + '<div class="chan-alt"><a href="' + esc(webWaHref(r)) + '" target="_blank" rel="noopener noreferrer" data-social="' + esc(r.id) + '">WhatsApp Web &#8599;</a>'
+           + '<button type="button" data-copy="+' + esc(r.wa) + '">+' + esc(r.wa) + ' kopieren</button></div>';
+      } else if (top.k === 'email'){
+        h += '<p class="chan-why">' + esc(r.ek) + (r.ea ? ' &middot; mehrere gleich gute Postfaecher, bitte pruefen' : '') + '</p>';
+      } else {
+        h += '<p class="chan-why">Profil oeffnen und Nachricht einfuegen: kein Netzwerk fuellt eine DM vor. Text unten kopieren.</p>';
+      }
+
+      if (live.length > 1){
         h += '<div class="chan-alt">';
-        for (var dm=1; dm<dms.length; dm++) h += '<a href="'+esc(dms[dm][1])+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">'+esc(SOC_LABEL[dms[dm][0]])+' ↗</a>';
+        for (var li=1; li<live.length; li++){
+          var it = live[li];
+          h += '<span class="chan-pair">';
+          if (it.copy) h += '<button type="button" data-copy="' + esc(it.copy) + '">' + esc(it.label) + '</button>';
+          else h += '<a href="' + esc(it.href) + '" target="_blank" rel="noopener noreferrer" data-social="' + esc(r.id) + '">' + esc(it.label) + ' &#8599;</a>';
+          h += xBtn(r.id, it.k) + '</span>';
+        }
         h += '</div>';
       }
-    } else if (r.ch === 'email'){
-      h += '<div class="chan-top"><span class="mono">'+esc(r.e)+'</span><span class="chip chip-email">E-Mail</span></div>'
-         + '<div class="chan-alt"><button type="button" data-copy="'+esc(r.e)+'">Adresse kopieren</button></div>'
-         + '<p class="chan-why">'+esc(r.ek)+(r.ea?' · mehrere gleich gute Postfächer, bitte prüfen':'')+'</p>';
-    } else {
-      h += '<p class="chan-none">Kein Kontaktweg gefunden. Website öffnen und selbst nachsehen.</p>';
     }
-    // Everything else we hold, so a dead channel is one click from the next one.
-    var extras = [];
-    if (r.ch !== 'whatsapp' && r.wa) extras.push('<a href="'+esc(waHref(r))+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">WhatsApp ↗</a>');
-    if (r.ch !== 'email' && r.e) extras.push('<button type="button" data-copy="'+esc(r.e)+'">'+esc(r.e)+'</button>');
-    if (r.ch !== 'social'){
-      var alt = dmProfiles(r);
-      for (var x=0; x<alt.length; x++) extras.push('<a href="'+esc(alt[x][1])+'" target="_blank" rel="noopener noreferrer" data-social="'+esc(r.id)+'">'+esc(SOC_LABEL[alt[x][0]])+' ↗</a>');
-    }
+
+    // A page we can look at but not write to. Kept for context, never offered as a way in.
     var seen = otherProfiles(r);
-    for (var y=0; y<seen.length; y++) extras.push('<a href="'+esc(seen[y][1])+'" target="_blank" rel="noopener noreferrer">'+esc(SOC_LABEL[seen[y][0]])+' (Seite, keine DM möglich) ↗</a>');
-    if (extras.length) h += '<div class="chan-alt">' + extras.join('') + '</div>';
+    if (seen.length){
+      h += '<div class="chan-alt">';
+      for (var y=0; y<seen.length; y++) h += '<a class="chan-dead" href="' + esc(seen[y][1]) + '" target="_blank" rel="noopener noreferrer">' + esc(SOC_LABEL[seen[y][0]]) + ' (Seite, keine DM moeglich) &#8599;</a>';
+      h += '</div>';
+    }
+
+    if (dead.length){
+      h += '<p class="chan-flag">Als defekt gemeldet: '
+         + dead.map(function(it){ return esc(KIND_LABEL[it.k] || it.k) + ' (' + esc(brokenMap(r.id)[it.k]) + ')'; }).join(', ')
+         + '</p><div class="chan-alt">';
+      for (var di=0; di<dead.length; di++){
+        h += '<button type="button" data-unbroken="' + esc(r.id) + '|' + esc(dead[di].k) + '">'
+           + esc(KIND_LABEL[dead[di].k] || dead[di].k) + ' doch erreichbar</button>';
+      }
+      h += '</div>';
+    }
     h += '</div></div>';
 
     if (r.ch === 'whatsapp' || r.ch === 'social'){
@@ -178,7 +313,8 @@ patch('channel block in panel',
 // ---- 6. clicks --------------------------------------------------------------
 patch('click targets',
   `    var t = ev.target.closest ? ev.target.closest('[data-open],[data-set],[data-filter],[data-copy],[data-copy-draft],[data-lang],[data-sort]') : null;`,
-  `    var t = ev.target.closest ? ev.target.closest('[data-open],[data-set],[data-filter],[data-copy],[data-copy-draft],[data-lang],[data-sort],[data-social],[data-copy-wa]') : null;`);
+  `    var t = ev.target.closest ? ev.target.closest('[data-open],[data-set],[data-filter],[data-copy],[data-copy-draft],[data-lang],[data-sort],[data-social],[data-copy-wa],[data-broken],[data-unbroken]') : null;`);
+
 
 patch('click handlers',
   `    if (t.hasAttribute('data-copy-draft')){`,
@@ -190,6 +326,14 @@ patch('click handlers',
       var soId = t.getAttribute('data-social');
       if (statusOf({id:soId}) !== 'sent') setStatus(soId, 'sent');
       return; // the anchor's own target="_blank" opens it
+    }
+    // Reporting a dead channel writes the report and nothing else: it is not a status change and
+    // must not look like one.
+    if (t.hasAttribute('data-broken') || t.hasAttribute('data-unbroken')){
+      var isOn = t.hasAttribute('data-broken');
+      var bp = (t.getAttribute(isOn ? 'data-broken' : 'data-unbroken') || '').split('|');
+      if (bp.length === 2) setBroken(bp[0], bp[1], isOn);
+      return;
     }
     if (t.hasAttribute('data-copy-wa')){
       copy(($('waDraft')||{}).value || '', t);
@@ -208,6 +352,7 @@ patch('filter predicate',
   `    if (f.ev && r.ev !== f.ev) return false;`,
   `    if (f.ev && r.ev !== f.ev) return false;
     if (f.chan === 'none'){ if (r.ch) return false; }
+    else if (f.chan === 'broken'){ if (!anyBroken(r.id)) return false; }
     else if (f.chan && r.ch !== f.chan) return false;`);
 
 patch('filter change', `    else if (id === 'fEv') f.ev = ev.target.value;`,
@@ -222,7 +367,203 @@ patch('filter reset',
 patch('row chip',
   `        + (sv.email?' <span class="flag" style="color:var(--st-yes)">· E-Mail hinterlegt</span>':'')+'</span></td>'`,
   `        + (sv.email?' <span class="flag" style="color:var(--st-yes)">· E-Mail hinterlegt</span>':'')+'</span>'
-        + (r.ch?' <span class="chip chip-'+r.ch+'">'+esc(CHAN_LABEL[r.ch])+'</span>':'')+'</td>'`);
+        + (r.ch?' <span class="chip chip-'+r.ch+'">'+esc(CHAN_LABEL[r.ch])+'</span>':'')
+        + (anyBroken(r.id)?' <span class="chip chip-broken">defekt</span>':'')+'</td>'`);
+
+// ---- 8a. THE BUG ------------------------------------------------------------
+//
+// renderStrip() threw on every single render, and had done since "queued" was added to STATUS.
+//
+//   var counts = {open:0,sent:0,yes:0,no:0};        // five statuses, four counters
+//   ...
+//   counts[s.k].toLocaleString('de-DE')             // s.k === 'queued' -> undefined.toLocaleString
+//
+// render() calls renderStrip() LAST, which is why the damage looked like anything but a rendering
+// bug: the table and the count line are written before the throw and look perfectly healthy, while
+// the five status tiles and the subtitle never appear. And because the initial render() sits
+// directly above the database block, the throw took the entire db initialisation with it. No
+// use("db"), so no store, no subscription, no banner, no error of any kind. The status list could
+// not load because nothing ever asked for it, and every click was lost on reload because setStatus
+// calls render() before it writes, so the write was never reached either.
+//
+// Fixed by deriving the counters from STATUS instead of writing them out a second time by hand, so
+// the two cannot drift apart again, and by tolerating a status the store holds that STATUS no
+// longer lists.
+patch('strip counters',
+  `  function renderStrip(){
+    var counts = {open:0,sent:0,yes:0,no:0};
+    for (var i=0;i<ROWS.length;i++){ if (f.hideAgg && ROWS[i].ag) continue; counts[statusOf(ROWS[i])]++; }`,
+  `  function renderStrip(){
+    // Derived from STATUS. A hand-written literal here is what broke the page for a week.
+    var counts = {};
+    for (var c=0;c<STATUS.length;c++) counts[STATUS[c].k] = 0;
+    for (var i=0;i<ROWS.length;i++){
+      if (f.hideAgg && ROWS[i].ag) continue;
+      var sk = statusOf(ROWS[i]);
+      if (counts[sk] === undefined) counts[sk] = 0;
+      counts[sk]++;
+    }`);
+
+// A rendering bug must never again be able to take the database with it. The db block is what
+// makes this tool remember anything; it has no business depending on the status tiles drawing.
+patch('init render guard',
+  `  render();
+
+  // ---- db: status survives reloads and republishes ---------------------------`,
+  `  try {
+    render();
+  } catch (e) {
+    // Keep going: a half-drawn table is worth far more than a page that silently stops before it
+    // has loaded a single status.
+    if (window.console && console.error) console.error('render() beim Start gescheitert', e);
+  }
+
+  // ---- db: status survives reloads and republishes ---------------------------`);
+
+// ---- 8b. a build stamp in static HTML --------------------------------------
+//
+// Two rounds of diagnosis were spent on JavaScript that provably shipped and provably did not
+// appear. Every instrument so far needed the page's script to run, which begs the question being
+// asked. This one does not: it is literal markup in the masthead, so if the page renders at all it
+// is visible, and if it is absent the file being served is not the file being published.
+patch('build stamp',
+  `    <h1>Backlink-Pipeline</h1>`,
+  `    <h1>Backlink-Pipeline</h1>
+    <span class="dach" title="Aus welchem Build diese Seite stammt. Rein statisch, ohne JavaScript.">BUILD ${new Date().toISOString().slice(0, 16).replace('T', ' ')} UTC</span>`);
+
+// ---- 8c. read the write back -----------------------------------------------
+//
+// "When I reload, my changes are gone" has two possible causes and they need opposite fixes: the
+// write never landed, or it landed and the read never returns it. set() resolving proves only that
+// the call was accepted. Reading the document straight back proves what is actually stored.
+// The writer for a reported dead channel. Same document as the status, same last-writer-wins
+// rules, so it needs no storage of its own and comes back with everything else on reload.
+patch('setBroken',
+  `  function saveFields(id){`,
+  `  function setBroken(id, ch, on){
+    captureFields(id);
+    var prev = state[id] || {};
+    var b = Object.assign({}, brokenMap(id));
+    if (on) b[ch] = new Date().toISOString().slice(0,10); else delete b[ch];
+    var body = Object.assign({}, prev, {broken: b, updatedAt: new Date().toISOString()});
+    state[id] = body;
+    render();
+    if (current === id) openPanel(id);
+    if (!db){ warn('Kein Speicher verfuegbar, die Meldung gilt nur fuer diese Sitzung.'); return; }
+    db.collection('outreach').doc(id).set(body)
+      .catch(function(e){ warn('Meldung nicht gespeichert (' + (e && e.code) + ').'); });
+  }
+
+  function saveFields(id){`);
+
+patch('write read-back',
+  `    db.collection('outreach').doc(id).set(body)
+      .catch(function(e){ warn('Status nicht gespeichert (' + (e && e.code) + ').'); });`,
+  `    db.collection('outreach').doc(id).set(body)
+      .then(function(){
+        return db.collection('outreach').doc(id).get().then(function(snap){
+          var d = snap && snap.data && snap.data();
+          diag(snap && snap.exists
+            ? ('gespeichert: ' + id + ' = "' + (d && d.status) + '", ' + hhmmss())
+            : ('SCHREIBEN VERSCHWUNDEN: ' + id + ' ist nach dem Speichern nicht da, ' + hhmmss()));
+        });
+      })
+      .catch(function(e){
+        warn('Status nicht gespeichert (' + (e && e.code) + ').');
+        diag('Schreiben gescheitert: ' + (e && e.code ? e.code : '?') + ' ' + (e && e.message ? e.message : ''));
+      });`);
+
+// ---- 9. the database, instrumented -----------------------------------------
+//
+// The status list stopped loading and NOTHING said so: the page showed every firm as "Nicht
+// kontaktiert" while 51 documents sat in the store, and no banner appeared. That combination is
+// only possible in the gaps this block had. use() resolving null warns, and a terminal query error
+// warns, but an exception thrown INSIDE the snapshot handler is caught by nobody, and a
+// subscription that simply never delivers looks exactly like one that delivered nothing.
+//
+// So the handler now reports rather than swallows, and every stage says where it got to. The
+// diagnosis line is deliberately separate from warn(), which replaces the whole banner area.
+patch('db diagnostics',
+  `  if (window.claude && typeof window.claude.use === 'function'){`,
+  `  // Its own element, so warn() replacing the banner area cannot wipe it and it cannot wipe warn().
+  function diag(msg){
+    var el = document.getElementById('dbdiag');
+    if (!el){
+      el = document.createElement('div');
+      el.id = 'dbdiag';
+      el.className = 'banner';
+      el.style.cssText = 'font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px';
+      var host = document.getElementById('dbwarn');
+      if (host && host.parentNode) host.parentNode.insertBefore(el, host.nextSibling);
+    }
+    el.textContent = 'DB: ' + msg;
+  }
+  var sawSnapshot = false;
+  var t0 = Date.now();
+  var hhmmss = function(){ return new Date().toTimeString().slice(0,8); };
+
+  diag('warte auf claude.use("db") ...');
+  // A subscription that never delivers and never errors is the one failure this block could not
+  // see. Fifteen seconds is well past the ten the runtime allows itself to answer in.
+  setTimeout(function(){
+    if (!sawSnapshot) diag('nach 15s kein Snapshot und kein Fehler. Das Abo antwortet nicht.');
+  }, 15000);
+
+  if (window.claude && typeof window.claude.use === 'function'){`);
+
+patch('db snapshot handler',
+  `      db = store;
+      db.collection('outreach').onSnapshot(function(snap){
+        var next = {};
+        snap.docs.forEach(function(d){ next[d.id] = d.data() || {}; });
+        // Never rebuild the open panel from a snapshot: it would wipe whatever is half-typed in it.
+        // The panel already shows the local state, and reopening it picks the stored values up.
+        if (current) captureFields(current);
+        if (current && state[current]) next[current] = Object.assign({}, next[current], state[current]);
+        state = next;
+        render();
+      }, function(e){`,
+  `      db = store;
+      diag('Speicher da nach ' + (Date.now() - t0) + 'ms, lese "outreach" ...');
+
+      // Everything here runs inside the platform's callback, where a throw reaches no catch of
+      // ours and no error callback. Reporting it is the whole point of the try.
+      function applySnapshot(snap, label){
+        try {
+          var docs = (snap && snap.docs) || [];
+          var next = {};
+          docs.forEach(function(d){ next[d.id] = (d.data && d.data()) || {}; });
+          // Never rebuild the open panel from a snapshot: it would wipe whatever is half-typed in it.
+          // The panel already shows the local state, and reopening it picks the stored values up.
+          if (current) captureFields(current);
+          if (current && state[current]) next[current] = Object.assign({}, next[current], state[current]);
+          state = next;
+          var withStatus = 0;
+          for (var k in next) if (next[k] && next[k].status) withStatus++;
+          diag(label + ': ' + docs.length + ' Dokumente, ' + withStatus + ' mit Status, ' + hhmmss()
+            + (snap && snap.metadata && snap.metadata.fromCache ? ' (Cache)' : ''));
+          render();
+        } catch (err) {
+          diag(label + ' konnte nicht verarbeitet werden: ' + (err && err.message ? err.message : err));
+        }
+      }
+
+      // A one-shot read, BEFORE the subscription and independent of it. The status list used to
+      // hang entirely on onSnapshot: when that never delivered, the page showed every firm as
+      // uncontacted for ever and reported nothing, because a subscription that stays silent is
+      // indistinguishable from one that delivered an empty set. get() has only two outcomes, and
+      // both are visible.
+      db.collection('outreach').get().then(function(snap){
+        sawSnapshot = true;
+        applySnapshot(snap, 'Erstabruf');
+      }).catch(function(e){
+        diag('Erstabruf gescheitert: ' + (e && e.code ? e.code : '?') + ' ' + (e && e.message ? e.message : ''));
+      });
+
+      db.collection('outreach').onSnapshot(function(snap){
+        sawSnapshot = true;
+        applySnapshot(snap, 'Live');
+      }, function(e){`);
 
 /**
  * Every token the added CSS uses must be defined in the artifact itself.
