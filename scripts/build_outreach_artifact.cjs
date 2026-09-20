@@ -43,17 +43,40 @@ const before = html.length;
  * which was wrong and sent me looking in the wrong place. Both forms are tried, and the
  * replacement takes the line ending of whichever matched, so the file never ends up mixed.
  */
+const applied = [];
+const already = [];
+
 function patch(label, find, replace) {
+  // Already published? Ask the result, not a marker.
+  //
+  // Every patch below had been applied and published, so running this file again threw on the
+  // first anchor that its own replacement had consumed: "the published file has drifted", about a
+  // file that had drifted in exactly the way this script drifted it. Worse was the patch that did
+  // NOT throw. 'wa message + helpers' is anchored on the EVNAME line and replaces it with that
+  // same line plus the whole WA_MSG block, so the anchor survives its own replacement and a second
+  // run appended a second copy of WA_MSG. The tool would have loaded, and the later copy would
+  // have silently won.
+  //
+  // So the question asked first is whether the replacement is already there. That is the result,
+  // not a marker beside it, which is the difference between "this patch has been applied" and
+  // "something once wrote a comment here". An anchor that is missing AND a replacement that is
+  // absent is still a hard failure, because that is real drift.
+  const crlf = (s) => s.replace(/\r?\n/g, '\r\n');
+  if (html.indexOf(replace) >= 0 || (replace.includes('\n') && html.indexOf(crlf(replace)) >= 0)) {
+    already.push(label);
+    return;
+  }
   let needle = find;
   let body = replace;
   if (html.indexOf(needle) < 0 && find.includes('\n')) {
-    needle = find.replace(/\r?\n/g, '\r\n');
-    body = replace.replace(/\r?\n/g, '\r\n');
+    needle = crlf(find);
+    body = crlf(replace);
   }
   const i = html.indexOf(needle);
   if (i < 0) throw new Error(`anchor not found for "${label}". The published file has drifted.`);
   if (html.indexOf(needle, i + needle.length) >= 0) throw new Error(`anchor for "${label}" is not unique.`);
   html = html.slice(0, i) + body + html.slice(i + needle.length);
+  applied.push(label);
 }
 
 // ---- 1. the catalogue -------------------------------------------------------
@@ -228,6 +251,78 @@ patch('draft language by country',
     if (out.indexOf('en') < 0) out.push('en');
     return out;
   }`);
+
+// ---- 4c. what answering is worth, said in both message types ---------------
+//
+// Both openers asked a stranger to check their entry and offered nothing back, while the thing
+// worth offering was already true and already built. A reply moves the row to the "visited" tier,
+// and EV_RANK in scripts/lib/service_labels.cjs sorts every city page on
+// { visited: 0, official: 1, 'self-declared': 2, directory: 3 } ascending, so a firm that confirms
+// its entry is printed above every firm that has not. data/service-languages.json says the same in
+// its own words: "which is why these are listed first".
+//
+// It is a fact about how the page is built, not an inducement. The order cannot be bought, the
+// listing stays free, and the only way into the top tier is to answer a question about your own
+// entry. Both message types carry the same sentence, because a firm that receives both and finds
+// they differ has learned that one of them is marketing.
+//
+// Anchored on each language's own question rather than on a line number, and the WhatsApp opener
+// and the mail draft ask that question differently in every language, so all twelve anchors are
+// unique. The apostrophes are doubled because these sit inside single-quoted JS strings in the
+// published file, where the artifact needs to read \' and the template literal here has to emit it.
+const WA_ASK = {
+  en: `Could you check it is right: your languages, address and website? `,
+  de: `Könnten Sie kurz prüfen, ob er stimmt: Sprachen, Adresse, Website? `,
+  es: `¿Podrían revisar si es correcta: idiomas, dirección y sitio web? `,
+  fr: `Pourriez-vous vérifier qu\\'elle est exacte : langues, adresse, site internet ? `,
+  it: `Potreste verificare che sia corretta: lingue, indirizzo, sito web? `,
+  pt: `Podem verificar se está correto: línguas, morada e site? `,
+};
+const WA_RANK = {
+  en: `Entries confirmed by the business are marked as checked and listed above the ones we have only read, so a reply also moves you up the page for your city. `,
+  de: `Von den Betrieben selbst bestätigte Einträge werden als geprüft gekennzeichnet und vor denen gelistet, die wir nur gelesen haben. Eine Antwort bringt Sie also auch auf der Seite Ihrer Stadt nach oben. `,
+  es: `Las fichas confirmadas por el propio negocio se marcan como verificadas y aparecen por delante de las que solo hemos leído, de modo que una respuesta también les sube en la página de su ciudad. `,
+  fr: `Les fiches confirmées par l\\'établissement lui-même sont signalées comme vérifiées et placées devant celles que nous avons seulement lues, une réponse vous fait donc aussi remonter sur la page de votre ville. `,
+  it: `Le schede confermate dall\\'attività stessa vengono contrassegnate come verificate e precedono quelle che abbiamo soltanto letto, quindi una risposta vi fa salire anche nella pagina della vostra città. `,
+  pt: `As fichas confirmadas pelo próprio negócio são assinaladas como verificadas e aparecem à frente das que apenas lemos, pelo que uma resposta também vos faz subir na página da vossa cidade. `,
+};
+Object.keys(WA_ASK).forEach((lang) => {
+  patch(`wa ranking sentence (${lang})`, WA_ASK[lang], WA_ASK[lang] + WA_RANK[lang]);
+});
+
+// The draft lines do not all end where their sentence does. German and French break the line after
+// "...website.", but the other four run straight on into "If anything is wrong, " and wrap mid
+// sentence, so appending after the line produced "If anything is wrong, Entries confirmed by the
+// business are ... for your city. or you would rather not be listed". The trailing clause has to
+// move below the new sentence, so each language says where its line splits rather than trusting
+// the line to be a sentence.
+const DRAFT_ASK = {
+  de: [`        + 'Ich schreibe, damit Sie die Angaben einmal prüfen können: Adresse, Arbeitssprachen, Website. '`, ''],
+  en: [`        + 'I am writing so you can check it: address, working languages, website. `, `If anything is wrong, '`],
+  es: [`        + 'Les escribo para que puedan revisarla: dirección, idiomas de trabajo, sitio web. `, `Si algo no es correcto, '`],
+  fr: [`        + 'Je vous écris afin que vous puissiez la vérifier : adresse, langues de travail, site internet. '`, ''],
+  it: [`        + 'Vi scrivo perché possiate verificarla: indirizzo, lingue di lavoro, sito web. `, `Se qualcosa non è corretto, '`],
+  pt: [`        + 'Escrevo para que possam verificá-lo: morada, línguas de trabalho, site. `, `Se algo estiver incorreto, '`],
+};
+Object.keys(DRAFT_ASK).forEach((lang) => {
+  const [head, tail] = DRAFT_ASK[lang];
+  const sentence = `        + '${WA_RANK[lang].trim()} '`;
+  // With a tail the head is an unterminated string, so it is closed here and the tail reopened on
+  // its own line; without one the head is already a whole line and the sentence simply follows it.
+  const replacement = tail
+    ? `${head}'\n${sentence}\n        + '${tail}`
+    : `${head}\n${sentence}`;
+  patch(`draft ranking sentence (${lang})`, head + tail, replacement);
+});
+
+// ---- 4d. the tier this tool creates, named in the tool ---------------------
+//
+// EVNAME had no 'visited', and that is the one tier the outreach produces: a firm that answers is
+// moved to it, build_outreach_dataset ranks it, and the payload carries it through as ev. The
+// panel was printing undefined for exactly the firms this pipeline had already succeeded with.
+patch('evname visited',
+  `  var EVNAME = {'official':'amtlich','self-declared':'selbst angegeben','directory':'Verzeichnis'};`,
+  `  var EVNAME = {'official':'amtlich','visited':'bestätigt','self-declared':'selbst angegeben','directory':'Verzeichnis'};`);
 
 // ---- 5. the block itself, at the top of the panel --------------------------
 patch('channel block in panel',
@@ -588,3 +683,8 @@ console.log(`css tokens: ${usedTokens.size} used without a fallback, all defined
 fs.writeFileSync(OUT, html);
 console.log(`patched ${path.basename(SRC)} -> ${path.basename(OUT)}`);
 console.log(`  ${(before / 1024).toFixed(0)} KB -> ${(html.length / 1024).toFixed(0)} KB`);
+// Which patches did something this run, and which were already in the published file. Without
+// this the run prints the same line whether it changed twelve things or nothing at all, and
+// "nothing at all" is the normal state for every patch from an earlier round.
+console.log(`  applied now (${applied.length}): ${applied.join(', ') || 'none'}`);
+console.log(`  already published (${already.length}): ${already.join(', ') || 'none'}`);

@@ -785,16 +785,29 @@
 
 /* Map container */
 .neighborhoods-map-container {
-  position: sticky;
-  top: calc(var(--nav-height) + var(--space-4));
-  height: 400px;
+  height: 320px;
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
 }
 
+/*
+ * Sticky only where the layout is two columns.
+ *
+ * Sticky was written for the desktop grid, where the map sits BESIDE the list and staying put is
+ * the whole point. The rule was not inside a media query, so it also applied to the single-column
+ * phone layout, where the map sits ABOVE the list and staying put means covering it: 400px of
+ * map pinned under a 70px nav and a sticky section bar left roughly 280px of an 844px screen for
+ * the card being read, and the card's own heading was behind the map.
+ *
+ * Below 1024px the map now scrolls away with everything else. Tapping a card still marks it,
+ * because the card carries its own .active border; only the marker highlight goes unseen, and it
+ * was already unseen the moment the map left the screen.
+ */
 @media (min-width: 1024px) {
   .neighborhoods-map-container {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-4));
     height: calc(100vh - var(--nav-height) - var(--space-16));
     max-height: 600px;
   }
@@ -977,6 +990,25 @@
   margin: var(--space-3) var(--space-4);
   font-family: var(--font-body);
   font-size: var(--text-sm);
+}
+
+/*
+ * Keep the popup inside the map on a phone.
+ *
+ * Leaflet measures the popup in JS and writes an inline width, and its default 300px is wider than
+ * the map on a phone, which is 100vw less the page gutters: 294px at 390px wide. The Silom popup
+ * was 303px and hung 14px past the right edge with its close button cut off.
+ *
+ * An inline width loses to a max-width from the stylesheet, so this needs no change to the script
+ * embedded in a thousand pages. It is set on the content while the measured overflow was on the
+ * wrapper, which adds its own padding, so the cap has to leave room for that rather than match the
+ * map exactly. Desktop is left alone: there the map is a 400px column and 300px has always fitted.
+ *
+ * Nothing is lost by being narrow. The popup repeats the card's name and tagline, and the card is
+ * directly underneath.
+ */
+@media (max-width: 1023px) {
+  .leaflet-popup-content { max-width: min(15rem, calc(100vw - 9rem)); }
 }
 
 .leaflet-popup-content strong {
@@ -2295,6 +2327,34 @@
 @media (max-width: 480px) {
   .cost-persona-val { font-size: 1.35rem; }
   .cost-persona { padding: 0.9rem 0.5rem; }
+}
+
+/*
+ * The three personas scroll sideways on a phone instead of being cut off.
+ *
+ * repeat(3, 1fr) cannot deliver three equal columns here, because a grid item will not shrink
+ * below its own content and "$2,970/mo" in the display face has a floor of about 118px. On a
+ * 390px screen the row was 292px wide holding 355px of personas, and .cost-box has
+ * overflow:hidden, so the last 63px, the whole "Lean / local" column, was clipped away with no
+ * way to reach it. A reader on a phone could not see the cheapest of the three figures.
+ *
+ * Scrolling keeps all three legible at full size and keeps them side by side, which is the point
+ * of showing them together. minmax(7.6rem, 1fr) means they still stretch to fill a wider phone
+ * and only scroll when they genuinely do not fit, and the third column stays part-visible at the
+ * edge, which is what tells a reader there is more to the right.
+ */
+@media (max-width: 560px) {
+  .cost-personas {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(7.6rem, 1fr);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .cost-personas::-webkit-scrollbar { display: none; }
+  .cost-persona { scroll-snap-align: start; }
 }
 
 /* cost box v2 refinements: header band, real-data badge, emphasized primary persona */
