@@ -132,7 +132,30 @@ const LANGS = {
  *
  * ANY is every language pattern as one alternation, so a rule can say "a language, right here".
  */
-const ANY = () => `(?:${Object.values(LANGS).join('|')})`;
+/**
+ * A language name must be a whole word.
+ *
+ * Without this, 'thai' matched inside Thailand, and a Bangkok clinic whose page said "Dental
+ * Treatment Center in Bangkok, Thailand" was published as working in Thai. The same trap holds
+ * 'german' inside Germany and 'deutsch' inside Deutschland: a postal address turned into a
+ * working language.
+ *
+ * Letter lookarounds rather than \b, because \b in JavaScript is ASCII-only and would misfire on
+ * the Cyrillic, Georgian, Hebrew and Arabic patterns, which are exactly the ones nobody checks.
+ */
+const LETTER = 'a-zA-Z\u00C0-\u024F';
+const whole = (pat) => new RegExp(`(?<![${LETTER}])(?:${pat})(?![${LETTER}])`, 'i');
+
+/**
+ * A hedged claim is not a working language.
+ *
+ * "He speaks a bit of French too" is honest of the practice and useless to a reader who needs to
+ * be understood. This directory exists to say who can work in a language, so "a bit of", "basic"
+ * and "some" disqualify the sentence rather than colouring it.
+ */
+const HEDGED = /\b(a (little|bit)( of)?|basic|some|limited|rudimentary|ein (wenig|bisschen)|un poco( de)?|um pouco( de)?|un peu( de)?)\b/i;
+const ANY_RAW = () => `(?:${Object.values(LANGS).join('|')})`;
+const ANY = () => `(?<![${LETTER}])${ANY_RAW()}(?![${LETTER}])`;
 
 const RULES = () => [
   // speaks / is fluent in / conversant in  ... English
@@ -140,7 +163,7 @@ const RULES = () => [
   // English-speaking, English speakers, English spoken
   `${ANY()}[\\s-]{0,2}(?:speaking|speakers?|spoken)`,
   // deutschsprachig, englischsprachige
-  `${ANY()}\\w{0,3}sprachig`,
+  `${ANY_RAW()}\\w{0,3}sprachig`,
   // available / offered / consultations / assistance ... IN ... English
   `(?:available|offered|conducted|provided|held|assist(?:ance)?|communicate|consultations?|support|treatment|service)\\b[^.!?]{0,25}\\bin\\b[^.!?]{0,25}${ANY()}`,
   // wir sprechen / spricht ... Deutsch
@@ -150,6 +173,26 @@ const RULES = () => [
   // atendimento em / atención en / service en ... inglês
   `(?:atendimento em|atenci[oó]n en|servicio en|service en|servizio in)\\b[^.!?]{0,30}${ANY()}`,
 ];
+
+/**
+ * A customer's words, on the business's own page.
+ *
+ * "Also, Jess speaks English which was super easy to tell her exactly what I wanted" is a review in
+ * a testimonials block. It names a language, it sits next to a speaking verb, and it is not the
+ * business saying anything: it is a customer saying it, which is precisely the kind of evidence this
+ * script's own rules refuse from Google. Being quoted on the provider's own site does not make it
+ * the provider's claim.
+ *
+ * The test is voice. A business says "we", "our", "unsere", "nuestro", "nossa", or says nothing
+ * personal at all ("English spoken"). A customer says "I", "my", "me". Where a sentence carries the
+ * customer's voice and none of the business's, it is a review and it is dropped.
+ *
+ * Kept deliberately English-only: "i" is the word "and" in Croatian and an article in Italian, and
+ * "me" is ordinary in Spanish and Portuguese, so a looser test would silently delete real claims in
+ * the languages this directory cares most about.
+ */
+const REVIEW_VOICE = /(\b[I]\b|\bI'(m|ve|d)\b|\bmy\b|\bme\b|\brecommend(ed|s)?\b|\bthank you\b)/;
+const BUSINESS_VOICE = /\b(we|our|us|wir|unser\w*|nuestr\w+|noss\w+|notre|nos|nosotros|equipe|team|clinic|cl[ií]nica|praxis|kanzlei|studio|salon|hospital|praktijk)\b/i;
 
 const clean = (s) => String(s || '').replace(/\s+/g, ' ').trim();
 
@@ -257,6 +300,45 @@ function textOf(html) {
     .replace(/&[a-z]+;/gi, ' ');
 }
 
+
+/**
+ * Is this prose, or a navigation bar with the punctuation stripped out?
+ *
+ * A menu reads as one enormous sentence once the tags are gone: "Desenvolvido por PetDoctors
+ * Veterinarios Facebook Flickr Instagram Tumblr Twitter Rss Email Toggle Sliding Bar Area Protocolo
+ * com Servicos Analises Banhos Cirurgia Consultas Contacto Dermatologia Ecografia English-Speaking".
+ * Every word of that is a link label, "English-Speaking" included, and quoting it on a card as
+ * something the site says would be absurd. Menus capitalise nearly every word; prose does not.
+ */
+function looksLikeMenu(sentence) {
+  const words = sentence.split(/\s+/).filter((w) => /[a-zA-ZÀ-ÿ]/.test(w));
+  if (words.length < 8) return false;
+  const capped = words.filter((w) => /^[A-ZÀ-Þ]/.test(w)).length;
+  return capped / words.length > 0.4;
+}
+
+/**
+ * The claim, cut down to the clause that carries it.
+ *
+ * A real claim can sit inside a long paragraph: "...bridged the gap for international patients by
+ * offering: Fluent English communication for clear treatment plans." Rejecting the sentence for its
+ * length would throw away a good provider; quoting all 277 characters on a card is unreadable. So
+ * the quote is a window around the match, cut back to a delimiter.
+ */
+function tighten(sentence, at, len) {
+  if (sentence.length <= 200) return sentence;
+  let a = Math.max(0, at - 70);
+  let b = Math.min(sentence.length, at + len + 110);
+  const left = sentence.slice(0, a).search(/[.:;|•][^.:;|•]*$/);
+  if (left >= 0 && at - left < 200) a = left + 1;
+  const right = sentence.slice(b).search(/[.:;|•]/);
+  if (right >= 0 && right < 80) b += right + 1;
+  let out = sentence.slice(a, b).trim();
+  if (a > 0) out = '... ' + out;
+  if (b < sentence.length) out = out + ' ...';
+  return out;
+}
+
 /**
  * The claim, or nothing.
  *
@@ -271,15 +353,25 @@ function findClaim(text) {
     // One of the rules must place a language beside the claim. Only then is it worth asking which
     // languages the sentence names, because a list ("English, French and Arabic") is normal once
     // the sentence has been established as a claim at all.
-    if (!rules.some((r) => r.test(s))) continue;
+    const hit = rules.map((r) => r.exec(s)).find(Boolean);
+    if (!hit) continue;
+    // A navigation bar is not a sentence and cannot be quoted as one.
+    if (looksLikeMenu(s)) continue;
+    // A review quoted on the page is not the page's claim.
+    if (REVIEW_VOICE.test(s) && !BUSINESS_VOICE.test(s)) continue;
+    // "a bit of French" is not a language this directory can send somebody to.
+    if (HEDGED.test(s)) continue;
     const found = [];
     for (const [code, pat] of Object.entries(LANGS)) {
-      if (new RegExp(pat, 'i').test(s)) found.push(code);
+      // Whole word, with one exception: German glues the language to its suffix, so
+      // "deutschsprachig" is the language Deutsch and must not be lost to the boundary that keeps
+      // Deutschland out.
+      if (whole(pat).test(s) || new RegExp(pat + '\\w{0,3}sprachig', 'i').test(s)) found.push(code);
     }
     if (!found.length) continue;
     // A sentence naming half the languages on earth is a language-selector menu, not a claim.
     if (found.length > 6) continue;
-    out.push({ quote: s, languages: found });
+    out.push({ quote: tighten(s, hit.index, hit[0].length), languages: found });
   }
   if (!out.length) return null;
   // The most specific claim: fewest languages beats a long list, then the shortest sentence.
@@ -308,16 +400,28 @@ async function pool(items, limit, fn) {
   return out;
 }
 
-async function fetchText(url, ms = 8000) {
+// An honest bot string first. A site that refuses it gets one more try as a browser, because a
+// WAF answering 403 to a crawler is not the same as a site with nothing to say, and four of the
+// candidate sites in one batch were exactly that: live, public, and invisible to a polite client.
+const UA_BOT = 'Mozilla/5.0 (compatible; thenomadhq/1.0; +https://thenomadhq.com)';
+const UA_BROWSER = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36';
+
+async function fetchText(url, ms = 8000, ua = UA_BOT) {
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), ms);
   try {
     const r = await fetch(url, {
       signal: ctl.signal,
       redirect: 'follow',
-      headers: { 'user-agent': 'Mozilla/5.0 (compatible; thenomadhq/1.0; +https://thenomadhq.com)' },
+      headers: { 'user-agent': ua },
     });
-    if (!r.ok) return '';
+    if (!r.ok) {
+      clearTimeout(t);
+      if (ua === UA_BOT && (r.status === 403 || r.status === 406 || r.status === 429)) {
+        return fetchText(url, ms, UA_BROWSER);
+      }
+      return '';
+    }
     const ct = r.headers.get('content-type') || '';
     if (!/html|text/i.test(ct)) return '';
     return textOf(await r.text());

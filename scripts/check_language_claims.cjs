@@ -42,6 +42,36 @@ const CASES = [
   ['reject', 'English Deutsch Español Français Italiano Português Русский 中文 日本語 한국어'],
   // No language, no claim.
   ['reject', 'Founded in 1998, we are a family business in the old town.'],
+
+  // --- a customer's words, quoted on the business's own page ------------------
+  // This one shipped: a testimonial on a Mexico City salon's site was read as the salon claiming
+  // English. It is a customer saying it, which is the same kind of evidence this script refuses
+  // from Google, and being quoted on the provider's own page does not change whose words they are.
+  ['reject', 'Also, Jess speaks English which was super easy to tell her exactly what I wanted.'],
+  ['reject', 'I loved that my dentist speaks English, would recommend to anyone.'],
+  // ...but the business's own voice survives, even in the same paragraph.
+  ['match', 'Our dentists speak English and Spanish.', ['en', 'es']],
+  ['match', 'English spoken.', ['en']],
+  // A Spanish sentence containing "me" is ordinary Spanish, not an English review.
+  ['match', 'Nos pueden escribir: hablamos inglés y español.', ['en', 'es']],
+
+  // --- a country is not a language -------------------------------------------
+  // All three of these shipped. "thai" matched inside Thailand and published a Bangkok clinic as
+  // working in Thai on the strength of its postal address; "german" and "deutsch" do the same
+  // inside Germany and Deutschland. A language name has to be a whole word.
+  ['reject', 'Dental Treatment Center in Bangkok, Thailand'],
+  ['reject', 'Our office in Germany handles the paperwork.'],
+  ['reject', 'Unsere Kanzlei in Deutschland berät Sie gern.'],
+  // ...while the languages themselves still read, including glued to a suffix.
+  ['match', 'Wir sprechen Deutsch und Englisch.', ['de', 'en']],
+  ['match', 'Ein deutschsprachiger Anwalt ist immer erreichbar.', ['de']],
+  ['match', 'Our vets speak fluent English and Thai.', ['en', 'th']],
+
+  // --- a hedged claim is not a working language -------------------------------
+  // "a bit of French" is honest of the practice and useless to somebody who needs to be understood.
+  ['reject', 'He speaks a bit of French too.'],
+  ['reject', 'Our receptionist has basic English.'],
+  ['reject', 'El doctor habla un poco de inglés.'],
 ];
 
 let pass = 0;
