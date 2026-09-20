@@ -67,6 +67,15 @@ const CASES = [
   ['match', 'Ein deutschsprachiger Anwalt ist immer erreichbar.', ['de']],
   ['match', 'Our vets speak fluent English and Thai.', ['en', 'th']],
 
+  // --- a question is not a claim ----------------------------------------------
+  // Found on hydromedicalbali.com, one step from being published as what the site says about
+  // itself. An FAQ asks the question because it has not been answered yet.
+  ['reject', 'Do your physiotherapists speak English?'],
+  ['reject', 'Sprechen Sie Deutsch?'],
+  ['reject', 'Looking for an English-speaking dentist in Canggu?'],
+  // ...and the answer underneath it still reads, when the answer is the thing that makes a claim.
+  ['match', 'Yes, all of our physiotherapists speak English.', ['en']],
+
   // --- a hedged claim is not a working language -------------------------------
   // "a bit of French" is honest of the practice and useless to somebody who needs to be understood.
   ['reject', 'He speaks a bit of French too.'],
@@ -104,7 +113,29 @@ if (findClaim(textOf(scriptOnly))) {
   fails.push(['reject', '(claim only inside <script>)', findClaim(textOf(scriptOnly))]);
 } else pass += 1;
 
-const total = CASES.length + 2;
+// The quote itself is published, so the quote itself has to be checked. Asserting only that this
+// matches would pass on the exact bug it is here for: the claim was found correctly and the card
+// carried an em-dash into a site that forbids them, because the sentence was too short for
+// tighten() to look at. The clause before the dash must survive whole, and the tail after it names
+// no language and must not.
+const dashed = 'Our multilingual team speaks Thai, English, and Chinese—ensuring clear '
+  + 'communication for both local and international patients.';
+const gotDash = findClaim(dashed);
+if (!gotDash || /—/.test(gotDash.quote)
+    || gotDash.quote !== 'Our multilingual team speaks Thai, English, and Chinese') {
+  fails.push(['match', '(em-dash clause, quoted without the dash)', gotDash]);
+} else pass += 1;
+
+// ...and the same when the dash brackets the claim rather than trailing it, where cutting at the
+// first dash instead of splitting on every one would throw the claim away.
+const bracketed = 'Our reception team — fluent in English and Spanish — is there all day.';
+const gotBracket = findClaim(bracketed);
+if (!gotBracket || /—/.test(gotBracket.quote)
+    || gotBracket.languages.slice().sort().join(',') !== 'en,es') {
+  fails.push(['match', '(em-dash bracketing the claim)', gotBracket]);
+} else pass += 1;
+
+const total = CASES.length + 4;
 if (fails.length) {
   console.error(`check_language_claims: ${fails.length} of ${total} wrong.\n`);
   fails.forEach(([want, text, got]) => {

@@ -230,6 +230,27 @@ function cities() {
   return new Map(eval(a.slice(0, e)).map((c) => [c.id, c]));
 }
 
+/**
+ * Providers turned down by hand, and why.
+ *
+ * Some rejections cannot be written as a rule without the rule doing more harm than good. The
+ * clearest is a third-person testimonial: "The staff is highly skilled, speaks English and takes
+ * well care of the customers and their lovely furry friends" is a customer talking, but it carries
+ * no "I" or "my", and every pattern broad enough to catch it also catches real sentences a clinic
+ * writes about its own staff.
+ *
+ * So the judgement is made once, by a person, and recorded. Without this file the same site is
+ * re-read, re-matched and re-proposed on every run, and whoever reviews it next has to make the
+ * same call again with no idea it was ever made.
+ *
+ * Keyed by host. The reason is required: a bare blocklist rots into superstition.
+ */
+const HELD_FILE = path.join(ROOT, 'data', 'discover-held.json');
+function heldHosts() {
+  if (!fs.existsSync(HELD_FILE)) return {};
+  try { return JSON.parse(fs.readFileSync(HELD_FILE, 'utf8')).hosts || {}; } catch (e) { return {}; }
+}
+
 const argv = process.argv.slice(2);
 const cmd = argv[0];
 const val = (f, d) => { const i = argv.indexOf(f); return i >= 0 && argv[i + 1] ? argv[i + 1] : d; };
@@ -278,10 +299,27 @@ function plan() {
 }
 
 // ---- verify -----------------------------------------------------------------
-/** Split page text into sentences, cheaply and tolerantly. */
+/**
+ * Split page text into sentences, cheaply and tolerantly.
+ *
+ * An em-dash is a clause boundary, and this site does not publish one.
+ *
+ * "Our multilingual team speaks Thai, English, and Chinese—ensuring clear communication for both
+ * local and international patients" is a real claim wearing a punctuation mark the prose gate
+ * rejects on sight, and it arrived on a card because the sentence is short enough that tighten()
+ * never looked at it. Rewriting somebody's quote is not an option; a quote is evidence.
+ *
+ * Splitting here solves both at once. The clause that carries the claim is kept verbatim and the
+ * marketing tail after the dash names no language, so findClaim drops it on its own. Only the
+ * em-dash is split on: the gate forbids only that one, and an en-dash is ordinary inside
+ * "English-Thai translation", where splitting would tear the claim in half.
+ *
+ * This became reachable the moment numeric entities were decoded in textOf. Before that &#8212;
+ * fell through the &[a-z]+; catch-all and left a space, which is what the split does now anyway.
+ */
 function sentences(text) {
   return clean(text)
-    .split(/(?<=[.!?。])\s+|(?:\s\|\s)|(?:\s•\s)/)
+    .split(/(?<=[.!?。])\s+|(?:\s\|\s)|(?:\s•\s)|\s*—\s*/)
     .map((s) => s.trim())
     .filter((s) => s.length > 12 && s.length < 400);
 }
@@ -297,6 +335,8 @@ function textOf(html) {
     .replace(/&amp;/gi, '&')
     .replace(/&#39;|&apos;/gi, "'")
     .replace(/&quot;/gi, '"')
+    .replace(/&#x([0-9a-f]+);/gi, (m, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (m, d) => String.fromCodePoint(parseInt(d, 10)))
     .replace(/&[a-z]+;/gi, ' ');
 }
 
@@ -313,8 +353,18 @@ function textOf(html) {
 function looksLikeMenu(sentence) {
   const words = sentence.split(/\s+/).filter((w) => /[a-zA-ZÀ-ÿ]/.test(w));
   if (words.length < 8) return false;
-  const capped = words.filter((w) => /^[A-ZÀ-Þ]/.test(w)).length;
-  return capped / words.length > 0.4;
+  // Language names are proper nouns, so the better a claim is the more capitalised it looks:
+  // "Our multilingual team speaks Thai, English, and Chinese" is half capitals and every one of
+  // them is the reason the sentence is worth keeping. Counting those as menu evidence made the
+  // heuristic sharpest against the claims it should protect. So judge on what is left after the
+  // language names and the opening word, which prose capitalises regardless.
+  const rest = words.slice(1).filter((w) => !Object.values(LANGS).some((p) => whole(p).test(w)));
+  // Too little left to read a ratio from. A menu is a list of headings, and one that is nothing
+  // but language names is a language selector, which findClaim already turns away for naming more
+  // languages than any real claim does.
+  if (rest.length < 4) return false;
+  const capped = rest.filter((w) => /^[A-ZÀ-Þ]/.test(w)).length;
+  return capped / rest.length > 0.4;
 }
 
 /**
@@ -359,6 +409,14 @@ function findClaim(text) {
     if (looksLikeMenu(s)) continue;
     // A review quoted on the page is not the page's claim.
     if (REVIEW_VOICE.test(s) && !BUSINESS_VOICE.test(s)) continue;
+    // Neither is a question. "Do your physiotherapists speak English?" is an FAQ heading on
+    // hydromedicalbali.com, and it was about to be published as what the site says about itself.
+    // The site asks it precisely because it has not yet been answered, and the answer below it is
+    // the thing that would be worth quoting. Losing that answer is the cost: it is usually "Yes,
+    // all of them do", which names no language and carries no claim on its own, so an FAQ that
+    // puts the language only in the question goes unread. That is a miss, and a miss costs one
+    // provider while a false positive publishes a claim nobody made.
+    if (/\?\s*$/.test(s)) continue;
     // "a bit of French" is not a language this directory can send somebody to.
     if (HEDGED.test(s)) continue;
     const found = [];
@@ -428,8 +486,11 @@ async function fetchText(url, ms = 8000, ua = UA_BOT) {
   } catch (e) { return ''; } finally { clearTimeout(t); }
 }
 
+const host0 = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
+
 async function verify(file) {
   const CITY = cities();
+  const HELD = heldHosts();
   const mapFile = path.join(ROOT, 'data', 'discover-map.json');
   const MAP = fs.existsSync(mapFile) ? JSON.parse(fs.readFileSync(mapFile, 'utf8')) : {};
   const places = JSON.parse(fs.readFileSync(path.resolve(file), 'utf8'));
@@ -441,7 +502,7 @@ async function verify(file) {
     try { return `${p.city}|${new URL(p.url).hostname.replace(/^www\./, '')}`; } catch (e) { return ''; }
   }));
 
-  const rows = []; const skipped = { noSite: 0, notASite: 0, dupe: 0, noClaim: 0, unreachable: 0, noCity: 0 };
+  const rows = []; const skipped = { noSite: 0, notASite: 0, held: 0, dupe: 0, noClaim: 0, unreachable: 0, noCity: 0 };
   let i = 0;
   for (const pl of places) {
     i += 1;
@@ -449,6 +510,7 @@ async function verify(file) {
     const site = pl.website || pl.url || pl.site || '';
     if (!name || !site || !/^https?:/i.test(site)) { skipped.noSite += 1; continue; }
     if (!isRealSite(site)) { skipped.notASite += 1; continue; }
+    if (HELD[host0(site)]) { skipped.held += 1; continue; }
 
     // Two shapes arrive here. Google Maps rows carry the query they were found through, and the
     // plan wrote down what each query meant. A hand-assembled candidate list says city and category
@@ -501,7 +563,8 @@ async function verify(file) {
   console.log(`${places.length} candidates -> ${rows.length} with a language claim on their own site`);
   console.log(`  skipped: ${skipped.noClaim} state no language, ${skipped.dupe} already listed, `
     + `${skipped.notASite} have a Facebook page or link-in-bio instead of a site, `
-    + `${skipped.noSite} have no website, ${skipped.noCity} could not be placed`);
+    + `${skipped.noSite} have no website, ${skipped.noCity} could not be placed, `
+    + `${skipped.held} held by hand`);
   const byCat = {}; const byLang = {};
   rows.forEach((r) => { byCat[r.category] = (byCat[r.category] || 0) + 1; r.languages.forEach((l) => { byLang[l] = (byLang[l] || 0) + 1; }); });
   console.log(`  categories: ${Object.entries(byCat).sort((a, b) => b[1] - a[1]).map(([c, n]) => `${c} ${n}`).join(', ')}`);
