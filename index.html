@@ -181,9 +181,15 @@
        the others or the price sits on the cut. */
     .home-hero .hero-picks > li:last-child .hero-pick-label { bottom: 1.6rem; }
 
-    /* The top of the panel is fading, and the first tile's score badge sat inside the fade at a
-       readable-but-ghostly 40%. It drops past the fade instead; the other two keep their corner. */
-    .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: 38%; }
+    /* One place for every score: level with the city's name, right-aligned over its price, so each
+       tile reads as two rows (name and score, then country and price). The top corner cannot be that
+       place: the panel fades in at the top, and the first badge had to drop to 38% of its tile to
+       escape the fade while the other two kept their corner, which read as a misaligned badge.
+       The offset is the label's own bottom plus its second line (0.85rem meta at 1.3 line height
+       with its gap), which puts the badge level with the name, plus 0.5rem so it clears the
+       price's line box: level alone left the badge sitting on the digits. */
+    .home-hero .hero-picks a.hero-pick .hero-pick-score { top: auto; right: 1rem; bottom: calc(0.85rem + 1.3rem + 0.5rem); }
+    .home-hero .hero-picks > li:last-child a.hero-pick .hero-pick-score { bottom: calc(1.6rem + 1.3rem + 0.5rem); }
 
     .home-hero .hero-picks a.hero-pick .hero-pick-name { font-size: 1.7rem; }
     .home-hero .hero-picks a.hero-pick .hero-pick-meta { font-size: 0.85rem; }
@@ -1439,9 +1445,9 @@
       .home-hero .hero-picks > li:nth-child(1) .hero-pick-label,
       .home-hero .hero-picks > li:nth-child(2) .hero-pick-label { left: 1rem; }
 
-      /* No diagonal and no fade here, so both nudges go back to normal. The score offset alone
-         left the first badge floating in the middle of its card. */
-      .home-hero .hero-picks > li:nth-child(1) .hero-pick-score { top: 0.7rem; }
+      /* No diagonal and no fade here, and a 104px card has no room for a badge beside the name,
+         so every badge goes back to its corner. */
+      .home-hero .hero-picks > li:nth-child(n) a.hero-pick .hero-pick-score { top: 0.7rem; right: 0.7rem; bottom: auto; }
 
       .home-hero .hero-picks > li:last-child .hero-pick-label { bottom: 0.85rem; }
 
