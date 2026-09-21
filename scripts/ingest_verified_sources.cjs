@@ -441,7 +441,7 @@ db.providers.forEach((p) => { (seenByCity[p.city] = seenByCity[p.city] || new Ma
  * the shorter name therefore made the longer one look new on the next run: eighteen rows merged on
  * 2026-08-24 came straight back the next morning, and would have come back every morning after.
  */
-const flat = (s) => fold(s).replace(/[^a-z0-9]/g, '');
+const flat = (s) => fold(T.withoutConjunctions(s)).replace(/[^a-z0-9]/g, '');
 const flatByCity = {};
 db.providers.forEach((p) => { (flatByCity[p.city] = flatByCity[p.city] || []).push(flat(p.name)); });
 const gateWouldMerge = (city, name) => {

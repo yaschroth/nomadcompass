@@ -134,7 +134,7 @@
 </style>
     <section class="tool-content"><div class="container">
       <div class="tc-block"><h2>Digital nomad visas, ranked by what you need to earn</h2><p>A digital nomad visa lets you live in a country legally while working remotely for clients or an employer outside it. Almost all of them ask you to prove a minimum income, and that bar is the single biggest factor in where you can actually go. This tool lines up more than 40 nomad and remote-work visas by their income requirement so you can see, at a glance, which ones your salary already clears and which are just out of reach.</p></div>
-      <div class="tc-block"><h2>The cheapest and the toughest bars</h2><p>At the accessible end, several Latin American and Balkan programmes ask for well under $1,500 a month: Colombia at $900, Albania at $950, Argentina at $1,000 and Ecuador at $1,446. In the middle sit the popular European options, Spain at $3,280 through Hungary, Greece, Malta and Croatia to Portugal at $4,240. At the top, Estonia, Indonesia, South Korea, Japan, Romania and Iceland want $4,900 to $7,300 a month. A handful, like Thailand's DTV, look at savings in the bank instead of monthly income.</p></div>
+      <div class="tc-block"><h2>The cheapest and the toughest bars</h2><p>At the accessible end, several Latin American and Balkan programmes ask for well under $1,500 a month: Colombia at $900, Albania at $950 and Ecuador at $1,446, and Argentina sets no figure at all. In the middle sit the popular European options, Spain at $3,280 through Hungary, Greece, Malta and Croatia to Portugal at $4,240. At the top, Estonia, Indonesia, South Korea, Japan, Romania and Iceland want $4,900 to $7,300 a month. A handful, like Thailand's DTV, look at savings in the bank instead of monthly income.</p></div>
       <div class="tc-block"><h2>Frequently asked questions</h2>
           <details><summary>What income do you need for a digital nomad visa?</summary><p>It varies enormously. Some Latin American and Balkan visas start under $1,000 a month, while Estonia, Iceland, Japan and South Korea ask for $4,900 to $7,300 a month. Enter your income above to see which ones you clear.</p></details>
           <details><summary>Are these income figures before or after tax?</summary><p>Most nomad visas state a gross income requirement, but the exact definition and required documents differ by country. Treat the figures here as an approximate guide and always confirm the current rule on the official government source before applying.</p></details>
@@ -199,29 +199,34 @@
         ['Brazil','br','Digital Nomad Visa',1500,'1 year, renewable','latam','USD 1,500 a month or USD 18,000 in savings.',false],
         ['Colombia','co','Digital Nomad Visa (V)',900,'Up to 2 years','latam','About three times Colombia’s minimum wage.',false],
         ['Ecuador','ec','Digital Nomad Visa',1446,'Up to 2 years','latam','Three times Ecuador’s unified basic salary, which is $482 for 2026. The country uses the US dollar.',false],
-        ['Argentina','ar','Digital Nomad Visa',1000,'Up to 1 year','latam','Proof of remote income; a modest bar.',false],
+        ['Argentina','ar','Digital Nomad Visa',0,'180 days, renewable once','latam','The rules set no income figure. You prove the work itself with a contract, a company letter or fee receipts, plus a CV and one work reference, and freelancers qualify. Renewing needs half the first 180 days spent in Argentina.','none'],
         ['Panama','pa','Short-Stay Remote Worker Visa',3000,'9 months, renewable once','latam','USD 36,000 a year.',false],
         ['Uruguay','uy','Digital Nomad Visa',1500,'Up to 1 year','latam','Low bar and a path to residency.',false],
         ['Barbados','bb','Welcome Stamp',4200,'1 year, renewable','latam','USD 50,000 a year.',false],
         ['Antigua & Barbuda','ag','Nomad Digital Residence',4200,'2 years','latam','USD 50,000 a year.',false],
-        ['Curacao','cw','@HOME in Curacao',0,'6 months, renewable','latam','No fixed income figure; proof of remote work and funds.',true],
+        ['Curacao','cw','@HOME in Curacao',0,'6 months, renewable','latam','No fixed income figure; proof of remote work and funds.','none'],
         ['South Africa','za','Digital Nomad Visa',3280,'Up to 3 years','africa','A flat rand amount from the October 2024 rules, cut from the opening figure; the dollar value moves with the currency, not a wage.',false],
         ['Mauritius','mu','Premium Visa',1500,'1 year, renewable','africa','About USD 1,500 a month; tax-friendly.',false],
         ['Cape Verde','cv','Remote Working Programme',1600,'6 months, renewable','africa','Average bank balance of around EUR 1,500.',false],
         ['Namibia','na','Digital Nomad Visa',2000,'6 months','africa','About USD 2,000 a month.',false],
         ['Kenya','ke','Digital Nomad Work Permit',4600,'1 year, renewable','africa','USD 55,000 a year.',false],
-        ['Seychelles','sc','Workation Retreat',0,'Up to 1 year','africa','No fixed income figure; proof of employment and funds.',true]
+        ['Seychelles','sc','Workation Retreat',0,'Up to 1 year','africa','No fixed income figure; proof of employment and funds.','none']
       ];
       var incomeEl=document.getElementById('nvIncome'),regionSel=document.getElementById('nvRegion');
       var results=document.getElementById('nvResults'),headline=document.getElementById('nvHeadline');
       var money=function(v){return '$'+Math.round(v).toLocaleString('en-US');};
       function flag(cc,name){return '<img src="/assets/flags/'+cc+'.svg" alt="" width="26" height="19" onerror="this.style.display=\'none\'">';}
       function card(v,income){
-        var min=v[3],savings=v[7];
-        var qualifies=savings||income>=min;
-        var req=savings?'<span class="nv-pill req savings">Savings-based</span>':'<span class="nv-pill req">From '+money(min)+'/mo</span>';
+        // v[7]: true when a savings balance is the test, 'none' when the rules set no figure at all.
+        var min=v[3],savings=v[7]===true,none=v[7]==='none';
+        var qualifies=savings||none||income>=min;
+        var req=savings?'<span class="nv-pill req savings">Savings-based</span>'
+          :none?'<span class="nv-pill req savings">No income floor</span>'
+          :'<span class="nv-pill req">From '+money(min)+'/mo</span>';
         var status=savings
           ? '<div class="nv-status yes">Income-flexible: judged on savings, not monthly income.</div>'
+          : none
+          ? '<div class="nv-status yes">No set income figure to clear.</div>'
           : (qualifies
               ? '<div class="nv-status yes">You clear it by '+money(income-min)+'/mo.</div>'
               : '<div class="nv-status gap">Short by <b>'+money(min-income)+'/mo</b>.</div>');
@@ -295,6 +300,7 @@
   }, true);
 })();</script>
 <!-- /aff-track -->
+
   <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
   <style>

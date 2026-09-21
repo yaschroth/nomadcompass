@@ -37,7 +37,9 @@ const ALLOW = new Set([
   'budapest|drlaszlopeter|drlaszlopeterandras',
 ]);
 
-const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+// "And" and "&" are the same word; see withoutConjunctions for the sixteen firms that proved it.
+const { withoutConjunctions } = require(path.join(ROOT, 'scripts', 'lib', 'service_text.cjs'));
+const norm = (s) => withoutConjunctions(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 
 // The containment test above misses the case that actually reached the site: the same person under
 // two name orders. The German embassy in Paris publishes one doctors list at a German URL and a

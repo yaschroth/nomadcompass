@@ -153,7 +153,25 @@ const tidyAddress = (text, limit) => {
   return trim(t.replace(/(\d{4,6})([A-Z][a-z])/g, '$1 $2'));
 };
 
+/**
+ * A firm's name with its "and" taken out, in any of the ways a list writes it.
+ *
+ * The duplicate test is "one name, flattened to letters and digits, contains the other", and a
+ * conjunction defeats it: "Vc Law And Consultancy" flattens to vclawandconsultancy and "VC LAW &
+ * CONSULTANCY" to vclawconsultancy, and neither contains the other. The UK list writes "And" where
+ * the firm and every other list write "&", so sixteen firms were live twice, VC Law & Consultancy in
+ * Istanbul among them until the firm itself told us. Spanish y, German und, French et and
+ * Portuguese e are the same word: "Carlos Pinto De Abreu E Associados" was on the page beside
+ * "Carlos Pinto De Abreu Associados". Measured before it was added: every pair it newly matched
+ * was one business.
+ *
+ * Used by the duplicate gate and by the ingest's test of what the gate would merge, which must agree
+ * or the ingest proposes again every row a merge removed.
+ */
+const withoutConjunctions = (s) => String(s || '').replace(/&|\b(?:and|y|und|et|e)\b/gi, ' ');
+
 module.exports = {
+  withoutConjunctions,
   unentity, tidyAddress, withoutTrailingPhone, withoutNameInFront,
   ADDRESS_LABEL, CONTINUES_ABOVE, NAME_BEFORE_ADDRESS, DANGLING_LABEL, RUN_TOGETHER,
 };

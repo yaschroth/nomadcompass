@@ -241,6 +241,10 @@ const PAGES = sandbox.window.NOMAD_SERVICE_PAGES || {};
 // can be compared with the row it came from. Without this the gate reports its own bug.
 const unesc = (s) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
 const names = (html) => [...html.matchAll(/<p class="sv-hit-name">(?:<a [^>]*>)?([^<]*)/g)].map((m) => unesc(m[1]));
+// The same trap one step later: finding a provider's result by its raw name misses every name with
+// an ampersand in it. MJ & Co was the first row with both a WhatsApp number and the Checked tier,
+// and three assertions failed on a result that was on the page all along.
+const hitFor = (html, name) => html.split('<li class="sv-hit">').find((s) => names('<li class="sv-hit">' + s)[0] === name) || '';
 
 // 1. A city on its own is a search. It used to return the 329-card grid instead.
 const bigCity = Object.keys(META).map((s) => [s, IDX.filter((r) => r[1] === s).length])
@@ -319,7 +323,7 @@ const contacts = IDX.map((r, i) => [r, i]).filter(([r]) => r[7]);
 if (contacts.length) {
   const [row] = contacts[0];
   html = search({ city: row[1], cat: row[2] });
-  const li = (html.split('<li class="sv-hit">').find((s) => s.includes(row[0])) || '');
+  const li = hitFor(html, row[0]);
   const ct = row[7];
   if (ct.w) {
     check('a supplied WhatsApp number is offered', li.includes('wa.me/' + ct.w), `${row[0]} has one and the result showed none`);
@@ -335,7 +339,7 @@ if (contacts.length) {
 const mobile = IDX.find((r) => r[7] && r[7].m);
 if (mobile) {
   html = search({ city: mobile[1], cat: mobile[2] });
-  const li = (html.split('<li class="sv-hit">').find((s) => s.includes(mobile[0])) || '');
+  const li = hitFor(html, mobile[0]);
   check('a mobile practice is not offered a map of its service area', !li.includes('maps/search'),
     `${mobile[0]} has no address and the result offered a map anyway`);
 }
@@ -350,7 +354,7 @@ if (checked) {
   const others = IDX.filter((r) => r[1] === checked[1] && r[4] !== 'v').length;
   check('a checked provider is listed before the rest', first === checked[0],
     `${checked[0]} answered us and ${first} came first, ahead of it, among ${others} unchecked rows`);
-  const li = (html.split('<li class="sv-hit">').find((x) => x.includes(checked[0])) || '');
+  const li = hitFor(html, checked[0]);
   check('the checked badge says what it says on the cards', li.includes('Checked with them'),
     'the search labelled the tier differently from the listing pages');
 }
