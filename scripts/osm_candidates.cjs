@@ -125,8 +125,12 @@ const FOREIGN = /\b(international|expat|english|foreign|global|multilingual|brit
     // running; one category at a time, it answers.
     const els = [];
     for (const cat of cats) {
-      // eslint-disable-next-line no-await-in-loop
-      els.push(...await overpass(query(c.lat, c.lng, radiusM, [cat])));
+      // A category Overpass will not answer is skipped and said so, rather than taking the whole
+      // run with it: six refusals on one category used to discard every city already fetched.
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        els.push(...await overpass(query(c.lat, c.lng, radiusM, [cat])));
+      } catch (e) { console.error(`  ${slug} ${cat}: skipped, ${e.message}`); }
       // eslint-disable-next-line no-await-in-loop
       await new Promise((res) => setTimeout(res, 1500));
     }
