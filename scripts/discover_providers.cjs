@@ -194,6 +194,22 @@ const RULES = () => [
 const REVIEW_VOICE = /(\b[I]\b|\bI'(m|ve|d)\b|\bmy\b|\bme\b|\brecommend(ed|s)?\b|\bthank you\b)/;
 const BUSINESS_VOICE = /\b(we|our|us|wir|unser\w*|nuestr\w+|noss\w+|notre|nos|nosotros|equipe|team|clinic|cl[ií]nica|praxis|kanzlei|studio|salon|hospital|praktijk)\b/i;
 
+/**
+ * A review that never says "I".
+ *
+ * "She speaks good English." has no customer pronoun in it, so the voice test above passes it, and
+ * on omdental.mx it sits between "I love Om Dental!" and "I highly recommend Om Dental!". On
+ * coraldentalcenter.com the sentence is "Competent friendly english speaking staff, good prices, and
+ * they did a good job descaling and polishing." Both are customers talking about the clinic.
+ *
+ * So a sentence written in the third person (she, he, they, as the one doing the speaking or the
+ * job) that carries no business voice of its own is judged by the company it keeps: if a sentence
+ * within two either side is a customer talking, it is part of a review. Only third-person sentences
+ * are judged this way. A heading like "English-Speaking Dentist in Buenos Aires" beside a solo
+ * practitioner's own "I studied at UBA" is the business in its own voice, and must still count.
+ */
+const THIRD_PERSON = /(^|[.!]\s*)(she|he|they)\b|\b(she|he|they)\s+(speaks?|spoke|is|was|were|did|does|has|had)\b/i;
+
 const clean = (s) => String(s || '').replace(/\s+/g, ' ').trim();
 
 /**
@@ -399,7 +415,9 @@ function tighten(sentence, at, len) {
 function findClaim(text) {
   const out = [];
   const rules = RULES().map((r) => new RegExp(r, 'i'));
-  for (const s of sentences(text)) {
+  const all = sentences(text);
+  for (let si = 0; si < all.length; si += 1) {
+    const s = all[si];
     // One of the rules must place a language beside the claim. Only then is it worth asking which
     // languages the sentence names, because a list ("English, French and Arabic") is normal once
     // the sentence has been established as a claim at all.
@@ -409,6 +427,9 @@ function findClaim(text) {
     if (looksLikeMenu(s)) continue;
     // A review quoted on the page is not the page's claim.
     if (REVIEW_VOICE.test(s) && !BUSINESS_VOICE.test(s)) continue;
+    // ...and neither is a third-person sentence sitting inside one. See THIRD_PERSON.
+    if (THIRD_PERSON.test(s) && !BUSINESS_VOICE.test(s)
+      && all.some((n, k) => k !== si && Math.abs(k - si) <= 2 && REVIEW_VOICE.test(n))) continue;
     // Neither is a question. "Do your physiotherapists speak English?" is an FAQ heading on
     // hydromedicalbali.com, and it was about to be published as what the site says about itself.
     // The site asks it precisely because it has not yet been answered, and the answer below it is
@@ -502,10 +523,14 @@ async function verify(file) {
     try { return `${p.city}|${new URL(p.url).hostname.replace(/^www\./, '')}`; } catch (e) { return ''; }
   }));
 
-  const rows = []; const skipped = { noSite: 0, notASite: 0, held: 0, dupe: 0, noClaim: 0, unreachable: 0, noCity: 0 };
-  let i = 0;
+  const skipped = { noSite: 0, notASite: 0, held: 0, dupe: 0, noClaim: 0, unreachable: 0, noCity: 0 };
+  // The cheap tests run first and serially; only what survives them is fetched, and the fetching
+  // runs through pool(). The loop used to await every site in turn, four paths at eight seconds
+  // each, which is fine for 43 Maps results and hours for the few thousand an OpenStreetMap city
+  // returns. The comment above pool() said it was used here; it was not.
+  const todo = [];
+  const batchHost = new Set();
   for (const pl of places) {
-    i += 1;
     const name = clean(pl.title || pl.name);
     const site = pl.website || pl.url || pl.site || '';
     if (!name || !site || !/^https?:/i.test(site)) { skipped.noSite += 1; continue; }
@@ -526,9 +551,14 @@ async function verify(file) {
     let host = '';
     try { host = new URL(site).hostname.replace(/^www\./, ''); } catch (e) { /* ignore */ }
     if (host && knownHost.has(`${city}|${host}`)) { skipped.dupe += 1; continue; }
+    // The same site twice in one batch, from two queries or two OSM nodes, is one business.
+    if (host && batchHost.has(`${city}|${host}`)) { skipped.dupe += 1; continue; }
+    if (host) batchHost.add(`${city}|${host}`);
+    todo.push({ pl, name, site, city, category });
+  }
 
-    process.stdout.write(`\r  ${i}/${places.length} ${name.slice(0, 40).padEnd(40)}`);
-
+  let done = 0;
+  const found = await pool(todo, parseInt(val('--conc', '12'), 10), async ({ pl, name, site, city, category }) => {
     let claim = null; let claimUrl = '';
     for (const p of CONTACT_PATHS) {
       const u = site.replace(/\/+$/, '') + p;
@@ -538,9 +568,10 @@ async function verify(file) {
       claim = findClaim(text);
       if (claim) { claimUrl = u; break; }
     }
-    if (!claim) { skipped.noClaim += 1; continue; }
-
-    rows.push({
+    done += 1;
+    process.stdout.write(`\r  ${done}/${todo.length} checked`);
+    if (!claim) return null;
+    return {
       city,
       name,
       category,
@@ -552,13 +583,16 @@ async function verify(file) {
       area: clean(pl.street || pl.address || '') || undefined,
       note: `Its own site says: "${clean(claim.quote)}"`,
       claimQuote: clean(claim.quote),
-    });
-  }
+    };
+  });
+  const rows = found.filter(Boolean);
+  skipped.noClaim += found.length - rows.length;
   process.stdout.write('\r'.padEnd(60) + '\r');
 
   if (!fs.existsSync(PROPOSALS)) fs.mkdirSync(PROPOSALS, { recursive: true });
-  const out = path.join(PROPOSALS, `discovered-${today}.json`);
-  fs.writeFileSync(out, `${JSON.stringify({ written: today, from: ACTOR, rows }, null, 1)}\n`);
+  // --out, because two batches on one day used to write the same file and the second erased the first.
+  const out = val('--out', '') ? path.resolve(val('--out', '')) : path.join(PROPOSALS, `discovered-${today}.json`);
+  fs.writeFileSync(out, `${JSON.stringify({ written: today, from: val('--from', ACTOR), rows }, null, 1)}\n`);
 
   console.log(`${places.length} candidates -> ${rows.length} with a language claim on their own site`);
   console.log(`  skipped: ${skipped.noClaim} state no language, ${skipped.dupe} already listed, `
@@ -646,7 +680,7 @@ function ingest(file) {
 
 // The claim detector is the only thing here that decides whether a row may exist, so it is
 // exported and tested against sentences it must catch and sentences it must refuse.
-module.exports = { findClaim, textOf, sentences, LANGS, RULES };
+module.exports = { findClaim, textOf, sentences, LANGS, RULES, cities };
 
 // ---- main -------------------------------------------------------------------
 if (require.main !== module) return;

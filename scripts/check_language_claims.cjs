@@ -78,6 +78,13 @@ const CASES = [
 
   // --- a hedged claim is not a working language -------------------------------
   // "a bit of French" is honest of the practice and useless to somebody who needs to be understood.
+  // A review that never says "I", judged by the customer sentences around it (omdental.mx and
+  // coraldentalcenter.com, 2026-09-21). And the two it must not swallow: a clinic describing its own
+  // dentist in the third person, and a solo practitioner whose "I" is the business speaking.
+  ['reject', 'I love Om Dental! I had a teeth cleaning with Grisbel. She was kind and patient. She speaks good English. The price was affordable. I highly recommend Om Dental!'],
+  ['reject', 'I had my teeth cleaned here last month. Competent friendly english speaking staff, good prices, and they did a good job descaling and polishing. Would recommend.'],
+  ['match', 'Dr. Ana Ruiz trained in Madrid and Boston. She speaks English and Spanish with every patient. Appointments are available on weekdays.', ['en', 'es']],
+  ['match', 'I am a dentist with twenty years of experience. English-Speaking Dentist in Buenos Aires. I studied at the University of Buenos Aires.', ['en']],
   ['reject', 'He speaks a bit of French too.'],
   ['reject', 'Our receptionist has basic English.'],
   ['reject', 'El doctor habla un poco de inglés.'],
