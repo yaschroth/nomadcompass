@@ -725,12 +725,14 @@ for (const src of manifestRows) {
     const map = (seenByCity[city] = seenByCity[city] || new Map());
     if (map.has(k) || gateWouldMerge(city, name) || takenFromSource.has(src.url + '|' + k)) { stats.already++; continue; }
 
-    const bits = [`On the ${src.publisher} list${r.specialty ? ', under ' + asciiFold(r.specialty).replace(/\.$/, '') : ''}.`];
+    // Only what is about this entry. The list's name, its roster claim and its date were written into
+    // every note, and they are the card's source badge and link written out in words: thirty cards
+    // from one Bulgarian list carried the same three sentences on 2026-09-22, and check_service_notes
+    // (a sentence on more than two cards) and check_disclaimers (a roster-level caveat) both refused
+    // them. Provenance is rendered, never narrated. The section heading goes too, because it repeats
+    // down a whole section and the category chip already says what it says.
+    const bits = [];
     if (r.role) bits.push(asciiFold(r.role).replace(/\.$/, '') + '.');
-    bits.push(/^roster/i.test(src.claimType || '')
-      ? `The list is published as a list of ${P.list(rosterLangs.map((l) => db._languages[l]))}-speaking providers, which is a claim about the roster rather than a note about this entry.`
-      : `The list states the languages of each entry, and this one names ${languages.map((l) => db._languages[l] || l).join(', ')}.`);
-    if (src.statedDate) bits.push(`The list is dated ${asciiFold(src.statedDate).replace(/\s*-\s*Artikel.*$/, '')}.`);
 
     const row = {
       city,
