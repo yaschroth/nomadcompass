@@ -18,9 +18,14 @@
  * authority is the business's site, and an address copied from the map would be the one field on
  * the card that the business never said.
  *
- * The yield will be lower than Maps's "English speaking ..." queries, because OSM cannot be asked
- * who courts foreigners. It is free, so volume makes up for it; businesses whose name or tags
- * suggest a foreign clientele are simply read first when a category is capped.
+ * MEASURED, AND IT IS THE REASON NOT TO RUN THIS AT SCALE. The pilot on 2026-09-22 read 354 OSM
+ * candidates in Lisbon and Istanbul (dentists, estate agents, gyms, opticians, garages, salons) and
+ * found 0 language claims. The fetches worked: 18 of a 24-site sample loaded, most are published in
+ * Portuguese only, and the three that mention English do so in a language switcher, which is rightly
+ * not a claim. OSM cannot be asked who courts foreigners, and a business that does not court them
+ * has no reason to say what it speaks. Maps's "English speaking ..." queries select for exactly the
+ * businesses that do, which is where their 12% comes from. Use this only where a category has no
+ * other route and a few rows matter more than the time, and expect close to nothing.
  *
  * Usage:
  *   node scripts/osm_candidates.cjs --city lisbon[,porto] [--cats vet,hair] [--radius 12] [--cap 150]
