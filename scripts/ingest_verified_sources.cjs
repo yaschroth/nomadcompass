@@ -41,13 +41,17 @@ const CAT = [
   // was filed as a vet, and Gauthier, Pelletier and Poitier were all waiting behind it.
   [/\btier|veterin|\bvet\b/i, 'vet'],
   [/zahn|kiefer|dental|dentist|odonto/i, 'dentist'],
-  [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop/i, 'physio'],
+  // kinesitherapeute is the French physiotherapist and orthophoniste the French speech therapist, filed
+  // with physio as logop already is. The French consular lists head their sections in French.
+  [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop|kin[eé]sith|orthophon/i, 'physio'],
   [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b/i, 'therapy'],
   [/optiker|optometr|augenoptik/i, 'optician'],
   [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht|solicitor|barrister|advocate|\blaw\b|\bavocat\b|avvocat|diritto|derecho|direito|advogad|rechtsberat/i, 'legal'],
   [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],
   [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
-  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein/i, 'doctor'],
+  // The French names for specialties sit at the end. On 2026-09-22 the Vienna list lost 50 of its
+  // doctors as uncategorised because GENERALISTES, OPHTALMOLOGUES and PEDIATRES matched nothing here.
+  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein|g[eé]n[eé]ralist|ophtalm|p[eé]diatr|pneumolog|cardiolog|endocrin|gastro-?ent|rhumatolog|oto-rhino|radiolog|traumatolog|anesth[eé]s|allergolog|n[eé]phrolog|h[eé]patolog|oncolog|acupunct/i, 'doctor'],
 ];
 /**
  * What a translation agency translates is not what it is.
@@ -83,24 +87,35 @@ const ALIASES = {
   venice: ['venezia', 'venedig'],
   genoa: ['genova'],
   bologna: ['bologna'],
-  lisbon: ['lisboa', 'lissabon'],
+  lisbon: ['lisboa', 'lissabon', 'lisbonne'],
   porto: ['oporto'],
   seville: ['sevilla'],
-  vienna: ['wien'],
+  vienna: ['wien', 'vienne'],
+  // French, because the French consulates write their own names for our cities, and the 34 medical
+  // lists added on 2026-09-22 placed Vienna's 138 doctors "elsewhere" for saying "1180 Vienne".
+  // "Vienne" is also a town near Lyon: that is safe, because a French list naming it finds a city
+  // in another country, placeOf keeps the list's own city, and the row is refused as elsewhere.
+  singapore: ['singapour'],
+  thessaloniki: ['salonique'],
+  beijing: ['pekin'],
+  valletta: ['la valette'],
+  santodomingo: ['saint-domingue', 'saint domingue'],
+  pondicherry: ['pondichery'],
+  cairo: ['le caire'],
   munich: ['munchen', 'muenchen'],
   cologne: ['koln', 'koeln'],
   prague: ['praha', 'prag'],
-  warsaw: ['warszawa', 'warschau'],
+  warsaw: ['warszawa', 'warschau', 'varsovie'],
   krakow: ['krakau'],
-  copenhagen: ['kobenhavn', 'kopenhagen'],
+  copenhagen: ['kobenhavn', 'kopenhagen', 'copenhague'],
   gothenburg: ['goteborg'],
   brussels: ['bruxelles', 'brussel', 'brussels'],
   antwerp: ['antwerpen', 'anvers'],
   geneva: ['geneve', 'genf'],
   zurich: ['zuerich'],
   belgrade: ['beograd'],
-  bucharest: ['bucuresti', 'bukarest'],
-  athens: ['athen', 'athina'],
+  bucharest: ['bucuresti', 'bukarest', 'bucarest'],
+  athens: ['athen', 'athina', 'athenes'],
   nicosia: ['lefkosia', 'lefkosa'],
   moscow: ['moskva', 'moskau'],
   marrakesh: ['marrakech'],
@@ -113,10 +128,10 @@ const ALIASES = {
   riodejaneiro: ['rio de janeiro'],
   mexicocity: ['mexico, d.f.', 'ciudad de mexico', 'cdmx', 'mexico city'],
   buenosaires: ['buenos aires'],
-  capetown: ['cape town', 'kapstadt'],
+  capetown: ['cape town', 'kapstadt', 'le cap'],
   telaviv: ['tel aviv', 'tel-aviv'],
   kualalumpur: ['kuala lumpur'],
-  tbilisi: ['tiflis'],
+  tbilisi: ['tiflis', 'tbilissi'],
   almaty: ['almaty', 'alma-ata'],
   yerevan: ['jerewan', 'eriwan'],
   seoul: ['seoul'],

@@ -73,6 +73,11 @@ for (const f of fixtures) {
   if (got.rows !== want.rows) problems.push('rows ' + want.rows + ' -> ' + got.rows);
   if (got.withLanguages !== want.withLanguages) problems.push('with languages ' + want.withLanguages + ' -> ' + got.withLanguages);
   (want.sample || []).forEach((n, i) => { if (got.sample[i] !== n) problems.push('name ' + (i + 1) + ' "' + n + '" -> "' + (got.sample[i] || 'nothing') + '"'); });
+  // Names that must be read as names somewhere in the list: the entries a fix rescued. The first,
+  // middle and last cannot pin those, because the rows a fix changes sit wherever they happen to,
+  // and a fixture whose samples were never broken passes against the broken reader. Kept outside
+  // `expect` so that --update does not erase it.
+  (f.mustInclude || []).forEach((n) => { if (!rows.some((r) => r.name === n)) problems.push('missing "' + n + '"'); });
 
   if (problems.length) {
     console.log('  FAIL  ' + f.name.padEnd(26) + problems.join('; ').slice(0, 160));

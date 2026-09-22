@@ -70,6 +70,15 @@ const looksLikeHeading = (l) => {
   // a section heading and its entry lost. A heading does not carry a comma, and a line of dots is a
   // table of contents rather than a section.
   if (t.includes(',') || /\.{3,}|…/.test(t)) return false;
+  // Nor is a given name followed by a surname in capitals, which is how every French consular list
+  // writes a person. The capitals test below counts letters, so a long surname tips it: "Rudolf
+  // BABITS" is 58% capitals and stayed a name, "Renate HOFFMANN-DORNINGER" is 76% and became a
+  // section heading, with her street read as her name. 87 of the 142 Vienna doctors were lost that
+  // way on 2026-09-22. A real heading is all capitals or ends in a colon; it does not open with a
+  // name in mixed case.
+  // The surname may be double-barrelled with a spaced dash: "Evelyn BÖHMER – LAUFER" took twenty
+  // entries with her when only a plain hyphen was allowed.
+  if (/^(?:(?:Dr|Prof|Pr|Me|Mme|Mlle|M)\.?\s+)?[A-ZÀ-Þ][a-zà-ÿ]+(?:[-\s][A-ZÀ-Þ][a-zà-ÿ]+)*\s+[A-ZÀ-Þ][A-ZÀ-Þ'’]+(?:(?:\s*[-–]\s*|\s+)[A-ZÀ-Þ][A-ZÀ-Þ'’]+)*$/.test(t)) return false;
   const letters = t.replace(/[^A-Za-zÀ-ÿ]/g, '');
   if (letters.length < 3) return false;
   const upper = t.replace(/[^A-ZÀ-Þ]/g, '').length;
