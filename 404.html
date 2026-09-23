@@ -74,12 +74,30 @@
     <p class="lead">We couldn&rsquo;t find that page, it may have moved, or never existed.</p>
     <p>Try one of these instead:</p>
     <ul>
+      <!-- A dead /services/<city>/<service> URL has a page one level up that does exist. Those pages
+           are written only where there is enough to say, so a combination can stop existing while
+           search engines and AI tools still hold the old URL: /services/tbilisi/vets and
+           /services/chiangmai/therapists were each landed on this month. -->
+      <li id="nf-up" hidden><a id="nf-up-link" href="/services"></a></li>
       <li><a href="/cities">Browse all 410 city guides</a></li>
       <li><a href="/wheel">Find your match on the Nomad Wheel</a></li>
       <li><a href="/blog">Read the blog</a></li>
       <li><a href="/">Go to the homepage</a></li>
     </ul>
     <a href="/cities" class="btn btn-primary btn-lg legal-cta">Browse cities &rarr;</a>
+    <script>
+      (function () {
+        var m = /^\/services\/([a-z0-9-]+)(?:\/[^/]+)+\/?$/.exec(location.pathname);
+        if (!m) return;
+        var li = document.getElementById('nf-up');
+        var a = document.getElementById('nf-up-link');
+        // The city is not named: most slugs are one word, so "chiangmai" prettifies to "Chiangmai",
+        // and a page that misspells the place is worse than one that does not say it.
+        a.href = '/services/' + m[1];
+        a.textContent = 'See every service we list in that city';
+        li.hidden = false;
+      }());
+    </script>
   </main>
 
   <footer class="footer"><div class="container">
