@@ -75,6 +75,9 @@ const STEPS = [
   ['sweep', 'apply_photo_credit.cjs', 'names the photographer of every CC-licensed city photo'],
   ['sweep', 'apply_entity_schema.cjs', 'must be the last writer'],
   ['build', 'generate_sitemap.cjs', 'reads the seven manifests'],
+  // After every writer, because it asks the filesystem which pages exist. Vercel matches redirects
+  // before the filesystem, so a stale list would stand in front of a real page.
+  ['build', 'build_service_redirects.cjs', 'the city-and-service URLs we do not write point at the city page that holds them'],
   ['gate', 'check_parsers.cjs', 'the readers still read their frozen pages the same way'],
   ['gate', 'check_service_pages.cjs', ''],
   ['gate', 'check_filter_counts.cjs', 'a listing agrees with itself about how long it is'],
@@ -91,6 +94,7 @@ const STEPS = [
   ['gate', 'check_meta.cjs', 'every page has its own title and description, both in budget'],
   ['gate', 'check_duplicate_blocks.cjs', 'no page carries a sweep-owned block twice'],
   ['gate', 'check_local_assets.cjs', 'no page points at a local file that is not there'],
+  ['gate', 'build_service_redirects.cjs --check', 'no redirect stands in front of a page that exists'],
   ['gate', 'verify_service_links.cjs --new-only', 'fetches the links a data change added, and only those'],
 ];
 
