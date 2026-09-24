@@ -40,18 +40,18 @@ const CAT = [
   // \b matters on both sides of tier: without it the Montreal law firm Neville-Warren Cloutier
   // was filed as a vet, and Gauthier, Pelletier and Poitier were all waiting behind it.
   [/\btier|veterin|\bvet\b/i, 'vet'],
-  [/zahn|kiefer|dental|dentist|odonto/i, 'dentist'],
+  [/zahn|kiefer|\bdental|dentaire|dentist|odont/i, 'dentist'],
   // kinesitherapeute is the French physiotherapist and orthophoniste the French speech therapist, filed
   // with physio as logop already is. The French consular lists head their sections in French.
   [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop|kin[eé]sith|orthophon/i, 'physio'],
-  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b/i, 'therapy'],
+  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b|family therap|marriage|counsell?or/i, 'therapy'],
   [/optiker|optometr|augenoptik/i, 'optician'],
   [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht|solicitor|barrister|advocate|\blaw\b|\bavocat\b|avvocat|diritto|derecho|direito|advogad|rechtsberat/i, 'legal'],
   [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],
   [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
   // The French names for specialties sit at the end. On 2026-09-22 the Vienna list lost 50 of its
   // doctors as uncategorised because GENERALISTES, OPHTALMOLOGUES and PEDIATRES matched nothing here.
-  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|hno|hals|augen|innere|allgemein|g[eé]n[eé]ralist|ophtalm|p[eé]diatr|pneumolog|cardiolog|endocrin|gastro-?ent|rhumatolog|oto-rhino|radiolog|traumatolog|anesth[eé]s|allergolog|n[eé]phrolog|h[eé]patolog|oncolog|acupunct/i, 'doctor'],
+  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|\bhno\b|hals|augen|innere|allgemein|g[eé]n[eé]ralist|ophtalm|p[eé]diatr|pneumolog|cardiolog|endocrin|gastro-?ent|rhumatolog|oto-rhino|radiolog|traumatolog|anesth[eé]s|allergolog|n[eé]phrolog|h[eé]patolog|oncolog|acupunct/i, 'doctor'],
 ];
 /**
  * What a translation agency translates is not what it is.
@@ -141,6 +141,24 @@ const ALIASES = {
   bali: ['denpasar', 'kuta', 'ubud', 'seminyak'],
   chiangmai: ['chiang mai'],
 };
+// French exonyms found by the French-list parse of 2026-09-24: 31 rows read to "not in our cities"
+// because the lists wrote Hambourg, Francfort, Koweit or Alexandrie. Merged into ALIASES rather than
+// written into it, so a key it already had keeps its own entries.
+const MORE_ALIASES = {"hamburg":["hambourg"],"frankfurt":["francfort"],"nuremberg":["nurnberg","nuernberg"],"thehague":["la haye","den haag"],"guangzhou":["canton"],"riyadh":["riyad","riad"],"jeddah":["djeddah"],"addisababa":["addis abeba"],"newdelhi":["delhi"],"kuwait":["koweit"],"london":["londres"],"alexandria":["alexandrie"],"siena":["sienne"]};
+for (const [k, v] of Object.entries(MORE_ALIASES)) ALIASES[k] = [...new Set([...(ALIASES[k] || []), ...v])];
+// From the UK and US consular parses of the same day. "cyprus" is the site's whole-island page, so
+// Nicosia, Limassol and Larnaca place there (Paphos has its own); the Indian cities go by their
+// renamed spellings; Panama and Palma are here because the town reader takes "Panama City" as
+// "Panama" and "Palma de Mallorca" as "Palma", which must still find the city.
+const UK_US_ALIASES = {
+  cyprus: ['nicosia', 'lefkosia', 'limassol', 'lemesos', 'larnaca'], tirana: ['tirane'], shkoder: ['shkodra'],
+  vlore: ['vlora'], bangalore: ['bengaluru'], mysore: ['mysuru'], pondicherry: ['pondichery', 'puducherry'],
+  kolkata: ['calcutta'], kochi: ['cochin', 'ernakulam'], jeju: ['jeju-si', 'jeju city'], ghent: ['gent'],
+  yangon: ['rangoon'], panama: ['panama'], palma: ['palma'],
+  brussels: ['uccle', 'ixelles', 'etterbeek', 'jette', 'auderghem', 'woluwe-saint-lambert', 'woluwe-saint-pierre', 'watermael-boitsfort', 'schaerbeek', 'saint-gilles', 'anderlecht'],
+};
+for (const [k, v] of Object.entries(UK_US_ALIASES)) ALIASES[k] = [...new Set([...(ALIASES[k] || []), ...v])];
+
 /**
  * Every city the site covers, not every city this directory already holds.
  *
@@ -721,7 +739,7 @@ for (const src of manifestRows) {
     const sole = (src.categories || []).length === 1 ? src.categories[0] : '';
     const ownWords = [r.specialty, r.role, r.hospital, r.detail, r.name].filter(Boolean).join(' ');
     const own = ownWords.trim() ? categorise(ownWords, '') : '';
-    const cat = sole === 'translator' ? sole : (own || sole);
+    const cat = (sole === 'translator' || sole === 'pharmacy') ? sole : (own || sole);
     if (!cat) { stats.noCategory++; continue; }
 
     // A form of address is not part of a name. Nor is a dash and a lower-case phrase after it, which
@@ -736,7 +754,12 @@ for (const src of manifestRows) {
     const k = key(name);
     // A bracket on either side of the name and not only an opening one: "Upadlosc i restrukturyzacja)"
     // is the tail of a practice-area list. A name that ends in "&" is a firm the reader cut in half.
-    if (!k || k.split(' ').length < 2 || /[:()\[\]]|[,&]$/.test(name) || NOT_A_PROVIDER.test(name) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
+    // "University" is refused because a faculty is not a provider, but "Tampere University Hospital"
+    // and "The First Affiliated Hospital of Xiamen University" are: 30+ of them fell to it on the
+    // UK lists. So the word is not held against a name that says what it treats.
+    const providerTest = /\b(hospital|clinic|medical|dental|stomatolog|cancer|health)\b/i.test(name)
+      ? name.replace(/\bUniversit\w*/gi, '') : name;
+    if (!k || k.split(' ').length < 2 || /[:()\[\]]|[,&]$/.test(name) || NOT_A_PROVIDER.test(providerTest) || NAME_IS_NOT_A_NAME.test(name) || NAME_IS_A_LIST.test(name)
       || HEADER_ROW.test(where) || HEADER_ROW.test(name) || isGenericName(name) || isOnlyAPlace(name) || NAME_IS_A_FRAGMENT(name)
       || NAME_OPENS_WITH_A_STREET(name) || NAME_IS_A_SECTION.test(name) || NAME_IS_A_FIELD.test(name)) { stats.noName++; continue; }
     const map = (seenByCity[city] = seenByCity[city] || new Map());
@@ -755,7 +778,9 @@ for (const src of manifestRows) {
       city,
       name,
       category: cat,
-      languages: [...new Set(languages)].sort(),
+      // Only codes the directory names: Gujarati and Marathi arrived from the Indian lists, and one
+      // unknown code on one row stops build_services from writing anything at all.
+      languages: [...new Set(languages)].filter((l) => M.LANGS[l]).sort(),
       ...(r.url ? { url: (/^https?:/.test(r.url) ? r.url : 'http://' + r.url).replace(/[.,)]+$/, '') } : {}),
       sourceUrl: src.url,
       evidence: 'official',
@@ -764,7 +789,7 @@ for (const src of manifestRows) {
       // Trimmed at both ends, not just the right. A reader that finds an empty cell before the
       // address leaves the punctuation behind it, and ";, , Facharzt fur Haut- und
       // Geschlechtskrankheiten" went out with the semicolon and two commas still on the front.
-      area: T.tidyAddress(asciiFold((r.area || '').split(/\b(?:Tel|Telf|Telefon|Fax|Mobil|Mob|Cel|E-?Mail|Email|Web|www\.|http)\b/i)[0]
+      area: T.tidyAddress(asciiFold((r.area || '').split(/\b(?:Tel|Telf|Telefon|Fax|Mobil|Mob|Cel(?=\s*[.:])|E-?Mail|Email|Web|www\.|http)\b/i)[0]
         || withoutContact), 120),
       note: bits.join(' ').replace(/\s+/g, ' ').trim(),
     };

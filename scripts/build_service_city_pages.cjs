@@ -239,6 +239,8 @@ for (const slug of slugs) {
   // A city holding more than one service is a hub: each service shows its best-sourced few and
   // links to its own page, which is where the whole list lives. A city holding one service is that
   // service's page already, so it shows everything and links nowhere.
+  // A single-service city now gets a child page too once its list passes BIG_LIST (Bucharest,
+  // Melbourne), so whether the whole group is shown depends only on whether a child holds it.
   const single = groups.length === 1;
   const PREVIEW = 3;
   const childOf = (cat) => '/services/' + slug + '/' + SERVICE_SLUGS[cat];
@@ -247,9 +249,9 @@ for (const slug of slugs) {
   // one shows three of it and links there, and a filter over three cards of 763 would report a
   // tally about a preview. 123 of the 329 cities are in that state and get no filter; the child
   // page they point at has one.
-  const complete = groups.every((g) => single || !hasChild(g.cat));
+  const complete = groups.every((g) => !hasChild(g.cat));
   /** The rows that actually become cards: whole groups, or the preview where a child page holds the rest. */
-  const renderedRows = groups.flatMap((g) => ((single || !hasChild(g.cat)) ? g.rows : g.rows.slice(0, PREVIEW)));
+  const renderedRows = groups.flatMap((g) => ((!hasChild(g.cat)) ? g.rows : g.rows.slice(0, PREVIEW)));
 
   /**
    * The language menu, counted over the cards on the page rather than over the city.
@@ -273,12 +275,12 @@ for (const slug of slugs) {
   // The cards this page actually renders, which on a page previewing its services is fewer than
   // the providers it counts: Lisbon counts 103 and shows 26. The tally has to describe the rows the
   // filter can reach, or it claims 103 sit on a page holding 26.
-  const rendered = groups.reduce((n, g) => n + ((single || !hasChild(g.cat)) ? g.rows.length : Math.min(PREVIEW, g.rows.length)), 0);
+  const rendered = groups.reduce((n, g) => n + ((!hasChild(g.cat)) ? g.rows.length : Math.min(PREVIEW, g.rows.length)), 0);
   const groupsHtml = groups.map((g) => {
     // A service with no page of its own has nowhere else to be read, so this page shows all of it.
     // Bangkok holds four hairdressers, its hairdressers page was held back under the word floor,
     // and the fourth appeared nowhere on the site: "3 shown, 1 more not shown here" and no link.
-    const shown = (single || !hasChild(g.cat)) ? g.rows : g.rows.slice(0, PREVIEW);
+    const shown = (!hasChild(g.cat)) ? g.rows : g.rows.slice(0, PREVIEW);
     const more = g.rows.length - shown.length;
     const head = hasChild(g.cat)
       ? `<a href="${childOf(g.cat)}">${esc(CATS[g.cat])}</a>`

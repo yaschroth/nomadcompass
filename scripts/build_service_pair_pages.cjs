@@ -106,12 +106,16 @@ function langSections(pair) {
   // Sections per language only where there is a real second language. Everywhere else a single list
   // reads better, and in 484 of 540 pairs one language covers nine rows in ten.
   const langs = pair.nonLocal.filter(([, n]) => n >= 2);
-  if (langs.length < 2) return null;
+  // A list past BIG_LIST is always sectioned, even by one language, because a section is capped and
+  // its overflow is paged on the city-and-language page: Hamburg's 3,721 doctors, 78% of them in
+  // English, rendered as one 5.8MB grid under the rules below.
+  const big = pair.rows.length > M.BIG_LIST && langs.length >= 1;
+  if (langs.length < 2 && !big) return null;
   // Sections are there to separate people. Where the top two hold almost the same providers they
   // separate nobody: Athens lists 95 doctors, 91 of them speak English and 88 of those same 91 also
   // speak German, so the page rendered 195 cards for 95 people and showed 20 of each. One list of
   // everyone, with the languages on each card, is both shorter and truer.
-  {
+  if (!big) {
     const [a, b] = langs;
     const setA = new Set(pair.rows.filter((r) => r.languages.includes(a[0])).map((r) => r.name));
     const setB = new Set(pair.rows.filter((r) => r.languages.includes(b[0])).map((r) => r.name));
@@ -175,11 +179,14 @@ const decide = () => {
     .sort((a, b) => M.pairOf(b.city, b.category).n - M.pairOf(a.city, a.category).n);
   for (const page of order) {
     const pair = M.pairOf(page.city, page.category);
-    if (proseWordsOf(pair) < WORD_FLOOR) continue;
+    // A list past BIG_LIST is never thin and never a copy: it is hundreds of named providers, and
+    // without this page its parent renders all of them (Bucharest's city page reached 7.6MB).
+    const big = pair.rows.length > M.BIG_LIST;
+    if (!big && proseWordsOf(pair) < WORD_FLOOR) continue;
     const fp = fingerprintOf(pair);
     let worst = 0;
     for (const s2 of seen) { const o = overlap(fp, s2); if (o > worst) worst = o; }
-    if (worst > SIMILARITY_CAP) continue;
+    if (!big && worst > SIMILARITY_CAP) continue;
     seen.push(fp);
     keep.add(page.city + '|' + page.category);
   }
@@ -257,7 +264,9 @@ for (const page of ordered) {
   const faq = P.faq(pair);
   // Declared boilerplate does not count towards the floor: a page must earn its own words.
   const uniqueWords = proseWordsOf(pair);
-  if (uniqueWords < WORD_FLOOR) {
+  // Past BIG_LIST neither hold applies; see decide() above.
+  const bigList = pair.rows.length > M.BIG_LIST;
+  if (!bigList && uniqueWords < WORD_FLOOR) {
     held.push({ url: page.url, n: pair.n, words: uniqueWords });
     continue;
   }
@@ -276,7 +285,7 @@ for (const page of ordered) {
     const o = overlap(fingerprint, a.fingerprint);
     if (o > worst) { worst = o; twin = a.url; }
   }
-  if (worst > SIMILARITY_CAP) {
+  if (!bigList && worst > SIMILARITY_CAP) {
     tooSimilar.push({ url: page.url, twin, score: worst.toFixed(2), n: pair.n });
     continue;
   }

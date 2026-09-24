@@ -67,6 +67,35 @@ const LOCAL = {
   // Paraguay's other official language is Guarani, and this map holds the one a claim in it says
   // nothing useful about. Spanish is that one.
   Paraguay: 'es',
+  // Every other site country, filled in 2026-09-24 when the register agents reached them all at once
+  // rather than one failed build at a time. null where two languages share the job (Malta, Luxembourg,
+  // Mauritius) or the local one is not a language this directory names (Mongolian, Azerbaijani).
+  Ghana: 'en', Rwanda: null, Nigeria: 'en', 'Puerto Rico': 'es', Panama: 'es', Cyprus: 'el',
+  'Bosnia and Herzegovina': null, Azerbaijan: null, Finland: 'fi', Iceland: null,
+  'Dominican Republic': 'es', Senegal: 'fr', Mauritius: null, Lebanon: 'ar', Qatar: 'ar', Malta: null,
+  Slovakia: 'sk', Kosovo: 'sq', Bahrain: 'ar', Luxembourg: null, 'Cape Verde': 'pt', Namibia: 'en',
+  Uganda: 'en', Mozambique: 'pt', 'Saudi Arabia': 'ar', Kuwait: 'ar', Palestine: 'ar', Iran: 'fa',
+  Fiji: 'en', 'New Caledonia': 'fr', Kyrgyzstan: null, Zambia: 'en', Cuba: 'es', Nicaragua: 'es',
+  'El Salvador': 'es', Bangladesh: 'bn', Pakistan: 'ur', Maldives: null, Mongolia: null, Jamaica: 'en',
+  'Ivory Coast': 'fr', Algeria: 'ar', Botswana: 'en', Vanuatu: null, Togo: 'fr', Barbados: 'en',
+  Bermuda: 'en', 'Cayman Islands': 'en', Curacao: null, Aruba: null, Bahamas: 'en', Dominica: 'en',
+  Grenada: 'en', 'Saint Lucia': 'en', 'Trinidad and Tobago': 'en', Guyana: 'en', Suriname: 'nl',
+  Honduras: 'es', Belize: 'en', Moldova: 'ro', Tajikistan: 'tg', Brunei: 'ms', 'Timor-Leste': null,
+  Bhutan: null, Madagascar: null, Malawi: 'en', Zimbabwe: 'en', Cameroon: null, Benin: 'fr',
+  Seychelles: null, Samoa: null, Tonga: null, 'Cook Islands': 'en', 'French Polynesia': 'fr',
+  'Saint Kitts and Nevis': 'en', 'Saint Vincent and the Grenadines': 'en', 'Antigua and Barbuda': 'en',
+  'British Virgin Islands': 'en', 'US Virgin Islands': 'en', 'Turks and Caicos': 'en',
+  'Sint Maarten': null, Bonaire: null, Guadeloupe: 'fr', Martinique: 'fr', 'French Guiana': 'fr',
+  Anguilla: 'en', Andorra: 'ca', Monaco: 'fr', Liechtenstein: 'de', 'Faroe Islands': null,
+  Greenland: null, Gibraltar: 'en', 'Isle of Man': 'en', 'San Marino': 'it', Gabon: 'fr',
+  'Sierra Leone': 'en', Gambia: 'en', Djibouti: 'fr', 'Sao Tome and Principe': 'pt', Lesotho: 'en',
+  Eswatini: 'en', Reunion: 'fr', Macau: 'zh', Palau: 'en', Guam: 'en', 'Northern Mariana Islands': 'en',
+  'American Samoa': 'en', 'Marshall Islands': 'en', Micronesia: 'en', 'Solomon Islands': 'en',
+  Tuvalu: 'en', Niue: 'en', Svalbard: 'no', 'Aland Islands': 'sv', Jersey: 'en', Guernsey: 'en',
+  'Vatican City': 'it', Belarus: 'ru', Burundi: null, 'Saint Barthelemy': 'fr', 'Saint Martin': 'fr',
+  Montserrat: 'en', 'Saint Pierre and Miquelon': 'fr', 'Falkland Islands': 'en',
+  'Equatorial Guinea': 'es', Angola: 'pt', Comoros: null, Mayotte: 'fr', Mauritania: 'ar',
+  'Guinea-Bissau': 'pt', Turkmenistan: null, Iraq: 'ar', Eritrea: null,
 };
 
 // A country with no entry would silently keep its own language in every heading it drives, and this
@@ -224,12 +253,20 @@ function nearest(slug, cat, k) {
  * Which pages this family consists of. A child page exists only where the city holds more than one
  * service: otherwise it would be a copy of its parent.
  */
+// More providers than one page should carry: about 120 cards is ~300KB, the most a page on a phone
+// should weigh (see CARD_BUDGET in build_service_city_lang_pages.cjs). A list longer than this is
+// always split by language and paged, whatever its language mix.
+const BIG_LIST = 120;
+
 function pageList() {
   const out = [];
   Object.keys(cities).sort().forEach((slug) => {
     const c = cities[slug];
     out.push({ kind: 'city', url: '/services/' + slug, file: 'services/' + slug + '.html', city: slug, n: c.rows.length });
-    if (c.single) return;
+    // A city holding one service is that service's page, unless the list is too long for one page:
+    // Bucharest's 5,585 sworn translators made a 7.6MB city page. Past BIG_LIST the service gets its
+    // own page, which splits by language and pages the overflow, and the city page previews it.
+    if (c.single && c.rows.length <= BIG_LIST) return;
     c.services.forEach((cat) => {
       out.push({
         kind: 'pair',
@@ -257,6 +294,6 @@ module.exports = {
   DB, CATS, LANGS, EVIDENCE, LOCAL, CITY,
   cities, pairs, services: byService,
   SERVICE_SLUGS, serviceSlug, districtOf, hostOf,
-  headlineLanguages, nearest, km, pageList,
+  headlineLanguages, nearest, km, pageList, BIG_LIST,
   pairOf: (slug, cat) => pairs[slug + '|' + cat],
 };

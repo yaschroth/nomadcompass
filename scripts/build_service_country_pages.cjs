@@ -131,7 +131,10 @@ for (const r of M.DB.providers) {
  * it. Anything else appearing here is a real collision and stops the build rather than silently
  * overwriting a city.
  */
-const EXPECTED_COLLISIONS = new Set(['singapore']);
+// The others share the city-state shape: Kuwait, Monaco, Gibraltar, Macau, Luxembourg, Djibouti and
+// Panama are named after their capital, Mauritius's city page is the island, and "cyprus" is the
+// site's whole-island page (Paphos has its own). They arrived with the consular lists of 2026-09-24.
+const EXPECTED_COLLISIONS = new Set(['singapore', 'kuwait', 'monaco', 'gibraltar', 'macau', 'luxembourg', 'djibouti', 'panama', 'mauritius', 'cyprus']);
 {
   const reserved = new Set([...Object.keys(M.cities), ...Object.values(M.SERVICE_SLUGS), 'languages']);
   const clash = Object.keys(COUNTRIES).map(slugify).filter((s) => reserved.has(s));
@@ -330,6 +333,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
           'Every language claim names the source it was read on, and links straight to it.',
           'Every language claim names the source it was read on.',
           'Each one links to the source that states it.',
+          'Each links to its source.',
         ],
       );
 

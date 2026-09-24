@@ -59,6 +59,9 @@ const MIN_ROWS = 21;
 const SECTION_CAP = 20;
 const parentShowsAll = (pair) => {
   const langs = pair.nonLocal.filter(([, n]) => n >= 2);
+  // The mirror of langSections in build_service_pair_pages.cjs: a list past BIG_LIST is sectioned
+  // and capped there, so its languages need pages here whatever their overlap.
+  if (pair.rows.length > M.BIG_LIST && langs.length >= 1) return false;
   if (langs.length < 2) return true;
   const [a, b] = langs;
   const setA = new Set(pair.rows.filter((r) => r.languages.includes(a[0])).map((r) => r.name));
@@ -272,12 +275,19 @@ for (const pair of Object.values(M.pairs)) {
     //
     // So it goes in the core, and only the closing sentence is optional. Madrid's list runs the
     // description past what Google shows; being findable is worth more than being whole on screen.
-    const descCore = `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the list that names them`
-      + (srcTop.length > 1 ? `, from ${srcTop.length} sources` : `, from ${srcTop[0].publisher}`) + '.'
+    // A publisher's full name can be most of the budget on its own ("Japan's Ministry of Health,
+    // Labour and Welfare"), so a description that would run over falls back to its short name.
+    const coreWith = (pub) => `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the list that names them`
+      + (srcTop.length > 1 ? `, from ${srcTop.length} sources` : (pub ? `, from ${pub}` : '')) + '.'
       + (alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : '');
+    // Full publisher, then its short name, then none (the page names it): the "Some also work in"
+    // clause must stay, because the page gate fails a language the description hides.
+    const descCore = [srcTop[0].publisher, srcTop[0].short, ''].map(coreWith).find((c) => c.length <= 160 || srcTop.length > 1)
+      || coreWith('');
     const desc = META.band(descCore, [
       'Every claim links to the source it was read on.',
       'Every claim links to where it came from.',
+      'Each links to its source.',
     ]);
 
     // --- one page per slice of the list ---------------------------------------------------------
@@ -387,7 +397,10 @@ for (const pair of Object.values(M.pairs)) {
     // from every page. Legal cover does not belong in the middle of what a reader came for.
     const ymyl = '';
 
-    const otherLangChips = alsoLangs.slice(0, 6).map(([l, n]) => {
+    // Six, and then every further language two or more of these providers also work in. Six was
+    // enough until Japan's register put twenty languages on Tokyo's lists, and a page that shows a
+    // card working in Tagalog must let a Tagalog speaker find that out without reading every card.
+    const otherLangChips = alsoLangs.filter(([, n], i) => i < 6 || n >= 2).map(([l, n]) => {
       const kid = `/services/${city.id}/${M.SERVICE_SLUGS[cat]}/${langSlug(l)}`;
       const target = WILL_EXIST.has(city.id + '|' + cat + '|' + l) ? kid : parent.url + '#lang-' + l;
       return B.chip({ href: target, label: P.langName(l), n });
