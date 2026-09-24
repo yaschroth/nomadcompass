@@ -55,6 +55,19 @@ const ALLOW = new Set([
   // One person, two professions on two statutory registers: a court interpreter on the Slovenian
   // justice ministry's register and a lawyer on the Bar Association of Slovenia's.
   'ljubljana|andoljektatjana|tatjanaandoljek',
+  // Two Bucharest firms at different addresses: Popovici Nitu Stoica at 239 Calea Dorobanti and
+  // Stoica & Associates at Str. Dr. N. Staicovici 2 (Opera Center II).
+  'bucharest|popovicinitustoicaassociates|stoicaassociates',
+  // A La Paz translation agency and two of its translators, each listed by the US embassy by name.
+  'lapaz|digitallanguageservices|digitallanguageservicesdanielromano',
+  'lapaz|digitallanguageservices|digitallanguageservicesroxanavalero',
+  // Three sites of Clinica Kennedy in Guayaquil: Kennedy, La Alborada and Samborondon.
+  'guayaquil|clinicakennedylaalborada|clinicakennedy',
+  'guayaquil|clinicakennedy|clinicakennedysamborondon',
+  // Two Limassol firms: Chambers & Co at Kosta Partasidi 11, Michael Chambers & Co at 25 Voukourestiou.
+  'cyprus|chambersco|michaelchamberscollc',
+  // Two campuses of Yonsei's hospital: Severance in Sinchon (Seodaemun-gu), Gangnam Severance in Gangnam-gu.
+  'seoul|gangnamseverancehospital|severancehospital',
 ]);
 
 // "And" and "&" are the same word; see withoutConjunctions for the sixteen firms that proved it.

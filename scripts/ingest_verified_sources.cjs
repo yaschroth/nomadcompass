@@ -44,7 +44,7 @@ const CAT = [
   // kinesitherapeute is the French physiotherapist and orthophoniste the French speech therapist, filed
   // with physio as logop already is. The French consular lists head their sections in French.
   [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop|kin[eé]sith|orthophon/i, 'physio'],
-  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b|family therap|marriage|counsell?or/i, 'therapy'],
+  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b|family therap|counsell?or/i, 'therapy'],
   [/optiker|optometr|augenoptik/i, 'optician'],
   [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht|solicitor|barrister|advocate|\blaw\b|\bavocat\b|avvocat|diritto|derecho|direito|advogad|rechtsberat/i, 'legal'],
   [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],

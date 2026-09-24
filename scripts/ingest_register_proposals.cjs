@@ -54,7 +54,8 @@ const src = P.source || {};
 const kind = val('--kind', src.kind || 'register');
 const metaOf = (r) => {
   // A reader that parsed several lists page by page keys each list's record by its URL instead.
-  const ls = P.sources && (P.sources[r.sourceUrl] || P.sources[r.sourceKey]);
+  const ls = P.sources && (P.sources[r.sourceUrl] || P.sources[r.sourceKey] || P.sources[r.sourceId]
+    || (typeof r.source === 'string' && P.sources[r.source]));
   if (ls) return { publisher: ls.publisher, short: ls.short || ls.publisher, pageNote: ls.pageNote };
   const ds = r.dataset && P.datasets && P.datasets[r.dataset];
   const publisher = ds ? ds.publisher : val('--publisher', src.publisher || '');

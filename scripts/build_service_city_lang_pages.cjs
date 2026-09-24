@@ -302,7 +302,14 @@ for (const pair of Object.values(M.pairs)) {
     const ofN = ', page ' + pageNo + ' of ' + pageCount;
     // The title is drawn from a pool so that it is not the h1 over again, and a page of a series
     // keeps that draw and adds its number to it.
-    const pageTitle = pageNo === 1 ? title : title + ofN;
+    // Buenos Aires runs to 24 pages, and "2795 English-speaking translators, Buenos Aires, page 10 of
+    // 24" is 62 characters, so a later page falls back to a shorter name that still says which page.
+    const pageTitle = pageNo === 1 ? title : [
+      title + ofN,
+      `${langName}-speaking ${P.catName(cat)} in ${city.name}` + ofN,
+      `${langName} ${P.catName(cat)}, ${city.name}` + ofN,
+      `${langName} ${P.catName(cat)}, ${city.name}, p. ${pageNo}/${pageCount}`,
+    ].find((t) => t.length <= 60 && t !== h1 + ofN) || `${langName} ${P.catName(cat)}, ${city.name}, p. ${pageNo}/${pageCount}`;
     const pageH1 = pageNo === 1 ? h1 : h1 + ofN;
     // A language two or more of these providers also work in has to be in the description of every
     // page of the series. Leaving it to the first hid French from four of Madrid's five.

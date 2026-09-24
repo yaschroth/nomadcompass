@@ -478,12 +478,14 @@ SOURCES['cz-cak'] = {
           city = c2; area = adr.trim();
         }
         const w = (t.match(/ www (\S+\.\S+)/) || [])[1];
-        if (w && !/^email$/i.test(w)) url = /^https?:/.test(w) ? w : 'https://' + w;
+        // The www field is typed by the lawyer: some put a LinkedIn profile or an email address
+        // ("info@akkozak.cz") there. Neither is a website, so neither is used as one.
+        if (w && !/^email$/i.test(w) && !/@|linkedin\.com|facebook\.com|instagram\.com/i.test(w)) url = /^https?:/.test(w) ? w : 'https://' + w;
       }
       if (!city) continue;
       const label = o.x.label.replace(/^\d+\s*-\s*/, '');
       ctx.add({
-        id: 'cz-' + id, city, name: nameCase(label), firm: o.x.firm || undefined, rawLangs: langs, table: CS,
+        id: 'cz-' + id, city, name: nameCase(label).replace(/\s+/g, ' ').trim(), firm: o.x.firm || undefined, rawLangs: langs, table: CS,
         url, area, sourceUrl: `${CAK}/Contact/Details/${id}`, checked: ctx.mtime('cz-cak', det ? 'contact-' + id : null),
       });
     }
