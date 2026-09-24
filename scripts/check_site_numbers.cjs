@@ -27,7 +27,9 @@ const S = stats();
 // coverage on /cost-of-living-index, the size of each tier list, and, best of all,
 // "sub-$900 cities", which is a price. A gate nobody trusts gets ignored.
 const STALE_HTML = [
-  [/\b(?:410|650\+?)\s+(?:cities|destinations|rated cities)/g, 'a stale index size (was 410 / 650+)'],
+  // "All 410 cities where we list lawyers" is a count of a directory slice, not the index size: the
+  // lawyers crossed 410 cities on 2026-09-24 and 264 pages were flagged for a true number.
+  [/\b(?:410|650\+?)\s+(?:cities|destinations|rated cities)(?!\s+where we list)/g, 'a stale index size (was 410 / 650+)'],
   [/\b(?:410|650)-city\b/g, 'a stale "N-city" phrase (was 410 / 650)'],
   [/<div class="num">(\d+)<\/div>\s*<div class="lbl">cities rated<\/div>/g, 'an about-page tile for cities rated'],
   [/<div class="num">(\d+)<\/div>\s*<div class="lbl">rankings<\/div>/g, 'an about-page tile for rankings'],
@@ -52,7 +54,11 @@ const problems = [];
 for (const f of html) {
   const t = fs.readFileSync(f, 'utf8');
   const rel = path.relative(ROOT, f);
+  // The services directory counts its own slices ("24,796 lawyers in 410 cities"), which can land on
+  // an old index size by chance; the index-size rule is about claims made for the whole site.
+  const directory = /^services([\\/]|\.html$)/.test(rel);
   for (const [re, what] of STALE_HTML) {
+    if (directory && what.startsWith('a stale index size')) continue;
     const m = t.match(re);
     if (!m) continue;
     // Tile rules capture the number, so only complain when it actually disagrees.
