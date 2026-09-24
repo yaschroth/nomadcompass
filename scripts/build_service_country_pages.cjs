@@ -294,7 +294,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
       const lshare = Math.round((lv.rows.length / v.rows.length) * 100);
       const s = sourcing(lv.rows, `these ${langName}-speaking ${label}`);
 
-      const lstand = `${lv.rows.length} ${label} in ${countryName} who work in ${langName}, `
+      const lstand = `${lv.rows.length} ${label} in ${countryName} ${P.who(cat)} work in ${langName}, `
         + `in ${lv.cities.size} cities. `
         + `${P.list(ltop.map((c) => c.name + ' (' + c.n + ')'))} hold ${Math.round((ltop.reduce((a, c) => a + c.n, 0) / lv.rows.length) * 100)}% of them.`;
 
@@ -324,7 +324,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
       ];
       const ltitle = ltitleOpts.find((t) => t.length <= 60) || ltitleOpts[ltitleOpts.length - 1];
       const ldesc = META.band(
-        `${lv.rows.length} ${label} in ${countryName} who work in ${langName}, across ${lv.cities.size} cities, `
+        `${lv.rows.length} ${label} in ${countryName} ${P.who(cat)} work in ${langName}, across ${lv.cities.size} cities, `
         + `led by ${ltop.map((c) => c.name).join(', ')}.`,
         [
           'Every language claim names the source it was read on, and links straight to it.',

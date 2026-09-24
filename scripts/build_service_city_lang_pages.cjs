@@ -91,8 +91,9 @@ const SCHEMA_TYPE = {
   doctor: 'Physician', dentist: 'Dentist', vet: 'VeterinaryCare', physio: 'MedicalBusiness',
   therapy: 'MedicalBusiness', legal: 'Attorney', tax: 'AccountingService', realestate: 'RealEstateAgent',
   hair: 'HairSalon', gym: 'ExerciseGym', mechanic: 'AutoRepair', optician: 'Optician',
+  pharmacy: 'Pharmacy',
 };
-const HEALTH = new Set(['doctor', 'dentist', 'vet', 'physio', 'therapy', 'optician']);
+const HEALTH = new Set(['doctor', 'dentist', 'vet', 'physio', 'therapy', 'optician', 'pharmacy']);
 const MONEY = new Set(['legal', 'tax', 'realestate']);
 
 const langSlug = (code) => M.LANGS[code].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -221,7 +222,7 @@ for (const pair of Object.values(M.pairs)) {
       {
         q: `How many ${P.catName(cat)} in ${city.name} work in ${langName}?`,
         a: `${rows.length}, on the sources we have read. That is what is published and checked, not what exists: ` +
-          `a ${P.singular(cat)} who speaks ${langName} and appears on no list is not here.`,
+          `a ${P.singular(cat)} ${P.who(cat)} speaks ${langName} and appears on no list is not here.`,
       },
       alsoLangs.length ? {
         q: `What if I need another language?`,
@@ -243,7 +244,7 @@ for (const pair of Object.values(M.pairs)) {
     const candidates = [
       `${rows.length} ${langName}-speaking ${P.catName(cat)}, ${city.name}`,
       `${langName} ${P.catName(cat)} in ${city.name}: ${rows.length} with sources`,
-      `${city.name}: ${rows.length} ${P.catName(cat)} who work in ${langName}`,
+      `${city.name}: ${rows.length} ${P.catName(cat)} ${P.who(cat)} work in ${langName}`,
       `${langName}-speaking ${P.catName(cat)} in ${city.name} (${month})`,
       `${rows.length} ${P.catName(cat)} in ${city.name} speaking ${langName}`,
     ].filter((t) => t !== h1 && !usedTitles.has(t));
@@ -501,7 +502,7 @@ ${shell.headEnd}
         ${cards}
       </div>
       ${F.empty({ id: 'svp', what: pageCount < 2
-    ? `This page holds every ${esc(langName)}-speaking ${esc(P.catName(cat).replace(/s$/, ''))} we can source in ${esc(city.name)}.`
+    ? `This page holds every ${esc(langName)}-speaking ${esc(P.singular(cat))} we can source in ${esc(city.name)}.`
     : `This is page ${pageNo} of ${pageCount}; the others hold the rest of the ${esc(langName)}-speaking ${esc(P.catName(cat))} in ${esc(city.name)}.` })}
       ${pager}
 

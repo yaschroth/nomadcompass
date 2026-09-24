@@ -83,7 +83,7 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   });
   const topLangs = Object.entries(langTotals).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
-  const h1 = `${Label} who work in a language you speak, city by city`;
+  const h1 = `${Label} ${P.who(cat)} work in a language you speak, city by city`;
   // "Physiotherapists" alone is 17 characters, so the full shape runs to 65. Longest that fits.
   const titleOpts = [
     `${Label} abroad by working language: ${svc.cities.length} cities, ${svc.n} listed`,
@@ -273,7 +273,7 @@ ${shell.headEnd}
 
       ${countryBlocks}
 
-      ${F.empty({ id: 'svh', what: `This page lists every city where we hold at least one ${esc(label.replace(/s$/, ''))} with a sourced working language.` })}
+      ${F.empty({ id: 'svh', what: `This page lists every city where we hold at least one ${esc(P.singular(cat))} with a sourced working language.` })}
 
       <section class="svh-foot">
         <p>Every city above links to the ${esc(label)} we hold for it, and every entry there names the source its language claim came from.</p>

@@ -22,7 +22,7 @@ const CAT_PLURAL = {
   doctor: 'doctors', dentist: 'dentists', vet: 'vets', therapy: 'therapists',
   physio: 'physiotherapists', optician: 'opticians', hair: 'hairdressers', legal: 'lawyers',
   tax: 'tax advisers', realestate: 'estate agents', mechanic: 'mechanics', fitness: 'gyms',
-  translator: 'translators',
+  translator: 'translators', pharmacy: 'pharmacies',
 };
 const slug = (s) => s.replace(/\s+/g, '-').toLowerCase();
 

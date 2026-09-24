@@ -33,6 +33,11 @@ const SOUNDS_CONSONANT = new Set(['Ukrainian']);
 const an = (word) => (/^[AEIOU]/.test(word) && !SOUNDS_CONSONANT.has(word) ? 'an ' : 'a ') + word;
 const catName = (c) => CAT_PLURAL[c] || c;
 const singular = (c) => catName(c).replace(/ies$/, 'y').replace(/s$/, '');
+// A pharmacy is a shop, and "pharmacies who work in English" reads as a slip in a heading. Gyms are
+// the same case and still say "who": their titles are live and being measured, and this would move
+// them. Add a category here when it names a place rather than a person.
+const PLACES = new Set(['pharmacy']);
+const who = (c) => (PLACES.has(c) ? 'that' : 'who');
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 function niceDate(iso) {
@@ -365,6 +370,6 @@ function contactLinks(p, lang) {
 
 module.exports = {
   esc, card, mapsUrl, contactLinks, WA_HELLO,
-  words, list, plural, count, langName, an, catName, singular, niceDate, publisherOf,
+  words, list, plural, count, langName, an, catName, singular, who, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,
 };

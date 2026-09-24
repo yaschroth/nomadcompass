@@ -57,6 +57,7 @@ const CATS = {
     ['healthcare:speciality', '(chiropractic|osteopathy|physiotherapy)']],
   vet: [['amenity', 'veterinary']],
   optician: [['shop', 'optician'], ['craft', 'optician'], ['healthcare', 'optometrist']],
+  pharmacy: [['amenity', 'pharmacy'], ['healthcare', 'pharmacy']],
   hair: [['shop', '^(hairdresser|barber)$']],
   mechanic: [['shop', '^(car_repair|motorcycle_repair)$']],
   fitness: [['leisure', 'fitness_centre']],

@@ -112,7 +112,7 @@ for (const [cat, svc] of Object.entries(M.services)) {
     // --- prose, all of it computed from these rows and none of it repeated from the listings ----
     const top = cityRows.slice(0, 3);
     const topShare = Math.round((top.reduce((s, c) => s + c.n, 0) / v.rows.length) * 100);
-    const standfirst = `${v.rows.length} ${label} who work in ${langName}, in ${v.cities.size} cities across ` +
+    const standfirst = `${v.rows.length} ${label} ${P.who(cat)} work in ${langName}, in ${v.cities.size} cities across ` +
       `${countries.length} ${countries.length === 1 ? 'country' : 'countries'}. ` +
       `${P.list(top.map((c) => c.name + ' (' + c.n + ')'))} hold ${topShare}% of them between them.`;
 
@@ -164,7 +164,7 @@ for (const [cat, svc] of Object.entries(M.services)) {
 
     const h1 = `${langName}-speaking ${label}, city by city`;
     const title = `${langName}-speaking ${label} in ${v.cities.size} cities: ${v.rows.length} listed`;
-    const descCore = `${v.rows.length} ${label} who work in ${langName}, across ${v.cities.size} cities in ` +
+    const descCore = `${v.rows.length} ${label} ${P.who(cat)} work in ${langName}, across ${v.cities.size} cities in ` +
       `${countries.length} countries, led by ${top.map((c) => c.name).join(', ')}.`;
     const desc = META.band(descCore, [
       'Every language claim names the source it was read on, and links straight to it.',
@@ -302,7 +302,7 @@ ${shell.headEnd}
 
       ${countryBlocks}
 
-      ${F.empty({ id: 'svl', what: `This page lists every city where we can point at a source saying a ${label.replace(/s$/, '')} works in ${langName}.` })}
+      ${F.empty({ id: 'svl', what: `This page lists every city where we can point at a source saying a ${P.singular(cat)} works in ${langName}.` })}
 
       <div class="svl-prose">
         <h2>Where these came from</h2>

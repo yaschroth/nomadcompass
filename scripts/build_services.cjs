@@ -502,6 +502,7 @@ ${shell.headTop}
     .sv-c-realestate .sv-ico { color:#7e22ce; background:#f4ecfd; }
     .sv-c-mechanic .sv-ico { color:#c2410c; background:#fbe9dd; }
     .sv-c-fitness .sv-ico { color:#15803d; background:#e6f3e9; }
+    .sv-c-pharmacy .sv-ico { color:#b91c1c; background:#fbeaea; }
     /* The languages are the entire point of this page, so they get the strongest block on the
        card, above the prose and well clear of the provenance footer. */
     .sv-langs { display:flex; flex-wrap:wrap; align-items:center; gap:.32rem; margin:0 0 .85rem; }
@@ -852,7 +853,7 @@ ${shell.bodyEnd}
           var nEl=cEl.querySelector('.sv-ix-n'), uEl=cEl.querySelector('.sv-ix-unit');
           nEl.textContent=cat!=='all'?n:cEl.getAttribute('data-total-n');
           uEl.textContent=cat!=='all'
-            ?(n===1?CAT_PLURAL[cat].replace(/s$/,''):CAT_PLURAL[cat])
+            ?(n===1?CAT_PLURAL[cat].replace(/ies$/,'y').replace(/s$/,''):CAT_PLURAL[cat])
             :cEl.getAttribute('data-total-u');
           // The filter travels with the click, so the city page opens on the same question.
           var qs=[];
