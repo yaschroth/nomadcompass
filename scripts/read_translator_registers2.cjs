@@ -26,7 +26,7 @@
  * a diploma, exam or oath check, and the body publishes the roll so that courts and the public can
  * use it. The language claim is therefore the state's, per named person: the official tier.
  *
- * Refused or not usable, with the reason and the quote, in agents/translators-asia/REPORT.md: the UAE
+ * Refused or not usable (reasons and quotes in the translators-asia agent report): the UAE
  * Ministry of Justice (its public translator search is broken; the only readable route is an
  * unauthenticated back-office API that also returns Emirates ID numbers, private e-mails and AML
  * screening flags, so it was not used and no copy was kept), Morocco (the 2025 roll is in Bulletin
@@ -48,7 +48,10 @@
  * PLACEMENT, AND THE precision FIELD
  *
  * Every row carries `precision`, because these rolls place people with very different accuracy:
- *   address       an office address in the city (vn-hcm, tn)
+ *   address       an office address in the city (vn-hcm)
+ *   court-district Tunisia: the first-instance court district (Tunis, Sousse, Sfax, Kairouan), or
+ *                 Sidi Bou Said and Djerba when the office address names them; the address itself
+ *                 is not carried (see TRAPS)
  *   district      the roll gives the district (ilce) and it is one of the city's own districts
  *                 (tr-bbk, and the tr-cmk lists that print a district: Gaziantep, Sanliurfa,
  *                 Trabzon, Mugla)
@@ -71,9 +74,11 @@
  *   the PDF has Ottoman Turkish. Every Turkish PDF is read by position through PyMuPDF instead.
  * - Tunisia's PDFs set the lam-alef ligatures in fonts with no Unicode mapping, so the letters come
  *   out as "8", "=", "&", "@", ";", "U", "F" or a control character, and differently in each file.
- *   A name with any such character is refused whole rather than repaired by guess (35 of 532).
- *   PyMuPDF returns Arabic table cells in visual order, so each line is reversed back, and runs of
- *   digits or Latin letters inside it are reversed again to stay readable.
+ *   A name with any such character is refused whole rather than repaired by guess.
+ *   The table's own cell text is unusable for Arabic: it comes in visual order and with the spaces
+ *   between words lost ("كمالفرفر" for "كمال فرفر"), so the cells are rebuilt from the positioned
+ *   words ('tablewords'), right to left, after undoing the page's 90 degree rotation. A word that
+ *   ends in an initial or medial presentation form is joined to the next ("ﻣ" + "حمد" = "محمد").
  * - Ho Chi Minh City absorbed Binh Duong and Ba Ria-Vung Tau on 1 July 2025, so its notary list now
  *   includes offices 30 to 90 km away. The wards of the two former provinces are listed in HCM_OUT and
  *   HCM_VUNGTAU: Vung Tau wards go to our Vung Tau city, the rest are not placed.
@@ -157,11 +162,45 @@ else:
     import fitz
     d = fitz.open(f)
     for i, p in enumerate(d):
-        if only and not only.search(p.get_text()):
+        if only and i > 0 and not only.search(p.get_text()):
             continue
         if mode == 'tables':
             for t in p.find_tables().tables:
                 res.append({'page': i, 'rows': t.extract()})
+        elif mode == 'tablewords':
+            # Arabic cells: words (logical order inside each word) placed by position, right to
+            # left, lines top to bottom. The page may be rotated; words are brought into the table's
+            # coordinates first. A word ending in an initial or medial presentation form is joined
+            # to the next one with no space: the glyph itself says the letters connect.
+            import unicodedata
+            W = [(fitz.Rect(w[:4]) * p.rotation_matrix, w[4]) for w in p.get_text('words')]
+            def joins(s):
+                return bool(s) and ('INITIAL FORM' in unicodedata.name(s[-1], '') or 'MEDIAL FORM' in unicodedata.name(s[-1], ''))
+            for t in p.find_tables().tables:
+                rows = []
+                for r in t.rows:
+                    cols = []
+                    for c in r.cells:
+                        if c is None:
+                            cols.append(None)
+                            continue
+                        R = fitz.Rect(c)
+                        ws = [(b, s) for b, s in W if R.contains(fitz.Point((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2))]
+                        ws.sort(key=lambda w: w[0].y0)
+                        lines = []
+                        for b, s in ws:
+                            if lines and abs(lines[-1][0] - b.y0) < 3:
+                                lines[-1][1].append((b, s))
+                            else:
+                                lines.append([b.y0, [(b, s)]])
+                        txt = ''
+                        for y, lw in lines:
+                            lw.sort(key=lambda w: -w[0].x0)
+                            for b, s in lw:
+                                txt += ('' if (not txt or joins(txt)) else ' ') + s
+                        cols.append(txt)
+                    rows.append(cols)
+                res.append({'page': i, 'rows': rows})
         else:
             L = []
             for b in p.get_text('dict')['blocks']:
@@ -209,6 +248,14 @@ const LANG = {
     SOMALICE: null, TATARCA: null, CERKEZCE: null, ABAZACA: null, LAZCA: null, GAGAVUZCA: null, KIRIMTATARCA: null,
     BELARUSCA: null, BEYAZRUSCA: null, HAUSACA: null, ESPERANTO: null, MOLDOVACA: null, ARAMICE: null,
     TIGRINYA: null, TIGRINCE: null, BELUCCE: null, SUAHILICE: 'sw', LINGALA: null, YORUBA: null, OROMOCA: null,
+    RUMENCE: 'ro', ENDONEZYADILI: 'id', AZERBAYCANTURKCESI: null, DARICE: null, KARADAGCA: null, ISARETDILITERCUMANI: null,
+    TURKCEISARETDILI: null, KUTCE: null,
+    // Written as the country, used as the language label on the Trabzon and Sanliurfa lists.
+    UKRAYNA: 'uk', RUSYA: 'ru',
+    // A plain misspelling of ALMANCA on one line of the Izmir list.
+    ALMACA: 'de',
+    // "Şam lehçesi ve fesih": Damascene Arabic and standard (fasih) Arabic.
+    SAMLEHCESIVEFESIH: 'ar',
   },
   vi: {
     anh: 'en', tienganh: 'en', phap: 'fr', duc: 'de', nhat: 'ja', nhatban: 'ja', han: 'ko', hanquoc: 'ko', trung: 'zh',
@@ -224,7 +271,7 @@ const LANG = {
     '波蘭語': 'pl', '尼泊爾語': 'ne', '孟加拉語': 'bn', '柬埔寨語': 'km', '高棉語': 'km', '僧伽羅語': 'si', '波斯語': 'fa',
     '烏克蘭語': 'uk', '希伯來語': 'he', '瑞典語': 'sv', '捷克語': 'cs', '匈牙利語': 'hu', '希臘語': 'el', '泰米爾語': 'ta',
     '旁遮普語': 'pa', '羅馬尼亞語': 'ro', '芬蘭語': 'fi', '丹麥語': 'da', '挪威語': 'no', '斯瓦希里語': 'sw',
-    '廣東語': null, '粵語': null, '寮語': null, '寮國語': null, '蒙古語': null, '手語': null, '其他': null,
+    '廣東語': null, '粵語': null, '雲南語': null, '爪哇語': null, '寮語': null, '寮國語': null, '蒙古語': null, '手語': null, '其他': null,
   },
   // Tunisia: one file per language, named by the ministry; the row's own column confirms it.
   tn: {
@@ -234,7 +281,7 @@ const LANG = {
   },
 };
 // Local, indigenous and dialect languages of Taiwan: never published there, not counted as unmapped.
-const TW_LOCAL = /^(客語|閩南語|臺語|台語|華語|國語|.*族語|.*阿美語|其他原住民語別|同步聽打)$/;
+const TW_LOCAL = /^(客語|閩南語|臺語|台語|華語|國語|手語|同步聽打|其他原住民語別)$|族|阿美|排灣|布農|泰雅|賽夏|賽德克|太魯閣|鄒|邵語|卑南|魯凱|雅美|達悟|噶瑪蘭|撒奇萊雅|拉阿魯哇|卡那卡那富/;
 const unmapped = {};
 function codeOf(cc, name) {
   const k = cc === 'tr' ? TRK(String(name).replace(/\([^)]*\)/g, ' ').replace(/\bDILI\b/i, 'DILI'))
@@ -248,6 +295,8 @@ function codeOf(cc, name) {
 const refused = [];
 const refuse = (cc, name, why, extra) => refused.push({ register: cc, name, why, ...(extra || {}) });
 function finish(cc, r, codes, dropped, local) {
+  // A cell too narrow for the name cuts it in the PDF itself ("LİUDMİLA KADAGANLI O" in Antalya).
+  if (/^tr-/.test(cc) && /\s\p{L}\.?$/u.test(r.name)) { refuse(cc, r.name, 'name cut off in the source', { city: r.city }); return null; }
   const langs = [...new Set(codes.filter((c) => c && c !== local))];
   if (!langs.length) { refuse(cc, r.name, dropped.length ? 'no language the directory has a code for: ' + dropped.join(', ') : 'only the local language', { city: r.city }); return null; }
   if (langs.length > MAX_LANGS) { refuse(cc, r.name, langs.length + ' languages, over the cap of ' + MAX_LANGS, { city: r.city }); return null; }
@@ -296,6 +345,24 @@ function trLanguagesOfRow(cells, isTranslatorRow) {
     }
   }
   return names;
+}
+// "ARAPÇA-KÜRTÇE", "İNGİLİZCE ALMANCA", "ARAPÇA KÜRTÇE OSMANLICA": split on separators, then read
+// the words greedily, longest known name first (three words covers "TÜRK İŞARET DİLİ").
+function trSplitNames(s) {
+  const out = [];
+  for (const piece of String(s || '').split(/\s*[,;\n/]\s*|\s*-\s*/).map(clean).filter(Boolean)) {
+    if (TRK(piece) in LANG.tr) { out.push(piece); continue; }
+    const w = piece.split(' ');
+    let i = 0; const got = [];
+    while (i < w.length) {
+      let n = Math.min(3, w.length - i);
+      while (n > 0 && !(TRK(w.slice(i, i + n).join(' ')) in LANG.tr)) n -= 1;
+      if (!n) { got.length = 0; break; }
+      got.push(w.slice(i, i + n).join(' ')); i += n;
+    }
+    if (got.length) out.push(...got); else out.push(piece);
+  }
+  return out;
 }
 function trCodes(names) {
   const codes = []; const dropped = [];
@@ -429,8 +496,6 @@ const TW_COURT = {
 const rocEnd = (s) => { const mm = String(s).match(/～\s*(\d{2,3})-(\d\d)-(\d\d)/); return mm ? `${Number(mm[1]) + 1911}-${mm[2]}-${mm[3]}` : null; };
 
 // ---- Tunisia -----------------------------------------------------------------------------------
-// PyMuPDF gives Arabic cells in visual order: reverse each line, then turn digit and Latin runs back.
-const unVisual = (s) => String(s || '').split('\n').map((l) => [...l].reverse().join('').replace(/[0-9A-Za-z@.\-/:+]+/g, (r) => [...r].reverse().join(''))).join(' ');
 const arNorm = (s) => clean(String(s).normalize('NFKC').replace(/ھ/g, 'ه').replace(/ی/g, 'ي'));
 const TN_DISTRICT = { 'تونس': 'tunis', 'سوسة': 'sousse', 'صفاقس': 'sfax', 'القيروان': 'kairouan', 'توزر': 'tozeur' };
 // Any of these in a name is a ligature the font did not map (see TRAPS). The name is refused.
@@ -532,7 +597,7 @@ const PROPOSE = {
       const r = finish('tr-cmk', { city, name: trTitle(name), sourceUrl: TR_CMK[list][1], quote: 'Uzmanlık: ' + langNames.join(', '), ...extra }, codes, dropped, 'tr');
       if (r) all.push(r);
     };
-    const splitLangs = (s) => String(s || '').split(/\s*[,\n]\s*|\s+-\s+/).map(clean).filter(Boolean);
+    const splitLangs = trSplitNames;
     const rowsOf = (list) => py('tables', fileOf('tr-cmk', TR_CMK[list][0])).flatMap((t) => t.rows.map((r) => r.map((c) => (c == null ? '' : String(c)))));
     // Izmir: one line per person and language, no address; the list is the Izmir courthouse's.
     {
@@ -625,7 +690,9 @@ const PROPOSE = {
         if (!th[0] || !court) continue;
         const end = rocEnd(period);
         if (end && end < TODAY) { refuse('tw', th[0], 'appointment ended ' + end); continue; }
-        const city = TW_COURT[court];
+        // "臺灣高等法院、臺北高等行政法院、智慧財產及商業法院": a person may serve several courts; the
+        // first court with one of our cities places the row.
+        const city = court.split(/[、,，]/).map(clean).map((c) => TW_COURT[c]).find(Boolean);
         if (!city) { refuse('tw', th[0], 'court district not one of our cities: ' + court); continue; }
         const k = city + '|' + th[0];
         if (!people.has(k)) people.set(k, { city, name: th[0], courts: new Set(), langs: new Set(), no: fieldOf('編號') });
@@ -655,16 +722,26 @@ const PROPOSE = {
     for (const f of Object.keys(LANG.tn)) {
       if (!exists('tn', f)) continue;
       const code = LANG.tn[f];
-      for (const t of py('tables', fileOf('tn', f))) {
+      for (const t of py('tablewords', fileOf('tn', f))) {
         for (const row of t.rows) {
           const cs = row.map((c) => (c == null ? '' : String(c)));
-          if (cs.length !== 6 || !/^\d+$/.test(clean(cs[5]))) continue;
-          const rawName = unVisual(cs[4]);
-          const langWord = arNorm(unVisual(cs[3]));
-          if (TN_BAD.test(rawName.normalize('NFKC'))) { refuse('tn', clean(rawName), 'name has an unmapped ligature glyph; not repaired by guess', { file: f }); continue; }
-          const name = arNorm(rawName);
-          const district = arNorm(unVisual(cs[2]));
-          const addr = arNorm(unVisual(cs[1]));
+          if (cs.length !== 6 || !/\d/.test(cs[5])) continue;
+          // The first letter of a name in an initial-form glyph is sometimes set outside the name
+          // cell and lands beside the row number ("2ﺻ" + "الح بن حليمة" for "صالح بن حليمة"). The
+          // name cell alone would publish a wrong name, so any letter in the number cell refuses it.
+          if (!/^\d+$/.test(clean(cs[5]))) { refuse('tn', arNorm(cs[4]), 'a letter of the name fell outside its cell: ' + clean(cs[5]), { file: f }); continue; }
+          const rawName = cs[4];
+          const langWord = arNorm(cs[3]);
+          if (TN_BAD.test(arNorm(rawName))) { refuse('tn', clean(rawName), 'name has an unmapped ligature glyph; not repaired by guess', { file: f }); continue; }
+          // A one-letter word, or a bare article, is a glyph the PDF set apart ("آ مال" for "آمال"):
+          // no Arabic name has a one-letter word, so it is joined to the word after it.
+          const name = arNorm(rawName).replace(/(^|\s)([ء-ي]|ال)\s+(?=[ء-ي])/g, '$1$2');
+          // Some fonts also set a word gap after a letter that does not join forward ("سا مية" for
+          // "سامية", "شح ةي"). A two-letter word other than بن or بو, or a ta marbuta inside a word,
+          // shows it; such a name is refused, not rejoined by guess.
+          if (name.split(' ').some((w) => (w.length <= 2 && !/^(بن|بو)$/.test(w)) || /ة./.test(w) || /^[ةى]/.test(w))) { refuse('tn', name, 'name split by the PDF inside a word; not rejoined by guess', { file: f }); continue; }
+          const district = arNorm(cs[2]);
+          const addr = arNorm(cs[1]);
           let city = TN_DISTRICT[district] || null;
           if (/سيدي بو ?سعيد/.test(addr)) city = 'sidibousaid';
           if (/جربة|حومة السوق|ميدون|أجيم/.test(addr)) city = 'djerba';
@@ -680,7 +757,9 @@ const PROPOSE = {
     const out = [];
     for (const e of people.values()) {
       const r = finish('tn', {
-        city: e.city, name: e.name, area: TN_BAD.test(e.addr) ? e.district : e.addr, precision: TN_BAD.test(e.addr) ? 'district' : 'address',
+        // The office address is used to place Sidi Bou Said and Djerba but not carried: the same
+        // broken ligatures drop letters from street names silently ("يوغس فيا" for "يوغسلافيا").
+        city: e.city, name: e.name, area: 'الدائرة الابتدائية: ' + e.district, precision: 'court-district',
         sourceUrl: 'https://www.justice.gov.tn/fileadmin/medias/les_intervenants/auxilieres_de_justice/interpretes_assermentes/tableau_interpretes_assermentes/' + e.files[0],
         quote: 'الاختصاص: ' + [...new Set(e.quotes)].join('، '),
       }, e.codes, e.codes.length ? [] : e.quotes, 'ar');

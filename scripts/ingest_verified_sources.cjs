@@ -44,14 +44,20 @@ const CAT = [
   // kinesitherapeute is the French physiotherapist and orthophoniste the French speech therapist, filed
   // with physio as logop already is. The French consular lists head their sections in French.
   [/physiotherap|krankengymnast|osteopath|chiroprakt|physical therap|logop|kin[eé]sith|orthophon/i, 'physio'],
-  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b|family therap|counsell?or/i, 'therapy'],
+  [/psycholog|psychotherap|psychiatr|psychoanaly|therapeut(in)?\b|family therap/i, 'therapy'],
   [/optiker|optometr|augenoptik/i, 'optician'],
-  [/anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht|solicitor|barrister|advocate|\blaw\b|\bavocat\b|avvocat|diritto|derecho|direito|advogad|rechtsberat/i, 'legal'],
+  // A Turkish law office is a "hukuk burosu", and the German lists name a lawyer's field as an area of
+  // law, "Zivilrecht", "Auslaenderrecht", "Baurecht", far more of them than the list below spells out.
+  // Not after b or p, because Albrecht, Engelbrecht, Lamprecht and Ruprecht are surnames and the name
+  // is part of the text categorised; not after ge, because "kindgerecht" is not a legal term.
+  [/hukuk|[a-zäöüß]{3,}(?<!ge|[bp])recht\b|\brecht\b|anwalt|anw[äa]lt|rechtsanw|avocat|abogad|lawyer|attorney|notar|legal|studio legale|erbrecht|familienrecht|strafrecht|handelsrecht|gesellschaftsrecht|arbeitsrecht|immobilienrecht|vertragsrecht|mietrecht|verkehrsrecht|steuerrecht|solicitor|barrister|advocate|\blaw\b|\bavocat\b|avvocat|diritto|derecho|direito|advogad|rechtsberat/i, 'legal'],
   [/[üu]bersetz|dolmetsch|translat|interpret|traduct/i, 'translator'],
   [/steuerberat|tax|contador|wirtschaftspr/i, 'tax'],
+  // "allgemein" alone is not general medicine: "Allgemeines Zivilrecht" and a lawyer's "Fachbereich:
+  // Allgemeines" are law, and filed a Turkish lawyer as a doctor. Allgemeinmedizin and Allgemeinarzt are.
   // The French names for specialties sit at the end. On 2026-09-22 the Vienna list lost 50 of its
   // doctors as uncategorised because GENERALISTES, OPHTALMOLOGUES and PEDIATRES matched nothing here.
-  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|\bhno\b|hals|augen|innere|allgemein|g[eé]n[eé]ralist|ophtalm|p[eé]diatr|pneumolog|cardiolog|endocrin|gastro-?ent|rhumatolog|oto-rhino|radiolog|traumatolog|anesth[eé]s|allergolog|n[eé]phrolog|h[eé]patolog|oncolog|acupunct/i, 'doctor'],
+  [/[äa]rzt|arzt|medizin|doctor|m[eé]dic|klinik|clinic|hospital|krankenhaus|chirurg|derma|gyn|kardio|neurolog|orthop|urolog|p[äa]diatr|\bhno\b|hals|augen|innere|allgemein(?:medizin|arzt|[äa]rzt|mediziner)|g[eé]n[eé]ralist|ophtalm|p[eé]diatr|pneumolog|cardiolog|endocrin|gastro-?ent|rhumatolog|oto-rhino|radiolog|traumatolog|anesth[eé]s|allergolog|n[eé]phrolog|h[eé]patolog|oncolog|acupunct/i, 'doctor'],
 ];
 /**
  * What a translation agency translates is not what it is.
@@ -158,6 +164,67 @@ const UK_US_ALIASES = {
   brussels: ['uccle', 'ixelles', 'etterbeek', 'jette', 'auderghem', 'woluwe-saint-lambert', 'woluwe-saint-pierre', 'watermael-boitsfort', 'schaerbeek', 'saint-gilles', 'anderlecht'],
 };
 for (const [k, v] of Object.entries(UK_US_ALIASES)) ALIASES[k] = [...new Set([...(ALIASES[k] || []), ...v])];
+// The German missions write our cities in German or in the local form: Peking, Kairo, Kanton, Alger,
+// Jbeil. La Paz is the city's own name and needs no alias.
+const DE_ALIASES = {
+  beijing: ['peking'], algiers: ['alger'], byblos: ['jbeil'], panama: ['ciudad de panama'],
+  guangzhou: ['kanton'], manila: ['metro manila'], cairo: ['kairo'],
+};
+for (const [k, v] of Object.entries(DE_ALIASES)) ALIASES[k] = [...new Set([...(ALIASES[k] || []), ...v])];
+// The Italian and Polish missions' names for our cities (Monaco di Baviera, Francoforte, Salonicco,
+// Wilno, Bruksela, Kopenhaga...), from the Italian, Polish and Spanish consular parses of 2026-09-24.
+const EXONYMS = {
+  munich: ['monaco di baviera'],
+  frankfurt: ['francoforte'],
+  nuremberg: ['norimberga'],
+  regensburg: ['ratisbona'],
+  freiburg: ['friburgo'],
+  cologne: ['colonia'],
+  stuttgart: ['stoccarda'],
+  athens: ['atene', 'ateny', 'atenas'],
+  thessaloniki: ['salonicco', 'saloniki', 'salonica'],
+  zagreb: ['zagabria'],
+  rijeka: ['fiume'],
+  split: ['spalato'],
+  vilnius: ['wilno'],
+  kaunas: ['kowno'],
+  brussels: ['bruksela'],
+  antwerp: ['antwerpia'],
+  riga: ['ryga'],
+  shanghai: ['szanghaj'],
+  istanbul: ['stambul'],
+  copenhagen: ['kopenhaga', 'kobenhavn k'],
+  basel: ['basilea', 'bazylea'],
+  zurich: ['zurigo', 'zurych'],
+  geneva: ['ginevra', 'genewa'],
+  lausanne: ['losanna', 'lozanna'],
+  jerusalem: ['gerusalemme'],
+  tunis: ['tunisi'],
+  algiers: ['algeri', 'alger'],
+  constantine: ['costantina'],
+  ljubljana: ['lubiana'],
+  warsaw: ['varsavia'],
+  krakow: ['cracovia'],
+  gdansk: ['danzica'],
+  wroclaw: ['wrocław', 'breslavia', 'wroclaw'],
+  bialystok: ['białystok'],
+  thehague: ["l'aia"],
+  dublin: ['dublino'],
+  strasbourg: ['strasburgo'],
+  lisbon: ['lizbona'],
+  prague: ['praga'],
+  vienna: ['wieden'],
+  beirut: ['bejrut'],
+  tirana: ['tiranie'],
+  belfast: ['belfaście'],
+  crete: ['heraklion', 'irakleio', 'iraklio'],
+  corfu: ['kerkyra'],
+  patras: ['patrasso', 'patra'],
+  oran: ['orano'],
+  phoenix: ['pheonix'],
+  cyprus: ['nicosia', 'lefkosia'],
+};
+for (const [k, v] of Object.entries(EXONYMS)) ALIASES[k] = [...new Set([...(ALIASES[k] || []), ...v])];
 
 /**
  * Every city the site covers, not every city this directory already holds.
@@ -168,13 +235,21 @@ for (const [k, v] of Object.entries(UK_US_ALIASES)) ALIASES[k] = [...new Set([..
  * was rejected 27 rows out of 29 that way, and it is why 415 of the 710 cities had stayed empty
  * however many sources were read. M.CITY is the site's own list of cities and is the right question.
  */
+/**
+ * The letters NFD cannot take apart: a stroke or a missing dot is part of the letter, not an accent on
+ * it. Without this "Wrocław" folded to "wrocław" and never matched the city, and "Diyarbakır" kept its
+ * dotless i. Small letters, because everything folded is compared in small letters.
+ */
+const unstroke = (s) => String(s || '').replace(/ß/g, 'ss').replace(/[łŁ]/g, 'l').replace(/[øØ]/g, 'o')
+  .replace(/[đĐðÐ]/g, 'd').replace(/ı/g, 'i').replace(/[æÆ]/g, 'ae').replace(/[œŒ]/g, 'oe')
+  .replace(/[þÞ]/g, 'th').replace(/[ħĦ]/g, 'h');
 const CITY_NAMES = Object.values(M.CITY).map((c) => ({
   id: c.id,
   // Match on the printed name, accents folded, plus a couple of spellings missions actually use.
   needles: [c.name, c.name.replace(/\s+/g, ''), ...(ALIASES[c.id] || [])]
-    .map((n) => String(n).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()),
+    .map((n) => unstroke(n).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()),
 }));
-const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const fold = (s) => unstroke(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 /**
  * A city's name has to be a word of the text, not a run of letters inside a longer one.
  *
@@ -203,6 +278,17 @@ const matchCity = (t) => CITY_NAMES.slice().sort((a, b) => b.needles[0].length -
  * reached Canberra by way of the street. Reading the locality first gets both right for the same
  * reason.
  */
+/**
+ * A street named after a city is not the city.
+ *
+ * "Via Firenze 47, Rome" was filed in Florence, because read whole the address names Firenze first;
+ * "No 54, Beijing Rd, Chuanying District, Jilin" named Beijing; "Km 28 Cairo/Alexandria Desert Road"
+ * named both. A street word in front of a name (Via, Rue, Calle...) or behind it (Road, Street, Lu...)
+ * makes it a street, and it is taken out before the whole address is read for a city.
+ */
+const STREET_BEFORE_NAME = /\b(?:via|viale|vicolo|piazza|piazzale|corso|largo|lungotevere|rue|avenida|avinguda|av\.|avda\.?|calle|carrer|paseo|passeig|rua|ulica|ul\.)\s+(?:(?:de|del|della|delle|dei|di|da|do|dos|das|des|du|la|le|los|las)\s+){0,2}[a-z\u00C0-\u024F][\w\u00C0-\u024F'’.-]*(?:\s*\/\s*[a-z\u00C0-\u024F][\w\u00C0-\u024F'’.-]*)*/gi;
+const STREET_AFTER_NAME = /[a-z\u00C0-\u024F][\w\u00C0-\u024F'’.-]*(?:\s*\/\s*[a-z\u00C0-\u024F][\w\u00C0-\u024F'’.-]*)*(?:\s+(?:desert|ring|expressway))?\s+(?:rd|road|street|st|avenue|ave|boulevard|blvd|highway|hwy|lu|dajie|jie|lane)(?![\w\u00C0-\u024F])\.?/gi;
+const withoutStreets = (text) => String(text || '').replace(STREET_BEFORE_NAME, ' ').replace(STREET_AFTER_NAME, ' ');
 const namedIn = (text) => {
   const town = localityOf(text);
   if (town) {
@@ -212,7 +298,7 @@ const namedIn = (text) => {
     // street or a landmark, not where this provider is.
     return '';
   }
-  const hit = matchCity(fold(text));
+  const hit = matchCity(fold(withoutStreets(text)));
   return hit ? hit.id : '';
 };
 
@@ -230,6 +316,43 @@ const placeOf = (text, fallback) => {
   return hit.id;
 };
 
+// Words that turn up where a town should be and are not towns: a state or province code (see the
+// NSW note in localityOf) and the parts of a building.
+const NOT_A_TOWN = /^(ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)$|^(Str|Street|Rd|Road|Ave|Avenue|Floor|Fl|Tower|Suite|Apt|Building|Clinic|Hospital|Center|Centre|Website|Web|Tel|Fax|Email|Mobile|Sec|Lane|No|Dist|District)$/i;
+const STREET_WORDS = 'St|Street|Rd|Road|Ave|Avenue|Blvd|Boulevard|Hwy|Highway|Lane|Ln|Dist|District|Str|Strasse|Stra\u00DFe';
+const TOWN_IS_A_STREET = new RegExp('\\s(?:' + STREET_WORDS + ')\\.?$', 'i');
+const STREET_FOLLOWS = new RegExp('^\\s*(?:' + STREET_WORDS + ')\\b', 'i');
+// In the order they are tried. The first match of the first pattern that matches is what the town
+// always was; the list form only lets a later candidate stand in when that one is a street.
+// TOWN_PATTERNS from this index on are only heard when they name one of our cities.
+const RESCUE_ONLY_FROM = 4;
+const TOWN_PATTERNS = [
+  // "<town>, <PROVINCE>, <postal code>", tried before the others because it is the most specific
+  // and because the patterns below mistake a North American street number for a postcode:
+  // "1200-805 West Broadway, Vancouver, BC" gave the town as West Broadway, and every Vancouver
+  // firm on the Canadian list was refused for being somewhere else. The separators are commas as
+  // often as spaces, which is what Canada writes and Australia does not.
+  // Letters, not just A to Z, in all of them: "MD-2009 Chișinău" gave the town as "Chi" and "1211
+  // Genève" as "Gen", and every Chisinau lawyer was refused as being somewhere else.
+  /(?<![\w\u00C0-\u024F])([A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’.-]+(?:\s+[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’.-]+){0,2})[,\s]+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU|AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WV|WI|WY|DC)[,\s]+[A-Z0-9]{3,5}(?:\s?[A-Z0-9]{3})?\b/g,
+  /(?<![\w\u00C0-\u024F])([A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+(?:\s+[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+)?)\s+City\b/g,
+  // Up to eight digits: Israeli postcodes are seven, and a six-digit cap matched nothing on that
+  // list, so every suburb in it passed as Tel Aviv.
+  // A Brazilian postcode is five digits, a hyphen and three more, and requiring whitespace right
+  // after the digits missed every one of them: two Porto Alegre firms were filed under Sao Paulo
+  // because "90010-000 Canoas" did not look like a town to this.
+  /\b\d{4,8}(?:-\d{3})?\s+([A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+(?:\s+[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+)?)/g,
+  /,\s*([A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+(?:\s+[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+)?)[,\s]+\d{4,8}\b/g,
+  // "Xiamen, Fujian 361012" and "Kunming, Yunnan, PRC 650051": a Chinese address puts the province
+  // between the town and the postcode, and the pattern above read the province as the town.
+  /,\s*([A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+(?:\s+[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+)?),\s*[A-Z][A-Za-z'’-]+(?:\s+Province)?(?:,\s*(?:PRC|P\.R\.C\.|P\.R\. China|China))?[,\s]+\d{5,6}\b/g,
+  // "Rua Sergipe 401, Consolação, 01243-001, São Paulo": a Brazilian address puts the district before
+  // the postcode and the city after it, and read with accents the district is a word the pattern
+  // above takes for the town. The town after a postcode is a candidate too, the last one tried.
+  // Five digits at least, because four is a house number as often as not: "Av. Praia de Belas, no
+  // 1212, Praia de Belas Porto Alegre" read "Praia" as the capital of Cape Verde.
+  /\b\d{5,8}(?:-\d{3})?,\s*([A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+(?:\s+[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u024F][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F'’-]+)?)/g,
+];
 /**
  * The town an address names, if it names one at all.
  *
@@ -245,29 +368,57 @@ const placeOf = (text, fallback) => {
  */
 const localityOf = (text) => {
   const s = String(text || '');
-  const m =
-    // "<town>, <PROVINCE>, <postal code>", tried before the others because it is the most specific
-    // and because the patterns below mistake a North American street number for a postcode:
-    // "1200-805 West Broadway, Vancouver, BC" gave the town as West Broadway, and every Vancouver
-    // firm on the Canadian list was refused for being somewhere else. The separators are commas as
-    // often as spaces, which is what Canada writes and Australia does not.
-    s.match(/\b([A-Z][A-Za-z'’.-]+(?:\s+[A-Z][A-Za-z'’.-]+){0,2})[,\s]+(?:ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU|AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WV|WI|WY|DC)[,\s]+[A-Z0-9]{3,5}(?:\s?[A-Z0-9]{3})?\b/)
-    || s.match(/\b([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)\s+City\b/)
-    // Up to eight digits: Israeli postcodes are seven, and a six-digit cap matched nothing on that
-    // list, so every suburb in it passed as Tel Aviv.
-    // A Brazilian postcode is five digits, a hyphen and three more, and requiring whitespace right
-    // after the digits missed every one of them: two Porto Alegre firms were filed under Sao Paulo
-    // because "90010-000 Canoas" did not look like a town to this.
-    || s.match(/\b\d{4,8}(?:-\d{3})?\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)/)
-    || s.match(/,\s*([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+)?)[,\s]+\d{4,8}\b/);
-  if (!m) return '';
-  const word = m[1].trim();
+  // Makati, Taguig and Pasig are cities of their own inside Metro Manila, and the directory's Manila
+  // page is the metro area. Only where the address itself says "Metro Manila": "1227 Makati City,
+  // Metro Manila" read as the town Makati and was refused.
+  if (/\bMetro Manila\b/i.test(s)) return 'Manila';
+  // "06700 Kavaklidere - Ankara", "Konak-IZMIR", "Bornova /IZMIR": a Turkish address ends with the
+  // district, a dash or slash, and the province. The postcode pattern below took the district as the
+  // town and refused every one of them. The side of the dash that is one of our cities, and nothing
+  // but, is the town; the district first, because "07400 Alanya-Antalya" is in Alanya.
+  // The first such pair, and only where no town of ours comes before it: "10 rue Tsoko Kableshkov -
+  // Plovdiv, 91 rue Sofronii Vratchanski - Sofia" is a firm with two offices, and "Kerpener Str. 62,
+  // 50937 Cologne, Urdenbacher Allee 7, 40593 Dusseldorf-Benrath" a surgeon with a practice in each;
+  // the first address is the one the list printed them under.
+  let dash = null;
+  {
+    const re = /([A-Za-z\u00C0-\u024F]+)\s*[-\u2013/]\s*([A-Za-z\u00C0-\u024F]+(?:\s+[A-Za-z\u00C0-\u024F]+)?)\s*(?=[,;.)/]|\s+\/|\s*$)/g;
+    let mm;
+    while (!dash && (mm = re.exec(s))) {
+      if (isOnlyAPlace(mm[1])) dash = { word: mm[1], index: mm.index };
+      else if (isOnlyAPlace(mm[2])) dash = { word: mm[2], index: mm.index };
+      re.lastIndex = mm.index + mm[1].length + 1;
+    }
+  }
+  const found = [];
+  TOWN_PATTERNS.forEach((re, i) => {
+    for (const m of s.matchAll(re)) {
+      // What follows the town, for the postcode-first pattern only: elsewhere the match ends at a postcode.
+      found.push({ word: m[1].trim(), index: m.index, next: i === 2 ? s.slice(m.index + m[0].length) : '', pattern: i });
+    }
+  });
+  // The dash pair found above, unless a town of ours comes before it in the address.
+  if (dash && !found.some((c) => c.index < dash.index && isOnlyAPlace(c.word))) return dash.word;
+  // A Saudi address opens with a four-digit building number, and "7252 Olaya Street, Riyadh 13325"
+  // and "7060 Al Takhassousi St, Mohammedia, Riyadh" read as the towns "Olaya Street" and "Al
+  // Takhassousi". A town is not a street: a candidate that ends in a street word, or that a street word
+  // follows, is passed over for the next.
+  //
+  // And one of ours outranks one that is not. "16F, Tower A, Knowledge City, 77 Xueyuan Road, Xinhu
+  // District, Hangzhou 310012" read as the town "Knowledge" and was refused; the postcode pattern
+  // further along had Hangzhou. Where no candidate is one of ours, the first still decides, so a row
+  // that names another town is refused exactly as before. The two patterns added last only ever
+  // rescue: a word they find that is not one of ours ("05403-010, Brazil") is not a town for this.
+  const usable = found.filter((c) => !TOWN_IS_A_STREET.test(c.word) && !STREET_FOLLOWS.test(c.next));
+  const pick = usable.find((c) => !NOT_A_TOWN.test(c.word) && matchCity(fold(c.word)))
+    || usable.find((c) => c.pattern < RESCUE_ONLY_FROM);
+  if (!pick) return '';
+  const word = pick.word;
   // Words that turn up in this position and are not towns.
   // A state or province code is not a town. "201 Elizabeth Street, Sydney, NSW 2000" puts a comma
   // where the pattern expects the town, so the town came out as NSW and a Sydney firm was placed
   // nowhere. Returning nothing here sends the address back to be read whole, which finds Sydney.
-  if (/^(ACT|NSW|NT|QLD|SA|TAS|VIC|WA|BC|AB|ON|QC|MB|NS|NB|SK|NL|PE|YT|NU)$/.test(word)) return '';
-  if (/^(Str|Street|Rd|Road|Ave|Avenue|Floor|Fl|Tower|Suite|Apt|Building|Clinic|Hospital|Center|Centre|Website|Web|Tel|Fax|Email|Mobile|Sec|Lane|No|Dist|District)$/i.test(word)) return '';
+  if (NOT_A_TOWN.test(word)) return '';
   return word;
 };
 
@@ -436,9 +587,15 @@ const isGenericName = (s) => String(s).split(/[^A-Za-zÀ-ÿ]+/).filter(Boolean).
  * out as Rocawski and Jarosław as Jarosaw: not a name with the accents taken off, a name with a
  * letter missing. These are the ones the consular lists actually contain.
  */
+//
+// A capital stays a capital. Mapping both cases to the small letter printed "lODZ" for LODZ, "istanbul"
+// for Istanbul and "oSTERGAARD" for OSTERGAARD. A two-letter capital is written Ae before a small
+// letter and AE in a word that is all capitals.
 const STROKED = [[/ß/g, 'ss'], [/ẞ/g, 'SS'],
-  [/[łŁ]/g, 'l'], [/[øØ]/g, 'o'], [/[đĐ]/g, 'd'], [/[ıİ]/g, 'i'], [/[æÆ]/g, 'ae'],
-  [/[œŒ]/g, 'oe'], [/[åÅ]/g, 'aa'], [/[þÞ]/g, 'th'], [/[ðÐ]/g, 'd'], [/[ħĦ]/g, 'h']];
+  [/ł/g, 'l'], [/Ł/g, 'L'], [/ø/g, 'o'], [/Ø/g, 'O'], [/đ/g, 'd'], [/Đ/g, 'D'], [/ı/g, 'i'], [/İ/g, 'I'],
+  [/æ/g, 'ae'], [/Æ(?=\p{Ll})/gu, 'Ae'], [/Æ/g, 'AE'], [/œ/g, 'oe'], [/Œ(?=\p{Ll})/gu, 'Oe'], [/Œ/g, 'OE'],
+  [/å/g, 'aa'], [/Å(?=\p{Ll})/gu, 'Aa'], [/Å/g, 'AA'], [/þ/g, 'th'], [/Þ(?=\p{Ll})/gu, 'Th'], [/Þ/g, 'TH'],
+  [/ð/g, 'd'], [/Ð/g, 'D'], [/ħ/g, 'h'], [/Ħ/g, 'H']];
 const asciiFold = (s) => STROKED.reduce((t, [re, r]) => t.replace(re, r), String(s || '')).normalize('NFD').replace(/[̀-ͯ]/g, '')
   .replace(/[‘’]/g, "'").replace(/[“”«»„]/g, '"').replace(/[–—]/g, ', ').replace(/[°º]/g, '')
   .replace(/[^\x20-\x7E]/g, '').replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ').replace(/^[,\s]+|[,\s]+$/g, '');
@@ -749,7 +906,7 @@ for (const src of manifestRows) {
     // A footnote marker is not part of a name. The German embassy Rome list stars the translators
     // who are sworn before a court, and forty cards were about to read "Christine ALBRECHT*" and
     // "Alessandra RIDOLFI *" as though the star were a letter of the name.
-    const name = upToTheJoin(withoutTitles(asciiFold(T.unentity(r.name).replace(/\*/g, ' ')).replace(/^(Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
+    const name = upToTheJoin(withoutTitles(asciiFold(T.unentity(r.name).replace(/\*/g, ' ')).replace(/^(Hr\.|Fr\.|Frau|Herr|Mr\.?|Mrs\.?|Ms\.?|Sra?\.)\s+/i, '')
       .replace(/\s+-\s+[a-z][^A-Z]*$/, '').trim()));
     const k = key(name);
     // A bracket on either side of the name and not only an opening one: "Upadlosc i restrukturyzacja)"

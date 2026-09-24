@@ -54,7 +54,7 @@ const ALLOW = new Set([
   'saopaulo|centromedicoliberdadehospitalnipobrasileiroenkyo|hospitalnipobrasileiro',
   // One person, two professions on two statutory registers: a court interpreter on the Slovenian
   // justice ministry's register and a lawyer on the Bar Association of Slovenia's.
-  'ljubljana|andoljektatjana|tatjanaandoljek',
+  'ljubljana|andoljsektatjana|tatjanaandoljsek',
   // Two Bucharest firms at different addresses: Popovici Nitu Stoica at 239 Calea Dorobanti and
   // Stoica & Associates at Str. Dr. N. Staicovici 2 (Opera Center II).
   'bucharest|popovicinitustoicaassociates|stoicaassociates',
@@ -68,11 +68,16 @@ const ALLOW = new Set([
   'cyprus|chambersco|michaelchamberscollc',
   // Two campuses of Yonsei's hospital: Severance in Sinchon (Seodaemun-gu), Gangnam Severance in Gangnam-gu.
   'seoul|gangnamseverancehospital|severancehospital',
+  // Two Prague lawyers on the Czech bar's register: Jan Koválik and Jan Koval.
+  'prague|mgrjankovalik|mgrjankoval',
 ]);
 
 // "And" and "&" are the same word; see withoutConjunctions for the sixteen firms that proved it.
 const { withoutConjunctions } = require(path.join(ROOT, 'scripts', 'lib', 'service_text.cjs'));
-const norm = (s) => withoutConjunctions(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+// Accents are folded, not deleted: deleting them turned "Mgr. Martin Říha" into "mgrmartinha", which
+// sits inside "mgrmartinhalaj", and flagged two Prague lawyers as one.
+const norm = (s) => withoutConjunctions(s).normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .toLowerCase().replace(/[^a-z0-9]/g, '');
 
 // The containment test above misses the case that actually reached the site: the same person under
 // two name orders. The German embassy in Paris publishes one doctors list at a German URL and a
