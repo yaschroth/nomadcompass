@@ -62,31 +62,31 @@ const MONEY = new Set(['legal', 'tax']);
 // as a heading that does. Google showed "English-speaking doctors in Barcelona" for the page that
 // holds eleven German-speaking ones, so a reader looking for German had no reason to click.
 const SKELETONS_ONE_LANGUAGE = [
-  (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}`,
-  (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}, each with its source`,
-  (t) => `${t.lang1}-speaking ${t.service} in ${t.city}, ${t.n} listed and checked ${t.month}`,
-  (t) => `Where to find ${P.an(t.lang1)}-speaking ${t.singular} in ${t.city}: ${t.n} listed`,
-  (t) => `${t.n} ${t.service} in ${t.city} ${t.who} ${t.work} in ${t.lang1}, with a source for each`,
-  (t) => `${t.lang1}-speaking ${t.service} in ${t.city}: ${t.n} names and where they came from`,
-  (t) => `${t.Service} in ${t.city} for ${t.lang1} speakers, ${t.n} with a cited source`,
+  (t) => `${t.n1} ${t.lang1}-speaking ${t.service} in ${t.city}`,
+  (t) => `${t.n1} ${t.lang1}-speaking ${t.service} in ${t.city}, each with its source`,
+  (t) => `${t.lang1}-speaking ${t.service} in ${t.city}, ${t.n1} listed and checked ${t.month}`,
+  (t) => `Where to find ${P.an(t.lang1)}-speaking ${t.singular} in ${t.city}: ${t.n1} listed`,
+  (t) => `${t.n1} ${t.service} in ${t.city} ${t.who} ${t.work} in ${t.lang1}, with a source for each`,
+  (t) => `${t.lang1}-speaking ${t.service} in ${t.city}: ${t.n1} names and where they came from`,
+  (t) => `${t.Service} in ${t.city} for ${t.lang1} speakers, ${t.n1} with a cited source`,
 ];
 // Every one of these names at least two languages, and three where the page has them. A title that
 // says only "34 doctors in Barcelona, sorted by the language they work in" is what a searcher for
 // German-speaking doctors sees in the result list, and it gives them no reason to click on the page
 // that holds eleven of them. The title is the door; the door has to say what is behind it.
 const SKELETONS_MANY_LANGUAGES = [
-  (t) => `${t.n} ${t.langList}-speaking ${t.service} in ${t.city}`,
-  (t) => `${t.langList}-speaking ${t.service} in ${t.city}: ${t.n} listed`,
-  (t) => `${t.Service} in ${t.city} ${t.who} ${t.work} in ${t.langList}: ${t.n} listed`,
-  (t) => `${t.n} ${t.service} in ${t.city}: ${t.langList}, each with its source`,
-  (t) => `${t.langList}-speaking ${t.service} in ${t.city}, ${t.n} listed`,
-  (t) => `${t.Service} in ${t.city} for ${t.langList} speakers, ${t.n} with sources`,
-  (t) => `${t.n} ${t.service} in ${t.city} ${t.working} in ${t.langList}, checked ${t.month}`,
-  (t) => `${t.Service} in ${t.city}: ${t.langList}, ${t.n} names and their sources`,
+  (t) => `${t.nList} ${t.langList}-speaking ${t.service} in ${t.city}`,
+  (t) => `${t.langList}-speaking ${t.service} in ${t.city}: ${t.nList} listed`,
+  (t) => `${t.Service} in ${t.city} ${t.who} ${t.work} in ${t.langList}: ${t.nList} listed`,
+  (t) => `${t.nList} ${t.service} in ${t.city}: ${t.langList}, each with its source`,
+  (t) => `${t.langList}-speaking ${t.service} in ${t.city}, ${t.nList} listed`,
+  (t) => `${t.Service} in ${t.city} for ${t.langList} speakers, ${t.nList} with sources`,
+  (t) => `${t.nList} ${t.service} in ${t.city} ${t.working} in ${t.langList}, checked ${t.month}`,
+  (t) => `${t.Service} in ${t.city}: ${t.langList}, ${t.nList} names and their sources`,
   // Three languages and a long service word ("physiotherapists in Barcelona") leave no room for a
   // list, and 28 pages had no candidate under 60 at all. These two name the biggest language only,
   // which is the one the title is competing for anyway.
-  (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}`,
+  (t) => `${t.n1} ${t.lang1}-speaking ${t.service} in ${t.city}`,
   (t) => `${t.Service} in ${t.city} ${t.who} ${t.work} in ${t.lang1}`,
 ];
 
@@ -321,6 +321,11 @@ for (const page of ordered) {
     work: P.work(cat),
     working: P.work(cat, 'working'),
     lang1: langs[0],
+    // The count beside a language is the number who work in it, never the page total. 158 titles
+    // read "2111 English-speaking doctors in Tokyo" over 1,966 who are, the rest being Chinese or
+    // Korean only. A title that names three counts everyone who works in at least one of them.
+    n1: pair.rows.filter((r) => r.languages.includes(langCodes[0])).length,
+    nList: pair.rows.filter((r) => servable.slice(0, 3).some(([l]) => r.languages.includes(l))).length,
     lang2: langs[1] || '',
     month: P.niceDate(pair.checked[pair.checked.length - 1]).replace(/^\d+ /, ''),
     publisher: P.publisherOf(pair.sources[0].host).short,

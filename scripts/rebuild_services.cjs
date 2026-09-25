@@ -92,6 +92,7 @@ const STEPS = [
   ['gate', 'check_photo_credit.cjs', 'a licensed image is never shown without its photographer'],
   ['gate', 'check_hero_credit.cjs', 'a hero credit names the photographer Commons names, not a stale one'],
   ['gate', 'check_meta.cjs', 'every page has its own title and description, both in budget'],
+  ['gate', 'check_title_counts.cjs', 'a number in a title counts the people the title names'],
   ['gate', 'check_duplicate_blocks.cjs', 'no page carries a sweep-owned block twice'],
   ['gate', 'check_local_assets.cjs', 'no page points at a local file that is not there'],
   ['gate', 'build_service_redirects.cjs --check', 'no redirect stands in front of a page that exists'],
