@@ -28,6 +28,8 @@ const CASES = [
   ['match', 'Atendimento em inglês e português.', ['en', 'pt']],
   ['match', 'Our team can assist you in English, French and Arabic.', ['en', 'fr', 'ar']],
   ['match', 'Ein deutschsprachiger Tierarzt ist jeden Dienstag da.', ['de']],
+  ['match', 'Damit Sie sich bei uns gut verstanden fühlen, beraten wir Sie gerne auf Deutsch, Englisch, Russisch, Türkisch oder Polnisch.', ['de', 'en', 'ru', 'tr', 'pl']],
+  ['match', 'We offer gel polish manicures, and our staff speak English.', ['en']],
 
   // --- must be refused --------------------------------------------------------
   // Names a language, claims nothing about speaking it.

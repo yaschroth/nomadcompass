@@ -121,6 +121,9 @@ const LANGS = {
   he: '(hebrew|hebr[aä]isch|hebreo|עברית)',
   el: '(greek|griechisch|griego|ελλην)',
   hu: '(hungarian|ungarisch|h[uú]ngaro|magyar)',
+  // Missing until 2026-09-25: a Berlin vet's "auf Deutsch, Englisch, Russisch, Türkisch oder
+  // Polnisch" lost its Polish. "polish" is also nail polish, which check_language_claims tests.
+  pl: '((?<!(?:gel|nail|shoe|floor|french|toe|uv)[\\s-])polish(?![\\s-]*(?:manicure|pedicure|nails?|remover|change|finish))|polnisch|polaco|polonais|polacco|polski|polsku)',
 };
 
 /**
