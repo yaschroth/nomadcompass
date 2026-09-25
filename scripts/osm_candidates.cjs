@@ -63,6 +63,7 @@ const CATS = {
   fitness: [['leisure', 'fitness_centre']],
   realestate: [['office', 'estate_agent'], ['shop', 'estate_agent']],
   tax: [['office', '^(accountant|tax_advisor)$']],
+  school: [['amenity', 'school']],
 };
 
 function query(lat, lng, radiusM, cats) {

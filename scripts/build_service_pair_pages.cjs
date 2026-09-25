@@ -50,6 +50,7 @@ const SCHEMA_TYPE = {
   physio: 'Physiotherapy', optician: 'Optician', hair: 'HairSalon', legal: 'Attorney',
   tax: 'AccountingService', realestate: 'RealEstateAgent', mechanic: 'AutoRepair',
   fitness: 'ExerciseGym', translator: 'ProfessionalService', pharmacy: 'Pharmacy',
+  school: 'School',
 };
 const HEALTH = new Set(['doctor', 'dentist', 'vet', 'therapy', 'physio', 'optician', 'pharmacy']);
 const MONEY = new Set(['legal', 'tax']);
@@ -65,7 +66,7 @@ const SKELETONS_ONE_LANGUAGE = [
   (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}, each with its source`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}, ${t.n} listed and checked ${t.month}`,
   (t) => `Where to find ${P.an(t.lang1)}-speaking ${t.singular} in ${t.city}: ${t.n} listed`,
-  (t) => `${t.n} ${t.service} in ${t.city} ${t.who} work in ${t.lang1}, with a source for each`,
+  (t) => `${t.n} ${t.service} in ${t.city} ${t.who} ${t.work} in ${t.lang1}, with a source for each`,
   (t) => `${t.lang1}-speaking ${t.service} in ${t.city}: ${t.n} names and where they came from`,
   (t) => `${t.Service} in ${t.city} for ${t.lang1} speakers, ${t.n} with a cited source`,
 ];
@@ -76,17 +77,17 @@ const SKELETONS_ONE_LANGUAGE = [
 const SKELETONS_MANY_LANGUAGES = [
   (t) => `${t.n} ${t.langList}-speaking ${t.service} in ${t.city}`,
   (t) => `${t.langList}-speaking ${t.service} in ${t.city}: ${t.n} listed`,
-  (t) => `${t.Service} in ${t.city} ${t.who} work in ${t.langList}: ${t.n} listed`,
+  (t) => `${t.Service} in ${t.city} ${t.who} ${t.work} in ${t.langList}: ${t.n} listed`,
   (t) => `${t.n} ${t.service} in ${t.city}: ${t.langList}, each with its source`,
   (t) => `${t.langList}-speaking ${t.service} in ${t.city}, ${t.n} listed`,
   (t) => `${t.Service} in ${t.city} for ${t.langList} speakers, ${t.n} with sources`,
-  (t) => `${t.n} ${t.service} in ${t.city} working in ${t.langList}, checked ${t.month}`,
+  (t) => `${t.n} ${t.service} in ${t.city} ${t.working} in ${t.langList}, checked ${t.month}`,
   (t) => `${t.Service} in ${t.city}: ${t.langList}, ${t.n} names and their sources`,
   // Three languages and a long service word ("physiotherapists in Barcelona") leave no room for a
   // list, and 28 pages had no candidate under 60 at all. These two name the biggest language only,
   // which is the one the title is competing for anyway.
   (t) => `${t.n} ${t.lang1}-speaking ${t.service} in ${t.city}`,
-  (t) => `${t.Service} in ${t.city} ${t.who} work in ${t.lang1}`,
+  (t) => `${t.Service} in ${t.city} ${t.who} ${t.work} in ${t.lang1}`,
 ];
 
 const hash = (s) => {
@@ -302,7 +303,7 @@ for (const page of ordered) {
   const spare = servable.length - named.length;
   const h1 = servable.length <= 1
     ? `${P.list(langs)}-speaking ${P.catName(cat)} in ${city.name}`
-    : `${P.catName(cat).replace(/^./, (x) => x.toUpperCase())} in ${city.name} ${P.who(cat)} work in ` +
+    : `${P.catName(cat).replace(/^./, (x) => x.toUpperCase())} in ${city.name} ${P.who(cat)} ${P.work(cat)} in ` +
       (spare > 0
         ? `${named.join(', ')} and ${spare} more ${spare === 1 ? 'language' : 'languages'}`
         : P.list(named));
@@ -317,6 +318,8 @@ for (const page of ordered) {
     Service: (pair.n === 1 ? P.singular(cat) : P.catName(cat)).replace(/^./, (c) => c.toUpperCase()),
     singular: P.singular(cat),
     who: P.who(cat),
+    work: P.work(cat),
+    working: P.work(cat, 'working'),
     lang1: langs[0],
     lang2: langs[1] || '',
     month: P.niceDate(pair.checked[pair.checked.length - 1]).replace(/^\d+ /, ''),
@@ -349,7 +352,7 @@ for (const page of ordered) {
     ? P.list(servable.map(([l, n]) => P.langName(l) + ' (' + n + ')'))
     : P.list(langs);
   // P.plural, not the bare plural: 77 pages were describing themselves as "1 lawyers in Agadir".
-  const descCore = `${pair.n} ${P.plural(pair.n, P.singular(cat), P.catName(cat))} in ${city.name} ${P.who(cat)} ${P.plural(pair.n, 'works', 'work')} in ${descLangs}`
+  const descCore = `${pair.n} ${P.plural(pair.n, P.singular(cat), P.catName(cat))} in ${city.name} ${P.who(cat)} ${P.plural(pair.n, P.work(cat, 'works'), P.work(cat))} in ${descLangs}`
     + (topArea && Object.keys(pair.areas).length > 1 ? `, across ${Object.keys(pair.areas).length} postcodes` : '') + '.';
   const desc = META.band(descCore, [
     'Every language claim names the source it came from, links straight to it, and carries the tier we grade that source by.',
@@ -608,7 +611,9 @@ ${shell.headEnd}
     crumbs: `<a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/${city.id}">${esc(city.name)}</a> &rsaquo; ${esc(P.catName(cat))}`,
     eyebrow: `${city.iso ? `<img src="/assets/flags/${city.iso}.svg" alt="" width="20" height="15">` : ''}${esc(city.name)}, ${esc(city.country)}`,
     h1,
-    sub: blocks.standfirst + (sections ? ' Each language has its own list below, so anyone who works in two appears in both.' : ''),
+    sub: blocks.standfirst + (sections ? ' Each language has its own list below, so '
+      + (P.teaches(cat) ? `any ${P.singular(cat)} that ${P.work(cat, 'works')}` : 'anyone who works')
+      + ' in two appears in both.' : ''),
     stats: [
       [pair.n.toLocaleString('en-US'), pair.n === 1 ? P.singular(cat) : P.catName(cat)],
       [servable.length, servable.length === 1 ? 'language' : 'languages'],

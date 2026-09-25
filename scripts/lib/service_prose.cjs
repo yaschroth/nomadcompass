@@ -36,8 +36,20 @@ const singular = (c) => catName(c).replace(/ies$/, 'y').replace(/s$/, '');
 // A pharmacy is a shop, and "pharmacies who work in English" reads as a slip in a heading. Gyms are
 // the same case and still say "who": their titles are live and being measured, and this would move
 // them. Add a category here when it names a place rather than a person.
-const PLACES = new Set(['pharmacy']);
+const PLACES = new Set(['pharmacy', 'school']);
 const who = (c) => (PLACES.has(c) ? 'that' : 'who');
+// A school's language is the one it teaches in, and "schools that work in English" says less than
+// that. work(cat, form) is the verb for a sentence about the language a provider uses: 'work',
+// 'works' or 'working', 'speaks' where the sentence has no "in", and 'practising' or 'practises',
+// which a school is not. Every other category gets back the word it was given, so its pages do not
+// move by a byte. teaches(cat) is for the few sentences that have to be built differently, such as a
+// question about whether the named person speaks the language, which a school has no answer to.
+const TEACHES = new Set(['school']);
+const TEACH = { work: 'teach', works: 'teaches', working: 'teaching', speaks: 'teaches in', practising: 'open', practises: 'teaches' };
+const work = (c, form = 'work') => (TEACHES.has(c) ? TEACH[form] : form);
+const teaches = (c) => TEACHES.has(c);
+// The label in front of a card's language chips: "Speaks", or "Teaches in" on a school.
+const speaksLabel = (c) => work(c, 'speaks').replace(/^./, (x) => x.toUpperCase());
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 function niceDate(iso) {
@@ -66,7 +78,7 @@ function standfirst(pair) {
   const first = bits[0].charAt(0).toUpperCase() + bits[0].slice(1) + '.';
   const second = langBit
     ? (langs.length === 1
-      ? 'All ' + (pair.n === 1 ? 'of it' : pair.n) + ' ' + (pair.n === 1 ? 'is' : 'are') + ' listed as working in ' + langName(langs[0][0]) + '.'
+      ? 'All ' + (pair.n === 1 ? 'of it' : pair.n) + ' ' + (pair.n === 1 ? 'is' : 'are') + ' listed as ' + work(pair.category, 'working') + ' in ' + langName(langs[0][0]) + '.'
       : 'Listed by language: ' + langBit + '.')
     : '';
   const dates = pair.checked;
@@ -212,7 +224,7 @@ function faq(pair) {
   const q = [];
   q.push({
     q: 'How many ' + catName(pair.category) + ' in ' + city.name + ' does this page list?',
-    a: count(pair.n).charAt(0).toUpperCase() + count(pair.n).slice(1) + '. That is the number whose working language we can trace to a published source, not the number practising in ' + city.name + '.',
+    a: count(pair.n).charAt(0).toUpperCase() + count(pair.n).slice(1) + '. That is the number whose working language we can trace to a published source, not the number ' + work(pair.category, 'practising') + ' in ' + city.name + '.',
   });
   if (pair.nonLocal.length) {
     q.push({
@@ -306,7 +318,7 @@ function card(p, opts) {
             <p class="sv-meta">${meta}</p>
           </div>
         </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
+        <p class="sv-langs"><span class="sv-lang-label">${speaksLabel(p.category)}</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
           <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
@@ -370,6 +382,6 @@ function contactLinks(p, lang) {
 
 module.exports = {
   esc, card, mapsUrl, contactLinks, WA_HELLO,
-  words, list, plural, count, langName, an, catName, singular, who, niceDate, publisherOf,
+  words, list, plural, count, langName, an, catName, singular, who, work, teaches, speaksLabel, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,
 };

@@ -94,7 +94,7 @@ const SCHEMA_TYPE = {
   doctor: 'Physician', dentist: 'Dentist', vet: 'VeterinaryCare', physio: 'MedicalBusiness',
   therapy: 'MedicalBusiness', legal: 'Attorney', tax: 'AccountingService', realestate: 'RealEstateAgent',
   hair: 'HairSalon', gym: 'ExerciseGym', mechanic: 'AutoRepair', optician: 'Optician',
-  pharmacy: 'Pharmacy',
+  pharmacy: 'Pharmacy', school: 'School',
 };
 const HEALTH = new Set(['doctor', 'dentist', 'vet', 'physio', 'therapy', 'optician', 'pharmacy']);
 const MONEY = new Set(['legal', 'tax', 'realestate']);
@@ -180,8 +180,8 @@ for (const pair of Object.values(M.pairs)) {
     const standfirst = `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the source that lists them, ` +
       `out of ${pair.n} we hold for ${city.name} in all. ` +
       (alsoTop.length
-        ? `${alsoTop[0][1]} of them also work in ${P.langName(alsoTop[0][0])}${alsoTop[1] ? ' and ' + alsoTop[1][1] + ' in ' + P.langName(alsoTop[1][0]) : ''}.`
-        : `None of them is recorded as working in a second non-local language.`);
+        ? `${alsoTop[0][1]} of them also ${P.work(cat)} in ${P.langName(alsoTop[0][0])}${alsoTop[1] ? ' and ' + alsoTop[1][1] + ' in ' + P.langName(alsoTop[1][0]) : ''}.`
+        : `None of them is recorded as ${P.work(cat, 'working')} in a second non-local language.`);
 
     const provenance = srcTop.length === 1
       ? `All ${rows.length} come from one source, ${srcTop[0].publisher}, and every card links to it.`
@@ -223,9 +223,9 @@ for (const pair of Object.values(M.pairs)) {
 
     const faq = [
       {
-        q: `How many ${P.catName(cat)} in ${city.name} work in ${langName}?`,
+        q: `How many ${P.catName(cat)} in ${city.name} ${P.work(cat)} in ${langName}?`,
         a: `${rows.length}, on the sources we have read. That is what is published and checked, not what exists: ` +
-          `a ${P.singular(cat)} ${P.who(cat)} speaks ${langName} and appears on no list is not here.`,
+          `a ${P.singular(cat)} ${P.who(cat)} ${P.work(cat, 'speaks')} ${langName} and appears on no list is not here.`,
       },
       alsoLangs.length ? {
         q: `What if I need another language?`,
@@ -247,7 +247,7 @@ for (const pair of Object.values(M.pairs)) {
     const candidates = [
       `${rows.length} ${langName}-speaking ${P.catName(cat)}, ${city.name}`,
       `${langName} ${P.catName(cat)} in ${city.name}: ${rows.length} with sources`,
-      `${city.name}: ${rows.length} ${P.catName(cat)} ${P.who(cat)} work in ${langName}`,
+      `${city.name}: ${rows.length} ${P.catName(cat)} ${P.who(cat)} ${P.work(cat)} in ${langName}`,
       `${langName}-speaking ${P.catName(cat)} in ${city.name} (${month})`,
       `${rows.length} ${P.catName(cat)} in ${city.name} speaking ${langName}`,
     ].filter((t) => t !== h1 && !usedTitles.has(t));
@@ -279,7 +279,7 @@ for (const pair of Object.values(M.pairs)) {
     // Labour and Welfare"), so a description that would run over falls back to its short name.
     const coreWith = (pub) => `${rows.length} ${P.catName(cat)} in ${city.name} whose ${langName} is stated by the list that names them`
       + (srcTop.length > 1 ? `, from ${srcTop.length} sources` : (pub ? `, from ${pub}` : '')) + '.'
-      + (alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : '');
+      + (alsoNamed.length ? ` Some also ${P.work(cat)} in ${P.list(alsoNamed)}.` : '');
     // Full publisher, then its short name, then none (the page names it): the "Some also work in"
     // clause must stay, because the page gate fails a language the description hides.
     const descCore = [srcTop[0].publisher, srcTop[0].short, ''].map(coreWith).find((c) => c.length <= 160 || srcTop.length > 1)
@@ -319,7 +319,7 @@ for (const pair of Object.values(M.pairs)) {
       : META.band(
         `Entries ${first} to ${last} of the ${rows.length} ${P.catName(cat)} in ${city.name} whose `
         + `${langName} is stated by the list that names them.`
-        + `${alsoNamed.length ? ` Some also work in ${P.list(alsoNamed)}.` : ''}`,
+        + `${alsoNamed.length ? ` Some also ${P.work(cat)} in ${P.list(alsoNamed)}.` : ''}`,
         [
           `Page ${pageNo} of ${pageCount}, and every claim links to the source it was read on.`,
           `Page ${pageNo} of ${pageCount}, and every claim links to where it came from.`,

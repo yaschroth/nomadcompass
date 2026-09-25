@@ -896,7 +896,9 @@ for (const src of manifestRows) {
     const sole = (src.categories || []).length === 1 ? src.categories[0] : '';
     const ownWords = [r.specialty, r.role, r.hospital, r.detail, r.name].filter(Boolean).join(' ');
     const own = ownWords.trim() ? categorise(ownWords, '') : '';
-    const cat = (sole === 'translator' || sole === 'pharmacy') ? sole : (own || sole);
+    // A school list is the same case: "Europa-Schule ... Deutsch-Italienisch" or a lycee named for a
+    // doctor is a school because the list it is on is a list of schools.
+    const cat = (sole === 'translator' || sole === 'pharmacy' || sole === 'school') ? sole : (own || sole);
     if (!cat) { stats.noCategory++; continue; }
 
     // A form of address is not part of a name. Nor is a dash and a lower-case phrase after it, which

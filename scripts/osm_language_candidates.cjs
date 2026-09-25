@@ -76,6 +76,7 @@ const TAGS = [
   ['estate_agent', 'office', 'estate_agent', 'realestate'],
   ['car_repair', 'shop', 'car_repair', 'mechanic'],
   ['fitness_centre', 'leisure', 'fitness_centre', 'fitness'],
+  ['school', 'amenity', 'school', 'school'],
 ];
 
 // Any of the language keys, or a description / note that names a foreign-facing language.

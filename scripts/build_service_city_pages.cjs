@@ -105,7 +105,7 @@ function card(p) {
             <p class="sv-meta">${meta}</p>
           </div>
         </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
+        <p class="sv-langs"><span class="sv-lang-label">${P.speaksLabel(p.category)}</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
           <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>

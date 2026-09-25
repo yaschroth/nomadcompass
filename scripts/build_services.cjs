@@ -140,7 +140,7 @@ function card(p) {
             <p class="sv-meta">${meta}</p>
           </div>
         </div>
-        <p class="sv-langs"><span class="sv-lang-label">Speaks</span>${chips}</p>
+        <p class="sv-langs"><span class="sv-lang-label">${PROSE.speaksLabel(p.category)}</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
           <p class="sv-src"><span class="sv-ev sv-ev-${p.evidence}">${EV_LABEL[p.evidence]}</span><a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
@@ -503,6 +503,7 @@ ${shell.headTop}
     .sv-c-mechanic .sv-ico { color:#c2410c; background:#fbe9dd; }
     .sv-c-fitness .sv-ico { color:#15803d; background:#e6f3e9; }
     .sv-c-pharmacy .sv-ico { color:#b91c1c; background:#fbeaea; }
+    .sv-c-school .sv-ico { color:#1d4ed8; background:#e8eefc; }
     /* The languages are the entire point of this page, so they get the strongest block on the
        card, above the prose and well clear of the provenance footer. */
     .sv-langs { display:flex; flex-wrap:wrap; align-items:center; gap:.32rem; margin:0 0 .85rem; }
@@ -812,6 +813,7 @@ ${shell.bodyEnd}
       var cards=[].slice.call(grid.querySelectorAll('.sv-ix'));
       var CAT_LABEL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CATS[c]])))};
       var CAT_PLURAL=${JSON.stringify(Object.fromEntries(usedCats.map((c) => [c, CAT_PLURAL[c] || CATS[c].toLowerCase()])))};
+      var WORKING=${JSON.stringify(Object.fromEntries(usedCats.filter((c) => PROSE.work(c, 'working') !== 'working').map((c) => [c, PROSE.work(c, 'working')])))};
       var LANG_LABEL=${JSON.stringify(Object.fromEntries(usedLangs.map((l) => [l, LANGS[l]])))};
       var WA_HELLO=${JSON.stringify(PROSE.WA_HELLO)};
       var CAT_TOTALS=${JSON.stringify(CAT_TOTALS)},LANG_TOTALS=${JSON.stringify(LANG_TOTALS)},PAIR_TOTALS=${JSON.stringify(PAIR_TOTALS)};
@@ -864,7 +866,7 @@ ${shell.bodyEnd}
         });
         var bits=[];
         if(cat!=='all')bits.push('with '+CAT_LABEL[cat]);
-        if(lang!=='all')bits.push('working in '+LANG_LABEL[lang]);
+        if(lang!=='all')bits.push((WORKING[cat]||'working')+' in '+LANG_LABEL[lang]);
         // The total belongs to an unfiltered page only. Typing a city and still being told about
         // 3,096 providers is the same false promise the per-city counts used to make.
         var filtered=cat!=='all'||lang!=='all'||!!term;
@@ -939,7 +941,7 @@ ${shell.bodyEnd}
         var one=function(n,s){ return n+' '+s+(n===1?'':'s'); };
         if(cat!=='all'&&lang!=='all'&&!PAIR_TOTALS[cat+'|'+lang]){
           var lt=LANG_TOTALS[lang]||0,ct=CAT_TOTALS[cat]||0;
-          why.textContent='No '+CAT_PLURAL[cat]+' in the directory are recorded as working in '
+          why.textContent='No '+CAT_PLURAL[cat]+' in the directory are recorded as '+(WORKING[cat]||'working')+' in '
             +LANG_LABEL[lang]+'. '+LANG_LABEL[lang]+' appears with '+one(lt,'provider')
             +' in other services, and we hold '+one(ct,'provider')+' under '+CAT_PLURAL[cat]+'.';
           doEl.hidden=false;
@@ -1134,7 +1136,7 @@ ${shell.bodyEnd}
         // count of nothing is legible without looking up at the controls to see why.
         var bits=[];
         if(cat!=='all')bits.push(CAT_PLURAL[cat]);
-        if(lang!=='all')bits.push('working in '+LANG_LABEL[lang]);
+        if(lang!=='all')bits.push((WORKING[cat]||'working')+' in '+LANG_LABEL[lang]);
         if(city)bits.push('in '+((CITYMETA[city]||[city])[0]));
         if(ts.length)bits.push('matching \\u201c'+esc(q.value.trim())+'\\u201d');
         var asked=bits.length?' '+bits.join(', '):'';

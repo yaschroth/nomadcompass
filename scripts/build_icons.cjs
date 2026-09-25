@@ -32,7 +32,7 @@ const NAMES = [
   // 'languages' was named by service_labels.cjs and never built, so the translator category, which
   // is the second largest on the site, had an empty space where its icon goes.
   'stethoscope', 'paw-print', 'brain', 'bone', 'glasses', 'scissors', 'wrench', 'dumbbell',
-  'calculator', 'key', 'languages', 'pill-bottle',
+  'calculator', 'key', 'languages', 'pill-bottle', 'school',
 ];
 
 // Lucide has no tooth (only bluetooth), and dentistry was standing in with 'smile', which reads

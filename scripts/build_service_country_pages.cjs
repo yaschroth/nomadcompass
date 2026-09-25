@@ -297,7 +297,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
       const lshare = Math.round((lv.rows.length / v.rows.length) * 100);
       const s = sourcing(lv.rows, `these ${langName}-speaking ${label}`);
 
-      const lstand = `${lv.rows.length} ${label} in ${countryName} ${P.who(cat)} work in ${langName}, `
+      const lstand = `${lv.rows.length} ${label} in ${countryName} ${P.who(cat)} ${P.work(cat)} in ${langName}, `
         + `in ${lv.cities.size} cities. `
         + `${P.list(ltop.map((c) => c.name + ' (' + c.n + ')'))} hold ${Math.round((ltop.reduce((a, c) => a + c.n, 0) / lv.rows.length) * 100)}% of them.`;
 
@@ -313,7 +313,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
         },
         {
           q: `Is ${langName} unusual for ${label} in ${countryName}?`,
-          a: `${lshare}% of the ${v.rows.length} ${label} we hold in ${countryName} are recorded as working in `
+          a: `${lshare}% of the ${v.rows.length} ${label} we hold in ${countryName} are recorded as ${P.work(cat, 'working')} in `
             + `${langName}. A consular list records the language because the mission publishes it for its `
             + `own citizens, so the figure reflects who publishes lists, not only who speaks what.`,
         },
@@ -327,7 +327,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
       ];
       const ltitle = ltitleOpts.find((t) => t.length <= 60) || ltitleOpts[ltitleOpts.length - 1];
       const ldesc = META.band(
-        `${lv.rows.length} ${label} in ${countryName} ${P.who(cat)} work in ${langName}, across ${lv.cities.size} cities, `
+        `${lv.rows.length} ${label} in ${countryName} ${P.who(cat)} ${P.work(cat)} in ${langName}, across ${lv.cities.size} cities, `
         + `led by ${ltop.map((c) => c.name).join(', ')}.`,
         [
           'Every language claim names the source it was read on, and links straight to it.',
@@ -414,7 +414,9 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
         }) + '\n      ' + F.count({ id: 'svn', total: lcities.length, noun: 'city', nounPlural: 'cities' }),
         blocks: lblocks + '\n\n      ' + F.empty({
           id: 'svn',
-          what: `This page lists every city in ${countryName} where a source says ${P.an(langName)}-speaking ${P.singular(cat)} works.`,
+          what: P.teaches(cat)
+            ? `This page lists every city in ${countryName} where a source says a ${P.singular(cat)} ${P.work(cat, 'works')} in ${langName}.`
+            : `This page lists every city in ${countryName} where a source says ${P.an(langName)}-speaking ${P.singular(cat)} works.`,
         }),
         prose: `<div class="svn-prose">
         <h2>Where these came from</h2>
@@ -468,7 +470,7 @@ ${builtLangs.map((l) => `          <li><a href="${l.url}">${esc(l.langName)}-spe
         q: `Are these the only ${label} in ${countryName}?`,
         a: `No. These are the ones whose working language a published source states, which is a much `
           + `smaller set than the ones that exist. A city missing here is a gap in what has been `
-          + `published, not evidence that nobody practises there.`,
+          + `published, not evidence that nobody ${P.work(cat, 'practises')} there.`,
       },
     ];
 
@@ -502,7 +504,7 @@ ${builtLangs.map((l) => `          <li><a href="${l.url}">${esc(l.langName)}-spe
       `${v.rows.length} ${label} in ${countryName} across ${v.cities.size} cities, led by `
       + `${top.map((c) => c.name + ' (' + c.n + ')').join(', ')}.`,
       [
-        'Every listing names the source it was read on, and the language it works in.',
+        `Every listing names the source it was read on, and the language it ${P.work(cat, 'works')} in.`,
         'Every listing names the source it was read on.',
         'Each one links to its source.',
       ],

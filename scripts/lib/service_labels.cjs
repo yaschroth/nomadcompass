@@ -9,12 +9,14 @@
 // A hospital and a barber looked identical at a glance, so each category carries its own Lucide
 // glyph. 'tooth' is drawn in scripts/build_icons.cjs because Lucide has none, and 'smile' read as
 // a mood rather than a molar. A pharmacy is a bottle rather than Lucide's 'pill', because the pill
-// is a rounded bar drawn on the diagonal and so is the physio bone that sits beside it.
+// is a rounded bar drawn on the diagonal and so is the physio bone that sits beside it. A school is
+// Lucide's 'school' building rather than 'graduation-cap', which is a university and sits flat and
+// light in its tile beside the others.
 const CAT_ICON = {
   doctor: 'stethoscope', dentist: 'tooth', vet: 'paw-print', therapy: 'brain',
   physio: 'bone', optician: 'glasses', hair: 'scissors', legal: 'scale',
   tax: 'calculator', realestate: 'key', mechanic: 'wrench', fitness: 'dumbbell',
-  translator: 'languages', pharmacy: 'pill-bottle',
+  translator: 'languages', pharmacy: 'pill-bottle', school: 'school',
 };
 
 // Plain plurals for a heading or a title. The labels in the data ("Doctors & clinics") read as
@@ -23,7 +25,7 @@ const CAT_PLURAL = {
   doctor: 'doctors', dentist: 'dentists', vet: 'vets', therapy: 'therapists',
   physio: 'physiotherapists', optician: 'opticians', hair: 'hairdressers', legal: 'lawyers',
   tax: 'tax advisers', realestate: 'estate agents', mechanic: 'mechanics', fitness: 'gyms',
-  translator: 'translators', pharmacy: 'pharmacies',
+  translator: 'translators', pharmacy: 'pharmacies', school: 'schools',
 };
 
 // Strongest evidence first, so the best-sourced row in a city leads.

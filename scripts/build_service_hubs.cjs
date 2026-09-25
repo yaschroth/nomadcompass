@@ -83,16 +83,16 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   });
   const topLangs = Object.entries(langTotals).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
-  const h1 = `${Label} ${P.who(cat)} work in a language you speak, city by city`;
+  const h1 = `${Label} ${P.who(cat)} ${P.work(cat)} in a language you speak, city by city`;
   // "Physiotherapists" alone is 17 characters, so the full shape runs to 65. Longest that fits.
   const titleOpts = [
     `${Label} abroad by working language: ${svc.cities.length} cities, ${svc.n} listed`,
     `${Label} abroad by language: ${svc.cities.length} cities, ${svc.n} listed`,
-    `${Label} abroad by the language they work in`,
+    `${Label} abroad by the language they ${P.work(cat)} in`,
   ];
   const title = titleOpts.find((x) => x.length <= 60) || titleOpts[titleOpts.length - 1];
   const descCore = `${svc.n} ${label} across ${svc.cities.length} cities, indexed by the language they ` +
-    `work in. ${topLangs.slice(0, 3).map(([l, n]) => P.langName(l) + ' ' + n).join(', ')}.`;
+    `${P.work(cat)} in. ${topLangs.slice(0, 3).map(([l, n]) => P.langName(l) + ' ' + n).join(', ')}.`;
   const desc = META.band(descCore, [
     'Every language claim names the source it was read on, and links straight to it.',
     'Every language claim names the source it was read on.',
@@ -100,7 +100,7 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
   ]);
 
   const standfirst = `${svc.n} ${label} in ${svc.cities.length} cities, listed by the language they ` +
-    `work in rather than by rating. Most of them are recorded in ` +
+    `${P.work(cat)} in rather than by rating. Most of them are recorded in ` +
     P.list(topLangs.slice(0, 3).map(([l, n]) => P.langName(l) + ' (' + n + ')')) +
     `, and every language claim on every page links to the source it was read on.`;
 
@@ -161,7 +161,7 @@ for (const page of M.pageList().filter((p) => p.kind === 'service')) {
       n: p.n,
       unit: 'listed',
       index: tileIndex++,
-      eyebrow: 'Works in',
+      eyebrow: P.work(cat, 'works').replace(/^./, (c) => c.toUpperCase()) + ' in',
       data: { langs: p.nonLocal.map(([l]) => l) },
       trayInner: pairs.length ? B.langChips(pairs) : '<span class="sb-tray-text">Language recorded on the page</span>',
     });

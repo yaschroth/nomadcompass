@@ -94,6 +94,7 @@ const QUERIES = {
   dentist: ['English speaking dental clinic', 'dental clinic for expats'],
   therapy: ['English speaking psychologist', 'therapist for expats'],
   pharmacy: ['English speaking pharmacy', 'pharmacy'],
+  school: ['English speaking school', 'bilingual school', 'international school'],
 };
 
 // A language named beside a word about speaking it. The language name is captured so only what the
