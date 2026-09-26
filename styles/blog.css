@@ -613,12 +613,28 @@
 
 /* Article hero image */
 .article-hero {
+  position: relative;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto var(--space-12);
   border-radius: var(--radius-xl);
   overflow: hidden;
 }
+
+/* The credit for a hero that is not a city photograph (those are credited by the photo-credit
+   sweep). Same treatment as .hero-credit on the city pages. */
+.article-hero-credit {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  font-size: 10px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.article-hero .article-hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 .article-hero img {
   width: 100%;
@@ -634,8 +650,12 @@
 }
 
 /* Article layout with sidebar */
+/* minmax(0, 1fr), not 1fr or the implicit auto track: a grid track grows to its widest child, so a
+   640px comparison table pushed four articles to 600-700px on a 390px phone instead of scrolling
+   inside its own wrapper. */
 .article-layout {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-10);
   max-width: 1200px;
   margin: 0 auto;
@@ -644,7 +664,7 @@
 
 @media (min-width: 1024px) {
   .article-layout {
-    grid-template-columns: 240px 1fr 280px;
+    grid-template-columns: 240px minmax(0, 1fr) 280px;
     gap: var(--space-10);
     padding: 0 var(--space-8);
   }
@@ -706,6 +726,7 @@
 /* Article content */
 .article-content {
   max-width: 720px;
+  min-width: 0;
 }
 
 .article-content h2 {

@@ -40,6 +40,25 @@ const GUIDE_CITY = {
   'santa-teresa-digital-nomad-guide': ['santateresa'],
   'sarajevo-digital-nomad-guide': ['sarajevo'],
   'siem-reap-digital-nomad-guide': ['siemreap'],
+  // 2026-09-26 batch
+  'hiring-a-lawyer-in-antalya': ['antalya'],
+  'buying-property-in-fethiye-as-a-foreigner': ['fethiye'],
+  'buying-property-in-split-croatia': ['split'],
+  'abogado-gestor-notario-spain-foreigners': ['alicante'],
+  'english-speaking-doctor-medellin': ['medellin'],
+  'portugal-tax-adviser-for-nomads': ['lisbon'],
+  'english-speaking-doctor-germany': ['berlin', 'hamburg'],
+  'english-speaking-doctors-japan': ['tokyo'],
+  'luxembourg-digital-nomad-guide': ['luxembourg'],
+  'swakopmund-digital-nomad-guide': ['swakopmund'],
+  'lombok-digital-nomad-guide': ['lombok'],
+  'wanaka-digital-nomad-guide': ['wanaka'],
+  'sal-boa-vista-cape-verde-remote-work': ['capeverde'],
+  'dakar-digital-nomad-guide': ['dakar'],
+  'oslo-digital-nomad-guide': ['oslo'],
+  'is-nashville-good-for-digital-nomads': ['nashville'],
+  'best-miami-neighborhoods-for-digital-nomads': ['miami'],
+  'st-kilda-melbourne-digital-nomad-guide': ['melbourne'],
 };
 
 const read = (p) => (fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null);
@@ -62,7 +81,8 @@ for (const [post, cities] of Object.entries(GUIDE_CITY)) {
 // A guide on disk that the map does not know is how the fifteen went missing in the first place.
 const known = new Set(Object.keys(GUIDE_CITY));
 const GENERAL = new Set(['index', 'best-european-cities-nomads', 'digital-nomad-tax-guide', 'portugal-digital-nomad-visa',
-  'remote-work-routine-guide', 'rise-of-coliving-spaces', 'stay-productive-working-abroad']);
+  'remote-work-routine-guide', 'rise-of-coliving-spaces', 'stay-productive-working-abroad',
+  'best-middle-east-cities-for-a-month-of-remote-work', 'safest-cities-for-female-digital-nomads']);
 for (const f of fs.readdirSync(path.join(ROOT, 'blog')).filter((x) => x.endsWith('.html'))) {
   const s = f.replace(/\.html$/, '');
   if (!known.has(s) && !GENERAL.has(s)) bad.push(`blog/${f} is neither in GUIDE_CITY nor listed as a general post`);

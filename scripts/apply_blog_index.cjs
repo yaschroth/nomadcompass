@@ -51,11 +51,12 @@ missing.sort((a, b) => (b.published || '').localeCompare(a.published || ''));
 // heroes has a purpose-made -card.webp beside it, which is a quarter of the bytes at the size the
 // card actually renders. Serving the 1920px hero into a thumbnail is waste nobody sees.
 const cardImage = (src) => {
-  const local = src.match(/\/images\/cities\/([a-z0-9-]+)\.webp$/);
+  // Any self-hosted webp, not only city heroes: a post about Sal has its own photo in /images/blog/.
+  const local = src.match(/(\/images\/(?:cities|blog)\/[a-z0-9-]+)\.webp$/);
   if (local) {
-    const variant = '/images/cities/' + local[1] + '-card.webp';
+    const variant = local[1] + '-card.webp';
     if (fs.existsSync(path.join(ROOT, variant.slice(1)))) return variant;
-    return '/images/cities/' + local[1] + '.webp';
+    return local[1] + '.webp';
   }
   return src.replace(/w=1200&h=630/, 'w=600&h=400');
 };
