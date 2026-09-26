@@ -70,3 +70,10 @@ write second. A thin or generic article is a failure even if it passes the scrip
 ## Your final message
 slug, title, word count, number of sources consulted, the internal links used, the external
 links used, and a short NOTES summary (discrepancies above all).
+
+## Your machine manners
+- Never kill, close or restart a process you did not start yourself (no `taskkill /IM chrome.exe`,
+  no `pkill chrome`). The owner works on this machine; a broad kill closes their browser.
+- Currency: write only the dollar figure. Codes after the number ("4,000 TL", "475,000 XOF") and
+  HTML entities (&euro;) count as local amounts too. The one exempt sentence states the rate and
+  must contain "exchange rate", "pegged" or "per euro/dollar" in the same text node.
