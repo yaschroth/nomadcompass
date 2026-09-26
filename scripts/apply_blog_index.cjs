@@ -35,7 +35,8 @@ const articles = fs.readdirSync(path.join(ROOT, 'blog'))
       section: get(/<meta property="article:section" content="([^"]+)"/, html) || 'City Guides',
       published: get(/<meta property="article:published_time" content="([^"T]+)/, html),
       image: get(/<meta property="og:image" content="([^"]+)"/, html),
-      alt: get(/<figure class="article-hero">[\s\S]*?alt="([^"]*)"/, html),
+      // The post-hero shape (apply_blog_hero.cjs) first, the old figure for a post not yet swept.
+      alt: get(/<img class="post-hero-img"[^>]*alt="([^"]*)"/, html) || get(/<figure class="article-hero">[\s\S]*?alt="([^"]*)"/, html),
       minutes: get(/<span>(\d+) min read<\/span>/, html) || '10',
     };
   });

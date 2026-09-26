@@ -215,4 +215,4 @@ if (problems.length) { console.error('\nrefused: fix the problems above'); proce
 
 fs.writeFileSync(path.join(ROOT, 'blog', spec.slug + '.html'), html);
 console.log('\nwrote blog/' + spec.slug + '.html');
-console.log('next: node scripts/apply_blog_seo.cjs ' + spec.slug + '  then the link/audit scripts');
+console.log('next: node scripts/apply_blog_seo.cjs ' + spec.slug + ', node scripts/apply_blog_hero.cjs, then the link/audit scripts');
