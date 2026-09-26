@@ -35,12 +35,42 @@ Status legend: 🔴 needs work · 🟡 partial / follow-ups open · ✅ meets th
 | remote-work-routine-guide | How to Build a Remote Work Routine That Actually Works | 🟡 | Lifestyle, soft CTA. |
 | rise-of-coliving-spaces | The Rise of Coliving: Best Spaces for Digital Nomads in 2026 | 🟡 | GSC: ranks for "co living for digital nomad" pos ~30. |
 | stay-productive-working-abroad | How to Stay Productive While Working Remotely Abroad | 🟡 | Lifestyle. |
+| hiring-a-lawyer-in-antalya | Hiring a Lawyer in Antalya: When You Need One, What It Costs | ✅ | ~600 impressions across Antalya lawyer queries (pos 17-58). Fees from the TBB 2025-26 minimum tariff. |
+| buying-property-in-fethiye-as-a-foreigner | Buying Property in Fethiye as a Foreigner: Tapu and Lawyers | ✅ | "fethiye lawyer" 94 + "fethiye law firm" 62. Valuation report no longer mandatory (TKGM 2024/2); DAB certificate. |
+| buying-property-in-split-croatia | Buying Property in Split as a Foreigner: Costs and Lawyers | ✅ | Split lawyer queries ~170. UPDATE the day Croatia joins the OECD (NN 52/2025 drops consent). |
+| abogado-gestor-notario-spain-foreigners | Lawyer in Spain: Abogado, Gestor or Notary for Foreigners | ✅ | Alicante/Malaga/Tenerife/Seville lawyer queries. Notary + registry fees from the tariffs. |
+| english-speaking-doctor-medellin | English-Speaking Doctor in Medellín: Costs, EPS, Insurance | ✅ | 129 impressions, pos 11. Tourists cannot join an EPS or buy prepagada. |
+| portugal-tax-adviser-for-nomads | Tax Adviser in Portugal: NIF, IFICI and IRS for Nomads | ✅ | "tax advisory portugal" 52. IFICI does not cover remote work for a foreign employer. |
+| english-speaking-doctor-germany | English-Speaking Doctor in Germany: Find, Book and Pay | ✅ | Our German rows are KV Hamburg's register, not 116117; the article says so. |
+| english-speaking-doctors-japan | English-Speaking Doctors in Japan: How to Find and Pay | ✅ | Explains the MHLW register our Tokyo pages come from. |
+| luxembourg-digital-nomad-guide | Luxembourg Digital Nomad Guide: Internet, Rent and Visas | ✅ | 144 impressions on "internet ... luxembourg" (pos 61). Leads with ILR's 207 Mbit/s. |
+| swakopmund-digital-nomad-guide | Swakopmund Digital Nomad Guide: Visa, Internet and Fog | ✅ | 35 impressions, pos 12. Fixed median 17.66 Mbps: work off 4G/5G. |
+| lombok-digital-nomad-guide | Lombok Digital Nomad Guide: Community, Wifi and Visas | ✅ | "digital nomad community lombok" 31. 1 to 78 foreign arrivals vs Bali. |
+| wanaka-digital-nomad-guide | Wanaka Digital Nomad Guide: Visas, Rent and Internet | ✅ | 24 impressions. Visitor remote work legal since 27 Jan 2025; 275-day tax rule from 1 Apr 2026. |
+| sal-boa-vista-cape-verde-remote-work | Boa Vista and Sal for Digital Nomads: Cape Verde Remote Work | ✅ | ~220 impressions landing on the Praia guide. Own hero (images/blog/sal-boa-vista.webp, IDS.photos CC BY-SA 2.0, credited on the image). |
+| dakar-digital-nomad-guide | Dakar Digital Nomad Guide: Fibre, Power Cuts and Visas | ✅ | "nomad dakar" 20, pos 8. |
+| oslo-digital-nomad-guide | Oslo Digital Nomad Guide: Real Costs and Residence Rules | ✅ | "nomads oslo" 20, pos 12. No DN visa; visitors' remote work only incidental. |
+| is-nashville-good-for-digital-nomads | Is Nashville Good for Digital Nomads? Yes, for US Citizens | ✅ | 17 impressions, pos 9. Visitor rules quoted verbatim, no interpretation. |
+| best-miami-neighborhoods-for-digital-nomads | Best Miami Neighborhoods for Digital Nomads: Rent and Risk | ✅ | 15 impressions, pos 14. The six-month rental line decides it. |
+| st-kilda-melbourne-digital-nomad-guide | St Kilda Digital Nomad Guide: Melbourne Rent, Trams, Visas | ✅ | "st kilda digital nomad guide" 72, pos 27. Rent data is Sep quarter 2025 (newest). |
+| best-middle-east-cities-for-a-month-of-remote-work | Best Middle East Cities for a Month of Remote Work | ✅ | ~180 impressions. DATE-SENSITIVE: security section dated 26 Sep 2026, recheck. |
+| safest-cities-for-female-digital-nomads | Safest Cities for Female Digital Nomads: What the Data Says | ✅ | 23 impressions. States openly where our safety scores disagree with official data. |
 
 All 15 carry the standard blog schema (BlogPosting + author entity + publisher) and the
 sitewide brand graph. None have been through the full style-guide pass (voice audit,
 repetition check baseline, per-article image uniqueness), hence 🟡.
 
 ## Change history
+
+- **2026-09-26 (fourth batch, 20 posts)**: topics from Search Console (scripts/gsc_query.cjs):
+  queries earning impressions with no article behind them. One research agent per article under a
+  shared brief (primary sources, 24 to 41 per post, every figure in a sources file; no disclaimers,
+  no first-person claims, USD only). Links set by hand in each post, on its city page and in
+  apply_blog_links' MAP; the autolinker skips these posts (HAND_LINKED). Corrected in the same
+  commit: portugal-digital-nomad-visa (NHR revoked 2024, tax residence, fiscal representative,
+  fees from AIMA/MNE tables, first-person claims removed) and digital-nomad-tax-guide (NHR, FEIE
+  2026, Beckham, UAE, Georgia, Paraguay, Malaysia). The research also listed ~60 errors on city
+  pages, /nomad-visas and older posts; they are being worked through separately.
 
 - **2026-08-26 (third batch)**: Chania (86 impressions, pos 9.7) and Dali (107, pos 13.4). Both
   lead with the constraint rather than the scenery: Chania's 14-25 Mbps and the Workhub membership
