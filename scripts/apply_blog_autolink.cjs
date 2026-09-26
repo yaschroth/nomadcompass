@@ -10,7 +10,9 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const CAP = 14;
-const BLOCK = new Set(['Nice', 'Split', 'Male', 'Bath', 'Victoria', 'Hue', 'As', 'Of', 'Central', 'Center', 'George Town', 'Sunshine Coast']);
+// Santiago is Chile's capital in our data and also Cape Verde's main island, Spain's Santiago de
+// Compostela and Cuba's Santiago: the Praia guide linked the island to Chile.
+const BLOCK = new Set(['Nice', 'Split', 'Male', 'Bath', 'Victoria', 'Hue', 'As', 'Of', 'Central', 'Center', 'George Town', 'Sunshine Coast', 'Santiago']);
 
 const m = {};
 new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';module.exports=CITIES')(m);
@@ -72,7 +74,20 @@ function autolink(region, already) {
   return { html: parts.join(''), added };
 }
 
-const files = fs.readdirSync(path.join(ROOT, 'blog')).filter((f) => f.endsWith('.html') && f !== 'index.html');
+// Posts whose links were set by hand, one by one. The owner asked on 2026-09-26 that links be chosen
+// and worded per page rather than generated, so this pass leaves these alone entirely.
+const HAND_LINKED = new Set([
+  'hiring-a-lawyer-in-antalya', 'buying-property-in-fethiye-as-a-foreigner', 'buying-property-in-split-croatia',
+  'abogado-gestor-notario-spain-foreigners', 'english-speaking-doctor-medellin', 'portugal-tax-adviser-for-nomads',
+  'english-speaking-doctor-germany', 'english-speaking-doctors-japan', 'luxembourg-digital-nomad-guide',
+  'swakopmund-digital-nomad-guide', 'lombok-digital-nomad-guide', 'wanaka-digital-nomad-guide',
+  'sal-boa-vista-cape-verde-remote-work', 'dakar-digital-nomad-guide', 'oslo-digital-nomad-guide',
+  'is-nashville-good-for-digital-nomads', 'best-miami-neighborhoods-for-digital-nomads',
+  'st-kilda-melbourne-digital-nomad-guide', 'best-middle-east-cities-for-a-month-of-remote-work',
+  'safest-cities-for-female-digital-nomads',
+]);
+const files = fs.readdirSync(path.join(ROOT, 'blog'))
+  .filter((f) => f.endsWith('.html') && f !== 'index.html' && !HAND_LINKED.has(f.replace(/\.html$/, '')));
 let done = 0, total = 0;
 for (const file of files) {
   const fp = path.join(ROOT, 'blog', file);

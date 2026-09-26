@@ -177,6 +177,9 @@ function geography(pair) {
   const city = M.cities[pair.city];
   const withPc = Object.values(pair.areas).reduce((a, b) => a + b, 0);
   if (areas.length === 1) {
+    // "Every address" is true only when every row gave one. 126 pages said it over partial data,
+    // Tokyo's doctors among them: one postcode out of 2,111 rows, and the page placed all of them there.
+    if (withPc < pair.n) return '';
     return 'Every address we hold for these sits in postcode ' + areas[0][0] + '. That is where this source looked, not where every ' +
       singular(pair.category) + ' in ' + city.name + ' is.';
   }

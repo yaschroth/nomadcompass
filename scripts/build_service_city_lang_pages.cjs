@@ -167,7 +167,7 @@ for (const pair of Object.values(M.pairs)) {
       // put the word undefined in the description of every page.
       .map(([h, n]) => ({ n, ...P.publisherOf(h) }));
     const areas = {};
-    rows.forEach((r) => { const d = M.districtOf(r.area); if (d) areas[d] = (areas[d] || 0) + 1; });
+    rows.forEach((r) => { const d = M.districtOf(r.area, M.cities[pair.city].country); if (d) areas[d] = (areas[d] || 0) + 1; });
     const areaList = Object.entries(areas).sort((a, b) => b[1] - a[1]);
     const withSite = rows.filter((r) => r.url).length;
     const checked = rows.map((r) => r.checked).filter(Boolean).sort();
@@ -196,7 +196,8 @@ for (const pair of Object.values(M.pairs)) {
 
     const geography = areaList.length > 1
       ? `They sit across ${areaList.length} postcodes, ${P.list(areaList.slice(0, 3).map(([d, n]) => d + ' (' + n + ')'))} the densest.`
-      : (areaList.length === 1 ? `Every address we hold for them is in ${areaList[0][0]}.` : '');
+      // "Every address" only when every row gave a postcode; one postcode among many blanks is not a place.
+      : (areaList.length === 1 && areaList[0][1] === rows.length ? `Every address we hold for them is in ${areaList[0][0]}.` : '');
 
     const near = M.nearest(city.id, cat, 8)
       .map((x) => ({ ...x, n: M.pairOf(x.city, cat).rows.filter((r) => r.languages.includes(lang)).length }))

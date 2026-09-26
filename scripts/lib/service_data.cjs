@@ -165,8 +165,17 @@ const hostOf = (url) => {
 // 08021 Barcelone", because the sources punctuate addresses however they like. A postcode is
 // either there and unambiguous or absent, and grouping by it is a real fact about where a source
 // looked.
-const districtOf = (area) => {
-  const m = /(?:^|[^0-9])([0-9]{4,6})(?:[^0-9]|$)/.exec(String(area || ''));
+//
+// Japan writes its postcode as 162-8655, and the four-digit half is not an area: it turned the
+// National Center for Global Health into "postcode 8655". Elsewhere that shape is a phone number or
+// a PO box (Panama, Peru, Beirut), so the Japanese form is read only for Japan.
+const districtOf = (area, country) => {
+  const s = String(area || '');
+  if (country === 'Japan') {
+    const jp = /(?:^|[^0-9])([0-9]{3}-[0-9]{4})(?:[^0-9]|$)/.exec(s);
+    return jp ? jp[1] : '';
+  }
+  const m = /(?:^|[^0-9])([0-9]{4,6})(?:[^0-9]|$)/.exec(s);
   return m ? m[1] : '';
 };
 
@@ -189,7 +198,7 @@ Object.keys(byPair).forEach((key) => {
     langCounts,
     nonLocal,
     evCounts: tally(rows, (r) => r.evidence),
-    areas: tally(rows, (r) => districtOf(r.area)),
+    areas: tally(rows, (r) => districtOf(r.area, country)),
     sources: Object.entries(tally(rows, (r) => hostOf(r.sourceUrl)))
       .sort((a, b) => b[1] - a[1])
       .map(([host, n]) => ({ host, n, url: (rows.find((r) => hostOf(r.sourceUrl) === host) || {}).sourceUrl })),

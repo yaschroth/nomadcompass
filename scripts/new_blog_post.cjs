@@ -75,7 +75,9 @@ if (spec.city) {
   const cityPage = path.join(ROOT, 'cities', spec.city + '.html');
   if (!fs.existsSync(cityPage)) { console.error('no city page for ' + spec.city); process.exit(1); }
   const cityHtml = fs.readFileSync(cityPage, 'utf8');
-  const score = (cityHtml.match(/Nomad Score ([\d.]+)\/10/) || [, ''])[1];
+  // City pages once printed "Nomad Score 8.0/10" and now print "Nomad Score is 8.0 out of 10";
+  // matching only the old wording stopped every post that names its city.
+  const score = (cityHtml.match(/Nomad Score (?:is )?([\d.]+)(?:\/10| out of 10)/) || [, ''])[1];
   const name = (cityHtml.match(/<h1 class="city-hero-title">([^<]+)</) || [, spec.city])[1];
   if (!score) { console.error('no Nomad Score on the ' + spec.city + ' page'); process.exit(1); }
   const widget = donor.slice(donor.indexOf('<!-- Nomad Score Widget -->'),
