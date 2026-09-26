@@ -60,6 +60,9 @@ const STEPS = [
   ['duplicated blocks (check_duplicate_blocks, a gate)', 'check_duplicate_blocks.cjs'],
   ['cost basis (check_cost_basis, a gate)', 'check_cost_basis.cjs'],
   ['local assets (check_local_assets, a gate)', 'check_local_assets.cjs'],
+  // apply_city_rankings rebuilds the card that holds the hand-set "Further reading" links and
+  // carries up to four across. This says whether every city guide survived the trip.
+  ['city guide links (check_blog_city_links, a gate)', 'check_blog_city_links.cjs'],
 ];
 STEPS.forEach(([label, script, args], i) => {
   console.log((i ? '\n' : '') + (i + 1) + '/' + STEPS.length + '  ' + label + '...');

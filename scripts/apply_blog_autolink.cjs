@@ -40,10 +40,19 @@ function autolink(region, already) {
     if (linkD || hD || skipD || added >= CAP || !tok.trim()) continue;
     // collect first-occurrence candidates on the ORIGINAL token (no mid-insert index shifts)
     const cands = [];
+    // A city already linked still claims its words. Skipping it outright is what linked the "York"
+    // of "New York" to York, England, in two posts: New York was taken, so York stood alone.
+    const taken = [];
     for (const c of CITYLIST) {
-      if (used.has(c.id)) continue;
       const mm = c.re.exec(tok);
-      if (mm) { const start = mm.index + mm[0].indexOf(c.name); cands.push({ start, end: start + c.name.length, c }); }
+      if (!mm) continue;
+      const start = mm.index + mm[0].indexOf(c.name);
+      if (used.has(c.id)) taken.push({ start, end: start + c.name.length });
+      else cands.push({ start, end: start + c.name.length, c });
+    }
+    for (let k = cands.length - 1; k >= 0; k--) {
+      const x = cands[k];
+      if (taken.some((t) => t.start <= x.start && t.end >= x.end && t.end - t.start > x.end - x.start)) cands.splice(k, 1);
     }
     // accept non-overlapping matches (earliest start; longer name wins an overlap so "New York" beats "York")
     cands.sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
