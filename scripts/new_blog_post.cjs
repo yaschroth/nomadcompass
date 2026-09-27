@@ -170,7 +170,10 @@ const article = `<main id="main-content" tabindex="-1" class="main-content">
     <figure class="article-hero">
       <img decoding="async" width="1200" height="600"
         src="${esc(spec.hero.src)}"
-        alt="${esc(spec.hero.alt)}">
+        alt="${esc(spec.hero.alt)}">${spec.hero.credit
+    // A post's own photograph (images/blog/) is credited here, as trusted HTML from the spec; the
+    // credit sweep only knows city photographs. apply_blog_hero.cjs carries it into the hero.
+    ? `\n      <figcaption class="article-hero-credit">${spec.hero.credit}</figcaption>` : ''}
     </figure>
 
     <!-- Article Layout -->

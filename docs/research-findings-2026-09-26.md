@@ -10,7 +10,7 @@
 - Facts panel lists Luxembourgish and French only; German is also administrative (1984 law).
 - "All transport free": first class on trains is not.
 - ~140,000 residents vs official 137,700.
-- Tram to the airport in early 2025: unverified.
+- Tram to the airport in early 2025: VERIFIED (opened 2 March 2025), city page is right.
 
 ## EXISTING BLOG POSTS, HIGH PRIORITY (YMYL errors, found by portugal-tax agent)
 - blog/portugal-digital-nomad-visa.html:
@@ -135,3 +135,10 @@
 - cities/ericeira: "NHR 2.0 offers a flat 20%... for 10 years".
 - blog/digital-nomad-guide-lisbon: offers NHR, income EUR 3,040 in JSON-LD vs $3,500 on page, FABRICATED quote.
 - blog.html: tax guide card still says "NHR".
+- NEW (v3 research): Santa Maria (Sal) pier was storm-damaged Oct 2024 and is being rebuilt (new 120 m pier, 18-month contract from Sep 2025, governo.cv): any page describing the old pier as in use needs a note.
+
+## luxembourg (v3 research)
+- Airport tram claim verified (opened 2 March 2025).
+
+## croatia (v3 research)
+- Split's World Heritage core: city/county/state right of first refusal on sales (NN 145/24 Art. 78-82, 60 days); not on the Split city page.
