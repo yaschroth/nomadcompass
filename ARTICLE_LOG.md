@@ -62,6 +62,8 @@ repetition check baseline, per-article image uniqueness), hence 🟡.
 
 ## Change history
 
+- **2026-09-27 (the 20 batch posts rewritten)**: the owner found the first drafts a chain of facts. Rewritten under docs/blog-voice-brief.md (voice, sense of place, every article its own hook, approved on the Oslo sample in two rounds). Same research; descriptive details sourced like figures; each opening a different device and sentence shape (checked side by side). St Kilda got its own photograph (images/blog/st-kilda.webp). The 30 older posts are NOT yet in this voice.
+
 - **2026-09-26 (fourth batch, 20 posts)**: topics from Search Console (scripts/gsc_query.cjs):
   queries earning impressions with no article behind them. One research agent per article under a
   shared brief (primary sources, 24 to 41 per post, every figure in a sources file; no disclaimers,
