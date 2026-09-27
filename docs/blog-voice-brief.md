@@ -15,6 +15,29 @@ without pretending to have been there: describe what a place is like from what i
 seasons, layout, what is on the street, what a normal day costs and feels like), use hypothetical
 scenarios ("Say you land in late November: the sun sets before four..."), and draw conclusions.
 
+## Sense of place (the owner's second note: "make it more about the city itself, give it more life,
+## more impressive and descriptive. Readers must be able to imagine what it's like to be there.")
+The article is about a PLACE first and a set of rules second. Before the reader meets a visa rule or a
+rent figure, they should be able to see the city, and the city should keep reappearing between the
+practical sections, not be confined to one "lifestyle" paragraph.
+- Open with the city itself: what you see, hear and do on an ordinary day there, and what makes it
+  unlike anywhere else. Then the verdict. Then the practicalities.
+- Paint with concrete, documented detail, never with adjectives alone. Not "a vibrant waterfront",
+  but what is actually on it: the opera house roof you can walk up, the floating saunas, the ferries
+  to the islands, the tram that climbs to the forest. Name streets, districts, landmarks, foods,
+  rituals, markets, the view from a known viewpoint, the sound of a known thing.
+- Give each neighbourhood a character a reader can picture (what its streets look like, who is there,
+  what a weekday there feels like), then its rent.
+- Seasons and light as lived: what a December afternoon or a July evening is like, what people do then.
+- A working day as a scene: where you might work in the morning, where you would eat at lunch, what
+  you could do at five o'clock, what a weekend looks like. Written as possibilities ("you could..."),
+  not as something the author did.
+- Every descriptive detail must be TRUE and checkable (tourism boards, the city's own sites, Wikipedia,
+  reputable guides are fine for description; log them in sources.md). No invented sensations, no
+  "I remember", no made-up cafés or conversations. Vivid and true, not vivid and made up.
+- Let the practical facts sit inside the life of the place: rent belongs to the neighbourhood you are
+  picturing, transit belongs to how you get from the flat to the fjord.
+
 ## What a paragraph looks like
 - One idea per paragraph, with its "so what". A fact without its consequence is not finished.
 - At most one or two numbers in a paragraph of prose. When a section needs more numbers, put them in
