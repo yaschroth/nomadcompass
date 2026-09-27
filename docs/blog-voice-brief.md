@@ -38,6 +38,19 @@ practical sections, not be confined to one "lifestyle" paragraph.
 - Let the practical facts sit inside the life of the place: rent belongs to the neighbourhood you are
   picturing, transit belongs to how you get from the flat to the fjord.
 
+## Every article its own hook (the owner's third note: "always different hooks; creative and varied,
+## but still full of information")
+Across the blog no two articles may open the same way or follow the same template. Do not copy the
+Oslo model's first sentence shape, section order or headings: copy its standard, not its pattern.
+Choose (or take the one assigned to you) a distinct way in, for example: a problem scenario the reader
+is living, a historical turn, one landmark as a lens, a paradox, an arrival journey, a comparison with a
+famous neighbour, the seasons, the map, a sensory morning scene, the reader's question answered head
+on, one element (water, wind, heat) as a lens, an hour-by-hour day, a calendar dilemma, the gap between
+data and perception, a myth against reality, a scene at a table where something gets signed, a local
+word as a lens, an everyday object or number as a lens, a small visual detail that opens a system.
+The hook must lead straight into real information within the first two or three paragraphs: it is a
+door, not decoration. Vary the section headings and the order of sections to fit the story.
+
 ## What a paragraph looks like
 - One idea per paragraph, with its "so what". A fact without its consequence is not finished.
 - At most one or two numbers in a paragraph of prose. When a section needs more numbers, put them in
