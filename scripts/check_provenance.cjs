@@ -45,6 +45,7 @@ const CLAIMS = [
   ['country-meta', 'Plug types per country', 'scripts/lib/country-meta.cjs'],
   ['city-elevations', 'Elevation reference used by the sanity gate', 'data/city-elevations.json'],
   ['city-airports', 'The airport each city flies from, and the flight legs on /route', 'data/city-airports.json'],
+  ['internet-speeds', 'Median fixed and mobile download speeds quoted on the WiFi score tile', 'data/internet-speeds.json'],
 ];
 
 const TIERS = ['primary', 'triangulated', 'editorial'];

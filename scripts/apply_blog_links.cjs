@@ -85,10 +85,12 @@ for (const file of files) {
   const block = `\n    <!-- blog-explore-start -->${CSS}\n    <section class="blog-explore container">\n      <h3>Explore the data behind this guide</h3>\n      <div class="blog-explore-chips">${chips}</div>\n      <h3 style="margin-top:1.3rem">Plan your trip with our tools</h3>\n      <div class="blog-explore-chips">${toolChips}</div>\n    </section>\n    <!-- blog-explore-end -->`;
   // insert before the Related Articles section, else before </main>
   if (/<section class="related-articles/.test(html)) {
-    html = html.replace(/(\n\s*<!-- Related Articles -->\s*)?(\n\s*<section class="related-articles)/, `${block}$1$2`);
+    // Function replacements throughout: a "$1" inside the block (a price) would otherwise be read as a
+    // capture group, which is how 247 city FAQs came to print "around </main>,600 a month".
+    html = html.replace(/(\n\s*<!-- Related Articles -->\s*)?(\n\s*<section class="related-articles)/, (m, a, b) => block + (a || '') + b);
     done++;
   } else if (/<\/main>/.test(html)) {
-    html = html.replace(/(\n\s*<\/main>)/, `${block}$1`);
+    html = html.replace(/(\n\s*<\/main>)/, (m, g) => block + g);
     done++;
   } else { noanchor++; continue; }
   fs.writeFileSync(abs, html);

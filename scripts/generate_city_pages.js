@@ -26,7 +26,6 @@ const CITY_CONTENT = {
     "hero_alt": "Lisbon's colorful Alfama district with traditional tiled buildings and tram",
     "monthly_budget": "€1,800",
     "wifi_speed": "100 Mbps",
-    "nomad_count": "5,000+",
     "score_title": "A Top-Tier Nomad Destination",
     "score_description": "Lisbon scores highly across most categories, excelling in climate, safety, community, and English accessibility. The main trade-off is cost, Lisbon has become more expensive in recent years, though it's still reasonable by Western European standards.",
     "neighborhoods": [
@@ -26867,8 +26866,9 @@ function generateDefaultContent(city) {
     hero_image: city.image || `https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1600&h=900&fit=crop`,
     hero_alt: `${city.name} cityscape`,
     monthly_budget: `$${costPerMonth.toLocaleString('en-US')}`,
-    wifi_speed: `${Math.round(city.scores.wifi * 10)} Mbps`,
-    nomad_count: city.scores.community >= 7 ? "5,000+" : city.scores.community >= 5 ? "2,000+" : "500+",
+    // Our wifi SCORE, labelled as a score. It used to print score x 10 as "Avg. WiFi Speed" in Mbps,
+    // a measurement nobody took (lombok's "40 Mbps" was its score of 4).
+    wifi_speed: `${city.scores.wifi}/10`,
     score_title: getScoreTitle(city),
     score_description: getScoreDescription(city),
     neighborhoods: [],
@@ -27080,15 +27080,11 @@ function generateCityPage(city) {
           </div>
           <div class="quick-stat">
             <div class="quick-stat-value">${content.wifi_speed}</div>
-            <div class="quick-stat-label">Avg. WiFi Speed</div>
+            <div class="quick-stat-label">WiFi Score</div>
           </div>
           <div class="quick-stat">
             <div class="quick-stat-value">${city.scores.safety}/10</div>
             <div class="quick-stat-label">Safety Score</div>
-          </div>
-          <div class="quick-stat">
-            <div class="quick-stat-value">${content.nomad_count}</div>
-            <div class="quick-stat-label">Active Nomads</div>
           </div>
           <div class="quick-stat">
             <div class="quick-stat-value">${(o=>{const s=o<0?'-':'+';const a=Math.abs(o);const h=Math.floor(a);const mm=Math.round((a-h)*60);return 'UTC'+s+h+(mm?':'+String(mm).padStart(2,'0'):'');})(city.timezone||0)}</div>

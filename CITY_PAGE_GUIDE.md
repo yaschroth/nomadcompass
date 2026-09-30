@@ -46,16 +46,16 @@ Full-width city image with gradient overlay.
 - Alt text should describe the scene specifically
 
 ### Section 2: Quick Stats Bar
-7 key metrics at a glance in a dark green bar.
+6 key metrics at a glance in a dark green bar.
 
 **Required stats:**
+(No "Active Nomads" or other head-count stat: the old figures were bucketed from our own community score, not counted, and an unsourced count breaks the no-fabrication rule. scripts/check_fabrication.cjs fails on it.)
 1. **Monthly Budget** - Realistic nomad budget (rent + food + lifestyle)
 2. **Current Weather** - Live weather fetched via API (auto-populated)
 3. **Climate Type** - From city data (e.g., "Mediterranean", "Tropical")
 4. **Avg. WiFi Speed** - Typical coworking/cafe speed
 5. **Safety Score** - From city data (X/10)
-6. **Active Nomads** - Estimated nomad population
-7. **Time Difference** - Hours from user's home timezone (requires sign-in)
+6. **Time Difference** - Hours from user's home timezone (requires sign-in)
 
 **Format examples:**
 - `$800` / `€1,800` (use local-appropriate currency)
@@ -90,10 +90,6 @@ Full-width city image with gradient overlay.
       <div class="quick-stat">
         <div class="quick-stat-value">8/10</div>
         <div class="quick-stat-label">Safety Score</div>
-      </div>
-      <div class="quick-stat">
-        <div class="quick-stat-value">5,000+</div>
-        <div class="quick-stat-label">Active Nomads</div>
       </div>
       <div class="quick-stat">
         <div class="quick-stat-value" id="timeDifference" data-timezone="0">--</div>
@@ -636,7 +632,6 @@ Before publishing, verify:
    - $2,500 Monthly Budget
    - 200 Mbps Avg. WiFi
    - 10/10 Safety Score
-   - 3,000+ Active Nomads
    - `data-lat="35.6762"` `data-lng="139.6503"` for weather
    - `data-timezone="9"` (UTC+9)
 

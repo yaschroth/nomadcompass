@@ -38,8 +38,9 @@ cityFiles.forEach(filename => {
 
   const cityTimezone = getCityTimezone(cityId);
 
-  // 1. Add timezone quick-stat after "Active Nomads" stat
-  const nomadsStatPattern = /<div class="quick-stat">\s*<div class="quick-stat-value">[^<]*<\/div>\s*<div class="quick-stat-label">Active Nomads<\/div>\s*<\/div>/;
+  // 1. Add timezone quick-stat after the Safety Score stat. It used to anchor on an "Active Nomads"
+  //    stat, an invented head count removed from every page on 2026-09-29 (see check_fabrication.cjs).
+  const nomadsStatPattern = /<div class="quick-stat">\s*<div class="quick-stat-value">[^<]*<\/div>\s*<div class="quick-stat-label">Safety Score<\/div>\s*<\/div>/;
   const nomadsMatch = content.match(nomadsStatPattern);
 
   if (nomadsMatch) {

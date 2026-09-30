@@ -126,7 +126,8 @@ for (const file of fs.readdirSync(DIR).filter((f) => /^neighborhoods-.+\.json$/.
   if (!/<section class="city-guide"/.test(s)) { console.error('NO ANCHOR', slug); noAnchor++; continue; }
 
   s = s.replace(/(\n\s*)(<section class="city-guide")/, (mm, ws, tag) => `\n${sectionHtml(city, hoods)}${ws}${tag}`);
-  s = s.replace(/(\n\s*<\/body>)/i, `${mapScript(hoods)}$1`);
+  // A function, so a "$1" inside the map data cannot be read as the capture group.
+  s = s.replace(/(\n\s*<\/body>)/i, (m, g) => mapScript(hoods) + g);
   fs.writeFileSync(page, s);
   done++;
 }

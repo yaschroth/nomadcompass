@@ -26,7 +26,7 @@ const CITIES = m.exports.filter((c) => c && c.id).map((c) => ({ id: c.id, name: 
 const NAMEFIX = { UAE: 'United Arab Emirates', 'Puerto Rico': 'United States', UK: 'United Kingdom', Bosnia: 'Bosnia and Herzegovina', 'New Caledonia': 'France' };
 const MONF = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const MSLUG = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-function comfort(cl, mo) { if (!cl || cl.h[mo] == null || cl.l[mo] == null) return null; const avg = (cl.h[mo] + cl.l[mo]) / 2; const r = cl.r[mo] == null ? 40 : cl.r[mo]; return 0.65 * Math.max(0, 100 - Math.abs(avg - 24) * 5) + 0.35 * Math.max(0, 100 - r * 0.5); }
+function comfort(cl, mo) { if (!cl || cl.h[mo] == null || cl.l[mo] == null) return null; const avg = (cl.h[mo] + cl.l[mo]) / 2; const r = cl.r[mo] == null ? 40 : cl.r[mo]; const hi = cl.h[mo]; const off = avg < 18 ? 18 - avg : avg > 25 ? avg - 25 : 0; const tS = Math.max(0, 100 - off * 6 - Math.max(0, hi - 30) * 5); const rS = r <= 50 ? 100 : Math.max(-60, 100 - (r - 50) * 0.5); return 0.55 * tS + 0.45 * rS; }
 const link = (c, hash) => `<a href="/cities/${c.id}${hash || ''}">${c.name}</a>`;
 const listLinks = (arr, hash) => arr.map((c) => link(c, hash)).join(', ');
 
@@ -149,7 +149,7 @@ const TOOLS = {
       ['What is a digital nomad visa?', 'It is a residence permit that lets you live in a country for six months to a few years while working remotely for clients or an employer abroad, usually with a minimum income requirement. Dozens of countries now offer one, from Portugal and Spain to Indonesia, Costa Rica and the UAE.'],
       ['What is the difference between visa-free and visa on arrival?', 'Visa-free means you can just show up and enter for a set number of days with no paperwork. Visa on arrival means you get the visa at the border, usually for a fee. An e-visa or ETA must be applied for online before you travel.'],
       ['Does visa-free entry mean I can work there?', 'No. Almost all visa-free and tourist entries are for tourism only and do not permit local employment. Working remotely for clients outside the country sits in a grey area in many places; a proper digital nomad visa is the clean way to stay and work legally.'],
-      ['How long can I stay visa-free?', 'It depends on your passport and the destination, from 14 days up to 180. The finder shows the exact day limit on each visa-free result. Always confirm with the official embassy before you book, as rules change often.'],
+      ['How long can I stay visa-free?', 'It depends on your passport and the destination, from 14 days up to 180. The finder shows the exact day limit on each visa-free result.'],
     ],
     related: [R.route, R.weather, R.geo, R.best, R.cities, CITY('lisbon', 'Lisbon'), CITY('bangkok', 'Bangkok'), CITY('mexicocity', 'Mexico City')],
   },

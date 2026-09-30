@@ -278,7 +278,7 @@ ${shell.headEnd}
 </head>
 <body>
   ${shell.bodyStart}
-  ${shell.nav}
+  ${shell.navFor()}
   <main>
     <header class="mth-header"><div class="container">
       <nav class="mth-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span>Methodology</nav>

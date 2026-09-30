@@ -15,7 +15,6 @@ CITY_CONTENT = {
         "hero_alt": "Lisbon's colorful Alfama district with traditional tiled buildings and tram",
         "monthly_budget": "€1,800",
         "wifi_speed": "100 Mbps",
-        "nomad_count": "5,000+",
         "score_title": "A Top-Tier Nomad Destination",
         "score_description": "Lisbon scores highly across most categories, excelling in climate, safety, community, and English accessibility. The main trade-off is cost—Lisbon has become more expensive in recent years, though it's still reasonable by Western European standards.",
         "categories": {
@@ -51,7 +50,6 @@ CITY_CONTENT = {
         "hero_alt": "Hanoi Old Quarter at night with lanterns and motorbikes",
         "monthly_budget": "$800",
         "wifi_speed": "50 Mbps",
-        "nomad_count": "2,500+",
         "score_title": "A Budget Nomad's Paradise",
         "score_description": "Hanoi delivers exceptional value with world-class street food and incredibly low living costs. The trade-offs are language barriers and humid summers, but the rich culture and growing nomad community make it a compelling choice for adventurous remote workers.",
         "categories": {
@@ -87,7 +85,6 @@ CITY_CONTENT = {
         "hero_alt": "Medellín cityscape with mountains and metro cable cars",
         "monthly_budget": "$1,200",
         "wifi_speed": "50 Mbps",
-        "nomad_count": "8,000+",
         "score_title": "The City of Eternal Spring",
         "score_description": "Medellín offers perfect year-round weather, a massive nomad community, and excellent value. The main concerns are safety in certain areas and limited English, but the city's transformation and warmth of its people make it a top nomad destination.",
         "categories": {
@@ -123,7 +120,6 @@ CITY_CONTENT = {
         "hero_alt": "Chiang Mai temple with golden spires and mountain backdrop",
         "monthly_budget": "$1,000",
         "wifi_speed": "60 Mbps",
-        "nomad_count": "10,000+",
         "score_title": "The Original Nomad Hub",
         "score_description": "Chiang Mai pioneered the digital nomad movement and remains one of the best places to work remotely. Incredible food, low costs, and the largest nomad community in Asia. The only downsides are burning season smoke (Feb-Apr) and visa complexity.",
         "categories": {
@@ -159,7 +155,6 @@ CITY_CONTENT = {
         "hero_alt": "Bali rice terraces with palm trees and misty mountains",
         "monthly_budget": "$1,500",
         "wifi_speed": "50 Mbps",
-        "nomad_count": "15,000+",
         "score_title": "The Instagram Nomad Paradise",
         "score_description": "Bali (especially Canggu) has become the world's most famous digital nomad destination. Surf, yoga, incredible cafes, and a huge community. The downsides are increasing costs, visa hassles, and over-tourism in hot spots.",
         "categories": {
@@ -195,7 +190,6 @@ CITY_CONTENT = {
         "hero_alt": "Mexico City Palacio de Bellas Artes and city skyline",
         "monthly_budget": "$1,500",
         "wifi_speed": "80 Mbps",
-        "nomad_count": "20,000+",
         "score_title": "The Megacity That Has It All",
         "score_description": "Mexico City delivers world-class food, art, and culture at excellent value. The nomad community has exploded, making it easy to connect. Safety concerns exist but are manageable with street smarts. The altitude takes adjustment.",
         "categories": {
@@ -231,7 +225,6 @@ CITY_CONTENT = {
         "hero_alt": "Budapest Parliament building along the Danube at dusk",
         "monthly_budget": "€1,200",
         "wifi_speed": "100 Mbps",
-        "nomad_count": "6,000+",
         "score_title": "Central Europe's Hidden Gem",
         "score_description": "Budapest offers an incredible lifestyle at Eastern European prices. Thermal baths, ruin bars, and stunning architecture make it a joy to explore. The nomad community is established and welcoming. Winters are cold but manageable.",
         "categories": {
@@ -267,7 +260,6 @@ CITY_CONTENT = {
         "hero_alt": "Tbilisi old town with colorful balconies and Narikala Fortress",
         "monthly_budget": "$800",
         "wifi_speed": "50 Mbps",
-        "nomad_count": "4,000+",
         "score_title": "The 365-Day Visa Paradise",
         "score_description": "Tbilisi offers incredible value, fascinating culture, and the easiest visa situation in the world—365 days visa-free for 95+ countries. The wine, food, and hospitality are legendary. Growing nomad community in a unique destination.",
         "categories": {
@@ -303,7 +295,6 @@ CITY_CONTENT = {
         "hero_alt": "Barcelona cityscape with Sagrada Familia and Mediterranean Sea",
         "monthly_budget": "€2,000",
         "wifi_speed": "100 Mbps",
-        "nomad_count": "12,000+",
         "score_title": "Mediterranean Beach City Life",
         "score_description": "Barcelona offers the dream combination of beach, city, and culture. Gaudí architecture, world-class food, and vibrant nightlife. It's gotten expensive but the lifestyle is worth it. Large international community and excellent infrastructure.",
         "categories": {
@@ -339,7 +330,6 @@ CITY_CONTENT = {
         "hero_alt": "Berlin TV Tower and cityscape at sunset",
         "monthly_budget": "€1,800",
         "wifi_speed": "100 Mbps",
-        "nomad_count": "15,000+",
         "score_title": "Europe's Creative Capital",
         "score_description": "Berlin offers unmatched creative freedom, legendary nightlife, and a massive international community. It's the startup capital of Europe with excellent infrastructure. The weather is gray but the culture compensates. Finding apartments is notoriously difficult.",
         "categories": {
@@ -375,7 +365,6 @@ CITY_CONTENT = {
         "hero_alt": "Bangkok skyline with temples and skyscrapers at sunset",
         "monthly_budget": "$1,200",
         "wifi_speed": "80 Mbps",
-        "nomad_count": "12,000+",
         "score_title": "The Gateway to Southeast Asia",
         "score_description": "Bangkok is chaotic, cheap, and endlessly fascinating. Amazing food, legendary nightlife, and a huge nomad community. The heat and traffic take adjustment, but the city rewards those who embrace its intensity.",
         "categories": {
@@ -447,35 +436,9 @@ def generate_default_content(city):
     else:
         budget = f"{currency}3,500"
 
-    # WiFi speed based on score
+    # Our wifi score, labelled as a score. The buckets that stood here printed invented Mbps figures.
     wifi_score = scores['wifi']
-    if wifi_score >= 9:
-        wifi_speed = "150 Mbps"
-    elif wifi_score >= 8:
-        wifi_speed = "100 Mbps"
-    elif wifi_score >= 7:
-        wifi_speed = "60 Mbps"
-    elif wifi_score >= 6:
-        wifi_speed = "40 Mbps"
-    else:
-        wifi_speed = "25 Mbps"
-
-    # Nomad count based on community score
-    community_score = scores['community']
-    if community_score >= 10:
-        nomad_count = "15,000+"
-    elif community_score >= 9:
-        nomad_count = "10,000+"
-    elif community_score >= 8:
-        nomad_count = "6,000+"
-    elif community_score >= 7:
-        nomad_count = "4,000+"
-    elif community_score >= 6:
-        nomad_count = "2,500+"
-    elif community_score >= 5:
-        nomad_count = "1,500+"
-    else:
-        nomad_count = "500+"
+    wifi_speed = f"{wifi_score}/10"
 
     # Generate score title based on strengths
     top_categories = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:3]
@@ -588,7 +551,6 @@ def generate_default_content(city):
         "hero_alt": f"{name} cityscape and landmarks",
         "monthly_budget": budget,
         "wifi_speed": wifi_speed,
-        "nomad_count": nomad_count,
         "score_title": score_title,
         "score_description": f"{name} offers a unique experience for digital nomads. With its mix of culture, infrastructure, and community, it's worth considering for your next base. Every city has trade-offs—weigh what matters most to you.",
         "categories": categories,
@@ -1339,15 +1301,11 @@ def generate_city_page(city):
           </div>
           <div class="quick-stat">
             <div class="quick-stat-value">{content['wifi_speed']}</div>
-            <div class="quick-stat-label">Avg. WiFi Speed</div>
+            <div class="quick-stat-label">WiFi Score</div>
           </div>
           <div class="quick-stat">
             <div class="quick-stat-value">{city['scores']['safety']}/10</div>
             <div class="quick-stat-label">Safety Score</div>
-          </div>
-          <div class="quick-stat">
-            <div class="quick-stat-value">{content['nomad_count']}</div>
-            <div class="quick-stat-label">Active Nomads</div>
           </div>
         </div>
       </div>

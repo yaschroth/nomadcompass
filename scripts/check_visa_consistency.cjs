@@ -27,8 +27,11 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const EUR_USD = 1.09;
-const GBP_USD = 1.27;
+// The same rate file the site converts with (assets/fx-usd.json, USD base). A fixed 1.09 here made
+// every euro page look about 5% cheaper than the dollar figure the tool prints.
+const FX = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'fx-usd.json'), 'utf8')).rates;
+const EUR_USD = 1 / FX.EUR;
+const GBP_USD = 1 / FX.GBP;
 const TOLERANCE = 0.12;   // below this it is rounding and exchange-rate drift, not a contradiction
 
 const visaHtml = fs.readFileSync(path.join(ROOT, 'nomad-visas.html'), 'utf8');
@@ -96,6 +99,8 @@ const DIFFERENT_SCHEMES = {
     + 'the Profession Liberale visa. Different permits, different floors.',
   Lithuania: 'Kaunas describes the ordinary temporary residence permit, Klaipeda the National Visa D '
     + 'for remote work. The 447% gap is two schemes, not one scheme stated twice.',
+  'South Korea': 'the F-1-D floor is set by age AND region (1x to 2x GNI per head; MoJ, 30 Jun 2026), so '
+    + 'Seoul and a city outside the capital region state different tiers on purpose. The tool shows the lowest.',
 };
 
 const disagree = [];
@@ -166,6 +171,14 @@ for (const m of visaHtml.matchAll(/well under \$([\d,]+) a month: ([^.]+)\./g)) 
   }
 }
 
-console.log('\n  /nomad-visas prose vs its own 41 rows:');
-if (!proseIssues.length) console.log('    every band and every named country matches the table.');
+// The count the prose states against the rows the table holds. "More than 40" sat over 41 rows.
+const vStart = visaHtml.indexOf('var VISAS=[');
+const rowCount = (visaHtml.slice(vStart, visaHtml.indexOf('];', vStart)).match(/^\s*\['/gm) || []).length;
+const prose = visaHtml.replace(/<script(?![^>]*ld\+json)[\s\S]*?<\/script>/g, '');
+for (const m of prose.matchAll(/\b(more than |over )?(\d{2,3})\+?( (?:digital nomad and remote-work visas|nomad and remote-work visas|remote-work visas|countries))/gi)) {
+  if (m[1] || Number(m[2]) !== rowCount) proseIssues.push('the page says "' + m[0].trim() + '" but the table has ' + rowCount + ' rows');
+}
+
+console.log('\n  /nomad-visas prose vs its own ' + rowCount + ' rows:');
+if (!proseIssues.length) console.log('    every band, every named country and every stated count matches the table.');
 else proseIssues.forEach((p) => console.log('    ' + p));

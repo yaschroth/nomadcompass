@@ -276,7 +276,7 @@ ${shell.headTop}
           <button type="button" id="rtClear" style="grid-column:1 / -1;">Clear all</button>
         </div>
         <p class="rt-hint">Set nights per stop in the list. Dates chain automatically. Click a faint dot on the map to add a city.</p>
-        <p class="rt-disclaim">Budgets and season adjustments are editorial estimates in USD, not quotes. Weather is a historical average, not a forecast. Always confirm your own visa and stay limits.</p>
+        <p class="rt-disclaim">Budgets and season adjustments are editorial estimates in USD, not quotes. Weather is a historical average, not a forecast.</p>
       </aside>
     </div>
   </main>
@@ -317,7 +317,7 @@ ${shell.headTop}
         var n=new Date();return Date.UTC(n.getUTCFullYear(),n.getUTCMonth()+1,1);} // default: first of next month
 
       // ---- climate helpers ----
-      function comfort(id,mo){var cl=CLIMATE[id];if(!cl||cl.h[mo]==null||cl.l[mo]==null)return null;var avg=(cl.h[mo]+cl.l[mo])/2;var r=cl.r[mo]==null?40:cl.r[mo];var tS=Math.max(0,100-Math.abs(avg-24)*5);var rS=Math.max(0,100-r*0.5);return Math.round(0.65*tS+0.35*rS);}
+      function comfort(id,mo){var cl=CLIMATE[id];if(!cl||cl.h[mo]==null||cl.l[mo]==null)return null;var avg=(cl.h[mo]+cl.l[mo])/2;var r=cl.r[mo]==null?40:cl.r[mo];var off=avg<18?18-avg:avg>25?avg-25:0;var tS=Math.max(0,100-off*6-Math.max(0,cl.h[mo]-30)*5);var rS=r<=50?100:Math.max(-60,100-(r-50)*0.5);return Math.round(0.55*tS+0.45*rS);}
       var seasonCache={};
       function seasonInfo(id){if(seasonCache[id])return seasonCache[id];var cl=CLIMATE[id];var mult=[],lab=[];if(!cl){for(var i=0;i<12;i++){mult.push(0);lab.push('');}return seasonCache[id]={mult:mult,lab:lab};}
         var cs=[];for(var mo=0;mo<12;mo++)cs.push({mo:mo,c:comfort(id,mo)});

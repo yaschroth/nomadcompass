@@ -148,7 +148,9 @@ ${faqHtml}
         </section>
         <!-- city-seo-end -->
 `;
-    html = html.replace(/(\n\s*<\/main>)/i, `${block}$1`);
+    // A function, not a replacement string: with a string, the "$1" in a price such as "$1,600" was
+    // read as the capture group, and 247 FAQs printed "around </main>,600 a month".
+    html = html.replace(/(\n\s*<\/main>)/i, (m, g) => block + g);
   }
 
   if (html !== before) { fs.writeFileSync(abs, html); changed++; }

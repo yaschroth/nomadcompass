@@ -86,6 +86,14 @@ const HAND_LINKED = new Set([
   'st-kilda-melbourne-digital-nomad-guide', 'best-middle-east-cities-for-a-month-of-remote-work',
   'safest-cities-for-female-digital-nomads',
 ]);
+// RETIRED 2026-09-27. Every post is now rewritten with links chosen by hand, and this pass was the
+// source of three wrong links: "York" of New York to York, England; the island of Santiago to
+// Santiago, Chile; "solo" traveller to the city of Solo in Java. Running it would put generated
+// links back into hand-linked posts. The code stays for reference; pass --force-legacy to run it.
+if (!process.argv.includes('--force-legacy')) {
+  console.log('apply_blog_autolink.cjs is retired: blog links are set by hand (see docs/blog-voice-brief.md).');
+  process.exit(0);
+}
 const files = fs.readdirSync(path.join(ROOT, 'blog'))
   .filter((f) => f.endsWith('.html') && f !== 'index.html' && !HAND_LINKED.has(f.replace(/\.html$/, '')));
 let done = 0, total = 0;

@@ -63,9 +63,11 @@ const CSS = `<style>
  * The note for a city with no cost survey behind it.
  *
  * It states the figure, says plainly that it is not a measurement, says what the other 330 pages
- * have that this one does not, and tells the reader what to do about it. It does not apologise and
+ * have that this one does not, and links to how we source everything. It does not apologise and
  * it does not pad: a reader who wants the number still gets it, with the right amount of trust
- * attached.
+ * attached. It used to end "treat it as a starting point and check current rental listings before
+ * you budget against it"; that went on 2026-09-29 with the rest of the verify-it-yourself hedges
+ * (see check_disclaimers.cjs). "Our own estimate rather than a measurement" already says it.
  */
 function note(c) {
   return `<div class="cost-basis">
@@ -73,8 +75,7 @@ function note(c) {
     + `${money(c.costPerMonth)} a month above is our own estimate rather than a measurement. `
     + `On ${N_SOURCED} of our ${N_TOTAL} city guides the figure is built from a published Numbeo basket, `
     + `a one-bedroom rent in the centre plus one person's monthly costs without rent, converted to USD; `
-    + `this city is not one of them. Treat it as a starting point and check current rental listings `
-    + `before you budget against it. <a href="/methodology">How we source everything</a>.</p>
+    + `this city is not one of them. <a href="/methodology">How we source everything</a>.</p>
       </div>`;
 }
 

@@ -89,13 +89,15 @@ for (const c of CITIES) {
   const block = sectionHtml(c);
   if (secRe.test(html)) { html = html.replace(secRe, block); refreshed++; }
   else if (/<section class="container city-seo-explore"/.test(html)) {
-    html = html.replace(/(\s*)<section class="container city-seo-explore"/, `\n${block}$1<section class="container city-seo-explore"`);
+    // Functions, not replacement strings: the block carries prices such as "$1,200", and in a string the
+    // "$1" would be read as the capture group (the whitespace), printing ",200".
+    html = html.replace(/(\s*)<section class="container city-seo-explore"/, (m, ws) => '\n' + block + ws + '<section class="container city-seo-explore"');
     added++;
   }
   // New-city base pages have no city-seo-explore block; fall back to inserting before the
   // "related cities" carousel so brand-new cities still get the static Similar Vibe block.
   else if (/<section class="related-section"/.test(html)) {
-    html = html.replace(/(\s*)<section class="related-section"/, `\n${block}$1<section class="related-section"`);
+    html = html.replace(/(\s*)<section class="related-section"/, (m, ws) => '\n' + block + ws + '<section class="related-section"');
     added++;
   } else skipped++;
 

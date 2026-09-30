@@ -92,6 +92,14 @@ if (spec.city) {
       .replace(/href="\.\.\/cities\/[a-z0-9-]+"/, () => `href="/cities/${spec.city}"`);
     tail = tail.split(widget).join(fresh);
   }
+} else {
+  // A post about no one city must not inherit the donor's "Nomad Score: Budapest". Multi-city posts
+  // get their own widget from apply_blog_city_scores.cjs afterwards.
+  const at = donor.indexOf('<!-- Nomad Score Widget -->');
+  if (at >= 0) {
+    const widget = donor.slice(at, donor.indexOf('</div>', donor.indexOf('View Full Profile')) + 6);
+    tail = tail.split(widget).join('');
+  }
 }
 
 // Our own city heroes are vision-verified and self-hosted; a guessed stock-photo id is not. The
@@ -141,7 +149,7 @@ ${(spec.tags || []).map((t) => `  <meta property="article:tag" content="${esc(t)
     description: spec.description,
     image: social,
     datePublished: spec.published + 'T10:00:00Z',
-    dateModified: spec.published + 'T10:00:00Z',
+    dateModified: (spec.modified || spec.published) + 'T10:00:00Z',
     mainEntityOfPage: { '@type': 'WebPage', '@id': BASE + '/blog/' + spec.slug },
     inLanguage: 'en',
   }, null, 2).replace(/\n/g, '\n  ')}

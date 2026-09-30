@@ -131,7 +131,7 @@ ${shell.bodyEnd}
       var SLUG=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
       var grid=document.getElementById('bwGrid'),count=document.getElementById('bwCount'),monthsEl=document.getElementById('bwMonths'),regionSel=document.getElementById('bwRegion'),beachChk=document.getElementById('bwBeach');
       var cur=(new Date()).getMonth();
-      function comfort(hi,lo,r){var avg=(hi+lo)/2;var tS=Math.max(0,100-Math.abs(avg-24)*5);var rS=Math.max(0,100-(r==null?40:r)*0.5);return 0.65*tS+0.35*rS;}
+      function comfort(hi,lo,r){var avg=(hi+lo)/2;var off=avg<18?18-avg:avg>25?avg-25:0;var tS=Math.max(0,100-off*6-Math.max(0,hi-30)*5);var rr=r==null?40:r;var rS=rr<=50?100:Math.max(-60,100-(rr-50)*0.5);return 0.55*tS+0.45*rS;}
       function verdict(cf){if(cf>=80)return ['Ideal','bw-v-ideal'];if(cf>=64)return ['Great','bw-v-great'];if(cf>=48)return ['Good','bw-v-good'];return ['Mild','bw-v-mild'];}
       function emo(hi,r){if(hi<12)return '\\u2744\\uFE0F';if(r>=90)return '\\uD83C\\uDF27\\uFE0F';if(r<40&&hi>=24)return '\\u2600\\uFE0F';return '\\uD83C\\uDF24\\uFE0F';}
       // month tabs

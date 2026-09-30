@@ -94,9 +94,49 @@ const prices = (s) => {
     .filter((m) => !exempt.some((x) => x.includes(m)));
 };
 
+// The text a reader meets outside the body: the FAQ answers and article descriptions in JSON-LD
+// (Google shows those as rich results), the meta and social descriptions, and the <title>.
+// mapTextNodes skips every <script> and never reads an attribute, so the body scan below walked all
+// 51 blog posts and printed "clean" while eight of their FAQ answers quoted "EUR 1,800 to 2,500",
+// "300,000 to 450,000 HUF" and "AED 10,000 to 15,000". The em-dash check already reads the raw HTML;
+// this closes the same blind spot for prices.
+const HTML_ENTITY = { '&amp;': '&', '&quot;': '"', '&#39;': "'", '&#039;': "'", '&lt;': '<', '&gt;': '>' };
+const unescape = (t) => t.replace(/&(?:amp|quot|#0?39|lt|gt);/g, (m) => HTML_ENTITY[m] || m);
+const stringsOf = (o, out) => {
+  if (typeof o === 'string') out.push(o);
+  else if (o && typeof o === 'object') for (const v of Object.values(o)) stringsOf(v, out);
+  return out;
+};
+const outsideBody = (html) => {
+  const out = [];
+  for (const m of html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { stringsOf(JSON.parse(m[1]), out); } catch (e) { out.push(m[1]); }
+  }
+  for (const m of html.matchAll(/<meta\s[^>]*(?:name|property)="(?:description|og:description|og:title|twitter:description|twitter:title)"[^>]*>/gi)) {
+    const c = m[0].match(/\bcontent="([^"]*)"/i);
+    if (c) out.push(unescape(c[1]));
+  }
+  const t = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+  if (t) out.push(unescape(t[1]));
+  return out;
+};
+const structuredIssues = (html, where) => {
+  const seen = new Set();
+  const found = [];
+  for (const v of outsideBody(html)) {
+    if (!/\d/.test(v)) continue;
+    for (const m of prices(v)) {
+      const line = where + ': not USD in structured data/meta  "' + around(v, m) + '"';
+      if (!seen.has(line)) { seen.add(line); found.push(line); }
+    }
+  }
+  return found;
+};
+
 const errors = [];
 const warnings = [];
 const bodyIssues = [];
+const blogIssues = [];
 
 // --- 1. What the city pages actually render.
 const cityDir = path.join(ROOT, 'cities');
@@ -126,6 +166,7 @@ for (const f of pages) {
     }
     return text;
   });
+  bodyIssues.push(...structuredIssues(html, 'cities/' + f));
 }
 
 // --- 1b. Every other page. /nomad-visas.html is not a city page and not the data file, so nothing
@@ -145,14 +186,22 @@ const walkHtml = (dir, rel) => {
     }
     if (!e.name.endsWith('.html')) continue;
     const html = fs.readFileSync(p, 'utf8');
-    for (const m of html.match(EM) || []) errors.push(r + ': em-dash  ' + around(html, m));
+    // Blog posts are reported in their own block, so an article's problems are not buried under
+    // forty city-page lines and the count per directory is visible at a glance.
+    const isBlog = r.startsWith('blog/');
+    if (isBlog) blogPages += 1;
+    const emTo = isBlog ? blogIssues : errors;
+    const bodyTo = isBlog ? blogIssues : bodyIssues;
+    for (const m of html.match(EM) || []) emTo.push(r + ': em-dash  ' + around(html, m));
     mapTextNodes(html, (text) => {
       if (!/\d/.test(text)) return text;
-      for (const m of prices(text)) bodyIssues.push(r + ': not USD  "' + around(text, m) + '"');
+      for (const m of prices(text)) bodyTo.push(r + ': not USD  "' + around(text, m) + '"');
       return text;
     });
+    bodyTo.push(...structuredIssues(html, r));
   }
 };
+let blogPages = 0;
 walkHtml(ROOT, '');
 
 // --- 2. The file the generator writes those tiles from.
@@ -196,7 +245,8 @@ for (const [id, o] of Object.entries(GUIDE)) {
 }
 
 console.log('PROSE STYLE GATE  (no em-dashes, every price in USD)');
-console.log('  ' + pages.length + ' city pages' + (noObject ? ', ' + noObject + ' without a score object' : '') + '\n');
+console.log('  ' + pages.length + ' city pages' + (noObject ? ', ' + noObject + ' without a score object' : '')
+  + ', ' + blogPages + ' blog posts (body, JSON-LD, meta and title on every page)\n');
 
 if (warnings.length) {
   console.log('  warnings (' + warnings.length + ') in entries no reader can reach, fix before those cities ship:');
@@ -205,7 +255,14 @@ if (warnings.length) {
   console.log('');
 }
 
+if (blogIssues.length) {
+  console.log('  BLOG (' + blogIssues.length + '):');
+  blogIssues.forEach((e) => console.log('    ' + e));
+  console.log('');
+}
+
 const all = errors.concat(bodyIssues);
+if (blogIssues.length && !all.length) process.exit(1);
 if (all.length) {
   console.log('  ERRORS (' + all.length + (bodyIssues.length ? ', ' + bodyIssues.length + ' in page bodies' : '') + '):');
   all.slice(0, 40).forEach((e) => console.log('    ' + e));

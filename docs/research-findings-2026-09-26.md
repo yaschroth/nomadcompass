@@ -1,5 +1,19 @@
 # City-page discrepancies found by the 2026-09-26 blog research (fix after the batch ships)
 
+**Status 2026-09-29: every item below was re-checked against a primary source and fixed sitewide,
+or removed where it could not be verified.** Deliberately NOT done, each needing a decision:
+- Safety scores vs official data (St John's, Turku, the NZ cities): scores are editorial; not changed.
+- Croatia OECD follow-up on the Split property post: still waiting on accession.
+- Alanya closed neighbourhoods (reopened Jun 2026?) and Aqaba-zone stay length: unverified, left general.
+- Oman remote-work visa: no official source found, so the claim was removed rather than kept.
+- Split November / Porto December rainfall (Open-Meteo ERA5) looks high against official normals: unchecked.
+- DONE 2026-09-30: costPerMonth corrected (Lombok 780, Wanaka 2360, Hiroshima 900, 41 cities moved onto
+  Numbeo, 21 more outliers fixed); visa scores are one per country from docs/visa-score-rubric.md (718
+  cities changed); 24 safety scores follow official crime data (docs/safety-score-method.md); every wifi
+  speed on a city page now names Ookla (data/internet-speeds.json). Not applied: the cross-national safety
+  baseline (docs/safety-score-cross-national-proposal.md), 183 remaining cost-score/cost inversions,
+  Canggu and Crete cost proposals, the Melaka/Malacca duplicate city.
+
 ## wanaka
 - Budget $1,500/mo is below rent alone (bond median NZ$800/wk Queenstown-Lakes, Jul 2026 = ~$1,970/mo). Prose on the same page says "$1,800 to $3,000 all in". Room/studio prices carry no currency or source.
 - Visa section: "check current guidance on remote work" is stale; INZ allows remote work for overseas employers on visitor visas applied from 27 Jan 2025.
@@ -142,3 +156,17 @@
 
 ## croatia (v3 research)
 - Split's World Heritage core: city/county/state right of first refusal on sales (NN 145/24 Art. 78-82, 60 days); not on the Split city page.
+
+## korea / busan (old-post rewrite research)
+- cities/busan visa section outdated: new F-1-D scheme from 30 Jun 2026 (MoJ press release 7 Jul 2026): income multiple of KRW 52.41M per head by age/region; Busan 18-34 ~$36,400, 35+/family ~$54,600; Seoul 35+ ~$72,800; switch in-country allowed; KRW 100M insurance.
+- nomad-visas Korea $6,070/mo is only the Seoul 35+ figure; intro says "more than 40", table has 41 rows.
+- cities/busan: "usually with a K-ETA" (22 countries exempt to 31 Dec 2026); "AREX" wrong (Busan-Gimhae Light Rail); best time "Jul, Aug, Oct" but July wettest, Aug-Sep typhoons.
+- Queen Beetle Busan-Fukuoka fast ferry ended Dec 2024; check blog/fukuoka + city pages.
+
+## thailand / colombia (medellin-vs-chiang-mai research)
+- Thailand visa exemption 60 -> 30 days from 15 Sep 2026 (TAT); check cities/bangkok, chiangmai, phuket etc. and /nomad-visas.
+- nomad-visas Colombia $900 (should be ~$1,578); DTV "~USD 14,000, no monthly income test" (500,000 THB ~ $15,000; KL checklist asks pay slips); cities/chiangmai phrases DTV funds as alternative (they are required).
+
+## bali (coworking research)
+- cities/canggu: BWork "$16 day / ~$195 monthly" vs own site ~$17 / $215; Kinship Studio listed but site down; BWork is on Jl. Nelayan not Berawa. cities/ubud Outpost "USD 150-200" vs $149. cities/sanur Livit Hub rates unverified. category-descriptions.json has four conflicting E33G figures.
+- Dojo Bali closed 2022, Hubud closed: any page naming them.

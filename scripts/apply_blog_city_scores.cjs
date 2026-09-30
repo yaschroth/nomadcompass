@@ -81,7 +81,7 @@ function tableBlock(ids) {
       </style>
       <h3>City scores at a glance</h3>
       <div class="csb-scroll"><table class="csb-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="csb-note">The Nomad HQ ratings, scored 0 to 10 across our 13 categories. Open a city guide for the full breakdown.</p>
+      <p class="csb-note">The Nomad HQ ratings, scored 0 to 10 across our 13 categories.</p>
     </div>
     <!-- city-scores-end -->
 `;
@@ -120,14 +120,21 @@ for (const slug of Object.keys(MAP)) {
   }
   if (html !== before) tables++;
 
-  // 2) replace a single-city sidebar widget with the multi-city one
-  const w = miniWidget(ids);
+  // 2) the multi-city sidebar widget, owned by its markers.
+  // The refresh used to match up to the first </div>, which is the end of the first ROW, so every run
+  // left the old rows behind and added a new set: Bali's widget listed Ubud three times. Now the block
+  // sits between markers and is replaced whole. A post rebuilt by new_blog_post.cjs with no city has
+  // no widget at all, so the block is inserted at the end of the sidebar.
+  const w = '<!-- nsm-start -->' + miniWidget(ids) + '<!-- nsm-end -->';
+  const markedRe = /<!-- nsm-start -->[\s\S]*?<!-- nsm-end -->/;
   const widgetRe = /<div class="nomad-score-widget">[\s\S]*?View Full Profile[\s\S]*?<\/a>\s*<\/div>/;
-  if (widgetRe.test(html)) { html = html.replace(widgetRe, w); widgets++; }
-  else {
-    // already converted? refresh it
-    const w2Re = /<div class="nomad-score-widget">\s*<style>\.nsm-row[\s\S]*?<\/div>/;
-    if (w2Re.test(html)) { html = html.replace(w2Re, w); }
+  const sidebarEndRe = /(<aside class="article-sidebar">[\s\S]*?)(\s*<\/div>\s*<\/aside>)/;
+  if (markedRe.test(html)) html = html.replace(markedRe, () => w);
+  else if (widgetRe.test(html)) { html = html.replace(widgetRe, () => w); widgets++; }
+  else if (/<div class="nomad-score-widget">\s*<style>\.nsm-row/.test(html)) {
+    console.log('  ' + slug + ': unmarked multi-city widget from an older run; rebuild the post, then rerun');
+  } else if (sidebarEndRe.test(html)) {
+    html = html.replace(sidebarEndRe, (m, a, b) => a + '\n\n          ' + w + b); widgets++;
   }
 
   fs.writeFileSync(abs, html);

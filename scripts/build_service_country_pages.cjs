@@ -249,6 +249,31 @@ function sourcing(rows, subject) {
   };
 }
 
+/**
+ * Why the language share looks the way it does, said for the sources this slice actually rests on.
+ * This used to be one sentence about consular lists on every page, which was false wherever a
+ * register dominates: 3,577 of Germany's 3,603 doctors come from KV Hamburg's register, not from
+ * any mission. The sentence now follows the largest source, and its kind in service-publishers.json.
+ */
+function shareCaveat(rows) {
+  const byHost = {};
+  rows.forEach((r) => { const h = M.hostOf(r.sourceUrl); byHost[h] = (byHost[h] || 0) + 1; });
+  const kinds = {};
+  Object.entries(byHost).forEach(([h, n]) => { const k = P.publisherOf(h).kind; kinds[k] = (kinds[k] || 0) + n; });
+  const [topHost, topN] = Object.entries(byHost).sort((a, b) => b[1] - a[1])[0];
+  const top = P.publisherOf(topHost);
+  if (top.kind === 'register' && topN * 2 > rows.length) {
+    return `Most of them come from ${top.publisher}, a register that records the languages each `
+      + `provider offers, so the figure reflects who that register covers, not only who speaks what.`;
+  }
+  if ((kinds.consular || 0) * 2 > rows.length) {
+    return 'A consular list records the language because the mission publishes it for its own '
+      + 'citizens, so the figure reflects who publishes lists, not only who speaks what.';
+  }
+  return 'Each source records a language for its own reasons, so the figure reflects who publishes '
+    + 'that information, not only who speaks what.';
+}
+
 const written = [];
 const skipped = [];
 
@@ -314,8 +339,7 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
         {
           q: `Is ${langName} unusual for ${label} in ${countryName}?`,
           a: `${lshare}% of the ${v.rows.length} ${label} we hold in ${countryName} are recorded as ${P.work(cat, 'working')} in `
-            + `${langName}. A consular list records the language because the mission publishes it for its `
-            + `own citizens, so the figure reflects who publishes lists, not only who speaks what.`,
+            + `${langName}. ${shareCaveat(v.rows)}`,
         },
       ];
 

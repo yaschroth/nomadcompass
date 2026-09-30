@@ -38,6 +38,10 @@ const FEATURES = [
   // photo credits from cities.html. Crediting a CC-BY photograph is a licence condition, not a
   // nicety, and it was the one destroyable feature this list did not watch.
   ['Foto-Credits', 'photo-credit'],
+  // The static content block + FAQ schema on the eight tool pages (apply_tool_content.cjs). A city
+  // batch on 2026-09-02 regenerated those pages and dropped it from all eight; nobody noticed for a
+  // month because the tools still worked. Restored 2026-09-29.
+  ['Tool-Inhalt', 'tc-start'],
 ];
 
 const FORCE = process.argv.includes('--force');

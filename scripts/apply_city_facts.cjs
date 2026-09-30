@@ -51,9 +51,11 @@ const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct
 // Same comfort model the weather section uses, so "Best time" matches that chart exactly.
 function comfort(hi, lo, r) {
   const avg = (hi + lo) / 2;
-  const tS = Math.max(0, 100 - Math.abs(avg - 24) * 5);
-  const rS = Math.max(0, 100 - (r == null ? 40 : r) * 0.5);
-  return 0.65 * tS + 0.35 * rS;
+  const off = avg < 18 ? 18 - avg : avg > 25 ? avg - 25 : 0;
+  const tS = Math.max(0, 100 - off * 6 - Math.max(0, hi - 30) * 5);
+  const rr = r == null ? 40 : r;
+  const rS = rr <= 50 ? 100 : Math.max(-60, 100 - (rr - 50) * 0.5);
+  return 0.55 * tS + 0.45 * rS;
 }
 function bestMonths(id) {
   const cl = CLIMATE[id];
