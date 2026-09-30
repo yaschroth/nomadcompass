@@ -264,7 +264,7 @@ const CITY_REGIONS = {
         shiraz: 'middleeast', gaziantep: 'middleeast', madaba: 'middleeast', rasalkhaimah: 'middleeast',
         gqeberha: 'africa', sousse: 'africa', jinja: 'africa', capecoast: 'africa',
         maun: 'africa', santafe: 'northamerica', bozeman: 'northamerica', kelowna: 'northamerica',
-        savannah: 'northamerica', kumamoto: 'asia', takamatsu: 'asia', melaka: 'asia',
+        savannah: 'northamerica', kumamoto: 'asia', takamatsu: 'asia',
         gangtok: 'asia', karakol: 'asia', phanthiet: 'asia', valdivia: 'latam',
         morelia: 'latam', puertomadryn: 'latam', laserena: 'latam', cagliari: 'europe',
         maribor: 'europe', almeria: 'europe',

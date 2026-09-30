@@ -25,7 +25,7 @@ Status legend: 🔴 needs work · 🟡 partial / follow-ups open · ✅ meets th
 | dresden-digital-nomad-guide | Dresden Digital Nomad Guide: Rent, Wifi and Visa Routes | ✅ | 87 impressions, top query is "digital nomad accommodation dresden", so the article leads with accommodation. |
 | busan-digital-nomad-guide | Busan Digital Nomad Guide: Costs, Wifi and the Visa | ✅ | 173 impressions, pos 8.3, no article behind the city page. Wifi 9 vs English 4 is the trade. |
 | bodrum-digital-nomad-guide | Bodrum Digital Nomad Guide: Internet, Costs and Season | ✅ | 148 impressions, pos 7.6. Leads with the 11 Mbps citywide average, which is the deciding fact. |
-| fukuoka-digital-nomad-guide | Fukuoka Digital Nomad Guide: Japan's Cheapest Big City | ✅ | 105 impressions, pos 8.1. Only city in our data scoring 10 for safety. |
+| fukuoka-digital-nomad-guide | Fukuoka Digital Nomad Guide: Japan's Startup City | ✅ | 105 impressions, pos 8.1. Only city in our data scoring 10 for safety. |
 | gijon-digital-nomad-guide | Gijon Digital Nomad Guide: Costs, Cider and Green Spain | ✅ | 131 impressions, best CTR of any city page. Headings varied to clear the 1.5% stuffing cap. |
 | sarajevo-digital-nomad-guide | Sarajevo Digital Nomad Guide: Europe's Cheapest Capital | ✅ | 89 impressions, pos 8.7. Winter air quality (4/10) stated in the lead, not buried. |
 | canggu-cost-of-living-guide | Canggu Cost of Living 2026: What Bali Really Costs Now | ✅ | Cost angle, deliberately distinct from best-coworking-spaces-bali. Year in title, keep current. |
@@ -61,6 +61,28 @@ sitewide brand graph. None have been through the full style-guide pass (voice au
 repetition check baseline, per-article image uniqueness), hence 🟡.
 
 ## Change history
+
+- **2026-09-29 (error pass over every post)**: corrected in place, dateModified bumped where material:
+  portugal-digital-nomad-visa (figure aligned to the site's $4,240, rate sentence), digital-nomad-tax-guide
+  (NHR card, Georgia 1% of turnover), digital-nomad-guide-lisbon (invented quote and first person removed,
+  NHR revoked, D8 2-year permit), dubai-digital-nomad-guide (invented "four years" removed, weekend is
+  Sat-Sun since 2022, UAE 90-in-180 rule), best-coworking-spaces-bali (closed spaces removed: Dojo, Hubud,
+  Outpost Canggu, Kumpul; now six verified spaces, "10" dropped from the title), busan (F-1-D regional
+  tiers, Queen Beetle ferry ended Dec 2024), fukuoka (ferry, Japan $63,080/yr), chania (Greece $4,030
+  net), gijon (Spain $3,280), praia and sal-boa-vista (Cape Verde is a 6-month average BALANCE test,
+  EASE airport-tax rule), dresden (no fixed funds figure), bodrum (tourist permits restricted, not
+  abolished), medellin-vs-chiang-mai (Thailand 30 days from 15 Sep 2026, Colombia $1,640), canggu
+  (visa on arrival, not visa-free), is-nashville (ESTA $40.27), dakar (two exemption lists). Mexico City
+  and Budapest FAQ JSON-LD carried HUF/MXN and half-converted ranges ("$22,000 to $2,020"); fixed.
+  "60 countries" for /nomad-visas corrected to 40 everywhere.
+  FOUND: 12 older posts carried invented first-person histories that contradict each other
+  (born in Budapest, grew up in Mexico City, five years in Cape Town, two in Bangkok). Eight are
+  rewritten in the new voice and PUBLISHED 2026-09-30 (owner: "do what you deem right"), each with its
+  own hook: Mexico City on the drained lake, Budapest on the river map, Tbilisi on the 365 days,
+  Cape Town on the wind, the routine post as an hour-by-hour day, the productivity post on the 3 a.m.
+  call, coliving on the key and the lease, Europe as a rail crossing. Research and sources.md per
+  post were kept in the session scratchpad. bangkok-budget-guide and medellin-vs-chiang-mai still
+  carry the invented persona: rewrite them next.
 
 - **2026-09-27 (the 20 batch posts rewritten)**: the owner found the first drafts a chain of facts. Rewritten under docs/blog-voice-brief.md (voice, sense of place, every article its own hook, approved on the Oslo sample in two rounds). Same research; descriptive details sourced like figures; each opening a different device and sentence shape (checked side by side). St Kilda got its own photograph (images/blog/st-kilda.webp). The 30 older posts are NOT yet in this voice.
 
