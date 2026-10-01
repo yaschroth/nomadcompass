@@ -62,6 +62,27 @@ repetition check baseline, per-article image uniqueness), hence 🟡.
 
 ## Change history
 
+- **2026-10-01 (the last 20 older posts rewritten; every post is now in the voice)**: each with an
+  assigned hook no other post uses: Bali coworking (the day-pass receipt), Bodrum (two populations),
+  Busan (Gwangan Bridge), Canggu cost (receipts against the Instagram picture), Chania (the Venetian
+  lighthouse), Dali (the Great Firewall on the first morning), Lisbon (the light), tax guide (the
+  183-day myth, five kinds of country), Dresden (the Frauenkirche stones), Dubai (the Red Line as the
+  city's spine), Fukuoka (yatai at dusk), Gijon (escanciar), Ibiza (the island by day and in winter),
+  Las Palmas (Gran Canaria against Tenerife), Palermo (Ballaro at 7:30), Portugal D8 (the folder on the
+  consulate counter), Praia (the arrival on Santiago), Santa Teresa (the tide and the road), Sarajevo
+  (the Meeting of Cultures line), Siem Reap (sunrise at Angkor before work). Every fact re-verified;
+  sources.md and NOTES.md per post in the session scratchpad. Titles changed: Lisbon ("Digital Nomad
+  Guide to Lisbon in 2026: Rent, D8 and Tax"), tax guide ("Why 183 Days Is Not a Shield"), Dubai ("Where
+  to Live on the Red Line"), Gijon, Ibiza, Las Palmas ("Gran Canaria or Tenerife?"), Palermo, Sarajevo,
+  Bali coworking (no number; now eight verified spaces, hero is the CC0 Bali city photo). Bodrum's
+  "11 Mbps citywide" was a Nomad List figure with no source: replaced by Ookla's Turkey medians.
+  Fixed on city pages from the research: Siem Reap airport (45 km, new since 2023), Bodrum's wrong
+  "Greek island resets the clock", Busan KTX/market/Pathfinder, Bali/Ubud/Sanur/Chania/Palermo/Lisbon
+  coworking prices, Spain $3,280 on 12 more pages, Italy one figure ($28,540/yr, DM 29 Feb 2024).
+  Also: hand-set links for queries ranking just off page one (Medellin doctor, Split property lawyer,
+  Antalya lawyer, Las Palmas, Boa Vista, St Kilda); invented author names in scripts/city-blog-articles.js
+  replaced by the real author.
+
 - **2026-09-29 (error pass over every post)**: corrected in place, dateModified bumped where material:
   portugal-digital-nomad-visa (figure aligned to the site's $4,240, rate sentence), digital-nomad-tax-guide
   (NHR card, Georgia 1% of turnover), digital-nomad-guide-lisbon (invented quote and first person removed,
