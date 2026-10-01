@@ -25,8 +25,13 @@ vm.createContext(sb);
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + '\n;globalThis.__c=CITIES;', sb);
 const byId = new Map(sb.__c.map((c) => [c.id, c]));
 
-const qual = (s) => (s >= 8 ? 'excellent' : s >= 6.5 ? 'good' : s >= 5 ? 'average' : 'on the limited side');
-const WORD = '(excellent|good|average|on the limited side)';
+// Two generators wrote these sentences with two different word scales, and each sentence shape must
+// keep its own: apply_city_seo.cjs says average / on the limited side, de_templatize_cities.cjs says
+// workable / patchy. Using one scale for both printed "handles daily remote work average".
+const qualSeo = (s) => (s >= 8 ? 'excellent' : s >= 6.5 ? 'good' : s >= 5 ? 'average' : 'on the limited side');
+const qualDt = (s) => (s >= 8 ? 'excellent' : s >= 6.5 ? 'good' : s >= 5 ? 'workable' : 'patchy');
+const WORD = '(excellent|good|average|on the limited side|workable|patchy)';
+const N = '\\d+(?:\\.\\d)?';
 
 let pages = 0, edits = 0;
 for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWith('.html'))) {
@@ -41,12 +46,20 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWi
     (m, a, b) => a + safety + '/10' + b);
   swap(/(<div class="quick-stat-value">)[^<]*(<\/div>\s*<div class="quick-stat-label">WiFi Score<\/div>)/g,
     (m, a, b) => a + wifi + '/10' + b);
-  swap(new RegExp('(\\b(?:scores|rates) )\\d+(?:\\.\\d)?( out of 10 for safety in our ratings, which is )' + WORD, 'g'),
-    (m, a, b) => a + safety + b + qual(safety));
-  swap(new RegExp('(\\brates )\\d+(?:\\.\\d)?( out of 10 for WiFi in our scoring, so connectivity is )' + WORD, 'g'),
-    (m, a, b) => a + wifi + b + qual(wifi));
-  swap(new RegExp('(\\brates )\\d+(?:\\.\\d)?( out of 10 for WiFi in our scoring, so it handles video calls and daily remote work )' + WORD, 'g'),
-    (m, a, b) => a + wifi + b + qual(wifi));
+  // apply_city_seo.cjs shapes
+  swap(new RegExp('(\\b(?:scores|rates) )' + N + '( out of 10 for safety in our ratings, which is )' + WORD + '( for solo travelers)', 'g'),
+    (m, a, b, w, t) => a + safety + b + qualSeo(safety) + t);
+  swap(new RegExp('(\\brates )' + N + '( out of 10 for WiFi in our scoring, so connectivity is )' + WORD, 'g'),
+    (m, a, b) => a + wifi + b + qualSeo(wifi));
+  // de_templatize_cities.cjs shapes
+  swap(new RegExp('(\\b(?:scores|rates) )' + N + '( out of 10 for safety in our ratings, which is )' + WORD + '( for solo travel and)', 'g'),
+    (m, a, b, w, t) => a + safety + b + qualDt(safety) + t);
+  swap(new RegExp('(\\brates )' + N + '( out of 10 for WiFi in our scoring, so it handles video calls and daily remote work )' + WORD, 'g'),
+    (m, a, b) => a + wifi + b + qualDt(wifi));
+  swap(new RegExp('(With a WiFi score of )' + N + '(/10, connectivity in [^<"]{1,60}? is )' + WORD + '( for calls)', 'g'),
+    (m, a, b, w, t) => a + wifi + b + qualDt(wifi) + t);
+  swap(new RegExp('(Our safety score for [^<"]{1,60}? is )' + N + '(/10, )' + WORD + '( for nomads)', 'g'),
+    (m, a, b, w, t) => a + safety + b + qualDt(safety) + t);
   if (out !== s) { pages++; if (APPLY) fs.writeFileSync(p, out); }
 }
 console.log(`score mentions: ${edits} updated on ${pages} pages${APPLY ? '' : ' (dry run, --apply to write)'}`);

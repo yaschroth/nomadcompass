@@ -14,19 +14,21 @@
  * gate as before (final solo USD in [250, 9000]).
  *
  * Usage: SP=<scratch> node scripts/build_numbeo_costs2.cjs <dataset.json> [feed.json] [--dry]
+ *        node scripts/build_numbeo_costs2.cjs --self-test   (currency cases; exits 1 on a failure)
  */
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const FX = require(path.join(ROOT, 'assets', 'fx-usd.json'));
 
+const SELF_TEST = process.argv.includes('--self-test');
 const dsPath = process.argv[2];
 const DRY = process.argv.includes('--dry');
-if (!dsPath) { console.error('need dataset path'); process.exit(1); }
+if (!dsPath && !SELF_TEST) { console.error('need dataset path'); process.exit(1); }
 const feedPath = process.argv[3] && !process.argv[3].startsWith('--') ? process.argv[3]
   : path.join(process.env.SP || '.', 'feed_all.json');
-const rows = JSON.parse(fs.readFileSync(dsPath, 'utf8'));
-const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8')); // [{slug,name,country}]
+const rows = SELF_TEST ? [] : JSON.parse(fs.readFileSync(dsPath, 'utf8'));
+const feed = SELF_TEST ? [] : JSON.parse(fs.readFileSync(feedPath, 'utf8')); // [{slug,name,country}]
 
 const LB = 0.453592; // kg per lb
 // canonical basket: matcher prefix -> monthly qty in BASE unit (kg for weight, L for volume, unit else)
@@ -85,6 +87,52 @@ const CUR = {
 // which currency a scraped symbol implies (only unambiguous ones; $ is deliberately omitted)
 const SYM2CUR = { '€': 'EUR', '£': 'GBP', '₺': 'TRY', 'zł': 'PLN', '₹': 'INR', '₩': 'KRW',
   '฿': 'THB', '₫': 'VND', '₪': 'ILS', '₽': 'RUB', '₾': 'GEL', 'Rp': 'IDR', 'RM': 'MYR', '₱': 'PHP' };
+
+// Countries whose Numbeo pages price in US dollars although the country has its own currency.
+// Only these may be switched to USD by the magnitude check in resolveCurrency. Until 2026-10-01
+// the switch fired for ANY country whose rent looked tiny in local currency, so a cheap Indian
+// city (Amritsar: rent Rs 6,000 = $68) was read as $6,000 of rent and its solo came out at $26k.
+// Argentina, Lebanon: dual-currency economies where rents are quoted in dollars. Ethiopia: Numbeo
+// showed Addis Ababa in USD (Aug 2026 scrape: meal 4, transit pass 21). Venezuela, Zimbabwe:
+// de facto dollarised.
+const DOLLAR_PRICED = new Set(['Argentina', 'Lebanon', 'Ethiopia', 'Venezuela', 'Zimbabwe']);
+
+// The currency a record is priced in. `sym` is the scraped symbol (may be blank or '$').
+// override=true means the country's own currency was replaced by USD.
+function resolveCurrency(country, sym, rent1c) {
+  const expected = CUR[country] || null;
+  if (!expected || expected === 'USD' || !FX.rates[expected]) return { cur: expected, override: false };
+  if (!DOLLAR_PRICED.has(country)) return { cur: expected, override: false };
+  // an unambiguous non-dollar symbol means the page is in local currency, whatever the magnitude
+  if (sym && SYM2CUR[sym]) return { cur: expected, override: false };
+  const testUsd = rent1c / FX.rates[expected];
+  if (testUsd < 80 && rent1c >= 80 && rent1c <= 9000) return { cur: 'USD', override: true };
+  return { cur: expected, override: false };
+}
+
+if (SELF_TEST) {
+  const cases = [
+    // [label, country, scraped symbol, rent1c, expected currency]
+    ['Amritsar, cheap INR rent (the 2026-09-29 bug)', 'India', '₹', 6000, 'INR'],
+    ['Indian city, symbol not scraped', 'India', '', 7000, 'INR'],
+    ['Lao rent in kip', 'Laos', '₭', 4500000, 'LAK'],
+    ['Czech rent in koruna', 'Czech Republic', 'Kč', 17000, 'CZK'],
+    ['Buenos Aires priced in USD', 'Argentina', '$', 722.79, 'USD'],
+    ['Argentine city priced in pesos', 'Argentina', '$', 650000, 'ARS'],
+    ['Beirut priced in USD', 'Lebanon', '$', 912.55, 'USD'],
+    ['Addis Ababa priced in USD', 'Ethiopia', '$', 706.95, 'USD'],
+    ['Addis Ababa priced in birr', 'Ethiopia', 'Br', 45000, 'ETB'],
+    ['Quito, a USD economy', 'Ecuador', '$', 650, 'USD'],
+  ];
+  let bad = 0;
+  for (const [label, country, sym, rent, want] of cases) {
+    const got = resolveCurrency(country, sym, rent).cur;
+    if (got !== want) bad++;
+    console.log((got === want ? '  ok    ' : '  FAIL  ') + label + ': ' + got + (got === want ? '' : ' (want ' + want + ')'));
+  }
+  console.log(bad ? bad + ' failing' : 'all ' + cases.length + ' currency cases pass');
+  process.exit(bad ? 1 : 0);
+}
 
 const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
   .toLowerCase().replace(/\s*\([^)]*\)/g, '').replace(/[^a-z0-9]/g, '');
@@ -152,11 +200,9 @@ for (const rec of rows) {
   const transitL = find(P, 'Monthly Public Transport Pass');
 
   // currency + USD-override for dollarised economies
-  let cur = expected;
-  if (cur && FX.rates[cur]) {
-    const testUsd = rent1c / FX.rates[cur];
-    if (testUsd < 80 && rent1c >= 80 && rent1c <= 9000) { cur = 'USD'; usdOverride.push(f.slug); }
-  }
+  const rc = resolveCurrency(f.country, sym, rent1c);
+  const cur = rc.cur;
+  if (rc.override) usdOverride.push(f.slug);
   out[f.slug] = {
     found: true, numbeoSlug: name.replace(/\s+/g, '-'), cur, date: null,
     rent1c: round2(rent1c),

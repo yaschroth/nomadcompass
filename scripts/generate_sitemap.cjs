@@ -65,6 +65,7 @@ add('/map', '0.7', 'monthly');
 add('/timezones', '0.6', 'monthly');
 add('/route', '0.6', 'monthly');
 add('/best-weather', '0.7', 'monthly');
+add('/comfort-index', '0.8', 'monthly');
 add('/visa', '0.7', 'monthly');
 add('/nomad-visas', '0.7', 'monthly');
 add('/services', '0.7', 'monthly');

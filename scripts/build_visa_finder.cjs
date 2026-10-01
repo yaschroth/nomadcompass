@@ -127,7 +127,7 @@ ${shell.headTop}
       <p class="vf-count" id="vfCount"></p>
       <div class="vf-grid" id="vfGrid"></div>
       <div class="vf-share"><button type="button" id="vfShare">Copy share link</button></div>
-      <p class="vf-disclaim">Visa data derived from the open <a href="https://github.com/ilyankou/passport-index-dataset" target="_blank" rel="nofollow noopener">Passport Index dataset</a> (CC BY-SA 4.0); "nomad visa" flags are our own editorial list. Rules change often and depend on your exact situation, so always confirm with the official embassy before you book. Tourist-entry status only, not work authorization.</p>
+      <p class="vf-disclaim">Visa data derived from the open <a href="https://github.com/ilyankou/passport-index-dataset" target="_blank" rel="nofollow noopener">Passport Index dataset</a> (CC BY-SA 4.0); "nomad visa" flags are our own editorial list. Tourist-entry status only, not work authorization.</p>
     </div>
   </main>
   ${shell.footer}

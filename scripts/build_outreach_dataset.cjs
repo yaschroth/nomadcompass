@@ -93,6 +93,18 @@ for (const r of providers) {
       sourceUrls: [],
       checked: r.checked,
       listedCount: 0,
+      // The first listing exactly as the site prints it. The outreach message shows the provider
+      // this entry and asks it to confirm or correct it, and the firm-level fields above cannot
+      // stand in for it: they are unions across cities (languages) or deduped lists that need
+      // not line up with cities[0] (addresses), and the payload clips addresses at 140 chars.
+      first: {
+        city: cityMeta.name || r.city,
+        category: CAT_PLURAL[r.category] || r.category,
+        area: r.area || '',
+        languages: r.languages || [],
+        listing,
+        sourceUrl: r.sourceUrl || '',
+      },
     });
   }
   const t = byDomain.get(domain);

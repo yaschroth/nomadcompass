@@ -15,6 +15,7 @@ const FLAT_BEFORE = [['/', 'Home']];
 const TOOLS = [
   ['/route', 'Route Planner'],
   ['/best-weather', 'Best Weather by Month'],
+  ['/comfort-index', 'Comfort Index'],
   ['/visa', 'Visa Finder'],
   ['/nomad-visas', 'Nomad Visa Finder'],
   ['/geoarbitrage', 'Geoarbitrage Calculator'],
@@ -96,8 +97,21 @@ function walk(dir, out) {
   }
 }
 
+// --exclude=cities,blog,services skips pages whose path (relative to the root) starts with any of
+// those prefixes, for a run while other work holds those directories. Re-run without it afterwards:
+// the sweep is idempotent, and a page it skipped still carries the old Tools list.
+const EXCLUDE = ((process.argv.find((a) => a.startsWith('--exclude=')) || '').split('=')[1] || '')
+  .split(',').map((x) => x.trim()).filter(Boolean);
 const files = [];
 walk(ROOT, files);
+if (EXCLUDE.length) {
+  const before = files.length;
+  for (let i = files.length - 1; i >= 0; i--) {
+    const rel = path.relative(ROOT, files[i]).replace(/\\/g, '/');
+    if (EXCLUDE.some((x) => rel.startsWith(x))) files.splice(i, 1);
+  }
+  console.log(`--exclude ${EXCLUDE.join(',')}: ${before - files.length} pages left untouched.`);
+}
 let changed = 0, skipped = 0;
 for (const f of files) {
   let html = fs.readFileSync(f, 'utf8');

@@ -23,7 +23,10 @@
  * "$1,490" stated as measured would not be, so the hedge stays.
  *
  * Usage:  const S = require('./lib/city_snippet.cjs');
- *         S.title(city)        ->  "Palermo, Italy Digital Nomad Guide: $1,490/mo"
+ *         S.title(city)        ->  the city's test variant, see variantOf() below:
+ *         S.titleA(city)       ->  "Palermo, Italy Digital Nomad Guide: $1,490/mo"
+ *         S.titleB(city)       ->  "Palermo Digital Nomad Guide: $1,490/mo, Highs 14-31C"
+ *         S.variantOf(id)      ->  "A" | "B"
  *         S.description(city)  ->  "Palermo runs about $1,490 a month. Food rates 8/10 ..."
  */
 const fs = require('fs');
@@ -74,7 +77,7 @@ const cap = (s) => CAP[s] || s.replace(/^./, (c) => c.toUpperCase());
  * a price stands out in a column of results that do not. Longest name in the index is
  * "Santiago de Compostela", which still fits the first option at 52 characters.
  */
-function title(c) {
+function titleA(c) {
   const cost = money(c.costPerMonth);
   // Singapore, Cyprus and Mauritius are their own country, so the usual shape reads
   // "Singapore, Singapore Digital Nomad Guide".
@@ -88,6 +91,85 @@ function title(c) {
     `${c.name} Digital Nomad Guide`,
   ];
   return opts.find((t) => t.length <= TITLE_CAP) || opts[opts.length - 1];
+}
+
+/**
+ * The title test, started 2026-10-01 (data/title-test.json, scripts/measure_title_test.cjs).
+ *
+ * The descriptions were rewritten on 2026-08-28 and the 5-10 band did not move: September put the
+ * city pages at a 1.1% CTR there on 10,794 impressions. So the title is now the suspect, and half
+ * the city pages carry a second shape so the two can be compared on the same weeks of traffic.
+ *
+ * Variant B keeps what the queries match. Of the city-page queries Search Console shows (September,
+ * 939 of 12,952 impressions; the rest are anonymised), 590 contain "nomad" and 238 "nomad guide",
+ * so "Digital Nomad Guide" stays whole. The country goes: outside the pages whose name already
+ * contains it, almost nobody types it. The room it frees carries the second number someone choosing
+ * a city decides on after the price: how warm it gets, as the coolest and warmest month's average
+ * high, from the same Open-Meteo table the page's weather section shows.
+ *
+ * Granada is in the index twice, so a name shared with another city keeps its country.
+ */
+// Chosen, before any page changed, as the most balanced of 13 salts on September's baseline:
+// 497 A / 502 B, CTR 1.12% / 1.10% at positions 1-20 (data/title-test.json baseline). The first salt split 0.88% against 1.36%,
+// a gap bigger than the effect the test is looking for. Never change it while the test runs: every
+// city would be redrawn.
+const SALT = 'title-test-2026-10-r3:';
+let nameCount = null;
+// Lazy: CITIES is declared further down this file.
+const sharesName = (c) => {
+  if (!nameCount) {
+    nameCount = {};
+    for (const x of CITIES) nameCount[x.name] = (nameCount[x.name] || 0) + 1;
+  }
+  return nameCount[c.name] > 1;
+};
+
+/**
+ * FNV-1a over the salted id, then murmur3's finaliser, then the top bit: a pure function of the id,
+ * so a city never changes group between runs.
+ *
+ * Not plain `fnv % 2`. Multiplying by an odd prime never changes the lowest bit, so the parity of
+ * FNV-1a is just the parity of the sum of the character codes, and every salt tried gave the same
+ * two halves with A or B swapped. The finaliser mixes every bit into the one that is read.
+ */
+function variantOf(id) {
+  let h = 0x811c9dc5;
+  const s = SALT + id;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b);
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35);
+  h ^= h >>> 16;
+  return (h >>> 31) === 0 ? 'A' : 'B';
+}
+
+function titleB(c) {
+  const cost = money(c.costPerMonth);
+  const name = sharesName(c) && c.name !== c.country ? `${c.name}, ${c.country}` : c.name;
+  const k = CLIMATE[c.id];
+  let highs = null;
+  if (k && Array.isArray(k.h) && k.h.length === 12) {
+    const lo = Math.min(...k.h);
+    const hi = Math.max(...k.h);
+    // "Highs -12-20C" reads as a subtraction.
+    highs = lo < 0 ? `Highs ${lo} to ${hi}C` : `Highs ${lo}-${hi}C`;
+  }
+  const opts = [
+    ...(highs ? [
+      `${name} Digital Nomad Guide: ${cost}/mo, ${highs}`,
+      `${name} Nomad Guide: ${cost}/mo, ${highs}`,
+    ] : []),
+    `${name} Digital Nomad Guide: ${cost}/mo`,
+    `${name} Digital Nomad Guide`,
+  ];
+  return opts.find((t) => t.length <= TITLE_CAP) || opts[opts.length - 1];
+}
+
+/** The title a city page carries: the shape of the test group its id hashes to. */
+function title(c) {
+  return variantOf(c.id) === 'B' ? titleB(c) : titleA(c);
 }
 
 /**
@@ -231,4 +313,6 @@ function compose(c, forceTwo) {
   return (!forceTwo && out.length < DESC_MIN) ? null : out;
 }
 
-module.exports = { title, description, TITLE_CAP, DESC_MIN, DESC_MAX, CLIMATE, KEYS };
+module.exports = {
+  title, titleA, titleB, variantOf, description, TITLE_CAP, DESC_MIN, DESC_MAX, CLIMATE, KEYS,
+};

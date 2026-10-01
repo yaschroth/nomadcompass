@@ -46,6 +46,9 @@ const txt = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</
 const money = (v) => typeof v === 'number' ? '$' + v.toLocaleString('en-US') + '/mo' : '';
 const flag = (iso) => iso ? '/assets/flags/' + iso + '.svg' : '';
 const paras = (s) => String(s || '').split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+// A hand-written internal link inside content-<key>.json prose, written [anchor](/path). Applied after
+// txt() has escaped the paragraph, and only to root-relative paths, so prose cannot inject markup.
+const inlineLinks = (h) => h.replace(/\[([^\]]+)\]\((\/[a-z0-9/#?=_-]*)\)/g, '<a href="$2">$1</a>');
 
 
 const CSS = `
@@ -176,7 +179,7 @@ function build(key, related) {
         </li>`;
   }).join('\n');
 
-  const introHtml = paras(content.intro).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
+  const introHtml = paras(content.intro).map((p) => `<p>${inlineLinks(txt(p))}</p>`).join('\n        ');
   const weighHtml = paras(content.considerations).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
   const closeHtml = paras(content.closing).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
   const picks = (content.quickPicks || []).filter((p) => byId[p.id]).map((p) => {

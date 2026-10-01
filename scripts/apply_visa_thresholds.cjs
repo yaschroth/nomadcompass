@@ -138,6 +138,19 @@ const COUNTRIES = {
     toolRule: 'Three times Moldova’s forecast average monthly salary, which the government sets every year, earned from a company registered outside Moldova over the six months before you apply.',
     tool: { duration: 'Up to 2 years, renewable' },
   },
+  Italy: {
+    // DM 29 Feb 2024 (Gazzetta Ufficiale n. 79, 4 Apr 2024), art. 2: income "non inferiore al triplo
+    // del livello minimo previsto per l'esenzione dalla partecipazione alla spesa sanitaria". The US
+    // consulates (New York, Los Angeles, Boston) state that as EUR 24,789 a year (3 x EUR 8,263.31) =
+    // $28,536 at the fx file, so $2,380 a month. London rounds the base up to EUR 8,500 (EUR 25,500,
+    // about $29,350). The old $32,230 (EUR 28,000) had no consulate behind it. Verified 2026-10-01.
+    // Every Italian page states the floor ANNUALLY ($28,540 a year), which the sentence logic below
+    // would skip anyway, so the pages were written by hand on 2026-10-01 (pages: false).
+    usd: 2380,
+    pages: false,
+    rule: "That floor is three times Italy's income threshold for exemption from health charges, so it moves when that threshold does.",
+    toolRule: 'About $28,540 a year, three times Italy’s income threshold for exemption from health charges, as the US consulates state it; London’s consulate rounds the base up and asks about $29,350. Health cover required.',
+  },
   Mexico: {
     usd: 4600,
     savings: 77500,

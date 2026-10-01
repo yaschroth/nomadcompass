@@ -30,6 +30,7 @@ const STRICT = args.includes('--strict');
 // Adding a new dataset without adding it here is itself a gate failure.
 const CLAIMS = [
   ['climate', 'Monthly temperature and precipitation normals', 'assets/city-climate.js'],
+  ['comfort-index', 'Monthly and yearly comfort scores, the best months to visit, and the Comfort Index ranking', 'scripts/build_comfort_index.cjs'],
   ['timezones', 'City time zones and DST behaviour', 'assets/city-tz.js'],
   ['hero-images', 'Hero photograph, photographer and licence', 'images/cities/attribution.json'],
   ['numbeo-costs', 'Cost-of-living component breakdown', 'data/numbeo-costs.json'],

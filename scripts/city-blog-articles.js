@@ -9,11 +9,11 @@
   // All blog articles with their associated cities and countries
   var articles = [
     {
-      title: "The Ultimate Digital Nomad Guide to Lisbon in 2025",
+      title: "Digital Nomad Guide to Lisbon in 2026: Rent, D8 and Tax",
       url: "../blog/digital-nomad-guide-lisbon.html",
       image: "https://images.pexels.com/photos/26898096/pexels-photo-26898096.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Sofia Andrade",
+      author: "Yannick Schroth",
       readTime: "8 min read",
       cities: ["lisbon"],
       countries: ["portugal"]
@@ -23,7 +23,7 @@
       url: "../blog/portugal-digital-nomad-visa.html",
       image: "https://images.pexels.com/photos/31194122/pexels-photo-31194122.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Visa & Legal",
-      author: "Elena Vasquez",
+      author: "Yannick Schroth",
       readTime: "12 min read",
       cities: [],
       countries: ["portugal"]
@@ -33,17 +33,17 @@
       url: "../blog/medellin-vs-chiang-mai.html",
       image: "https://images.pexels.com/photos/15293179/pexels-photo-15293179.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Marcus Chen",
+      author: "Yannick Schroth",
       readTime: "10 min read",
       cities: ["medellin", "medellín", "chiang mai"],
       countries: ["colombia", "thailand"]
     },
     {
-      title: "The 10 Best Coworking Spaces in Bali for Remote Workers",
+      title: "The Best Coworking Spaces in Bali for Remote Workers",
       url: "../blog/best-coworking-spaces-bali.html",
       image: "https://images.pexels.com/photos/32191652/pexels-photo-32191652.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Remote Work",
-      author: "Jake Morrison",
+      author: "Yannick Schroth",
       readTime: "9 min read",
       cities: ["bali", "canggu", "ubud", "seminyak"],
       countries: ["indonesia"]
@@ -53,7 +53,7 @@
       url: "../blog/digital-nomads-tbilisi-georgia.html",
       image: "https://images.pexels.com/photos/17426635/pexels-photo-17426635.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Nina Kowalski",
+      author: "Yannick Schroth",
       readTime: "7 min read",
       cities: ["tbilisi"],
       countries: ["georgia"]
@@ -63,7 +63,7 @@
       url: "../blog/bangkok-budget-guide.html",
       image: "https://images.pexels.com/photos/32105270/pexels-photo-32105270.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Priya Sharma",
+      author: "Yannick Schroth",
       readTime: "9 min read",
       cities: ["bangkok"],
       countries: ["thailand"]
@@ -73,7 +73,7 @@
       url: "../blog/mexico-city-nomad-guide.html",
       image: "https://images.pexels.com/photos/20849711/pexels-photo-20849711.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Carlos Rivera",
+      author: "Yannick Schroth",
       readTime: "10 min read",
       cities: ["mexico city"],
       countries: ["mexico"]
@@ -83,7 +83,7 @@
       url: "../blog/cape-town-nomad-guide.html",
       image: "https://images.pexels.com/photos/32495850/pexels-photo-32495850.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Thabo Molefe",
+      author: "Yannick Schroth",
       readTime: "8 min read",
       cities: ["cape town"],
       countries: ["south africa"]
@@ -93,17 +93,17 @@
       url: "../blog/budapest-nomad-guide.html",
       image: "https://images.pexels.com/photos/34431040/pexels-photo-34431040.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Anna Horvath",
+      author: "Yannick Schroth",
       readTime: "8 min read",
       cities: ["budapest"],
       countries: ["hungary"]
     },
     {
-      title: "Dubai for Digital Nomads: Luxury Meets Remote Work",
+      title: "Dubai Digital Nomad Guide: Where to Live on the Red Line",
       url: "../blog/dubai-digital-nomad-guide.html",
       image: "https://images.pexels.com/photos/33953639/pexels-photo-33953639.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "City Guides",
-      author: "Aisha Al-Mansouri",
+      author: "Yannick Schroth",
       readTime: "9 min read",
       cities: ["dubai"],
       countries: ["united arab emirates", "uae"]
@@ -113,7 +113,7 @@
       url: "../blog/best-european-cities-nomads.html",
       image: "https://images.pexels.com/photos/33736635/pexels-photo-33736635.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Lifestyle",
-      author: "Sofia Andrade",
+      author: "Yannick Schroth",
       readTime: "11 min read",
       cities: ["lisbon", "budapest", "tallinn", "split", "berlin", "tbilisi"],
       countries: ["portugal", "hungary", "estonia", "croatia", "germany", "georgia"]
@@ -123,7 +123,7 @@
       url: "../blog/stay-productive-working-abroad.html",
       image: "https://images.pexels.com/photos/29119987/pexels-photo-29119987.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Remote Work",
-      author: "Marcus Chen",
+      author: "Yannick Schroth",
       readTime: "7 min read",
       cities: [],
       countries: [],
@@ -134,18 +134,18 @@
       url: "../blog/rise-of-coliving-spaces.html",
       image: "https://images.pexels.com/photos/33145553/pexels-photo-33145553.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Lifestyle",
-      author: "Jake Morrison",
+      author: "Yannick Schroth",
       readTime: "10 min read",
       cities: [],
       countries: [],
       general: true
     },
     {
-      title: "Digital Nomad Tax Guide: What You Need to Know in 2025",
+      title: "Digital Nomad Tax Guide 2026: Why 183 Days Is Not a Shield",
       url: "../blog/digital-nomad-tax-guide.html",
       image: "https://images.pexels.com/photos/4386469/pexels-photo-4386469.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Visa & Legal",
-      author: "Elena Vasquez",
+      author: "Yannick Schroth",
       readTime: "12 min read",
       cities: [],
       countries: [],
@@ -156,7 +156,7 @@
       url: "../blog/remote-work-routine-guide.html",
       image: "https://images.pexels.com/photos/19935029/pexels-photo-19935029.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
       category: "Remote Work",
-      author: "Priya Sharma",
+      author: "Yannick Schroth",
       readTime: "8 min read",
       cities: [],
       countries: [],

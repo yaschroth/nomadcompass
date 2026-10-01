@@ -8,6 +8,10 @@
  * This reads the <title> each page actually carries, finds the languages it names, and requires
  * every number in it to equal the providers listed there who work in at least one of them.
  *
+ * A title that says "property lawyers" counts only those whose source records real estate as well,
+ * read by the same practice reader the generator uses (scripts/lib/service_practice.cjs), so the
+ * two can never disagree about who that is.
+ *
  * Usage: node scripts/check_title_counts.cjs
  */
 const fs = require('fs');
@@ -15,6 +19,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const M = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
+const PRACTICE = require(path.join(ROOT, 'scripts', 'lib', 'service_practice.cjs'));
 const pages = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'service-pair-pages.json'), 'utf8'));
 
 // Longest names first, so "Brazilian Portuguese" would be found before "Portuguese".
@@ -38,7 +43,9 @@ for (const p of pages) {
   if (!codes.length || !numbers.length) continue;
   checked++;
   const rows = M.pairOf(p.city, p.service).rows;
-  const want = rows.filter((r) => codes.some((c) => r.languages.includes(c))).length;
+  const property = PRACTICE.PROPERTY_TITLE.test(title);
+  const want = rows.filter((r) => codes.some((c) => r.languages.includes(c))
+    && (!property || PRACTICE.handles(r, 'property'))).length;
   numbers.filter((n) => n !== want).forEach((n) => bad.push(`${p.url}: "${title}" says ${n}, ${want} work in ${codes.join('/')}`));
 }
 

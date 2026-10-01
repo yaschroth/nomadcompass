@@ -33,6 +33,33 @@ const shell = require(path.join(ROOT, 'scripts', 'lib', 'page_shell.cjs'));
 const META = require(path.join(ROOT, 'scripts', 'lib', 'meta_text.cjs'));
 const { inlineIcon } = require(path.join(ROOT, 'scripts', 'lib', 'icons.cjs'));
 const { CAT_ICON } = require(path.join(ROOT, 'scripts', 'lib', 'service_labels.cjs'));
+const PRACTICE = require(path.join(ROOT, 'scripts', 'lib', 'service_practice.cjs'));
+
+// Hand-chosen reading, one entry per page that has an article written for exactly its question.
+// Each link was picked for that page and each sentence written for it, by hand: a generated link
+// put the same two posts on 410 city pages, which is why internal links are never computed here.
+// The article links to this page already; this is the way back. Search Console showed the gap:
+// "medellin english speaking doctor" landed on the Medellín doctors page, which had no path to the
+// article that answers what the visit costs, and the Split and Antalya lawyer pages ranked for
+// property and attorney searches with no route to the guides on buying in Split or hiring in
+// Antalya. An entry whose page is not written this run is simply not used.
+// Keyed city|category. The sentence is HTML: the one place markup is written into this generator
+// by hand, so it is checked by eye, and every href points at a published post.
+const FURTHER_READING = {
+  'medellin|doctor': 'Our guide to <a href="/blog/english-speaking-doctor-medellin">seeing an English-speaking doctor in Medellín</a> covers what a private visit costs, who can join an EPS, the insurance the nomad visa requires, how urgencias work and how to check a doctor on ReTHUS.',
+  'split|legal': 'Buying a flat or an old stone house? Our guide to <a href="/blog/buying-property-in-split-croatia">buying property in Split as a foreigner</a> covers who needs Ministry consent, the land registry and permit checks a property lawyer makes, and the 3% transfer tax.',
+  'antalya|legal': 'Our guide to <a href="/blog/hiring-a-lawyer-in-antalya">hiring a lawyer in Antalya</a> covers the three situations where a foreigner needs one (a refused residence permit, a property purchase, a company), the 2026 bar fee floors in dollars and how to check who you are hiring.',
+  'fethiye|legal': 'Our guide to <a href="/blog/buying-property-in-fethiye-as-a-foreigner">buying property in Fethiye as a foreigner</a> covers the tapu steps, the 4% deed fees, the $200,000 residence permit route and when a lawyer helps.',
+  'alicante|legal': 'Not sure an abogado is who you need? Our guide to <a href="/blog/abogado-gestor-notario-spain-foreigners">abogado, gestor or notary in Spain</a> sorts NIE, visa, property and inheritance work between the three, with the 2026 fees and how to check a lawyer.',
+  'malaga|legal': 'Not sure an abogado is who you need? Our guide to <a href="/blog/abogado-gestor-notario-spain-foreigners">abogado, gestor or notary in Spain</a> sorts NIE, visa, property and inheritance work between the three, with the 2026 fees and how to check a lawyer.',
+  'tenerife|legal': 'Not sure an abogado is who you need? Our guide to <a href="/blog/abogado-gestor-notario-spain-foreigners">abogado, gestor or notary in Spain</a> sorts NIE, visa, property and inheritance work between the three, with the 2026 fees and how to check a lawyer.',
+  'berlin|doctor': 'Our guide to <a href="/blog/english-speaking-doctor-germany">finding an English-speaking doctor in Germany</a> covers the official 116117 search, statutory and private insurance, what a visit costs, referrals and where to go at night.',
+  'hamburg|doctor': 'Our guide to <a href="/blog/english-speaking-doctor-germany">finding an English-speaking doctor in Germany</a> covers the official 116117 search, statutory and private insurance, what a visit costs, referrals and where to go at night.',
+  'munich|doctor': 'Our guide to <a href="/blog/english-speaking-doctor-germany">finding an English-speaking doctor in Germany</a> covers the official 116117 search, statutory and private insurance, what a visit costs, referrals and where to go at night.',
+  'tokyo|doctor': 'Our guide to <a href="/blog/english-speaking-doctors-japan">English-speaking doctors in Japan</a> explains the health ministry\'s register, what its language flags mean, the 30% co-pay and what a visit costs without Japanese insurance.',
+  'osaka|doctor': 'Our guide to <a href="/blog/english-speaking-doctors-japan">English-speaking doctors in Japan</a> explains the health ministry\'s register, what its language flags mean, the 30% co-pay and what a visit costs without Japanese insurance.',
+  'lisbon|tax': 'Our guide to <a href="/blog/portugal-tax-adviser-for-nomads">hiring a tax adviser in Portugal</a> covers the NIF, fiscal representatives, the 183-day residency test, why IFICI\'s 20% rate rarely fits a nomad and how to check an adviser.',
+};
 
 const esc = P.esc;
 const WORD_FLOOR = 220;
@@ -345,11 +372,32 @@ for (const page of ordered) {
     .filter((c) => c.text !== h1 && !usedTitles.has(c.text));
   const BUDGET = 60;
   const fits = candidates.filter((c) => c.text.length <= BUDGET);
+  // "Property lawyer in Split" and "real estate lawyer in Split" were the two biggest searches the
+  // Split lawyers page was shown for, at position 20, under a title that said only "lawyers". Where
+  // the source records real estate for every provider the title counts, the title says so: the
+  // number still counts exactly the people it names, which check_title_counts verifies through the
+  // same practice reader. Ten pages qualified on 2026-10-01 (Split, Dubrovnik, Zadar, Crete, Fethiye,
+  // Ibiza, Tenerife, Podgorica, Veliko Tarnovo, Addis Ababa); everywhere else it would be a guess.
+  const propertyRows = cat === 'legal'
+    ? pair.rows.filter((r) => r.languages.includes(langCodes[0]) && PRACTICE.handles(r, 'property'))
+    : [];
+  const propertyTitle = (cat === 'legal' && tokens.n1 >= 3 && propertyRows.length === tokens.n1)
+    ? `${tokens.n1} ${tokens.lang1}-speaking property lawyers in ${city.name}`
+    : '';
   let title;
-  if (fits.length) title = fits[hash(page.url) % fits.length].text;
+  if (propertyTitle && propertyTitle.length <= BUDGET && !usedTitles.has(propertyTitle)) title = propertyTitle;
+  else if (fits.length) title = fits[hash(page.url) % fits.length].text;
   else if (candidates.length) title = candidates.slice().sort((a, b) => a.text.length - b.text.length)[0].text;
   else title = `${h1}, ${pair.n} listed`;
   usedTitles.add(title);
+
+  // What the lawyers here take on, where their sources say. Counted over the whole page, never
+  // stated where no row records an area, and always as "their sources record" because a missing
+  // area is a gap in the list, not a fact about the lawyer.
+  const practice = cat === 'legal' ? PRACTICE.counts(pair.rows).slice(0, 3) : [];
+  const practiceLine = practice.some((a) => a.n >= 2)
+    ? 'Their sources record practice areas too: ' + P.list(practice.map((a, i) => a.n + (i === 0 ? ' list ' : ' ') + a.label)) + '.'
+    : '';
 
   // The other half of the search result, and it was still naming the headline two languages. Every
   // language the page can serve is named here, with its count, even where the title had no room.
@@ -357,8 +405,18 @@ for (const page of ordered) {
     ? P.list(servable.map(([l, n]) => P.langName(l) + ' (' + n + ')'))
     : P.list(langs);
   // P.plural, not the bare plural: 77 pages were describing themselves as "1 lawyers in Agadir".
-  const descCore = `${pair.n} ${P.plural(pair.n, P.singular(cat), P.catName(cat))} in ${city.name} ${P.who(cat)} ${P.plural(pair.n, P.work(cat, 'works'), P.work(cat))} in ${descLangs}`
+  const descBase = `${pair.n} ${P.plural(pair.n, P.singular(cat), P.catName(cat))} in ${city.name} ${P.who(cat)} ${P.plural(pair.n, P.work(cat, 'works'), P.work(cat))} in ${descLangs}`
     + (topArea && Object.keys(pair.areas).length > 1 ? `, across ${Object.keys(pair.areas).length} postcodes` : '') + '.';
+  // The property searches again, in the half of the result a reader scans after the title. Only
+  // where it still leaves room for the shortest closer, because band() never trims the core and an
+  // over-length description is an error in check_meta.
+  const propertyBit = (() => {
+    const p = practice.find((a) => a.key === 'property');
+    return p && p.n >= 2 ? ` ${p.n} of them list real estate.` : '';
+  })();
+  const descCore = propertyBit && (descBase + propertyBit + ' Every language claim names its source.').length <= META.MAX
+    ? descBase + propertyBit
+    : descBase;
   const desc = META.band(descCore, [
     'Every language claim names the source it came from, links straight to it, and carries the tier we grade that source by.',
     'Every language claim names the source it came from and links straight to it, with the tier we grade it by.',
@@ -616,7 +674,7 @@ ${shell.headEnd}
     crumbs: `<a href="/">Home</a> &rsaquo; <a href="/services">Services by language</a> &rsaquo; <a href="/services/${city.id}">${esc(city.name)}</a> &rsaquo; ${esc(P.catName(cat))}`,
     eyebrow: `${city.iso ? `<img src="/assets/flags/${city.iso}.svg" alt="" width="20" height="15">` : ''}${esc(city.name)}, ${esc(city.country)}`,
     h1,
-    sub: blocks.standfirst + (sections ? ' Each language has its own list below, so '
+    sub: blocks.standfirst + (practiceLine ? ' ' + practiceLine : '') + (sections ? ' Each language has its own list below, so '
       + (P.teaches(cat) ? `any ${P.singular(cat)} that ${P.work(cat, 'works')}` : 'anyone who works')
       + ' in two appears in both.' : ''),
     stats: [
@@ -641,6 +699,7 @@ ${shell.headEnd}
     : `This page shows the first of the ${esc(P.catName(cat))} we hold in ${esc(city.name)}; the language pages linked beside each list hold the rest.` })}
 
       <div class="svp-prose">
+        ${FURTHER_READING[city.id + '|' + cat] ? `<h2>Before you contact one</h2>\n        <p>${FURTHER_READING[city.id + '|' + cat]}</p>` : ''}
         <h2>Where these came from</h2>
         <p>${esc(blocks.provenance)}</p>
         <p>${esc(blocks.claim)}</p>

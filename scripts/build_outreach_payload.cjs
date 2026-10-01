@@ -42,6 +42,17 @@ const rows = targets.map((t) => ({
   ch: t.channel || '',
   wa: t.whatsapp || '',
   so: t.social || undefined,
+  // The one entry the outreach message prints in full and asks the provider to confirm: the first
+  // listing, unclipped. Absent on a catalogue built before 2026-10-01; the tool falls back to the
+  // firm-level fields, which are the same thing for a firm listed in one city.
+  x: t.first ? {
+    c: t.first.city,
+    g: t.first.category,
+    a: t.first.area,
+    l: t.first.languages,
+    u: t.first.listing,
+    su: t.first.sourceUrl || undefined,
+  } : undefined,
 }));
 
 const payload = {

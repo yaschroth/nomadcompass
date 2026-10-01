@@ -46,7 +46,18 @@ const before = html.length;
 const applied = [];
 const already = [];
 
-function patch(label, find, replace) {
+// A patch that a LATER patch rewrote. Its anchor is gone (it consumed it) and its replacement is
+// gone too (the later patch changed it), which reads exactly like drift. That is what happened on
+// 2026-10-01: '4c' inserted the ranking sentence into the WA_MSG block that 'wa message + helpers'
+// had written, so every run after the v17 publish threw on 'wa message + helpers' and the tool
+// could not be rebuilt at all. A patch names what supersedes it, as a string that only exists once
+// the later patch has run, and is then reported as already published.
+function patch(label, find, replace, opts) {
+  const sup = (opts && opts.supersededBy) || [];
+  if (sup.some((s) => html.indexOf(s) >= 0)) {
+    already.push(`${label} (superseded)`);
+    return;
+  }
   // Already published? Ask the result, not a marker.
   //
   // Every patch below had been applied and published, so running this file again threw on the
@@ -78,6 +89,29 @@ function patch(label, find, replace) {
   html = html.slice(0, i) + body + html.slice(i + needle.length);
   applied.push(label);
 }
+
+/**
+ * Replace the text from `start` up to (not including) `end`, once.
+ *
+ * For a block too long to quote as an anchor, such as a whole message table. Both ends must be
+ * unique and in order; a body that is already present counts as published, the same rule patch()
+ * follows.
+ */
+function replaceBlock(label, start, end, body) {
+  if (html.indexOf(body) >= 0) { already.push(label); return; }
+  const i = html.indexOf(start);
+  if (i < 0) throw new Error(`block start not found for "${label}". The published file has drifted.`);
+  if (html.indexOf(start, i + start.length) >= 0) throw new Error(`block start for "${label}" is not unique.`);
+  const j = html.indexOf(end, i + start.length);
+  if (j < 0) throw new Error(`block end not found for "${label}". The published file has drifted.`);
+  if (html.indexOf(end, j + end.length) >= 0) throw new Error(`block end for "${label}" is not unique.`);
+  html = html.slice(0, i) + body + html.slice(j);
+  applied.push(label);
+}
+
+// The marker the v2 message block opens with. Older patches that wrote or rewrote the messages
+// are superseded once it is present.
+const V2_MARKER = '// ---- outreach messages v2: show the entry, offer the Checked tier ----';
 
 // ---- 1. the catalogue -------------------------------------------------------
 const payload = fs.readFileSync(path.join(ROOT, 'data', 'outreach-payload.json'), 'utf8');
@@ -229,7 +263,11 @@ patch('wa message + helpers', `  var EVNAME = {'official':'amtlich','self-declar
   function otherProfiles(r){
     var so = r.so || {};
     return (so.linkedin && !/linkedin\\.com\\/in\\//i.test(so.linkedin)) ? [['linkedin', so.linkedin]] : [];
-  }`);
+  }`, {
+  // 4c rewrote this block's WA_MSG, and section 4e replaces it outright. Every helper this patch
+  // added is in the published file either way.
+  supersededBy: [`Entries confirmed by the business are marked as checked`, V2_MARKER],
+});
 
 // ---- 4b. the mail draft follows the same rule ------------------------------
 //
@@ -253,6 +291,10 @@ patch('draft language by country',
   }`);
 
 // ---- 4c. what answering is worth, said in both message types ---------------
+//
+// SUPERSEDED 2026-10-01 by section 4e, which replaces both message tables. Kept so a run against a
+// pre-4e file still reproduces the history; once V2_MARKER is in the file these report as
+// superseded and do nothing.
 //
 // Both openers asked a stranger to check their entry and offered nothing back, while the thing
 // worth offering was already true and already built. A reply moves the row to the "visited" tier,
@@ -287,7 +329,7 @@ const WA_RANK = {
   pt: `As fichas confirmadas pelo próprio negócio são assinaladas como verificadas e aparecem à frente das que apenas lemos, pelo que uma resposta também vos faz subir na página da vossa cidade. `,
 };
 Object.keys(WA_ASK).forEach((lang) => {
-  patch(`wa ranking sentence (${lang})`, WA_ASK[lang], WA_ASK[lang] + WA_RANK[lang]);
+  patch(`wa ranking sentence (${lang})`, WA_ASK[lang], WA_ASK[lang] + WA_RANK[lang], { supersededBy: [V2_MARKER] });
 });
 
 // The draft lines do not all end where their sentence does. German and French break the line after
@@ -312,7 +354,7 @@ Object.keys(DRAFT_ASK).forEach((lang) => {
   const replacement = tail
     ? `${head}'\n${sentence}\n        + '${tail}`
     : `${head}\n${sentence}`;
-  patch(`draft ranking sentence (${lang})`, head + tail, replacement);
+  patch(`draft ranking sentence (${lang})`, head + tail, replacement, { supersededBy: [V2_MARKER] });
 });
 
 // ---- 4d. the tier this tool creates, named in the tool ---------------------
@@ -323,6 +365,223 @@ Object.keys(DRAFT_ASK).forEach((lang) => {
 patch('evname visited',
   `  var EVNAME = {'official':'amtlich','self-declared':'selbst angegeben','directory':'Verzeichnis'};`,
   `  var EVNAME = {'official':'amtlich','visited':'bestätigt','self-declared':'selbst angegeben','directory':'Verzeichnis'};`);
+
+// ---- 4e. v2 messages: show the entry, ask for a confirmation, offer the tier --
+//
+// 2026-10-01. The openers pointed at a page and asked "is it right?", so a provider had to open the
+// page, find itself among a dozen cards and work out which fields we meant. The answer that earns
+// the Checked tier is a confirmation of the whole entry INCLUDING the languages (see the memory
+// note on the tier: a reply that fixes one field and says nothing about the rest does not earn
+// it), and the way to get that answer is to put the whole entry in the message. So both message
+// types now print exactly what we list (name, website, languages, address, category, city), ask for
+// a confirmation or a correction, and say in one sentence what a confirmation does: the entry is
+// marked "Checked with them" with the date and shown first on its city, service and language
+// pages, and nobody can pay for that.
+//
+// How it works in practice: Alpha Legal Thailand replied on 2026-09-29 confirming name, website,
+// languages and address and correcting one comma (Klongtoey, nua -> Klongtoey Nua). The row now
+// carries evidence 'visited' and confirmedOn 2026-09-29. Another firm is never named in the
+// message itself: they did not agree to be our example.
+//
+// Kept from v1, on purpose: the source line (where the details came from, which a provider in the
+// EU is owed), the removal offer, the country-language rule (msgLang, so DACH and the EU/non-EU
+// order are untouched: targeting lives in harvest_outreach_emails.cjs and the panel's DACH badge,
+// neither of which this changes), and "free". Dropped: "editorial" (meant nothing to the reader)
+// and the raw source id ("find-a-professional-service-abro-e93d75"), which is an internal key and
+// was being shown to providers. The source is now the source URL when we hold one.
+//
+// The badge text stays English in every language, in quotes, because that is what the card on the
+// site says; a short gloss follows it in the reader's language.
+//
+// Typographic apostrophes (U+2019) throughout, so no string needs escaping inside the published
+// file's single-quoted JS, and String.raw so \n reaches the artifact as written.
+const V2_WA = String.raw`  ${V2_MARKER}
+  // Built by scripts/build_outreach_artifact.cjs section 4e. Both message types are generated from
+  // MSG below, so the WhatsApp opener and the mail draft cannot say different things.
+
+  // Category names in the reader's language. English is the site's own label.
+  var CAT_NAME = {
+    de:{'lawyers':'Anwälte','doctors':'Ärzte','translators':'Übersetzer','therapists':'Therapeuten',
+        'dentists':'Zahnärzte','physiotherapists':'Physiotherapeuten','opticians':'Optiker','vets':'Tierärzte',
+        'tax advisers':'Steuerberater','hairdressers':'Friseure','estate agents':'Immobilienmakler',
+        'mechanics':'Autowerkstätten','gyms':'Fitnessstudios','pharmacies':'Apotheken','schools':'Schulen'},
+    es:{'lawyers':'Abogados','doctors':'Médicos','translators':'Traductores','therapists':'Terapeutas',
+        'dentists':'Dentistas','physiotherapists':'Fisioterapeutas','opticians':'Ópticas','vets':'Veterinarios',
+        'tax advisers':'Asesores fiscales','hairdressers':'Peluquerías','estate agents':'Agentes inmobiliarios',
+        'mechanics':'Talleres mecánicos','gyms':'Gimnasios','pharmacies':'Farmacias','schools':'Colegios'},
+    fr:{'lawyers':'Avocats','doctors':'Médecins','translators':'Traducteurs','therapists':'Thérapeutes',
+        'dentists':'Dentistes','physiotherapists':'Kinésithérapeutes','opticians':'Opticiens','vets':'Vétérinaires',
+        'tax advisers':'Conseillers fiscaux','hairdressers':'Coiffeurs','estate agents':'Agents immobiliers',
+        'mechanics':'Garages','gyms':'Salles de sport','pharmacies':'Pharmacies','schools':'Écoles'},
+    it:{'lawyers':'Avvocati','doctors':'Medici','translators':'Traduttori','therapists':'Terapeuti',
+        'dentists':'Dentisti','physiotherapists':'Fisioterapisti','opticians':'Ottici','vets':'Veterinari',
+        'tax advisers':'Consulenti fiscali','hairdressers':'Parrucchieri','estate agents':'Agenti immobiliari',
+        'mechanics':'Officine meccaniche','gyms':'Palestre','pharmacies':'Farmacie','schools':'Scuole'},
+    pt:{'lawyers':'Advogados','doctors':'Médicos','translators':'Tradutores','therapists':'Terapeutas',
+        'dentists':'Dentistas','physiotherapists':'Fisioterapeutas','opticians':'Óticas','vets':'Veterinários',
+        'tax advisers':'Consultores fiscais','hairdressers':'Cabeleireiros','estate agents':'Agentes imobiliários',
+        'mechanics':'Oficinas mecânicas','gyms':'Ginásios','pharmacies':'Farmácias','schools':'Escolas'}
+  };
+  function catName(g, lang){
+    var m = CAT_NAME[lang];
+    if (m && m[g]) return m[g];
+    return g ? g.charAt(0).toUpperCase() + g.slice(1) : '';
+  }
+  // Language names from the browser, in the reader's language. A code it cannot name is shown as
+  // the code rather than dropped, because a missing language is exactly the error we ask about.
+  function langNames(codes, lang){
+    var dn = null;
+    try { dn = new Intl.DisplayNames([lang], {type:'language'}); } catch (e) {}
+    return (codes || []).map(function(c){
+      var n = '';
+      try { n = dn ? dn.of(c) : ''; } catch (e) {}
+      return n || c;
+    }).join(', ');
+  }
+  // The one entry the message is about: the first listing, the same one c[0] and u[0] name. x is
+  // that listing exactly as the site prints it (build_outreach_payload.cjs); without it the
+  // firm-level fields stand in, and for a firm in one city they are the same thing.
+  function entryOf(r){
+    var x = r.x || {};
+    return {
+      name: r.n || '', website: r.w || '',
+      langs: x.l || r.l || [],
+      address: (x.a !== undefined ? x.a : (r.a[0] || '')),
+      cat: x.g || r.g[0] || '', city: x.c || r.c[0] || '',
+      url: x.u || r.u[0] || 'https://thenomadhq.com/services',
+      src: x.su || r.su[0] || ''
+    };
+  }
+
+  var MSG = {
+    en:{ name:'English', subj:'Subject',
+      labels:['Name','Website','Languages','Address','Category','City'],
+      subject:function(e){ return 'Your entry on The Nomad HQ (' + e.city + '): is it right?'; },
+      hello:'Hello,', waHello:'Hello!',
+      intro:'We run The Nomad HQ, a free directory that sorts providers by the languages they work in. This is what we list for you:',
+      see:'You can see it here: ',
+      src:function(u){ return 'We took these details from a public source' + (u ? ' (' + u + ')' : '') + '.'; },
+      ask:'Could you reply to confirm it, or tell me what to change?',
+      waAsk:'Could you confirm it is right, or tell me what to change?',
+      tier:'When a provider confirms its entry, including the languages it works in, we mark it "Checked with them" with the date and show it first on its city, service and language pages, and no one can pay for that.',
+      out:'If you would rather not be listed, just say so and I will remove it.',
+      waOut:'If you would rather not be listed, just reply here and I will remove it.',
+      bye:'Best regards' },
+    de:{ name:'Deutsch', subj:'Betreff',
+      labels:['Name','Website','Sprachen','Adresse','Kategorie','Stadt'],
+      subject:function(e){ return 'Ihr Eintrag auf The Nomad HQ (' + e.city + '): stimmt er?'; },
+      hello:'Guten Tag,', waHello:'Guten Tag!',
+      intro:'Wir betreiben The Nomad HQ, ein kostenloses Verzeichnis, das Anbieter nach ihren Arbeitssprachen ordnet. So führen wir Sie:',
+      mailIntro:'wir betreiben The Nomad HQ, ein kostenloses Verzeichnis, das Anbieter nach ihren Arbeitssprachen ordnet. So führen wir Sie:',
+      see:'Hier ist der Eintrag zu sehen: ',
+      src:function(u){ return 'Die Angaben stammen aus einer öffentlichen Quelle' + (u ? ' (' + u + ')' : '') + '.'; },
+      ask:'Könnten Sie kurz bestätigen, dass alles stimmt, oder mir schreiben, was ich ändern soll?',
+      waAsk:'Könnten Sie kurz bestätigen, dass alles stimmt, oder mir schreiben, was ich ändern soll?',
+      tier:'Wenn ein Anbieter seinen Eintrag bestätigt, einschließlich der Sprachen, in denen er arbeitet, kennzeichnen wir ihn mit Datum als "Checked with them" (mit dem Anbieter geprüft) und zeigen ihn auf seinen Stadt-, Dienstleistungs- und Sprachseiten zuerst, und kaufen kann das niemand.',
+      out:'Wenn Sie lieber nicht gelistet sein möchten, genügt eine kurze Antwort, dann entferne ich den Eintrag.',
+      waOut:'Wenn Sie lieber nicht gelistet sein möchten, genügt eine Antwort hier, dann entferne ich den Eintrag.',
+      bye:'Freundliche Grüße' },
+    es:{ name:'Español', subj:'Asunto',
+      labels:['Nombre','Sitio web','Idiomas','Dirección','Categoría','Ciudad'],
+      subject:function(e){ return 'Su ficha en The Nomad HQ (' + e.city + '): ¿es correcta?'; },
+      hello:'Buenos días:', waHello:'¡Buenos días!',
+      intro:'Gestionamos The Nomad HQ, un directorio gratuito que ordena a los profesionales según los idiomas en los que trabajan. Esto es lo que publicamos sobre ustedes:',
+      see:'Pueden verla aquí: ',
+      src:function(u){ return 'Tomamos estos datos de una fuente pública' + (u ? ' (' + u + ')' : '') + '.'; },
+      ask:'¿Podrían confirmarnos que es correcta, o indicarnos qué debemos cambiar?',
+      waAsk:'¿Podrían confirmarnos que es correcta, o indicarnos qué debemos cambiar?',
+      tier:'Cuando un profesional confirma su ficha, incluidos los idiomas en los que trabaja, la marcamos como "Checked with them" (verificada con el propio profesional) con la fecha y la mostramos en primer lugar en sus páginas de ciudad, servicio e idioma, y nadie puede pagar por ello.',
+      out:'Si prefieren no aparecer, basta con decírnoslo y retiro la ficha.',
+      waOut:'Si prefieren no aparecer, basta con responder aquí y retiro la ficha.',
+      bye:'Un cordial saludo' },
+    fr:{ name:'Français', subj:'Objet ',
+      labels:['Nom ','Site internet ','Langues ','Adresse ','Catégorie ','Ville '],
+      subject:function(e){ return 'Votre fiche sur The Nomad HQ (' + e.city + ') : est-elle exacte ?'; },
+      hello:'Bonjour,', waHello:'Bonjour !',
+      intro:'Nous gérons The Nomad HQ, un annuaire gratuit qui classe les prestataires selon les langues dans lesquelles ils travaillent. Voici ce que nous publions pour vous :',
+      see:'Vous pouvez la voir ici : ',
+      src:function(u){ return 'Nous avons repris ces informations d’une source publique' + (u ? ' (' + u + ')' : '') + '.'; },
+      ask:'Pourriez-vous nous confirmer qu’elle est exacte, ou nous dire ce qu’il faut corriger ?',
+      waAsk:'Pourriez-vous nous confirmer qu’elle est exacte, ou nous dire ce qu’il faut corriger ?',
+      tier:'Lorsqu’un prestataire confirme sa fiche, y compris les langues dans lesquelles il travaille, nous la marquons « Checked with them » (vérifiée auprès du prestataire) avec la date et l’affichons en premier sur ses pages de ville, de service et de langue, et personne ne peut payer pour cela.',
+      out:'Si vous préférez ne pas figurer dans l’annuaire, il suffit de nous le dire et je retire la fiche.',
+      waOut:'Si vous préférez ne pas figurer dans l’annuaire, une réponse ici suffit et je retire la fiche.',
+      bye:'Cordialement' },
+    it:{ name:'Italiano', subj:'Oggetto',
+      labels:['Nome','Sito web','Lingue','Indirizzo','Categoria','Città'],
+      subject:function(e){ return 'La vostra scheda su The Nomad HQ (' + e.city + '): è corretta?'; },
+      hello:'Buongiorno,', waHello:'Buongiorno!',
+      intro:'Gestiamo The Nomad HQ, una directory gratuita che ordina i professionisti in base alle lingue in cui lavorano. Ecco cosa pubblichiamo su di voi:',
+      mailIntro:'gestiamo The Nomad HQ, una directory gratuita che ordina i professionisti in base alle lingue in cui lavorano. Ecco cosa pubblichiamo su di voi:',
+      see:'Potete vederla qui: ',
+      src:function(u){ return 'Abbiamo ripreso questi dati da una fonte pubblica' + (u ? ' (' + u + ')' : '') + '.'; },
+      ask:'Potreste confermarci che è corretta, o dirci cosa cambiare?',
+      waAsk:'Potreste confermarci che è corretta, o dirci cosa cambiare?',
+      tier:'Quando un professionista conferma la propria scheda, comprese le lingue in cui lavora, la segnaliamo come "Checked with them" (verificata con il professionista) con la data e la mostriamo per prima nelle sue pagine di città, servizio e lingua, e nessuno può pagare per questo.',
+      out:'Se preferite non comparire, basta dircelo e rimuovo la scheda.',
+      waOut:'Se preferite non comparire, basta rispondere qui e rimuovo la scheda.',
+      bye:'Cordiali saluti' },
+    pt:{ name:'Português', subj:'Assunto',
+      labels:['Nome','Site','Línguas','Endereço','Categoria','Cidade'],
+      subject:function(e){ return 'A sua ficha no The Nomad HQ (' + e.city + '): está correta?'; },
+      hello:'Bom dia,', waHello:'Bom dia!',
+      intro:'Gerimos o The Nomad HQ, um diretório gratuito que organiza prestadores segundo as línguas em que trabalham. Esta é a ficha que publicamos:',
+      see:'Pode vê-la aqui: ',
+      src:function(u){ return 'Recolhemos estes dados de uma fonte pública' + (u ? ' (' + u + ')' : '') + '.'; },
+      ask:'Poderia confirmar que está correta, ou dizer-nos o que alterar?',
+      waAsk:'Poderia confirmar que está correta, ou dizer-nos o que alterar?',
+      tier:'Quando um prestador confirma a sua ficha, incluindo as línguas em que trabalha, marcamo-la como "Checked with them" (verificada com o prestador) com a data e mostramo-la em primeiro lugar nas suas páginas de cidade, serviço e língua, e ninguém pode pagar por isso.',
+      out:'Se preferir não constar, basta dizer-nos e eu retiro a ficha.',
+      waOut:'Se preferir não constar, basta responder aqui e eu retiro a ficha.',
+      bye:'Com os melhores cumprimentos' }
+  };
+
+  // The entry as a block of "Label: value" lines. A field we do not hold is left out rather than
+  // printed empty: an empty "Address:" reads as an address we lost.
+  function entryLines(e, t, lang){
+    var v = [e.name, e.website, langNames(e.langs, lang), e.address, catName(e.cat, lang), e.city];
+    var out = [];
+    for (var i=0;i<v.length;i++) if (v[i]) out.push(t.labels[i] + ': ' + v[i]);
+    return out.join('\n');
+  }
+  function waMessage(r, lang){
+    var t = MSG[lang] || MSG.en, e = entryOf(r);
+    return t.waHello + ' ' + t.intro + '\n\n' + entryLines(e, t, lang) + '\n' + e.url
+      + '\n\n' + t.waAsk + ' ' + t.tier + ' ' + t.waOut;
+  }
+  function mailMessage(r, lang){
+    var t = MSG[lang] || MSG.en, e = entryOf(r);
+    return t.subj + ': ' + t.subject(e) + '\n\n'
+      + t.hello + '\n\n' + (t.mailIntro || t.intro) + '\n\n'
+      + entryLines(e, t, lang) + '\n\n'
+      + t.see + e.url + '\n' + t.src(e.src) + '\n\n'
+      + t.ask + ' ' + t.tier + '\n\n'
+      + t.out + '\n\n' + t.bye + '\n';
+  }
+
+  // The WhatsApp opener. Short enough for a chat, but it carries the whole entry, because the
+  // entry is the question.
+  var WA_MSG = {};
+  Object.keys(MSG).forEach(function(k){ WA_MSG[k] = function(r){ return waMessage(r, k); }; });
+`;
+replaceBlock('v2 wa message', `  // The WhatsApp opener. Short, because it is a chat`, `  var CHAN_LABEL = `, V2_WA);
+
+const V2_DRAFTS = String.raw`  // The mail draft in the country's language (msgLang), English beside it. Generated from MSG with
+  // the WhatsApp opener (section 4e of build_outreach_artifact.cjs), so the two cannot drift.
+  var DRAFTS = {};
+  Object.keys(MSG).forEach(function(k){
+    DRAFTS[k] = { name: MSG[k].name, f: function(r){ return mailMessage(r, k); } };
+  });
+
+`;
+replaceBlock('v2 mail drafts', `  // Write to a firm in a language it actually works in.`, `  function draftLangsFor(r){`, V2_DRAFTS);
+
+patch('v2 wa text call',
+  `    return WA_MSG[msgLang(r)](r.c[0]||'', r.g[0]||'', r.u[0]||'https://thenomadhq.com/services');`,
+  `    return WA_MSG[msgLang(r)](r);`);
+patch('v2 mail draft call',
+  `    return d.f(r.n, r.c[0] || '', r.g[0] || '', r.s[0] || '', r.u[0] || 'https://thenomadhq.com/services');`,
+  `    return d.f(r);`);
 
 // ---- 5. the block itself, at the top of the panel --------------------------
 patch('channel block in panel',
@@ -521,6 +780,10 @@ patch('init render guard',
 // appear. Every instrument so far needed the page's script to run, which begs the question being
 // asked. This one does not: it is literal markup in the masthead, so if the page renders at all it
 // is visible, and if it is absent the file being served is not the file being published.
+// The stamp carries the build time, so its replacement is never "already present" and every run
+// added one more: the version published on 2026-09-20 shows two. Old stamps are removed first, so
+// the masthead always carries exactly one, the current build's.
+html = html.replace(/\r?\n    <span class="dach" title="Aus welchem Build diese Seite stammt\.[^"]*">BUILD [^<]*<\/span>/g, '');
 patch('build stamp',
   `    <h1>Backlink-Pipeline</h1>`,
   `    <h1>Backlink-Pipeline</h1>

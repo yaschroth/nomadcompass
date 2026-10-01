@@ -42,6 +42,12 @@ const NOTES = {
     + 'nobody reading this will live there. The nomad belt at Anjuna, Vagator and Assagao runs $365 '
     + 'to $575 for the same kind of flat, which is more than the whole headline figure. Treat the '
     + 'number above as the district, and the guide below as the coast.',
+  // Added 2026-10-01 when Amritsar moved onto Numbeo at $270, the lowest figure on the site.
+  amritsar: 'The measured figure above prices a one-bedroom at local rents, about $63 a month, which is '
+    + 'what Numbeo\'s contributors in Amritsar pay. The places a visitor can rent for a month, a '
+    + 'guesthouse room or a simple furnished flat near the old city, run about $120 to $350 in the '
+    + 'guide below, and a comfortable month comes to roughly $650 to $1,000. Treat the number above '
+    + 'as the city\'s own cost of living, and the guide as what a month there costs you.',
   zanzibar: 'Every rent quoted in the guide below starts above the measured figure here, which '
     + 'means the survey is describing a different Zanzibar: the island away from Stone Town and the '
     + 'northern beach strip, where almost no visitor stays. Budget from the guide rather than from '
@@ -102,4 +108,4 @@ console.log('  cities needing one: ' + Object.keys(NOTES).length);
 console.log('  written: ' + applied + (APPLY ? '' : '   [dry run]'));
 if (already) console.log('  already current: ' + already);
 if (missing.length) console.log('  PROBLEM: ' + missing.join(', '));
-console.log('\n  The ranking is unchanged on all eight. See the header for why.');
+console.log('\n  The ranking is unchanged on every page that carries the note. See the header for why.');
