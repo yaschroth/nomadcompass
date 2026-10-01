@@ -195,7 +195,10 @@ const dataset = {
 };
 const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [['Home', BASE + '/'], ['Comfort Index', BASE + '/comfort-index']].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
 
-const hero = ATTRIB.laspalmas || {};
+// Funchal, Madeira: the island of eternal spring, a calm hillside view with no crowd in it.
+// (The first hero was a crowded Las Canteras beach; a comfort index wants the climate, not the people.)
+const HERO_ID = 'funchal';
+const hero = ATTRIB[HERO_ID] || {};
 const heroCredit = hero.author ? `<a class="hero-credit" href="${esc(hero.sourcePageUrl)}" target="_blank" rel="nofollow noopener">Photo: ${esc(hero.author)} / ${esc(hero.source || 'Wikimedia Commons')} (${esc(hero.license)})</a>` : '';
 
 // The nav is lifted from services.html. apply_tools_nav.cjs adds "Comfort Index" to it; until that
@@ -226,7 +229,7 @@ ${shell.headTop}
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="stylesheet" href="/styles/fonts.css">
-  <link rel="preload" as="image" href="/images/cities/laspalmas.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/cities/${HERO_ID}.webp" fetchpriority="high">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/nav.css">
   <link rel="stylesheet" href="/styles/footer.css">
@@ -351,7 +354,7 @@ ${shell.headTop}
   ${nav}
   <main id="main-content" tabindex="-1">
     <header class="hub-hero">
-      <img class="hub-hero-img" src="/images/cities/laspalmas.webp" alt="${esc(hero.alt || 'Las Canteras beach in Las Palmas de Gran Canaria')}" fetchpriority="high" width="1600" height="970">
+      <img class="hub-hero-img" src="/images/cities/${HERO_ID}.webp" alt="${esc(hero.alt || 'Funchal on the hillsides above the harbour, Madeira')}" fetchpriority="high" width="1600" height="1067">
       <div class="hub-hero-overlay"><div class="container">
         <span class="hub-eyebrow">Data</span>
         <h1>The Nomad Comfort Index</h1>
