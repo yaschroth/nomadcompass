@@ -26,7 +26,8 @@ const SKIP = new Set(['node_modules', '.git', 'scripts', 'data', 'ui-ux-pro-max-
 
 const num = (s) => parseFloat(s.replace(/,/g, ''));
 const RANGE = /\$\s?([\d,]+(?:\.\d+)?)\s*(k|K)?\s*(?:to|-|–)\s*\$\s?([\d,]+(?:\.\d+)?)\s*(k|K)?/g;
-const GLOSS = /\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?(?:\s*(?:\/|per |a )(?:mo|month|day|night|meal|week|year)\b)?\s*\(\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?\)/g;
+// "(~$27)" is the same doubled gloss with a tilde, which this pattern missed until 2026-10-05 (37 on 24 pages).
+const GLOSS = /\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?(?:\s*(?:\/|per |a )(?:mo|month|day|night|meal|week|year)\b)?\s*\(~?\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?\)/g;
 const TAG_THEN_DIGITS = /<\/?[a-zA-Z][^<>]{0,200}>[,.]\d{2}/g;
 const WS_THEN_DIGITS = /\n[ \t]*,\d{3}\b/g;
 

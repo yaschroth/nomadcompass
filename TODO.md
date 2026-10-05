@@ -4,7 +4,12 @@ Deferred work and decisions, so nothing gets lost. Newest/most important first.
 
 ---
 
-## 0. IN PROGRESS: the 1,155-word floor across all 649 loop-reachable cities
+## 0. RESOLVED 2026-10-05: all 648 JSON-backed guides clear the 1,155-word floor
+
+Fifteen agent batches (284 cities) took it from 474 to 648 of 648, folding in the EES and the opener
+rewrites below. Before any further guide batch: `node scripts/migrate_guide_html.cjs --resync` must
+report 0, because a refresh used to revert pages whose HTML was newer than the JSON (see the memory
+note on refresh drift). The original notes follow.
 
 The floor job was declared done at 350 of 350 (below), but the site has 1,000 city pages and the
 migration brought the loop-reachable corpus to 649. Measured page-aware (JSON sections plus the
@@ -78,7 +83,15 @@ Two rules that follow from this and are easy to forget:
   rebuild for an hour.
 - when a regex has to match a line ending in a page, it is `\r?\n`, never `\n`.
 
-## 0e. OPEN: the visa sections are the fastest-rotting thing on the site
+## 0e. LARGELY DONE 2026-10-05: the visa sections are the fastest-rotting thing on the site
+
+Built: `scripts/check_visa_absence.cjs` lists every sentence asserting a visa route does not exist (404
+in 139 countries) and fails unless `data/visa-absence-checks.json` holds a dated official check for the
+country (180 days) that does not contradict it. Region audits corrected Thailand, Japan, Taiwan,
+Kazakhstan, Sri Lanka, Kyrgyzstan, Turkey, Bulgaria, Albania, Andorra, Grenada, Guatemala, Brazil,
+Peru and the Philippines. Brazil and Namibia are pinned in apply_visa_thresholds.cjs. Still open:
+South Korea's tiered F-1-D (official pages unreachable) and South Africa (pages state it annually), and
+re-running the region audits before the checks dated 2026-10-05 go stale, around 2027-04-03, when the gate starts failing. The original notes follow.
 
 Four separate national visa regimes turned out to be wrong or stale in a single day of deepening
 work, all found by reading a page rather than by any gate:
@@ -206,7 +219,12 @@ Johannesburg, which agree. South Africa is *not* in the COUNTRIES table in
 so only a regulation change moves it. Same gap for **South Korea**, whose F-1-D test is 2x GNI per
 capita, halved to 1x for applicants aged 18-34 outside Seoul/Incheon/Gyeonggi.
 
-## 0a. OPEN: the EU Entry/Exit System changes what 192 Schengen guides should say
+## 0a. DONE 2026-10-05: the EU Entry/Exit System changes what 192 Schengen guides should say
+
+142 of the 146 JSON-backed Schengen guides now say how the EES works from their own airport, ferry or
+land border, each phrased differently (check_guide_phrasing treats the system's name as a name). Left:
+ronda and plzen (their sentences rested on facts that could not be verified: the Gibraltar treaty date
+and Germany's border checks), setubal (visas section full) and zilina. The original notes follow.
 
 The EES became **fully operational across the Schengen area on 10 April 2026**, after a phased
 rollout that started 12 October 2025. It records a facial image and fingerprints at every external
@@ -232,7 +250,10 @@ to something local (a ferry that is an external crossing, a land border, an isla
 
 ---
 
-## 0b. OPEN: 84 sections open with "Be honest with yourself"
+## 0b. RESOLVED 2026-10-05: 84 sections open with "Be honest with yourself"
+
+Zero pages carry it now, nor its "Be blunt with yourself" variant (90 and 6 pages before), including
+category tiles and the nine guides that live only in the HTML. Each was rewritten individually. The original notes follow.
 
 `check_guide_openers.cjs` flagged this construction at 59 uses when the opener work was done; it now
 stands at **84 sections** across the corpus because it kept getting written. It is the single most

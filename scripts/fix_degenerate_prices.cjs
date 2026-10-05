@@ -52,7 +52,14 @@ function fix(text, log, where) {
     last = m.index + m[0].length;
     log.push(where + ': "' + text.slice(start, last) + '" -> "' + rep + '"');
   }
-  return out + text.slice(last);
+  out += text.slice(last);
+  // A dollar figure glossed with another dollar figure, "$28 (~$27)": the old local-currency gloss after
+  // its local side was converted too. The gloss goes; a note riding in the same brackets stays.
+  return out.replace(/(\$[\d,.]+(?:\s*(?:-|–|to)\s*\$?[\d,.]+)?(?:[^()<$]{0,30}?|\/month<\/strong>|<\/strong>))\s*\(~\$[\d,.]+(?:\s*(?:-|–|to)\s*\$?[\d,.]+)?(, [^()]*)?\)/g, (all, lead, note) => {
+    const rep = lead + (note ? ' (' + note.slice(2) + ')' : '');
+    log.push(where + ': "' + all.slice(0, 70) + '" -> "' + rep.slice(0, 70) + '"');
+    return rep;
+  });
 }
 
 const log = [];
