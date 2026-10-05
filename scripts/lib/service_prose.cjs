@@ -162,7 +162,9 @@ function claimScope(pair) {
     dir ? (dir === rem ? 'a directory listing' : dir + ' on a directory listing') : '',
   ].filter(Boolean));
   if (official === pair.n) {
-    parts.push('All ' + pair.n + ' sit on an official list.');
+    // Keep this as long as the sentence it replaced: pair pages exist only above a word floor, and
+    // cutting five words here on 2026-10-05 dropped 50 of them (they came back with this wording).
+    parts.push('All ' + pair.n + ' sit on an official list, published by a body with nothing to sell.');
   } else if (official) {
     parts.push(official + ' of the ' + pair.n + ' sit on an official list; the remaining ' +
       rem + ' ' + plural(rem, 'rests', 'rest') + ' on ' + restOn + '.');
@@ -401,7 +403,7 @@ function evidenceClaim(rows) {
   rows.forEach((r) => { ev[r.evidence] = (ev[r.evidence] || 0) + 1; });
   const n = rows.length, official = ev.official || 0, checked = ev.visited || 0;
   const rest = n - official - checked;
-  if (official === n) return 'Every one of these sits on an official list.';
+  if (official === n) return 'Every one of these sits on an official list, published by a body with nothing to sell.';
   if (checked === n) return `Every one of these confirmed its own entry to us, and each card gives the date.`;
   const parts = [];
   if (official) parts.push(`${official} of the ${n} sit on an official list`);

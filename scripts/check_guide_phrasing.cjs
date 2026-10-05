@@ -56,7 +56,14 @@ const FUNCTION = new Set(('a an and are as at be been but by can do does for fro
   + 'under above all any both each few many some such own said say says').split(' '));
 const isContent = (w) => !FUNCTION.has(w) && w.length > 2;
 
-const norm = (s) => s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+// Named systems are names, not phrasing, the same as a place name. "the EU Entry/Exit System which"
+// is three content words of proper noun, and with the EES folded into ~140 Schengen guides on
+// 2026-10-05 every batch collided on the name alone. Collapsed to one token that does not count as
+// content, so what is said AROUND the name still has to differ.
+const NAMED = [[/\b(?:eu )?entry exit system\b/g, 'ees'], [/\b(?:eu )?european travel information and authori[sz]ation system\b/g, 'etias']];
+FUNCTION.add('ees'); FUNCTION.add('etias');
+const norm = (s) => NAMED.reduce((t, [re, to]) => t.replace(re, to),
+  s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim());
 const shingles = (s) => {
   const w = norm(s).split(' ');
   const out = new Map();

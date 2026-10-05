@@ -26,6 +26,7 @@ const DIR = path.join(ROOT, 'cities');
 const OWNED = [
   ['<!-- cost-basis -->', '<!-- /cost-basis -->'],
   ['<!-- cost-start -->', '<!-- cost-end -->'],
+  ['<!-- catchment-note -->', '<!-- /catchment-note -->'],  // apply_catchment_note.cjs: a refresh used to overwrite it (Amritsar, 2026-10-05)
 ];
 function mask(str) {
   let out = str;

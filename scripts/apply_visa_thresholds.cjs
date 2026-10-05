@@ -151,6 +151,19 @@ const COUNTRIES = {
     rule: "That floor is three times Italy's income threshold for exemption from health charges, so it moves when that threshold does.",
     toolRule: 'About $28,540 a year, three times Italy’s income threshold for exemption from health charges, as the US consulates state it; London’s consulate rounds the base up and asks about $29,350. Health cover required.',
   },
+  // Added 2026-10-05 (TODO 0e): two pages each had denied these schemes existed. Both floors are set
+  // in US dollars by the scheme itself, so no conversion and no wage peg to recompute.
+  Brazil: {
+    usd: 1500,
+    savings: 18000,
+    rule: 'Both figures are fixed in US dollars by CNIg Resolution 45 of 2021, which created the VITEM XIV, so they do not move with the real.',
+    toolRule: 'Fixed in US dollars by CNIg Resolution 45/2021; $18,000 in savings works instead. One year, renewable once.',
+  },
+  Namibia: {
+    usd: 2000,
+    rule: 'That floor is set in US dollars by the Namibia Investment Promotion and Development Board, with more required for a spouse and each child.',
+    toolRule: 'Set in US dollars; $1,000 more for a spouse and $500 per child. Six months, not renewable.',
+  },
   Mexico: {
     usd: 4600,
     savings: 77500,

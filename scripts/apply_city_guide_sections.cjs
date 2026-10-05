@@ -108,6 +108,7 @@ const ALIASES = {
 const OWNED = [
   ['<!-- cost-basis -->', '<!-- /cost-basis -->'],  // apply_cost_basis.cjs
   ['<!-- cost-start -->', '<!-- cost-end -->'],     // apply_city_costs.cjs
+  ['<!-- catchment-note -->', '<!-- /catchment-note -->'],  // apply_catchment_note.cjs: a refresh used to overwrite it (Amritsar, 2026-10-05)
 ];
 function mask(str) {
   let out = str;
@@ -180,8 +181,13 @@ function refresh(html, name, c, eol) {
 
 let done = 0, refreshed = 0, unchanged = 0, noAnchor = 0, noContent = 0, incomplete = [];
 const unreachable = [];
+// Slugs on the command line limit the run to those cities. Until 2026-10-05 they were ignored and
+// every run touched all 648, which mattered because 72 pages had corrections the JSON did not hold:
+// a "refresh <batch>" reverted all of them (since resynced with migrate_guide_html.cjs --resync).
+const ONLY = new Set(process.argv.slice(2).filter((a) => !a.startsWith('--')));
 for (const [slug, c] of Object.entries(CONTENT)) {
   if (slug === '_meta') continue;
+  if (ONLY.size && !ONLY.has(slug)) continue;
   const file = path.join(DIR, slug + '.html');
   if (!fs.existsSync(file)) { noContent++; continue; }
   let s = fs.readFileSync(file, 'utf8');

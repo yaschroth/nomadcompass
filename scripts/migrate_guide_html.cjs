@@ -65,6 +65,7 @@ const unesc = (s) => s
 const OWNED = [
   ['<!-- cost-basis -->', '<!-- /cost-basis -->'],
   ['<!-- cost-start -->', '<!-- cost-end -->'],
+  ['<!-- catchment-note -->', '<!-- /catchment-note -->'],  // apply_catchment_note.cjs: a refresh used to overwrite it (Amritsar, 2026-10-05)
 ];
 function mask(str) {
   let out = str;
@@ -161,6 +162,48 @@ function extract(slug) {
 
 const guide = JSON.parse(fs.readFileSync(GUIDE, 'utf8'));
 const already = new Set(Object.keys(guide).filter((k) => !k.startsWith('_')));
+
+/**
+ * --resync [--only a,b] [--apply]: for cities ALREADY in the JSON, take back any section whose page
+ * text has moved on from the data file.
+ *
+ * Found 2026-10-05: on 73 migrated cities a correction had been made straight in the HTML (Croatia's
+ * nomad permit is 18 months, the JSON still said a year; Abu Dhabi's entry fees) and never written
+ * back. apply_city_guide_sections.cjs --refresh renders every city from the JSON, so the next refresh
+ * silently reverted all of them, and every deepening batch was writing against the stale text. The
+ * page is the newer copy in this direction, so the page wins; the same extract() rules apply, and a
+ * section this script would refuse to migrate (split, markup, missing) is left alone and reported.
+ */
+if (process.argv.includes('--resync')) {
+  const oi = process.argv.indexOf('--only');
+  const only = oi > 0 ? new Set(process.argv[oi + 1].split(',')) : null;
+  const norm = (x) => String(x || '').replace(/\s+/g, ' ').trim();
+  const changed = [];
+  const refused = [];
+  for (const slug of [...already].sort()) {
+    if (only && !only.has(slug)) continue;
+    const r = extract(slug);
+    if (!r) continue;
+    const keys = [];
+    for (const key of ORDER) {
+      if (!(key in guide[slug])) continue;
+      if (!r.sections[key]) { if (r.split.includes(key) || r.markup.includes(key)) refused.push(slug + '.' + key); continue; }
+      if (norm(r.sections[key]) === norm(guide[slug][key])) continue;
+      keys.push(key);
+      if (process.argv.includes('--apply')) guide[slug][key] = r.sections[key];
+    }
+    if (keys.length) changed.push(slug + ' [' + keys.join(',') + ']');
+  }
+  console.log('\n  sections where the page has moved on from the JSON: ' + changed.length + ' cities');
+  changed.forEach((x) => console.log('    ' + x));
+  if (refused.length) console.log('  left alone (split or markup on the page): ' + refused.join(' '));
+  if (process.argv.includes('--apply') && changed.length) {
+    const eol = fs.readFileSync(GUIDE, 'utf8').includes('\r\n') ? '\r\n' : '\n';
+    fs.writeFileSync(GUIDE, JSON.stringify(guide, null, 2).replace(/\n/g, eol) + eol);
+    console.log('  written: data/guide-content.json now matches the pages for these cities\n');
+  } else console.log('  dry run: --apply to write\n');
+  process.exit(0);
+}
 const slugs = fs.readdirSync(DIR).filter((f) => f.endsWith('.html')).map((f) => f.replace(/\.html$/, ''))
   .filter((s) => !already.has(s)).sort();
 
