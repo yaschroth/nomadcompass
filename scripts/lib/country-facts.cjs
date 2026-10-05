@@ -92,7 +92,7 @@ const FACTS = {
   Reunion: { cur: 'Euro (€, EUR)', lang: 'French, Creole', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Not expected; service included', ride: 'Car Jaune buses, taxis', emg: '112 / 15' },
   Macau: { cur: 'Pataca (MOP), HK dollar accepted', lang: 'Cantonese, Portuguese', volt: '220V / 50Hz', water: 'Safe to drink', tip: 'Not expected; service often added', ride: 'Local buses, taxis, free casino shuttles', emg: '999 / 112' },
   Palau: { cur: 'US dollar ($, USD)', lang: 'Palauan, English', volt: '115V / 60Hz', water: 'Bottled or filtered', tip: 'Not expected', ride: 'Local taxis, rental cars', emg: '911' },
-  Bulgaria: { cur: 'Lev (лв, BGN)', lang: 'Bulgarian', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Round up or 10%', ride: 'Bolt', emg: '112' },
+  Bulgaria: { cur: 'Euro (€, EUR), since January 2026', lang: 'Bulgarian', volt: '230V / 50Hz', water: 'Safe to drink', tip: 'Round up or 10%', ride: 'Bolt', emg: '112' },
   Cambodia: { cur: 'Riel (៛, KHR) / USD', lang: 'Khmer', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: 'Not expected; appreciated', ride: 'Grab, PassApp', emg: '117' },
   Canada: { cur: 'Dollar ($, CAD)', lang: 'English, French', volt: '120V / 60Hz', water: 'Safe to drink', tip: 'Expected; 15-20%', ride: 'Uber, Lyft', emg: '911' },
   'Cape Verde': { cur: 'Escudo ($, CVE)', lang: 'Portuguese, Creole', volt: '230V / 50Hz', water: 'Bottled or filtered', tip: 'Round up or 10%', ride: 'Local taxis', emg: '112' },

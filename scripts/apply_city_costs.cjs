@@ -57,7 +57,21 @@ const RECONCILE = ' The guide below quotes its own monthly range, which is a dif
   + 'rather than a competing one: this table prices a defined basket at the figures above, while '
   + 'that range is a judgement about how somebody actually lives here.';
 
-function costBox(slug, d, reconcile) {
+// Currencies replaced by the euro after the Numbeo figures were captured in them. Bulgaria adopted the
+// euro on 1 January 2026 at a rate fixed by the EU Council, so the lev amounts are converted at that
+// rate rather than shown in a currency that no longer circulates. Every numeric field is money.
+const REDENOMINATED = { BGN: ['EUR', 1.95583] };
+function redenominate(d) {
+  const r = REDENOMINATED[d.cur];
+  if (!r) return d;
+  const o = {};
+  for (const [k, v] of Object.entries(d)) o[k] = typeof v === 'number' ? v / r[1] : v;
+  o.cur = r[0];
+  return o;
+}
+
+function costBox(slug, d0, reconcile) {
+  const d = redenominate(d0);
   const rate = FX.rates[d.cur];
   if (!rate) { console.error('NO FX RATE for', d.cur, '(' + slug + ')'); return null; }
   const city = NAME[slug] || slug;

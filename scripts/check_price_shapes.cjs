@@ -41,6 +41,10 @@ function scan(rel, s) {
     const before = s.slice(Math.max(0, m.index - 6), m.index).toLowerCase();
     if (a > b * 1.05 && !/from\s*$/.test(before)) found.inverted.push(rel + ': ' + ctx(s, m.index, m[0].length));
   }
+  // "$1-1": a converted range whose ends rounded to the same dollar, so it says nothing (Gdansk, 2026-10-05).
+  // RANGE above needs a "$" on both ends and so never saw it.
+  const DEGEN = /\$\s?(\d[\d,]*(?:\.\d+)?)\s*(?:-|–|to)\s*\$?\s?(\d[\d,]*(?:\.\d+)?)(?![\d.,]*\d)/g;
+  while ((m = DEGEN.exec(s))) if (m[1] === m[2]) found.inverted.push(rel + ': (same both ends) ' + ctx(s, m.index, m[0].length));
   while ((m = GLOSS.exec(s))) found.gloss.push(rel + ': ' + ctx(s, m.index, m[0].length));
   while ((m = TAG_THEN_DIGITS.exec(s))) {
     // a real tag followed by ".50" can be legitimate only inside scripts/styles, which are not prose
