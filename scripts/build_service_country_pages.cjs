@@ -242,10 +242,7 @@ function sourcing(rows, subject) {
   return {
     provenance: `${cap(subject)} come from ${n} ${n === 1 ? 'source' : 'sources'}, led by `
       + P.list(top.map((s) => s.publisher + ' (' + s.c + ')')) + '.',
-    claim: official === rows.length
-      ? 'Every one of these sits on an official list, the strongest tier this directory carries.'
-      : `${official} of the ${rows.length} sit on an official list; the rest rest on the provider `
-        + 'saying so or on a directory listing, and each card says which.',
+    claim: P.evidenceClaim(rows),
   };
 }
 

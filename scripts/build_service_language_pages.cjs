@@ -165,11 +165,7 @@ for (const [lang, v] of Object.entries(rowsByLang)) {
   const evCounts = {};
   v.rows.forEach((r) => { evCounts[r.evidence] = (evCounts[r.evidence] || 0) + 1; });
   const official = evCounts.official || 0;
-  const claim = official === v.rows.length
-    ? 'Every one of these sits on an official list, the strongest tier this directory carries.'
-    : `${official} of the ${v.rows.length} sit on an official list. The rest rest on the provider `
-      + `saying so, or on a directory that says it of its whole roster, and `
-      + `is labelled as such on every card.`;
+  const claim = P.evidenceClaim(v.rows);
 
   const strongest = catRows[0];
   const thinnest = catRows[catRows.length - 1];

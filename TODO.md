@@ -50,7 +50,11 @@ visa bullets are `<li>` items no data file holds. And photo credits look like le
 not: crediting a CC-BY photograph is a licence condition, `check_photo_credit.cjs` enforces it, and
 it stays.
 
-## 0g. OPEN: three more sweeps leave a stray carriage return behind
+## 0g. RESOLVED 2026-10-05: three more sweeps leave a stray carriage return behind
+
+Fixed at the source for every script that loads `_safe_write.cjs` (145 of them): any text write turns a
+lone `\r` back into the line break it was half of. `scripts/check_line_endings.cjs` is the gate for the
+rest (`--fix` repairs in binary). The original notes follow.
 
 Found while committing the provider contact work. A sweep that removes its own marker block with a
 regex matching `\n?` but not `\r?\n?` leaves the `\r` of a CRLF line ending orphaned. Git reads a

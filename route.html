@@ -142,7 +142,6 @@
       body { background:#fff; }
     }
   </style>
-  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 999 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 <!-- travelpayouts -->
 <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
   (function () {
@@ -167,6 +166,7 @@
 </script>
 <!-- /travelpayouts -->
   <script type="application/ld+json" data-tc-faq>{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is the trip budget worked out?","acceptedAnswer":{"@type":"Answer","text":"We take each city’s estimated monthly cost of living for one person, divide it into a nightly rate, and multiply by the nights you spend there in each calendar month. Peak-season months get a small uplift and low-season months a small discount, based on the local climate. It is a planning estimate in USD, not a quote."}},{"@type":"Question","name":"Does it include flight prices?","acceptedAnswer":{"@type":"Answer","text":"Yes, once you add them. Each leg names the two airports you would actually fly between and links straight to a search for that route on your arrival date, and whatever fare you type in joins the trip total and the share link. We do not guess the number for you: a ticket price turns on the date, the airline and when you happen to look, so an estimate would be worse than an empty field. Distance, flight time and CO2 are computed either way."}},{"@type":"Question","name":"What is the Schengen 90/180 rule?","acceptedAnswer":{"@type":"Answer","text":"Most non-EU visitors may spend at most 90 days inside the Schengen area in any rolling 180-day window. The planner counts the nights your route spends in Schengen countries and warns you if a stretch would put you over the limit."}},{"@type":"Question","name":"Is the weather a forecast?","acceptedAnswer":{"@type":"Answer","text":"No, it is a historical average for that month, from 30 years of weather-station records where a station is close enough and five years of gridded data elsewhere, so it tells you what is typical rather than what the sky will do on a given day. Use it to avoid rainy seasons and pick comfortable months."}},{"@type":"Question","name":"Can I save or share a route?","acceptedAnswer":{"@type":"Answer","text":"Yes. Your route and dates live in the page URL, so the \"Copy share link\" button gives you a link that reopens the exact same trip. You can also export it as an .ics calendar or print a one-page itinerary."}}]}</script>
+  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 999 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -590,7 +590,26 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
-<!-- nav-search-js -->
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
+  <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
   <style>
   form[data-city-search]{position:relative;}
@@ -677,24 +696,5 @@
   if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
   })();</script>
   <!-- /nav-search-js -->
-<!-- aff-track -->
-<script>(function(){
-  document.addEventListener("click", function (e) {
-    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
-    if (!a) return;
-    var h = a.href || "";
-    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
-    if (typeof gtag !== "function") return;
-    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
-    var partner = m ? m[1] : "travelpayouts";
-    gtag("event", "affiliate_click", {
-      affiliate_partner: partner,
-      affiliate_placement: a.getAttribute("data-aff") || "",
-      link_url: h,
-      page_path: location.pathname
-    });
-  }, true);
-})();</script>
-<!-- /aff-track -->
 </body>
 </html>

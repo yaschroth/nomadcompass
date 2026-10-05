@@ -63,6 +63,16 @@ if (unproven.length) {
   unproven.forEach((p) => console.error('  - ' + p.name + ' [' + p.city + '/' + p.category + ']'));
   process.exit(1);
 }
+// The tier lapses a year after the reply; a stale one would keep a card at the top of its city on a
+// claim nobody has renewed. scripts/expire_checked_tier.cjs moves it back to self-declared.
+const { lapsed } = require(path.join(ROOT, 'scripts', 'expire_checked_tier.cjs'));
+const overdue = providers.filter((p) => lapsed(p));
+if (overdue.length) {
+  console.error('REFUSED: ' + overdue.length + ' Checked row(s) were confirmed more than a year ago:');
+  overdue.forEach((p) => console.error('  - ' + p.name + ' [' + p.city + '/' + p.category + '] ' + p.confirmedOn));
+  console.error('Run node scripts/expire_checked_tier.cjs --apply, or renew confirmedOn if they answered again.');
+  process.exit(1);
+}
 if (bad.length) {
   console.error('REFUSED: ' + bad.length + ' row(s) in data/service-languages.json are unusable:');
   bad.forEach((p) => console.error('  - ' + (p.name || '(unnamed)') + ' [' + p.city + '/' + p.category + '] missing a known city, category, language or sourceUrl/evidence'));

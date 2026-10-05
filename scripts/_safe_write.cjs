@@ -47,8 +47,16 @@ const FEATURES = [
 const FORCE = process.argv.includes('--force');
 const realWrite = fs.writeFileSync;
 
+// A lone carriage return (\r not followed by \n) makes Git read the file as binary, stop normalising
+// its line endings and commit it whole as CRLF: 90,000 lines of churn around 11 real ones. Sweeps that
+// strip their own block with a \n? regex leave one behind on CRLF text (TODO 0g: apply_analytics' cc
+// block, the cities-data.js and city-regions.js writers). Every text write through here turns a lone
+// \r back into the line break it was half of; scripts/check_line_endings.cjs finds any that slip past.
+const TEXT = /\.(html?|js|cjs|mjs|json|css|md|txt|xml|svg)$/i;
+
 fs.writeFileSync = function (file, data, ...rest) {
   const name = String(file);
+  if (typeof data === 'string' && TEXT.test(name) && data.includes('\r')) data = data.replace(/\r(?!\n)/g, '\n');
   if (typeof data === 'string' && /\.html$/i.test(name) && fs.existsSync(name)) {
     let old = '';
     try { old = realWrite === null ? '' : fs.readFileSync(name, 'utf8'); } catch { old = ''; }

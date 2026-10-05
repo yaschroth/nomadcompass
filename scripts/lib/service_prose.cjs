@@ -153,19 +153,26 @@ function claimScope(pair) {
   const dir = ev.directory || 0;
   const visited = ev.visited || 0;
   const parts = [];
+  // A Checked row (visited) ranks above an official list since 2026-09-17, so an all-official pair is
+  // no longer "the strongest tier", and a mix must name the confirmed rows rather than drop them.
+  const rem = pair.n - official;
+  const restOn = list([
+    visited ? (visited === rem ? 'the provider confirming its entry to us' : visited + ' on the provider confirming its entry to us') : '',
+    self ? (self === rem ? 'the provider stating it' : self + ' on the provider stating it') : '',
+    dir ? (dir === rem ? 'a directory listing' : dir + ' on a directory listing') : '',
+  ].filter(Boolean));
   if (official === pair.n) {
-    parts.push('All ' + pair.n + ' sit on an official list, the strongest tier this directory carries.');
+    parts.push('All ' + pair.n + ' sit on an official list.');
   } else if (official) {
     parts.push(official + ' of the ' + pair.n + ' sit on an official list; the remaining ' +
-      (pair.n - official) + ' ' + plural(pair.n - official, 'rests', 'rest') + ' on ' + list([
-        self ? (self === pair.n - official ? 'the provider stating it' : self + ' on the provider stating it') : '',
-        dir ? (dir === pair.n - official ? 'a directory listing' : dir + ' on a directory listing') : '',
-      ].filter(Boolean)) + '.');
+      rem + ' ' + plural(rem, 'rests', 'rest') + ' on ' + restOn + '.');
+  } else if (visited === pair.n) {
+    parts.push('Every one of these confirmed its own entry to us, and each card gives the date.');
+  } else if (visited) {
+    parts.push('None of these sits on an official list; ' + visited + ' ' + plural(visited, 'rests', 'rest')
+      + ' on the provider confirming its entry to us, and for the rest treat the language claim as the provider’s or the directory’s own word.');
   } else {
     parts.push('None of these sits on an official list, so treat the language claim as the provider’s or the directory’s own word.');
-  }
-  if (!visited) {
-
   }
   return parts.join(' ');
 }
@@ -383,7 +390,30 @@ function contactLinks(p, lang) {
   return out.join('');
 }
 
+/**
+ * The sentence under a slice of rows that says what its claims rest on. It used to be three copies
+ * that knew two tiers: official, and everything else as "the provider saying so or a directory".
+ * A Checked row rests on neither (the provider answered us), and since 2026-09-17 it ranks above an
+ * official list, so "the strongest tier this directory carries" had become false wherever it showed.
+ */
+function evidenceClaim(rows) {
+  const ev = {};
+  rows.forEach((r) => { ev[r.evidence] = (ev[r.evidence] || 0) + 1; });
+  const n = rows.length, official = ev.official || 0, checked = ev.visited || 0;
+  const rest = n - official - checked;
+  if (official === n) return 'Every one of these sits on an official list.';
+  if (checked === n) return `Every one of these confirmed its own entry to us, and each card gives the date.`;
+  const parts = [];
+  if (official) parts.push(`${official} of the ${n} sit on an official list`);
+  if (checked) parts.push(`${checked} confirmed ${checked === 1 ? 'its' : 'their'} own entry to us directly`);
+  if (!rest) return parts.join(' and ') + ', and each card says which.';
+  const lead = parts.length ? parts.join(', ') + '; ' : '';
+  return (lead + (rest === n ? 'all of them rest' : 'the rest rest') + ' on the provider saying so or on a directory listing, and each card says which.')
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
 module.exports = {
+  evidenceClaim,
   esc, card, mapsUrl, contactLinks, WA_HELLO,
   words, list, plural, count, langName, an, catName, singular, who, work, teaches, speaksLabel, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,

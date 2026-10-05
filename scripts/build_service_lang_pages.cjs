@@ -130,10 +130,7 @@ for (const [cat, svc] of Object.entries(M.services)) {
     const evCounts = {};
     v.rows.forEach((r) => { evCounts[r.evidence] = (evCounts[r.evidence] || 0) + 1; });
     const official = evCounts.official || 0;
-    const claim = official === v.rows.length
-      ? `Every one of these sits on an official list, the strongest tier this directory carries.`
-      : `${official} of the ${v.rows.length} sit on an official list; the rest rest on the provider ` +
-        `saying so or on a directory listing, and each card says which.`;
+    const claim = P.evidenceClaim(v.rows);
 
     // Where this language is not recorded at all, which is a real limit of the sourcing.
     const without = svc.cities.filter((slug) => !v.cities.has(slug));

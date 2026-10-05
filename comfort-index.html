@@ -137,7 +137,6 @@
     }
     @media (max-width:520px){ .cx-months-grid { grid-template-columns:1fr; } }
   </style>
-  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 999 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 <!-- travelpayouts -->
 <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
   (function () {
@@ -161,6 +160,7 @@
   })();
 </script>
 <!-- /travelpayouts -->
+  <!-- brand-graph --><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thenomadhq.com/#organization","name":"The Nomad HQ","url":"https://thenomadhq.com/","logo":{"@type":"ImageObject","url":"https://thenomadhq.com/logo.png","width":512,"height":512},"description":"Data-driven guides and rankings that help remote workers choose where to live and work, built on an index of 999 cities scored across 13 categories.","founder":{"@id":"https://thenomadhq.com/about/yannick-schroth#person"},"sameAs":["https://www.linkedin.com/in/yannick-schroth/","https://www.instagram.com/ynncks/"]},{"@type":"WebSite","@id":"https://thenomadhq.com/#website","name":"The Nomad HQ","url":"https://thenomadhq.com/","publisher":{"@id":"https://thenomadhq.com/#organization"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://thenomadhq.com/cities?q={search_term_string}"},"query-input":"required name=search_term_string"}}]}</script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -1349,7 +1349,85 @@
   </style>
   <script>(function(){var K='nomadhq_consent',bar=document.getElementById('cookie-consent');function upd(s){if(typeof gtag==='function'){gtag('consent','update',{analytics_storage:s==='granted'?'granted':'denied'});}}var saved=null;try{saved=localStorage.getItem(K);}catch(e){}if(saved!=='granted'&&saved!=='denied'){if(bar)bar.hidden=false;}function choose(s){try{localStorage.setItem(K,s);}catch(e){}upd(s);if(bar)bar.hidden=true;}var a=document.getElementById('cc-accept'),d=document.getElementById('cc-decline');if(a)a.addEventListener('click',function(){choose('granted');});if(d)d.addEventListener('click',function(){choose('denied');});})();</script>
   <!-- /cc -->
-<!-- nav-search-js -->
+<!-- aff-track -->
+<script>(function(){
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.href || "";
+    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
+    if (typeof gtag !== "function") return;
+    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
+    var partner = m ? m[1] : "travelpayouts";
+    gtag("event", "affiliate_click", {
+      affiliate_partner: partner,
+      affiliate_placement: a.getAttribute("data-aff") || "",
+      link_url: h,
+      page_path: location.pathname
+    });
+  }, true);
+})();</script>
+<!-- /aff-track -->
+  <script>
+    (function(){
+      var table=document.getElementById('cxTable'),body=document.getElementById('cxBody');
+      var search=document.getElementById('cxSearch'),region=document.getElementById('cxRegion'),month=document.getElementById('cxMonth');
+      var count=document.getElementById('cxCount'),empty=document.getElementById('cxEmpty'),scoreH=document.getElementById('cxScoreH');
+      var SLUG=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],MONF=["January","February","March","April","May","June","July","August","September","October","November","December"];
+      var rows=[].map.call(body.rows,function(tr){
+        return {tr:tr,n:tr.getAttribute('data-n'),r:tr.getAttribute('data-r'),y:+tr.getAttribute('data-y'),c:+tr.getAttribute('data-c'),
+          m:tr.getAttribute('data-m').split(',').map(Number),name:tr.querySelector('.cx-city a').textContent,
+          rank:tr.querySelector('.cx-rank'),b:tr.querySelector('.cx-score b'),bar:tr.querySelector('.cx-bar i')};
+      });
+      rows.forEach(function(x){x.tr.querySelector('.cx-cells').setAttribute('aria-label','Comfort by month, January to December: '+x.m.join(', '));});
+      var sortK='score',asc=false,mo=-1,open=false,LIM=50;
+      var more=document.getElementById('cxMore'),moreWrap=document.getElementById('cxMoreWrap');
+      more.addEventListener('click',function(){open=true;apply();});
+      function val(x){return mo<0?x.y:x.m[mo];}
+      function apply(){
+        var q=(search.value||'').trim().toLowerCase(),rg=region.value;
+        var vis=rows.filter(function(x){return (!rg||x.r===rg)&&(!q||x.n.indexOf(q)>=0);});
+        vis.sort(function(a,b){var d;
+          if(sortK==='name')d=a.name.localeCompare(b.name);
+          else if(sortK==='months')d=a.c-b.c||val(a)-val(b);
+          else d=val(a)-val(b)||a.y-b.y;
+          return asc?d:-d;});
+        var f=document.createDocumentFragment();
+        rows.forEach(function(x){x.tr.hidden=true;});
+        vis.forEach(function(x,i){x.tr.hidden=!open&&i>=LIM;x.rank.textContent=i+1;var v=Math.round(val(x));x.b.textContent=v;x.bar.style.width=Math.max(0,v)+'%';f.appendChild(x.tr);});
+        body.appendChild(f);
+        empty.hidden=vis.length>0;
+        moreWrap.hidden=open||vis.length<=LIM;more.textContent='Show all '+vis.length+' cities';
+        count.textContent=vis.length===rows.length?rows.length+' cities':vis.length+' of '+rows.length+' cities';
+      }
+      function setMonth(i){mo=i;if(i<0)table.removeAttribute('data-mo');else table.setAttribute('data-mo',i);scoreH.textContent=i<0?'Yearly score':MONF[i].slice(0,3)+' score';}
+      function syncUrl(){try{var u=new URL(window.location);if(mo>=0)u.searchParams.set('month',SLUG[mo]);else u.searchParams.delete('month');if(region.value)u.searchParams.set('region',region.value);else u.searchParams.delete('region');history.replaceState(null,'',u);}catch(e){}}
+      table.querySelectorAll('th[data-k]').forEach(function(th){th.addEventListener('click',function(){
+        var k=th.getAttribute('data-k');if(sortK===k)asc=!asc;else{sortK=k;asc=(k==='name');}
+        table.querySelectorAll('th').forEach(function(h){h.classList.remove('sorted','asc');});th.classList.add('sorted');if(asc)th.classList.add('asc');apply();});});
+      search.addEventListener('input',apply);
+      region.addEventListener('change',function(){apply();syncUrl();});
+      month.addEventListener('change',function(){setMonth(month.value?SLUG.indexOf(month.value):-1);sortK='score';asc=false;
+        table.querySelectorAll('th').forEach(function(h){h.classList.remove('sorted','asc');});scoreH.classList.add('sorted');apply();syncUrl();});
+      // tooltip for the 12-month strip
+      var tip=document.createElement('div');tip.className='cx-tip';tip.hidden=true;document.body.appendChild(tip);
+      function show(cell){var tr=cell.closest('tr');if(!tr||!tr.getAttribute('data-w'))return;var i=[].indexOf.call(cell.parentNode.children,cell);
+        var w=tr.getAttribute('data-w').split(' ')[i].split('/'),sc=tr.getAttribute('data-m').split(',')[i];
+        tip.innerHTML='<b>'+MONF[i]+'</b> <span>&middot;</span> '+w[0]+'&deg; / '+w[1]+'&deg;C <span>&middot;</span> '+(w[2]===''?'n/a':w[2]+' mm rain')+' <span>&middot;</span> <b>'+sc+'</b>';
+        tip.hidden=false;var r=cell.getBoundingClientRect(),tw=tip.offsetWidth,vw=document.documentElement.clientWidth;
+        var left=Math.min(Math.max(8,r.left+r.width/2-tw/2),vw-tw-8);tip.style.left=(left+window.pageXOffset)+'px';tip.style.top=(r.top+window.pageYOffset-tip.offsetHeight-8)+'px';}
+      body.addEventListener('mouseover',function(e){var c=e.target.closest('.cx-cells i');if(c)show(c);else tip.hidden=true;});
+      body.addEventListener('mouseleave',function(){tip.hidden=true;});
+      body.addEventListener('click',function(e){var c=e.target.closest('.cx-cells i');if(c)show(c);});
+      window.addEventListener('scroll',function(){tip.hidden=true;},{passive:true});
+      // state from the URL (?month=jan&region=asia)
+      try{var sp=new URLSearchParams(window.location.search);var mp=(sp.get('month')||'').toLowerCase();var rp=sp.get('region');
+        if(rp&&region.querySelector('option[value="'+rp+'"]'))region.value=rp;
+        if(SLUG.indexOf(mp)>=0){month.value=mp;setMonth(SLUG.indexOf(mp));}}catch(e){}
+      apply();
+    })();
+  </script>
+  <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>
   <style>
   form[data-city-search]{position:relative;}
@@ -1436,83 +1514,5 @@
   if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
   })();</script>
   <!-- /nav-search-js -->
-<!-- aff-track -->
-<script>(function(){
-  document.addEventListener("click", function (e) {
-    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
-    if (!a) return;
-    var h = a.href || "";
-    if (!/(?:tpx\.li|tp-em\.com|tp\.media)/.test(h)) return;
-    if (typeof gtag !== "function") return;
-    var m = h.match(/^https?:\/\/([a-z0-9-]+)\.tpx\.li/);
-    var partner = m ? m[1] : "travelpayouts";
-    gtag("event", "affiliate_click", {
-      affiliate_partner: partner,
-      affiliate_placement: a.getAttribute("data-aff") || "",
-      link_url: h,
-      page_path: location.pathname
-    });
-  }, true);
-})();</script>
-<!-- /aff-track -->
-  <script>
-    (function(){
-      var table=document.getElementById('cxTable'),body=document.getElementById('cxBody');
-      var search=document.getElementById('cxSearch'),region=document.getElementById('cxRegion'),month=document.getElementById('cxMonth');
-      var count=document.getElementById('cxCount'),empty=document.getElementById('cxEmpty'),scoreH=document.getElementById('cxScoreH');
-      var SLUG=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],MONF=["January","February","March","April","May","June","July","August","September","October","November","December"];
-      var rows=[].map.call(body.rows,function(tr){
-        return {tr:tr,n:tr.getAttribute('data-n'),r:tr.getAttribute('data-r'),y:+tr.getAttribute('data-y'),c:+tr.getAttribute('data-c'),
-          m:tr.getAttribute('data-m').split(',').map(Number),name:tr.querySelector('.cx-city a').textContent,
-          rank:tr.querySelector('.cx-rank'),b:tr.querySelector('.cx-score b'),bar:tr.querySelector('.cx-bar i')};
-      });
-      rows.forEach(function(x){x.tr.querySelector('.cx-cells').setAttribute('aria-label','Comfort by month, January to December: '+x.m.join(', '));});
-      var sortK='score',asc=false,mo=-1,open=false,LIM=50;
-      var more=document.getElementById('cxMore'),moreWrap=document.getElementById('cxMoreWrap');
-      more.addEventListener('click',function(){open=true;apply();});
-      function val(x){return mo<0?x.y:x.m[mo];}
-      function apply(){
-        var q=(search.value||'').trim().toLowerCase(),rg=region.value;
-        var vis=rows.filter(function(x){return (!rg||x.r===rg)&&(!q||x.n.indexOf(q)>=0);});
-        vis.sort(function(a,b){var d;
-          if(sortK==='name')d=a.name.localeCompare(b.name);
-          else if(sortK==='months')d=a.c-b.c||val(a)-val(b);
-          else d=val(a)-val(b)||a.y-b.y;
-          return asc?d:-d;});
-        var f=document.createDocumentFragment();
-        rows.forEach(function(x){x.tr.hidden=true;});
-        vis.forEach(function(x,i){x.tr.hidden=!open&&i>=LIM;x.rank.textContent=i+1;var v=Math.round(val(x));x.b.textContent=v;x.bar.style.width=Math.max(0,v)+'%';f.appendChild(x.tr);});
-        body.appendChild(f);
-        empty.hidden=vis.length>0;
-        moreWrap.hidden=open||vis.length<=LIM;more.textContent='Show all '+vis.length+' cities';
-        count.textContent=vis.length===rows.length?rows.length+' cities':vis.length+' of '+rows.length+' cities';
-      }
-      function setMonth(i){mo=i;if(i<0)table.removeAttribute('data-mo');else table.setAttribute('data-mo',i);scoreH.textContent=i<0?'Yearly score':MONF[i].slice(0,3)+' score';}
-      function syncUrl(){try{var u=new URL(window.location);if(mo>=0)u.searchParams.set('month',SLUG[mo]);else u.searchParams.delete('month');if(region.value)u.searchParams.set('region',region.value);else u.searchParams.delete('region');history.replaceState(null,'',u);}catch(e){}}
-      table.querySelectorAll('th[data-k]').forEach(function(th){th.addEventListener('click',function(){
-        var k=th.getAttribute('data-k');if(sortK===k)asc=!asc;else{sortK=k;asc=(k==='name');}
-        table.querySelectorAll('th').forEach(function(h){h.classList.remove('sorted','asc');});th.classList.add('sorted');if(asc)th.classList.add('asc');apply();});});
-      search.addEventListener('input',apply);
-      region.addEventListener('change',function(){apply();syncUrl();});
-      month.addEventListener('change',function(){setMonth(month.value?SLUG.indexOf(month.value):-1);sortK='score';asc=false;
-        table.querySelectorAll('th').forEach(function(h){h.classList.remove('sorted','asc');});scoreH.classList.add('sorted');apply();syncUrl();});
-      // tooltip for the 12-month strip
-      var tip=document.createElement('div');tip.className='cx-tip';tip.hidden=true;document.body.appendChild(tip);
-      function show(cell){var tr=cell.closest('tr');if(!tr||!tr.getAttribute('data-w'))return;var i=[].indexOf.call(cell.parentNode.children,cell);
-        var w=tr.getAttribute('data-w').split(' ')[i].split('/'),sc=tr.getAttribute('data-m').split(',')[i];
-        tip.innerHTML='<b>'+MONF[i]+'</b> <span>&middot;</span> '+w[0]+'&deg; / '+w[1]+'&deg;C <span>&middot;</span> '+(w[2]===''?'n/a':w[2]+' mm rain')+' <span>&middot;</span> <b>'+sc+'</b>';
-        tip.hidden=false;var r=cell.getBoundingClientRect(),tw=tip.offsetWidth,vw=document.documentElement.clientWidth;
-        var left=Math.min(Math.max(8,r.left+r.width/2-tw/2),vw-tw-8);tip.style.left=(left+window.pageXOffset)+'px';tip.style.top=(r.top+window.pageYOffset-tip.offsetHeight-8)+'px';}
-      body.addEventListener('mouseover',function(e){var c=e.target.closest('.cx-cells i');if(c)show(c);else tip.hidden=true;});
-      body.addEventListener('mouseleave',function(){tip.hidden=true;});
-      body.addEventListener('click',function(e){var c=e.target.closest('.cx-cells i');if(c)show(c);});
-      window.addEventListener('scroll',function(){tip.hidden=true;},{passive:true});
-      // state from the URL (?month=jan&region=asia)
-      try{var sp=new URLSearchParams(window.location.search);var mp=(sp.get('month')||'').toLowerCase();var rp=sp.get('region');
-        if(rp&&region.querySelector('option[value="'+rp+'"]'))region.value=rp;
-        if(SLUG.indexOf(mp)>=0){month.value=mp;setMonth(SLUG.indexOf(mp));}}catch(e){}
-      apply();
-    })();
-  </script>
 </body>
 </html>
