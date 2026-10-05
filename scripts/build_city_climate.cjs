@@ -4,10 +4,12 @@
  * assets/city-climate.js as a compact browser global + CommonJS export:
  *   CITY_CLIMATE = { <id>: { h:[12 avg highs], l:[12 avg lows], r:[12 monthly precip mm] } }
  * Temps are rounded °C; precip rounded mm/month. Resumable: results are cached to
- * c:/tmp/nomad-climate-cache.json so re-runs only fetch the cities still missing.
+ * c:/tmp/nomad-climate-cache.json so re-runs only fetch the cities still missing. Each entry records
+ * the coordinate it was fetched for (at: [lat, lng]) and is fetched again when the city's pin moves;
+ * before 2026-10-05 the cache was keyed by id alone, so a moved pin silently kept the old cell.
  * Usage: node scripts/build_city_climate.cjs
  *
- * This is only the gridded BASE layer. Since 2026-10-01, 636 cities carry 1991-2020 weather-station
+ * This is only the gridded BASE layer. Since 2026-10-05, 644 cities carry 1991-2020 weather-station
  * normals instead, laid over this file by scripts/build_climate_stations.cjs. Running this script
  * alone puts the grid back on every city, Manizales' 6,120 mm of rain included, so always follow
  * it with: node scripts/build_climate_stations.cjs --apply (which reads its ERA5 baseline from
@@ -57,7 +59,7 @@ async function fetchCity(c, attempt = 1) {
       // precip: total over all years / number of years => avg mm for that calendar month
       r.push(a.nPr ? Math.round(a.pr / nYears) : null);
     }
-    return { h, l, r };
+    return { h, l, r, at: [c.lat, c.lng] };
   } catch (e) {
     if (attempt <= 3) { await sleep(800 * attempt); return fetchCity(c, attempt + 1); }
     return null;
@@ -65,7 +67,8 @@ async function fetchCity(c, attempt = 1) {
 }
 
 (async () => {
-  const todo = CITIES.filter((c) => !cache[c.id]);
+  const moved = (c) => cache[c.id] && cache[c.id].at && (cache[c.id].at[0] !== c.lat || cache[c.id].at[1] !== c.lng);
+  const todo = CITIES.filter((c) => !cache[c.id] || moved(c));
   console.log(`${CITIES.length} cities total, ${Object.keys(cache).length} cached, ${todo.length} to fetch.`);
   let done = 0, failed = 0, sinceSave = 0;
   for (let i = 0; i < todo.length; i += CONCURRENCY) {
@@ -80,7 +83,7 @@ async function fetchCity(c, attempt = 1) {
 
   // Emit only cities we have data for, in cities-data order
   const out = {};
-  for (const c of CITIES) if (cache[c.id]) out[c.id] = cache[c.id];
+  for (const c of CITIES) if (cache[c.id]) out[c.id] = { h: cache[c.id].h, l: cache[c.id].l, r: cache[c.id].r };
   const js = 'const CITY_CLIMATE = ' + JSON.stringify(out) + ';\n' +
     "if (typeof module !== 'undefined' && module.exports) { module.exports = CITY_CLIMATE; }\n";
   fs.writeFileSync(path.join(ROOT, 'assets', 'city-climate.js'), js);

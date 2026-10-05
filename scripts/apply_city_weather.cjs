@@ -20,6 +20,11 @@ const PROVIDER_HTML = {
   wmo: `WMO climate normals, published by <a href="https://www.ncei.noaa.gov/products/wmo-climate-normals" ${EXT}>NOAA NCEI</a>`,
   ideam: `<a href="https://www.ideam.gov.co/sala-de-prensa/informes/Normales-clim%C3%A1ticas-est%C3%A1ndar" ${EXT}>IDEAM</a>, Colombia's met service`,
   meteostat: `<a href="https://meteostat.net" ${EXT}>Meteostat</a> and its data providers (<a href="https://creativecommons.org/licenses/by/4.0/" ${EXT}>CC BY 4.0</a>)`,
+  // Stations from data/climate-national-normals.json link to the met service's own file for that station.
+  pagasa: (u) => `<a href="${escH(u)}" ${EXT}>PAGASA</a>, the Philippine weather service`,
+  dhm: (u) => `<a href="${escH(u)}" ${EXT}>DHM</a>, Nepal's Department of Hydrology and Meteorology`,
+  imd: (u) => `<a href="${escH(u)}" ${EXT}>IMD</a>, the India Meteorological Department`,
+  meteofrance: (u) => `<a href="${escH(u)}" ${EXT}>Météo-France</a> (Licence Ouverte 2.0)`,
 };
 // Subtitle and source line for the section: which station, how far, whose data.
 function sourceLines(id) {
@@ -27,9 +32,20 @@ function sourceLines(id) {
   if (s && s.source === 'station' && PROVIDER_HTML[s.provider]) {
     const de = s.elev_diff_m;
     const height = Math.abs(de) >= 100 ? `, ${Math.abs(de)} m ${de > 0 ? 'higher' : 'lower'}` : '';
+    const credit = typeof PROVIDER_HTML[s.provider] === 'function' ? PROVIDER_HTML[s.provider](s.url) : PROVIDER_HTML[s.provider];
+    const away = `${s.distance_km < 1 ? 'under 1' : Math.round(s.distance_km)} km away${height}`;
+    // Not every station has published 1991-2020 normals: PAGASA's Iloilo sheet is 1991-2009, IMD's
+    // newest for Madikeri is 1981-2010. The page says which years, never the standard period.
+    if (s.period && s.period !== '1991-2020') {
+      return {
+        sub: `Monthly averages for ${s.period} from a local weather station, and the best time to visit`,
+        note: `Monthly averages for ${s.period}, the latest period published for the ${escH(s.station)} weather station, ${away}. Historical averages, not a forecast. Source: ${credit}.`,
+      };
+    }
     return {
-      sub: '30-year monthly averages (1991-2020) from a local weather station, and the best time to visit',
-      note: `Climate normals for 1991-2020 measured at the ${escH(s.station)} weather station, ${s.distance_km < 1 ? 'under 1' : Math.round(s.distance_km)} km away${height}. Historical averages, not a forecast. Source: ${PROVIDER_HTML[s.provider]}.`,
+      // DHM's Bandipur temperatures are 1991-2020 normals averaged over a shorter record: no "30-year".
+      sub: s.periodNote ? 'Monthly climate normals (1991-2020) from a local weather station, and the best time to visit' : '30-year monthly averages (1991-2020) from a local weather station, and the best time to visit',
+      note: `Climate normals for 1991-2020${s.periodNote ? ` (${s.periodNote})` : ''} measured at the ${escH(s.station)} weather station, ${away}. Historical averages, not a forecast. Source: ${credit}.`,
     };
   }
   return {

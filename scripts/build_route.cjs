@@ -256,7 +256,7 @@ ${shell.headTop}
         </div>
         <div class="rt-card" id="rtStopsCard">
           <h2>Your stops, month by month</h2>
-          <p class="rt-card-note">Weather is the average for the month you arrive: the 1991-2020 normal of a nearby weather station where there is one, otherwise the 2019-2023 Open-Meteo average. Season, daylight, jet-lag and the flight in are computed for your dates.</p>
+          <p class="rt-card-note">Weather is the average for the month you arrive: the average of a nearby weather station where there is one, mostly the 1991-2020 normal, otherwise the 2019-2023 Open-Meteo average. Season, daylight, jet-lag and the flight in are computed for your dates.</p>
           <div id="rtStopDetails"></div>
         </div>
         <div class="rt-card" id="rtPackCard">

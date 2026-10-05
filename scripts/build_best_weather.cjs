@@ -27,6 +27,9 @@ const REGION = rm.exports || {};
 const DATA = m.exports.filter((c) => c && c.id && CLIMATE[c.id]).map((c) => [c.id, c.name, c.country, iso(c.flag), REGION[c.id] || '', nomadScore(c)]);
 const CLIM = {}; DATA.forEach((d) => { CLIM[d[0]] = CLIMATE[d[0]]; });
 const NSTATION = DATA.filter((d) => CSRC[d[0]] && CSRC[d[0]].source === 'station').length;
+// Stations without published 1991-2020 normals (PAGASA's Iloilo sheet is 1991-2009, IMD's Madikeri 1981-2010).
+const NSHORT = DATA.filter((d) => CSRC[d[0]] && CSRC[d[0]].source === 'station' && CSRC[d[0]].period !== '1991-2020').length;
+const STATION_PHRASE = NSHORT ? `weather-station averages for ${NSTATION} cities (1991-2020 normals for all but ${NSHORT}, whose stations publish other years)` : `1991-2020 weather-station normals for ${NSTATION} cities`;
 
 const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'Middle East', northamerica: 'North America', oceania: 'Oceania' };
 const regionOptions = Object.keys(REGION_NAMES).map((r) => `<option value="${r}">${REGION_NAMES[r]}</option>`).join('');
@@ -120,7 +123,7 @@ ${shell.headTop}
       <p class="bw-count" id="bwCount"></p>
       <div class="bw-grid" id="bwGrid"></div>
       <div class="bw-share"><button type="button" id="bwShare">Copy share link</button></div>
-      <p class="bw-disclaim">Rankings use monthly climate averages, scored for warmth and dryness: 1991-2020 weather-station normals for ${NSTATION} cities and Open-Meteo ERA5 averages for 2019-2023 for the rest, with the source named under each city's weather chart. Historical averages, not a forecast. ${DATA.length} cities with climate data are included.</p>
+      <p class="bw-disclaim">Rankings use monthly climate averages, scored for warmth and dryness: ${STATION_PHRASE} and Open-Meteo ERA5 averages for 2019-2023 for the rest, with the source named under each city's weather chart. Historical averages, not a forecast. ${DATA.length} cities with climate data are included.</p>
     </div>
   </main>
   ${shell.footer}

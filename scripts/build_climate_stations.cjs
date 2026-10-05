@@ -8,11 +8,16 @@
  * airport station measures 1,611 mm and highs of 21-23C, and the comfort index ranked it last on
  * the grid's numbers. Split read 297 mm in November and Porto 267 mm in December.
  *
- * Sources, best first (all 1991-2020 normals, the current WMO standard period):
+ * Sources, best first (1991-2020 normals, the current WMO standard period, unless noted):
  *   wmo        WMO Climate Normals 1991-2020 as submitted by each national met service, published by
  *              NOAA NCEI (accession 0253808, data-composite-primary-parameters TMAX/TMIN/PRCP)
  *   ideam      IDEAM, Colombia's met service: "Normales climatologicas estandar 1991-2020" (xlsx)
  *   meteostat  Meteostat bulk normals (CC BY 4.0, credit "Meteostat and its data providers")
+ *   national   data/climate-national-normals.json: stations transcribed from national met services
+ *              that are missing from the WMO file (PAGASA, DHM Nepal, IMD, Meteo-France), each with its
+ *              file URL and its own period, which is not always 1991-2020 (Iloilo 1991-2009; IMD's
+ *              newest for Madikeri and Kochi's naval air station is 1981-2010). Ranked
+ *              like a WMO station; the period travels into the sidecar and onto the page.
  *
  * A city takes a station when the station is within MAX_KM of the city coordinate AND within
  * MAX_ELEV_M of the city's elevation (data/city-elevations.json), has all twelve months of mean
@@ -76,7 +81,14 @@ const PROVIDER = {
   wmo: 'WMO Climate Normals 1991-2020 (national met service, via NOAA NCEI)',
   ideam: 'IDEAM Normales Climatologicas 1991-2020',
   meteostat: 'Meteostat and its data providers (CC BY 4.0)',
+  pagasa: 'PAGASA climatological normals (Philippines)',
+  dhm: 'DHM Nepal climate normals 1991-2020',
+  imd: 'IMD Climatological Tables (India)',
+  meteofrance: 'Meteo-France fiches climatologiques 1991-2020 (Licence Ouverte 2.0)',
 };
+// Stations transcribed by hand from national met services that are absent from the WMO submission,
+// each with the URL of the official file and its own period (PAGASA's Iloilo sheet covers 1991-2009).
+const NATIONAL_F = path.join(ROOT, 'data', 'climate-national-normals.json');
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const hav = (a, b, c, d) => { const t = Math.PI / 180; const x = Math.sin((c - a) * t / 2) ** 2 + Math.cos(a * t) * Math.cos(c * t) * Math.sin((d - b) * t / 2) ** 2; return 2 * 6371 * Math.asin(Math.sqrt(x)); };
@@ -179,9 +191,15 @@ function pretty(name) {
   const SIDE_F = path.join(ROOT, 'data', 'city-climate-source.json');
   const SIDE = fs.existsSync(SIDE_F) ? JSON.parse(fs.readFileSync(SIDE_F, 'utf8')).cities : {};
   const cities = m.exports.filter((c) => c && c.id && CUR[c.id] && typeof c.lat === 'number');
-  // The gridded baseline: the ERA5 values kept in the sidecar for station cities, the file for the rest.
+  // The gridded baseline: the ERA5 cache entry when it was fetched for the city's current coordinate
+  // (build_city_climate.cjs refetches a moved pin), else the ERA5 values kept in the sidecar for
+  // station cities, else the file. Without the first, a moved pin kept the old cell's grid values.
+  const GRID = (() => { try { return JSON.parse(fs.readFileSync('c:/tmp/nomad-climate-cache.json', 'utf8')); } catch (e) { return {}; } })();
   const ERA = {};
-  for (const c of cities) ERA[c.id] = (SIDE[c.id] && SIDE[c.id].era5) || CUR[c.id];
+  for (const c of cities) {
+    const g = GRID[c.id];
+    ERA[c.id] = g && g.at && g.at[0] === c.lat && g.at[1] === c.lng ? { h: g.h, l: g.l, r: g.r } : (SIDE[c.id] && SIDE[c.id].era5) || CUR[c.id];
+  }
 
   // ---- downloads (cached) ----
   await download(URLS.meteostatStations, path.join(CACHE, 'stations.json.gz'));
@@ -240,6 +258,15 @@ function pretty(name) {
       STATIONS.push({ src: 'ideam', id: s.id, wmo: null, name: s.name, lat: s.lat, lng: s.lng, el: s.el, h: s.h, l: s.l, r: s.r, pref: /aeropuerto/i.test(s.name) });
     }
   }
+  // ---- national met services not in the WMO file (data/climate-national-normals.json) ----
+  // A station here is the met service's own file, so Meteostat's copy of the same WMO index is skipped:
+  // Meteostat had Tagbilaran at a rounded coordinate 6 km off and labelled 1991-2020, PAGASA says 1991-2013.
+  const nationalWmo = new Set();
+  for (const s of (fs.existsSync(NATIONAL_F) ? JSON.parse(fs.readFileSync(NATIONAL_F, 'utf8')).stations : [])) {
+    if (!sane(s.h, s.l, s.r)) { dropped.insane++; continue; }
+    if (s.wmo) nationalWmo.add(String(s.wmo));
+    STATIONS.push({ src: s.provider, id: s.id, wmo: s.wmo || null, name: s.name, lat: s.lat, lng: s.lng, el: s.el, h: s.h, l: s.l, r: s.r, pref: false, period: s.period, periodNote: s.periodNote, url: s.url });
+  }
   // ---- Meteostat normals, fetched only for stations that could qualify ----
   const msWithNormals = MS.filter((s) => s.inventory && s.inventory.normals && s.inventory.normals.start && s.location && s.location.latitude != null);
   const msWant = new Set();
@@ -269,6 +296,7 @@ function pretty(name) {
     const l = rows.map((r) => +r[3]), h = rows.map((r) => +r[4]), r = rows.map((x) => +x[5]);
     if (!sane(h, l, r)) { dropped.insane++; continue; }
     const s = msById[id];
+    if (s.identifiers && s.identifiers.wmo && nationalWmo.has(String(s.identifiers.wmo))) continue;
     STATIONS.push({ src: 'meteostat', id, wmo: (s.identifiers && s.identifiers.wmo) || null, name: s.name.en, lat: s.location.latitude, lng: s.location.longitude, el: s.location.elevation, h, l, r, pref: !!(s.identifiers && (s.identifiers.wmo || s.identifiers.icao)) });
   }
 
@@ -291,7 +319,7 @@ function pretty(name) {
 
   // ---- match ----
   const side = {}, out = {};
-  const log = { station: { wmo: 0, ideam: 0, meteostat: 0 }, era5: 0, rejected: [] };
+  const log = { station: Object.fromEntries(Object.keys(PROVIDER).map((k) => [k, 0])), era5: 0, rejected: [] };
   for (const c of cities) {
     const e = ELEV[c.id];
     const cands = near(c).map((s) => {
@@ -307,7 +335,7 @@ function pretty(name) {
       out[c.id] = { h: s.h.map(Math.round), l: s.l.map(Math.round), r: s.r.map(Math.round) };
       side[c.id] = {
         source: 'station', provider: s.src, dataset: PROVIDER[s.src], station: displayName(s.wmo || s.id, s.name), stationId: s.wmo || s.id,
-        period: '1991-2020', distance_km: +s.d.toFixed(1), elev_diff_m: Math.round(s.de), era5: ERA[c.id],
+        period: s.period || '1991-2020', ...(s.periodNote ? { periodNote: s.periodNote } : {}), ...(s.url ? { url: s.url } : {}), distance_km: +s.d.toFixed(1), elev_diff_m: Math.round(s.de), era5: ERA[c.id],
       };
       log.station[s.src]++;
     } else {
@@ -340,7 +368,7 @@ function pretty(name) {
   });
   const q = (arr, p) => { const s = [...arr].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.round(p * (s.length - 1)))]; };
   const changed = stationIds.filter((id) => JSON.stringify(out[id]) !== JSON.stringify(CUR[id]));
-  console.log(`cities ${cities.length}: station ${stationIds.length} (WMO ${log.station.wmo}, IDEAM ${log.station.ideam}, Meteostat ${log.station.meteostat}), ERA5 ${log.era5}`);
+  console.log(`cities ${cities.length}: station ${stationIds.length} (${Object.entries(log.station).filter((x) => x[1]).map(([k, n]) => k + ' ' + n).join(', ')}), ERA5 ${log.era5}`);
   console.log(`stations usable ${STATIONS.length}; dropped: ${dropped.coord} WMO coordinate conflicts, ${dropped.country} rows from ${BAD_TEMP_COUNTRIES.size} countries with non-daily TMAX/TMIN, ${dropped.insane} failing the sanity checks`);
   console.log(`ERA5 / station annual rain: p5 ${q(rows.map((r) => r.ratio), 0.05).toFixed(2)}, median ${q(rows.map((r) => r.ratio), 0.5).toFixed(2)}, p95 ${q(rows.map((r) => r.ratio), 0.95).toFixed(2)}; off by 1.5x or more: ${rows.filter((r) => r.ratio >= 1.5 || r.ratio <= 1 / 1.5).length}`);
   console.log(`ERA5 - station mean high: median ${q(rows.map((r) => r.dh), 0.5).toFixed(1)}C, off by >2C: ${rows.filter((r) => Math.abs(r.dh) > 2).length}; mean low: median ${q(rows.map((r) => r.dl), 0.5).toFixed(1)}C, off by >2C: ${rows.filter((r) => Math.abs(r.dl) > 2).length}`);
@@ -361,9 +389,10 @@ function pretty(name) {
       wmo: URLS.wmo('{TMAX,TMIN,PRCP}'),
       ideam: 'https://www.ideam.gov.co/sala-de-prensa/informes/Normales-clim%C3%A1ticas-est%C3%A1ndar',
       meteostat: 'https://meteostat.net (bulk normals, CC BY 4.0)',
+      national: 'data/climate-national-normals.json (per-station url in the sidecar)',
       'open-meteo': 'https://open-meteo.com/en/docs/historical-weather-api',
     },
-    counts: { station: stationIds.length, wmo: log.station.wmo, ideam: log.station.ideam, meteostat: log.station.meteostat, era5: log.era5, era5Flagged: flags.length },
+    counts: { station: stationIds.length, ...log.station, era5: log.era5, era5Flagged: flags.length },
   };
   const sideOrdered = {};
   for (const id of Object.keys(CUR)) if (side[id]) sideOrdered[id] = side[id];

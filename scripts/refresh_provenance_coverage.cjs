@@ -81,7 +81,8 @@ const topCities = [...P.reduce((mm, r) => mm.set(r.city, (mm.get(r.city) || 0) +
 
 const coverage = {
   climate: mine(climate) + ' of ' + N + ' cities: ' + climStations + ' from a weather station (WMO ' + climBy('wmo')
-    + ', Meteostat ' + climBy('meteostat') + ', IDEAM ' + climBy('ideam') + '), ' + climEra + ' from the ERA5 grid',
+    + ', Meteostat ' + climBy('meteostat') + ', IDEAM ' + climBy('ideam')
+    + ', other national met services ' + (climStations - climBy('wmo') - climBy('meteostat') - climBy('ideam')) + '), ' + climEra + ' from the ERA5 grid',
   'climate-source': Object.keys(climSrc).filter((k) => ids.has(k)).length + ' of ' + N + ' cities: ' + climStations
     + ' station, ' + climEra + ' ERA5, of which ' + climFlag + ' flagged as doubtful against nearby stations',
   timezones: mine(tz) + ' of ' + N + ' cities',

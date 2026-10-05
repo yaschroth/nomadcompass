@@ -132,6 +132,9 @@ const lima = rows.find((r) => r.id === 'lima');
 // How many cities rest on a station and how many on the grid, and one city the grid got badly wrong,
 // all read from the sidecar so the prose cannot drift from the data.
 const nStation = rows.filter((r) => SOURCE[r.id] && SOURCE[r.id].source === 'station').length;
+// Stations without published 1991-2020 normals (PAGASA's Iloilo sheet is 1991-2009, IMD's Madikeri 1981-2010).
+const nShort = rows.filter((r) => SOURCE[r.id] && SOURCE[r.id].source === 'station' && SOURCE[r.id].period !== '1991-2020').length;
+const stationPhrase = (n) => (nShort ? `weather-station averages for ${n} cities (1991-2020 normals for all but ${nShort})` : `1991-2020 weather-station normals for ${n} cities`);
 const nGrid = N - nStation;
 const highGrid = rows.filter((r) => elevOf(r.id) >= 2000 && !(SOURCE[r.id] && SOURCE[r.id].source === 'station')).length;
 const sumR = (a) => a.reduce((x, y) => x + y, 0);
@@ -181,7 +184,7 @@ const FAQ = [
   ['Why does a cold, dry city outscore a hot, rainy one?',
     `The temperature half of a month's score stops at zero, but the rain half keeps falling to minus 60. A frozen month with no rain keeps 45 points; a monsoon month can drop below zero. We built it that way on the view that daily rain disrupts a working day more than cold does. If you hate cold more than rain, read the 12-month strip rather than the yearly score.`],
   ['Is this the same as the BestPlaces comfort index?',
-    `No. BestPlaces publishes its own comfort index for places in the United States, with its own method. This index covers ${fmt(N)} cities worldwide, uses 1991-2020 weather-station normals for ${fmt(nStation)} cities and Open-Meteo's ERA5 grid for 2019 to 2023 for the other ${fmt(nGrid)}, and its whole formula is written out on this page, so any score can be recomputed by hand.`],
+    `No. BestPlaces publishes its own comfort index for places in the United States, with its own method. This index covers ${fmt(N)} cities worldwide, uses ${stationPhrase(fmt(nStation))} and Open-Meteo's ERA5 grid for 2019 to 2023 for the other ${fmt(nGrid)}, and its whole formula is written out on this page, so any score can be recomputed by hand.`],
 ];
 const strip = (s) => s.replace(/<[^>]+>/g, '').replace(/&deg;/g, '°').replace(/&amp;/g, '&');
 const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: strip(a) } })) };
@@ -191,7 +194,7 @@ const clim = PROV.climate || {};
 const dataset = {
   '@context': 'https://schema.org', '@type': 'Dataset',
   name: 'The Nomad Comfort Index',
-  description: `Climate comfort scores for ${N} cities worldwide: a 0 to 100 score for every month from temperature and rainfall, the yearly average of those scores, the number of comfortable months and the three best months, computed from 1991-2020 weather-station normals for ${nStation} cities and Open-Meteo ERA5 averages for 2019 to 2023 for the other ${nGrid}.`,
+  description: `Climate comfort scores for ${N} cities worldwide: a 0 to 100 score for every month from temperature and rainfall, the yearly average of those scores, the number of comfortable months and the three best months, computed from ${stationPhrase(nStation)} and Open-Meteo ERA5 averages for 2019 to 2023 for the other ${nGrid}.`,
   url: BASE + '/comfort-index',
   creator: { '@id': BASE + '/#organization' },
   isBasedOn: [clim.sourceUrl || 'https://www.ncei.noaa.gov/products/wmo-climate-normals', 'https://open-meteo.com/en/docs/historical-weather-api'],
@@ -402,7 +405,7 @@ ${tbody}
         <div class="cx-morewrap" id="cxMoreWrap" hidden><button type="button" class="cx-more" id="cxMore"></button></div>
         <p class="cx-empty" id="cxEmpty" hidden>No city matches. Clear the search or pick another region.</p>
       </div>
-      <p class="cx-note">Scores from the average daily high and low and total rain for each month: 1991-2020 weather-station normals for ${fmt(nStation)} cities, Open-Meteo ERA5 averages for 2019 to 2023 for the other ${fmt(nGrid)}, named under each city's weather chart. Hover or tap a month in the strip for its numbers. The best months are the three highest-scoring ones, the same three each city's guide shows in its weather chart.</p>
+      <p class="cx-note">Scores from the average daily high and low and total rain for each month: ${stationPhrase(fmt(nStation))}, Open-Meteo ERA5 averages for 2019 to 2023 for the other ${fmt(nGrid)}, named under each city's weather chart. Hover or tap a month in the strip for its numbers. The best months are the three highest-scoring ones, the same three each city's guide shows in its weather chart.</p>
 
       <section class="cx-section">
         <h2 class="cx-h2">Perfect for a month, ordinary the rest of the year</h2>
@@ -426,7 +429,7 @@ ${tbody}
 
       <h2>What the index cannot tell you</h2>
       <ul>
-        <li><b>It describes climate, not weather.</b> For ${fmt(nStation)} cities the figures are the 1991-2020 normals of a weather station near the city, the 30-year averages national weather services publish; for the other ${fmt(nGrid)} they are averages of five years, 2019 to 2023. Either way they describe a typical January, not the one you will get.</li>
+        <li><b>It describes climate, not weather.</b> For ${fmt(nStation)} cities the figures are the 1991-2020 normals of a weather station near the city, the 30-year averages national weather services publish${nShort ? ` (for ${nShort} of them the station publishes other years, and the chart says which)` : ''}; for the other ${fmt(nGrid)} they are averages of five years, 2019 to 2023. Either way they describe a typical January, not the one you will get.</li>
         <li><b>Humidity, sunshine and wind are not in it.</b> ${lima ? `${cityLink(lima)} scores ${yr(lima)} because it is mild and almost rainless, yet the model cannot see the low grey cloud that sits over the coast for much of the southern winter.` : ''} Equally, 30${deg} feels very different in dry Andalusia than on a humid tropical coast.</li>
         <li><b>It is harder on rain than on cold.</b> A month far below freezing but dry keeps 45 points from its rain half, while a very wet month can fall below zero. ${negCities} cities have at least one month that does. That is a choice, made on the view that rain disrupts a working day more than cold does. If cold is what you cannot stand, read the strip rather than the yearly number.</li>
         <li><b>Cities without a nearby station carry a margin.</b> A city takes a station's numbers only when the station is within 25 km and 250 m of height. For the other ${fmt(nGrid)} the data comes from ERA5, a reanalysis that averages the weather over grid cells about 25 km wide: on a coast a cell can take in open sea, in the mountains slopes far above or below the town. ${highGrid ? `${highGrid} of them sit above 2,000 m, and those deserve the most caution.` : ''}${mani ? ` ${cityLink(mani)} shows the size of the error: its grid cell put ${fmt(sumR(maniSrc.era5.r))} mm of rain a year on it and a comfort score of ${maniGridYear}, while the ${esc(maniSrc.station)} station measures ${fmt(sumR(mani.cl.r))} mm, and it scores ${yr(mani)}.` : ''}</li>
