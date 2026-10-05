@@ -37,7 +37,7 @@ const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const TITLES = {
-  climate: 'Climate normals', timezones: 'Time zones', 'hero-images': 'City photographs',
+  climate: 'Climate normals', 'climate-source': 'Climate source per city', timezones: 'Time zones', 'hero-images': 'City photographs',
   'numbeo-costs': 'Cost of living components', visa: 'Visa rules and income thresholds',
   'city-elevations': 'Elevation', 'city-scores': 'The 13 category scores',
   'cost-per-month': 'Monthly budget figure', 'cost-ranges': 'Monthly budget range',

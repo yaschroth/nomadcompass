@@ -6944,8 +6944,8 @@ const CITIES = [
       airquality: 9},
     costLow:1890,
     costPerMonth: 2160,
-    lat: 32.6669,
-    lng: -16.9241,
+    lat: 32.6479,
+    lng: -16.9085,
     timezone: 0
   },
   {

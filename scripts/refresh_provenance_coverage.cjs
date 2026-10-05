@@ -37,6 +37,12 @@ const js = (file, name) => {
 const mine = (obj) => Object.keys(obj).filter((k) => ids.has(k)).length;
 
 const climate = js('assets/city-climate.js', 'CITY_CLIMATE');
+// Which source each city's climate came from (scripts/build_climate_stations.cjs).
+const climSrc = (() => { try { return JSON.parse(fs.readFileSync(R('data/city-climate-source.json'), 'utf8')).cities; } catch (e) { return {}; } })();
+const climBy = (p) => Object.keys(climSrc).filter((k) => ids.has(k) && climSrc[k].provider === p).length;
+const climStations = Object.keys(climSrc).filter((k) => ids.has(k) && climSrc[k].source === 'station').length;
+const climEra = mine(climate) - climStations;
+const climFlag = Object.keys(climSrc).filter((k) => ids.has(k) && climSrc[k].flag).length;
 const tz = js('assets/city-tz.js', 'CITY_TZ');
 const elev = JSON.parse(fs.readFileSync(R('data/city-elevations.json'), 'utf8')).elevations;
 const numbeo = JSON.parse(fs.readFileSync(R('data/numbeo-costs.json'), 'utf8'));
@@ -74,7 +80,10 @@ const topCities = [...P.reduce((mm, r) => mm.set(r.city, (mm.get(r.city) || 0) +
   .map(([id, n]) => (cities.find((c) => c.id === id) || { name: id }).name + ' ' + n).join(', ');
 
 const coverage = {
-  climate: mine(climate) + ' of ' + N + ' cities',
+  climate: mine(climate) + ' of ' + N + ' cities: ' + climStations + ' from a weather station (WMO ' + climBy('wmo')
+    + ', Meteostat ' + climBy('meteostat') + ', IDEAM ' + climBy('ideam') + '), ' + climEra + ' from the ERA5 grid',
+  'climate-source': Object.keys(climSrc).filter((k) => ids.has(k)).length + ' of ' + N + ' cities: ' + climStations
+    + ' station, ' + climEra + ' ERA5, of which ' + climFlag + ' flagged as doubtful against nearby stations',
   timezones: mine(tz) + ' of ' + N + ' cities',
   'hero-images': heroes + ' images',
   'numbeo-costs': nSourced + ' of ' + N + ' cities',

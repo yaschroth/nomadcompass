@@ -12,7 +12,7 @@
  * itself and traceable to data on disk:
  *
  *   costPerMonth, the 13 scores   cities-data.js
- *   monthly high and low          assets/city-climate.js (Open-Meteo, tier primary)
+ *   monthly high and low          assets/city-climate.js (station normals or Open-Meteo ERA5, tier primary)
  *
  * Title and description live in one file because they are read together, in one result, and were
  * previously written by two sweeps that did not know about each other: the title said "Cost, WiFi
@@ -105,7 +105,7 @@ function titleA(c) {
  * so "Digital Nomad Guide" stays whole. The country goes: outside the pages whose name already
  * contains it, almost nobody types it. The room it frees carries the second number someone choosing
  * a city decides on after the price: how warm it gets, as the coolest and warmest month's average
- * high, from the same Open-Meteo table the page's weather section shows.
+ * high, from the same climate table the page's weather section shows.
  *
  * Granada is in the index twice, so a name shared with another city keeps its country.
  */

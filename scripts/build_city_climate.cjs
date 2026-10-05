@@ -6,6 +6,12 @@
  * Temps are rounded °C; precip rounded mm/month. Resumable: results are cached to
  * c:/tmp/nomad-climate-cache.json so re-runs only fetch the cities still missing.
  * Usage: node scripts/build_city_climate.cjs
+ *
+ * This is only the gridded BASE layer. Since 2026-10-01, 636 cities carry 1991-2020 weather-station
+ * normals instead, laid over this file by scripts/build_climate_stations.cjs. Running this script
+ * alone puts the grid back on every city, Manizales' 6,120 mm of rain included, so always follow
+ * it with: node scripts/build_climate_stations.cjs --apply (which reads its ERA5 baseline from
+ * data/city-climate-source.json, so the order is safe to repeat).
  */
 const fs = require('fs');
 const path = require('path');

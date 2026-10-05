@@ -2,8 +2,10 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Injects a static, crawlable "Weather in <City>" section (12-month temperature + rainfall
  * chart, best-time-to-visit summary) into every city page that has climate data in
- * assets/city-climate.js. Rendered server-side from the 2019-2023 Open-Meteo normals, so no
- * client JS. Inserted right after the "Category Breakdown" section. Idempotent via
+ * assets/city-climate.js. Rendered server-side, so no client JS. The numbers are 1991-2020 station
+ * normals where scripts/build_climate_stations.cjs found a station close enough, and the 2019-2023
+ * Open-Meteo ERA5 grid elsewhere; data/city-climate-source.json says which, and the section names
+ * the station, its distance and the provider (Meteostat's CC BY 4.0 licence requires the credit). Inserted right after the "Category Breakdown" section. Idempotent via
  * <!-- cw-start -->/<!-- cw-end --> markers (re-run safely after climate coverage grows).
  * Styles live in styles/city-page.css. Usage: node scripts/apply_city_weather.cjs
  */
@@ -11,6 +13,30 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const CLIMATE = require(path.join(ROOT, 'assets', 'city-climate.js'));
+const SOURCE = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'city-climate-source.json'), 'utf8')).cities; } catch (e) { return {}; } })();
+const escH = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const EXT = 'target="_blank" rel="nofollow noopener"';
+const PROVIDER_HTML = {
+  wmo: `WMO climate normals, published by <a href="https://www.ncei.noaa.gov/products/wmo-climate-normals" ${EXT}>NOAA NCEI</a>`,
+  ideam: `<a href="https://www.ideam.gov.co/sala-de-prensa/informes/Normales-clim%C3%A1ticas-est%C3%A1ndar" ${EXT}>IDEAM</a>, Colombia's met service`,
+  meteostat: `<a href="https://meteostat.net" ${EXT}>Meteostat</a> and its data providers (<a href="https://creativecommons.org/licenses/by/4.0/" ${EXT}>CC BY 4.0</a>)`,
+};
+// Subtitle and source line for the section: which station, how far, whose data.
+function sourceLines(id) {
+  const s = SOURCE[id];
+  if (s && s.source === 'station' && PROVIDER_HTML[s.provider]) {
+    const de = s.elev_diff_m;
+    const height = Math.abs(de) >= 100 ? `, ${Math.abs(de)} m ${de > 0 ? 'higher' : 'lower'}` : '';
+    return {
+      sub: '30-year monthly averages (1991-2020) from a local weather station, and the best time to visit',
+      note: `Climate normals for 1991-2020 measured at the ${escH(s.station)} weather station, ${s.distance_km < 1 ? 'under 1' : Math.round(s.distance_km)} km away${height}. Historical averages, not a forecast. Source: ${PROVIDER_HTML[s.provider]}.`,
+    };
+  }
+  return {
+    sub: 'Monthly averages from 2019-2023 (Open-Meteo), and the best time to visit',
+    note: 'Historical monthly averages, not a forecast. Source: Open-Meteo ERA5, a grid of roughly 25 km cells, because no weather station with published normals is close enough to the city.',
+  };
+}
 const m = {};
 new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';module.exports=CITIES')(m);
 const NAME = {}; m.exports.forEach((c) => { if (c && c.id) NAME[c.id] = c.name; });
@@ -89,18 +115,19 @@ function buildSection(id) {
     : '';
   const liveScript = co ? '\n        <script src="/scripts/city-live-conditions.js" defer></script>' : '';
 
+  const src = sourceLines(id);
   return '<!-- cw-start -->\n' +
     `    <section class="weather-section" id="weather">
       <div class="container">
         <div class="section-header">
           <h2>Weather in ${name}</h2>
-          <p>Monthly averages from 2019-2023 (Open-Meteo), and the best time to visit</p>
+          <p>${src.sub}</p>
         </div>
         ${live}<div class="cw-chart"><div class="cw-cols">
           ${cols.join('\n          ')}
         </div>${legend}</div>
         ${summary}
-        <p class="cw-note">Historical monthly averages, not a forecast. Source: Open-Meteo.</p>${liveScript}
+        <p class="cw-note">${src.note}</p>${liveScript}
       </div>
     </section>\n` +
     '    <!-- cw-end -->';

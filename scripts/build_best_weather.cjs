@@ -2,7 +2,8 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
 /**
  * Builds /best-weather: a "where's warm in <month>?" finder. Pick a month (and optionally a
  * region / beach-only), and it ranks the cities with the most comfortable weather then, from
- * the precomputed Open-Meteo normals in assets/city-climate.js. Shareable via
+ * the precomputed climate normals in assets/city-climate.js (1991-2020 station normals where a station
+ * stands for the city, the 2019-2023 Open-Meteo ERA5 grid elsewhere). Shareable via
  * ?month=jul&region=asia. Only cities with climate data are included. Run the head/body sweeps
  * (finish with apply_tools_nav.cjs) + sitemap afterwards. Usage: node scripts/build_best_weather.cjs
  */
@@ -13,6 +14,7 @@ const shell = require(path.join(__dirname, 'lib', 'page_shell.cjs'));
 const BASE = 'https://thenomadhq.com';
 const iso = (flag) => { const p = [...(flag || '')]; if (p.length !== 2) return ''; return p.map((x) => String.fromCharCode(x.codePointAt(0) - 0x1F1E6 + 97)).join(''); };
 const CLIMATE = require(path.join(ROOT, 'assets', 'city-climate.js'));
+const CSRC = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'city-climate-source.json'), 'utf8')).cities; } catch (e) { return {}; } })();
 const m = {};
 new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8') + ';module.exports=CITIES')(m);
 const CK = ['climate', 'cost', 'wifi', 'nightlife', 'nature', 'safety', 'food', 'community', 'english', 'visa', 'culture', 'cleanliness', 'airquality'];
@@ -24,6 +26,7 @@ const REGION = rm.exports || {};
 // [id, name, country, iso, region, score] for cities that have climate normals
 const DATA = m.exports.filter((c) => c && c.id && CLIMATE[c.id]).map((c) => [c.id, c.name, c.country, iso(c.flag), REGION[c.id] || '', nomadScore(c)]);
 const CLIM = {}; DATA.forEach((d) => { CLIM[d[0]] = CLIMATE[d[0]]; });
+const NSTATION = DATA.filter((d) => CSRC[d[0]] && CSRC[d[0]].source === 'station').length;
 
 const REGION_NAMES = { europe: 'Europe', asia: 'Asia', latam: 'Latin America', africa: 'Africa', middleeast: 'Middle East', northamerica: 'North America', oceania: 'Oceania' };
 const regionOptions = Object.keys(REGION_NAMES).map((r) => `<option value="${r}">${REGION_NAMES[r]}</option>`).join('');
@@ -39,7 +42,7 @@ ${shell.headTop}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Best Weather by Month: Where to Go for Digital Nomads | The Nomad HQ</title>
-  <meta name="description" content="Where is it warm and dry this month? Pick any month and see the digital nomad cities with the best weather, from 5-year climate averages. Filter by region.">
+  <meta name="description" content="Where is it warm and dry this month? Pick any month and see the digital nomad cities with the best weather, from station climate data. Filter by region.">
   <link rel="canonical" href="${BASE}/best-weather">
   <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="Best Weather by Month | The Nomad HQ">
@@ -102,7 +105,7 @@ ${shell.headTop}
       <div class="hub-hero-overlay"><div class="container">
         <span class="hub-eyebrow">Trip tool</span>
         <h1>Where's warm this month?</h1>
-        <p class="sub">Pick any month and see the nomad cities with the best weather then, ranked from five years of climate data. Plan your winter escape or chase an endless summer.</p>
+        <p class="sub">Pick any month and see the nomad cities with the best weather then, ranked from weather-station and climate records. Plan your winter escape or chase an endless summer.</p>
       </div></div>
     </header>
     <div class="bw-wrap">
@@ -117,7 +120,7 @@ ${shell.headTop}
       <p class="bw-count" id="bwCount"></p>
       <div class="bw-grid" id="bwGrid"></div>
       <div class="bw-share"><button type="button" id="bwShare">Copy share link</button></div>
-      <p class="bw-disclaim">Rankings use 2019-2023 monthly climate averages (Open-Meteo), scored for warmth and dryness. Historical averages, not a forecast. ${DATA.length} cities with climate data are included.</p>
+      <p class="bw-disclaim">Rankings use monthly climate averages, scored for warmth and dryness: 1991-2020 weather-station normals for ${NSTATION} cities and Open-Meteo ERA5 averages for 2019-2023 for the rest, with the source named under each city's weather chart. Historical averages, not a forecast. ${DATA.length} cities with climate data are included.</p>
     </div>
   </main>
   ${shell.footer}
