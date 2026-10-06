@@ -46,6 +46,9 @@ const PLBL = {
   community: 'Best for nomad community', nightlife: 'Best for nightlife', english: 'Best for English speakers',
   female: 'Best for female nomads', broke: 'Best on a tight budget', beginner: 'Best for first-timers',
   families: 'Best for families', party: 'Best for parties',
+  culture: 'Best for culture and history', cleanliness: 'Cleanest cities', airquality: 'Best for clean air',
+  cheapwifi: 'Cheap with fast WiFi', wintersun: 'Best for winter sun', summercool: 'Best summer escape',
+  spring: 'Eternal spring cities',
 };
 const isGeo = (k) => k.startsWith('region_') || k.startsWith('country_');
 const labelOf = (r) => isGeo(r.pagekey) ? r.h1.replace(/^Best Digital Nomad Cities in (the )?/, 'Best cities in ') : (PLBL[r.pagekey] || r.h1);
@@ -105,7 +108,7 @@ for (const file of cityFiles) {
   const footer = [
     nearbyLine ? `<p class="city-explore-links"><strong>Nearby:</strong> ${nearbyLine}</p>` : '',
     readingLine ? `<p class="city-explore-links"><strong>Further reading:</strong> ${readingLine}</p>` : '',
-    `<p class="city-explore-links"><a href="/cities">Browse all city guides</a> &middot; <a href="/wheel">Find your match on the Nomad Wheel</a> &middot; <a href="/best">See all 32 rankings</a></p>`,
+    `<p class="city-explore-links"><a href="/cities">Browse all city guides</a> &middot; <a href="/wheel">Find your match on the Nomad Wheel</a> &middot; <a href="/best">See all ${rankings.length} rankings</a></p>`,
   ].filter(Boolean).join('\n          ');
   const card = `\n          <div class="city-explore" data-explore="v3">\n          <p class="city-rank-eyebrow">In the rankings</p>\n          <h3 class="city-rank-head">${head}</h3>\n          ${sub}\n          <ol class="city-rank-list">\n${rows}\n          </ol>\n          ${footer}\n          </div>\n`;
 

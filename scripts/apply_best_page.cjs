@@ -25,7 +25,7 @@ const DIR = process.env.DIR || ROOT;
 const OUTDIR = path.join(ROOT, 'best');
 const BASE = 'https://thenomadhq.com';
 
-const CHIP = { cost: 'Affordability', wifi: 'WiFi', safety: 'Safety', climate: 'Climate', visa: 'Visa access', food: 'Food', nature: 'Nature', community: 'Community', nightlife: 'Nightlife', english: 'English' };
+const CHIP = { cost: 'Affordability', wifi: 'WiFi', safety: 'Safety', climate: 'Climate', visa: 'Visa access', food: 'Food', nature: 'Nature', community: 'Community', nightlife: 'Nightlife', english: 'English', culture: 'Culture', cleanliness: 'Cleanliness', airquality: 'Air quality' };
 const SHORT = { climate: 'Climate', cost: 'Value', wifi: 'WiFi', nightlife: 'Nightlife', nature: 'Nature', safety: 'Safety', food: 'Food', community: 'Community', english: 'English', visa: 'Visa', culture: 'Culture', cleanliness: 'Clean', airquality: 'Air' };
 // contextual sub-scores shown on each card (minus the page's own metric)
 const CONTEXT = ['safety', 'wifi', 'cost', 'community', 'climate'];
@@ -36,6 +36,8 @@ const RLBL = {
   climate: 'Year-round weather', visa: 'Nomad visas', food: 'Food', nature: 'Nature & outdoors',
   community: 'Nomad community', nightlife: 'Nightlife', english: 'English-speaking',
   female: 'Female nomads', broke: 'Tight budget', beginner: 'First-timers', families: 'Families', party: 'Party scene',
+  culture: 'Culture & history', cleanliness: 'Cleanest', airquality: 'Clean air', cheapwifi: 'Cheap + fast WiFi',
+  wintersun: 'Winter sun', summercool: 'Summer escape', spring: 'Eternal spring',
 };
 const relShort = (r) => (r.key.startsWith('region_') || r.key.startsWith('country_'))
   ? r.h1.replace(/^Best Digital Nomad Cities in (the )?/, '') : (RLBL[r.key] || r.h1);
@@ -150,7 +152,23 @@ function build(key, related) {
   const items = data.cities.map((c) => {
     // Fall back to the city's tagline so a city added later (before its blurb is written) still renders.
     const blurb = blurbById[c.id] || c.tagline || '';
-    const metricStat = data.metric === 'cost'
+    // Weather pages show the measured season rather than a comfort score: on winter sun and summer
+    // escape most of the top fifteen reach the maximum, so "100/100" fifteen times would say nothing.
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const seasonStat = () => {
+      const cl = c.climate; if (!cl || !data.months) return '';
+      const hs = data.months.map((m) => cl.h[m]);
+      const rain = Math.round(data.months.reduce((s, m) => s + cl.r[m], 0) / data.months.length);
+      const span = MON[data.months[0]] + '&ndash;' + MON[data.months[data.months.length - 1]];
+      return `<span class="best-stat hi">${span} highs ${Math.min(...hs)}&ndash;${Math.max(...hs)}&deg;C</span><span class="best-stat">${rain} mm rain a month</span>`;
+    };
+    const springStat = () => {
+      const m = c.monthMeans; if (!m) return '';
+      return `<span class="best-stat hi">Monthly average ${Math.min(...m)}&ndash;${Math.max(...m)}&deg;C all year</span>`;
+    };
+    const metricStat = data.metric === 'season' ? seasonStat()
+      : data.metric === 'spring' ? springStat()
+      : data.metric === 'cost'
       ? `<span class="best-stat hi">${esc(money(c.costPerMonth))}</span>`
       : data.metric === 'overall'
       ? `<span class="best-stat hi">Nomad Score ${c.nomadScore}</span>`
@@ -180,13 +198,13 @@ function build(key, related) {
   }).join('\n');
 
   const introHtml = paras(content.intro).map((p) => `<p>${inlineLinks(txt(p))}</p>`).join('\n        ');
-  const weighHtml = paras(content.considerations).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
-  const closeHtml = paras(content.closing).map((p) => `<p>${txt(p)}</p>`).join('\n        ');
+  const weighHtml = paras(content.considerations).map((p) => `<p>${inlineLinks(txt(p))}</p>`).join('\n        ');
+  const closeHtml = paras(content.closing).map((p) => `<p>${inlineLinks(txt(p))}</p>`).join('\n        ');
   const picks = (content.quickPicks || []).filter((p) => byId[p.id]).map((p) => {
     const c = byId[p.id];
     return `          <a class="best-pick" href="/cities/${c.id}"><span class="best-pick-label">${esc(p.label)}</span><span class="best-pick-city"><img src="${flag(c.iso)}" alt="" width="24" height="18">${esc(c.name)}</span><p class="best-pick-note">${txt(p.note)}</p></a>`;
   }).join('\n');
-  const faqHtml = (content.faq || []).map((f) => `        <div><h3 class="best-faq-q">${txt(f.q)}</h3><p class="best-faq-a">${txt(f.a)}</p></div>`).join('\n');
+  const faqHtml = (content.faq || []).map((f) => `        <div><h3 class="best-faq-q">${txt(f.q)}</h3><p class="best-faq-a">${inlineLinks(txt(f.a))}</p></div>`).join('\n');
   const relGroups = { priority: [], region: [], country: [] };
   related.filter((r) => r.key !== key).forEach((r) => relGroups[relGroup(r)].push(r));
   const relTile = (r) => `<a class="best-rel-tile" href="/best/${r.slug}" aria-label="${esc(r.h1)}"><img class="best-rel-img" src="/images/cities/${r.top}.webp" alt="" loading="lazy" onerror="this.style.display='none'"><span class="best-rel-scrim"></span><span class="best-rel-label">${esc(relShort(r))}</span></a>`;
@@ -232,7 +250,7 @@ function build(key, related) {
   let metaDesc = (lead + costs).length <= META.MAX ? lead + costs : lead;
   if (metaDesc.length < 120 && (metaDesc + extra).length <= META.MAX) metaDesc += extra;
 
-  const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) } : null;
+  const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: String(f.a).replace(/\[([^\]]+)\]\((\/[^)]*)\)/g, '$1') } })) } : null;
   const crumbs = [['Home', BASE + '/'], ['Rankings', BASE + '/best'], [data.h1, url]];
   const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[0], item: c[1] })) };
   const crumbHtml = `<nav class="crumbs" aria-label="Breadcrumb">${crumbs.map((c, i) => i < crumbs.length - 1 ? `<a href="${c[1].replace(BASE, '')}">${esc(c[0])}</a><span>/</span>` : `<span aria-current="page">${esc(c[0])}</span>`).join('')}</nav>`;

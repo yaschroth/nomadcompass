@@ -35,7 +35,9 @@ const CHECKS = fs.existsSync(CHECKS_F) ? JSON.parse(fs.readFileSync(CHECKS_F, 'u
 const VISA = '(?:digital[- ]nomad|nomad|remote[- ]work(?:er)?|freelanc\\w*|long[- ]stay|retirement|work(?:ing)? holiday|startup|self[- ]employ\\w*)';
 const RX = [
   new RegExp(`\\b(?:has|offers|there is|there's)\\s+no\\s+(?:\\w+\\s+){0,3}${VISA}\\s+(?:visa|permit|scheme|programme|program|route|category|framework)`, 'i'),
-  new RegExp(`\\b(?:does not|doesn't|did not|has not|hasn't|never)\\s+(?:yet\\s+)?(?:offer|have|has|issue|introduce|launch|run|created?)\\s+(?:a|an|any)\\s+(?:\\w+\\s+){0,3}${VISA}\\s+(?:visa|permit|scheme|programme|program|route|category)`, 'i'),
+  // An adverb between the verb parts ("does not currently offer") and up to five words before the visa
+  // ("a dedicated remote worker or digital nomad visa") both hid claims until 2026-10-06 (Cebu, Siargao).
+  new RegExp(`\\b(?:does not|doesn't|did not|has not|hasn't|never)\\s+(?:(?:yet|currently|presently|still|as yet)\\s+)?(?:offer|have|has|issue|introduce|launch|run|created?)\\s+(?:a|an|any)\\s+(?:[\\w-]+\\s+){0,5}?${VISA}\\s+(?:visa|permit|scheme|programme|program|route|category)`, 'i'),
   new RegExp(`\\b(?:has yet to|is yet to)\\s+(?:offer|introduce|launch|create)\\s+(?:a|an|any)\\s+(?:\\w+\\s+){0,3}${VISA}`, 'i'),
   new RegExp(`\\b(?:lacks|without)\\s+(?:a|an|any)\\s+(?:\\w+\\s+){0,3}${VISA}\\s+(?:visa|permit|scheme|route)`, 'i'),
   new RegExp(`\\bno\\s+${VISA}\\s+(?:visa|permit|scheme)\\s+(?:exists|is available|is on offer)`, 'i'),

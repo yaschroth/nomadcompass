@@ -91,6 +91,9 @@ const INDEX_PHRASES = [
   /(ranked across )(\d{3,4})( cities)/g,
   /(across our )(\d{3,4})(-city index)/g,
   /(an index of )(\d{3,4})( cities)/g,
+  // "factors across 1,000 cities" in the all-round ranking's description, written when the index was
+  // rounder than it is; the comma form was invisible to the patterns above.
+  /(factors across )(\d,\d{3}|\d{3,4})( cities)/g,
 ];
 
 module.exports = { stats, INDEX_PHRASES };
