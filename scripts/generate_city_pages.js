@@ -15675,7 +15675,7 @@ const CITY_CONTENT = {
       {
         "name": "Hassan II Mosque Area",
         "tagline": "Architectural wonder on the Atlantic",
-        "description": "The Hassan II Mosque dominates Casablanca's waterfront - world's third-largest mosque built over the Atlantic. Stunning architecture that defines the city's modern identity.",
+        "description": "The Hassan II Mosque dominates Casablanca's waterfront, one of the world's largest mosques and built partly out over the Atlantic. Stunning architecture that defines the city's modern identity.",
         "vibe": "Iconic & Spiritual",
         "bestFor": "Architecture lovers, spiritual seekers, and photographers",
         "pros": ["Stunning mosque", "Ocean setting", "Cultural significance", "Tours available"],

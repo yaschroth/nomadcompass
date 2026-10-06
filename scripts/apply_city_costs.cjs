@@ -20,11 +20,11 @@ new Function('module', fs.readFileSync(path.join(ROOT, 'cities-data.js'), 'utf8'
 const NAME = {}; m.exports.forEach((c) => { if (c && c.id) NAME[c.id] = c.name; });
 
 const SYM = { USD: '$', EUR: '€', GBP: '£', THB: '฿', JPY: '¥', CNY: '¥', INR: '₹',
-  BRL: 'R$', MXN: '$', KRW: '₩', TRY: '₺', RUB: '₽', ZAR: 'R', AUD: '$', CAD: '$', NZD: '$',
+  BRL: 'R$', MXN: 'MX$', KRW: '₩', TRY: '₺', RUB: '₽', ZAR: 'R', AUD: 'A$', CAD: 'C$', NZD: 'NZ$',
   CHF: 'CHF ', PLN: 'zł', CZK: 'Kč', HUF: 'Ft', SEK: 'kr', NOK: 'kr', DKK: 'kr', RON: 'lei',
   BGN: 'лв', HRK: 'kn', ILS: '₪', AED: 'AED ', SAR: 'SAR ', QAR: 'QAR ', KZT: '₸',
-  IDR: 'Rp', MYR: 'RM', PHP: '₱', VND: '₫', SGD: '$', HKD: '$', TWD: 'NT$', LKR: 'Rs', NPR: 'Rs',
-  EGP: 'E£', MAD: 'DH', COP: '$', ARS: '$', CLP: '$', PEN: 'S/', UYU: '$U', GEL: '₾', RSD: 'din',
+  IDR: 'Rp', MYR: 'RM', PHP: '₱', VND: '₫', SGD: 'S$', HKD: 'HK$', TWD: 'NT$', LKR: 'Rs', NPR: 'Rs',
+  EGP: 'E£', MAD: 'DH', COP: 'COL$', ARS: 'AR$', CLP: 'CLP$', PEN: 'S/', UYU: '$U', GEL: '₾', RSD: 'din',
   UAH: '₴', ISK: 'kr', KES: 'KSh' };
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const commas = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -96,9 +96,11 @@ function costBox(slug, d0, reconcile) {
     ['Monthly transit pass', d.transport],
     ['Buy price, per m² (centre)', d.buySqm],
   ];
-  const lines = lineDefs.filter((l) => l[1] != null).map((l) => {
+  // Numbeo records 0 for a monthly pass both where transit is free (Belgrade) and where no pass was
+  // reported (Arequipa); "$0" says neither, so a zero line is left out.
+  const lines = lineDefs.filter((l) => l[1] != null && l[1] !== 0).map((l) => {
     const u = usd(l[1], rate);
-    return `          <li><span class="cost-line-label">${esc(l[0])}</span><span class="cost-line-val">${money(u)}<em>${esc(localStr(l[1], d.cur))}</em></span></li>`;
+    return `          <li><span class="cost-line-label">${esc(l[0])}</span><span class="cost-line-val">${money(u)}${d.cur === 'USD' ? '' : `<em>${esc(localStr(l[1], d.cur))}</em>`}</span></li>`;
   }).join('\n');
 
   const rr = Math.round(rate * 100) / 100;
@@ -117,7 +119,7 @@ ${personas}
         <ul class="cost-lines">
 ${lines}
         </ul>
-        <p class="cost-src">Prices are from Numbeo (${esc(d.date)}), converted to USD at ${esc(rateStr)} (${esc(fxDate)}). The monthly living-costs figure is our transparent one-person basket, groceries, a few meals out, utilities, phone, internet, transport and essentials, priced from those figures. Solo adds central rent; couple and lean are estimates from the same numbers.${reconcile ? RECONCILE : ''}</p>
+        <p class="cost-src">Prices are from Numbeo (${esc(d.date)}), ${d.cur === 'USD' ? 'already in US dollars' : `converted to USD at ${esc(rateStr)} (${esc(fxDate)})`}. The monthly living-costs figure is our transparent one-person basket, groceries, a few meals out, utilities, phone, internet, transport and essentials, priced from those figures. Solo adds central rent; couple and lean are estimates from the same numbers.${reconcile ? RECONCILE : ''}</p>
       </div>
       <!-- cost-end -->`;
 }

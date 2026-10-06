@@ -25,6 +25,7 @@ function fmtOffset(o) {
 
 const VALUE_RE = /<div class="quick-stat-value" id="timeDifference"[^>]*>[^<]*<\/div>/;
 const LABEL_STR = '<div class="quick-stat-label">Time Difference</div>';
+const REFRESH_RE = /(<div class="quick-stat-value">)UTC[^<]*(<\/div>\s*<div class="quick-stat-label">Timezone<\/div>)/;
 
 let done = 0, skipped = 0, miss = [];
 for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWith('.html'))) {
@@ -36,6 +37,9 @@ for (const f of fs.readdirSync(path.join(ROOT, 'cities')).filter((x) => x.endsWi
   const utc = fmtOffset(tzById.get(slug));
   s = s.replace(VALUE_RE, `<div class="quick-stat-value">${utc}</div>`);
   s = s.split(LABEL_STR).join('<div class="quick-stat-label">Timezone</div>');
+  // Refresh as well as insert: Morocco left UTC+1 on 2026-09-20 and an insert-only sweep kept the old
+  // offset on all 15 pages.
+  s = s.replace(REFRESH_RE, (m, pre, post) => pre + utc + post);
   if (s !== before) { fs.writeFileSync(abs, s); done++; }
   else if (/quick-stat-label">Timezone</.test(s)) skipped++;
   else miss.push(f);

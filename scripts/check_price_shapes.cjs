@@ -27,7 +27,9 @@ const SKIP = new Set(['node_modules', '.git', 'scripts', 'data', 'ui-ux-pro-max-
 const num = (s) => parseFloat(s.replace(/,/g, ''));
 const RANGE = /\$\s?([\d,]+(?:\.\d+)?)\s*(k|K)?\s*(?:to|-|–)\s*\$\s?([\d,]+(?:\.\d+)?)\s*(k|K)?/g;
 // "(~$27)" is the same doubled gloss with a tilde, which this pattern missed until 2026-10-05 (37 on 24 pages).
-const GLOSS = /\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?(?:\s*(?:\/|per |a )(?:mo|month|day|night|meal|week|year)\b)?\s*\(~?\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?\)/g;
+// 2026-10-06: "(about $580 to $900)", "(roughly $3,800)" and "$345-450 / $370-480" are the same doubled
+// gloss in other spellings; fix_price_glosses.cjs removed 282 of them and this keeps them out.
+const GLOSS = /\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?(?:\s*(?:\/|per |a )(?:mo|month|day|night|meal|week|year)\b)?\s*(?:\((?:~|about |roughly |approx\.? )?\$[\d,.]+(?:\s*(?:-|to)\s*\$?[\d,.]+)?\))|\$[\d,.]+-[\d,.]+(?: per [a-z]+)? \/ \$[\d,.]+-[\d,.]+/g;
 const TAG_THEN_DIGITS = /<\/?[a-zA-Z][^<>]{0,200}>[,.]\d{2}/g;
 const WS_THEN_DIGITS = /\n[ \t]*,\d{3}\b/g;
 
