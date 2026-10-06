@@ -249,6 +249,11 @@ function build(key, related) {
   const extra = ' Compare wifi, safety and visas.';
   let metaDesc = (lead + costs).length <= META.MAX ? lead + costs : lead;
   if (metaDesc.length < 120 && (metaDesc + extra).length <= META.MAX) metaDesc += extra;
+  // A page whose searchers ask a different question than the template answers can set its own line
+  // (2026-10-06: the weather ranking showed 2,400 times a month at position 8 with a 0.8% CTR for
+  // "best climate cities", and the template led with the ranking's name and its price span).
+  // It replaces the generated one only when it fits the budget; it carries no cost figure to drift.
+  if (content.metaDescriptionOverride && content.metaDescriptionOverride.length >= 120 && content.metaDescriptionOverride.length <= META.MAX) metaDesc = content.metaDescriptionOverride;
 
   const faqLd = (content.faq && content.faq.length) ? { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: content.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: String(f.a).replace(/\[([^\]]+)\]\((\/[^)]*)\)/g, '$1') } })) } : null;
   const crumbs = [['Home', BASE + '/'], ['Rankings', BASE + '/best'], [data.h1, url]];
