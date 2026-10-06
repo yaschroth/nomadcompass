@@ -52,10 +52,18 @@ fares in Semarang, Batumi, Yogyakarta, Zanzibar; Sapa's "$0 Loi" was Dong Loi), 
 COL$, CLP$ instead of a bare "$" for other dollar currencies; a 0 line is left out). check_price_shapes.cjs
 now flags the slash and "(about $...)" forms.
 
-## Guide prose that disagrees with the page's own cost figure (OPEN, owner decision)
-Gwangju, Crete, Oaxaca, Tepoztlan, Santiago, Antigua, Boquete, Ipoh, Chefchaouen, Ouarzazate, Cordoba,
-Osijek, Antalya, Oulu, Zermatt, Geiranger, Paris, Patras (transit pass), Huanchaco. Cordoba's "50-60%
-lower than Buenos Aires" is fixed (now "roughly a quarter below", from our own figures).
+## Guide prose that disagrees with the page's own cost figure (DONE)
+Owner decision: the text follows the number. Gwangju, Crete, Oaxaca, Tepoztlan, Santiago, Antigua,
+Boquete, Ipoh, Chefchaouen, Ouarzazate, Cordoba, Osijek, Antalya, Oulu, Zermatt, Geiranger, Paris, Patras,
+Huanchaco: every stated total now matches the hero figure. On the nine Numbeo cities, rents and transit
+passes in the prose take the measured values the page's own table shows (Cordoba's blue-rate-era rents
+of $87-300 became $310-490; Patras's pass $30 became $63). Lower tiers that are labelled as such ("budget
+nomads can live on $1,100") stay. Also fixed: five "$x / roughly $y" glosses in Santiago, Oulu's and
+Paris's bracket glosses, Oaxaca's eleven peso prices (USD rule), and "A arid/oceanic climate" plus
+"strong low costs" from the intro template on 54 pages (template fixed in de_templatize_cities.cjs and
+fix_new_city_intros.cjs). OPEN: Zermatt's own breakdown (rent $1,400-2,600 plus groceries $500-750)
+cannot fit the $1,900 estimate; the estimate itself looks low. Cordoba's groceries ($40-60) look like
+blue-rate-era figures too.
 
 ## Guide prose that disagrees with our climate data (DONE)
 Fixed in the guides against the climate data. Rarotonga's "day highs" were the data's fault, not the
