@@ -824,31 +824,32 @@
   height: 100%;
 }
 
-/* Custom map markers */
+/* Custom map markers. A square with an upright number, in the site's square shape. The old pin rotated
+   the marker -45deg and the number back +45deg, but Leaflet positions a marker with its own inline
+   transform, which replaced the rotation: the pin never turned and every number was drawn tilted. So
+   nothing here may use transform on .neighborhood-marker itself. */
 .neighborhood-marker {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: var(--color-charcoal);
-  border: 3px solid var(--color-white);
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
+  background: var(--color-ink, #0F172A);
+  border: 2px solid var(--color-white);
   box-shadow: var(--shadow-md);
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .neighborhood-marker span {
-  transform: rotate(45deg);
   color: var(--color-white);
   font-weight: var(--font-semibold);
   font-size: var(--text-sm);
+  line-height: 1;
 }
 
 .neighborhood-marker.active {
   background: var(--color-terracotta);
-  transform: rotate(-45deg) scale(1.2);
+  box-shadow: 0 0 0 4px rgba(192, 57, 43, .28), var(--shadow-md);
   z-index: 1000 !important;
 }
 
@@ -2391,3 +2392,8 @@
   line-height: 1.55;
 }
 .venue-src a { color: var(--color-terracotta); }
+
+/* Map tiles come from OpenStreetMap since 2026-10-08 (Carto's free basemaps now answer with an
+   "API key required" watermark). OSM's standard style is louder than Carto Voyager was, so the tiles
+   are toned down to sit with the page; the markers sit above the tile pane and keep their colour. */
+#neighborhoodsMap .leaflet-tile-pane { filter: saturate(.55) contrast(.95) brightness(1.04); }
