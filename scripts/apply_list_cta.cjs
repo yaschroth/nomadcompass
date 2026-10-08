@@ -42,9 +42,6 @@ const COUNT = stats().cities;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-  + '<path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h7A2.5 2.5 0 0 1 15 5.5v4a2.5 2.5 0 0 1-2.5 2.5H8l-3.5 3v-3.2A2.5 2.5 0 0 1 3 9.5z"/>'
-  + '<path d="M15 8h3.5A2.5 2.5 0 0 1 21 10.5v4a2.5 2.5 0 0 1-2 2.45V20l-3.5-3H12a2.5 2.5 0 0 1-2.4-1.8"/></svg>';
 const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
 function cityOf(rel) {
@@ -55,18 +52,19 @@ function cityOf(rel) {
 function block(indent, slug) {
   const where = slug ? 'in ' + esc(CITY.get(slug)) : 'in one of our ' + COUNT.toLocaleString('en-US') + ' cities';
   const href = '/list-your-business' + (slug ? '#city=' + slug : '');
+  // Styled as the top section of the footer (styles/footer.css), inside the footer's own .container
+  // so its left edge lines up with the footer columns below.
   return indent + OPEN + '\n'
     + indent + '<aside class="list-cta" aria-label="List your business">\n'
-    + indent + '  <div class="list-cta-inner">\n'
-    + indent + '    <span class="list-cta-icon" aria-hidden="true">' + ICON + '</span>\n'
+    + indent + '  <div class="container"><div class="list-cta-inner">\n'
     + indent + '    <div class="list-cta-text">\n'
     + indent + '      <p class="list-cta-eyebrow">For local businesses</p>\n'
-    + indent + '      <p class="list-cta-title">Do you serve clients in more than one language?</p>\n'
+    + indent + '      <p class="list-cta-title">Serve clients in <em>more than one language?</em></p>\n'
     + indent + '      <p class="list-cta-body">If your clinic, law firm, translation office or practice is ' + where
     + ', add it to our directory of services sorted by language. Listing is free.</p>\n'
     + indent + '    </div>\n'
     + indent + '    <a class="list-cta-btn" href="' + href + '">List your business' + ARROW + '</a>\n'
-    + indent + '  </div>\n'
+    + indent + '  </div></div>\n'
     + indent + '</aside>\n'
     + indent + CLOSE + '\n';
 }
