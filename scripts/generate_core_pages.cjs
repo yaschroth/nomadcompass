@@ -73,11 +73,9 @@ ${shell.bodyEnd}
 function contactPage() {
   const title = 'Contact The Nomad HQ';
   const desc = 'Questions, corrections, city suggestions or partnership ideas. Reader corrections are what keep the city guides accurate, and we read every message.';
-  const ICON = {
-    email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
-    linkedin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 17v-7"/></svg>',
-    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7v.01"/></svg>',
-  };
+  // IBM Carbon, the sitewide icon set (lib/carbon.cjs). apply_icon_set.cjs keeps the published page in step.
+  const { carbonSvg } = require(path.join(__dirname, 'lib', 'carbon.cjs'));
+  const ICON = { email: carbonSvg('email'), linkedin: carbonSvg('logo--linkedin'), instagram: carbonSvg('logo--instagram') };
   const card = (href, ext, icon, label, value, note) =>
     `<a class="contact-card" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}>
           <span class="contact-icon">${icon}</span>
