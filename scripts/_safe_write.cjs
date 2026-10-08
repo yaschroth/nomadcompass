@@ -70,6 +70,18 @@ fs.writeFileSync = function (file, data, ...rest) {
       console.error('Vorlage erst aktualisieren. Bewusstes Ueberschreiben: --force');
       process.exit(1);
     }
+    // The list-your-business banner is carried, not guarded: it sits in one fixed place (directly
+    // before the shared footer) and is the same on every page of a family, so a generator that does
+    // not know about it gets the page's existing block put back instead of a refusal. Blocking
+    // would leave every page generator stuck until each template learned the banner.
+    // apply_list_cta.cjs still owns the wording and refreshes it.
+    const cta = old.match(/[ \t]*<!-- list-cta -->[\s\S]*?<!-- \/list-cta -->[ \t]*\r?\n?/);
+    const foot = data.indexOf('<footer class="footer"');
+    if (cta && foot !== -1 && !data.includes('<!-- list-cta -->')) {
+      const lineStart = data.lastIndexOf('\n', foot) + 1;
+      const at = /^[ \t]*$/.test(data.slice(lineStart, foot)) ? lineStart : foot;
+      data = data.slice(0, at) + cta[0].replace(/\r\n/g, '\n') + data.slice(at);
+    }
   }
   return realWrite.call(fs, file, data, ...rest);
 };

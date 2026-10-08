@@ -131,7 +131,7 @@ function contactPage() {
 
 const updatedLine = `    <p class="legal-updated">Last updated: ${UPDATED}</p>`;
 // Privacy was revised (third-party/map-tile + self-hosted-fonts clarification) after the others.
-const privacyUpdatedLine = `    <p class="legal-updated">Last updated: July 28, 2026</p>`;
+const privacyUpdatedLine = `    <p class="legal-updated">Last updated: October 8, 2026</p>`;
 
 // NOTE: about.html is intentionally NOT generated here. It is a bespoke, hand-maintained
 // page (custom layout, AboutPage + Organization + Person JSON-LD, stat row, category grid,
@@ -179,11 +179,12 @@ ${updatedLine}`),
     <ul>
       <li><strong>Analytics data.</strong> We use privacy-respecting analytics and Google Search Console to understand aggregate traffic (pages viewed, approximate location, device, referrer). This is not used to personally identify you.</li>
       <li><strong>Messages.</strong> If you email us, we keep your message and address to reply.</li>
+      <li><strong>Listing requests.</strong> If you send the form on <a href="/list-your-business">List your business</a>, the business details you enter are published on your listing. Your own name and email address are used only to reply to you and are not published.</li>
     </ul>
     <h2>Cookies</h2>
     <p>We use essential cookies for basic functionality and may use analytics and affiliate cookies (e.g., to attribute a referral to a booking partner). You can block cookies in your browser; core content will still work.</p>
     <h2>Third parties</h2>
-    <p>We rely on trusted providers to run the site: hosting and CDN (Vercel) and analytics (Google). When you open an interactive map, the map tiles and mapping library load from OpenStreetMap, Carto, and a public code CDN, which receive your IP address in order to serve them. Affiliate links are handled by their respective networks (for example, Booking.com). Each provider processes data under its own privacy policy. We host our own fonts, so no data is sent to any font CDN. We do not sell your personal information.</p>
+    <p>We rely on trusted providers to run the site: hosting and CDN (Vercel), analytics (Google) and delivery of the listing form to our inbox (Resend). When you open an interactive map, the map tiles and mapping library load from OpenStreetMap, Carto, and a public code CDN, which receive your IP address in order to serve them. Affiliate links are handled by their respective networks (for example, Booking.com). Each provider processes data under its own privacy policy. We host our own fonts, so no data is sent to any font CDN. We do not sell your personal information.</p>
     <h2>Your rights</h2>
     <p>Depending on where you live (e.g., the EU/UK under GDPR, or California under CCPA), you may have the right to access, correct, or delete your data, or opt out of certain processing. To exercise these rights, <a href="/contact">contact us</a>.</p>
     <h2>Data retention &amp; children</h2>

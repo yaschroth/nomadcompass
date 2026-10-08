@@ -41,6 +41,7 @@ const ONCE = {
   '<!-- facts-start -->': 'apply_city_facts.cjs',
   '<!-- cost-basis -->': 'apply_cost_basis.cjs',
   '<!-- city-scores:': 'apply_city_scores.cjs',
+  '<!-- list-cta -->': 'apply_list_cta.cjs',
   '<nav class="nav"': 'the shared nav',
   '<footer class="footer"': 'the shared footer',
 };

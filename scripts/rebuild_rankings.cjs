@@ -48,6 +48,7 @@ const STEPS = [
   ['nav search box (apply_nav_search)', 'apply_nav_search.cjs'],
   ['cost basis (apply_cost_basis)', 'apply_cost_basis.cjs'],
   ['photo credit (apply_photo_credit)', 'apply_photo_credit.cjs'],
+  ['list-your-business banner (apply_list_cta)', 'apply_list_cta.cjs'],
   ['structured data (apply_entity_schema, must run last)', 'apply_entity_schema.cjs'],
   ['analytics (apply_analytics)', 'apply_analytics.cjs'],
   ['search snippets (check_meta, a gate)', 'check_meta.cjs'],

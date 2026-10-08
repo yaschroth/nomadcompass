@@ -73,6 +73,7 @@ const STEPS = [
   ['sweep', 'apply_nav_search.cjs', ''],
   ['sweep', 'apply_footer_legal.cjs', ''],
   ['sweep', 'apply_photo_credit.cjs', 'names the photographer of every CC-licensed city photo'],
+  ['sweep', 'apply_list_cta.cjs', 'the list-your-business banner above the footer, on pages that are new'],
   ['sweep', 'apply_entity_schema.cjs', 'must be the last writer'],
   ['build', 'generate_sitemap.cjs', 'reads the seven manifests'],
   // After every writer, because it asks the filesystem which pages exist. Vercel matches redirects
