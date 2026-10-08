@@ -78,9 +78,36 @@ const WARDS = {
   nagoya: ['23', { 101: 'Chikusa', 102: 'Higashi', 103: 'Kita', 104: 'Nishi', 105: 'Nakamura', 106: 'Naka', 107: 'Showa', 108: 'Mizuho', 109: 'Atsuta', 110: 'Nakagawa', 111: 'Minato', 112: 'Minami', 113: 'Moriyama', 114: 'Midori', 115: 'Meito', 116: 'Tempaku' }],
   hiroshima: ['34', { 101: 'Naka', 102: 'Higashi', 103: 'Minami', 104: 'Nishi', 105: 'Asaminami', 106: 'Asakita', 107: 'Aki', 108: 'Saeki' }],
   kanazawa: ['17', { 201: '' }],
+  // Added 2026-10-08: the other 21 Japanese cities on the site, each at 0-10 rows before. JIS X 0402
+  // codes; a city without wards is one municipality, its 2xx code (or a town/village code: Hakone 382,
+  // Shirakawa 604 for Shirakawa-go, Koya 344 for Koyasan). Check the addresses after the first fetch.
+  kobe: ['28', { 101: 'Higashinada', 102: 'Nada', 105: 'Hyogo', 106: 'Nagata', 107: 'Suma', 108: 'Tarumi', 109: 'Kita', 110: 'Chuo', 111: 'Nishi' }],
+  sendai: ['04', { 101: 'Aoba', 102: 'Miyagino', 103: 'Wakabayashi', 104: 'Taihaku', 105: 'Izumi' }],
+  okayama: ['33', { 101: 'Kita', 102: 'Naka', 103: 'Higashi', 104: 'Minami' }],
+  kumamoto: ['43', { 101: 'Chuo', 102: 'Higashi', 103: 'Nishi', 104: 'Minami', 105: 'Kita' }],
+  naha: ['47', { 201: '' }],
+  nara: ['29', { 201: '' }],
+  matsumoto: ['20', { 202: '' }],
+  takayama: ['21', { 203: '' }],
+  kamakura: ['14', { 204: '' }],
+  nikko: ['09', { 206: '' }],
+  hakone: ['14', { 382: '' }],
+  shirakawago: ['21', { 604: '' }],
+  koyasan: ['30', { 344: '' }],
+  kurashiki: ['33', { 202: '' }],
+  matsue: ['32', { 201: '' }],
+  nagasaki: ['42', { 201: '' }],
+  takamatsu: ['37', { 201: '' }],
+  hakodate: ['01', { 202: '' }],
+  kagoshima: ['46', { 201: '' }],
+  matsuyama: ['38', { 201: '' }],
+  aomori: ['02', { 201: '' }],
 };
+// --only city,city restricts a run to those cities (a new city does not need the other 8 re-read).
+const ONLY = (val('--only', '') || '').split(',').filter(Boolean);
 const MUNIS = [];
 for (const [city, [pref, wards]] of Object.entries(WARDS)) {
+  if (ONLY.length && !ONLY.includes(city)) continue;
   for (const [code, ward] of Object.entries(wards)) MUNIS.push({ city, muni: pref + code, ward });
 }
 

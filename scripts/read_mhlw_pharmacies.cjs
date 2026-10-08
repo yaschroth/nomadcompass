@@ -83,8 +83,11 @@ const val = (k, d) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] :
 const CACHE = path.resolve(val('--cache', path.join(ROOT, '.cache', 'mhlw-pharmacy')));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// --only city,city restricts a run to those cities, as in read_mhlw_register.cjs.
+const ONLY = (val('--only', '') || '').split(',').filter(Boolean);
 const MUNIS = [];
 for (const [city, [pref, wards]] of Object.entries(WARDS)) {
+  if (ONLY.length && !ONLY.includes(city)) continue;
   for (const [code, ward] of Object.entries(wards)) MUNIS.push({ city, muni: pref + code, ward });
 }
 

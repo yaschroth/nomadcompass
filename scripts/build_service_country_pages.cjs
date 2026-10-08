@@ -343,7 +343,9 @@ for (const [countryName, co] of Object.entries(COUNTRIES)) {
       const lh1 = `${langName}-speaking ${label} in ${countryName}`;
       const ltitleOpts = [
         `${langName}-speaking ${label} in ${countryName}: ${lv.rows.length} listed`,
-        `${langName}-speaking ${label} in ${countryName}`,
+        // The count up front is shorter than ": N listed", so a long country name keeps it. The bare
+        // h1 is never an option: check_service_pages refuses a title that repeats the h1.
+        `${lv.rows.length} ${langName}-speaking ${label} in ${countryName}`,
         `${langName} ${label} in ${countryName}`,
       ];
       const ltitle = ltitleOpts.find((t) => t.length <= 60) || ltitleOpts[ltitleOpts.length - 1];

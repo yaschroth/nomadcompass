@@ -25,6 +25,19 @@ const { db: DB } = require(path.join(ROOT, 'scripts', 'lib', 'service_db.cjs'));
 
 // city|normalised-name pairs that are known to be two different things.
 const ALLOW = new Set([
+  // 2026-10-08, the AEFE list of French schools abroad names separate campuses with a suffix.
+  // École maternelle internationale Acacia de Hanoï / École maternelle internationale Acacia de Hanoï Long Bien: two campuses of one school, each on the list with its own address.
+  'ecolematernelleinternationaleacaciadehanoi|ecolematernelleinternationaleacaciadehanoilongbien|hanoi',
+  // Lycée français Jean-Mermoz / Lycée français Jean-Mermoz South: two campuses of one school, each on the list with its own address.
+  'dubai|lycefrancaisjeanmermoz|lycefrancaisjeanmermozsouth',
+  // Lycée français international Louis-Massignon / Lycée français international Louis-Massignon Casa-Anfa: two campuses of one school, each on the list with its own address.
+  'casablanca|lycefrancaisinternationallouismassignon|lycefrancaisinternationallouismassignoncasaanfa',
+  // Fondation Bouebdelli - Lycée Louis-Pasteur Gammarth / Lycée Louis-Pasteur: two campuses of one school, each on the list with its own address.
+  'fondationbouebdellilycelouispasteurgammarth|lycelouispasteur|tunis',
+  // Groupe scolaire René-Descartes Les Berges du Lac / Groupe scolaire René-Descartes: two campuses of one school, each on the list with its own address.
+  'groupescolairerenedescartes|groupescolairerenedescarteslesbergesdulac|tunis',
+  // École Simone-de-Beauvoir / École Simone-de-Beauvoir Junior: two campuses of one school, each on the list with its own address.
+  'ecolesimonedebeauvoir|ecolesimonedebeauvoirjunior|sfax',
   // The FCDO's Mexico list prints this name at two addresses in different districts; both are
   // kept and the second carries its district in the name so they can be told apart.
   'mexicocity|centromedicoabcobservatorio|centromedicoabcobservatoriolosmoralespolanco',
