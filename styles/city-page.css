@@ -2397,3 +2397,53 @@
    "API key required" watermark). OSM's standard style is louder than Carto Voyager was, so the tiles
    are toned down to sit with the page; the markers sit above the tile pane and keep their colour. */
 #neighborhoodsMap .leaflet-tile-pane { filter: saturate(.55) contrast(.95) brightness(1.04); }
+
+/* "Where to Stay" cards without a photo get a designed header instead (apply_stay_visuals.cjs owns the
+   markup). Same height as a photo plus its credit line, so cards with and without photos line up in a row.
+   Navy split on the home hero's diagonal, the type as an eyebrow, the neighbourhood large, and a Carbon
+   icon for the type as a faint watermark cut off by the corner, like the home page tool tiles. */
+.stay-visual {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 176px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: .3rem;
+  padding: 1.1rem var(--space-5);
+  background: linear-gradient(115deg, #111a2b 0%, #111a2b 58%, #172338 58%, #172338 100%);
+}
+.stay-visual-icon {
+  position: absolute;
+  right: -20px;
+  bottom: -26px;
+  z-index: -1;
+  width: 150px;
+  height: 150px;
+  color: #fff;
+  opacity: .08;
+  transition: opacity .25s ease, transform .35s ease;
+}
+.stay-card:hover .stay-visual-icon { opacity: .14; transform: translate(-6px, -6px); }
+.stay-visual-type {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #ff8863;
+}
+.stay-visual-area {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+/* The header carries the type and the area, so the body does not print them a second time. */
+.stay-visual ~ .stay-card-body .venue-type,
+.stay-visual ~ .stay-card-body .venue-area { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .stay-visual-icon { transition: none; }
+  .stay-card:hover .stay-visual-icon { transform: none; }
+}

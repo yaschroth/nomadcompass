@@ -76,7 +76,8 @@ const NAMECLASS = { coworking: 'cowork-card-name', eat: 'eat-card-name', stay: '
 
       // insert as first child of the article (flush top). For stay-card, still first child (before stay-card-body).
       const openTag = '<article class="' + cardClass + '">';
-      const replaced = target[0].replace(openTag, openTag + img);
+      // A real photo replaces the designed header apply_stay_visuals.cjs gives a stay card without one.
+      const replaced = target[0].replace(/[ \t]*<!-- stay-visual -->[\s\S]*?<!-- \/stay-visual -->\s*/, '').replace(openTag, openTag + img);
       s = s.replace(target[0], replaced);
       attrib[slug + '/' + vs] = { name: v.name, kind: v.kind, author: v.author, source: v.source, license: v.license, sourcePageUrl: v.sourcePageUrl, confirm: v.confirm };
       ok++;
