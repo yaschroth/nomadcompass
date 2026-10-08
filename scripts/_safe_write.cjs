@@ -45,6 +45,7 @@ const FEATURES = [
 ];
 
 const FORCE = process.argv.includes('--force');
+const navCta = require('./lib/nav_cta.cjs');
 const realWrite = fs.writeFileSync;
 
 // A lone carriage return (\r not followed by \n) makes Git read the file as binary, stop normalising
@@ -82,6 +83,8 @@ fs.writeFileSync = function (file, data, ...rest) {
       const at = /^[ \t]*$/.test(data.slice(lineStart, foot)) ? lineStart : foot;
       data = data.slice(0, at) + cta[0].replace(/\r\n/g, '\n') + data.slice(at);
     }
+    // The header's "Get listed" button, carried the same way (apply_nav_cta.cjs owns it).
+    if (navCta.hasNavCta(old) && !navCta.hasNavCta(data)) data = navCta.withNavCta(data);
   }
   return realWrite.call(fs, file, data, ...rest);
 };

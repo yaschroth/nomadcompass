@@ -583,3 +583,58 @@ body.nav-open {
 @media (min-width: 1024px) {
   .nav-search { display: flex; }
 }
+
+/* --------------------------------------------
+   "GET LISTED" BUTTON
+   Desktop: right of the nav search. Mobile: full width at the foot of the menu.
+   Owned by scripts/apply_nav_cta.cjs. The doubled selectors outrank base.css's
+   a:not(.btn):not(.nav-link), which would otherwise paint the label terracotta on terracotta.
+   -------------------------------------------- */
+.nav-cta { display: none; }
+@media (min-width: 1024px) {
+  .nav .nav-container a.nav-cta {
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 1rem;
+    border-radius: var(--radius-md, 8px);
+    background: var(--color-terracotta);
+    color: #fff;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+  .nav .nav-container a.nav-cta:hover {
+    background: var(--color-terracotta-dark, #a03325);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(192, 57, 43, .22);
+  }
+  .nav .nav-container a.nav-cta:focus-visible { outline: 3px solid rgba(192, 57, 43, .35); outline-offset: 2px; }
+  /* The search already pushes itself right with margin-left:auto; only a page without it needs the button to. */
+  .nav-container:not(:has(.nav-search)) a.nav-cta { margin-left: auto; }
+  .nav-container:has(.nav-cta) .nav-search { margin-right: .75rem; }
+}
+
+.nav-mobile a.nav-mobile-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: var(--radius-md, 8px);
+  background: var(--color-terracotta);
+  color: #fff;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  text-decoration: none;
+}
+.nav-mobile a.nav-mobile-cta:hover { background: var(--color-terracotta-dark, #a03325); color: #fff; }
+/* Centered links + search + button need ~1180px. Below that the search box ran into the links
+   (28px overlap at 1024), so the narrow desktop keeps the button and drops the box; city search
+   stays on /cities and the home page. Measured, not guessed: links-to-search gap is 49px at 1180. */
+@media (min-width: 1024px) and (max-width: 1179px) {
+  .nav-container:has(.nav-cta) .nav-search { display: none; }
+  .nav-container:has(.nav-cta) a.nav-cta { margin-left: auto; }
+}
