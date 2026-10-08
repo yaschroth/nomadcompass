@@ -886,3 +886,64 @@ body.home :is(
   color: var(--text-muted, #5a6270);
 }
 .ymyl-note strong { color: var(--text, #1d2530); }
+
+/* ============================================
+   SHAPE: SQUARE CORNERS, ONE DIAGONAL
+   Owner's rule (2026-10-08): no rounded corners anywhere. The site's shape is the home hero's
+   diagonal edge, the "/" that splits the copy from the city photographs.
+
+   1. Every corner is square. Pages carry ~130,000 border-radius declarations in their own inline
+      styles, so this is done once here (base.css is linked by every page) rather than in each one.
+      !important because an inline <style> block later in the page would otherwise win.
+   2. Solid buttons and small solid labels take the diagonal: a parallelogram leaning the same way
+      as the home hero's edge. Only solid fills: a clip-path cuts a border, so outlined buttons,
+      cards and inputs stay square instead of losing their slanted sides.
+   ============================================ */
+:root {
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-full: 0;
+  --slant: 12px;
+}
+*, *::before, *::after { border-radius: 0 !important; }
+
+.btn-primary,
+.nav .nav-container a.nav-cta,
+.nav-mobile a.nav-mobile-cta,
+.list-cta .list-cta-inner a.list-cta-btn,
+.lb-submit,
+.cc-btn-primary,
+.sv-cta,
+.rt-primary,
+.footer-newsletter-btn,
+.home-rank-all {
+  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+  padding-left: max(1.4rem, calc(var(--slant) + .9rem));
+  padding-right: max(1.4rem, calc(var(--slant) + .9rem));
+}
+/* Small labels lean the same way with a shallower cut. */
+.vs-board-win,
+.tool-badge,
+.cmp-ribbon,
+.filter-badge {
+  --slant: 6px;
+  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+  padding-left: calc(var(--slant) + .55rem);
+  padding-right: calc(var(--slant) + .55rem);
+}
+/* A clip-path also clips an outline drawn outside the box, so the focus ring is drawn inside. */
+.btn-primary:focus-visible,
+.nav .nav-container a.nav-cta:focus-visible,
+.nav-mobile a.nav-mobile-cta:focus-visible,
+.list-cta .list-cta-inner a.list-cta-btn:focus-visible,
+.lb-submit:focus-visible,
+.cc-btn-primary:focus-visible,
+.sv-cta:focus-visible,
+.rt-primary:focus-visible,
+.footer-newsletter-btn:focus-visible,
+.home-rank-all:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -5px;
+}
