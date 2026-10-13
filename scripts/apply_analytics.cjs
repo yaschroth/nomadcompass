@@ -8,6 +8,11 @@ require(require('path').join(__dirname,'_safe_write.cjs'));
  *   - Body (before </body>, <!-- cc --> markers): the Accept/Decline banner, shown only
  *     until the visitor chooses; Accept -> consent update granted + remembered.
  *
+ *   - Internal traffic sends nothing (GA's own ga-disable-<ID> opt-out): any device that once
+ *     opened a page with ?internal=1 (undo with ?internal=0), headless browsers
+ *     (navigator.webdriver) and every host other than thenomadhq.com (localhost, previews).
+ *     GA4 data filters cannot be created through the Admin API, so this is done in the page.
+ *
  * Run after any generator that rewrites <head>/<body>. Chained into rebuild_rankings.cjs.
  * Usage: node scripts/apply_analytics.cjs
  */
@@ -18,7 +23,7 @@ const GA_ID = 'G-JV1BMRJF89';
 
 const BLOCK = `  <!-- ga4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});try{if(localStorage.getItem('nomadhq_consent')==='granted'){gtag('consent','update',{analytics_storage:'granted'});}}catch(e){}gtag('config','${GA_ID}');</script>
+  <script>(function(){var K='nomadhq_internal',on=false;try{if(/[?&]internal=1\\b/.test(location.search))localStorage.setItem(K,'1');if(/[?&]internal=0\\b/.test(location.search))localStorage.removeItem(K);on=localStorage.getItem(K)==='1';}catch(e){}if(on||navigator.webdriver||location.hostname!=='thenomadhq.com')window['ga-disable-${GA_ID}']=true;})();window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});try{if(localStorage.getItem('nomadhq_consent')==='granted'){gtag('consent','update',{analytics_storage:'granted'});}}catch(e){}gtag('config','${GA_ID}');</script>
   <!-- /ga4 -->`;
 
 const BANNER = `  <!-- cc -->
