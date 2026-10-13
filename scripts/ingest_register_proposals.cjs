@@ -42,7 +42,11 @@ const file = argv[0];
 if (!file || file.startsWith('--')) { console.error('usage: ingest_register_proposals.cjs <proposals.json> --publisher "..." [--apply]'); process.exit(2); }
 
 const P = JSON.parse(fs.readFileSync(path.resolve(file), 'utf8'));
-const db = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+const DB_RAW = fs.readFileSync(DB_FILE, 'utf8');
+const db = JSON.parse(DB_RAW);
+// Write the file back in the indent it was read in: writing 2 into a file kept at 1 rewrites every
+// one of its lines, and the commit can no longer show which rows a batch added.
+const DB_INDENT = (DB_RAW.match(/^\{\r?\n( +)"/) || [, '  '])[1].length;
 const sources = JSON.parse(fs.readFileSync(SRC_FILE, 'utf8'));
 const checks = JSON.parse(fs.readFileSync(CHECKS_FILE, 'utf8'));
 const cities = require(path.join(ROOT, 'scripts', 'lib', 'service_data.cjs'));
@@ -152,7 +156,7 @@ for (const { row, sid, r } of add) {
   }
   if (has('--seed-checks')) checks.checks[r.sourceUrl] = { verdict: 'OK', status: 200, checkedAt: row.checked };
 }
-fs.writeFileSync(DB_FILE, `${JSON.stringify(db, null, 2)}\n`);
+fs.writeFileSync(DB_FILE, `${JSON.stringify(db, null, DB_INDENT)}\n`);
 fs.writeFileSync(SRC_FILE, `${JSON.stringify(sources, null, 1)}\n`);
 if (has('--seed-checks')) fs.writeFileSync(CHECKS_FILE, `${JSON.stringify(checks, null, 1)}\n`);
 console.log(`\nwrote ${add.length} rows. now run: node scripts/rebuild_services.cjs`);
