@@ -66,6 +66,8 @@ const STEPS = [
   // After the pair manifest exists, because the index reads it to decide whether the "see all X in
   // Y" button can name a service page or has to name the city page.
   ['build', 'gen_service_search_index.cjs', 'the provider index behind the live search on /services'],
+  // After the pair manifest, for the same reason: each badge links to the most specific page its card is on.
+  ['build', 'generate_badge_page.cjs', 'the Checked badge page: one entry per Checked row, linking to its card'],
   ['build', 'apply_city_services_link.cjs', 'the links from cities/ into the directory'],
   ['sweep', 'apply_analytics.cjs', ''],
   ['sweep', 'apply_skip_link.cjs', ''],

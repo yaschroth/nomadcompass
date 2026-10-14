@@ -37,6 +37,11 @@
     .lb-set legend { float: left; width: 100%; font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--color-ink); padding: 0; margin: 0 0 .2rem; }
     .lb-set legend + * { clear: both; }
     .lb-set-note { margin: 0 0 1.25rem; color: var(--color-stone); font-size: .92rem; }
+    .lb-claim { margin: 0 0 1.5rem; padding: 1.1rem 1.25rem 1rem; background: #eaf5ee; border-left: 4px solid #2f7d55; color: #0f4a2f; font-size: .95rem; line-height: 1.6; }
+    .lb-claim p { margin: 0 0 .5rem; }
+    .lb-claim p:last-child { margin: 0; }
+    .lb-claim-head { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: #0f4a2f; }
+    .lb-claim-tip { font-size: .85rem; color: #1c5c3c; }
     .lb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 1.1rem; }
     .lb-full { grid-column: 1 / -1; }
     @media (max-width: 640px) { .lb-grid { grid-template-columns: minmax(0, 1fr); } .lb-form, .lb-done { padding: 1.5rem 1.25rem 1.4rem; border-radius: 16px; } }
@@ -151,6 +156,11 @@
 
     <div class="lb-wrap">
       <div class="lb-main">
+        <div class="lb-claim" id="lbClaim" hidden>
+          <p class="lb-claim-head">You are already listed</p>
+          <p>Your entry for <strong id="lbClaimName"></strong> was read off a published list. Check it below, correct anything that is wrong, and tell us every language you work in. A confirmed entry is marked <em>Checked with them</em> with the date and shown first on its city, service and language pages, and may show <a href="/badge">the Checked badge</a> on its own site. Nobody can pay for that; it can only be confirmed.</p>
+          <p class="lb-claim-tip">Write from an address at your own domain where you can, so we can see it is you.</p>
+        </div>
         <form class="lb-form" id="lbForm" novalidate>
           <fieldset class="lb-set">
             <legend>Your business</legend>
@@ -268,6 +278,7 @@
           </fieldset>
 
           <div class="lb-hp" aria-hidden="true"><label for="lbFax">Fax</label><input id="lbFax" name="fax" type="text" tabindex="-1" autocomplete="off"></div>
+          <input type="hidden" name="claim" id="lbClaimField" value="">
 
           <div class="lb-submit-row">
             <button type="submit" class="lb-submit" id="lbSubmit">Send my listing<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -297,6 +308,10 @@
         <div class="lb-card lb-card-quiet">
           <h2>Prefer email?</h2>
           <p>Send the same details to <a href="mailto:info@topblog.agency">info@topblog.agency</a>.</p>
+        </div>
+        <div class="lb-card lb-card-quiet">
+          <h2>Already Checked?</h2>
+          <p>Show <a href="/badge">the Checked badge</a> on your own site. It links straight to your entry.</p>
         </div>
       </aside>
     </div>
@@ -362,9 +377,22 @@
       else if(e.key==='Enter'&&panel.classList.contains('is-open')){e.preventDefault();if(active>-1&&rows[active])pick(rows[active].city);else if(rows.length===1)pick(rows[0].city);}
     });
 
-    // A banner on a city page links here as #city=<slug>.
-    var m=location.hash.match(/city=([a-z0-9-]+)/);
-    if(m){for(var i=0;i<L.length;i++){if(L[i][1]===m[1]){pick(L[i]);break;}}}
+    // A banner on a city page links here as #city=<slug>. The "Is this you?" link on a provider
+    // card adds claim=1, cat=<key> and name=<the name as the card prints it>: the provider arrives
+    // with its own entry filled in, and the page says what confirming it is worth.
+    var hp;try{hp=new URLSearchParams(location.hash.replace(/^#/,''));}catch(e){hp=new URLSearchParams('');}
+    var hc=hp.get('city');
+    if(hc){for(var i=0;i<L.length;i++){if(L[i][1]===hc){pick(L[i]);break;}}}
+    if(hp.get('claim')==='1'&&hp.get('name')){
+      var nm=hp.get('name').slice(0,200),hcat=hp.get('cat')||'';
+      form.elements.businessName.value=nm;
+      if(hcat&&cat.querySelector('option[value="'+hcat.replace(/[^a-z]/g,'')+'"]')){cat.value=hcat;otherWrap.hidden=cat.value!=='other';}
+      document.getElementById('lbClaimField').value='1';
+      document.getElementById('lbClaimName').textContent=nm;
+      document.getElementById('lbClaim').hidden=false;
+      document.getElementById('lbMessage').placeholder='Anything on your entry that is wrong or missing.';
+      var dh=done.querySelector('h2');if(dh)dh.textContent='Thank you, we have your confirmation';
+    }
 
     cat.addEventListener('change',function(){otherWrap.hidden=cat.value!=='other';clearErr('category');});
     form.addEventListener('change',function(e){if(e.target.name==='lang')clearErr('languages');});
@@ -377,7 +405,7 @@
 
     function collect(){
       var v={};
-      ['businessName','category','categoryOther','website','address','phone','whatsapp','publicEmail','description','contactName','email','message','fax'].forEach(function(n){v[n]=(form.elements[n].value||'').trim();});
+      ['businessName','category','categoryOther','website','address','phone','whatsapp','publicEmail','description','contactName','email','message','fax','claim'].forEach(function(n){v[n]=(form.elements[n].value||'').trim();});
       var langs=[];Array.prototype.forEach.call(form.querySelectorAll('input[name="lang"]:checked'),function(x){langs.push(x.value);});
       (form.elements.otherLanguages.value||'').split(/[,;\/]+/).forEach(function(x){x=x.trim();if(x&&langs.indexOf(x)<0)langs.push(x);});
       v.languages=langs;
@@ -418,7 +446,7 @@
           if(res.status===200&&res.body.ok){
             form.hidden=true;done.hidden=false;done.focus();
             window.scrollTo({top:Math.max(0,done.getBoundingClientRect().top+window.scrollY-120),behavior:'smooth'});
-            if(typeof gtag==='function')gtag('event','generate_lead',{form_name:'list_business',service:v.category});
+            if(typeof gtag==='function')gtag('event','generate_lead',{form_name:'list_business',service:v.category,claim:v.claim==='1'?'existing':'new'});
             return;
           }
           if(res.status===400&&res.body.field&&ERR[res.body.field]){setErr(res.body.field,res.body.error);return;}
@@ -484,6 +512,7 @@
   }, true);
 })();</script>
 <!-- /aff-track -->
+
 
   <!-- nav-search-js -->
   <script src="/assets/city-search-index.js" defer></script>

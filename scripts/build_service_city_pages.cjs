@@ -97,7 +97,7 @@ function card(p) {
     ? `<a href="${esc(p.url)}" target="_blank" rel="nofollow noopener">${esc(p.name)}</a>`
     : esc(p.name);
   const meta = [esc(CATS[p.category]), p.area ? esc(p.area) : null].filter(Boolean).join('&nbsp;&middot; ');
-  return `<article class="sv-card sf-item sv-c-${p.category}${p.evidence === 'visited' ? ' sv-checked' : ''}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
+  return `<article class="sv-card sf-item sv-c-${p.category}${p.evidence === 'visited' ? ' sv-checked' : ''}" id="${P.cardId(p)}" data-cat="${p.category}" data-lang="${p.languages.join(' ')}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${inlineIcon(CAT_ICON[p.category])}</span>
           <div>
@@ -108,7 +108,7 @@ function card(p) {
         <p class="sv-langs"><span class="sv-lang-label">${P.speaksLabel(p.category)}</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
-          <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
+          <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a>${P.claimLink(p)}</p>
           <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}${p.mobile ? '' : `<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a>`}${P.contactLinks(p)}</p>
         </div>
       </article>`;

@@ -81,6 +81,7 @@ add('/blog', '0.7', 'weekly');
 add('/about', '0.4', 'yearly');
 add('/contact', '0.3', 'yearly');
 add('/list-your-business', '0.4', 'yearly');
+add('/badge', '0.3', 'yearly');
 add('/disclosure', '0.3', 'yearly');
 add('/privacy', '0.2', 'yearly');
 add('/terms', '0.2', 'yearly');

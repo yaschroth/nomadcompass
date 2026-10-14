@@ -44,6 +44,20 @@ open the medical / "医療機関" link (usually under `/itpr_ja/`) and save the 
 | `jp-bangkok-medical.*` | https://www.th.emb-japan.go.jp/ | Bangkok |
 | `jp-mexico-medical.*` | https://www.mx.emb-japan.go.jp/ | Mexico City |
 
+## Held for the owner's permission request (2026-10-14)
+
+- **Croatian Bar Association register** (https://www.hok-cba.hr/imenik/): records each lawyer's working
+  languages, searchable by city and language, one JSON call returns a whole city (recipe in the session
+  notes). Active lawyers recording English: Zagreb 2,209, Split 349, Rijeka 284, Zadar 128, Pula 111,
+  Dubrovnik 66; also German, Italian, French, Russian, Czech. Its terms (https://www.hok-cba.hr/prava-koristenja/)
+  allow personal use only and claim copyright over the database, so nothing was read into the directory.
+  Permission request drafted for the owner to send to hok-cba@hok-cba.hr. Until then the lawyer pages for
+  those six cities link to the register's prefiltered search with the dated count.
+- **Turkish bar rolls**: none records languages (TBB national levha, Antalya, Muğla, İzmir, İstanbul, Ankara
+  all checked 2026-10-14). TBB and İzmir sit behind captchas; Muğla filters by district with no captcha
+  (Fethiye 559, Bodrum 656, Marmaris 223 lawyers) but publishes contact details only with the lawyer's
+  consent, so they are empty. Useful to confirm a name is registered, never as a source of rows.
+
 ## Held for the owner's decision (2026-10-09)
 
 - US Consulate Krakow attorney and doctor lists (42 rows): publicly posted but marked "SENSITIVE BUT UNCLASSIFIED".

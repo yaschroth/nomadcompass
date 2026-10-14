@@ -301,6 +301,29 @@ function mapsUrl(p) {
     encodeURIComponent([p.name, p.area, c && c.name, c && c.country].filter(Boolean).join(', '));
 }
 
+/**
+ * A stable anchor for one card, so a link from outside (the Checked badge on a provider's own site)
+ * lands on the card and not on the top of a page of two hundred. The provider's name, folded to
+ * ASCII; a name with no Latin letters in it (a Tokyo clinic, a Shanghai hospital) falls back to a
+ * short hash of the name, which is ugly and unique rather than pretty and empty.
+ */
+function cardId(p) {
+  const slug = String(p.name || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  return 'p-' + (slug.length >= 3 ? slug : require('crypto').createHash('sha1').update(String(p.name)).digest('hex').slice(0, 8));
+}
+
+/**
+ * The one link on a card addressed to the provider rather than the reader. A provider who googles
+ * its own name lands here (Bing shows those searches), and until 2026-10-14 the card offered it
+ * nothing. It opens the listing form with this entry filled in, as a confirmation or a correction;
+ * a confirmed entry earns the Checked tier. In the source line, in the source line's colour: it is
+ * about the entry's standing, not an action for the reader, and must not read as one.
+ */
+function claimLink(p) {
+  return `<a class="sv-claim" href="/list-your-business#claim=1&amp;city=${p.city}&amp;cat=${p.category}&amp;name=${encodeURIComponent(p.name).replace(/'/g, '%27')}">Is this you?</a>`;
+}
+
 function card(p, opts) {
   const o = opts || {};
   const chips = p.languages.map((l) => `<span class="sv-lang">${esc(langName(l))}</span>`).join('');
@@ -322,7 +345,7 @@ function card(p, opts) {
    * the full list, which is right where cards are grouped by category rather than by language.
    */
   const filterLangs = o.lang ? o.lang : p.languages.join(' ');
-  return `<article class="sv-card sf-item sv-c-${p.category}${p.evidence === 'visited' ? ' sv-checked' : ''}" data-cat="${p.category}" data-lang="${filterLangs}" data-name="${esc(p.name.toLowerCase())}">
+  return `<article class="sv-card sf-item sv-c-${p.category}${p.evidence === 'visited' ? ' sv-checked' : ''}" id="${cardId(p)}" data-cat="${p.category}" data-lang="${filterLangs}" data-name="${esc(p.name.toLowerCase())}">
         <div class="sv-head">
           <span class="sv-ico">${o.icon || ''}</span>
           <div>
@@ -333,7 +356,7 @@ function card(p, opts) {
         <p class="sv-langs"><span class="sv-lang-label">${speaksLabel(p.category)}</span>${chips}</p>
         ${p.note ? `<p class="sv-note">${esc(p.note)}</p>` : ''}
         <div class="sv-foot">
-          <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a></p>
+          <p class="sv-src">${evBadge(p)}<a href="${esc(p.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(host)}</a>${claimLink(p)}</p>
           <p class="sv-links">${p.url ? `<a class="sv-go" href="${esc(p.url)}" target="_blank" rel="nofollow noopener">Website</a>` : '<span class="sv-nogo">No site</span>'}${p.mobile ? '' : `<a class="sv-go" href="${esc(mapsUrl(p))}" target="_blank" rel="nofollow noopener">Maps</a>`}${contactLinks(p, o.lang)}</p>
         </div>
       </article>`;
@@ -416,7 +439,7 @@ function evidenceClaim(rows) {
 
 module.exports = {
   evidenceClaim,
-  esc, card, mapsUrl, contactLinks, WA_HELLO,
+  esc, card, cardId, claimLink, mapsUrl, contactLinks, WA_HELLO,
   words, list, plural, count, langName, an, catName, singular, who, work, teaches, speaksLabel, niceDate, publisherOf,
   standfirst, provenance, claimScope, geography, alternatives, faq, gapSentence, BOILERPLATE,
 };

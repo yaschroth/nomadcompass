@@ -41,6 +41,9 @@ const FIELDS = {
   contactName: ['Contact person', 200, false],
   email: ['Reply to', 200, false],
   message: ['Note to us', 2000, false],
+  // '1' when the provider came from the "Is this you?" link on its own card: this is a confirmation
+  // or a correction of an entry we already hold, and a confirmation earns the Checked tier.
+  claim: ['Existing entry', 4, false],
 };
 
 const ORIGINS = /^https:\/\/(thenomadhq\.com|www\.thenomadhq\.com|[a-z0-9-]+\.vercel\.app)$|^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
@@ -110,7 +113,10 @@ module.exports = async function handler(req, res) {
 
   const site = websiteUrl(v.website);
   const service = v.category === 'other' ? (v.categoryOther || CATEGORIES.other) : CATEGORIES[v.category];
-  const shown = { ...v, category: service, categoryOther: '', website: site || v.website };
+  const claim = v.claim === '1';
+  const kind = claim ? 'entry confirmation' : 'listing request';
+  const shown = { ...v, category: service, categoryOther: '', website: site || v.website,
+    claim: claim ? 'Yes: the provider confirms or corrects the entry already on the site' : '' };
 
   if (!process.env.RESEND_API_KEY) {
     console.error('list-business: RESEND_API_KEY is not set on this Vercel project');
@@ -132,7 +138,7 @@ module.exports = async function handler(req, res) {
 
   const html = `<!DOCTYPE html><html><body style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#334155">
 <div style="background:#0f172a;border-radius:12px;padding:24px 26px;margin-bottom:18px">
-<p style="margin:0;color:#ff8863;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700">The Nomad HQ &middot; listing request</p>
+<p style="margin:0;color:#ff8863;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700">The Nomad HQ &middot; ${kind}</p>
 <h1 style="margin:8px 0 0;color:#fff;font-size:22px">${esc(v.businessName)}</h1>
 <p style="margin:6px 0 0;color:#cbd5e1;font-size:14px">${esc(service)} in ${esc(v.city)}</p></div>
 <h2 style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;margin:0 0 6px">For the listing</h2>
@@ -142,7 +148,7 @@ module.exports = async function handler(req, res) {
 <p style="margin-top:24px;font-size:13px;color:#6b7280">Reply to this email to reach ${esc(v.contactName || v.businessName)} at ${esc(v.email)}.</p>
 </body></html>`;
 
-  const text = ['Listing request from thenomadhq.com', '', 'FOR THE LISTING']
+  const text = [(claim ? 'Entry confirmation' : 'Listing request') + ' from thenomadhq.com', '', 'FOR THE LISTING']
     .concat(listingKeys.filter((k) => shown[k]).map((k) => FIELDS[k][0] + ': ' + shown[k]))
     .concat(['', 'NOT FOR PUBLICATION'])
     .concat(privateKeys.filter((k) => shown[k]).map((k) => FIELDS[k][0] + ': ' + shown[k]))
@@ -156,7 +162,7 @@ module.exports = async function handler(req, res) {
         from: FROM,
         to: [TO],
         reply_to: v.email,
-        subject: `Listing request: ${v.businessName} (${service}, ${v.city})`.slice(0, 250),
+        subject: `${claim ? 'Entry confirmed' : 'Listing request'}: ${v.businessName} (${service}, ${v.city})`.slice(0, 250),
         html,
         text,
       }),
