@@ -677,7 +677,9 @@ function ingest(file) {
     if (!sources[sid]) sources[sid] = src;
     else sources[sid].rows += 1;
   });
-  fs.writeFileSync(DB_FILE, `${JSON.stringify(db, null, 2)}\n`);
+  // In the file's own indent: writing 2 into a file kept at 1 rewrote all million lines (2026-10-14).
+  const indent = (fs.readFileSync(DB_FILE, 'utf8').match(/^\{\r?\n( +)"/) || [, '  '])[1].length;
+  fs.writeFileSync(DB_FILE, `${JSON.stringify(db, null, indent)}\n`);
   fs.writeFileSync(SRC_FILE, `${JSON.stringify(sources, null, 1)}\n`);
   console.log(`\nwrote ${add.length} rows into data/service-languages.json`);
   console.log('now run: node scripts/rebuild_services.cjs');

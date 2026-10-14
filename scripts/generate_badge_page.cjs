@@ -13,6 +13,15 @@ require(require('path').join(__dirname, '_safe_write.cjs'));
  *
  * The list of entries is built from the data, so a provider whose tier lapsed is simply not offered
  * (expire_checked_tier.cjs moves it back to self-declared after a year). Re-run with the directory.
+ *
+ * ONE BADGE PER PROVIDER, NOT ONE FOR EVERYBODY
+ *
+ * A single badge image can be pasted onto any site by anyone. So each Checked provider gets its own
+ * pair of SVGs at /badges/<city>-<name>.svg (and -light.svg) carrying its name and the date it
+ * confirmed: copied onto another firm's site it names the wrong firm. Every key ever issued is kept
+ * in data/badge-issued.json, and when a provider stops being Checked its files are rewritten as
+ * "Listing not confirmed". Sites that embedded it change with it, without anyone asking them to.
+ * vercel.json caches /badges/ for a day, not the week /assets/ gets, so the change arrives.
  */
 const fs = require('fs');
 const path = require('path');
@@ -30,9 +39,13 @@ const pairUrl = {};
 const manifest = path.join(ROOT, 'data', 'service-pair-pages.json');
 if (fs.existsSync(manifest)) JSON.parse(fs.readFileSync(manifest, 'utf8')).forEach((p) => { pairUrl[p.city + '|' + p.service] = p.url; });
 
+// The file name: city first, because one name can be listed in two cities (MexTax, Lux Brumalis).
+const badgeKey = (p) => p.city + '-' + P.cardId(p).replace(/^p-/, '');
+
 const entries = db.providers
   .filter((p) => p.evidence === 'visited')
   .map((p) => ({
+    key: badgeKey(p),
     name: p.name,
     city: M.CITY[p.city] ? M.CITY[p.city].name : p.city,
     url: 'https://thenomadhq.com' + (pairUrl[p.city + '|' + p.category] || '/services/' + p.city) + '#' + P.cardId(p),
@@ -41,6 +54,67 @@ const entries = db.providers
   .sort((a, b) => a.name.localeCompare(b.name) || a.city.localeCompare(b.city));
 
 if (!entries.length) { console.error('generate_badge_page: no Checked rows, nothing to offer'); process.exit(1); }
+const dupKey = entries.map((e) => e.key).filter((k, i, a) => a.indexOf(k) !== i);
+if (dupKey.length) { console.error('generate_badge_page: two Checked rows share a badge file: ' + dupKey.join(', ')); process.exit(1); }
+
+// ---- the badge files ------------------------------------------------------------------------------
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const longDate = (iso) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? `${Number(m[3])} ${MON[Number(m[2]) - 1]} ${m[1]}` : ''; };
+const xml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// 11px sans averages about 6.2px a character; the text column is 212px. Cut on a word where one is near.
+const fit = (s, max = 33) => {
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max - 1);
+  // A cut that already ends where a word ends keeps that word.
+  if (s.charAt(max - 1) === ' ') return cut.replace(/[\s,.&-]+$/, '') + '…';
+  const sp = cut.lastIndexOf(' ');
+  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,.&-]+$/, '') + '…';
+};
+const W = 300; const H = 84;
+function badgeSvg({ name, on, light, lapsed }) {
+  const ink = light ? '#0f172a' : '#ffffff';
+  const head = lapsed ? (light ? '#6b7280' : '#cbd5e1') : (light ? '#c0392b' : '#ffb199');
+  const sub = light ? '#4b5563' : '#cbd5e1';
+  const tile = lapsed ? '#6b7280' : '#c0392b';
+  const label = lapsed ? 'Listing not confirmed on The Nomad HQ' : `Confirmed listing on The Nomad HQ: ${name}, ${longDate(on)}`;
+  const mark = lapsed
+    ? '<path d="M8 15h16v2H8z"/>'
+    : '<path d="M13 24 4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"/>';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${xml(label)}">
+  <title>${xml(label)}</title>
+  <rect width="${W}" height="${H}" fill="${light ? '#ffffff' : '#0f172a'}"/>
+  ${light ? `<rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="#0f172a"/>` : ''}
+  <rect width="72" height="${H}" fill="${tile}"/>
+  <g transform="translate(20 26)" fill="#ffffff">${mark}</g>
+  <text x="86" y="22" font-family="Inter, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" letter-spacing="1.2" fill="${head}">${lapsed ? 'LISTING NOT CONFIRMED' : 'CONFIRMED LISTING ON'}</text>
+  <text x="86" y="42" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="${ink}">The Nomad HQ</text>
+  <text x="86" y="60" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="${ink}">${xml(fit(name))}</text>
+  <text x="86" y="74" font-family="Inter, Helvetica, Arial, sans-serif" font-size="9.5" fill="${sub}">${lapsed ? 'Confirmation lapsed' : 'Confirmed ' + xml(longDate(on))}</text>
+</svg>
+`;
+}
+
+const BADGE_DIR = path.join(ROOT, 'badges');
+const ISSUED_FILE = path.join(ROOT, 'data', 'badge-issued.json');
+fs.mkdirSync(BADGE_DIR, { recursive: true });
+const issued = fs.existsSync(ISSUED_FILE) ? JSON.parse(fs.readFileSync(ISSUED_FILE, 'utf8')) : {};
+const today = new Date().toISOString().slice(0, 10);
+const live = new Set();
+for (const e of entries) {
+  if (!e.on) { console.error('generate_badge_page: Checked row without confirmedOn: ' + e.name); process.exit(1); }
+  live.add(e.key);
+  issued[e.key] = { name: e.name, firstIssued: (issued[e.key] && issued[e.key].firstIssued) || today };
+  fs.writeFileSync(path.join(BADGE_DIR, e.key + '.svg'), badgeSvg({ name: e.name, on: e.on }));
+  fs.writeFileSync(path.join(BADGE_DIR, e.key + '-light.svg'), badgeSvg({ name: e.name, on: e.on, light: true }));
+}
+// Issued once and no longer Checked: the file stays, and says so.
+const lapsed = Object.keys(issued).filter((k) => !live.has(k));
+for (const k of lapsed) {
+  fs.writeFileSync(path.join(BADGE_DIR, k + '.svg'), badgeSvg({ name: issued[k].name, lapsed: true }));
+  fs.writeFileSync(path.join(BADGE_DIR, k + '-light.svg'), badgeSvg({ name: issued[k].name, lapsed: true, light: true }));
+}
+fs.writeFileSync(ISSUED_FILE, JSON.stringify(issued, null, 1) + '\n');
+const sample = entries.find((e) => e.name.length < 26) || entries[0];
 
 const title = 'The Confirmed listing badge | The Nomad HQ';
 const description = 'Providers that confirmed their entry on The Nomad HQ can show the Confirmed listing badge on their site. What it means, who may use it, and the embed code.';
@@ -83,7 +157,7 @@ ${shell.headTop}
     .bd-preview { display:flex; align-items:center; justify-content:center; padding:2rem 1rem; border:1px solid #e7ded0; }
     .bd-preview.is-dark { background:#f6f1e7; }
     .bd-preview.is-light { background:#fff; }
-    .bd-preview img { display:block; width:260px; height:60px; }
+    .bd-preview img { display:block; width:300px; max-width:100%; height:auto; }
     .bd-get { margin-top:1.25rem; padding:1.5rem; background:#f6f1e7; border:1px solid #e7ded0; }
     .bd-get label { display:block; font-weight:700; font-size:.92rem; margin:0 0 .4rem; }
     .bd-get select, .bd-get textarea { width:100%; font:inherit; font-size:.95rem; padding:.65rem .75rem; border:1px solid #cfc5b4; background:#fff; color:var(--color-ink,#0f172a); border-radius:0; }
@@ -116,13 +190,14 @@ ${shell.headTop}
 
     <div class="bd-wrap">
       <div class="bd-previews">
-        <div class="bd-preview is-dark"><img src="/assets/badge-checked.svg" alt="The Checked badge, dark version" width="260" height="60"></div>
-        <div class="bd-preview is-light"><img src="/assets/badge-checked-light.svg" alt="The Checked badge, light version" width="260" height="60"></div>
+        <div class="bd-preview is-dark"><img src="/badges/${sample.key}.svg" alt="An example badge, dark version" width="300" height="84"></div>
+        <div class="bd-preview is-light"><img src="/badges/${sample.key}-light.svg" alt="An example badge, light version" width="300" height="84"></div>
       </div>
 
       <h2>What it means</h2>
       <p>It means the provider answered us and confirmed what its card says, on the date the card shows. That is all it means, and it is more than any list we read can tell us, because it comes from the business itself in answer to a question. It says nothing about how good the work is. It cannot be bought, and it cannot be given to anyone who did not confirm their own entry.</p>
-      <p>A confirmation holds for twelve months. After that the card goes back to the tier it had before, until the provider confirms again, and the badge should come down with it.</p>
+      <p>Each badge is made for one provider: it carries your name and the date you confirmed, and it links to your entry. Copied onto another site it names you, not them, and the link shows whose it is.</p>
+      <p>A confirmation holds for twelve months. After that the card goes back to the tier it had before, until the provider confirms again, and the badge changes by itself to read <em>Listing not confirmed</em>, wherever it is shown. Confirm again and it comes back.</p>
 
       <h2>Get your badge</h2>
       <div class="bd-get">
@@ -133,8 +208,8 @@ ${shell.headTop}
         </select>
         <div class="bd-row">
           <div class="bd-variant" role="radiogroup" aria-label="Badge version">
-            <label><input type="radio" name="bdVar" value="badge-checked" checked> Dark</label>
-            <label><input type="radio" name="bdVar" value="badge-checked-light"> Light</label>
+            <label><input type="radio" name="bdVar" value="" checked> Dark</label>
+            <label><input type="radio" name="bdVar" value="-light"> Light</label>
           </div>
         </div>
         <label for="bdCode" style="margin-top:1rem">Paste this where you want the badge</label>
@@ -152,7 +227,7 @@ ${shell.headTop}
         <li>Keep the link. The badge stands for one entry, and the link is what lets a visitor check it.</li>
         <li>Use the image as it is. Resize it if you like, but do not redraw it or change its words.</li>
         <li>One badge per site, on the page where you present your practice.</li>
-        <li>Take it down if your entry is no longer Checked.</li>
+        <li>Link the image from our address, as the code does, rather than saving a copy: that is what lets it update when your entry does.</li>
       </ol>
 
       <h2>Not listed at all?</h2>
@@ -161,16 +236,16 @@ ${shell.headTop}
   </main>
 
   <script>(function(){
-    var E=${JSON.stringify(entries.map((e) => ({ n: e.name, c: e.city, u: e.url })))};
+    var E=${JSON.stringify(entries.map((e) => ({ n: e.name, c: e.city, u: e.url, k: e.key })))};
     var pick=document.getElementById('bdPick'),code=document.getElementById('bdCode'),copy=document.getElementById('bdCopy'),ok=document.getElementById('bdCopied'),live=document.getElementById('bdLive'),liveIn=document.getElementById('bdLiveIn');
-    function variant(){var r=document.querySelector('input[name=bdVar]:checked');return r?r.value:'badge-checked';}
+    function variant(){var r=document.querySelector('input[name=bdVar]:checked');return r?r.value:'';}
     function build(){
       var e=E[pick.value];ok.hidden=true;
       if(!e){code.value='';copy.disabled=true;live.hidden=true;return;}
-      var img='https://thenomadhq.com/assets/'+variant()+'.svg';
-      code.value='<a href="'+e.u+'" title="Confirmed listing on The Nomad HQ"><img src="'+img+'" alt="Confirmed listing on The Nomad HQ" width="260" height="60" loading="lazy" style="border:0"></a>';
+      var img='https://thenomadhq.com/badges/'+e.k+variant()+'.svg';
+      code.value='<a href="'+e.u+'" title="Confirmed listing on The Nomad HQ"><img src="'+img+'" alt="Confirmed listing on The Nomad HQ: '+e.n.replace(/"/g,'&quot;')+'" width="300" height="84" loading="lazy" style="border:0;max-width:100%;height:auto"></a>';
       copy.disabled=false;
-      liveIn.innerHTML='<a href="'+e.u+'"><img src="/assets/'+variant()+'.svg" alt="" width="260" height="60" style="display:block"></a>';
+      liveIn.innerHTML='<a href="'+e.u+'"><img src="/badges/'+e.k+variant()+'.svg" alt="" width="300" height="84" style="display:block;max-width:100%;height:auto"></a>';
       live.hidden=false;
     }
     pick.addEventListener('change',build);
