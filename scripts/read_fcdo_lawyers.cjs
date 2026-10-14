@@ -44,6 +44,31 @@ const lastIndexOfWord = (text, w) => {
 // ("S Lke Thyssen"), and publishing one puts a name in the directory that belongs to nobody.
 const looksDamaged = (name) => /^[A-Z]\s[A-Z][a-z]{1,3}(\s|$)/.test(name);
 
+// Entries whose "name" is a job title, an office suite or a professional body, not a firm or a person.
+const NOT_A_NAME = /^(lawyer|advocaat|advocate|attorney|independent|at law office)$|bar association|^suite \d/i;
+
+// Spain and Italy name a province after its capital, and an address ends with the province: "Jávea
+// (Xàbia), Alicante" is 90 km from Alicante. Their postcodes tell them apart: a provincial capital's
+// is PP0NN in Spain and PP1NN in Italy. An address holding no postcode of that form is not in the city.
+const CAPITAL_POSTCODE = { Spain: /(^|\D)\d{2}0\d{2}(\D|$)/, Italy: /(^|\D)\d{2}1\d{2}(\D|$)/ };
+// Our Spanish and Italian cities that are not provincial capitals, so the test above says nothing about them.
+const NOT_CAPITAL = new Set(['tenerife', 'tarifa', 'fuerteventura', 'gijon', 'ibiza', 'marbella', 'ronda',
+  'santiagodecompostela', 'albarracin', 'cudillero', 'besalu', 'vigo', 'vernazza', 'positano', 'alberobello',
+  'assisi', 'taormina', 'civitadibagnoregio', 'tropea', 'manarola', 'pitigliano']);
+
+// Placed in one of our cities by its province or neighbour, read by hand on 2026-10-13.
+const OUTSIDE = {
+  'Avukat Kader Gunes': 'Kas, 190 km from Antalya',
+  'Amaz Hassan Law Firm': 'Rawalpindi only, not Islamabad',
+  'Odvjetnik Marin Novakovic': 'Tenja, a village outside Osijek',
+};
+
+const key = (s) => fold(s).replace(/[^\p{L}\p{N}]+/gu, '');
+// For telling one firm's two entries apart from two firms: the legal form and the joining words go,
+// because the service lists "Macesic Partners Llc" and "Macesic Partners Ltd" at one address.
+const FORM = new Set(['llc', 'ltd', 'llp', 'pllc', 'inc', 'co', 'and', 'sl', 'slp', 'sa', 'srl', 'doo', 'd', 'o', 'gmbh', 'mbb', 'cjsc', 'law', 'firm', 'office', 'advocates', 'legal', 'consultants', 'associates']);
+const firmKey = (s) => fold(s).split(/[^\p{L}\p{N}]+/u).filter((w) => w && !FORM.has(w)).join('');
+
 const note = (r) => {
   const areas = String(r.expertise || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
   const parts = [];
@@ -52,7 +77,7 @@ const note = (r) => {
   return parts.length ? parts.join(', and ') + '.' : '';
 };
 
-const rows = []; const unplaced = {}; const damaged = []; const perCountry = {};
+const rows = []; const unplaced = {}; const damaged = []; const refused = []; const perCountry = {}; const seenIn = {};
 for (const f of fs.readdirSync(DIR).filter((x) => x.endsWith('.json'))) {
   const d = JSON.parse(fs.readFileSync(path.join(DIR, f), 'utf8'));
   if (!d.rows || !d.rows.length) continue;
@@ -62,6 +87,8 @@ for (const f of fs.readdirSync(DIR).filter((x) => x.endsWith('.json'))) {
   perCountry[country] = 0;
   for (const r of d.rows) {
     if (looksDamaged(r.name)) { damaged.push(country + ': ' + r.name); continue; }
+    if (NOT_A_NAME.test(r.name.trim())) { refused.push(country + ': "' + r.name + '" is not a firm'); continue; }
+    if (OUTSIDE[r.name]) { refused.push(country + ': ' + r.name + ' (' + OUTSIDE[r.name] + ')'); continue; }
     const text = fold(r.address || '');
     let best = null; let bestAt = -1;
     for (const { c, needles } of inCountry) {
@@ -71,6 +98,15 @@ for (const f of fs.readdirSync(DIR).filter((x) => x.endsWith('.json'))) {
       }
     }
     if (!best) { unplaced[country] = (unplaced[country] || 0) + 1; continue; }
+    if (CAPITAL_POSTCODE[country] && !NOT_CAPITAL.has(best.id) && /\d{5}/.test(r.address) && !CAPITAL_POSTCODE[country].test(r.address)) {
+      refused.push(country + ': ' + r.name + ' (postcode outside ' + best.name + ')'); continue;
+    }
+    // The service lists one firm several times (per office, per spelling: "Macesic Partners Llc" and
+    // "... Ltd"). One card per firm and city; one name inside the other is how the dupes gate sees it.
+    const k = firmKey(r.name) || key(r.name);
+    const seen = (seenIn[best.id] = seenIn[best.id] || []);
+    if (seen.some((q) => q === k || (q.length >= 6 && k.length >= 6 && (q.includes(k) || k.includes(q))))) continue;
+    seen.push(k);
     perCountry[country] += 1;
     rows.push({
       city: best.id,
@@ -87,6 +123,18 @@ for (const f of fs.readdirSync(DIR).filter((x) => x.endsWith('.json'))) {
   }
 }
 
+// Three firms giving the same practice areas share one sentence, and a sentence on several cards tells
+// a reader nothing about any of them (check_service_notes.cjs fails it). Such notes are left off.
+const DB = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'service-languages.json'), 'utf8'));
+// Counted in firms, not cards: a firm already listed carries its own note, and that is not a second firm.
+const firmsWith = {};
+[...DB.providers, ...rows].forEach((p) => {
+  if (!p.note) return;
+  (firmsWith[p.note] = firmsWith[p.note] || new Set()).add(p.city + '|' + (firmKey(p.name) || key(p.name)));
+});
+let dropped = 0;
+rows.forEach((r) => { if (r.note && firmsWith[r.note].size > 1) { delete r.note; dropped += 1; } });
+
 fs.writeFileSync(OUT, JSON.stringify({
   source: {
     publisher: "the UK Foreign Office's Find a professional service abroad",
@@ -97,6 +145,8 @@ fs.writeFileSync(OUT, JSON.stringify({
   rows,
 }, null, 1) + '\n');
 
+console.log(dropped + ' notes left off because another card carries the same sentence');
 console.log(rows.length + ' placed, ' + Object.values(unplaced).reduce((a, b) => a + b, 0) + ' with no city of ours in the address');
 console.log('  placed per country: ' + Object.entries(perCountry).filter(([, n]) => n).sort((a, b) => b[1] - a[1]).map(([k, n]) => k + ' ' + n).join(', '));
 if (damaged.length) console.log('  skipped, damaged name on the source: ' + damaged.join('; '));
+if (refused.length) console.log('  refused (' + refused.length + '):\n    ' + refused.join('\n    '));

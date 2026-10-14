@@ -81,7 +81,13 @@ const LANGS = db._languages;
 const LOCAL = cities.LOCAL || {};
 const CITY = cities.CITY; // every site city; `.cities` holds only those that already have rows
 
-const key = (s) => String(s || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+// The same name test as check_service_dupes.cjs, or the gate fails what this let through: without the
+// conjunctions and with accents folded, "Rödl Vietnam" is "Rodl Vietnam" and "Chauveau Mulon Et
+// Associes" sits inside "Cm A Chauveau Mulon Associes" (six such pairs on 2026-10-13). NFKC first, for
+// the full-width letters of the Japanese register.
+const { withoutConjunctions } = require(path.join(ROOT, 'scripts', 'lib', 'service_text.cjs'));
+const key = (s) => withoutConjunctions(String(s || '').normalize('NFKC')).normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
 const bare = (u) => String(u || '').toLowerCase().replace(/^https?:\/\/(www\.)?/, '').replace(/\/+$/, '');
 const urlOf = (p) => p.sourceUrl || (sources[p.source] || {}).url || '';
 const sourceId = (url) => {
