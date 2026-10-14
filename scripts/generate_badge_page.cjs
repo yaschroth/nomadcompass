@@ -24,6 +24,7 @@ require(require('path').join(__dirname, '_safe_write.cjs'));
  * vercel.json caches /badges/ for a day, not the week /assets/ gets, so the change arrives.
  */
 const fs = require('fs');
+const { execFileSync } = require('child_process');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -61,35 +62,78 @@ if (dupKey.length) { console.error('generate_badge_page: two Checked rows share 
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const longDate = (iso) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? `${Number(m[3])} ${MON[Number(m[2]) - 1]} ${m[1]}` : ''; };
 const xml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-// 11px sans averages about 6.2px a character; the text column is 212px. Cut on a word where one is near.
-const fit = (s, max = 33) => {
-  if (s.length <= max) return s;
-  const cut = s.slice(0, max - 1);
-  // A cut that already ends where a word ends keeps that word.
-  if (s.charAt(max - 1) === ' ') return cut.replace(/[\s,.&-]+$/, '') + '…';
+
+/**
+ * Text as outlines in the site's own fonts (scripts/text_to_path.py). The badge is an <img> on
+ * somebody else's site and cannot load our fonts; outlines need none. One python call per batch.
+ * A name in a script the fonts do not cover (a Tokyo clinic) comes back `missing` and is drawn as
+ * <text> in the system sans instead.
+ */
+function outlines(jobs) {
+  if (!jobs.length) return [];
+  const out = execFileSync('python', ['-I', path.join(__dirname, 'text_to_path.py')], { input: JSON.stringify(jobs), maxBuffer: 1 << 26 });
+  return JSON.parse(out.toString());
+}
+const NAME_FONT = { font: 'barlow-600', size: 12.5 };
+const W = 320; const H = 88; const TX = 76; const NAME_MAX = W - TX - 14;
+// Cut on a word where one is near, keeping a word that the cut already ends on.
+const cutTo = (s, n) => {
+  if (s.length <= n) return s;
+  const cut = s.slice(0, n - 1);
+  if (s.charAt(n - 1) === ' ') return cut.replace(/[\s,.&-]+$/, '') + '…';
   const sp = cut.lastIndexOf(' ');
-  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,.&-]+$/, '') + '…';
+  return (sp > n * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,.&-]+$/, '') + '…';
 };
-const W = 300; const H = 84;
-function badgeSvg({ name, on, light, lapsed }) {
+// Names that do not fit are cut in proportion to how far over they are and measured again, until they fit.
+function fittedNames(names) {
+  let cur = names.slice();
+  let m = outlines(cur.map((t) => ({ text: t, ...NAME_FONT })));
+  for (let round = 0; round < 4; round += 1) {
+    const over = cur.map((t, i) => (!m[i].missing && m[i].width > NAME_MAX ? i : -1)).filter((i) => i >= 0);
+    if (!over.length) break;
+    over.forEach((i) => { cur[i] = cutTo(names[i], Math.max(8, Math.floor((cur[i].length * NAME_MAX) / m[i].width) - round)); });
+    const again = outlines(over.map((i) => ({ text: cur[i], ...NAME_FONT })));
+    over.forEach((i, j) => { m[i] = again[j]; });
+  }
+  return cur.map((t, i) => ({ text: t, o: m[i] }));
+}
+const FIXED = outlines([
+  { text: 'CONFIRMED LISTING ON', font: 'chakra-petch-700', size: 9, track: 1.3 },
+  { text: 'LISTING NOT CONFIRMED', font: 'chakra-petch-700', size: 9, track: 1.3 },
+  { text: 'The Nomad', font: 'chakra-petch-700', size: 21 },
+  { text: 'HQ', font: 'chakra-petch-700', size: 21 },
+  { text: 'Confirmation lapsed', font: 'barlow-400', size: 10.5 },
+]);
+const [EYEBROW, EYEBROW_LAPSED, NOMAD, HQ, LAPSED_LINE] = FIXED;
+const at = (o, x, y, fill) => `<path transform="translate(${x} ${y})" fill="${fill}" d="${o.d}"/>`;
+
+/**
+ * The owner's pick of three (2026-10-14), "A: Slant": an ink field with a terracotta slab cut on the
+ * home hero's "/" diagonal, the white check inside it, and the wordmark as the nav writes it. The
+ * lapsed version keeps the layout and greys the slab, so a stale embed visibly tells on itself.
+ */
+function badgeSvg({ name, on, dateLine, light, lapsed }) {
+  const bg = light ? '#ffffff' : '#0f172a';
   const ink = light ? '#0f172a' : '#ffffff';
-  const head = lapsed ? (light ? '#6b7280' : '#cbd5e1') : (light ? '#c0392b' : '#ffb199');
-  const sub = light ? '#4b5563' : '#cbd5e1';
-  const tile = lapsed ? '#6b7280' : '#c0392b';
-  const label = lapsed ? 'Listing not confirmed on The Nomad HQ' : `Confirmed listing on The Nomad HQ: ${name}, ${longDate(on)}`;
+  const sub = light ? '#64748b' : '#94a3b8';
+  const slab = lapsed ? '#64748b' : '#c0392b';
+  const head = lapsed ? sub : (light ? '#c0392b' : '#ff8863');
+  const label = lapsed ? `Listing not confirmed on The Nomad HQ: ${name.text}` : `Confirmed listing on The Nomad HQ: ${name.text}, ${longDate(on)}`;
   const mark = lapsed
-    ? '<path d="M8 15h16v2H8z"/>'
+    ? '<path d="M7 15h18v2.4H7z"/>'
     : '<path d="M13 24 4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"/>';
+  const nameEl = name.o.missing
+    ? `<text x="${TX}" y="66" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12.5" font-weight="600" fill="${ink}">${xml(name.text)}</text>`
+    : at(name.o, TX, 66, ink);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${xml(label)}">
-  <title>${xml(label)}</title>
-  <rect width="${W}" height="${H}" fill="${light ? '#ffffff' : '#0f172a'}"/>
-  ${light ? `<rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="#0f172a"/>` : ''}
-  <rect width="72" height="${H}" fill="${tile}"/>
-  <g transform="translate(20 26)" fill="#ffffff">${mark}</g>
-  <text x="86" y="22" font-family="Inter, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" letter-spacing="1.2" fill="${head}">${lapsed ? 'LISTING NOT CONFIRMED' : 'CONFIRMED LISTING ON'}</text>
-  <text x="86" y="42" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="${ink}">The Nomad HQ</text>
-  <text x="86" y="60" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="${ink}">${xml(fit(name))}</text>
-  <text x="86" y="74" font-family="Inter, Helvetica, Arial, sans-serif" font-size="9.5" fill="${sub}">${lapsed ? 'Confirmation lapsed' : 'Confirmed ' + xml(longDate(on))}</text>
+<title>${xml(label)}</title>
+<rect width="${W}" height="${H}" fill="${bg}"/>${light ? `<rect x=".5" y=".5" width="${W - 1}" height="${H - 1}" fill="none" stroke="#0f172a" stroke-opacity=".9"/>` : ''}
+<polygon points="0,0 62,0 46,${H} 0,${H}" fill="${slab}"/>
+<g transform="translate(10 28)" fill="#ffffff">${mark}</g>
+${at(lapsed ? EYEBROW_LAPSED : EYEBROW, TX, 24, head)}
+${at(NOMAD, TX, 47, ink)}${at(HQ, TX + NOMAD.width + 6, 47, lapsed ? sub : '#c0392b')}
+${nameEl}
+${at(lapsed ? LAPSED_LINE : dateLine, TX, 80, sub)}
 </svg>
 `;
 }
@@ -104,15 +148,21 @@ for (const e of entries) {
   if (!e.on) { console.error('generate_badge_page: Checked row without confirmedOn: ' + e.name); process.exit(1); }
   live.add(e.key);
   issued[e.key] = { name: e.name, firstIssued: (issued[e.key] && issued[e.key].firstIssued) || today };
-  fs.writeFileSync(path.join(BADGE_DIR, e.key + '.svg'), badgeSvg({ name: e.name, on: e.on }));
-  fs.writeFileSync(path.join(BADGE_DIR, e.key + '-light.svg'), badgeSvg({ name: e.name, on: e.on, light: true }));
 }
 // Issued once and no longer Checked: the file stays, and says so.
 const lapsed = Object.keys(issued).filter((k) => !live.has(k));
-for (const k of lapsed) {
-  fs.writeFileSync(path.join(BADGE_DIR, k + '.svg'), badgeSvg({ name: issued[k].name, lapsed: true }));
-  fs.writeFileSync(path.join(BADGE_DIR, k + '-light.svg'), badgeSvg({ name: issued[k].name, lapsed: true, light: true }));
-}
+const names = fittedNames([...entries.map((e) => e.name), ...lapsed.map((k) => issued[k].name)]);
+const dates = outlines(entries.map((e) => ({ text: 'Confirmed ' + longDate(e.on), font: 'barlow-400', size: 10.5 })));
+entries.forEach((e, i) => {
+  const a = { name: names[i], on: e.on, dateLine: dates[i] };
+  fs.writeFileSync(path.join(BADGE_DIR, e.key + '.svg'), badgeSvg(a));
+  fs.writeFileSync(path.join(BADGE_DIR, e.key + '-light.svg'), badgeSvg({ ...a, light: true }));
+});
+lapsed.forEach((k, j) => {
+  const a = { name: names[entries.length + j], lapsed: true };
+  fs.writeFileSync(path.join(BADGE_DIR, k + '.svg'), badgeSvg(a));
+  fs.writeFileSync(path.join(BADGE_DIR, k + '-light.svg'), badgeSvg({ ...a, light: true }));
+});
 fs.writeFileSync(ISSUED_FILE, JSON.stringify(issued, null, 1) + '\n');
 const sample = entries.find((e) => e.name.length < 26) || entries[0];
 
@@ -157,7 +207,7 @@ ${shell.headTop}
     .bd-preview { display:flex; align-items:center; justify-content:center; padding:2rem 1rem; border:1px solid #e7ded0; }
     .bd-preview.is-dark { background:#f6f1e7; }
     .bd-preview.is-light { background:#fff; }
-    .bd-preview img { display:block; width:300px; max-width:100%; height:auto; }
+    .bd-preview img { display:block; width:320px; max-width:100%; height:auto; }
     .bd-get { margin-top:1.25rem; padding:1.5rem; background:#f6f1e7; border:1px solid #e7ded0; }
     .bd-get label { display:block; font-weight:700; font-size:.92rem; margin:0 0 .4rem; }
     .bd-get select, .bd-get textarea { width:100%; font:inherit; font-size:.95rem; padding:.65rem .75rem; border:1px solid #cfc5b4; background:#fff; color:var(--color-ink,#0f172a); border-radius:0; }
@@ -190,8 +240,8 @@ ${shell.headTop}
 
     <div class="bd-wrap">
       <div class="bd-previews">
-        <div class="bd-preview is-dark"><img src="/badges/${sample.key}.svg" alt="An example badge, dark version" width="300" height="84"></div>
-        <div class="bd-preview is-light"><img src="/badges/${sample.key}-light.svg" alt="An example badge, light version" width="300" height="84"></div>
+        <div class="bd-preview is-dark"><img src="/badges/${sample.key}.svg" alt="An example badge, dark version" width="320" height="88"></div>
+        <div class="bd-preview is-light"><img src="/badges/${sample.key}-light.svg" alt="An example badge, light version" width="320" height="88"></div>
       </div>
 
       <h2>What it means</h2>
@@ -243,9 +293,9 @@ ${shell.headTop}
       var e=E[pick.value];ok.hidden=true;
       if(!e){code.value='';copy.disabled=true;live.hidden=true;return;}
       var img='https://thenomadhq.com/badges/'+e.k+variant()+'.svg';
-      code.value='<a href="'+e.u+'" title="Confirmed listing on The Nomad HQ"><img src="'+img+'" alt="Confirmed listing on The Nomad HQ: '+e.n.replace(/"/g,'&quot;')+'" width="300" height="84" loading="lazy" style="border:0;max-width:100%;height:auto"></a>';
+      code.value='<a href="'+e.u+'" title="Confirmed listing on The Nomad HQ"><img src="'+img+'" alt="Confirmed listing on The Nomad HQ: '+e.n.replace(/"/g,'&quot;')+'" width="320" height="88" loading="lazy" style="border:0;max-width:100%;height:auto"></a>';
       copy.disabled=false;
-      liveIn.innerHTML='<a href="'+e.u+'"><img src="/badges/'+e.k+variant()+'.svg" alt="" width="300" height="84" style="display:block;max-width:100%;height:auto"></a>';
+      liveIn.innerHTML='<a href="'+e.u+'"><img src="/badges/'+e.k+variant()+'.svg" alt="" width="320" height="88" style="display:block;max-width:100%;height:auto"></a>';
       live.hidden=false;
     }
     pick.addEventListener('change',build);
