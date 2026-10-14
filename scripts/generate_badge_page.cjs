@@ -42,8 +42,8 @@ const entries = db.providers
 
 if (!entries.length) { console.error('generate_badge_page: no Checked rows, nothing to offer'); process.exit(1); }
 
-const title = 'The Checked badge | The Nomad HQ';
-const description = 'Providers that confirmed their entry on The Nomad HQ can show the Checked badge on their own site. What it means, who may use it, and the code to embed it.';
+const title = 'The Confirmed listing badge | The Nomad HQ';
+const description = 'Providers that confirmed their entry on The Nomad HQ can show the Confirmed listing badge on their site. What it means, who may use it, and the embed code.';
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -83,7 +83,7 @@ ${shell.headTop}
     .bd-preview { display:flex; align-items:center; justify-content:center; padding:2rem 1rem; border:1px solid #e7ded0; }
     .bd-preview.is-dark { background:#f6f1e7; }
     .bd-preview.is-light { background:#fff; }
-    .bd-preview img { display:block; width:240px; height:60px; }
+    .bd-preview img { display:block; width:260px; height:60px; }
     .bd-get { margin-top:1.25rem; padding:1.5rem; background:#f6f1e7; border:1px solid #e7ded0; }
     .bd-get label { display:block; font-weight:700; font-size:.92rem; margin:0 0 .4rem; }
     .bd-get select, .bd-get textarea { width:100%; font:inherit; font-size:.95rem; padding:.65rem .75rem; border:1px solid #cfc5b4; background:#fff; color:var(--color-ink,#0f172a); border-radius:0; }
@@ -109,15 +109,15 @@ ${shell.headTop}
     <header class="bd-hero">
       <div class="bd-hero-inner">
         <span class="bd-eyebrow">For listed providers</span>
-        <h1>The Checked badge</h1>
+        <h1>The Confirmed listing badge</h1>
         <p class="bd-lead">A provider that confirms its own entry in our directory, including the languages it works in, is marked <em>Checked with them</em> with the date and listed first on its city, service and language pages. If that is you, you can show it on your own site. The badge links to your entry.</p>
       </div>
     </header>
 
     <div class="bd-wrap">
       <div class="bd-previews">
-        <div class="bd-preview is-dark"><img src="/assets/badge-checked.svg" alt="The Checked badge, dark version" width="240" height="60"></div>
-        <div class="bd-preview is-light"><img src="/assets/badge-checked-light.svg" alt="The Checked badge, light version" width="240" height="60"></div>
+        <div class="bd-preview is-dark"><img src="/assets/badge-checked.svg" alt="The Checked badge, dark version" width="260" height="60"></div>
+        <div class="bd-preview is-light"><img src="/assets/badge-checked-light.svg" alt="The Checked badge, light version" width="260" height="60"></div>
       </div>
 
       <h2>What it means</h2>
@@ -168,9 +168,9 @@ ${shell.headTop}
       var e=E[pick.value];ok.hidden=true;
       if(!e){code.value='';copy.disabled=true;live.hidden=true;return;}
       var img='https://thenomadhq.com/assets/'+variant()+'.svg';
-      code.value='<a href="'+e.u+'" title="Checked with them on The Nomad HQ"><img src="'+img+'" alt="Checked with them on The Nomad HQ" width="240" height="60" loading="lazy" style="border:0"></a>';
+      code.value='<a href="'+e.u+'" title="Confirmed listing on The Nomad HQ"><img src="'+img+'" alt="Confirmed listing on The Nomad HQ" width="260" height="60" loading="lazy" style="border:0"></a>';
       copy.disabled=false;
-      liveIn.innerHTML='<a href="'+e.u+'"><img src="/assets/'+variant()+'.svg" alt="" width="240" height="60" style="display:block"></a>';
+      liveIn.innerHTML='<a href="'+e.u+'"><img src="/assets/'+variant()+'.svg" alt="" width="260" height="60" style="display:block"></a>';
       live.hidden=false;
     }
     pick.addEventListener('change',build);

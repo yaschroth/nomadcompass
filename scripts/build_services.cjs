@@ -794,7 +794,7 @@ ${LANGUAGE_TILES ? `      <nav class="sv-lgs" id="by-language" aria-label="Brows
         <ul class="sv-tiers">
           ${Object.keys(EV_RANK).map((k) => `<li><span class="sv-ev sv-ev-${k}">${EV_LABEL[k]}</span>${esc(EVIDENCE[k])}</li>`).join('\n          ')}
         </ul>
-        <p>A provider that confirmed its entry may show <a href="/badge">the Checked badge</a> on its own site; the badge links back to the card it stands for. If you are listed here, the "Is this you?" link on your card is where to confirm or correct the entry.</p>
+        <p>A provider that confirmed its entry may show <a href="/badge">the Confirmed listing badge</a> on its own site; the badge links back to the card it stands for. If you are listed here, the "Is this you?" link on your card is where to confirm or correct the entry.</p>
         <p>What this data is and is not, including who publishes these lists and on what terms, is set out in the <a href="/terms">terms</a>.</p>
       </section>
     </div>
