@@ -88,6 +88,14 @@ const CITY = cities.CITY; // every site city; `.cities` holds only those that al
 const { withoutConjunctions } = require(path.join(ROOT, 'scripts', 'lib', 'service_text.cjs'));
 const key = (s) => withoutConjunctions(String(s || '').normalize('NFKC')).normalize('NFD').replace(/[̀-ͯ]/g, '')
   .toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+// As in check_service_dupes.cjs: titles dropped, accents and umlaut spellings folded, words sorted.
+const TITLE_WORD = /^(dr|dre|prof|med|dent|phil|phd|llm|mba|ma|dipl|mme|mr|m|maitre|mtre|herr|frau|monsieur|madame|judr|mgr|ing|phdr|dott|dottssa)$/;
+const wordKey = (s) => {
+  const w = String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    .replace(/oe/g, 'o').replace(/ue/g, 'u').replace(/ae/g, 'a')
+    .split(/[^a-z0-9]+/).filter(Boolean).filter((x) => !TITLE_WORD.test(x));
+  return w.length >= 2 ? w.slice().sort().join(' ') : '';
+};
 const bare = (u) => String(u || '').toLowerCase().replace(/^https?:\/\/(www\.)?/, '').replace(/\/+$/, '');
 const urlOf = (p) => p.sourceUrl || (sources[p.source] || {}).url || '';
 const sourceId = (url) => {
@@ -123,7 +131,11 @@ for (const r of P.rows) {
   // the register), so it is caught here, before the gate has to.
   const k = key(r.name);
   const contained = k.length >= 8 && (byCity[r.city] || []).find((p) => { const q = key(p.name); return q.length >= 8 && (q.includes(k) || k.includes(q)); });
-  const clash = knownName.get(r.city + '|' + k) || (r.url && knownUrl.get(r.city + '|' + bare(r.url))) || contained;
+  // And the gate's second test, the same words in another order: registers print "Veselić Barbora"
+  // where a mission prints "Barbora Veselić" (13 pairs on 2026-10-14).
+  const wk = wordKey(r.name);
+  const reordered = wk && (byCity[r.city] || []).find((p) => wordKey(p.name) === wk);
+  const clash = knownName.get(r.city + '|' + k) || (r.url && knownUrl.get(r.city + '|' + bare(r.url))) || contained || reordered;
   if (clash) { dupes.push([r, clash]); continue; }
   const sid = sourceId(r.sourceUrl);
   add.push({
